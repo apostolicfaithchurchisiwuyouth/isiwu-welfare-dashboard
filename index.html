@@ -1,4 +1,4 @@
-```html
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -60,6 +60,7 @@ border-radius:50%;
 top:-180px;
 right:-120px;
 backdrop-filter:blur(5px);
+animation:float 8s ease-in-out infinite;
 }
 
 header::after{
@@ -71,6 +72,13 @@ background:rgba(255,255,255,0.05);
 border-radius:50%;
 bottom:-140px;
 left:-90px;
+animation:float 10s ease-in-out infinite;
+}
+
+@keyframes float{
+0%{transform:translateY(0px);}
+50%{transform:translateY(15px);}
+100%{transform:translateY(0px);}
 }
 
 .navbar{
@@ -96,7 +104,7 @@ align-items:center;
 .menu a{
 color:white;
 text-decoration:none;
-font-size:0.85rem;
+font-size:0.86rem;
 font-weight:500;
 }
 
@@ -104,8 +112,6 @@ font-weight:500;
 display:none;
 font-size:1.4rem;
 cursor:pointer;
-z-index:99999;
-position:relative;
 color:white;
 }
 
@@ -117,14 +123,14 @@ z-index:2;
 }
 
 .hero h1{
-font-size:2.4rem;
+font-size:2.5rem;
 margin-bottom:10px;
 }
 
 .hero p{
 max-width:680px;
 margin:auto;
-font-size:0.9rem;
+font-size:0.92rem;
 line-height:1.7;
 opacity:0.95;
 }
@@ -138,12 +144,16 @@ flex-wrap:wrap;
 }
 
 .hero-buttons a{
-padding:12px 22px;
+padding:13px 24px;
 border-radius:10px;
 text-decoration:none;
 font-size:0.84rem;
 font-weight:600;
 transition:0.3s;
+}
+
+.hero-buttons a:hover{
+transform:translateY(-3px);
 }
 
 .btn-primary{
@@ -166,7 +176,7 @@ padding:30px 28px;
 
 .section{
 margin-top:45px;
-padding:20px;
+padding:18px;
 border-radius:24px;
 background:transparent;
 }
@@ -180,7 +190,7 @@ color:#0d47a1;
 }
 
 .section-title h2{
-font-size:1.15rem;
+font-size:1rem;
 }
 
 .cards{
@@ -189,16 +199,28 @@ grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
 gap:18px;
 }
 
-.card{
-background:rgba(255,255,255,0.65);
-padding:20px;
-border-radius:18px;
+.card,
+.activities,
+.report-box,
+.reports-feed,
+.leaderboard,
+canvas{
+background:rgba(255,255,255,0.55);
 backdrop-filter:blur(10px);
-border:1px solid rgba(255,255,255,0.3);
+border:1px solid rgba(255,255,255,0.25);
 box-shadow:0 10px 25px rgba(0,0,0,0.05);
-transition:0.3s;
+}
+
+.card{
+padding:22px;
+border-radius:18px;
 position:relative;
 overflow:hidden;
+transition:0.3s;
+}
+
+.card:hover{
+transform:translateY(-5px);
 }
 
 .card::before{
@@ -212,23 +234,19 @@ top:-50px;
 right:-50px;
 }
 
-.card:hover{
-transform:translateY(-5px);
-}
-
 .card i{
-font-size:1.4rem;
+font-size:1.5rem;
 margin-bottom:10px;
 }
 
 .card h2{
-font-size:0.82rem;
+font-size:0.8rem;
 color:#666;
-margin-bottom:6px;
+margin-bottom:7px;
 }
 
 .amount{
-font-size:1.5rem;
+font-size:1.55rem;
 font-weight:700;
 }
 
@@ -240,12 +258,8 @@ font-weight:700;
 .report-box,
 .leaderboard,
 .reports-feed{
-background:rgba(255,255,255,0.55);
 padding:20px;
 border-radius:18px;
-backdrop-filter:blur(12px);
-border:1px solid rgba(255,255,255,0.25);
-box-shadow:0 8px 20px rgba(0,0,0,0.04);
 }
 
 table{
@@ -255,7 +269,7 @@ border-collapse:collapse;
 
 th,td{
 padding:13px;
-font-size:0.82rem;
+font-size:0.8rem;
 border-bottom:1px solid #eee;
 }
 
@@ -265,20 +279,17 @@ color:white;
 }
 
 canvas{
-background:rgba(255,255,255,0.6);
 padding:18px;
 border-radius:18px;
-backdrop-filter:blur(10px);
-border:1px solid rgba(255,255,255,0.25);
 }
 
 .report-box h2{
-font-size:1rem;
-margin-bottom:8px;
+font-size:0.95rem;
+margin-bottom:6px;
 }
 
 .report-box p{
-font-size:0.82rem;
+font-size:0.78rem;
 line-height:1.6;
 color:#555;
 }
@@ -296,7 +307,7 @@ padding:12px 18px;
 border-radius:10px;
 text-decoration:none;
 color:white;
-font-size:0.8rem;
+font-size:0.76rem;
 font-weight:600;
 background:linear-gradient(135deg,#1565c0,#42a5f5);
 }
@@ -314,18 +325,18 @@ gap:12px;
 
 .feed-item{
 padding:14px;
-background:rgba(255,255,255,0.4);
+background:rgba(255,255,255,0.45);
 border-radius:14px;
 border-left:4px solid #1565c0;
 }
 
 .feed-item h4{
-font-size:0.84rem;
+font-size:0.82rem;
 margin-bottom:5px;
 }
 
 .feed-item p{
-font-size:0.76rem;
+font-size:0.74rem;
 line-height:1.5;
 color:#555;
 }
@@ -333,7 +344,6 @@ color:#555;
 .pagination{
 display:flex;
 justify-content:center;
-align-items:center;
 gap:8px;
 margin-top:20px;
 flex-wrap:wrap;
@@ -345,15 +355,11 @@ height:38px;
 border:none;
 border-radius:10px;
 cursor:pointer;
-font-size:0.82rem;
-font-weight:600;
 background:rgba(255,255,255,0.7);
-backdrop-filter:blur(10px);
-transition:0.3s;
+font-weight:700;
 }
 
-.page-btn.active,
-.page-btn:hover{
+.page-btn.active{
 background:#1565c0;
 color:white;
 }
@@ -362,11 +368,11 @@ color:white;
 display:flex;
 justify-content:center;
 align-items:flex-end;
-gap:18px;
+gap:20px;
 flex-wrap:nowrap;
 overflow-x:auto;
-padding-top:18px;
-padding-bottom:14px;
+padding-top:20px;
+padding-bottom:15px;
 }
 
 .leader-circle{
@@ -387,16 +393,16 @@ box-shadow:0 10px 25px rgba(0,0,0,0.14);
 }
 
 .big{
-width:110px;
-height:110px;
-font-size:2.2rem;
+width:120px;
+height:120px;
+font-size:2.5rem;
 background:linear-gradient(135deg,#ffd54f,#ff9800);
 }
 
 .small{
-width:85px;
-height:85px;
-font-size:1.6rem;
+width:90px;
+height:90px;
+font-size:1.8rem;
 }
 
 .second-place .small{
@@ -408,12 +414,12 @@ background:linear-gradient(135deg,#ffcc80,#fb8c00);
 }
 
 .leader-circle h3{
-font-size:0.74rem;
-margin-top:8px;
+font-size:0.78rem;
+margin-top:10px;
 }
 
 .leader-circle p{
-font-size:0.68rem;
+font-size:0.72rem;
 }
 
 .leader-list{
@@ -529,7 +535,7 @@ display:block;
 }
 
 .hero h1{
-font-size:1.8rem;
+font-size:1.85rem;
 }
 
 .hero p{
@@ -537,27 +543,37 @@ font-size:0.78rem;
 }
 
 .section-title h2{
-font-size:0.92rem;
+font-size:0.9rem;
 }
 
 .report-box h2{
-font-size:0.88rem;
+font-size:0.85rem;
 }
 
 .feed-item h4{
-font-size:0.76rem;
+font-size:0.74rem;
 }
 
 .feed-item p,
 .report-box p,
 th,td{
-font-size:0.72rem;
+font-size:0.7rem;
 }
 
-.page-btn{
-width:34px;
-height:34px;
-font-size:0.72rem;
+.amount{
+font-size:1.35rem;
+}
+
+.big{
+width:92px;
+height:92px;
+font-size:2rem;
+}
+
+.small{
+width:70px;
+height:70px;
+font-size:1.4rem;
 }
 
 }
@@ -610,19 +626,19 @@ AFC Isiwu Youth
 <div class="card green">
 <i class="fa-solid fa-money-bill-trend-up"></i>
 <h2>Total Contributions</h2>
-<div class="amount" id="totalContributions">₦0</div>
+<div class="amount" id="totalContributions">Loading...</div>
 </div>
 
 <div class="card red">
 <i class="fa-solid fa-wallet"></i>
 <h2>Total Expenses</h2>
-<div class="amount" id="totalExpenses">₦0</div>
+<div class="amount" id="totalExpenses">Loading...</div>
 </div>
 
 <div class="card blue">
 <i class="fa-solid fa-building-columns"></i>
 <h2>Current Balance</h2>
-<div class="amount" id="currentBalance">₦0</div>
+<div class="amount" id="currentBalance">Loading...</div>
 </div>
 </div>
 </div>
@@ -641,6 +657,7 @@ AFC Isiwu Youth
 <th>Amount</th>
 </tr>
 </thead>
+
 <tbody id="activityTable"></tbody>
 </table>
 </div>
@@ -651,20 +668,27 @@ AFC Isiwu Youth
 <i class="fa-solid fa-chart-line"></i>
 <h2>Financial Overview</h2>
 </div>
+
 <canvas id="financeChart"></canvas>
 </div>
 
 <div class="section" id="reports">
+
 <div class="section-title">
 <i class="fa-solid fa-file-lines"></i>
 <h2>Secretariat Reports</h2>
 </div>
 
 <div class="report-box">
+
 <h2>Programs & Attendance Reports</h2>
-<p>Official attendance records, meeting summaries and youth updates.</p>
+
+<p>
+Official attendance records, meeting summaries and youth updates.
+</p>
 
 <div class="report-buttons">
+
 <a href="#" class="report-btn">
 <i class="fa-solid fa-pen-to-square"></i>
 Fill Program Report
@@ -674,11 +698,15 @@ Fill Program Report
 <i class="fa-solid fa-user-check"></i>
 Submit Attendance
 </a>
+
 </div>
+
 </div>
 
 <div class="reports-feed" id="reportsFeed"></div>
+
 <div class="pagination" id="pagination"></div>
+
 </div>
 
 <div class="section" id="leaderboard">
@@ -688,6 +716,7 @@ Submit Attendance
 </div>
 
 <div class="leaderboard">
+
 <div class="top-three">
 <div class="leader-circle second-place">
 <div class="leader-avatar small">🥈</div>
@@ -707,6 +736,22 @@ Submit Attendance
 <p>90 Points</p>
 </div>
 </div>
+
+<div class="leader-list">
+<div class="leader-item"><span>#4</span><p>Esther Paulina</p><strong>85</strong></div>
+<div class="leader-item"><span>#5</span><p>Joshua Tersoo</p><strong>82</strong></div>
+<div class="leader-item"><span>#6</span><p>Deborah Usha</p><strong>80</strong></div>
+<div class="leader-item"><span>#7</span><p>Michael Terna</p><strong>77</strong></div>
+<div class="leader-item"><span>#8</span><p>Grace Iorver</p><strong>75</strong></div>
+<div class="leader-item"><span>#9</span><p>Samuel Hemba</p><strong>73</strong></div>
+<div class="leader-item"><span>#10</span><p>Mercy Jime</p><strong>71</strong></div>
+<div class="leader-item"><span>#11</span><p>Philip Shima</p><strong>69</strong></div>
+<div class="leader-item"><span>#12</span><p>Ruth Orkuma</p><strong>68</strong></div>
+<div class="leader-item"><span>#13</span><p>Caleb Terkimbi</p><strong>66</strong></div>
+<div class="leader-item"><span>#14</span><p>Sharon Aondo</p><strong>64</strong></div>
+<div class="leader-item"><span>#15</span><p>Timothy Ioryer</p><strong>61</strong></div>
+</div>
+
 </div>
 </div>
 
@@ -717,6 +762,7 @@ Submit Attendance
 </div>
 
 <div class="gallery">
+
 <div class="gallery-card">
 <img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?q=80&w=1200&auto=format&fit=crop">
 <div class="gallery-overlay">Youth Fellowship Moments</div>
@@ -738,6 +784,7 @@ Submit Attendance
 View More Images & Videos
 </a>
 </div>
+
 </div>
 </div>
 
@@ -769,20 +816,20 @@ try{
 const response = await fetch(welfareCSV);
 const data = await response.text();
 
-const rows = data.split('\n').map(row => row.split(','));
+const rows = data.trim().split('\n').map(row => row.split(','));
 
-const contributions = rows[0][1] || 0;
-const expenses = rows[1][1] || 0;
-const balance = rows[2][1] || 0;
+const contributions = parseFloat(rows[0][1]) || 0;
+const expenses = parseFloat(rows[1][1]) || 0;
+const balance = parseFloat(rows[2][1]) || 0;
 
 document.getElementById('totalContributions').innerText =
-`₦${Number(contributions).toLocaleString()}`;
+`₦${contributions.toLocaleString()}`;
 
 document.getElementById('totalExpenses').innerText =
-`₦${Number(expenses).toLocaleString()}`;
+`₦${expenses.toLocaleString()}`;
 
 document.getElementById('currentBalance').innerText =
-`₦${Number(balance).toLocaleString()}`;
+`₦${balance.toLocaleString()}`;
 
 const ctx = document.getElementById('financeChart');
 
@@ -808,18 +855,24 @@ const activityTable = document.getElementById('activityTable');
 activityTable.innerHTML = '';
 
 for(let i = 3; i < rows.length; i++){
+
 if(rows[i][0]){
+
 activityTable.innerHTML += `
 <tr>
 <td>${rows[i][0]}</td>
 <td>₦${Number(rows[i][1]).toLocaleString()}</td>
 </tr>
 `;
+
 }
+
 }
 
 }catch(error){
+
 console.log(error);
+
 }
 
 }
@@ -844,7 +897,9 @@ displayReports(currentPage);
 createPagination();
 
 }catch(error){
+
 console.log(error);
+
 }
 
 }
@@ -852,6 +907,7 @@ console.log(error);
 function displayReports(page){
 
 const reportsFeed = document.getElementById('reportsFeed');
+
 reportsFeed.innerHTML = '';
 
 const start = (page - 1) * reportsPerPage;
@@ -866,12 +922,14 @@ const attendance = report[1];
 const summary = report[2];
 
 if(title){
+
 reportsFeed.innerHTML += `
 <div class="feed-item">
 <h4>${title}</h4>
 <p>Attendance: ${attendance} youths • ${summary}</p>
 </div>
 `;
+
 }
 
 });
@@ -881,6 +939,7 @@ reportsFeed.innerHTML += `
 function createPagination(){
 
 const pagination = document.getElementById('pagination');
+
 pagination.innerHTML = '';
 
 const totalPages = Math.ceil(allReports.length / reportsPerPage);
@@ -888,7 +947,9 @@ const totalPages = Math.ceil(allReports.length / reportsPerPage);
 for(let i = 1; i <= totalPages; i++){
 
 const button = document.createElement('button');
+
 button.innerText = i;
+
 button.classList.add('page-btn');
 
 if(i === currentPage){
@@ -896,9 +957,13 @@ button.classList.add('active');
 }
 
 button.addEventListener('click', () => {
+
 currentPage = i;
+
 displayReports(currentPage);
+
 createPagination();
+
 });
 
 pagination.appendChild(button);
@@ -907,5 +972,10 @@ pagination.appendChild(button);
 
 }
 
-fetc
-```
+fetchSheetData();
+fetchSecretariatReports();
+
+</script>
+
+</body>
+</html>
