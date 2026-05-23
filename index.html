@@ -565,66 +565,96 @@
        MOBILE
     ========================== */
 
-    @media(max-width:768px){
+    <!-- REPLACE ONLY YOUR CURRENT MOBILE MEDIA QUERY WITH THIS UPDATED ONE -->
 
-      .menu{
-        position:absolute;
-        top:75px;
-        right:7%;
-        background:white;
-        width:230px;
-        border-radius:14px;
-        padding:20px;
-        display:none;
-        flex-direction:column;
-        align-items:flex-start;
-        box-shadow:0 15px 40px rgba(0,0,0,0.15);
-        z-index:9999;
-      }
+@media(max-width:768px){
 
-      .menu a{
-        color:#222;
-        width:100%;
-        padding:10px 0;
-        border-bottom:1px solid #eee;
-      }
+  .menu{
+    position:absolute;
+    top:75px;
+    right:7%;
+    background:white;
+    width:230px;
+    border-radius:14px;
+    padding:20px;
+    display:none;
+    flex-direction:column;
+    align-items:flex-start;
+    box-shadow:0 15px 40px rgba(0,0,0,0.15);
+    z-index:9999;
+  }
 
-      .menu.active{
-        display:flex;
-        animation:fadeIn 0.4s ease;
-      }
+  .menu a{
+    color:#222;
+    width:100%;
+    padding:10px 0;
+    border-bottom:1px solid #eee;
+  }
 
-      .hamburger{
-        display:block;
-      }
+  .menu.active{
+    display:flex;
+    animation:fadeIn 0.4s ease;
+  }
 
-      .hero h1{
-        font-size:1.8rem;
-      }
+  .hamburger{
+    display:block;
+  }
 
-      .hero p{
-        font-size:0.85rem;
-      }
+  .hero h1{
+    font-size:1.8rem;
+  }
 
-      .card .amount{
-        font-size:1.35rem;
-      }
+  .hero p{
+    font-size:0.85rem;
+  }
 
-      .top-three{
-        gap:18px;
-      }
+  .card .amount{
+    font-size:1.35rem;
+  }
 
-      .big{
-        width:100px;
-        height:100px;
-      }
+  /* =========================
+     MOBILE LEADERBOARD FIX
+  ========================= */
 
-      .small{
-        width:75px;
-        height:75px;
-      }
+  .top-three{
+    display:flex;
+    flex-wrap:nowrap;
+    justify-content:center;
+    align-items:flex-end;
+    gap:10px;
+    overflow-x:auto;
+    padding-bottom:10px;
+  }
 
-    }
+  .leader-circle{
+    flex-shrink:0;
+  }
+
+  .big{
+    width:78px;
+    height:78px;
+    font-size:2rem;
+  }
+
+  .small{
+    width:62px;
+    height:62px;
+    font-size:1.5rem;
+  }
+
+  .leader-circle h3{
+    font-size:0.78rem;
+  }
+
+  .leader-circle p{
+    font-size:0.7rem;
+  }
+
+  .first-place{
+    transform:translateY(-6px);
+  }
+
+}
 
   </style>
 </head>
