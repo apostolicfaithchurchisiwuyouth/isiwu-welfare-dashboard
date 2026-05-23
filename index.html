@@ -959,16 +959,36 @@ const paginatedItems = allReports.slice(start, end);
 
 paginatedItems.forEach(report => {
 
-const title = report[0];
-const attendance = report[1];
-const summary = report[2];
+const date = report[0];
+const programTitle = report[1];
+const programType = report[2];
+const whatWentWell = report[3];
+const reporter = report[4];
 
-if(title){
+if(programTitle){
 
 reportsFeed.innerHTML += `
 <div class="feed-item">
-<h4>${title}</h4>
-<p>Attendance: ${attendance} youths • ${summary}</p>
+
+<h4>${programTitle}</h4>
+
+<p>
+<strong>Date:</strong> ${date}
+</p>
+
+<p>
+<strong>Program Type:</strong> ${programType}
+</p>
+
+<p>
+<strong>What Went Well:</strong><br>
+${whatWentWell}
+</p>
+
+<p>
+<strong>Reporter:</strong> ${reporter}
+</p>
+
 </div>
 `;
 
