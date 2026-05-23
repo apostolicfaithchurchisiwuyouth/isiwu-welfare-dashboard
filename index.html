@@ -846,6 +846,9 @@ menu.classList.toggle('active');
 const welfareCSV =
 "https://docs.google.com/spreadsheets/d/e/2PACX-1vQHlE5IpmFYaQyW5u-rentH2fGC5VZJ2w9Ql1WI-X8bE76qlN5_ttDIitwlXX1CM4sqdEW8RroDUNSU/pub?gid=439044630&single=true&output=csv";
 
+const activitiesCSV =
+"https://docs.google.com/spreadsheets/d/e/2PACX-1vQHlE5IpmFYaQyW5u-rentH2fGC5VZJ2w9Ql1WI-X8bE76qlN5_ttDIitwlXX1CM4sqdEW8RroDUNSU/pub?gid=493023062&single=true&output=csv";
+  
 const secretariatCSV =
 "https://docs.google.com/spreadsheets/d/e/2PACX-1vTE5Ds6_y0OYFL9_pYfRekpMx1Jq-kijbtdXsL-LCyg5KsC8LVootmeHOew2xiqV2sAXEVUKm_3vz17/pub?gid=1085033955&single=true&output=csv";
 
@@ -891,23 +894,35 @@ legend:{display:false}
 }
 });
 
+const activityResponse = await fetch(activitiesCSV);
+const activityData = await activityResponse.text();
+
+const activityRows = activityData
+.trim()
+.split('\n')
+.map(row => row.split(','));
+
 const activityTable = document.getElementById('activityTable');
+
 activityTable.innerHTML = '';
 
-for(let i = 3; i < rows.length; i++){
+activityRows.reverse().slice(0,10).forEach(row => {
 
-if(rows[i][0]){
+const purpose = row[0];
+const amount = row[1];
+
+if(purpose){
 
 activityTable.innerHTML += `
 <tr>
-<td>${rows[i][0]}</td>
-<td>₦${Number(rows[i][1]).toLocaleString()}</td>
+<td>${purpose}</td>
+<td>₦${Number(amount).toLocaleString()}</td>
 </tr>
 `;
 
 }
 
-}
+});
 
 }catch(error){
 
