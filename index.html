@@ -1,571 +1,566 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-
-  <title>AFC Isiwu Youth Portal</title>
-
-  <!-- GOOGLE FONTS -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-  <!-- ICONS -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
-  <!-- CHART -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-  <style>
-
-    *{
-      margin:0;
-      padding:0;
-      box-sizing:border-box;
-    }
-
-    html{
-      scroll-behavior:smooth;
-    }
-
-    body{
-      font-family:'Plus Jakarta Sans', sans-serif;
-      background:#eef3f9;
-      color:#222;
-      overflow-x:hidden;
-    }
-
-    h1,h2,h3,h4,.logo{
-      font-family:'Outfit', sans-serif;
-    }
-
-    /* =========================
-       HEADER
-    ========================== */
-
-    header{
-      position:relative;
-      background:linear-gradient(135deg,#0d47a1,#1565c0,#1976d2);
-      color:white;
-      overflow:visible;
-      padding-bottom:45px;
-    }
-
-    .navbar{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      padding:18px 7%;
-      position:relative;
-      z-index:1000;
-    }
-
-    .logo{
-      font-size:1.1rem;
-      font-weight:600;
-    }
-
-    .menu{
-      display:flex;
-      gap:22px;
-      align-items:center;
-    }
-
-    .menu a{
-      color:white;
-      text-decoration:none;
-      font-size:0.88rem;
-      transition:0.3s;
-    }
-
-    .menu a:hover{
-      opacity:0.8;
-    }
-
-    .hamburger{
-      display:none;
-      font-size:1.3rem;
-      cursor:pointer;
-      z-index:2000;
-    }
-
-    .hero{
-      padding:30px 7% 15px;
-      text-align:center;
-      position:relative;
-      z-index:1;
-      animation:fadeIn 1s ease;
-    }
-
-    .hero h1{
-      font-size:2.3rem;
-      margin-bottom:10px;
-      font-weight:700;
-    }
-
-    .hero p{
-      max-width:650px;
-      margin:auto;
-      opacity:0.93;
-      line-height:1.6;
-      font-size:0.92rem;
-    }
-
-    .hero-buttons{
-      margin-top:22px;
-      display:flex;
-      justify-content:center;
-      gap:12px;
-      flex-wrap:wrap;
-    }
-
-    .hero-buttons a{
-      text-decoration:none;
-      padding:12px 22px;
-      border-radius:8px;
-      font-size:0.88rem;
-      font-weight:500;
-      transition:0.4s;
-    }
-
-    .btn-primary{
-      background:white;
-      color:#1565c0;
-    }
-
-    .btn-primary:hover{
-      transform:translateY(-3px);
-    }
-
-    .btn-secondary{
-      background:rgba(255,255,255,0.12);
-      border:1px solid rgba(255,255,255,0.25);
-      color:white;
-      backdrop-filter:blur(10px);
-    }
-
-    .btn-secondary:hover{
-      background:rgba(255,255,255,0.2);
-    }
-
-    /* =========================
-       CONTAINER
-    ========================== */
-
-    .container{
-      max-width:1200px;
-      margin:auto;
-      padding:30px 20px;
-    }
-
-    /* =========================
-       SECTION TITLE
-    ========================== */
-
-    .section{
-      margin-top:45px;
-    }
-
-    .section-title{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      margin-bottom:18px;
-      color:#0d47a1;
-    }
-
-    .section-title i{
-      font-size:1rem;
-    }
-
-    .section-title h2{
-      font-size:1.15rem;
-    }
-
-    /* =========================
-       CARDS
-    ========================== */
-
-    .cards{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
-      gap:20px;
-      margin-top:20px;
-    }
-
-    .card{
-      background:rgba(255,255,255,0.75);
-      backdrop-filter:blur(10px);
-      padding:22px;
-      border-radius:12px;
-      box-shadow:0 10px 25px rgba(0,0,0,0.06);
-      transition:0.4s;
-      animation:slideUp 0.8s ease;
-    }
-
-    .card:hover{
-      transform:translateY(-6px);
-    }
-
-    .card i{
-      font-size:1.7rem;
-      margin-bottom:12px;
-    }
-
-    .card h2{
-      font-size:0.88rem;
-      color:#666;
-      margin-bottom:8px;
-    }
-
-    .card .amount{
-      font-size:1.7rem;
-      font-weight:700;
-    }
-
-    .green{
-      border-left:5px solid #2e7d32;
-    }
-
-    .green i{
-      color:#2e7d32;
-    }
-
-    .red{
-      border-left:5px solid #c62828;
-    }
-
-    .red i{
-      color:#c62828;
-    }
-
-    .blue{
-      border-left:5px solid #1565c0;
-    }
-
-    .blue i{
-      color:#1565c0;
-    }
-
-    /* =========================
-       ACTIVITIES
-    ========================== */
-
-    .activities{
-      background:white;
-      padding:20px;
-      border-radius:14px;
-      box-shadow:0 10px 25px rgba(0,0,0,0.06);
-    }
-
-    table{
-      width:100%;
-      border-collapse:collapse;
-    }
-
-    th, td{
-      padding:14px;
-      text-align:left;
-      border-bottom:1px solid #eee;
-      font-size:0.88rem;
-    }
-
-    th{
-      background:#1565c0;
-      color:white;
-    }
-
-    /* =========================
-       CHART
-    ========================== */
-
-    canvas{
-      background:white;
-      padding:20px;
-      border-radius:12px;
-      box-shadow:0 10px 25px rgba(0,0,0,0.06);
-    }
-
-    /* =========================
-       REPORTS
-    ========================== */
-
-    .report-box{
-      background:white;
-      padding:30px;
-      border-radius:14px;
-      box-shadow:0 10px 25px rgba(0,0,0,0.06);
-      text-align:center;
-    }
-
-    .report-box h2{
-      font-size:1.1rem;
-    }
-
-    .report-box p{
-      margin:12px 0 24px;
-      color:#666;
-      font-size:0.9rem;
-    }
-
-    .report-buttons{
-      display:flex;
-      justify-content:center;
-      gap:15px;
-      flex-wrap:wrap;
-    }
-
-    .report-btn{
-      display:inline-block;
-      padding:13px 24px;
-      border-radius:10px;
-      background:linear-gradient(135deg,#1565c0,#42a5f5);
-      color:white;
-      text-decoration:none;
-      font-size:0.88rem;
-      font-weight:600;
-      transition:0.4s;
-      box-shadow:0 8px 20px rgba(21,101,192,0.25);
-    }
-
-    .report-btn:hover{
-      transform:translateY(-4px);
-    }
-
-    .green-btn{
-      background:linear-gradient(135deg,#2e7d32,#43a047);
-    }
-
-    /* =========================
-       LEADERBOARD
-    ========================== */
-
-    .leaderboard{
-      background:white;
-      border-radius:16px;
-      padding:25px;
-      box-shadow:0 10px 25px rgba(0,0,0,0.06);
-    }
-
-    .top-three{
-      display:flex;
-      justify-content:center;
-      align-items:flex-end;
-      gap:30px;
-      margin-bottom:35px;
-      flex-wrap:wrap;
-    }
-
-    .leader-circle{
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      animation:slideUp 0.8s ease;
-    }
-
-    .leader-avatar{
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      border-radius:50%;
-      font-size:2rem;
-      font-weight:700;
-      color:white;
-      box-shadow:0 10px 25px rgba(0,0,0,0.12);
-      transition:0.4s;
-    }
-
-    .leader-avatar:hover{
-      transform:translateY(-6px) scale(1.05);
-    }
-
-    .big{
-      width:120px;
-      height:120px;
-      background:linear-gradient(135deg,#ffd54f,#ffb300);
-      font-size:2.8rem;
-    }
-
-    .small{
-      width:90px;
-      height:90px;
-      font-size:2rem;
-    }
-
-    .second-place .small{
-      background:linear-gradient(135deg,#cfd8dc,#90a4ae);
-    }
-
-    .third-place .small{
-      background:linear-gradient(135deg,#ffcc80,#fb8c00);
-    }
-
-    .leader-circle h3{
-      margin-top:12px;
-      font-size:0.95rem;
-    }
-
-    .leader-circle p{
-      font-size:0.82rem;
-      color:#666;
-      margin-top:4px;
-    }
-
-    .first-place{
-      transform:translateY(-10px);
-    }
-
-    .leader-list{
-      display:flex;
-      flex-direction:column;
-      gap:12px;
-    }
-
-    .leader-item{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      background:#f8fbff;
-      padding:14px 18px;
-      border-radius:10px;
-      transition:0.3s;
-    }
-
-    .leader-item:hover{
-      transform:translateX(5px);
-    }
-
-    .leader-item span{
-      font-weight:700;
-      color:#1565c0;
-    }
-
-    .leader-item p{
-      flex:1;
-      margin-left:20px;
-      font-size:0.9rem;
-    }
-
-    .leader-item strong{
-      color:#222;
-    }
-
-    /* =========================
-       DOWNLOADS
-    ========================== */
-
-    .downloads{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-      gap:20px;
-    }
-
-    .download-card{
-      background:white;
-      padding:22px;
-      border-radius:14px;
-      box-shadow:0 10px 25px rgba(0,0,0,0.06);
-      transition:0.4s;
-    }
-
-    .download-card:hover{
-      transform:translateY(-5px);
-    }
-
-    .download-card i{
-      font-size:1.7rem;
-      color:#1565c0;
-      margin-bottom:12px;
-    }
-
-    .download-card h3{
-      font-size:1rem;
-    }
-
-    .download-card a{
-      display:inline-block;
-      margin-top:12px;
-      color:#1565c0;
-      text-decoration:none;
-      font-size:0.88rem;
-      font-weight:600;
-    }
-
-    /* =========================
-       GALLERY
-    ========================== */
-
-    .gallery{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-      gap:18px;
-      margin-top:15px;
-    }
-
-    .gallery img{
-      width:100%;
-      height:220px;
-      object-fit:cover;
-      border-radius:14px;
-      box-shadow:0 10px 25px rgba(0,0,0,0.08);
-      transition:0.4s;
-    }
-
-    .gallery img:hover{
-      transform:scale(1.03);
-    }
-
-    /* =========================
-       FOOTER
-    ========================== */
-
-    footer{
-      margin-top:60px;
-      padding:30px;
-      text-align:center;
-      color:#666;
-      font-size:0.88rem;
-    }
-
-    .loading{
-      text-align:center;
-      margin-top:30px;
-      color:#555;
-      font-size:0.9rem;
-    }
-
-    /* =========================
-       ANIMATIONS
-    ========================== */
-
-    @keyframes fadeIn{
-      from{
-        opacity:0;
-        transform:translateY(20px);
-      }
-      to{
-        opacity:1;
-        transform:translateY(0);
-      }
-    }
-
-    @keyframes slideUp{
-      from{
-        opacity:0;
-        transform:translateY(40px);
-      }
-      to{
-        opacity:1;
-        transform:translateY(0);
-      }
-    }
-
-    /* =========================
-       MOBILE
-    ========================== */
-
-    <!-- REPLACE ONLY YOUR CURRENT MOBILE MEDIA QUERY WITH THIS UPDATED ONE -->
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<title>AFC Isiwu Youth Portal</title>
+
+<!-- GOOGLE FONTS -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<!-- ICONS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<!-- CHART -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  font-family:'Plus Jakarta Sans', sans-serif;
+  background:#eef3f9;
+  color:#222;
+  overflow-x:hidden;
+}
+
+h1,h2,h3,h4,.logo{
+  font-family:'Outfit', sans-serif;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+header{
+  background:linear-gradient(135deg,#0d47a1,#1565c0,#1976d2);
+  color:white;
+  padding-bottom:45px;
+  overflow:visible;
+}
+
+.navbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:18px 7%;
+  position:relative;
+  z-index:1000;
+}
+
+.logo{
+  font-size:1.1rem;
+  font-weight:600;
+}
+
+.menu{
+  display:flex;
+  gap:22px;
+  align-items:center;
+}
+
+.menu a{
+  color:white;
+  text-decoration:none;
+  font-size:0.88rem;
+  transition:0.3s;
+}
+
+.menu a:hover{
+  opacity:0.8;
+}
+
+.hamburger{
+  display:none;
+  font-size:1.3rem;
+  cursor:pointer;
+  z-index:2000;
+}
+
+.hero{
+  padding:30px 7% 15px;
+  text-align:center;
+  animation:fadeIn 1s ease;
+}
+
+.hero h1{
+  font-size:2.3rem;
+  margin-bottom:10px;
+  font-weight:700;
+}
+
+.hero p{
+  max-width:650px;
+  margin:auto;
+  opacity:0.93;
+  line-height:1.6;
+  font-size:0.92rem;
+}
+
+.hero-buttons{
+  margin-top:22px;
+  display:flex;
+  justify-content:center;
+  gap:12px;
+  flex-wrap:wrap;
+}
+
+.hero-buttons a{
+  text-decoration:none;
+  padding:12px 22px;
+  border-radius:8px;
+  font-size:0.88rem;
+  font-weight:500;
+  transition:0.4s;
+}
+
+.btn-primary{
+  background:white;
+  color:#1565c0;
+}
+
+.btn-primary:hover{
+  transform:translateY(-3px);
+}
+
+.btn-secondary{
+  background:rgba(255,255,255,0.12);
+  border:1px solid rgba(255,255,255,0.25);
+  color:white;
+  backdrop-filter:blur(10px);
+}
+
+.btn-secondary:hover{
+  background:rgba(255,255,255,0.2);
+}
+
+/* =========================
+   CONTAINER
+========================= */
+
+.container{
+  max-width:1200px;
+  margin:auto;
+  padding:30px 20px;
+}
+
+/* =========================
+   SECTION TITLE
+========================= */
+
+.section{
+  margin-top:45px;
+}
+
+.section-title{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:18px;
+  color:#0d47a1;
+}
+
+.section-title i{
+  font-size:1rem;
+}
+
+.section-title h2{
+  font-size:1.15rem;
+}
+
+/* =========================
+   CARDS
+========================= */
+
+.cards{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:20px;
+  margin-top:20px;
+}
+
+.card{
+  background:rgba(255,255,255,0.75);
+  backdrop-filter:blur(10px);
+  padding:22px;
+  border-radius:12px;
+  box-shadow:0 10px 25px rgba(0,0,0,0.06);
+  transition:0.4s;
+  animation:slideUp 0.8s ease;
+}
+
+.card:hover{
+  transform:translateY(-6px);
+}
+
+.card i{
+  font-size:1.7rem;
+  margin-bottom:12px;
+}
+
+.card h2{
+  font-size:0.88rem;
+  color:#666;
+  margin-bottom:8px;
+}
+
+.card .amount{
+  font-size:1.7rem;
+  font-weight:700;
+}
+
+.green{
+  border-left:5px solid #2e7d32;
+}
+
+.green i{
+  color:#2e7d32;
+}
+
+.red{
+  border-left:5px solid #c62828;
+}
+
+.red i{
+  color:#c62828;
+}
+
+.blue{
+  border-left:5px solid #1565c0;
+}
+
+.blue i{
+  color:#1565c0;
+}
+
+/* =========================
+   ACTIVITIES
+========================= */
+
+.activities{
+  background:white;
+  padding:20px;
+  border-radius:14px;
+  box-shadow:0 10px 25px rgba(0,0,0,0.06);
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+}
+
+th, td{
+  padding:14px;
+  text-align:left;
+  border-bottom:1px solid #eee;
+  font-size:0.88rem;
+}
+
+th{
+  background:#1565c0;
+  color:white;
+}
+
+/* =========================
+   CHART
+========================= */
+
+canvas{
+  background:white;
+  padding:20px;
+  border-radius:12px;
+  box-shadow:0 10px 25px rgba(0,0,0,0.06);
+}
+
+/* =========================
+   REPORTS
+========================= */
+
+.report-box{
+  background:white;
+  padding:30px;
+  border-radius:14px;
+  box-shadow:0 10px 25px rgba(0,0,0,0.06);
+  text-align:center;
+}
+
+.report-box h2{
+  font-size:1.1rem;
+}
+
+.report-box p{
+  margin:12px 0 24px;
+  color:#666;
+  font-size:0.9rem;
+}
+
+.report-buttons{
+  display:flex;
+  justify-content:center;
+  gap:15px;
+  flex-wrap:wrap;
+}
+
+.report-btn{
+  display:inline-block;
+  padding:13px 24px;
+  border-radius:10px;
+  background:linear-gradient(135deg,#1565c0,#42a5f5);
+  color:white;
+  text-decoration:none;
+  font-size:0.88rem;
+  font-weight:600;
+  transition:0.4s;
+  box-shadow:0 8px 20px rgba(21,101,192,0.25);
+}
+
+.report-btn:hover{
+  transform:translateY(-4px);
+}
+
+.green-btn{
+  background:linear-gradient(135deg,#2e7d32,#43a047);
+}
+
+/* =========================
+   LEADERBOARD
+========================= */
+
+.leaderboard{
+  background:white;
+  border-radius:16px;
+  padding:25px;
+  box-shadow:0 10px 25px rgba(0,0,0,0.06);
+}
+
+.top-three{
+  display:flex;
+  justify-content:center;
+  align-items:flex-end;
+  gap:30px;
+  margin-bottom:35px;
+  flex-wrap:wrap;
+}
+
+.leader-circle{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  animation:slideUp 0.8s ease;
+}
+
+.leader-avatar{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  border-radius:50%;
+  font-size:2rem;
+  font-weight:700;
+  color:white;
+  box-shadow:0 10px 25px rgba(0,0,0,0.12);
+  transition:0.4s;
+}
+
+.leader-avatar:hover{
+  transform:translateY(-6px) scale(1.05);
+}
+
+.big{
+  width:120px;
+  height:120px;
+  background:linear-gradient(135deg,#ffd54f,#ffb300);
+  font-size:2.8rem;
+}
+
+.small{
+  width:90px;
+  height:90px;
+  font-size:2rem;
+}
+
+.second-place .small{
+  background:linear-gradient(135deg,#cfd8dc,#90a4ae);
+}
+
+.third-place .small{
+  background:linear-gradient(135deg,#ffcc80,#fb8c00);
+}
+
+.leader-circle h3{
+  margin-top:12px;
+  font-size:0.95rem;
+}
+
+.leader-circle p{
+  font-size:0.82rem;
+  color:#666;
+  margin-top:4px;
+}
+
+.first-place{
+  transform:translateY(-10px);
+}
+
+.leader-list{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+
+.leader-item{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  background:#f8fbff;
+  padding:14px 18px;
+  border-radius:10px;
+  transition:0.3s;
+}
+
+.leader-item:hover{
+  transform:translateX(5px);
+}
+
+.leader-item span{
+  font-weight:700;
+  color:#1565c0;
+}
+
+.leader-item p{
+  flex:1;
+  margin-left:20px;
+  font-size:0.9rem;
+}
+
+.leader-item strong{
+  color:#222;
+}
+
+/* =========================
+   DOWNLOADS
+========================= */
+
+.downloads{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:20px;
+}
+
+.download-card{
+  background:white;
+  padding:22px;
+  border-radius:14px;
+  box-shadow:0 10px 25px rgba(0,0,0,0.06);
+  transition:0.4s;
+}
+
+.download-card:hover{
+  transform:translateY(-5px);
+}
+
+.download-card i{
+  font-size:1.7rem;
+  color:#1565c0;
+  margin-bottom:12px;
+}
+
+.download-card h3{
+  font-size:1rem;
+}
+
+.download-card a{
+  display:inline-block;
+  margin-top:12px;
+  color:#1565c0;
+  text-decoration:none;
+  font-size:0.88rem;
+  font-weight:600;
+}
+
+/* =========================
+   GALLERY
+========================= */
+
+.gallery{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:18px;
+  margin-top:15px;
+}
+
+.gallery img{
+  width:100%;
+  height:220px;
+  object-fit:cover;
+  border-radius:14px;
+  box-shadow:0 10px 25px rgba(0,0,0,0.08);
+  transition:0.4s;
+}
+
+.gallery img:hover{
+  transform:scale(1.03);
+}
+
+/* =========================
+   FOOTER
+========================= */
+
+footer{
+  margin-top:60px;
+  padding:30px;
+  text-align:center;
+  color:#666;
+  font-size:0.88rem;
+}
+
+.loading{
+  text-align:center;
+  margin-top:30px;
+  color:#555;
+  font-size:0.9rem;
+}
+
+/* =========================
+   ANIMATIONS
+========================= */
+
+@keyframes fadeIn{
+  from{
+    opacity:0;
+    transform:translateY(20px);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+@keyframes slideUp{
+  from{
+    opacity:0;
+    transform:translateY(40px);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+/* =========================
+   MOBILE
+========================= */
 
 @media(max-width:768px){
 
@@ -612,9 +607,7 @@
     font-size:1.35rem;
   }
 
-  /* =========================
-     MOBILE LEADERBOARD FIX
-  ========================= */
+  /* MOBILE LEADERBOARD FIX */
 
   .top-three{
     display:flex;
@@ -656,430 +649,442 @@
 
 }
 
-  </style>
+</style>
 </head>
 
 <body>
 
-  <!-- HEADER -->
+<!-- HEADER -->
 
-  <header>
+<header>
 
-    <div class="navbar">
+  <div class="navbar">
 
-      <div class="logo">
-        <i class="fa-solid fa-shield-heart"></i>
-        AFC Isiwu Youth
-      </div>
-
-      <div class="menu" id="menu">
-        <a href="#">Home</a>
-        <a href="#finance">Finance</a>
-        <a href="#reports">Reports</a>
-        <a href="#leaderboard">Challenge</a>
-        <a href="#gallery">Gallery</a>
-      </div>
-
-      <div class="hamburger" id="hamburger">
-        <i class="fa-solid fa-bars"></i>
-      </div>
-
+    <div class="logo">
+      <i class="fa-solid fa-shield-heart"></i>
+      AFC Isiwu Youth
     </div>
 
-    <div class="hero">
-
-      <h1>AFC Isiwu Youth Portal</h1>
-
-      <p>
-        Transparency • Accountability • Welfare Support • Youth Development
-      </p>
-
-      <div class="hero-buttons">
-
-        <a href="#reports" class="btn-primary">
-          View Reports
-        </a>
-
-        <a href="#leaderboard" class="btn-secondary">
-          Sunday Challenge
-        </a>
-
-      </div>
-
+    <div class="menu" id="menu">
+      <a href="#">Home</a>
+      <a href="#finance">Finance</a>
+      <a href="#reports">Reports</a>
+      <a href="#leaderboard">Challenge</a>
+      <a href="#gallery">Gallery</a>
     </div>
 
-  </header>
-
-  <!-- MAIN -->
-
-  <div class="container">
-
-    <!-- WELFARE REPORTS -->
-
-    <div class="section">
-
-      <div class="section-title">
-        <i class="fa-solid fa-chart-column"></i>
-        <h2>Welfare Reports</h2>
-      </div>
-
-      <div class="cards">
-
-        <div class="card green">
-          <i class="fa-solid fa-money-bill-trend-up"></i>
-          <h2>Total Contributions</h2>
-          <div class="amount" id="totalContributions">₦0</div>
-        </div>
-
-        <div class="card red">
-          <i class="fa-solid fa-wallet"></i>
-          <h2>Total Expenses</h2>
-          <div class="amount" id="totalExpenses">₦0</div>
-        </div>
-
-        <div class="card blue">
-          <i class="fa-solid fa-building-columns"></i>
-          <h2>Current Balance</h2>
-          <div class="amount" id="currentBalance">₦0</div>
-        </div>
-
-      </div>
-
-    </div>
-
-    <!-- ACTIVITIES -->
-
-    <div class="section">
-
-      <div class="section-title">
-        <i class="fa-solid fa-clock-rotate-left"></i>
-        <h2>Recent Welfare Activities</h2>
-      </div>
-
-      <div class="activities">
-
-        <table>
-
-          <thead>
-            <tr>
-              <th>Activity</th>
-              <th>Amount</th>
-            </tr>
-          </thead>
-
-          <tbody id="activityTable">
-
-            <tr>
-              <td>Loading...</td>
-              <td>₦0</td>
-            </tr>
-
-          </tbody>
-
-        </table>
-
-      </div>
-
-    </div>
-
-    <!-- FINANCE -->
-
-    <div class="section" id="finance">
-
-      <div class="section-title">
-        <i class="fa-solid fa-chart-line"></i>
-        <h2>Financial Overview</h2>
-      </div>
-
-      <canvas id="financeChart"></canvas>
-
-    </div>
-
-    <!-- SECRETARIAT REPORTS -->
-
-    <div class="section" id="reports">
-
-      <div class="section-title">
-        <i class="fa-solid fa-file-lines"></i>
-        <h2>Secretariat Reports</h2>
-      </div>
-
-      <div class="report-box">
-
-        <h2>Program & Attendance Reports</h2>
-
-        <p>
-          Submit attendance, program reports and official secretariat updates.
-        </p>
-
-        <div class="report-buttons">
-
-          <a href="#" class="report-btn">
-            <i class="fa-solid fa-pen-to-square"></i>
-            Fill Program Report
-          </a>
-
-          <a href="#" class="report-btn green-btn">
-            <i class="fa-solid fa-user-check"></i>
-            Submit Attendance
-          </a>
-
-        </div>
-
-      </div>
-
-    </div>
-
-    <!-- LEADERBOARD -->
-
-    <div class="section" id="leaderboard">
-
-      <div class="section-title">
-        <i class="fa-solid fa-trophy"></i>
-        <h2>Sunday Lessons Challenge</h2>
-      </div>
-
-      <div class="leaderboard">
-
-        <div class="top-three">
-
-          <div class="leader-circle second-place">
-
-            <div class="leader-avatar small">
-              🥈
-            </div>
-
-            <h3>Peace</h3>
-            <p>95 Points</p>
-
-          </div>
-
-          <div class="leader-circle first-place">
-
-            <div class="leader-avatar big">
-              🥇
-            </div>
-
-            <h3>Daniel</h3>
-            <p>120 Points</p>
-
-          </div>
-
-          <div class="leader-circle third-place">
-
-            <div class="leader-avatar small">
-              🥉
-            </div>
-
-            <h3>Favour</h3>
-            <p>90 Points</p>
-
-          </div>
-
-        </div>
-
-        <div class="leader-list">
-
-          <div class="leader-item">
-            <span>#4</span>
-            <p>Esther</p>
-            <strong>85</strong>
-          </div>
-
-          <div class="leader-item">
-            <span>#5</span>
-            <p>Joshua</p>
-            <strong>82</strong>
-          </div>
-
-          <div class="leader-item">
-            <span>#6</span>
-            <p>Deborah</p>
-            <strong>80</strong>
-          </div>
-
-          <div class="leader-item">
-            <span>#7</span>
-            <p>Michael</p>
-            <strong>77</strong>
-          </div>
-
-        </div>
-
-      </div>
-
-    </div>
-
-    <!-- DOWNLOADABLE REPORTS -->
-
-    <div class="section">
-
-      <div class="section-title">
-        <i class="fa-solid fa-download"></i>
-        <h2>Downloadable Reports</h2>
-      </div>
-
-      <div class="downloads">
-
-        <div class="download-card">
-          <i class="fa-solid fa-file-pdf"></i>
-          <h3>Monthly Welfare Report</h3>
-          <a href="#">Download PDF</a>
-        </div>
-
-        <div class="download-card">
-          <i class="fa-solid fa-file-excel"></i>
-          <h3>Financial Spreadsheet</h3>
-          <a href="#">Download Excel</a>
-        </div>
-
-      </div>
-
-    </div>
-
-    <!-- GALLERY -->
-
-    <div class="section" id="gallery">
-
-      <div class="section-title">
-        <i class="fa-solid fa-image"></i>
-        <h2>Youth Gallery</h2>
-      </div>
-
-      <div class="gallery">
-
-        <img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?q=80&w=1200&auto=format&fit=crop">
-
-        <img src="https://images.unsplash.com/photo-1511632765486-a01980e01a18?q=80&w=1200&auto=format&fit=crop">
-
-        <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=1200&auto=format&fit=crop">
-
-      </div>
-
-    </div>
-
-    <!-- LOADING -->
-
-    <div class="loading" id="loadingText">
-      Connecting to Google Sheets...
+    <div class="hamburger" id="hamburger">
+      <i class="fa-solid fa-bars"></i>
     </div>
 
   </div>
 
-  <!-- FOOTER -->
+  <div class="hero">
 
-  <footer>
-    AFC Isiwu Youth Welfare Department Portal © 2026
-  </footer>
+    <h1>AFC Isiwu Youth Portal</h1>
 
-  <!-- SCRIPT -->
+    <p>
+      Transparency • Accountability • Welfare Support • Youth Development
+    </p>
 
-  <script>
+    <div class="hero-buttons">
 
-    // MOBILE MENU
+      <a href="#reports" class="btn-primary">
+        View Reports
+      </a>
 
-    const hamburger = document.getElementById('hamburger');
-    const menu = document.getElementById('menu');
+      <a href="#leaderboard" class="btn-secondary">
+        Sunday Challenge
+      </a>
 
-    hamburger.addEventListener('click', () => {
-      menu.classList.toggle('active');
-    });
+    </div>
 
-    // GOOGLE SHEETS LINK
+  </div>
 
-    const sheetURL =
-    "https://docs.google.com/spreadsheets/d/e/2PACX-1vQHlE5IpmFYaQyW5u-rentH2fGC5VZJ2w9Ql1WI-X8bE76qlN5_ttDIitwlXX1CM4sqdEW8RroDUNSU/pub?gid=439044630&single=true&output=csv";
+</header>
 
-    async function fetchSheetData(){
+<!-- MAIN -->
 
-      try{
+<div class="container">
 
-        const response = await fetch(sheetURL);
-        const data = await response.text();
+  <!-- WELFARE REPORTS -->
 
-        const rows = data.split('\n').map(row => row.split(','));
+  <div class="section">
 
-        const contributions = rows[0][1] || 0;
-        const expenses = rows[1][1] || 0;
-        const balance = rows[2][1] || 0;
+    <div class="section-title">
+      <i class="fa-solid fa-chart-column"></i>
+      <h2>Welfare Reports</h2>
+    </div>
 
-        document.getElementById('totalContributions').innerText =
-        `₦${Number(contributions).toLocaleString()}`;
+    <div class="cards">
 
-        document.getElementById('totalExpenses').innerText =
-        `₦${Number(expenses).toLocaleString()}`;
+      <div class="card green">
+        <i class="fa-solid fa-money-bill-trend-up"></i>
+        <h2>Total Contributions</h2>
+        <div class="amount" id="totalContributions">₦0</div>
+      </div>
 
-        document.getElementById('currentBalance').innerText =
-        `₦${Number(balance).toLocaleString()}`;
+      <div class="card red">
+        <i class="fa-solid fa-wallet"></i>
+        <h2>Total Expenses</h2>
+        <div class="amount" id="totalExpenses">₦0</div>
+      </div>
 
-        // CHART
+      <div class="card blue">
+        <i class="fa-solid fa-building-columns"></i>
+        <h2>Current Balance</h2>
+        <div class="amount" id="currentBalance">₦0</div>
+      </div>
 
-        const ctx = document.getElementById('financeChart');
+    </div>
 
-        new Chart(ctx, {
+  </div>
 
-          type:'bar',
+  <!-- ACTIVITIES -->
 
-          data:{
-            labels:['Contributions','Expenses','Balance'],
+  <div class="section">
 
-            datasets:[{
-              label:'Financial Overview',
-              data:[contributions, expenses, balance],
-              borderRadius:8
-            }]
-          },
+    <div class="section-title">
+      <i class="fa-solid fa-clock-rotate-left"></i>
+      <h2>Recent Welfare Activities</h2>
+    </div>
 
-          options:{
-            responsive:true,
+    <div class="activities">
 
-            plugins:{
-              legend:{
-                display:false
-              }
-            }
-          }
+      <table>
 
-        });
+        <thead>
+          <tr>
+            <th>Activity</th>
+            <th>Amount</th>
+          </tr>
+        </thead>
 
-        // ACTIVITIES TABLE
+        <tbody id="activityTable">
 
-        const activityTable =
-        document.getElementById('activityTable');
+          <tr>
+            <td>Loading...</td>
+            <td>₦0</td>
+          </tr>
 
-        activityTable.innerHTML = '';
+        </tbody>
 
-        for(let i = 3; i < rows.length; i++){
+      </table>
 
-          if(rows[i][0]){
+    </div>
 
-            activityTable.innerHTML += `
-              <tr>
-                <td>${rows[i][0]}</td>
-                <td>₦${Number(rows[i][1]).toLocaleString()}</td>
-              </tr>
-            `;
+  </div>
+
+  <!-- FINANCE -->
+
+  <div class="section" id="finance">
+
+    <div class="section-title">
+      <i class="fa-solid fa-chart-line"></i>
+      <h2>Financial Overview</h2>
+    </div>
+
+    <canvas id="financeChart"></canvas>
+
+  </div>
+
+  <!-- SECRETARIAT REPORTS -->
+
+  <div class="section" id="reports">
+
+    <div class="section-title">
+      <i class="fa-solid fa-file-lines"></i>
+      <h2>Secretariat Reports</h2>
+    </div>
+
+    <div class="report-box">
+
+      <h2>Program & Attendance Reports</h2>
+
+      <p>
+        Submit attendance, program reports and official secretariat updates.
+      </p>
+
+      <div class="report-buttons">
+
+        <a href="#" class="report-btn">
+          <i class="fa-solid fa-pen-to-square"></i>
+          Fill Program Report
+        </a>
+
+        <a href="#" class="report-btn green-btn">
+          <i class="fa-solid fa-user-check"></i>
+          Submit Attendance
+        </a>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- LEADERBOARD -->
+
+  <div class="section" id="leaderboard">
+
+    <div class="section-title">
+      <i class="fa-solid fa-trophy"></i>
+      <h2>Sunday Lessons Challenge</h2>
+    </div>
+
+    <div class="leaderboard">
+
+      <div class="top-three">
+
+        <!-- SECOND -->
+
+        <div class="leader-circle second-place">
+
+          <div class="leader-avatar small">
+            🥈
+          </div>
+
+          <h3>Peace</h3>
+          <p>95 Points</p>
+
+        </div>
+
+        <!-- FIRST -->
+
+        <div class="leader-circle first-place">
+
+          <div class="leader-avatar big">
+            🥇
+          </div>
+
+          <h3>Daniel</h3>
+          <p>120 Points</p>
+
+        </div>
+
+        <!-- THIRD -->
+
+        <div class="leader-circle third-place">
+
+          <div class="leader-avatar small">
+            🥉
+          </div>
+
+          <h3>Favour</h3>
+          <p>90 Points</p>
+
+        </div>
+
+      </div>
+
+      <!-- OTHER LEADERS -->
+
+      <div class="leader-list">
+
+        <div class="leader-item">
+          <span>#4</span>
+          <p>Esther</p>
+          <strong>85</strong>
+        </div>
+
+        <div class="leader-item">
+          <span>#5</span>
+          <p>Joshua</p>
+          <strong>82</strong>
+        </div>
+
+        <div class="leader-item">
+          <span>#6</span>
+          <p>Deborah</p>
+          <strong>80</strong>
+        </div>
+
+        <div class="leader-item">
+          <span>#7</span>
+          <p>Michael</p>
+          <strong>77</strong>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- DOWNLOADS -->
+
+  <div class="section">
+
+    <div class="section-title">
+      <i class="fa-solid fa-download"></i>
+      <h2>Downloadable Reports</h2>
+    </div>
+
+    <div class="downloads">
+
+      <div class="download-card">
+        <i class="fa-solid fa-file-pdf"></i>
+        <h3>Monthly Welfare Report</h3>
+        <a href="#">Download PDF</a>
+      </div>
+
+      <div class="download-card">
+        <i class="fa-solid fa-file-excel"></i>
+        <h3>Financial Spreadsheet</h3>
+        <a href="#">Download Excel</a>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- GALLERY -->
+
+  <div class="section" id="gallery">
+
+    <div class="section-title">
+      <i class="fa-solid fa-image"></i>
+      <h2>Youth Gallery</h2>
+    </div>
+
+    <div class="gallery">
+
+      <img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?q=80&w=1200&auto=format&fit=crop">
+
+      <img src="https://images.unsplash.com/photo-1511632765486-a01980e01a18?q=80&w=1200&auto=format&fit=crop">
+
+      <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=1200&auto=format&fit=crop">
+
+    </div>
+
+  </div>
+
+  <!-- LOADING -->
+
+  <div class="loading" id="loadingText">
+    Connecting to Google Sheets...
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+
+<footer>
+  AFC Isiwu Youth Welfare Department Portal © 2026
+</footer>
+
+<!-- SCRIPT -->
+
+<script>
+
+const hamburger = document.getElementById('hamburger');
+const menu = document.getElementById('menu');
+
+hamburger.addEventListener('click', () => {
+  menu.classList.toggle('active');
+});
+
+/* GOOGLE SHEETS */
+
+const sheetURL =
+"https://docs.google.com/spreadsheets/d/e/2PACX-1vQHlE5IpmFYaQyW5u-rentH2fGC5VZJ2w9Ql1WI-X8bE76qlN5_ttDIitwlXX1CM4sqdEW8RroDUNSU/pub?gid=439044630&single=true&output=csv";
+
+async function fetchSheetData(){
+
+  try{
+
+    const response = await fetch(sheetURL);
+    const data = await response.text();
+
+    const rows = data.split('\n').map(row => row.split(','));
+
+    const contributions = rows[0][1] || 0;
+    const expenses = rows[1][1] || 0;
+    const balance = rows[2][1] || 0;
+
+    document.getElementById('totalContributions').innerText =
+    `₦${Number(contributions).toLocaleString()}`;
+
+    document.getElementById('totalExpenses').innerText =
+    `₦${Number(expenses).toLocaleString()}`;
+
+    document.getElementById('currentBalance').innerText =
+    `₦${Number(balance).toLocaleString()}`;
+
+    /* CHART */
+
+    const ctx = document.getElementById('financeChart');
+
+    new Chart(ctx, {
+
+      type:'bar',
+
+      data:{
+        labels:['Contributions','Expenses','Balance'],
+
+        datasets:[{
+          label:'Financial Overview',
+          data:[contributions, expenses, balance],
+          borderRadius:8,
+          backgroundColor:[
+            '#42a5f5',
+            '#ef5350',
+            '#66bb6a'
+          ]
+        }]
+      },
+
+      options:{
+        responsive:true,
+
+        plugins:{
+          legend:{
+            display:false
           }
         }
-
-        document.getElementById('loadingText').style.display =
-        'none';
-
       }
 
-      catch(error){
+    });
 
-        console.error(error);
+    /* ACTIVITIES */
 
-        document.getElementById('loadingText').innerText =
-        'Failed to connect to Google Sheets.';
+    const activityTable =
+    document.getElementById('activityTable');
+
+    activityTable.innerHTML = '';
+
+    for(let i = 3; i < rows.length; i++){
+
+      if(rows[i][0]){
+
+        activityTable.innerHTML += `
+          <tr>
+            <td>${rows[i][0]}</td>
+            <td>₦${Number(rows[i][1]).toLocaleString()}</td>
+          </tr>
+        `;
       }
 
     }
 
-    fetchSheetData();
+    document.getElementById('loadingText').style.display =
+    'none';
 
-  </script>
+  }
+
+  catch(error){
+
+    console.error(error);
+
+    document.getElementById('loadingText').innerText =
+    'Failed to connect to Google Sheets.';
+  }
+
+}
+
+fetchSheetData();
+
+</script>
 
 </body>
 </html>
