@@ -1364,84 +1364,120 @@ async function fetchSecretariatReports() {
 
 /*
 ==============================
-WEEKLY LESSONS (FIXED ISSUE HERE)
+WEEKLY LESSONS (ROBUST FIX)
 ==============================
 */
 
 let lessonsData = [];
+
+/* SAFE CSV PARSER (handles commas, quotes, asterisks, full stops) */
+function parseCSV(text) {
+  const rows = [];
+  let row = [];
+  let value = '';
+  let inQuotes = false;
+
+  for (let i = 0; i < text.length; i++) {
+    const char = text[i];
+
+    if (char === '"') {
+      inQuotes = !inQuotes;
+    } else if (char === ',' && !inQuotes) {
+      row.push(value.trim());
+      value = '';
+    } else if (char === '\n' && !inQuotes) {
+      row.push(value.trim());
+      rows.push(row);
+      row = [];
+      value = '';
+    } else {
+      value += char;
+    }
+  }
+
+  if (value || row.length) {
+    row.push(value.trim());
+    rows.push(row);
+  }
+
+  return rows.filter(r => r.length > 1);
+}
 
 async function fetchWeeklyLesson() {
   try {
     const response = await fetch(weeklyLessonCSV);
     const data = await response.text();
 
-    const rows = data
-      .trim()
-      .split('\n')   // ✅ FIXED (this was your main bug)
-      .map(row => row.split(','));
+    const rows = parseCSV(data);
 
-    const actualRows = rows.slice(1);
+    console.log("RAW LESSON CSV:", rows); // 👈 IMPORTANT DEBUG
 
-    lessonsData = actualRows.map(row => ({
-      className: row[0],
-      topic: row[1],
-      bibleText: row[2],
-      memoryVerse: row[3],
-      summary: row[4],
-      discussion: row[5],
-      image: row[6]
+    const headers = rows[0].map(h => h.toLowerCase());
+
+    const getIndex = (name) => headers.indexOf(name.toLowerCase());
+
+    const iLesson = getIndex("lesson");
+    const iClass = getIndex("class");
+    const iTopic = getIndex("topic");
+    const iBible = getIndex("bibletext");
+    const iMemory = getIndex("memoryverse");
+    const iSummary = getIndex("summary");
+    const iDiscussion = getIndex("discussion");
+
+    lessonsData = rows.slice(1).map(r => ({
+      lesson: r[iLesson],
+      className: r[iClass],
+      topic: r[iTopic],
+      bibleText: r[iBible],
+      memoryVerse: r[iMemory],
+      summary: r[iSummary],
+      discussion: r[iDiscussion]
     }));
 
-    // Auto-load saved tab or fallback
-    const saved = localStorage.getItem('selectedLessonClass');
-    const defaultClass = saved || 'Senior';
+    console.log("PARSED LESSONS:", lessonsData);
 
-    switchLesson(defaultClass);
+    switchLesson("Senior");
 
-  } catch (error) {
-    console.log("Lesson Error:", error);
+  } catch (err) {
+    console.error("Lesson Fetch Error:", err);
   }
 }
 
 function switchLesson(className) {
-  const lesson = lessonsData.find(item => item.className === className);
+  const lesson = lessonsData.find(l =>
+    (l.className || "").toLowerCase() === className.toLowerCase()
+  );
 
   if (!lesson) {
     console.log("No lesson found for:", className);
     return;
   }
 
-  document.getElementById('lessonTopic').innerText = lesson.topic || '';
-  document.getElementById('lessonBibleText').innerText = lesson.bibleText || '';
-  document.getElementById('lessonMemoryVerse').innerText = lesson.memoryVerse || '';
+  document.getElementById("lessonTopic").innerText = lesson.topic || "No Topic";
+  document.getElementById("lessonBibleText").innerText = lesson.bibleText || "No Bible Text";
+  document.getElementById("lessonMemoryVerse").innerText = lesson.memoryVerse || "No Memory Verse";
 
-  const summary = lesson.summary || '';
-  document.getElementById('lessonPreview').innerText =
-    summary.length > 180 ? summary.substring(0, 180) + '...' : summary;
+  const summary = lesson.summary || "";
+  document.getElementById("lessonPreview").innerText =
+    summary.length > 180 ? summary.slice(0, 180) + "..." : summary;
 
-  document.getElementById('lessonImage').src = lesson.image || '';
+  // REMOVE IMAGE (you requested this)
+  const img = document.getElementById("lessonImage");
+  if (img) img.style.display = "none";
 
-  document.querySelectorAll('.lesson-tab').forEach(tab => {
-    tab.classList.remove('active');
-    if (tab.innerText === className) {
-      tab.classList.add('active');
+  document.querySelectorAll(".lesson-tab").forEach(tab => {
+    tab.classList.remove("active");
+    if (tab.innerText.trim().toLowerCase() === className.toLowerCase()) {
+      tab.classList.add("active");
     }
   });
 
-  localStorage.setItem('selectedLessonClass', className);
+  localStorage.setItem("selectedLessonClass", className);
 }
 
-/*
-==============================
-INITIAL LOAD
-==============================
-*/
-
-fetchSheetData();
-fetchSecretariatReports();
+/* INIT */
 fetchWeeklyLesson();
-
-/*
+  
 ==============================
 AUTO REFRESH REPORTS
 ==============================
