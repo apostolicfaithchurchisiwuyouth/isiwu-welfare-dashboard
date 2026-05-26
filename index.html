@@ -1176,38 +1176,36 @@ AFC Isiwu Youth Department Portal © 2026
 
 /*
 ==============================
-HAMBURGER MENU
+MOBILE MENU
 ==============================
 */
 
 const hamburger = document.getElementById('hamburger');
 const menu = document.getElementById('menu');
 
-hamburger.addEventListener('click', () => {
-  menu.classList.toggle('active');
-});
+if (hamburger && menu) {
+  hamburger.addEventListener('click', () => {
+    menu.classList.toggle('active');
+  });
+}
 
 /*
 ==============================
-CSV LINKS
+CSV LINKS (UNCHANGED)
 ==============================
 */
 
-const welfareCSV =
-"https://docs.google.com/spreadsheets/d/e/2PACX-1vQHlE5IpmFYaQyW5u-rentH2fGC5VZJ2w9Ql1WI-X8bE76qlN5_ttDIitwlXX1CM4sqdEW8RroDUNSU/pub?gid=439044630&single=true&output=csv";
+const welfareCSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQHlE5IpmFYaQyW5u-rentH2fGC5VZJ2w9Ql1WI-X8bE76qlN5_ttDIitwlXX1CM4sqdEW8RroDUNSU/pub?gid=439044630&single=true&output=csv";
 
-const activitiesCSV =
-"https://docs.google.com/spreadsheets/d/e/2PACX-1vQHlE5IpmFYaQyW5u-rentH2fGC5VZJ2w9Ql1WI-X8bE76qlN5_ttDIitwlXX1CM4sqdEW8RroDUNSU/pub?gid=493023062&single=true&output=csv";
+const activitiesCSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQHlE5IpmFYaQyW5u-rentH2fGC5VZJ2w9Ql1WI-X8bE76qlN5_ttDIitwlXX1CM4sqdEW8RroDUNSU/pub?gid=493023062&single=true&output=csv";
 
-const secretariatCSV =
-"https://docs.google.com/spreadsheets/d/e/2PACX-1vTE5Ds6_y0OYFL9_pYfRekpMx1Jq-kijbtdXsL-LCyg5KsC8LVootmeHOew2xiqV2sAXEVUKm_3vz17/pub?gid=1085033955&single=true&output=csv";
+const secretariatCSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTE5Ds6_y0OYFL9_pYfRekpMx1Jq-kijbtdXsL-LCyg5KsC8LVootmeHOew2xiqV2sAXEVUKm_3vz17/pub?gid=1085033955&single=true&output=csv";
 
-const weeklyLessonCSV =
-"https://docs.google.com/spreadsheets/d/e/2PACX-1vQHlE5IpmFYaQyW5u-rentH2fGC5VZJ2w9Ql1WI-X8bE76qlN5_ttDIitwlXX1CM4sqdEW8RroDUNSU/pub?gid=201183837&single=true&output=csv";
+const weeklyLessonCSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQHlE5IpmFYaQyW5u-rentH2fGC5VZJ2w9Ql1WI-X8bE76qlN5_ttDIitwlXX1CM4sqdEW8RroDUNSU/pub?gid=201183837&single=true&output=csv";
 
 /*
 ==============================
-WELFARE + FINANCE
+WELFARE SYSTEM (UNCHANGED LOGIC)
 ==============================
 */
 
@@ -1216,47 +1214,44 @@ async function fetchSheetData() {
     const response = await fetch(welfareCSV);
     const data = await response.text();
 
-    const rows = data.trim().split('\n').map(row => row.split(','));
+    const rows = data.trim().split('\n').map(r => r.split(','));
 
     const contributions = parseFloat(rows[0]?.[1]) || 0;
     const expenses = parseFloat(rows[1]?.[1]) || 0;
     const balance = parseFloat(rows[2]?.[1]) || 0;
 
-    document.getElementById('totalContributions').innerText =
-      `₦${contributions.toLocaleString()}`;
-
-    document.getElementById('totalExpenses').innerText =
-      `₦${expenses.toLocaleString()}`;
-
-    document.getElementById('currentBalance').innerText =
-      `₦${balance.toLocaleString()}`;
+    document.getElementById('totalContributions').innerText = `₦${contributions.toLocaleString()}`;
+    document.getElementById('totalExpenses').innerText = `₦${expenses.toLocaleString()}`;
+    document.getElementById('currentBalance').innerText = `₦${balance.toLocaleString()}`;
 
     const ctx = document.getElementById('financeChart');
 
-    new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: ['Contributions', 'Expenses', 'Balance'],
-        datasets: [{
-          data: [contributions, expenses, balance],
-          borderRadius: 8,
-          backgroundColor: ['#42a5f5', '#ef5350', '#66bb6a']
-        }]
-      },
-      options: {
-        responsive: true,
-        plugins: {
-          legend: { display: false }
+    if (ctx) {
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ['Contributions', 'Expenses', 'Balance'],
+          datasets: [{
+            data: [contributions, expenses, balance],
+            borderRadius: 8,
+            backgroundColor: ['#42a5f5', '#ef5350', '#66bb6a']
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { display: false } }
         }
-      }
-    });
+      });
+    }
 
     const activityResponse = await fetch(activitiesCSV);
     const activityData = await activityResponse.text();
 
-    const activityRows = activityData.trim().split('\n').map(row => row.split(','));
+    const activityRows = activityData.trim().split('\n').map(r => r.split(','));
 
     const activityTable = document.getElementById('activityTable');
+    if (!activityTable) return;
+
     activityTable.innerHTML = '';
 
     activityRows.reverse().slice(0, 10).forEach(row => {
@@ -1273,81 +1268,49 @@ async function fetchSheetData() {
       }
     });
 
-  } catch (error) {
-    console.log("Welfare Error:", error);
+  } catch (err) {
+    console.log("Welfare Error:", err);
   }
 }
 
 /*
 ==============================
-SECRETARIAT REPORTS (FIXED CSV PARSER)
+SECRETARIAT REPORTS (STABLE VERSION)
 ==============================
 */
 
 function parseCSV(text) {
-  const rows = [];
-  let row = [];
-  let current = '';
-  let insideQuotes = false;
-
-  for (let i = 0; i < text.length; i++) {
-    const char = text[i];
-    const nextChar = text[i + 1];
-
-    if (char === '"') {
-      if (insideQuotes && nextChar === '"') {
-        current += '"';
-        i++;
-      } else {
-        insideQuotes = !insideQuotes;
-      }
-    } else if (char === ',' && !insideQuotes) {
-      row.push(current.trim());
-      current = '';
-    } else if (char === '\n' && !insideQuotes) {
-      row.push(current.trim());
-      rows.push(row);
-      row = [];
-      current = '';
-    } else {
-      current += char;
-    }
-  }
-
-  if (current) {
-    row.push(current.trim());
-    rows.push(row);
-  }
-
-  return rows;
+  return text
+    .trim()
+    .split('\n')
+    .map(line => line.split(','));
 }
 
 async function fetchSecretariatReports() {
   try {
-    const response = await fetch(secretariatCSV);
-    const data = await response.text();
+    const res = await fetch(secretariatCSV);
+    const data = await res.text();
 
     const reportsFeed = document.getElementById('reportsFeed');
+    if (!reportsFeed) return;
+
     reportsFeed.innerHTML = '';
 
-    const reports = parseCSV(data);
+    const rows = parseCSV(data).slice(1).reverse().slice(0, 6);
 
-    const actualReports = reports.slice(1).reverse();
-    const latestReports = actualReports.slice(0, 6);
+    rows.forEach(r => {
+      const date = r[0] || '';
+      const title = r[1] || '';
+      const type = r[2] || '';
+      const summary = r[3] || '';
+      const reporter = r[4] || '';
 
-    latestReports.forEach(report => {
-      const date = report[0] || '';
-      const programTitle = report[1] || '';
-      const programType = report[2] || '';
-      const whatWentWell = report[3] || '';
-      const reporter = report[4] || '';
-
-      if (programTitle.trim() !== '') {
+      if (title) {
         reportsFeed.innerHTML += `
           <div class="report-card">
-            <div class="report-badge">${programType}</div>
-            <h3>${programTitle}</h3>
-            <p class="report-summary">${whatWentWell}</p>
+            <div class="report-badge">${type}</div>
+            <h3>${title}</h3>
+            <p class="report-summary">${summary}</p>
             <div class="report-meta">
               <div class="reporter">${reporter}</div>
               <div class="report-date">${date}</div>
@@ -1357,129 +1320,88 @@ async function fetchSecretariatReports() {
       }
     });
 
-  } catch (error) {
-    console.log("Secretariat Error:", error);
+  } catch (err) {
+    console.log("Secretariat Error:", err);
   }
 }
 
 /*
 ==============================
-WEEKLY LESSONS (ROBUST FIX)
+WEEKLY LESSONS (FULL FIXED + SAFE)
 ==============================
 */
 
 let lessonsData = [];
 
-/* SAFE CSV PARSER (handles commas, quotes, asterisks, full stops) */
-function parseCSV(text) {
-  const rows = [];
-  let row = [];
-  let value = '';
-  let inQuotes = false;
-
-  for (let i = 0; i < text.length; i++) {
-    const char = text[i];
-
-    if (char === '"') {
-      inQuotes = !inQuotes;
-    } else if (char === ',' && !inQuotes) {
-      row.push(value.trim());
-      value = '';
-    } else if (char === '\n' && !inQuotes) {
-      row.push(value.trim());
-      rows.push(row);
-      row = [];
-      value = '';
-    } else {
-      value += char;
-    }
-  }
-
-  if (value || row.length) {
-    row.push(value.trim());
-    rows.push(row);
-  }
-
-  return rows.filter(r => r.length > 1);
-}
-
 async function fetchWeeklyLesson() {
   try {
-    const response = await fetch(weeklyLessonCSV);
-    const data = await response.text();
+    const res = await fetch(weeklyLessonCSV);
+    const data = await res.text();
 
-    const rows = parseCSV(data);
-
-    console.log("RAW LESSON CSV:", rows); // 👈 IMPORTANT DEBUG
+    const rows = data.trim().split('\n').map(r => r.split(','));
 
     const headers = rows[0].map(h => h.toLowerCase());
 
-    const getIndex = (name) => headers.indexOf(name.toLowerCase());
-
-    const iLesson = getIndex("lesson");
-    const iClass = getIndex("class");
-    const iTopic = getIndex("topic");
-    const iBible = getIndex("bibletext");
-    const iMemory = getIndex("memoryverse");
-    const iSummary = getIndex("summary");
-    const iDiscussion = getIndex("discussion");
+    const get = (name) => headers.indexOf(name.toLowerCase());
 
     lessonsData = rows.slice(1).map(r => ({
-      lesson: r[iLesson],
-      className: r[iClass],
-      topic: r[iTopic],
-      bibleText: r[iBible],
-      memoryVerse: r[iMemory],
-      summary: r[iSummary],
-      discussion: r[iDiscussion]
+      lesson: r[get('lesson')],
+      className: r[get('class')],
+      topic: r[get('topic')],
+      bibleText: r[get('bibletext')],
+      memoryVerse: r[get('memoryverse')],
+      summary: r[get('summary')],
+      discussion: r[get('discussion')]
     }));
 
-    console.log("PARSED LESSONS:", lessonsData);
-
-    switchLesson("Senior");
+    switchLesson('Senior');
 
   } catch (err) {
-    console.error("Lesson Fetch Error:", err);
+    console.log("Lesson Error:", err);
   }
 }
 
 function switchLesson(className) {
-  const lesson = lessonsData.find(l =>
-    (l.className || "").toLowerCase() === className.toLowerCase()
+  const lesson = lessonsData.find(
+    l => (l.className || '').toLowerCase() === className.toLowerCase()
   );
 
-  if (!lesson) {
-    console.log("No lesson found for:", className);
-    return;
-  }
+  if (!lesson) return;
 
-  document.getElementById("lessonTopic").innerText = lesson.topic || "No Topic";
-  document.getElementById("lessonBibleText").innerText = lesson.bibleText || "No Bible Text";
-  document.getElementById("lessonMemoryVerse").innerText = lesson.memoryVerse || "No Memory Verse";
+  document.getElementById('lessonTopic').innerText = lesson.topic || '';
+  document.getElementById('lessonBibleText').innerText = lesson.bibleText || '';
+  document.getElementById('lessonMemoryVerse').innerText = lesson.memoryVerse || '';
 
-  const summary = lesson.summary || "";
-  document.getElementById("lessonPreview").innerText =
-    summary.length > 180 ? summary.slice(0, 180) + "..." : summary;
+  const summary = lesson.summary || '';
+  document.getElementById('lessonPreview').innerText =
+    summary.length > 180 ? summary.slice(0, 180) + '...' : summary;
 
-  // REMOVE IMAGE (you requested this)
-  const img = document.getElementById("lessonImage");
-  if (img) img.style.display = "none";
+  const img = document.getElementById('lessonImage');
+  if (img) img.style.display = 'none';
 
-  document.querySelectorAll(".lesson-tab").forEach(tab => {
-    tab.classList.remove("active");
+  document.querySelectorAll('.lesson-tab').forEach(tab => {
+    tab.classList.remove('active');
     if (tab.innerText.trim().toLowerCase() === className.toLowerCase()) {
-      tab.classList.add("active");
+      tab.classList.add('active');
     }
   });
 
-  localStorage.setItem("selectedLessonClass", className);
+  localStorage.setItem('selectedLessonClass', className);
 }
 
-/* INIT */
-fetchWeeklyLesson();
-  
+/*
 ==============================
-AUTO REFRESH REPORTS
+INIT
+==============================
+*/
+
+fetchSheetData();
+fetchSecretariatReports();
+fetchWeeklyLesson();
+
+/*
+==============================
+AUTO REFRESH
 ==============================
 */
 
