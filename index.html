@@ -325,6 +325,90 @@ display:flex;
 flex-direction:column;
 gap:12px;
 }
+  .premium-reports-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+gap:20px;
+margin-top:20px;
+}
+
+.report-card{
+background:rgba(255,255,255,0.6);
+backdrop-filter:blur(14px);
+border:1px solid rgba(255,255,255,0.25);
+border-radius:24px;
+padding:22px;
+position:relative;
+overflow:hidden;
+transition:0.35s;
+box-shadow:0 10px 30px rgba(0,0,0,0.06);
+}
+
+.report-card:hover{
+transform:translateY(-6px);
+box-shadow:0 18px 45px rgba(0,0,0,0.1);
+}
+
+.report-card::before{
+content:'';
+position:absolute;
+width:160px;
+height:160px;
+border-radius:50%;
+background:rgba(21,101,192,0.06);
+top:-60px;
+right:-60px;
+}
+
+.report-badge{
+display:inline-block;
+padding:8px 14px;
+border-radius:999px;
+background:rgba(21,101,192,0.1);
+color:#1565c0;
+font-size:0.65rem;
+font-weight:700;
+margin-bottom:14px;
+position:relative;
+z-index:2;
+}
+
+.report-card h3{
+font-size:1.05rem;
+line-height:1.5;
+margin-bottom:12px;
+position:relative;
+z-index:2;
+}
+
+.report-summary{
+font-size:0.78rem;
+line-height:1.8;
+color:#555;
+margin-bottom:18px;
+position:relative;
+z-index:2;
+}
+
+.report-meta{
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:12px;
+flex-wrap:wrap;
+position:relative;
+z-index:2;
+}
+
+.reporter{
+font-size:0.72rem;
+font-weight:700;
+}
+
+.report-date{
+font-size:0.7rem;
+color:#777;
+}
 
 .feed-item{
 padding:14px;
@@ -619,74 +703,6 @@ width:70px;
 height:70px;
 font-size:1.4rem;
 }
-  .reports-header-card{
-}
-
-.report-footer{
-display:flex;
-align-items:center;
-justify-content:space-between;
-gap:12px;
-position:relative;
-z-index:2;
-}
-
-.reporter-info{
-display:flex;
-align-items:center;
-gap:12px;
-}
-
-.reporter-avatar{
-width:42px;
-height:42px;
-border-radius:50%;
-background:linear-gradient(135deg,#1565c0,#42a5f5);
-color:white;
-display:flex;
-align-items:center;
-justify-content:center;
-font-weight:700;
-font-size:0.9rem;
-}
-
-.reporter-name{
-font-size:0.75rem;
-font-weight:700;
-}
-
-.reporter-role{
-font-size:0.66rem;
-color:#777;
-margin-top:3px;
-}
-
-.report-link{
-text-decoration:none;
-font-size:0.72rem;
-font-weight:700;
-color:#1565c0;
-}
-
-@media(max-width:768px){
-
-.reports-header-card{
-padding:20px;
-}
-
-.reports-header-card h3{
-font-size:1.1rem;
-}
-
-.premium-reports-grid{
-grid-template-columns:1fr;
-}
-
-.report-card{
-padding:20px;
-}
-
-}
 
 }
 
@@ -815,32 +831,7 @@ Submit Attendance
 
 </div>
 
-<div class="section" id="reports">
-
-<div class="section-title">
-<i class="fa-solid fa-file-lines"></i>
-<h2>Secretariat Reports</h2>
-</div>
-
-<div class="reports-header-card">
-
-<div>
-<h3>Programs & Activity Reports</h3>
-<p>
-Latest updates, attendance summaries, fellowship programs and youth activities.
-</p>
-</div>
-
-<a href="reports.html" class="view-all-btn">
-View All Reports
-<i class="fa-solid fa-arrow-right"></i>
-</a>
-
-</div>
-
 <div class="premium-reports-grid" id="reportsFeed"></div>
-
-</div>
 
 </div>
 
@@ -925,10 +916,9 @@ View More Images & Videos
 </div>
 
 <footer>
-AFC Isiwu Youth Welfare Department Portal © 2026
+AFC Isiwu Youth Department Portal © 2026
 </footer>
 
-```html
 <script>
 
 const hamburger = document.getElementById('hamburger');
@@ -1125,21 +1115,26 @@ const reporter = report[4] || '';
 
 if(programTitle.trim() !== ''){
 
-const initials = reporter
-.split(' ')
-.map(name => name.charAt(0))
-.join('')
-.substring(0,2)
-.toUpperCase();
-
 reportsFeed.innerHTML += `
 
 <div class="report-card">
 
-<div class="report-top">
-
-<div class="program-type-badge">
+<div class="report-badge">
 ${programType}
+</div>
+
+<h3>
+${programTitle}
+</h3>
+
+<p class="report-summary">
+${whatWentWell}
+</p>
+
+<div class="report-meta">
+
+<div class="reporter">
+${reporter}
 </div>
 
 <div class="report-date">
@@ -1148,72 +1143,10 @@ ${date}
 
 </div>
 
-<h3 class="report-title">
-${programTitle}
-</h3>
-
-<p class="report-summary">
-${whatWentWell}
-</p>
-
-<div class="report-footer">
-
-<div class="reporter-info">
-
-<div class="reporter-avatar">
-${initials}
-</div>
-
-<div>
-<div class="reporter-name">
-${reporter}
-</div>
-
-<div class="reporter-role">
-Secretariat Department
-</div>
-</div>
-
-</div>
-
-<a href="reports.html" class="report-link">
-Read More →
-</a>
-
-</div>
-
 </div>
 
 `;
-
-<div class="feed-item">
-
-<h4>${programTitle}</h4>
-
-<p>
-<strong>Date:</strong>
-${date}
-</p>
-
-<p>
-<strong>Program Type:</strong>
-${programType}
-</p>
-
-<p>
-<strong>What Went Well:</strong><br>
-${whatWentWell}
-</p>
-
-<p>
-<strong>Reporter:</strong>
-${reporter}
-</p>
-
-</div>
-
-`;
-
+  
 }
 
 });
@@ -1244,8 +1177,6 @@ AUTO REFRESH
 setInterval(fetchSecretariatReports, 30000);
 
 </script>
-```
-
 
 </body>
 </html>
