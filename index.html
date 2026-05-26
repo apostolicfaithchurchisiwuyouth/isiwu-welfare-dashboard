@@ -436,6 +436,31 @@ margin-top:20px;
 flex-wrap:wrap;
 }
 
+  .reports-button-wrap{
+display:flex;
+justify-content:center;
+margin-top:30px;
+}
+
+.more-reports-btn{
+display:flex;
+align-items:center;
+gap:10px;
+padding:14px 24px;
+border-radius:16px;
+text-decoration:none;
+background:linear-gradient(135deg,#1565c0,#42a5f5);
+color:white;
+font-size:0.82rem;
+font-weight:700;
+transition:0.3s;
+box-shadow:0 10px 25px rgba(21,101,192,0.2);
+}
+
+.more-reports-btn:hover{
+transform:translateY(-4px);
+box-shadow:0 18px 40px rgba(21,101,192,0.3);
+}
 .page-btn{
 width:38px;
 height:38px;
@@ -832,7 +857,14 @@ Submit Attendance
 </div>
 
 <div class="premium-reports-grid" id="reportsFeed"></div>
+<div class="reports-button-wrap">
 
+<a href="reports.html" class="more-reports-btn">
+View More Reports
+<i class="fa-solid fa-arrow-right"></i>
+</a>
+
+</div>
 </div>
 
 <div class="section" id="leaderboard">
@@ -1103,7 +1135,7 @@ actualReports.reverse();
 SHOW ONLY 5 REPORTS
 */
 
-const latestReports = actualReports.slice(0,5);
+const latestReports = actualReports.slice(0,6);
 
 latestReports.forEach(report => {
 
