@@ -20,6 +20,20 @@ padding:0;
 box-sizing:border-box;
 }
 
+/* Remove blue click/tap highlight */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Remove focus outline (desktop click box) */
+button:focus,
+a:focus,
+button:active,
+a:active {
+  outline: none;
+  box-shadow: none;
+}
+
 html{
 scroll-behavior:smooth;
 }
