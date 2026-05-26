@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<title>Weekly Lessons | AFC Isiwu Youth</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700&family=Host+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+font-family:'Host Grotesk',sans-serif;
+background:#eef3f9;
+color:#222;
+}
+
+h1,h2,h3{
+font-family:'Bricolage Grotesque',sans-serif;
+}
+
+/* HEADER */
+header{
+padding:20px 7%;
+background:linear-gradient(135deg,#0d47a1,#1976d2);
+color:white;
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+header h2{
+font-size:1.1rem;
+}
+
+.back{
+color:white;
+text-decoration:none;
+font-size:0.85rem;
+background:rgba(255,255,255,0.15);
+padding:10px 14px;
+border-radius:10px;
+}
+
+/* CONTAINER */
+.container{
+max-width:1000px;
+margin:30px auto;
+padding:0 16px;
+}
+
+/* CARD */
+.card{
+background:white;
+border-radius:20px;
+padding:22px;
+box-shadow:0 10px 25px rgba(0,0,0,0.06);
+margin-bottom:20px;
+}
+
+/* TABS */
+.tabs{
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+margin-bottom:20px;
+}
+
+.tab{
+padding:10px 18px;
+border:none;
+border-radius:999px;
+cursor:pointer;
+background:#e3eaf6;
+font-weight:600;
+font-size:0.85rem;
+transition:0.2s;
+}
+
+.tab.active{
+background:#0d47a1;
+color:white;
+}
+
+/* SECTIONS */
+.section-title{
+font-size:0.9rem;
+margin-bottom:8px;
+color:#0d47a1;
+font-weight:700;
+}
+
+.text{
+font-size:0.9rem;
+line-height:1.8;
+color:#333;
+white-space:pre-wrap;
+}
+
+/* TOP INFO */
+.topic{
+font-size:1.3rem;
+margin-bottom:10px;
+}
+
+.meta{
+font-size:0.8rem;
+color:#666;
+margin-bottom:15px;
+}
+
+/* GRID */
+.grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:15px;
+}
+
+@media(max-width:768px){
+.grid{grid-template-columns:1fr;}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<h2>📖 Weekly Lessons</h2>
+<a class="back" href="index.html">← Back</a>
+</header>
+
+<div class="container">
+
+<div class="tabs">
+<button class="tab active" onclick="switchClass('Senior')">Senior</button>
+<button class="tab" onclick="switchClass('Junior')">Junior</button>
+<button class="tab" onclick="switchClass('Elementary')">Elementary</button>
+</div>
+
+<div class="card">
+
+<div class="topic" id="topic">Loading...</div>
+<div class="meta" id="meta"></div>
+
+<div class="grid">
+
+<div>
+<div class="section-title">Bible Text</div>
+<div class="text" id="bibleText"></div>
+</div>
+
+<div>
+<div class="section-title">Memory Verse</div>
+<div class="text" id="memoryVerse"></div>
+</div>
+
+</div>
+
+<br>
+
+<div class="section-title">Summary</div>
+<div class="text" id="summary"></div>
+
+<br>
+
+<div class="section-title">Discussion</div>
+<div class="text" id="discussion"></div>
+
+</div>
+
+</div>
+
+<script>
+
+// 🔴 YOUR CSV (UNCHANGED)
+const weeklyLessonCSV =
+"https://docs.google.com/spreadsheets/d/e/2PACX-1vQHlE5IpmFYaQyW5u-rentH2fGC5VZJ2w9Ql1WI-X8bE76qlN5_ttDIitwlXX1CM4sqdEW8RroDUNSU/pub?gid=201183837&single=true&output=csv";
+
+let lessons = [];
+
+async function loadLessons(){
+
+const res = await fetch(weeklyLessonCSV);
+const csv = await res.text();
+
+const result = Papa.parse(csv, {
+header:true,
+skipEmptyLines:true
+});
+
+lessons = result.data;
+
+switchClass('Senior');
+}
+
+function switchClass(cls){
+
+const lesson = lessons.find(l => l.Class?.trim() === cls);
+
+if(!lesson) return;
+
+document.getElementById("topic").innerText = lesson.Topic || "";
+document.getElementById("meta").innerText = cls;
+
+document.getElementById("bibleText").innerText = lesson.BibleText || "";
+document.getElementById("memoryVerse").innerText = lesson.MemoryVerse || "";
+
+document.getElementById("summary").innerText = lesson.Summary || "";
+document.getElementById("discussion").innerText = lesson.Discussion || "";
+
+// tabs UI
+document.querySelectorAll(".tab").forEach(t => {
+t.classList.remove("active");
+if(t.innerText === cls) t.classList.add("active");
+});
+}
+
+loadLessons();
+
+</script>
+
+</body>
+</html>
