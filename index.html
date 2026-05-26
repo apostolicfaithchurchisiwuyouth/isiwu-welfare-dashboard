@@ -11,7 +11,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700;800&family=Host+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 <style>
 
 *{
@@ -1380,60 +1380,60 @@ let lessonsData = [];
 
 async function fetchWeeklyLesson() {
   try {
-    const res = await fetch(weeklyLessonCSV);
-    const data = await res.text();
+    const response = await fetch(weeklyLessonCSV);
+    const csvText = await response.text();
 
-    const rows = data.trim().split('\n').map(r => r.split(','));
+    const result = Papa.parse(csvText, {
+      header: true,
+      skipEmptyLines: true
+    });
 
-    const headers = rows[0].map(h => h.toLowerCase());
-
-    const get = (name) => headers.indexOf(name.toLowerCase());
-
-    lessonsData = rows.slice(1).map(r => ({
-  lesson: r[headers.indexOf("lesson")] || "",
-  className: r[headers.indexOf("class")] || "",
-  topic: r[headers.indexOf("topic")] || "",
-  bibleText: r[headers.indexOf("bibletext")] || "",
-  memoryVerse: r[headers.indexOf("memoryverse")] || "",
-  summary: r[headers.indexOf("summary")] || "",
-  discussion: r[headers.indexOf("discussion")] || ""
-}));
+    // normalize data
+    lessonsData = result.data.map(row => ({
+      className: row.Class?.trim(),
+      topic: row.Topic?.trim(),
+      bibleText: row.BibleText?.trim(),
+      memoryVerse: row.MemoryVerse?.trim(),
+      summary: row.Summary?.trim(),
+      discussion: row.Discussion?.trim(),
+      image: row.Image?.trim()
+    }));
 
     switchLesson('Senior');
 
-  } catch (err) {
-    console.log("Lesson Error:", err);
+  } catch (error) {
+    console.log("Weekly lesson error:", error);
   }
 }
-
+  
 function switchLesson(className) {
-  const lesson = lessonsData.find(
-    l => (l.className || '').toLowerCase() === className.toLowerCase()
-  );
-
+  const lesson = lessonsData.find(item => item.className === className);
   if (!lesson) return;
 
-  document.getElementById('lessonTopic').innerText = lesson.topic || '';
-  document.getElementById('lessonBibleText').innerText = lesson.bibleText || '';
-  document.getElementById('lessonMemoryVerse').innerText = lesson.memoryVerse || '';
+  document.getElementById('lessonTopic').innerText = lesson.topic || "";
 
-  const summary = lesson.summary || '';
+  document.getElementById('lessonBibleText').innerText = lesson.bibleText || "";
+
+  // ❌ REMOVE trimming for memory verse
+  document.getElementById('lessonMemoryVerse').innerText = lesson.memoryVerse || "";
+
+  // show more summary (2 paragraphs safe)
   document.getElementById('lessonPreview').innerText =
-    summary.length > 180 ? summary.slice(0, 180) + '...' : summary;
+    (lesson.summary || "").split("\n").slice(0, 2).join("\n");
 
-  const img = document.getElementById('lessonImage');
-  if (img) img.style.display = 'none';
+  // remove image completely if not needed
+  document.getElementById('lessonImage').style.display = "none";
 
   document.querySelectorAll('.lesson-tab').forEach(tab => {
     tab.classList.remove('active');
-    if (tab.innerText.trim().toLowerCase() === className.toLowerCase()) {
+    if (tab.innerText === className) {
       tab.classList.add('active');
     }
   });
 
   localStorage.setItem('selectedLessonClass', className);
 }
-
+  
 /*
 ==============================
 INIT
