@@ -1,0 +1,574 @@
+# reports.html
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AFC Isiwu Youth Reports</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700;800&family=Host+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+html{
+scroll-behavior:smooth;
+}
+
+body{
+font-family:'Host Grotesk',sans-serif;
+background:#eef3f9;
+color:#222;
+overflow-x:hidden;
+background-image:
+radial-gradient(circle at top left, rgba(33,150,243,0.12), transparent 28%),
+radial-gradient(circle at bottom right, rgba(156,39,176,0.10), transparent 25%),
+url('https://www.transparenttextures.com/patterns/cubes.png');
+}
+
+h1,h2,h3,h4,.logo{
+font-family:'Bricolage Grotesque',sans-serif;
+}
+
+header{
+position:relative;
+overflow:hidden;
+background:
+linear-gradient(135deg, rgba(13,71,161,0.95), rgba(25,118,210,0.92)),
+url('https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1600&auto=format&fit=crop');
+background-size:cover;
+background-position:center;
+padding-bottom:40px;
+color:white;
+}
+
+.navbar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:18px 7%;
+position:relative;
+z-index:1000;
+}
+
+.logo{
+font-size:1rem;
+font-weight:700;
+}
+
+.menu{
+display:flex;
+gap:22px;
+align-items:center;
+}
+
+.menu a{
+color:white;
+text-decoration:none;
+font-size:0.86rem;
+font-weight:500;
+}
+
+.hamburger{
+display:none;
+font-size:1.4rem;
+cursor:pointer;
+color:white;
+}
+
+.hero{
+padding:45px 7% 25px;
+text-align:center;
+position:relative;
+z-index:2;
+}
+
+.hero h1{
+font-size:2.5rem;
+margin-bottom:10px;
+}
+
+.hero p{
+max-width:680px;
+margin:auto;
+font-size:0.92rem;
+line-height:1.7;
+opacity:0.95;
+}
+
+.container{
+max-width:1300px;
+margin:auto;
+padding:35px 18px;
+}
+
+.filter-bar{
+display:grid;
+grid-template-columns:2fr 1fr 1fr;
+gap:16px;
+margin-bottom:30px;
+}
+
+.search-box,
+.filter-select{
+background:rgba(255,255,255,0.65);
+backdrop-filter:blur(12px);
+border:1px solid rgba(255,255,255,0.3);
+border-radius:18px;
+padding:16px;
+font-size:0.85rem;
+outline:none;
+width:100%;
+box-shadow:0 10px 25px rgba(0,0,0,0.04);
+}
+
+.reports-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+gap:24px;
+}
+
+.report-card{
+position:relative;
+overflow:hidden;
+padding:24px;
+border-radius:24px;
+background:rgba(255,255,255,0.6);
+backdrop-filter:blur(16px);
+border:1px solid rgba(255,255,255,0.3);
+box-shadow:0 15px 35px rgba(0,0,0,0.06);
+transition:0.35s;
+}
+
+.report-card:hover{
+transform:translateY(-8px);
+box-shadow:0 22px 55px rgba(0,0,0,0.12);
+}
+
+.report-card::before{
+content:'';
+position:absolute;
+width:180px;
+height:180px;
+background:rgba(21,101,192,0.06);
+border-radius:50%;
+top:-70px;
+right:-70px;
+}
+
+.report-top{
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:12px;
+margin-bottom:18px;
+position:relative;
+z-index:2;
+}
+
+.report-badge{
+padding:8px 14px;
+border-radius:999px;
+background:rgba(21,101,192,0.1);
+color:#1565c0;
+font-size:0.65rem;
+font-weight:700;
+}
+
+.report-date{
+font-size:0.72rem;
+color:#777;
+}
+
+.report-title{
+font-size:1.08rem;
+line-height:1.5;
+margin-bottom:14px;
+position:relative;
+z-index:2;
+}
+
+.report-summary{
+font-size:0.8rem;
+line-height:1.8;
+color:#555;
+margin-bottom:22px;
+position:relative;
+z-index:2;
+}
+
+.report-footer{
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:12px;
+position:relative;
+z-index:2;
+}
+
+.reporter{
+font-size:0.74rem;
+font-weight:700;
+}
+
+.reporter-role{
+font-size:0.66rem;
+color:#777;
+margin-top:4px;
+}
+
+.empty-state{
+text-align:center;
+padding:60px 20px;
+font-size:0.9rem;
+color:#666;
+}
+
+footer{
+margin-top:50px;
+padding:25px;
+text-align:center;
+font-size:0.8rem;
+color:#666;
+}
+
+@media(max-width:768px){
+
+.filter-bar{
+grid-template-columns:1fr;
+}
+
+.hero h1{
+font-size:1.9rem;
+}
+
+.menu{
+position:absolute;
+top:75px;
+right:7%;
+width:240px;
+display:none;
+flex-direction:column;
+background:#ffffff;
+padding:20px 16px;
+width:100%;
+border-radius:18px;
+z-index:999999;
+box-shadow:0 20px 45px rgba(0,0,0,0.18);
+}
+
+.menu.active{
+display:flex;
+}
+
+.menu a{
+color:#222;
+padding:10px 0;
+border-bottom:1px solid #eee;
+width:100%;
+}
+
+.hamburger{
+display:block;
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+
+<div class="navbar">
+
+<div class="logo">
+<i class="fa-solid fa-shield-heart"></i>
+AFC Isiwu Youth
+</div>
+
+<div class="menu" id="menu">
+<a href="index.html">Home</a>
+<a href="#reports">Reports</a>
+</div>
+
+<div class="hamburger" id="hamburger">
+<i class="fa-solid fa-bars"></i>
+</div>
+
+</div>
+
+<div class="hero">
+<h1>Secretariat Reports Archive</h1>
+<p>
+Browse youth programs, activity summaries, attendance updates and fellowship reports.
+</p>
+</div>
+
+</header>
+
+<div class="container">
+
+<div class="filter-bar">
+
+<input
+class="search-box"
+id="searchInput"
+type="text"
+placeholder="Search by program title..."
+>
+
+<select class="filter-select" id="typeFilter">
+<option value="all">All Program Types</option>
+</select>
+
+<select class="filter-select" id="sortFilter">
+<option value="newest">Newest First</option>
+<option value="oldest">Oldest First</option>
+</select>
+
+</div>
+
+<div class="reports-grid" id="reportsFeed"></div>
+
+<div class="empty-state" id="emptyState" style="display:none;">
+No reports found.
+</div>
+
+</div>
+
+<footer>
+AFC Isiwu Youth Welfare Department Portal © 2026
+</footer>
+
+<script>
+
+const hamburger = document.getElementById('hamburger');
+const menu = document.getElementById('menu');
+
+hamburger.addEventListener('click', () => {
+menu.classList.toggle('active');
+});
+
+const secretariatCSV =
+"https://docs.google.com/spreadsheets/d/e/2PACX-1vTE5Ds6_y0OYFL9_pYfRekpMx1Jq-kijbtdXsL-LCyg5KsC8LVootmeHOew2xiqV2sAXEVUKm_3vz17/pub?gid=1085033955&single=true&output=csv";
+
+let allReports = [];
+
+function parseCSV(text){
+
+const rows = [];
+let row = [];
+let current = '';
+let insideQuotes = false;
+
+for(let i = 0; i < text.length; i++){
+
+const char = text[i];
+const nextChar = text[i + 1];
+
+if(char === '"'){
+
+if(insideQuotes && nextChar === '"'){
+current += '"';
+i++;
+}else{
+insideQuotes = !insideQuotes;
+}
+
+}else if(char === ',' && !insideQuotes){
+
+row.push(current.trim());
+current = '';
+
+}else if(char === '\n' && !insideQuotes){
+
+row.push(current.trim());
+rows.push(row);
+
+row = [];
+current = '';
+
+}else{
+
+current += char;
+
+}
+
+}
+
+if(current){
+row.push(current.trim());
+rows.push(row);
+}
+
+return rows;
+
+}
+
+async function fetchReports(){
+
+try{
+
+const response = await fetch(secretariatCSV);
+const data = await response.text();
+
+const reports = parseCSV(data);
+
+const actualReports = reports.slice(1);
+
+allReports = actualReports.map(report => ({
+
+date: report[0] || '',
+programTitle: report[1] || '',
+programType: report[2] || '',
+whatWentWell: report[3] || '',
+reporter: report[4] || ''
+
+}));
+
+populateProgramTypes();
+renderReports();
+
+}catch(error){
+console.error(error);
+}
+
+}
+
+function populateProgramTypes(){
+
+const typeFilter = document.getElementById('typeFilter');
+
+const uniqueTypes = [...new Set(
+allReports.map(report => report.programType)
+)];
+
+uniqueTypes.forEach(type => {
+
+if(type.trim() !== ''){
+
+const option = document.createElement('option');
+option.value = type;
+option.textContent = type;
+
+typeFilter.appendChild(option);
+
+}
+
+});
+
+}
+
+function renderReports(){
+
+const reportsFeed = document.getElementById('reportsFeed');
+const emptyState = document.getElementById('emptyState');
+
+const searchValue = document.getElementById('searchInput').value.toLowerCase();
+const typeValue = document.getElementById('typeFilter').value;
+const sortValue = document.getElementById('sortFilter').value;
+
+let filteredReports = allReports.filter(report => {
+
+const matchesSearch = report.programTitle
+.toLowerCase()
+.includes(searchValue);
+
+const matchesType =
+typeValue === 'all' ||
+report.programType === typeValue;
+
+return matchesSearch && matchesType;
+
+});
+
+if(sortValue === 'newest'){
+filteredReports.reverse();
+}
+
+reportsFeed.innerHTML = '';
+
+if(filteredReports.length === 0){
+emptyState.style.display = 'block';
+return;
+}else{
+emptyState.style.display = 'none';
+}
+
+filteredReports.forEach(report => {
+
+reportsFeed.innerHTML += `
+
+<div class="report-card">
+
+<div class="report-top">
+
+<div class="report-badge">
+${report.programType}
+</div>
+
+<div class="report-date">
+${report.date}
+</div>
+
+</div>
+
+<h3 class="report-title">
+${report.programTitle}
+</h3>
+
+<p class="report-summary">
+${report.whatWentWell}
+</p>
+
+<div class="report-footer">
+
+<div>
+<div class="reporter">
+${report.reporter}
+</div>
+
+<div class="reporter-role">
+Secretariat Department
+</div>
+</div>
+
+</div>
+
+</div>
+
+`;
+
+});
+
+}
+
+document.getElementById('searchInput')
+.addEventListener('input', renderReports);
+
+
+document.getElementById('typeFilter')
+.addEventListener('change', renderReports);
+
+
+document.getElementById('sortFilter')
+.addEventListener('change', renderReports);
+
+fetchReports();
+
+</script>
+
+</body>
+</html>
+```
