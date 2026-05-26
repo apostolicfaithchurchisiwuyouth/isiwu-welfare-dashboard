@@ -619,6 +619,74 @@ width:70px;
 height:70px;
 font-size:1.4rem;
 }
+  .reports-header-card{
+}
+
+.report-footer{
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:12px;
+position:relative;
+z-index:2;
+}
+
+.reporter-info{
+display:flex;
+align-items:center;
+gap:12px;
+}
+
+.reporter-avatar{
+width:42px;
+height:42px;
+border-radius:50%;
+background:linear-gradient(135deg,#1565c0,#42a5f5);
+color:white;
+display:flex;
+align-items:center;
+justify-content:center;
+font-weight:700;
+font-size:0.9rem;
+}
+
+.reporter-name{
+font-size:0.75rem;
+font-weight:700;
+}
+
+.reporter-role{
+font-size:0.66rem;
+color:#777;
+margin-top:3px;
+}
+
+.report-link{
+text-decoration:none;
+font-size:0.72rem;
+font-weight:700;
+color:#1565c0;
+}
+
+@media(max-width:768px){
+
+.reports-header-card{
+padding:20px;
+}
+
+.reports-header-card h3{
+font-size:1.1rem;
+}
+
+.premium-reports-grid{
+grid-template-columns:1fr;
+}
+
+.report-card{
+padding:20px;
+}
+
+}
 
 }
 
@@ -747,7 +815,32 @@ Submit Attendance
 
 </div>
 
-<div class="reports-feed" id="reportsFeed"></div>
+<div class="section" id="reports">
+
+<div class="section-title">
+<i class="fa-solid fa-file-lines"></i>
+<h2>Secretariat Reports</h2>
+</div>
+
+<div class="reports-header-card">
+
+<div>
+<h3>Programs & Activity Reports</h3>
+<p>
+Latest updates, attendance summaries, fellowship programs and youth activities.
+</p>
+</div>
+
+<a href="reports.html" class="view-all-btn">
+View All Reports
+<i class="fa-solid fa-arrow-right"></i>
+</a>
+
+</div>
+
+<div class="premium-reports-grid" id="reportsFeed"></div>
+
+</div>
 
 </div>
 
@@ -1032,7 +1125,66 @@ const reporter = report[4] || '';
 
 if(programTitle.trim() !== ''){
 
+const initials = reporter
+.split(' ')
+.map(name => name.charAt(0))
+.join('')
+.substring(0,2)
+.toUpperCase();
+
 reportsFeed.innerHTML += `
+
+<div class="report-card">
+
+<div class="report-top">
+
+<div class="program-type-badge">
+${programType}
+</div>
+
+<div class="report-date">
+${date}
+</div>
+
+</div>
+
+<h3 class="report-title">
+${programTitle}
+</h3>
+
+<p class="report-summary">
+${whatWentWell}
+</p>
+
+<div class="report-footer">
+
+<div class="reporter-info">
+
+<div class="reporter-avatar">
+${initials}
+</div>
+
+<div>
+<div class="reporter-name">
+${reporter}
+</div>
+
+<div class="reporter-role">
+Secretariat Department
+</div>
+</div>
+
+</div>
+
+<a href="reports.html" class="report-link">
+Read More →
+</a>
+
+</div>
+
+</div>
+
+`;
 
 <div class="feed-item">
 
