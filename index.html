@@ -729,6 +729,160 @@ height:70px;
 font-size:1.4rem;
 }
 
+  .lesson-hero{
+position:relative;
+overflow:hidden;
+border-radius:34px;
+min-height:650px;
+display:flex;
+align-items:flex-end;
+padding:45px;
+background:#111;
+box-shadow:0 25px 70px rgba(0,0,0,0.15);
+}
+
+.lesson-bg-image{
+position:absolute;
+width:100%;
+height:100%;
+top:0;
+left:0;
+object-fit:cover;
+}
+
+.lesson-overlay{
+position:absolute;
+inset:0;
+background:
+linear-gradient(
+to top,
+rgba(0,0,0,0.88),
+rgba(0,0,0,0.30)
+);
+z-index:1;
+}
+
+.lesson-content{
+position:relative;
+z-index:2;
+width:100%;
+max-width:760px;
+color:white;
+}
+
+.lesson-top-badge{
+display:inline-block;
+padding:10px 18px;
+border-radius:999px;
+background:rgba(255,255,255,0.12);
+backdrop-filter:blur(10px);
+font-size:0.72rem;
+font-weight:700;
+letter-spacing:1px;
+margin-bottom:18px;
+}
+
+.lesson-content h1{
+font-size:3rem;
+line-height:1.2;
+margin-bottom:28px;
+}
+
+.lesson-tabs{
+display:flex;
+gap:12px;
+flex-wrap:wrap;
+margin-bottom:28px;
+}
+
+.lesson-tab{
+padding:12px 22px;
+border:none;
+border-radius:999px;
+background:rgba(255,255,255,0.12);
+backdrop-filter:blur(12px);
+color:white;
+cursor:pointer;
+font-size:0.8rem;
+font-weight:600;
+transition:0.3s;
+}
+
+.lesson-tab.active{
+background:white;
+color:#111;
+}
+
+.lesson-mini-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:18px;
+margin-bottom:22px;
+}
+
+.mini-card{
+padding:24px;
+border-radius:24px;
+background:rgba(255,255,255,0.08);
+backdrop-filter:blur(12px);
+border:1px solid rgba(255,255,255,0.10);
+}
+
+.mini-card h3{
+font-size:0.8rem;
+margin-bottom:10px;
+opacity:0.88;
+}
+
+.mini-card p{
+font-size:0.92rem;
+line-height:1.7;
+}
+
+.lesson-preview{
+padding:28px;
+border-radius:26px;
+background:rgba(255,255,255,0.08);
+backdrop-filter:blur(12px);
+border:1px solid rgba(255,255,255,0.10);
+margin-bottom:25px;
+}
+
+.lesson-preview p{
+font-size:0.92rem;
+line-height:1.9;
+}
+
+.lesson-read-more{
+display:inline-flex;
+align-items:center;
+gap:10px;
+padding:16px 28px;
+border-radius:18px;
+background:white;
+color:#111;
+text-decoration:none;
+font-size:0.82rem;
+font-weight:700;
+transition:0.3s;
+}
+
+.lesson-read-more:hover{
+transform:translateY(-4px);
+}
+
+@media(max-width:768px){
+
+.lesson-hero{
+min-height:auto;
+padding:30px 22px;
+}
+
+.lesson-content h1{
+font-size:2rem;
+}
+
+
 }
 
 </style>
@@ -768,7 +922,90 @@ AFC Isiwu Youth
 </header>
 
 <div class="container">
+<div class="section">
 
+<div class="lesson-hero">
+
+<div class="lesson-overlay"></div>
+
+<img
+id="lessonImage"
+class="lesson-bg-image"
+src=""
+alt="Lesson Image"
+>
+
+<div class="lesson-content">
+
+<div class="lesson-top-badge">
+THIS WEEK'S LESSON
+</div>
+
+<h1 id="lessonTopic">
+Loading...
+</h1>
+
+<div class="lesson-tabs">
+
+<button class="lesson-tab active" onclick="switchLesson('Senior')">
+Senior
+</button>
+
+<button class="lesson-tab" onclick="switchLesson('Junior')">
+Junior
+</button>
+
+<button class="lesson-tab" onclick="switchLesson('Elementary')">
+Elementary
+</button>
+
+</div>
+
+<div class="lesson-mini-grid">
+
+<div class="mini-card">
+
+<h3>Bible Text</h3>
+
+<p id="lessonBibleText">
+Loading...
+</p>
+
+</div>
+
+<div class="mini-card">
+
+<h3>Memory Verse</h3>
+
+<p id="lessonMemoryVerse">
+Loading...
+</p>
+
+</div>
+
+</div>
+
+<div class="lesson-preview">
+
+<p id="lessonPreview">
+Loading summary preview...
+</p>
+
+</div>
+
+<a href="lesson.html" class="lesson-read-more">
+
+Read Full Summary
+<i class="fa-solid fa-arrow-right"></i>
+
+</a>
+
+</div>
+
+</div>
+
+</div>
+  
 <div class="section">
 <div class="section-title">
 <i class="fa-solid fa-chart-column"></i>
@@ -1207,6 +1444,89 @@ AUTO REFRESH
 */
 
 setInterval(fetchSecretariatReports, 30000);
+
+  const weeklyLessonCSV =
+"https://docs.google.com/spreadsheets/d/e/2PACX-1vQHlE5IpmFYaQyW5u-rentH2fGC5VZJ2w9Ql1WI-X8bE76qlN5_ttDIitwlXX1CM4sqdEW8RroDUNSU/pub?gid=201183837&single=true&output=csv";
+
+let lessonsData = [];
+
+async function fetchWeeklyLesson(){
+
+try{
+
+const response = await fetch(weeklyLessonCSV);
+const data = await response.text();
+
+const rows = data.trim()
+.split('\\n')
+.map(row => row.split(','));
+
+const actualRows = rows.slice(1);
+
+lessonsData = actualRows.map(row => ({
+
+className: row[0],
+topic: row[1],
+bibleText: row[2],
+memoryVerse: row[3],
+summary: row[4],
+discussion: row[5],
+image: row[6]
+
+}));
+
+switchLesson('Senior');
+
+}catch(error){
+
+console.log(error);
+
+}
+
+}
+
+function switchLesson(className){
+
+const lesson = lessonsData.find(
+item => item.className === className
+);
+
+if(!lesson) return;
+
+document.getElementById('lessonTopic').innerText =
+lesson.topic;
+
+document.getElementById('lessonBibleText').innerText =
+lesson.bibleText;
+
+document.getElementById('lessonMemoryVerse').innerText =
+lesson.memoryVerse;
+
+document.getElementById('lessonPreview').innerText =
+lesson.summary.substring(0,180) + '...';
+
+document.getElementById('lessonImage').src =
+lesson.image;
+
+document.querySelectorAll('.lesson-tab')
+.forEach(tab => {
+
+tab.classList.remove('active');
+
+if(tab.innerText === className){
+tab.classList.add('active');
+}
+
+});
+
+localStorage.setItem(
+'selectedLessonClass',
+className
+);
+
+}
+
+fetchWeeklyLesson();
 
 </script>
 
