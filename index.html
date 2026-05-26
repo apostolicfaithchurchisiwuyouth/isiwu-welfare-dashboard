@@ -1419,10 +1419,7 @@ function switchLesson(className) {
 
   // show more summary (2 paragraphs safe)
   document.getElementById('lessonPreview').innerText =
-    (lesson.summary || "").split("\n").slice(0, 2).join("\n");
-
-  // remove image completely if not needed
-  document.getElementById('lessonImage').style.display = "none";
+    (lesson.summary || "").split("\n").slice(0, 4).join("\n");
 
   document.querySelectorAll('.lesson-tab').forEach(tab => {
     tab.classList.remove('active');
@@ -1433,7 +1430,7 @@ function switchLesson(className) {
 
   localStorage.setItem('selectedLessonClass', className);
 }
-  
+  console.log("Parsed Lessons:", lessonsData);
 /*
 ==============================
 INIT
