@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -342,6 +343,182 @@ line-height:1.5;
 color:#555;
 }
 
+.pagination{
+display:flex;
+justify-content:center;
+gap:8px;
+margin-top:20px;
+flex-wrap:wrap;
+}
+
+.page-btn{
+width:38px;
+height:38px;
+border:none;
+border-radius:10px;
+cursor:pointer;
+background:rgba(255,255,255,0.7);
+font-weight:700;
+}
+
+.page-btn.active{
+background:#1565c0;
+color:white;
+}
+
+.top-three{
+display:flex;
+justify-content:center;
+align-items:flex-end;
+gap:20px;
+flex-wrap:nowrap;
+overflow-x:auto;
+padding-top:20px;
+padding-bottom:15px;
+}
+
+.leader-circle{
+display:flex;
+flex-direction:column;
+align-items:center;
+flex-shrink:0;
+}
+
+.leader-avatar{
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+color:white;
+font-weight:700;
+box-shadow:0 10px 25px rgba(0,0,0,0.14);
+}
+
+.big{
+width:120px;
+height:120px;
+font-size:2.5rem;
+background:linear-gradient(135deg,#ffd54f,#ff9800);
+}
+
+.small{
+width:90px;
+height:90px;
+font-size:1.8rem;
+}
+
+.second-place .small{
+background:linear-gradient(135deg,#cfd8dc,#90a4ae);
+}
+
+.third-place .small{
+background:linear-gradient(135deg,#ffcc80,#fb8c00);
+}
+
+.leader-circle h3{
+font-size:0.7rem;
+font-weight:200;
+margin-top:10px;
+text-align:center;
+}
+
+
+.leader-circle p{
+font-size:0.62rem;
+}
+
+
+.leader-list{
+display:flex;
+flex-direction:column;
+gap:10px;
+margin-top:20px;
+}
+
+.leader-item{
+display:flex;
+align-items:center;
+gap:10px;
+background:rgba(255,255,255,0.45);
+padding:10px 12px;
+border-radius:12px;
+}
+
+.leader-item span{
+font-size:0.72rem;
+font-weight:700;
+min-width:35px;
+}
+
+.leader-item p{
+flex:1;
+font-size:0.68rem;
+white-space:nowrap;
+overflow:hidden;
+text-overflow:ellipsis;
+}
+
+.leader-item strong{
+margin-left:auto;
+font-size:0.66rem;
+white-space:nowrap;
+text-align:right;
+}
+
+
+.gallery{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+gap:18px;
+}
+
+.gallery-card{
+position:relative;
+overflow:hidden;
+border-radius:18px;
+}
+
+.gallery-card img{
+width:100%;
+height:230px;
+object-fit:cover;
+transition:0.4s;
+display:block;
+}
+
+.gallery-card:hover img{
+transform:scale(1.06);
+}
+
+.gallery-overlay{
+position:absolute;
+left:0;
+right:0;
+bottom:0;
+padding:16px;
+background:linear-gradient(to top, rgba(0,0,0,0.75), transparent);
+color:white;
+font-size:0.8rem;
+}
+
+.more-gallery{
+display:flex;
+align-items:center;
+justify-content:center;
+background:linear-gradient(135deg,#1565c0,#42a5f5);
+min-height:230px;
+border-radius:18px;
+padding:20px;
+text-align:center;
+}
+
+.more-gallery a{
+color:white;
+text-decoration:none;
+font-weight:600;
+font-size:0.9rem;
+}
+
 footer{
 margin-top:45px;
 padding:25px;
@@ -350,12 +527,193 @@ font-size:0.8rem;
 color:#666;
 }
 
+@media(max-width:768px){
+
+.container{
+padding:24px 10px;
+}
+
+.menu{
+position:absolute;
+top:75px;
+right:7%;
+width:240px;
+display:none;
+flex-direction:column;
+background:#ffffff;
+padding:20px 16px;
+width:100%;
+border-radius:18px;
+z-index:999999;
+box-shadow:0 20px 45px rgba(0,0,0,0.18);
+}
+
+.menu.active{
+display:flex;
+}
+
+.menu a{
+color:#222;
+padding:10px 0;
+border-bottom:1px solid #eee;
+width:100%;
+}
+
+.hamburger{
+display:block;
+}
+
+.hero h1{
+font-size:1.85rem;
+}
+
+.hero p{
+font-size:0.78rem;
+}
+
+.section-title h2{
+font-size:0.9rem;
+}
+
+.report-box h2{
+font-size:0.85rem;
+}
+
+.feed-item h4{
+font-size:0.74rem;
+}
+
+.feed-item p,
+.report-box p,
+th,td{
+font-size:0.7rem;
+}
+
+.amount{
+font-size:1.35rem;
+}
+
+
+.leader-item p{
+font-size:0.62rem;
+}
+
+.leader-item strong{
+font-size:0.6rem;
+}
+
+.section{
+padding:18px 12px;
+}
+
+
+.big{
+width:92px;
+height:92px;
+font-size:2rem;
+}
+
+.small{
+width:70px;
+height:70px;
+font-size:1.4rem;
+}
+
+}
+
 </style>
 </head>
 
 <body>
 
+<header>
+<div class="navbar">
+<div class="logo">
+<i class="fa-solid fa-shield-heart"></i>
+AFC Isiwu Youth
+</div>
+
+<div class="menu" id="menu">
+<a href="#">Home</a>
+<a href="#finance">Finance</a>
+<a href="#reports">Reports</a>
+<a href="#leaderboard">Challenge</a>
+<a href="#gallery">Gallery</a>
+</div>
+
+<div class="hamburger" id="hamburger">
+<i class="fa-solid fa-bars"></i>
+</div>
+</div>
+
+<div class="hero">
+<h1>AFC Isiwu Youth Portal</h1>
+<p>Transparency • Accountability • Welfare Support • Youth Development</p>
+
+<div class="hero-buttons">
+<a href="#reports" class="btn-primary">View Reports</a>
+<a href="#leaderboard" class="btn-secondary">Sunday Challenge</a>
+</div>
+</div>
+</header>
+
 <div class="container">
+
+<div class="section">
+<div class="section-title">
+<i class="fa-solid fa-chart-column"></i>
+<h2>Welfare Reports</h2>
+</div>
+
+<div class="cards">
+<div class="card green">
+<i class="fa-solid fa-money-bill-trend-up"></i>
+<h2>Total Contributions</h2>
+<div class="amount" id="totalContributions">Updating...</div>
+</div>
+
+<div class="card red">
+<i class="fa-solid fa-wallet"></i>
+<h2>Total Expenses</h2>
+<div class="amount" id="totalExpenses">Updating...</div>
+</div>
+
+<div class="card blue">
+<i class="fa-solid fa-building-columns"></i>
+<h2>Current Balance</h2>
+<div class="amount" id="currentBalance">Updating...</div>
+</div>
+</div>
+</div>
+
+<div class="section">
+<div class="section-title">
+<i class="fa-solid fa-clock-rotate-left"></i>
+<h2>Recent Welfare Activities</h2>
+</div>
+
+<div class="activities">
+<table>
+<thead>
+<tr>
+<th class="margin-left:-30px;">Activity</th>
+<th>Amount</th>
+</tr>
+</thead>
+
+<tbody id="activityTable"></tbody>
+</table>
+</div>
+</div>
+
+<div class="section" id="finance">
+<div class="section-title">
+<i class="fa-solid fa-chart-line"></i>
+<h2>Financial Overview</h2>
+</div>
+
+<canvas id="financeChart"></canvas>
+</div>
 
 <div class="section" id="reports">
 
@@ -364,8 +722,110 @@ color:#666;
 <h2>Secretariat Reports</h2>
 </div>
 
+<div class="report-box">
+
+<h2>Programs & Attendance Reports</h2>
+
+<p>
+Official attendance records, meeting summaries and youth updates.
+</p>
+
+<div class="report-buttons">
+
+<a href="#" class="report-btn">
+<i class="fa-solid fa-pen-to-square"></i>
+Fill Program Report
+</a>
+
+<a href="#" class="report-btn green-btn">
+<i class="fa-solid fa-user-check"></i>
+Submit Attendance
+</a>
+
+</div>
+
+</div>
+
 <div class="reports-feed" id="reportsFeed"></div>
 
+</div>
+
+<div class="section" id="leaderboard">
+<div class="section-title">
+<i class="fa-solid fa-trophy"></i>
+<h2>Sunday Lessons Challenge Leaderboard</h2>
+</div>
+
+<div class="leaderboard">
+
+<div class="top-three">
+<div class="leader-circle second-place">
+<div class="leader-avatar small">🥈</div>
+<h3>Adesanya <br> Adeola</h3>
+<p style="margin-top:5px;"><strong>10,860 Points</strong></p>
+</div>
+
+<div class="leader-circle first-place">
+<div class="leader-avatar big">🥇</div>
+<h3>Oluwatimilehin <br> Mercy</h3>
+<p style="margin-top:5px;"><strong>11,240 Points</strong></p>
+</div>
+
+<div class="leader-circle third-place">
+<div class="leader-avatar small">🥉</div>
+<h3>Ashaolu <br> Bisola</h3>
+<p style="margin-top:5px;"><strong>10,790 Points</strong></p>
+</div>
+</div>
+
+<div class="leader-list">
+<div class="leader-item"><span>#4</span><p>Kehinde Anuoluwapo</p><strong>10,780 Points</strong></div>
+<div class="leader-item"><span>#5</span><p>Olajimbiti Molayo</p><strong>10,610 Points</strong></div>
+<div class="leader-item"><span>#6</span><p>Oluwatimilehin Akorede</p><strong>6,220 Points</strong></div>
+<div class="leader-item"><span>#7</span><p>Agosu Kehinde</p><strong>5,610 Points</strong></div>
+<div class="leader-item"><span>#8</span><p>Agosu Taiwo</p><strong>5,440 Points</strong></div>
+<div class="leader-item"><span>#9</span><p>Agosu Abigail</p><strong>4,720 Points</strong></div>
+<div class="leader-item"><span>#10</span><p>Ademola Grace</p><strong>4,330 Points</strong></div>
+<div class="leader-item"><span>#11</span><p>Adesanya Oluwapelumi</p><strong>2,300 Points</strong></div>
+<div class="leader-item"><span>#12</span><p>Ashaolu Reuben</p><strong>1,360 Points</strong></div>
+<div class="leader-item"><span>#13</span><p>Odedokun Blessing</p><strong>1,340 Points</strong></div>
+<div class="leader-item"><span>#14</span><p>Onomakpor Daniel</p><strong>1,300 Points</strong></div>
+</div>
+
+</div>
+</div>
+
+<div class="section" id="gallery">
+<div class="section-title">
+<i class="fa-solid fa-image"></i>
+<h2>Youth Gallery</h2>
+</div>
+
+<div class="gallery">
+
+<div class="gallery-card">
+<img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?q=80&w=1200&auto=format&fit=crop">
+<div class="gallery-overlay">Youth Fellowship Moments</div>
+</div>
+
+<div class="gallery-card">
+<img src="https://images.unsplash.com/photo-1511632765486-a01980e01a18?q=80&w=1200&auto=format&fit=crop">
+<div class="gallery-overlay">Welfare Support Session</div>
+</div>
+
+<div class="gallery-card">
+<img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=1200&auto=format&fit=crop">
+<div class="gallery-overlay">Leadership & Training</div>
+</div>
+
+<div class="more-gallery">
+<a href="#">
+<i class="fa-solid fa-photo-film"></i><br><br>
+View More Images & Videos
+</a>
+</div>
+
+</div>
 </div>
 
 </div>
@@ -374,13 +834,109 @@ color:#666;
 AFC Isiwu Youth Welfare Department Portal © 2026
 </footer>
 
+```html
 <script>
 
+const hamburger = document.getElementById('hamburger');
+const menu = document.getElementById('menu');
+
+hamburger.addEventListener('click', () => {
+menu.classList.toggle('active');
+});
+
+const welfareCSV =
+"https://docs.google.com/spreadsheets/d/e/2PACX-1vQHlE5IpmFYaQyW5u-rentH2fGC5VZJ2w9Ql1WI-X8bE76qlN5_ttDIitwlXX1CM4sqdEW8RroDUNSU/pub?gid=439044630&single=true&output=csv";
+
+const activitiesCSV =
+"https://docs.google.com/spreadsheets/d/e/2PACX-1vQHlE5IpmFYaQyW5u-rentH2fGC5VZJ2w9Ql1WI-X8bE76qlN5_ttDIitwlXX1CM4sqdEW8RroDUNSU/pub?gid=493023062&single=true&output=csv";
+  
 const secretariatCSV =
 "https://docs.google.com/spreadsheets/d/e/2PACX-1vTE5Ds6_y0OYFL9_pYfRekpMx1Jq-kijbtdXsL-LCyg5KsC8LVootmeHOew2xiqV2sAXEVUKm_3vz17/pub?gid=1085033955&single=true&output=csv";
 
+async function fetchSheetData(){
+
+try{
+
+const response = await fetch(welfareCSV);
+const data = await response.text();
+
+const rows = data.trim().split('\n').map(row => row.split(','));
+
+const contributions = parseFloat(rows[0][1]) || 0;
+const expenses = parseFloat(rows[1][1]) || 0;
+const balance = parseFloat(rows[2][1]) || 0;
+
+document.getElementById('totalContributions').innerText =
+`₦${contributions.toLocaleString()}`;
+
+document.getElementById('totalExpenses').innerText =
+`₦${expenses.toLocaleString()}`;
+
+document.getElementById('currentBalance').innerText =
+`₦${balance.toLocaleString()}`;
+
+const ctx = document.getElementById('financeChart');
+
+new Chart(ctx, {
+type:'bar',
+data:{
+labels:['Contributions','Expenses','Balance'],
+datasets:[{
+data:[contributions, expenses, balance],
+borderRadius:8,
+backgroundColor:['#42a5f5','#ef5350','#66bb6a']
+}]
+},
+options:{
+responsive:true,
+plugins:{
+legend:{display:false}
+}
+}
+});
+
+const activityResponse = await fetch(activitiesCSV);
+const activityData = await activityResponse.text();
+
+const activityRows = activityData
+.trim()
+.split('\n')
+.map(row => row.split(','));
+
+const activityTable = document.getElementById('activityTable');
+
+activityTable.innerHTML = '';
+
+activityRows.reverse().slice(0,10).forEach(row => {
+
+const purpose = row[0];
+const amount = row[1];
+
+if(purpose){
+
+activityTable.innerHTML += `
+<tr>
+<td>${purpose}</td>
+<td>₦${Number(amount).toLocaleString()}</td>
+</tr>
+`;
+
+}
+
+});
+
+}catch(error){
+
+console.log(error);
+
+}
+
+}
+
 /*
-BETTER CSV PARSER
+==============================
+BETTER SECRETARIAT REPORTS
+==============================
 */
 
 function parseCSV(text){
@@ -460,7 +1016,7 @@ SHOW NEWEST FIRST
 actualReports.reverse();
 
 /*
-LIMIT TO 5 REPORTS
+SHOW ONLY 5 REPORTS
 */
 
 const latestReports = actualReports.slice(0,5);
@@ -472,10 +1028,6 @@ const programTitle = report[1] || '';
 const programType = report[2] || '';
 const whatWentWell = report[3] || '';
 const reporter = report[4] || '';
-
-/*
-SKIP EMPTY ROWS
-*/
 
 if(programTitle.trim() !== ''){
 
@@ -522,18 +1074,25 @@ console.error('Secretariat Reports Error:', error);
 }
 
 /*
-LOAD REPORTS
+==============================
+INITIAL LOAD
+==============================
 */
 
+fetchSheetData();
 fetchSecretariatReports();
 
 /*
-AUTO REFRESH EVERY 30 SECONDS
+==============================
+AUTO REFRESH
+==============================
 */
 
 setInterval(fetchSecretariatReports, 30000);
 
 </script>
+```
+
 
 </body>
 </html>
