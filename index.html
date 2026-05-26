@@ -1280,10 +1280,46 @@ SECRETARIAT REPORTS (STABLE VERSION)
 */
 
 function parseCSV(text) {
-  return text
-    .trim()
-    .split('\n')
-    .map(line => line.split(','));
+  const rows = [];
+  let row = [];
+  let value = '';
+  let insideQuotes = false;
+
+  for (let i = 0; i < text.length; i++) {
+    const char = text[i];
+    const next = text[i + 1];
+
+    if (char === '"') {
+      if (insideQuotes && next === '"') {
+        value += '"';
+        i++;
+      } else {
+        insideQuotes = !insideQuotes;
+      }
+    } 
+    else if (char === ',' && !insideQuotes) {
+      row.push(value.trim());
+      value = '';
+    } 
+    else if ((char === '\n' || char === '\r') && !insideQuotes) {
+      if (value || row.length) {
+        row.push(value.trim());
+        rows.push(row);
+        row = [];
+        value = '';
+      }
+    } 
+    else {
+      value += char;
+    }
+  }
+
+  if (value || row.length) {
+    row.push(value.trim());
+    rows.push(row);
+  }
+
+  return rows.filter(r => r.length > 1);
 }
 
 async function fetchSecretariatReports() {
@@ -1296,16 +1332,26 @@ async function fetchSecretariatReports() {
 
     reportsFeed.innerHTML = '';
 
-    const rows = parseCSV(data).slice(1).reverse().slice(0, 6);
+    const rows = parseCSV(data);
 
-    rows.forEach(r => {
-      const date = r[0] || '';
-      const title = r[1] || '';
-      const type = r[2] || '';
-      const summary = r[3] || '';
-      const reporter = r[4] || '';
+    const headers = rows[0].map(h => h.toLowerCase());
 
-      if (title) {
+    const iDate = headers.indexOf("date");
+    const iTitle = headers.indexOf("program title");
+    const iType = headers.indexOf("program type");
+    const iSummary = headers.indexOf("what went well");
+    const iReporter = headers.indexOf("reporter");
+
+    const reports = rows.slice(1).reverse().slice(0, 6);
+
+    reports.forEach(r => {
+      const date = r[iDate] || '';
+      const title = r[iTitle] || '';
+      const type = r[iType] || '';
+      const summary = r[iSummary] || '';
+      const reporter = r[iReporter] || '';
+
+      if (title.trim() !== '') {
         reportsFeed.innerHTML += `
           <div class="report-card">
             <div class="report-badge">${type}</div>
@@ -1324,7 +1370,6 @@ async function fetchSecretariatReports() {
     console.log("Secretariat Error:", err);
   }
 }
-
 /*
 ==============================
 WEEKLY LESSONS (FULL FIXED + SAFE)
@@ -1345,14 +1390,14 @@ async function fetchWeeklyLesson() {
     const get = (name) => headers.indexOf(name.toLowerCase());
 
     lessonsData = rows.slice(1).map(r => ({
-      lesson: r[get('lesson')],
-      className: r[get('class')],
-      topic: r[get('topic')],
-      bibleText: r[get('bibletext')],
-      memoryVerse: r[get('memoryverse')],
-      summary: r[get('summary')],
-      discussion: r[get('discussion')]
-    }));
+  lesson: r[headers.indexOf("lesson")] || "",
+  className: r[headers.indexOf("class")] || "",
+  topic: r[headers.indexOf("topic")] || "",
+  bibleText: r[headers.indexOf("bibletext")] || "",
+  memoryVerse: r[headers.indexOf("memoryverse")] || "",
+  summary: r[headers.indexOf("summary")] || "",
+  discussion: r[headers.indexOf("discussion")] || ""
+}));
 
     switchLesson('Senior');
 
