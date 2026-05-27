@@ -156,50 +156,71 @@ position:fixed;
 top:0;
 left:0;
 width:100%;
+
 padding:16px 7%;
+
 display:flex;
 justify-content:space-between;
 align-items:center;
+
 z-index:999999;
 
-background:rgba(5,15,35,0.55);
-backdrop-filter:blur(14px);
+/* PREMIUM BLUE GLASS */
+background:
+linear-gradient(
+135deg,
+rgba(7,24,58,0.82),
+rgba(13,71,161,0.55)
+);
 
+backdrop-filter:blur(18px);
+-webkit-backdrop-filter:blur(18px);
+
+/* SOFT BORDER */
 border-bottom:1px solid rgba(255,255,255,0.08);
+
+/* DEPTH */
+box-shadow:
+0 8px 30px rgba(0,0,0,0.18);
 }
 
 .logo{
 font-size:1rem;
 font-weight:700;
-color:white;
+
+color:#ffffff;
+
 display:flex;
 align-items:center;
 gap:10px;
+
+letter-spacing:0.3px;
 }
 
 .logo i{
 color:#90caf9;
 }
 
-.menu{
-display:flex;
-gap:24px;
-align-items:center;
-}
-
 .menu a{
-color:white;
+color:rgba(255,255,255,0.92);
+text-decoration:none;
+
 font-size:0.86rem;
 font-weight:500;
+
+transition:0.3s ease;
+}
+
+.menu a:hover{
+color:#90caf9;
 }
 
 .hamburger{
-display:none;
+color:white;
 font-size:1.4rem;
 cursor:pointer;
-color:white;
 }
-
+  
 /* =========================
 GENERAL LAYOUT
 ========================= */
