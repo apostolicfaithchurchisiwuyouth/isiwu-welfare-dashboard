@@ -716,15 +716,25 @@ border-radius:999px;
 background:rgba(255,255,255,0.12);
 border:1px solid rgba(255,255,255,0.18);
 backdrop-filter:blur(10px);
+
 color:white;
 font-size:0.75rem;
-transition:0.3s;
+font-weight:500;
+
+cursor:pointer;
+transition:0.3s ease;
+
+outline:none;
+appearance:none;
+-webkit-appearance:none;
+
 }
 
 .lesson-tab.active{
-background:white;
+background:#ffffff;
 color:#0d47a1;
 font-weight:700;
+border:1px solid #ffffff;
 }
   
 .lesson-mini-grid{
@@ -1440,12 +1450,13 @@ summaryText
 .slice(0, 4)
 .join("<br><br>");
 
-  document.querySelectorAll('.lesson-tab').forEach(tab => {
-    tab.classList.remove('active');
-    if (tab.innerText === className) {
-      tab.classList.add('active');
-    }
-  });
+document.querySelectorAll('.lesson-tab').forEach(tab => {
+  tab.classList.remove('active');
+
+  if (tab.textContent.trim() === className) {
+    tab.classList.add('active');
+  }
+});
 
   localStorage.setItem('selectedLessonClass', className);
 }
