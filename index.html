@@ -1100,7 +1100,6 @@ Loading...
 </p>
 
 </div></div>
-<div class="lesson-preview" id="lessonPreview"></div>
   
 <a href="lessons.html" class="lesson-read-more">
 
@@ -1508,16 +1507,6 @@ function switchLesson(className) {
   // ❌ REMOVE trimming for memory verse
   document.getElementById('lessonMemoryVerse').innerText = lesson.memoryVerse || "";
 
-  // show more summary (2 paragraphs safe)
- // Show clean summary preview
-const summaryText = lesson.summary || "";
-
-document.getElementById('lessonPreview').innerHTML =
-summaryText
-.replace(/\n/g, "<br><br>")
-.split("<br><br>")
-.slice(0, 4)
-.join("<br><br>");
 
 document.querySelectorAll('.lesson-tab').forEach(tab => {
   tab.classList.remove('active');
