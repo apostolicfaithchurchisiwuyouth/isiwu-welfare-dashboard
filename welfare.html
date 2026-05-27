@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AFC Isiwu Youth Welfare Dashboard</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700;800&family=Host+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+-webkit-tap-highlight-color:transparent;
+}
+
+body{
+font-family:'Host Grotesk',sans-serif;
+background:#eef3f9;
+color:#222;
+overflow-x:hidden;
+background-image:
+radial-gradient(circle at top left, rgba(33,150,243,0.12), transparent 28%),
+radial-gradient(circle at bottom right, rgba(156,39,176,0.10), transparent 25%),
+url('https://www.transparenttextures.com/patterns/cubes.png');
+}
+
+h1,h2,h3,h4{
+font-family:'Bricolage Grotesque',sans-serif;
+}
+
+header{
+background:linear-gradient(135deg,#0d47a1,#1976d2);
+padding:40px 20px;
+color:white;
+text-align:center;
+}
+
+header h1{
+font-size:2rem;
+margin-bottom:10px;
+}
+
+header p{
+font-size:0.9rem;
+opacity:0.95;
+}
+
+.container{
+max-width:1200px;
+margin:auto;
+padding:30px 15px;
+}
+
+.section{
+margin-top:30px;
+}
+
+.section-title{
+display:flex;
+align-items:center;
+gap:10px;
+margin-bottom:18px;
+color:#0d47a1;
+}
+
+.cards{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+gap:18px;
+}
+
+.card,
+.activities,
+canvas{
+background:rgba(255,255,255,0.65);
+backdrop-filter:blur(12px);
+border:1px solid rgba(255,255,255,0.25);
+box-shadow:0 10px 25px rgba(0,0,0,0.06);
+}
+
+.card{
+padding:22px;
+border-radius:20px;
+position:relative;
+overflow:hidden;
+}
+
+.card i{
+font-size:1.5rem;
+margin-bottom:10px;
+}
+
+.card h2{
+font-size:0.85rem;
+color:#666;
+margin-bottom:8px;
+}
+
+.amount{
+font-size:1.6rem;
+font-weight:700;
+}
+
+.green{border-left:5px solid #2e7d32;}
+.red{border-left:5px solid #c62828;}
+.blue{border-left:5px solid #1565c0;}
+
+.activities{
+padding:20px;
+border-radius:20px;
+overflow-x:auto;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+}
+
+th,td{
+padding:14px;
+font-size:0.82rem;
+border-bottom:1px solid #eee;
+text-align:left;
+}
+
+th{
+background:#1565c0;
+color:white;
+}
+
+canvas{
+padding:20px;
+border-radius:20px;
+width:100%;
+}
+
+.back-btn{
+display:inline-flex;
+align-items:center;
+gap:10px;
+padding:12px 18px;
+background:#1565c0;
+color:white;
+text-decoration:none;
+border-radius:12px;
+font-size:0.8rem;
+font-weight:600;
+margin-top:20px;
+}
+
+footer{
+margin-top:50px;
+padding:25px;
+text-align:center;
+font-size:0.8rem;
+color:#666;
+}
+
+@media(max-width:768px){
+
+header h1{
+font-size:1.6rem;
+}
+
+.amount{
+font-size:1.3rem;
+}
+
+th,td{
+font-size:0.72rem;
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<script>
+
+/*
+====================================
+SIMPLE PASSWORD PROTECTION
+====================================
+*/
+
+const dashboardPassword = "AFCIsiwu2026";
+
+const enteredPassword = prompt("Enter Welfare Dashboard Password");
+
+if (enteredPassword !== dashboardPassword) {
+  document.body.innerHTML = `
+  <div style="
+    height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    font-family:Arial,sans-serif;
+    background:#0d47a1;
+    color:white;
+    text-align:center;
+    padding:20px;
+  ">
+
+    <h1 style="margin-bottom:15px;">Access Denied</h1>
+
+    <p style="max-width:400px; line-height:1.7;">
+      Incorrect password. You are not authorized to access the AFC Isiwu Welfare Dashboard.
+    </p>
+
+  </div>
+  `;
+
+  throw new Error("Unauthorized Access");
+}
+
+</script>
+
+<header>
+<h1>
+<i class="fa-solid fa-wallet"></i>
+AFC Isiwu Welfare Dashboard
+</h1>
+
+<p>
+Transparency • Accountability • Welfare Support
+</p>
+</header>
+
+<div class="container">
+
+<div class="section">
+<div class="section-title">
+<i class="fa-solid fa-chart-column"></i>
+<h2>Welfare Reports</h2>
+</div>
+
+<div class="cards">
+
+<div class="card green">
+<i class="fa-solid fa-money-bill-trend-up"></i>
+<h2>Total Contributions</h2>
+<div class="amount" id="totalContributions">Updating...</div>
+</div>
+
+<div class="card red">
+<i class="fa-solid fa-wallet"></i>
+<h2>Total Expenses</h2>
+<div class="amount" id="totalExpenses">Updating...</div>
+</div>
+
+<div class="card blue">
+<i class="fa-solid fa-building-columns"></i>
+<h2>Current Balance</h2>
+<div class="amount" id="currentBalance">Updating...</div>
+</div>
+
+</div>
+</div>
+
+<div class="section">
+<div class="section-title">
+<i class="fa-solid fa-clock-rotate-left"></i>
+<h2>Recent Welfare Activities</h2>
+</div>
+
+<div class="activities">
+<table>
+<thead>
+<tr>
+<th>Activity</th>
+<th>Amount</th>
+</tr>
+</thead>
+
+<tbody id="activityTable"></tbody>
+</table>
+</div>
+</div>
+
+<div class="section">
+<div class="section-title">
+<i class="fa-solid fa-chart-line"></i>
+<h2>Financial Overview</h2>
+</div>
+
+<canvas id="financeChart"></canvas>
+</div>
+
+<a href="index.html" class="back-btn">
+<i class="fa-solid fa-arrow-left"></i>
+Back To Homepage
+</a>
+
+</div>
+
+<footer>
+AFC Isiwu Youth Welfare System © 2026
+</footer>
+
+<script>
+
+/*
+====================================
+CSV LINKS
+====================================
+*/
+
+const welfareCSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQHlE5IpmFYaQyW5u-rentH2fGC5VZJ2w9Ql1WI-X8bE76qlN5_ttDIitwlXX1CM4sqdEW8RroDUNSU/pub?gid=439044630&single=true&output=csv";
+
+const activitiesCSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQHlE5IpmFYaQyW5u-rentH2fGC5VZJ2w9Ql1WI-X8bE76qlN5_ttDIitwlXX1CM4sqdEW8RroDUNSU/pub?gid=493023062&single=true&output=csv";
+
+/*
+====================================
+FETCH WELFARE DATA
+====================================
+*/
+
+async function fetchSheetData() {
+
+try {
+
+const response = await fetch(welfareCSV);
+const data = await response.text();
+
+const rows = data.trim().split('\n').map(r => r.split(','));
+
+const contributions = parseFloat(rows[0]?.[1]) || 0;
+const expenses = parseFloat(rows[1]?.[1]) || 0;
+const balance = parseFloat(rows[2]?.[1]) || 0;
+
+
+document.getElementById('totalContributions').innerText = `₦${contributions.toLocaleString()}`;
+document.getElementById('totalExpenses').innerText = `₦${expenses.toLocaleString()}`;
+document.getElementById('currentBalance').innerText = `₦${balance.toLocaleString()}`;
+
+
+const ctx = document.getElementById('financeChart');
+
+new Chart(ctx, {
+
+type:'bar',
+
+data:{
+labels:['Contributions','Expenses','Balance'],
+datasets:[{
+data:[contributions, expenses, balance],
+borderRadius:8,
+backgroundColor:['#42a5f5','#ef5350','#66bb6a']
+}]
+},
+
+options:{
+responsive:true,
+plugins:{
+legend:{display:false}
+}
+}
+
+});
+
+
+const activityResponse = await fetch(activitiesCSV);
+const activityData = await activityResponse.text();
+
+const activityRows = activityData.trim().split('\n').map(r => r.split(','));
+
+const activityTable = document.getElementById('activityTable');
+activityTable.innerHTML = '';
+
+activityRows.reverse().slice(0,10).forEach(row => {
+
+const purpose = row[0];
+const amount = row[1];
+
+if(purpose){
+
+activityTable.innerHTML += `
+<tr>
+<td>${purpose}</td>
+<td>₦${Number(amount).toLocaleString()}</td>
+</tr>
+`;
+
+}
+
+});
+
+}
+
+catch(error){
+console.log('Welfare Error:', error);
+}
+
+}
+
+fetchSheetData();
+
+/*
+====================================
+AUTO REFRESH
+====================================
+*/
+
+setInterval(fetchSheetData,30000);
+
+</script>
+
+</body>
+</html>
