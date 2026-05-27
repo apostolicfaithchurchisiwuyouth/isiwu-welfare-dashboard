@@ -1289,7 +1289,27 @@ AFC Isiwu Youth Department Portal © 2026
 </footer>
 
 <script>
+const slides = document.querySelectorAll('.slide');
 
+let currentSlide = 0;
+
+function autoSlide(){
+
+slides.forEach(slide => {
+slide.classList.remove('active');
+});
+
+currentSlide++;
+
+if(currentSlide >= slides.length){
+currentSlide = 0;
+}
+
+slides[currentSlide].classList.add('active');
+
+}
+
+setInterval(autoSlide, 5000);
 /*
 ==============================
 MOBILE MENU
