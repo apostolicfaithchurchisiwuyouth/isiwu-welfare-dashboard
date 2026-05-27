@@ -13,24 +13,15 @@
 <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 <style>
 
+/* =========================
+RESET
+========================= */
+
 *{
 margin:0;
 padding:0;
 box-sizing:border-box;
-}
-
-/* Remove blue click/tap highlight */
-* {
-  -webkit-tap-highlight-color: transparent;
-}
-
-/* Remove focus outline (desktop click box) */
-button:focus,
-a:focus,
-button:active,
-a:active {
-  outline: none;
-  box-shadow: none;
+-webkit-tap-highlight-color:transparent;
 }
 
 html{
@@ -52,12 +43,22 @@ h1,h2,h3,h4,.logo{
 font-family:'Bricolage Grotesque',sans-serif;
 }
 
+button,
+a{
+outline:none;
+border:none;
+text-decoration:none;
+}
+
+/* =========================
+HEADER + HERO
+========================= */
+
 header{
 position:relative;
 height:72vh;
-min-height:520px;
+min-height:540px;
 overflow:hidden;
-padding-bottom:0;
 }
 
 .hero-slider{
@@ -70,7 +71,7 @@ height:100%;
 position:absolute;
 inset:0;
 background-size:cover;
-background-position:center center;
+background-position:center;
 opacity:0;
 transition:opacity 1s ease;
 display:flex;
@@ -100,7 +101,7 @@ text-align:center;
 color:white;
 max-width:760px;
 padding:20px;
-margin-top:60px;
+margin-top:70px;
 }
 
 .slide-badge{
@@ -123,7 +124,7 @@ margin-bottom:16px;
 }
 
 .slide-content p{
-font-size:0.9rem;
+font-size:0.92rem;
 line-height:1.8;
 opacity:0.95;
 margin-bottom:28px;
@@ -137,7 +138,6 @@ padding:15px 26px;
 border-radius:14px;
 background:white;
 color:#0d47a1;
-text-decoration:none;
 font-size:0.82rem;
 font-weight:700;
 transition:0.3s;
@@ -147,16 +147,20 @@ transition:0.3s;
 transform:translateY(-4px);
 }
 
+/* =========================
+NAVBAR
+========================= */
+
 .navbar{
 position:fixed;
 top:0;
 left:0;
 width:100%;
 padding:16px 7%;
-z-index:999999;
 display:flex;
 justify-content:space-between;
 align-items:center;
+z-index:999999;
 
 background:rgba(5,15,35,0.55);
 backdrop-filter:blur(14px);
@@ -171,76 +175,20 @@ color:white;
 display:flex;
 align-items:center;
 gap:10px;
-z-index:999999;
 }
 
 .logo i{
 color:#90caf9;
 }
 
-.menu a{
-color:white;
-}
-
-.hamburger{
-color:white;
-z-index:999999;
-}
-
-@media(max-width:768px){
-
-header{
-height:58vh;
-min-height:430px;
-}
-
-.slide{
-background-position:center;
-}
-
-.slide-content{
-padding:18px;
-margin-top:70px;
-}
-
-.slide-content h1{
-font-size:1.75rem;
-line-height:1.2;
-}
-
-.slide-content p{
-font-size:0.76rem;
-line-height:1.7;
-margin-bottom:22px;
-}
-
-.slide-badge{
-font-size:0.62rem;
-padding:8px 14px;
-}
-
-.hero-btn{
-padding:13px 20px;
-font-size:0.74rem;
-}
-
-.navbar{
-padding:16px 5%;
-}
-
-.logo{
-font-size:0.88rem;
-}
-
 .menu{
 display:flex;
-gap:22px;
+gap:24px;
 align-items:center;
 }
 
 .menu a{
 color:white;
-text-decoration:none;
 font-size:0.86rem;
 font-weight:500;
 }
@@ -252,58 +200,9 @@ cursor:pointer;
 color:white;
 }
 
-.hero{
-padding:45px 7% 20px;
-text-align:center;
-position:relative;
-z-index:2;
-}
-
-.hero h1{
-font-size:2.5rem;
-margin-bottom:10px;
-}
-
-.hero p{
-max-width:680px;
-margin:auto;
-font-size:0.92rem;
-line-height:1.7;
-opacity:0.95;
-}
-
-.hero-buttons{
-margin-top:25px;
-display:flex;
-justify-content:center;
-gap:14px;
-flex-wrap:wrap;
-}
-
-.hero-buttons a{
-padding:13px 24px;
-border-radius:10px;
-text-decoration:none;
-font-size:0.84rem;
-font-weight:600;
-transition:0.3s;
-}
-
-.hero-buttons a:hover{
-transform:translateY(-3px);
-}
-
-.btn-primary{
-background:white;
-color:#1565c0;
-}
-
-.btn-secondary{
-background:rgba(255,255,255,0.15);
-border:1px solid rgba(255,255,255,0.25);
-color:white;
-backdrop-filter:blur(8px);
-}
+/* =========================
+GENERAL LAYOUT
+========================= */
 
 .container{
 max-width:1250px;
@@ -316,7 +215,6 @@ margin-top:45px;
 padding:20px 16px;
 width:100%;
 border-radius:24px;
-background:transparent;
 }
 
 .section-title{
@@ -330,6 +228,10 @@ color:#0d47a1;
 .section-title h2{
 font-size:1rem;
 }
+
+/* =========================
+CARDS
+========================= */
 
 .cards{
 display:grid;
@@ -392,33 +294,15 @@ font-weight:700;
 .red{border-left:5px solid #c62828;}
 .blue{border-left:5px solid #1565c0;}
 
+/* =========================
+REPORTS
+========================= */
+
 .activities,
 .report-box,
 .leaderboard,
 .reports-feed{
 padding:20px;
-border-radius:18px;
-}
-
-table{
-width:100%;
-border-collapse:collapse;
-}
-
-th,td{
-padding:13px;
-font-size:0.8rem;
-border-bottom:1px solid #eee;
-}
-
-th{
-background:#1565c0;
-color:white;
-}
-
-canvas{
-padding:20px 16px;
-width:100%;
 border-radius:18px;
 }
 
@@ -444,7 +328,6 @@ margin-top:18px;
 .report-btn{
 padding:12px 18px;
 border-radius:10px;
-text-decoration:none;
 color:white;
 font-size:0.76rem;
 font-weight:600;
@@ -455,13 +338,7 @@ background:linear-gradient(135deg,#1565c0,#42a5f5);
 background:linear-gradient(135deg,#2e7d32,#43a047);
 }
 
-.reports-feed{
-margin-top:18px;
-display:flex;
-flex-direction:column;
-gap:12px;
-}
-  .premium-reports-grid{
+.premium-reports-grid{
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
 gap:20px;
@@ -482,18 +359,6 @@ box-shadow:0 10px 30px rgba(0,0,0,0.06);
 
 .report-card:hover{
 transform:translateY(-6px);
-box-shadow:0 18px 45px rgba(0,0,0,0.1);
-}
-
-.report-card::before{
-content:'';
-position:absolute;
-width:160px;
-height:160px;
-border-radius:50%;
-background:rgba(21,101,192,0.06);
-top:-60px;
-right:-60px;
 }
 
 .report-badge{
@@ -505,16 +370,11 @@ color:#1565c0;
 font-size:0.65rem;
 font-weight:700;
 margin-bottom:14px;
-position:relative;
-z-index:2;
 }
 
 .report-card h3{
 font-size:1.05rem;
-line-height:1.5;
 margin-bottom:12px;
-position:relative;
-z-index:2;
 }
 
 .report-summary{
@@ -522,8 +382,6 @@ font-size:0.78rem;
 line-height:1.8;
 color:#555;
 margin-bottom:18px;
-position:relative;
-z-index:2;
 }
 
 .report-meta{
@@ -532,8 +390,6 @@ justify-content:space-between;
 align-items:center;
 gap:12px;
 flex-wrap:wrap;
-position:relative;
-z-index:2;
 }
 
 .reporter{
@@ -546,78 +402,15 @@ font-size:0.7rem;
 color:#777;
 }
 
-.feed-item{
-padding:14px;
-background:rgba(255,255,255,0.45);
-border-radius:14px;
-border-left:4px solid #1565c0;
-}
-
-.feed-item h4{
-font-size:0.82rem;
-margin-bottom:5px;
-}
-
-.feed-item p{
-font-size:0.74rem;
-line-height:1.5;
-color:#555;
-}
-
-.pagination{
-display:flex;
-justify-content:center;
-gap:8px;
-margin-top:20px;
-flex-wrap:wrap;
-}
-
-  .reports-button-wrap{
-display:flex;
-justify-content:center;
-margin-top:30px;
-}
-
-.more-reports-btn{
-display:flex;
-align-items:center;
-gap:10px;
-padding:14px 24px;
-border-radius:16px;
-text-decoration:none;
-background:linear-gradient(135deg,#1565c0,#42a5f5);
-color:white;
-font-size:0.82rem;
-font-weight:700;
-transition:0.3s;
-box-shadow:0 10px 25px rgba(21,101,192,0.2);
-}
-
-.more-reports-btn:hover{
-transform:translateY(-4px);
-box-shadow:0 18px 40px rgba(21,101,192,0.3);
-}
-.page-btn{
-width:38px;
-height:38px;
-border:none;
-border-radius:10px;
-cursor:pointer;
-background:rgba(255,255,255,0.7);
-font-weight:700;
-}
-
-.page-btn.active{
-background:#1565c0;
-color:white;
-}
+/* =========================
+LEADERBOARD
+========================= */
 
 .top-three{
 display:flex;
 justify-content:center;
 align-items:flex-end;
 gap:20px;
-flex-wrap:nowrap;
 overflow-x:auto;
 padding-top:20px;
 padding-bottom:15px;
@@ -663,16 +456,13 @@ background:linear-gradient(135deg,#ffcc80,#fb8c00);
 
 .leader-circle h3{
 font-size:0.7rem;
-font-weight:200;
 margin-top:10px;
 text-align:center;
 }
 
-
 .leader-circle p{
 font-size:0.62rem;
 }
-
 
 .leader-list{
 display:flex;
@@ -699,18 +489,15 @@ min-width:35px;
 .leader-item p{
 flex:1;
 font-size:0.68rem;
-white-space:nowrap;
-overflow:hidden;
-text-overflow:ellipsis;
 }
 
 .leader-item strong{
-margin-left:auto;
 font-size:0.66rem;
-white-space:nowrap;
-text-align:right;
 }
 
+/* =========================
+GALLERY
+========================= */
 
 .gallery{
 display:grid;
@@ -760,18 +547,13 @@ text-align:center;
 
 .more-gallery a{
 color:white;
-text-decoration:none;
 font-weight:600;
 font-size:0.9rem;
 }
 
-footer{
-margin-top:45px;
-padding:25px;
-text-align:center;
-font-size:0.8rem;
-color:#666;
-}
+/* =========================
+LESSON HERO
+========================= */
 
 .lesson-hero{
 position:relative;
@@ -781,8 +563,6 @@ min-height:500px;
 display:flex;
 align-items:flex-end;
 padding:45px;
-
-/* NEW CLEAN LOOK */
 background-color:#081B2C;
 box-shadow:0 25px 70px rgba(0,0,0,0.25);
 }
@@ -799,8 +579,6 @@ z-index:1;
 }
 
 .lesson-content{
-color:#ffffff;
-text-shadow:0 2px 10px rgba(0,0,0,0.25);
 position:relative;
 z-index:2;
 width:100%;
@@ -813,7 +591,6 @@ display:inline-block;
 padding:10px 18px;
 border-radius:999px;
 background:#C83200;
-backdrop-filter:blur(10px);
 font-size:0.72rem;
 font-weight:700;
 letter-spacing:1px;
@@ -839,27 +616,18 @@ border-radius:999px;
 background:rgba(255,255,255,0.12);
 border:1px solid rgba(255,255,255,0.18);
 backdrop-filter:blur(10px);
-
 color:white;
 font-size:0.75rem;
-font-weight:500;
-
 cursor:pointer;
-transition:0.3s ease;
-
-outline:none;
-appearance:none;
--webkit-appearance:none;
-
+transition:0.3s;
 }
 
 .lesson-tab.active{
 background:#ffffff;
 color:#0d47a1;
 font-weight:700;
-border:1px solid #ffffff;
 }
-  
+
 .lesson-mini-grid{
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
@@ -873,18 +641,11 @@ border-radius:24px;
 background:rgba(255,255,255,0.10);
 backdrop-filter:blur(14px);
 border:1px solid rgba(255,255,255,0.15);
-transition:0.3s;
-}
-
-.mini-card:hover{
-transform:translateY(-4px);
-background:rgba(255,255,255,0.14);
 }
 
 .mini-card h3{
 font-size:0.8rem;
 margin-bottom:10px;
-opacity:0.88;
 }
 
 .mini-card p{
@@ -899,7 +660,6 @@ background:rgba(255,255,255,0.08);
 backdrop-filter:blur(12px);
 border:1px solid rgba(255,255,255,0.10);
 margin-bottom:25px;
-font-size:0.75rem;
 }
 
 .lesson-preview p{
@@ -915,7 +675,6 @@ padding:16px 28px;
 border-radius:10px;
 background:white;
 color:#111;
-text-decoration:none;
 font-size:0.82rem;
 font-weight:700;
 transition:0.3s;
@@ -925,22 +684,65 @@ transition:0.3s;
 transform:translateY(-4px);
 }
 
-@media(max-width:768px){
+/* =========================
+FOOTER
+========================= */
 
-.lesson-hero{
-min-height:auto;
-padding:30px 22px;
+footer{
+margin-top:45px;
+padding:25px;
+text-align:center;
+font-size:0.8rem;
+color:#666;
 }
 
-.lesson-content h1{
+/* =========================
+MOBILE
+========================= */
+
+@media(max-width:768px){
+
+header{
+height:58vh;
+min-height:430px;
+}
+
+.slide{
+background-position:center;
+}
+
+.slide-content{
+padding:18px;
+margin-top:70px;
+}
+
+.slide-content h1{
 font-size:1.75rem;
+line-height:1.2;
 }
 
+.slide-content p{
+font-size:0.76rem;
+line-height:1.7;
+margin-bottom:22px;
 }
-@media(max-width:768px){
 
-.container{
-padding:24px 10px;
+.slide-badge{
+font-size:0.62rem;
+padding:8px 14px;
+}
+
+.hero-btn{
+padding:13px 20px;
+font-size:0.74rem;
+}
+
+.navbar{
+padding:16px 5%;
+}
+
+.logo{
+font-size:0.88rem;
 }
 
 .menu{
@@ -973,12 +775,8 @@ width:100%;
 display:block;
 }
 
-.hero h1{
-font-size:1.85rem;
-}
-
-.hero p{
-font-size:0.78rem;
+.container{
+padding:24px 10px;
 }
 
 .section-title h2{
@@ -995,14 +793,14 @@ font-size:0.74rem;
 
 .feed-item p,
 .report-box p,
-th,td{
+th,
+td{
 font-size:0.7rem;
 }
 
 .amount{
 font-size:1.35rem;
 }
-
 
 .leader-item p{
 font-size:0.62rem;
@@ -1016,7 +814,6 @@ font-size:0.6rem;
 padding:18px 12px;
 }
 
-
 .big{
 width:92px;
 height:92px;
@@ -1027,6 +824,15 @@ font-size:2rem;
 width:70px;
 height:70px;
 font-size:1.4rem;
+}
+
+.lesson-hero{
+min-height:auto;
+padding:30px 22px;
+}
+
+.lesson-content h1{
+font-size:1.75rem;
 }
 
 }
