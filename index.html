@@ -857,19 +857,24 @@ color:#64748b;
 
 
 /* =========================
-TOP THREE SCROLL PODIUM
+TOP THREE PODIUM FIXED
 ========================= */
 
+
 .top-three-wrapper{
+
 position:relative;
 
 width:100%;
 
 overflow:hidden;
 
-margin-bottom:30px;
+margin-bottom:28px;
+
 }
 
+
+/* SCROLL AREA */
 
 .top-three{
 
@@ -877,44 +882,51 @@ display:flex;
 
 gap:14px;
 
+width:100%;
+
+
 overflow-x:auto;
 
-justify-content:flex-start;
+overflow-y:hidden;
 
-padding:28px 5px 15px;
+
+padding:
+
+28px 5px 12px;
 
 
 scroll-behavior:smooth;
 
 
-/* IMPORTANT */
-width:100%;
+/* keep inside container */
+
+box-sizing:border-box;
 
 
-/* scrollbar visible */
+/* scrollbar */
+
 scrollbar-width:thin;
 
 scrollbar-color:
 #c084fc
-#f1f5f9;
+transparent;
 
 }
 
 
-/* CHROME SCROLLBAR */
+
+/* CHROME */
 
 .top-three::-webkit-scrollbar{
 
-height:6px;
+height:5px;
 
 }
 
 
 .top-three::-webkit-scrollbar-track{
 
-background:#f1f5f9;
-
-border-radius:20px;
+background:transparent;
 
 }
 
@@ -929,47 +941,21 @@ border-radius:20px;
 
 
 
-/* scroll indicator */
 
-.top-three-wrapper::after{
-
-content:'→ Scroll';
-
-position:absolute;
-
-right:8px;
-
-bottom:0;
-
-
-font-size:.6rem;
-
-font-weight:700;
-
-color:#7e22ce;
-
-background:white;
-
-padding:4px 8px;
-
-border-radius:20px;
-
-box-shadow:
-0 5px 15px rgba(0,0,0,.08);
-
-}
-
-
-
-/* CARD */
+/* CARD SIZE */
 
 .leader-card{
 
-flex:0 0 150px;
+flex:0 0 140px;
 
-padding:18px 12px 15px;
+
+padding:
+
+18px 12px 15px;
+
 
 border-radius:20px;
+
 
 background:
 
@@ -982,56 +968,202 @@ linear-gradient(
 
 border:
 
-1px solid rgba(148,163,184,.22);
+1px solid rgba(148,163,184,.25);
 
 
 box-shadow:
 
-0 12px 30px rgba(15,23,42,.07);
+0 15px 35px rgba(15,23,42,.08);
+
 
 text-align:center;
 
+
+transition:.3s ease;
+
 }
 
 
 
-/* RANK */
+
+.leader-card:hover{
+
+transform:translateY(-5px);
+
+}
+
+
+
+/* RANK CIRCLE */
 
 .rank-circle{
 
-width:32px;
+position:absolute;
 
-height:32px;
+top:-17px;
 
-top:-16px;
+left:50%;
+
+transform:translateX(-50%);
+
+
+width:34px;
+
+height:34px;
+
+
+border-radius:50%;
+
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
 
 font-size:.7rem;
 
+font-weight:800;
+
+
+color:white;
+
+
+background:
+
+linear-gradient(
+135deg,
+#6366f1,
+#8b5cf6
+);
+
+
+box-shadow:
+
+0 8px 20px rgba(99,102,241,.35);
+
 }
 
 
 
-/* ICON */
+
+/* FIRST */
+
+.first-place{
+
+background:
+
+linear-gradient(
+145deg,
+#ffffff,
+#fff7ed
+);
+
+
+border-color:
+
+rgba(245,158,11,.35);
+
+}
+
+
+.first-place .rank-circle{
+
+background:
+
+linear-gradient(
+135deg,
+#f59e0b,
+#f97316
+);
+
+}
+
+
+
+
+/* SECOND */
+
+.second-place .rank-circle{
+
+background:
+
+linear-gradient(
+135deg,
+#64748b,
+#94a3b8
+);
+
+}
+
+
+
+
+/* THIRD */
+
+.third-place .rank-circle{
+
+background:
+
+linear-gradient(
+135deg,
+#10b981,
+#059669
+);
+
+}
+
+
+
+
+/* AVATAR */
 
 .leader-avatar{
 
-width:38px;
+width:42px;
 
-height:38px;
+height:42px;
 
-font-size:1rem;
 
-border-radius:12px;
+margin:8px auto 10px;
+
+
+border-radius:14px;
+
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+
+background:
+
+linear-gradient(
+135deg,
+#eef2ff,
+#e0e7ff
+);
+
+
+font-size:1.1rem;
 
 }
 
 
 
-/* TEXT */
 
 .leader-card h3{
 
-font-size:.62rem;
+font-size:.63rem;
+
+line-height:1.3;
+
+color:#334155;
+
+margin-bottom:8px;
 
 }
 
@@ -1041,6 +1173,10 @@ font-size:.62rem;
 
 font-size:.75rem;
 
+color:#111827;
+
+display:block;
+
 }
 
 
@@ -1048,6 +1184,50 @@ font-size:.75rem;
 .leader-card span{
 
 font-size:.55rem;
+
+color:#64748b;
+
+}
+
+
+
+
+/* SCROLL MESSAGE */
+
+.top-three-wrapper::after{
+
+content:'Swipe →';
+
+position:absolute;
+
+
+right:8px;
+
+bottom:12px;
+
+
+font-size:.55rem;
+
+font-weight:700;
+
+
+color:#7e22ce;
+
+
+background:white;
+
+
+padding:5px 10px;
+
+
+border-radius:20px;
+
+
+box-shadow:
+
+0 5px 15px rgba(0,0,0,.08);
+
+pointer-events:none;
 
 }
 
@@ -1057,27 +1237,18 @@ font-size:.55rem;
 
 @media(max-width:768px){
 
-.top-three-wrapper{
-
-margin-left:0;
-
-margin-right:0;
-
-}
-
 
 .top-three{
 
-padding-left:2px;
-
-padding-right:40px;
+padding-right:45px;
 
 }
+
 
 
 .leader-card{
 
-flex-basis:140px;
+flex-basis:135px;
 
 }
 
