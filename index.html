@@ -655,7 +655,6 @@ font-size:0.9rem;
 LESSON HERO
 ========================= */
 
-```css
 .lesson-hero{
 position:relative;
 overflow:hidden;
@@ -673,15 +672,15 @@ align-items:flex-end;
 background:
 linear-gradient(
 135deg,
-#ffffff,
-#fcfbff,
-#f9f5ff
+#0a0016,
+#140022,
+#1b062b
 );
 
-border:1px solid rgba(74,7,84,.08);
+border:1px solid rgba(255,255,255,0.06);
 
 box-shadow:
-0 25px 70px rgba(74,7,84,.08);
+0 25px 80px rgba(0,0,0,.45);
 
 isolation:isolate;
 }
@@ -700,7 +699,7 @@ border-radius:50%;
 background:
 radial-gradient(
 circle,
-rgba(126,34,206,.08),
+rgba(147,51,234,.20),
 transparent 70%
 );
 
@@ -724,7 +723,7 @@ border-radius:50%;
 background:
 radial-gradient(
 circle,
-rgba(74,7,84,.08),
+rgba(74,7,84,.22),
 transparent 70%
 );
 
@@ -748,7 +747,7 @@ border-radius:50%;
 background:
 radial-gradient(
 circle,
-rgba(168,85,247,.10),
+rgba(168,85,247,.15),
 transparent 70%
 );
 
@@ -768,7 +767,7 @@ z-index:2;
 
 max-width:760px;
 
-color:#111827;
+color:#f8fafc;
 }
 
 .lesson-top-badge{
@@ -778,13 +777,17 @@ gap:10px;
 
 padding:10px 18px;
 
-background:#f3e8ff;
+background:
+rgba(255,255,255,.04);
 
-border:1px solid rgba(74,7,84,.08);
+border:
+1px solid rgba(255,255,255,.08);
 
 border-radius:12px;
 
-color:#4a0754;
+backdrop-filter:blur(20px);
+
+color:#d8b4fe;
 
 font-size:.65rem;
 font-weight:700;
@@ -799,14 +802,14 @@ line-height:1.2;
 
 font-weight:800;
 
-color:#111827;
+color:#ffffff;
 
 margin-bottom:34px;
 
 max-width:680px;
 }
 
-/* PREMIUM MODERN TABS */
+/* MODERN NEXT.JS STYLE TABS */
 .lesson-tabs{
 display:inline-flex;
 
@@ -814,14 +817,15 @@ padding:6px;
 
 gap:4px;
 
-background:#ffffff;
+background:
+rgba(255,255,255,.04);
 
-border:1px solid rgba(74,7,84,.08);
+border:
+1px solid rgba(255,255,255,.08);
 
 border-radius:14px;
 
-box-shadow:
-0 8px 24px rgba(74,7,84,.05);
+backdrop-filter:blur(20px);
 
 margin-bottom:34px;
 
@@ -835,7 +839,7 @@ border:none;
 
 background:transparent;
 
-color:#64748b;
+color:#cbd5e1;
 
 font-size:.75rem;
 font-weight:600;
@@ -850,8 +854,10 @@ outline:none;
 }
 
 .lesson-tab:hover{
-background:#f8f5ff;
-color:#4a0754;
+background:
+rgba(255,255,255,.04);
+
+color:#ffffff;
 }
 
 .lesson-tab.active{
@@ -865,7 +871,7 @@ linear-gradient(
 color:white;
 
 box-shadow:
-0 10px 25px rgba(126,34,206,.20);
+0 10px 25px rgba(126,34,206,.35);
 }
 
 .lesson-mini-grid{
@@ -884,13 +890,16 @@ padding:26px;
 
 border-radius:18px;
 
-background:#ffffff;
+background:
+rgba(255,255,255,.03);
 
 border:
-1px solid rgba(74,7,84,.08);
+1px solid rgba(255,255,255,.06);
+
+backdrop-filter:blur(20px);
 
 box-shadow:
-0 10px 35px rgba(74,7,84,.05);
+0 10px 40px rgba(0,0,0,.18);
 
 transition:.3s ease;
 }
@@ -899,7 +908,7 @@ transition:.3s ease;
 transform:translateY(-5px);
 
 box-shadow:
-0 20px 50px rgba(74,7,84,.08);
+0 20px 50px rgba(0,0,0,.25);
 }
 
 .mini-card h3{
@@ -909,7 +918,7 @@ letter-spacing:.5px;
 
 text-transform:uppercase;
 
-color:#7e22ce;
+color:#a78bfa;
 
 margin-bottom:14px;
 }
@@ -921,7 +930,7 @@ line-height:1.9;
 
 font-weight:500;
 
-color:#334155;
+color:#f1f5f9;
 }
 
 .lesson-read-more{
@@ -950,7 +959,7 @@ font-weight:700;
 transition:.3s ease;
 
 box-shadow:
-0 15px 35px rgba(126,34,206,.20);
+0 15px 35px rgba(126,34,206,.35);
 }
 
 .lesson-read-more:hover{
@@ -959,7 +968,7 @@ transform:translateY(-4px);
 gap:16px;
 
 box-shadow:
-0 22px 45px rgba(126,34,206,.28);
+0 22px 45px rgba(126,34,206,.45);
 }
 
 /* MOBILE */
@@ -1009,7 +1018,6 @@ width:100%;
 justify-content:center;
 }
 }
-```
 
 /* =========================
 FOOTER
