@@ -262,6 +262,36 @@ document.getElementById("meta").innerText = cls;
 document.getElementById("bibleText").innerText = lesson.BibleText || "";
 document.getElementById("memoryVerse").innerText = lesson.MemoryVerse || "";
 
+const audioContainer =
+document.getElementById("yorubaAudioContainer");
+
+const audioPlayer =
+document.getElementById("yorubaAudioPlayer");
+
+const audioSource =
+document.getElementById("yorubaAudioSource");
+
+if(
+lesson.YorubaAudio &&
+lesson.YorubaAudio.trim() !== ""
+){
+
+audioSource.src =
+lesson.YorubaAudio;
+
+audioPlayer.load();
+
+audioContainer.style.display = "block";
+
+}else{
+
+audioContainer.style.display = "none";
+
+audioSource.src = "";
+
+audioPlayer.load();
+
+}
 document.getElementById("summary").innerHTML = lesson.Summary || "";
 document.getElementById("discussion").innerText = lesson.Discussion || "";
 
