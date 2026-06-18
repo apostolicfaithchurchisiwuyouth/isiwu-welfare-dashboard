@@ -156,7 +156,7 @@ background:
 linear-gradient(
 135deg,
 #4a0754,
-#7e22ce
+#0A0016
 );
 
 color:white;
@@ -775,99 +775,326 @@ box-shadow:
 0 12px 30px rgba(126,34,206,0.20);
 }
   
-/* =========================
-LEADERBOARD
-========================= */
+/* ==========================
+MODERN LEADERBOARD
+========================== */
+
+.leaderboard-section{
+
+background:white;
+
+border-radius:26px;
+
+padding:28px;
+
+border:
+1px solid rgba(74,7,84,.06);
+
+box-shadow:
+0 25px 70px rgba(15,23,42,.08);
+
+}
+
+
+/* HEADER */
+
+.leaderboard-header{
+
+display:flex;
+
+align-items:center;
+
+gap:14px;
+
+margin-bottom:28px;
+
+}
+
+
+.leader-title-icon{
+
+width:45px;
+height:45px;
+
+border-radius:14px;
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+background:#f3e8ff;
+
+color:#4a0754;
+
+font-size:1.1rem;
+
+}
+
+
+.leaderboard-header h2{
+
+margin:0;
+
+font-size:1rem;
+
+color:#4a0754;
+
+font-weight:800;
+
+}
+
+
+.leaderboard-header p{
+
+margin-top:5px;
+
+font-size:.72rem;
+
+color:#64748b;
+
+}
+
+
+
+/* TOP THREE */
 
 .top-three{
-display:flex;
-justify-content:center;
-align-items:flex-end;
-gap:20px;
-overflow-x:auto;
-padding-top:20px;
-padding-bottom:15px;
+
+display:grid;
+
+grid-template-columns:
+repeat(3,1fr);
+
+gap:18px;
+
+margin-bottom:28px;
+
 }
 
-.leader-circle{
-display:flex;
-flex-direction:column;
-align-items:center;
-flex-shrink:0;
+
+
+.leader-card{
+
+position:relative;
+
+padding:22px 15px;
+
+border-radius:22px;
+
+text-align:center;
+
+background:#fafafa;
+
+border:
+
+1px solid rgba(0,0,0,.05);
+
+transition:.3s;
+
 }
+
+
+
+.leader-card:hover{
+
+transform:translateY(-5px);
+
+}
+
+
+
+.first-place{
+
+background:
+
+linear-gradient(
+135deg,
+#4a0754,
+#7e22ce
+);
+
+color:white;
+
+box-shadow:
+
+0 20px 45px rgba(126,34,206,.25);
+
+}
+
+
+
+.rank-number{
+
+position:absolute;
+
+top:12px;
+
+right:15px;
+
+font-size:.7rem;
+
+font-weight:800;
+
+}
+
+
 
 .leader-avatar{
-border-radius:50%;
-display:flex;
-align-items:center;
-justify-content:center;
-color:white;
-font-weight:700;
-box-shadow:0 10px 25px rgba(0,0,0,0.14);
+
+font-size:2rem;
+
+margin:15px 0;
 }
 
-.big{
-width:120px;
-height:120px;
-font-size:2.5rem;
-background:linear-gradient(135deg,#ffd54f,#ff9800);
+
+
+.leader-card h3{
+
+font-size:.75rem;
+
+margin-bottom:8px;
+
 }
 
-.small{
-width:90px;
-height:90px;
-font-size:1.8rem;
+
+
+.leader-card strong{
+
+font-size:.7rem;
+
 }
 
-.second-place .small{
-background:linear-gradient(135deg,#cfd8dc,#90a4ae);
-}
 
-.third-place .small{
-background:linear-gradient(135deg,#ffcc80,#fb8c00);
-}
 
-.leader-circle h3{
-font-size:0.6rem;
-margin-top:10px;
-text-align:center;
-}
-
-.leader-circle p{
-font-size:0.62rem;
-}
+/* LIST */
 
 .leader-list{
+
 display:flex;
+
 flex-direction:column;
+
 gap:10px;
-margin-top:20px;
+
 }
+
+
 
 .leader-item{
+
 display:flex;
+
 align-items:center;
-gap:10px;
-background:rgba(255,255,255,0.45);
-padding:10px 12px;
-border-radius:12px;
+
+gap:12px;
+
+padding:14px;
+
+border-radius:14px;
+
+background:#f8fafc;
+
+border:
+
+1px solid rgba(15,23,42,.05);
+
 }
+
+
 
 .leader-item span{
-font-size:0.72rem;
-font-weight:700;
-min-width:35px;
+
+font-size:.7rem;
+
+font-weight:800;
+
+color:#7e22ce;
+
 }
+
+
 
 .leader-item p{
+
 flex:1;
-font-size:0.7rem;
+
+margin:0;
+
+font-size:.72rem;
+
+color:#334155;
+
 }
+
+
 
 .leader-item strong{
-font-size:0.68rem;
+
+font-size:.68rem;
+
+color:#4a0754;
+
 }
 
+
+
+/* MOBILE */
+
+@media(max-width:768px){
+
+
+.leaderboard-section{
+
+padding:20px;
+
+border-radius:20px;
+
+}
+
+
+
+.top-three{
+
+grid-template-columns:1fr;
+
+gap:14px;
+
+}
+
+
+
+.leader-card{
+
+padding:18px;
+
+}
+
+
+
+.leader-title-icon{
+
+width:40px;
+height:40px;
+
+}
+
+
+.leaderboard-header h2{
+
+font-size:.85rem;
+
+}
+
+
+
+.leader-item{
+
+padding:12px;
+
+}
+
+
+}
 /* =========================
 GALLERY
 ========================= */
@@ -1579,49 +1806,179 @@ Read Combined Lesson Note
   
 <div class="container">
 
-<div class="section" id="leaderboard">
-<div class="section-title">
+<section class="leaderboard-section" id="leaderboard">
+
+
+<div class="leaderboard-header">
+
+<div class="leader-title-icon">
 <i class="fa-solid fa-trophy"></i>
-<h2>Lessons Challenge Leaderboard</h2>
 </div>
 
-<div class="leaderboard">
+<div>
+<h2>Lessons Challenge Leaderboard</h2>
+<p>Top performers in weekly Bible lesson challenges</p>
+</div>
+
+</div>
+
+
 
 <div class="top-three">
-<div class="leader-circle second-place">
-<div class="leader-avatar small">🥈</div>
-<h3>Olajimbiti <br> Molayo</h3>
-<p style="margin-top:5px;"><strong>27,260 Points</strong></p>
+
+
+<div class="leader-card second-place">
+
+<div class="rank-number">2</div>
+
+<div class="leader-avatar">
+🥈
 </div>
 
-<div class="leader-circle first-place">
-<div class="leader-avatar big">🥇</div>
-<h3>Oluwatimilehin <br> Mercy</h3>
-<p style="margin-top:5px;"><strong>27,510 Points</strong></p>
+<h3>
+Olajimbiti Molayo
+</h3>
+
+<strong>
+27,260 Points
+</strong>
+
 </div>
 
-<div class="leader-circle third-place">
-<div class="leader-avatar small">🥉</div>
-<h3>Ashaolu <br> Bisola</h3>
-<p style="margin-top:5px;"><strong>26,510 Points</strong></p>
+
+
+<div class="leader-card first-place">
+
+<div class="rank-number">
+1
 </div>
+
+<div class="leader-avatar">
+🥇
 </div>
+
+<h3>
+Oluwatimilehin Mercy
+</h3>
+
+<strong>
+27,510 Points
+</strong>
+
+</div>
+
+
+
+<div class="leader-card third-place">
+
+<div class="rank-number">
+3
+</div>
+
+<div class="leader-avatar">
+🥉
+</div>
+
+<h3>
+Ashaolu Bisola
+</h3>
+
+<strong>
+26,510 Points
+</strong>
+
+</div>
+
+
+</div>
+
+
 
 <div class="leader-list">
-<div class="leader-item"><span>#4</span><p>Adesanya Adeola</p><strong>26,030 Points</strong></div>
-<div class="leader-item"><span>#5</span><p>Oluwatimilehin Akorede</p><strong>17,220 Points</strong></div>
-<div class="leader-item"><span>#6</span><p>Kehinde Anuoluwapo</p><strong>15,980 Points</strong></div>
-<div class="leader-item"><span>#7</span><p>Agosu Abigail</p><strong>15,140 Points</strong></div>
-<div class="leader-item"><span>#8</span><p>Adesanya Oluwapelumi</p><strong>14,020 Points</strong></div>
-<div class="leader-item"><span>#9</span><p>Ademola Grace</p><strong>12,890 Points</strong></div>
-<div class="leader-item"><span>#10</span><p>Agosu Taiwo</p><strong>10,190 Points</strong></div>
-<div class="leader-item"><span>#11</span><p>Agosu Kehinde</p><strong>5,610 Points</strong></div>
-<div class="leader-item"><span>#12</span><p>Ashaolu Reuben</p><strong>1,360 Points</strong></div>
-<div class="leader-item"><span>#13</span><p>Odedokun Blessing</p><strong>1,340 Points</strong></div>
-<div class="leader-item"><span>#14</span><p>Onomakpor Daniel</p><strong>1,300 Points</strong></div>
+
+
+<div class="leader-item">
+<span>#4</span>
+<p>Adesanya Adeola</p>
+<strong>26,030</strong>
 </div>
 
+
+<div class="leader-item">
+<span>#5</span>
+<p>Oluwatimilehin Akorede</p>
+<strong>17,220</strong>
 </div>
+
+
+<div class="leader-item">
+<span>#6</span>
+<p>Kehinde Anuoluwapo</p>
+<strong>15,980</strong>
+</div>
+
+
+<div class="leader-item">
+<span>#7</span>
+<p>Agosu Abigail</p>
+<strong>15,140</strong>
+</div>
+
+
+<div class="leader-item">
+<span>#8</span>
+<p>Adesanya Oluwapelumi</p>
+<strong>14,020</strong>
+</div>
+
+
+<div class="leader-item">
+<span>#9</span>
+<p>Ademola Grace</p>
+<strong>12,890</strong>
+</div>
+
+
+<div class="leader-item">
+<span>#10</span>
+<p>Agosu Taiwo</p>
+<strong>10,190</strong>
+</div>
+
+
+<div class="leader-item">
+<span>#11</span>
+<p>Agosu Kehinde</p>
+<strong>5,610</strong>
+</div>
+
+
+<div class="leader-item">
+<span>#12</span>
+<p>Ashaolu Reuben</p>
+<strong>1,360</strong>
+</div>
+
+
+<div class="leader-item">
+<span>#13</span>
+<p>Odedokun Blessing</p>
+<strong>1,340</strong>
+</div>
+
+
+<div class="leader-item">
+<span>#14</span>
+<p>Onomakpor Daniel</p>
+<strong>1,300</strong>
+</div>
+
+
+</div>
+
+
+</section>
+
 </div>
 
 <div class="section" id="reports">
