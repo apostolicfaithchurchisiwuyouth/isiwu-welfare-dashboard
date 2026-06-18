@@ -306,67 +306,197 @@ padding:18px;
 NAVBAR
 ========================= */
 
-.navbar{
-position:fixed;
-top:0;
-left:0;
-width:100%;
+/* =========================
+NAVBAR - MODERN NEXT.JS STYLE
+========================= */
 
-padding:16px 7%;
+.navbar{
+
+position:fixed;
+
+top:0;
+left:50%;
+
+transform:translateX(-50%);
+
+width:min(1180px,92%);
+
+height:64px;
+
+padding:0 24px;
 
 display:flex;
+
 justify-content:space-between;
+
 align-items:center;
 
 z-index:999999;
 
-/* PREMIUM BLUE GLASS */
-background:#0A0016;
+
+/* PREMIUM GLASS */
+
+background:
+rgba(10,0,22,.88);
 
 backdrop-filter:blur(18px);
 -webkit-backdrop-filter:blur(18px);
 
-/* SOFT BORDER */
-border-bottom:1px solid rgba(255,255,255,0.08);
 
-/* DEPTH */
+/* MODERN SHAPE */
+
+border-radius:
+
+0 0 10px 10px;
+
+
+border:
+
+1px solid rgba(255,255,255,.08);
+
+
 box-shadow:
-0 8px 30px rgba(0,0,0,0.18);
+
+0 15px 40px rgba(0,0,0,.18);
 }
+
+
+/* LOGO */
 
 .logo{
-font-size:1rem;
-font-weight:700;
-color:white;
+
 display:flex;
+
 align-items:center;
+
 gap:10px;
-letter-spacing:0.3px;
+
+font-size:.9rem;
+
+font-weight:700;
+
+color:white;
+
+letter-spacing:.3px;
+
 }
+
 
 .logo i{
-color:white;
+
+color:#c084fc;
+
+font-size:1.1rem;
+
 }
+
+
+/* DESKTOP MENU */
+
+.menu{
+
+display:flex;
+
+align-items:center;
+
+gap:28px;
+
+}
+
 
 .menu a{
-color:#333;
+
+color:#e2e8f0;
+
 text-decoration:none;
 
-font-size:0.86rem;
-font-weight:500;
+font-size:.78rem;
 
-transition:0.3s ease;
+font-weight:600;
+
+transition:.3s ease;
+
 }
+
 
 .menu a:hover{
-color:#90caf9;
+
+color:#c084fc;
+
 }
 
-.hamburger{ 
-color:white; 
-font-size:1.4rem;
-font-weight:400;
-cursor:pointer; 
+
+/* HAMBURGER */
+
+.hamburger{
+
+display:none;
+
+color:white;
+
+font-size:1.3rem;
+
+cursor:pointer;
+
+}
+
+
+/* MOBILE */
+
+@media(max-width:768px){
+
+
+.navbar{
+
+width:94%;
+
+height:60px;
+
+padding:0 18px;
+
+border-radius:
+
+0 0 10px 10px;
+
+}
+
+
+.menu{
+
+display:none;
+
+}
+
+
+.hamburger{
+
+display:block;
+
+}
+
+
+.logo{
+
+font-size:.82rem;
+
+}
+
+
+}
+
+
+/* LARGE DESKTOP */
+
+@media(min-width:769px){
+
+
+.hamburger{
+
+display:none;
+
+}
+
+
 }
   
 /* =========================
