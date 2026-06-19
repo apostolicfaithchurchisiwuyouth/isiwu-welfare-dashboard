@@ -131,21 +131,33 @@ margin-bottom:28px;
 
 .stat-card{
 
-background:#fff;
+position:relative;
+overflow:hidden;
 
-border:1px solid
-rgba(74,7,84,.08);
+padding:18px;
 
 border-radius:22px;
 
-padding:22px;
+background:
+linear-gradient(
+135deg,
+#ffffff,
+#faf5ff
+);
+
+border:1px solid rgba(74,7,84,.08);
 
 box-shadow:
-0 10px 25px
-rgba(74,7,84,.05);
+0 10px 30px rgba(74,7,84,.08);
 
-position:relative;
-overflow:hidden;
+transition:.3s ease;
+}
+
+.stat-card:hover{
+transform:translateY(-4px);
+
+box-shadow:
+0 18px 40px rgba(74,7,84,.12);
 }
 
 .stat-card::before{
@@ -153,44 +165,101 @@ content:'';
 
 position:absolute;
 
-width:120px;
-height:120px;
-
-background:
-rgba(74,7,84,.04);
+width:90px;
+height:90px;
 
 border-radius:50%;
 
-top:-50px;
-right:-50px;
+top:-30px;
+right:-30px;
+
+opacity:.15;
+}
+
+.stat-card:nth-child(1)::before{
+background:#7c3aed;
+}
+
+.stat-card:nth-child(2)::before{
+background:#2563eb;
+}
+
+.stat-card:nth-child(3)::before{
+background:#10b981;
+}
+
+.stat-card:nth-child(4)::before{
+background:#f59e0b;
+}
+
+.stat-top{
+display:flex;
+justify-content:space-between;
+align-items:flex-start;
+margin-bottom:12px;
+}
+
+.stat-icon{
+width:42px;
+height:42px;
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+border-radius:14px;
+
+font-size:1rem;
+}
+
+.stat-card:nth-child(1) .stat-icon{
+background:rgba(124,58,237,.12);
+color:#7c3aed;
+}
+
+.stat-card:nth-child(2) .stat-icon{
+background:rgba(37,99,235,.12);
+color:#2563eb;
+}
+
+.stat-card:nth-child(3) .stat-icon{
+background:rgba(16,185,129,.12);
+color:#10b981;
+}
+
+.stat-card:nth-child(4) .stat-icon{
+background:rgba(245,158,11,.12);
+color:#f59e0b;
 }
 
 .stat-number{
+
 font-family:
 'Bricolage Grotesque',
 sans-serif;
 
-font-size:2rem;
+font-size:1.8rem;
 
 font-weight:800;
 
-color:#4A0754;
+line-height:1;
 
-margin-bottom:8px;
+margin-bottom:4px;
 
-position:relative;
-z-index:2;
+color:#111827;
 }
 
 .stat-label{
-font-size:.8rem;
+
+font-size:.72rem;
 
 font-weight:600;
 
-color:#666;
+color:#6b7280;
 
-position:relative;
-z-index:2;
+text-transform:uppercase;
+
+letter-spacing:.05em;
 }
 
 @media(max-width:768px){
@@ -445,23 +514,55 @@ grid-template-columns:1fr;
 <div class="stats-grid">
 
 <div class="stat-card">
+
+<div class="stat-top">
+<div class="stat-icon">
+<i class="fa-solid fa-layer-group"></i>
+</div>
+</div>
+
 <div class="stat-number" id="totalPrograms">0</div>
-<div class="stat-label">Total Programs</div>
+<div class="stat-label">Programs</div>
+
 </div>
 
 <div class="stat-card">
+
+<div class="stat-top">
+<div class="stat-icon">
+<i class="fa-solid fa-video"></i>
+</div>
+</div>
+
 <div class="stat-number" id="totalVirtual">0</div>
-<div class="stat-label">Virtual Programs</div>
+<div class="stat-label">Virtual</div>
+
 </div>
 
 <div class="stat-card">
+
+<div class="stat-top">
+<div class="stat-icon">
+<i class="fa-solid fa-users"></i>
+</div>
+</div>
+
 <div class="stat-number" id="totalPhysical">0</div>
-<div class="stat-label">Physical Programs</div>
+<div class="stat-label">Physical</div>
+
 </div>
 
 <div class="stat-card">
+
+<div class="stat-top">
+<div class="stat-icon">
+<i class="fa-solid fa-chart-simple"></i>
+</div>
+</div>
+
 <div class="stat-number" id="totalTypes">0</div>
-<div class="stat-label">Program Types</div>
+<div class="stat-label">Types</div>
+
 </div>
 
 </div>
