@@ -1,16 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>AFC Isiwu Youth Welfare Dashboard</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
+
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700;800&family=Host+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+
 <style>
+
 
 *{
 margin:0;
@@ -19,493 +26,1138 @@ box-sizing:border-box;
 -webkit-tap-highlight-color:transparent;
 }
 
+
 body{
+
 font-family:'Host Grotesk',sans-serif;
-background:#eef3f9;
-color:#222;
+
+background:
+radial-gradient(circle at top left,#eadcff,transparent 30%),
+radial-gradient(circle at bottom right,#dbeafe,transparent 30%),
+#f8fafc;
+
+color:#202033;
+
 overflow-x:hidden;
-background-image:
-radial-gradient(circle at top left, rgba(33,150,243,0.12), transparent 28%),
-radial-gradient(circle at bottom right, rgba(156,39,176,0.10), transparent 25%),
-url('https://www.transparenttextures.com/patterns/cubes.png');
+
 }
 
-h1,h2,h3,h4{
+
+h1,h2,h3{
+
 font-family:'Bricolage Grotesque',sans-serif;
+
 }
+
+
+/* =====================
+HEADER
+===================== */
+
 
 header{
+
+margin:18px;
+border-radius:32px;
+
+padding:70px 25px;
+
 position:relative;
+
 overflow:hidden;
-background:
-linear-gradient(135deg, rgba(7,33,73,0.95), rgba(21,101,192,0.92)),
-url('https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1600&auto=format&fit=crop');
-background-size:cover;
-background-position:center;
-padding:70px 20px 85px;
+
 color:white;
-text-align:center;
+
+background:
+
+linear-gradient(
+135deg,
+#4a0754,
+#7b2cbf,
+#2563eb
+);
+
+box-shadow:
+
+0 25px 60px rgba(74,7,84,.25);
+
 }
+
 
 header::before{
-content:'';
+
+content:"";
+
 position:absolute;
-width:420px;
-height:420px;
+
+width:350px;
+height:350px;
+
 border-radius:50%;
-background:rgba(255,255,255,0.06);
-top:-180px;
+
+background:rgba(255,255,255,.12);
+
+top:-150px;
 right:-120px;
-backdrop-filter:blur(10px);
+
 }
 
-header::after{
-content:'';
-position:absolute;
-width:300px;
-height:300px;
-border-radius:50%;
-background:rgba(255,255,255,0.05);
-bottom:-140px;
-left:-100px;
-}
 
 .header-content{
+
 position:relative;
+
 z-index:2;
-max-width:720px;
-margin:auto;
+
+max-width:700px;
+
 }
+
 
 .header-badge{
+
 display:inline-flex;
+
 align-items:center;
-gap:10px;
+
+gap:8px;
+
 padding:10px 18px;
+
 border-radius:999px;
-background:rgba(255,255,255,0.12);
-border:1px solid rgba(255,255,255,0.18);
-backdrop-filter:blur(10px);
-font-size:0.72rem;
-font-weight:700;
-letter-spacing:0.5px;
-margin-bottom:22px;
+
+background:rgba(255,255,255,.15);
+
+backdrop-filter:blur(12px);
+
+font-size:.7rem;
+
+margin-bottom:20px;
+
 }
-
-
 
 
 
 header h1{
-font-size:2rem;
-margin-bottom:10px;
+
+font-size:2.1rem;
+
+margin-bottom:12px;
+
 }
 
+
+
 header p{
-font-size:0.9rem;
-opacity:0.95;
+
+opacity:.9;
+
+font-size:.9rem;
+
+line-height:1.7;
+
 }
+
+
+
+/* =====================
+MAIN
+===================== */
+
 
 .container{
+
 max-width:1200px;
+
 margin:auto;
-padding:30px 15px;
+
+padding:25px 18px;
+
 }
 
-.section{
-margin-top:30px;
-}
+
 
 .section-title{
+
 display:flex;
+
 align-items:center;
-gap:8px;
-margin-bottom:14px;
-color:#0d47a1;
+
+gap:10px;
+
+margin:35px 0 18px;
+
 }
 
-.section-title h2{
-font-size:0.9rem;
-font-weight:700;
-}
 
 .section-title i{
-font-size:0.85rem;
+
+width:35px;
+height:35px;
+
+display:flex;
+
+align-items:center;
+justify-content:center;
+
+border-radius:12px;
+
+background:#ede9fe;
+
+color:#7c3aed;
+
 }
 
-.cards{
+
+.section-title h2{
+
+font-size:1rem;
+
+}
+
+
+
+/* =====================
+SUMMARY GRID
+===================== */
+
+
+.dashboard-grid{
+
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+
+grid-template-columns:
+repeat(auto-fit,minmax(220px,1fr));
+
 gap:18px;
+
 }
 
-.card,
-.activities,
-canvas{
-background:rgba(255,255,255,0.65);
-backdrop-filter:blur(12px);
-border:1px solid rgba(255,255,255,0.25);
-box-shadow:0 10px 25px rgba(0,0,0,0.06);
-}
 
-.card{
-padding:22px;
-border-radius:20px;
+
+.stat-card{
+
 position:relative;
+
+padding:22px;
+
+border-radius:26px;
+
+background:rgba(255,255,255,.75);
+
+backdrop-filter:blur(18px);
+
+border:1px solid rgba(255,255,255,.5);
+
+box-shadow:
+
+0 18px 45px rgba(0,0,0,.07);
+
+transition:.3s;
+
 overflow:hidden;
+
 }
 
-.card i{
-font-size:1.5rem;
-margin-bottom:10px;
+
+
+.stat-card:hover{
+
+transform:translateY(-6px);
+
 }
 
-.card h2{
-font-size:0.85rem;
-color:#666;
+
+
+.stat-icon{
+
+width:52px;
+height:52px;
+
+border-radius:18px;
+
+display:flex;
+
+align-items:center;
+justify-content:center;
+
+font-size:1.4rem;
+
+margin-bottom:18px;
+
+}
+
+
+
+.purple-icon{
+
+background:#ede9fe;
+color:#7c3aed;
+
+}
+
+
+.green-icon{
+
+background:#dcfce7;
+color:#16a34a;
+
+}
+
+
+.red-icon{
+
+background:#fee2e2;
+color:#dc2626;
+
+}
+
+
+.blue-icon{
+
+background:#dbeafe;
+color:#2563eb;
+
+}
+
+
+
+.stat-card h3{
+
+font-size:.85rem;
+
+color:#64748b;
+
 margin-bottom:8px;
+
 }
+
 
 .amount{
-font-size:1.6rem;
-font-weight:700;
+
+font-size:1.7rem;
+
+font-weight:800;
+
 }
 
-.green{border-left:5px solid #2e7d32;}
-.red{border-left:5px solid #c62828;}
-.blue{border-left:5px solid #1565c0;}
+
+
+/* =====================
+ACTIVITY
+===================== */
+
 
 .activities{
+
+background:rgba(255,255,255,.75);
+
+border-radius:28px;
+
 padding:20px;
-border-radius:20px;
-overflow-x:auto;
+
+box-shadow:
+
+0 18px 45px rgba(0,0,0,.06);
+
 }
 
-table{
-width:100%;
-border-collapse:collapse;
+
+
+.activity-item{
+
+display:flex;
+
+align-items:center;
+
+justify-content:space-between;
+
+padding:16px;
+
+border-radius:18px;
+
+margin-bottom:12px;
+
+background:#fafafa;
+
 }
 
-th,td{
-padding:14px;
-font-size:0.82rem;
-border-bottom:1px solid #eee;
-text-align:left;
+
+
+.activity-left{
+
+display:flex;
+
+align-items:center;
+
+gap:14px;
+
 }
 
-th{
-background:#1565c0;
-color:white;
+
+.activity-icon{
+
+width:42px;
+height:42px;
+
+border-radius:14px;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+background:#f3e8ff;
+
+color:#7c3aed;
+
 }
 
-canvas{
+
+
+.activity-name{
+
+font-weight:600;
+
+font-size:.85rem;
+
+}
+
+
+
+.activity-amount{
+
+font-weight:700;
+
+color:#7c3aed;
+
+}
+
+
+
+/* =====================
+CHART
+===================== */
+
+
+.chart-box{
+
+margin-top:20px;
+
+background:white;
+
 padding:20px;
-border-radius:20px;
-width:100%;
+
+border-radius:28px;
+
+box-shadow:
+
+0 18px 45px rgba(0,0,0,.06);
+
 }
+
+
+
+/* BUTTON */
+
 
 .back-btn{
+
 display:inline-flex;
+
 align-items:center;
+
 gap:10px;
-padding:12px 18px;
-background:#1565c0;
+
+margin-top:25px;
+
+padding:13px 20px;
+
+border-radius:15px;
+
+background:#4a0754;
+
 color:white;
+
 text-decoration:none;
-border-radius:12px;
-font-size:0.8rem;
-font-weight:600;
-margin-top:20px;
+
+font-size:.85rem;
+
 }
+
+
 
 footer{
-margin-top:50px;
-padding:25px;
+
+padding:20px;
+
 text-align:center;
-font-size:0.8rem;
-color:#666;
+
+font-size:.75rem;
+
+color:#64748b;
+
 }
 
-@media(max-width:768px){
+
+
+@media(max-width:600px){
+
 
 header{
-padding:55px 18px 70px;
+
+padding:55px 20px;
+
 }
+
 
 header h1{
-font-size:1.7rem;
+
+font-size:1.55rem;
+
 }
 
-.header-badge{
-font-size:0.65rem;
-padding:9px 15px;
-}
-
-header p{
-font-size:0.76rem;
-}
 
 .amount{
-font-size:1.3rem;
-}
 
-th,td{
-font-size:0.72rem;
-}
+font-size:1.35rem;
 
 }
 
-th,td{
-font-size:0.72rem;
+
+.activity-item{
+
+align-items:flex-start;
+
+flex-direction:column;
+
+gap:10px;
+
 }
+
 
 }
 
 </style>
+
 </head>
+
 
 <body>
 
+
 <script>
 
-/*
-====================================
-SIMPLE PASSWORD PROTECTION
-====================================
-*/
+const dashboardPassword="1";
 
-const dashboardPassword = "1";
+const enteredPassword=prompt("Enter Welfare Dashboard Password");
 
-const enteredPassword = prompt("Enter Welfare Dashboard Password");
 
-if (enteredPassword !== dashboardPassword) {
-  document.body.innerHTML = `
-  <div style="
-    height:100vh;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    flex-direction:column;
-    font-family:Arial,sans-serif;
-    background:#0d47a1;
-    color:white;
-    text-align:center;
-    padding:20px;
-  ">
+if(enteredPassword!==dashboardPassword){
 
-    <h1 style="margin-bottom:15px;">Access Denied</h1>
+document.body.innerHTML=`
 
-    <p style="max-width:400px; line-height:1.7;">
-      Incorrect password. You are not authorized to access the AFC Isiwu Welfare Dashboard.
-    </p>
+<div style="
+height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+flex-direction:column;
+background:#4a0754;
+color:white;
+font-family:Arial;
+text-align:center;
+padding:20px;
+">
 
-  </div>
-  `;
+<h1>Access Denied</h1>
 
-  throw new Error("Unauthorized Access");
+<p>
+Incorrect password. Unauthorized access.
+</p>
+
+</div>
+
+`;
+
+throw new Error("Unauthorized");
+
 }
+
 
 </script>
 
+
+
 <header>
+
 
 <div class="header-content">
 
+
 <div class="header-badge">
+
 <i class="fa-solid fa-shield-heart"></i>
+
 PRIVATE WELFARE SYSTEM
+
 </div>
+
 
 <h1>
 AFC Isiwu Welfare Dashboard
 </h1>
 
+
 <p>
-Monitor welfare contributions, expenses, balance records and recent activities from one secure and centralized dashboard.
+Manage contributions, expenses and welfare activities from a modern centralized dashboard.
 </p>
 
+
 </div>
+
 
 </header>
 
+
+
 <div class="container">
 
-<div class="section">
+
 <div class="section-title">
-<i class="fa-solid fa-chart-column"></i>
-<h2>Welfare Reports</h2>
-</div>
 
-<div class="cards">
+<i class="fa-solid fa-chart-pie"></i>
 
-<div class="card green">
-<i class="fa-solid fa-money-bill-trend-up"></i>
-<h2>Total Contributions</h2>
-<div class="amount" id="totalContributions">Updating...</div>
-</div>
-
-<div class="card red">
-<i class="fa-solid fa-wallet"></i>
-<h2>Total Expenses</h2>
-<div class="amount" id="totalExpenses">Updating...</div>
-</div>
-
-<div class="card blue">
-<i class="fa-solid fa-building-columns"></i>
-<h2>Current Balance</h2>
-<div class="amount" id="currentBalance">Updating...</div>
-</div>
-
-</div>
-</div>
-
-<div class="section">
-<div class="section-title">
-<i class="fa-solid fa-clock-rotate-left"></i>
-<h2>Recent Welfare Activities</h2>
-</div>
-
-<div class="activities">
-<table>
-<thead>
-<tr>
-<th>Activity</th>
-<th>Amount</th>
-</tr>
-</thead>
-
-<tbody id="activityTable"></tbody>
-</table>
-</div>
-</div>
-
-<div class="section">
-<div class="section-title">
-<i class="fa-solid fa-chart-line"></i>
 <h2>Financial Overview</h2>
+
 </div>
+
+
+
+<div class="dashboard-grid">
+
+
+
+<div class="stat-card">
+
+<div class="stat-icon green-icon">
+
+<i class="fa-solid fa-hand-holding-dollar"></i>
+
+</div>
+
+
+<h3>Total Contributions</h3>
+
+<div class="amount" id="totalContributions">
+Updating...
+</div>
+
+</div>
+
+
+
+<div class="stat-card">
+
+<div class="stat-icon red-icon">
+
+<i class="fa-solid fa-wallet"></i>
+
+</div>
+
+
+<h3>Total Expenses</h3>
+
+<div class="amount" id="totalExpenses">
+Updating...
+</div>
+
+</div>
+
+
+
+<div class="stat-card">
+
+<div class="stat-icon blue-icon">
+
+<i class="fa-solid fa-building-columns"></i>
+
+</div>
+
+
+<h3>Current Balance</h3>
+
+<div class="amount" id="currentBalance">
+Updating...
+</div>
+
+</div>
+
+
+
+<div class="stat-card">
+
+<div class="stat-icon purple-icon">
+
+<i class="fa-solid fa-users"></i>
+
+</div>
+
+
+<h3>Welfare Status</h3>
+
+<div class="amount">
+Active
+</div>
+
+</div>
+
+
+</div>
+<!-- =========================
+ACTIVITY SECTION
+========================= -->
+
+
+<div class="section-title">
+
+<i class="fa-solid fa-clock-rotate-left"></i>
+
+<h2>Recent Welfare Activities</h2>
+
+</div>
+
+
+<div class="activities" id="activityFeed">
+
+
+<div class="activity-item">
+
+<div class="activity-left">
+
+<div class="activity-icon">
+
+<i class="fa-solid fa-spinner fa-spin"></i>
+
+</div>
+
+
+<div>
+
+<div class="activity-name">
+Loading activities...
+</div>
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+<!-- =========================
+CHART SECTION
+========================= -->
+
+
+<div class="section-title">
+
+<i class="fa-solid fa-chart-line"></i>
+
+<h2>Financial Analytics</h2>
+
+</div>
+
+
+
+<div class="chart-box">
+
 
 <canvas id="financeChart"></canvas>
+
+
 </div>
+
+
+
+
 
 <a href="index.html" class="back-btn">
+
 <i class="fa-solid fa-arrow-left"></i>
+
 Back To Homepage
+
 </a>
+
+
 
 </div>
 
+
+
 <footer>
+
 AFC Isiwu Youth Welfare System © 2026
+
 </footer>
+
+
+
+
 
 <script>
 
+
 /*
 ====================================
-CSV LINKS
+GOOGLE SHEET LINKS
 ====================================
 */
+
 
 const welfareCSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQHlE5IpmFYaQyW5u-rentH2fGC5VZJ2w9Ql1WI-X8bE76qlN5_ttDIitwlXX1CM4sqdEW8RroDUNSU/pub?gid=439044630&single=true&output=csv";
 
+
 const activitiesCSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQHlE5IpmFYaQyW5u-rentH2fGC5VZJ2w9Ql1WI-X8bE76qlN5_ttDIitwlXX1CM4sqdEW8RroDUNSU/pub?gid=493023062&single=true&output=csv";
 
-/*
-====================================
-FETCH WELFARE DATA
-====================================
-*/
 
-async function fetchSheetData() {
 
-try {
+
+
+async function fetchSheetData(){
+
+
+try{
+
 
 const response = await fetch(welfareCSV);
+
 const data = await response.text();
 
-const rows = data.trim().split('\n').map(r => r.split(','));
 
-const contributions = parseFloat(rows[0]?.[1]) || 0;
-const expenses = parseFloat(rows[1]?.[1]) || 0;
-const balance = parseFloat(rows[2]?.[1]) || 0;
-
-
-document.getElementById('totalContributions').innerText = `₦${contributions.toLocaleString()}`;
-document.getElementById('totalExpenses').innerText = `₦${expenses.toLocaleString()}`;
-document.getElementById('currentBalance').innerText = `₦${balance.toLocaleString()}`;
+const rows =
+data.trim()
+.split('\n')
+.map(r=>r.split(','));
 
 
-const ctx = document.getElementById('financeChart');
 
-new Chart(ctx, {
+const contributions =
+parseFloat(rows[0]?.[1]) || 0;
 
-type:'bar',
+
+const expenses =
+parseFloat(rows[1]?.[1]) || 0;
+
+
+
+const balance =
+parseFloat(rows[2]?.[1]) || 0;
+
+
+
+
+document.getElementById("totalContributions")
+.innerText =
+`₦${contributions.toLocaleString()}`;
+
+
+
+document.getElementById("totalExpenses")
+.innerText =
+`₦${expenses.toLocaleString()}`;
+
+
+
+document.getElementById("currentBalance")
+.innerText =
+`₦${balance.toLocaleString()}`;
+
+
+
+
+
+/*
+=========================
+CHART
+=========================
+*/
+
+
+const ctx =
+document.getElementById("financeChart");
+
+
+
+if(window.financeChartInstance){
+
+window.financeChartInstance.destroy();
+
+}
+
+
+
+
+window.financeChartInstance =
+new Chart(ctx,{
+
+type:"bar",
+
 
 data:{
-labels:['Contributions','Expenses','Balance'],
+
+
+labels:[
+
+"Contributions",
+
+"Expenses",
+
+"Balance"
+
+],
+
+
 datasets:[{
-data:[contributions, expenses, balance],
-borderRadius:8,
-backgroundColor:['#42a5f5','#ef5350','#66bb6a']
+
+data:[
+
+contributions,
+
+expenses,
+
+balance
+
+],
+
+
+borderRadius:14,
+
+
+backgroundColor:[
+
+"#7c3aed",
+
+"#ef4444",
+
+"#2563eb"
+
+]
+
+
 }]
+
+
 },
 
+
+
 options:{
+
+
 responsive:true,
+
+
 plugins:{
-legend:{display:false}
+
+
+legend:{
+
+display:false
+
 }
+
+
+},
+
+
+
+scales:{
+
+
+y:{
+
+beginAtZero:true
+
 }
+
+
+}
+
+
+
+}
+
 
 });
 
 
-const activityResponse = await fetch(activitiesCSV);
-const activityData = await activityResponse.text();
 
-const activityRows = activityData.trim().split('\n').map(r => r.split(','));
 
-const activityTable = document.getElementById('activityTable');
-activityTable.innerHTML = '';
 
-activityRows.reverse().slice(0,10).forEach(row => {
 
-const purpose = row[0];
-const amount = row[1];
+
+/*
+=========================
+ACTIVITY FETCH
+=========================
+*/
+
+
+const activityResponse =
+await fetch(activitiesCSV);
+
+
+const activityData =
+await activityResponse.text();
+
+
+
+const activityRows =
+activityData
+.trim()
+.split('\n')
+.map(r=>r.split(','));
+
+
+
+
+const feed =
+document.getElementById("activityFeed");
+
+
+
+feed.innerHTML="";
+
+
+
+activityRows
+.reverse()
+.slice(0,10)
+.forEach(row=>{
+
+
+
+const purpose=row[0];
+
+const amount=row[1];
+
+
 
 if(purpose){
 
-activityTable.innerHTML += `
-<tr>
-<td>${purpose}</td>
-<td>₦${Number(amount).toLocaleString()}</td>
-</tr>
+
+
+feed.innerHTML += `
+
+
+<div class="activity-item">
+
+
+<div class="activity-left">
+
+
+<div class="activity-icon">
+
+<i class="fa-solid fa-heart"></i>
+
+</div>
+
+
+
+<div>
+
+
+<div class="activity-name">
+
+${purpose}
+
+</div>
+
+
+<small>
+Welfare activity recorded
+</small>
+
+
+</div>
+
+
+</div>
+
+
+
+<div class="activity-amount">
+
+₦${Number(amount).toLocaleString()}
+
+</div>
+
+
+
+</div>
+
+
 `;
+
+
 
 }
 
+
 });
+
+
+
+
 
 }
 
 catch(error){
-console.log('Welfare Error:', error);
-}
+
+console.log(
+"Welfare Error:",
+error
+);
 
 }
+
+
+
+}
+
+
+
+
 
 fetchSheetData();
 
-/*
-====================================
-AUTO REFRESH
-====================================
-*/
 
-setInterval(fetchSheetData,30000);
+
+setInterval(
+
+fetchSheetData,
+
+30000
+
+);
+
+
 
 </script>
 
+
+
 </body>
+
 </html>
