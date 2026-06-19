@@ -97,8 +97,15 @@ border:1px solid rgba(74,7,84,.08);
 border-radius:22px;
 padding:18px;
 box-shadow:0 10px 30px rgba(74,7,84,.08);
+transition:.3s ease;
 }
 
+.card:hover{
+transform:translateY(-4px);
+box-shadow:
+0 15px 40px rgba(74,7,84,.12);
+}
+  
 .icon{
 width:35px;height:35px;
 display:flex;align-items:center;justify-content:center;
@@ -122,10 +129,10 @@ margin-top:6px;
 .activities,.chart-box{
 background:#fff;
 border-radius:24px;
-padding:18px;
+padding:24px;
 border:1px solid rgba(74,7,84,.08);
-box-shadow:0 10px 30px rgba(74,7,84,.08);
-overflow-x:auto;
+box-shadow:0 10px 30px rgba(74,7,84,.08),
+0 1px 3px rgba(0,0,0,.04);
 }
 
 table{width:100%;border-collapse:collapse}
@@ -278,14 +285,20 @@ throw new Error('Access Denied');
 
 </div>
 
-<div class="section-title">
-<i class="fas fa-chart-column"></i>
-<span>Financial Analytics</span>
+<div class="chart-box">
+
+<div class="card-header">
+<div>
+<h3>Financial Analytics</h3>
+<p>Contributions, expenses and balance overview</p>
 </div>
 
-<div class="chart-box">
-<canvas id="financeChart"></canvas>
+<div class="header-badge">
+Live Data
 </div>
+</div>
+
+<canvas id="financeChart"></canvas>
 
 </div>
 
