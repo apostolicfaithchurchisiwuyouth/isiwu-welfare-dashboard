@@ -119,6 +119,98 @@ margin-top:25px;
 padding:35px auto;
 }
 
+.stats-grid{
+display:grid;
+grid-template-columns:
+repeat(4,1fr);
+
+gap:16px;
+
+margin-bottom:28px;
+}
+
+.stat-card{
+
+background:#fff;
+
+border:1px solid
+rgba(74,7,84,.08);
+
+border-radius:22px;
+
+padding:22px;
+
+box-shadow:
+0 10px 25px
+rgba(74,7,84,.05);
+
+position:relative;
+overflow:hidden;
+}
+
+.stat-card::before{
+content:'';
+
+position:absolute;
+
+width:120px;
+height:120px;
+
+background:
+rgba(74,7,84,.04);
+
+border-radius:50%;
+
+top:-50px;
+right:-50px;
+}
+
+.stat-number{
+font-family:
+'Bricolage Grotesque',
+sans-serif;
+
+font-size:2rem;
+
+font-weight:800;
+
+color:#4A0754;
+
+margin-bottom:8px;
+
+position:relative;
+z-index:2;
+}
+
+.stat-label{
+font-size:.8rem;
+
+font-weight:600;
+
+color:#666;
+
+position:relative;
+z-index:2;
+}
+
+@media(max-width:768px){
+
+.stats-grid{
+grid-template-columns:
+repeat(2,1fr);
+}
+
+.stat-card{
+padding:18px;
+}
+
+.stat-number{
+font-size:1.5rem;
+}
+
+}
+
+
 /* =========================
 FILTER BAR
 ========================= */
@@ -348,6 +440,33 @@ grid-template-columns:1fr;
 
 <div class="container">
 
+<!-- STATISTICS CARDS -->
+
+<div class="stats-grid">
+
+<div class="stat-card">
+<div class="stat-number" id="totalPrograms">0</div>
+<div class="stat-label">Total Programs</div>
+</div>
+
+<div class="stat-card">
+<div class="stat-number" id="totalVirtual">0</div>
+<div class="stat-label">Virtual Programs</div>
+</div>
+
+<div class="stat-card">
+<div class="stat-number" id="totalPhysical">0</div>
+<div class="stat-label">Physical Programs</div>
+</div>
+
+<div class="stat-card">
+<div class="stat-number" id="totalTypes">0</div>
+<div class="stat-label">Program Types</div>
+</div>
+
+</div>
+
+  
 <div class="filter-bar">
 
 <input
@@ -386,6 +505,57 @@ const secretariatCSV =
 "https://docs.google.com/spreadsheets/d/e/2PACX-1vTE5Ds6_y0OYFL9_pYfRekpMx1Jq-kijbtdXsL-LCyg5KsC8LVootmeHOew2xiqV2sAXEVUKm_3vz17/pub?gid=1085033955&single=true&output=csv";
 
 let allReports = [];
+
+function updateStatistics(){
+
+const totalPrograms =
+allReports.length;
+
+const totalVirtual =
+allReports.filter(report =>
+
+report.programType
+.toLowerCase()
+.includes('virtual')
+
+).length;
+
+const totalPhysical =
+totalPrograms -
+totalVirtual;
+
+const totalTypes =
+new Set(
+
+allReports.map(
+report =>
+report.programType
+)
+
+).size;
+
+document.getElementById(
+'totalPrograms'
+).innerText =
+totalPrograms;
+
+document.getElementById(
+'totalVirtual'
+).innerText =
+totalVirtual;
+
+document.getElementById(
+'totalPhysical'
+).innerText =
+totalPhysical;
+
+document.getElementById(
+'totalTypes'
+).innerText =
+totalTypes;
+
+}
+
 
 function parseCSV(text){
 
@@ -460,7 +630,9 @@ reporter: report[4] || ''
 }));
 
 populateProgramTypes();
+updateStatistics();
 renderReports();
+
 
 }catch(error){
 console.error(error);
