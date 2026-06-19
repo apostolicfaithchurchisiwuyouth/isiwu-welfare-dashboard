@@ -95,6 +95,11 @@ background:
 rgba(255,255,255,.12);
 
 transition:.25s ease;
+/* REMOVE MOBILE BLUE HIGHLIGHT */
+-webkit-tap-highlight-color: transparent;
+-webkit-touch-callout: none;
+outline:none;
+user-select:none;
 }
 
 .back:hover{
@@ -350,15 +355,15 @@ class="search-box"
 id="searchInput"
 type="text"
 placeholder="Search by program title..."
->
+style="font-family:DM Sans;">
 
 <select class="filter-select" id="typeFilter">
-<option value="all">All Program Types</option>
+<option value="all" style="font-family:DM Sans;">All Program Types</option>
 </select>
 
 <select class="filter-select" id="sortFilter">
-<option value="newest">Newest First</option>
-<option value="oldest">Oldest First</option>
+<option value="newest" style="font-family:DM Sans;">Newest First</option>
+<option value="oldest" style="font-family:DM Sans;">Oldest First</option>
 </select>
 
 </div>
