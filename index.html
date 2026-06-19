@@ -1036,47 +1036,237 @@ font-weight:700;
 .blue{border-left:5px solid #1565c0;}
 
 /* =========================
-REPORTS
+MODERN REPORT SECTION
 ========================= */
 
-.activities,
-.report-box,
-.leaderboard,
-.reports-feed{
-padding:20px;
-border-radius:18px;
+.reports-section{
+
+width:100%;
+padding:100px 20px;
+
+background:
+linear-gradient(
+135deg,
+#faf5ff 0%,
+#ffffff 50%,
+#f8fafc 100%
+);
+
+position:relative;
+overflow:hidden;
+
 }
 
-.report-box h2{
-font-size:0.95rem;
-margin-bottom:6px;
+.reports-container{
+
+max-width:1200px;
+margin:auto;
+
 }
 
-.report-box p{
-font-size:0.78rem;
-line-height:1.6;
-color:#555;
+.report-card{
+
+background:#fff;
+
+border:1px solid rgba(74,7,84,.08);
+
+border-radius:28px;
+
+padding:40px;
+
+box-shadow:
+0 25px 60px rgba(15,23,42,.08);
+
+position:relative;
+
+overflow:hidden;
+
 }
 
-.report-buttons{
+.report-card::before{
+
+content:"";
+
+position:absolute;
+
+top:-100px;
+right:-100px;
+
+width:250px;
+height:250px;
+
+background:
+radial-gradient(
+circle,
+rgba(74,7,84,.08),
+transparent
+);
+
+border-radius:50%;
+
+}
+
+.report-header{
+
 display:flex;
+align-items:center;
+gap:18px;
+
+margin-bottom:20px;
+
+position:relative;
+z-index:2;
+
+}
+
+.report-icon{
+
+width:70px;
+height:70px;
+
+display:flex;
+align-items:center;
 justify-content:center;
-gap:12px;
-flex-wrap:wrap;
-margin-top:18px;
-}
 
-.report-btn{
-padding:12px 18px;
-border-radius:10px;
+border-radius:20px;
+
+background:
+linear-gradient(
+135deg,
+#0A0016,
+#4A0754
+);
+
 color:white;
-font-size:0.76rem;
-font-weight:600;
-background:linear-gradient(135deg,#0A0016,#4A0754);
+
+font-size:1.5rem;
+
+box-shadow:
+0 12px 30px rgba(74,7,84,.25);
+
 }
 
-.green-btn{
-background:linear-gradient(135deg,#333,#222);
+.report-text span{
+
+display:block;
+
+font-size:.85rem;
+font-weight:600;
+
+letter-spacing:1px;
+text-transform:uppercase;
+
+color:#7c3aed;
+
+margin-bottom:4px;
+
+}
+
+.report-text h2{
+
+font-size:2rem;
+font-weight:700;
+
+color:#111827;
+
+margin:0;
+
+}
+
+.report-description{
+
+font-size:.98rem;
+
+line-height:1.8;
+
+color:#6b7280;
+
+max-width:700px;
+
+margin-bottom:30px;
+
+position:relative;
+z-index:2;
+
+}
+
+.report-actions{
+
+display:flex;
+flex-wrap:wrap;
+gap:16px;
+
+position:relative;
+z-index:2;
+
+}
+
+.report-action{
+
+display:flex;
+align-items:center;
+gap:10px;
+
+padding:15px 24px;
+
+border-radius:14px;
+
+font-size:.9rem;
+font-weight:600;
+
+text-decoration:none;
+
+transition:.35s ease;
+
+}
+
+.report-action i{
+
+font-size:1rem;
+
+}
+
+.report-action.primary{
+
+background:
+linear-gradient(
+135deg,
+#0A0016,
+#4A0754
+);
+
+color:white;
+
+}
+
+.report-action.primary:hover{
+
+transform:translateY(-3px);
+
+box-shadow:
+0 15px 30px rgba(74,7,84,.25);
+
+}
+
+.report-action.secondary{
+
+background:#f8fafc;
+
+color:#111827;
+
+border:1px solid #e5e7eb;
+
+}
+
+.report-action.secondary:hover{
+
+transform:translateY(-3px);
+
+background:white;
+
+box-shadow:
+0 12px 25px rgba(0,0,0,.08);
+
 }
 
 /* =========================
@@ -2655,36 +2845,54 @@ Points
 
 </div>
 
-<div class="section" id="reports">
+<section class="reports-section" id="reports">
 
-<div class="section-title">
+<div class="reports-container">
+
+<div class="report-card">
+
+<div class="report-header">
+
+<div class="report-icon">
 <i class="fa-solid fa-file-lines"></i>
+</div>
+
+<div class="report-text">
+<span>Administration</span>
 <h2>Secretariat Reports</h2>
 </div>
 
-<div class="report-box">
+</div>
 
-<h2>Programs & Attendance Reports</h2>
-
-<p>
-Official attendance records, meeting summaries and youth updates.
+<p class="report-description">
+Access attendance records, program summaries, meeting reports and other official youth ministry documentation from one central location.
 </p>
 
-<div class="report-buttons">
+<div class="report-actions">
 
-<a href="#" class="report-btn">
+<a href="#" class="report-action primary">
+
 <i class="fa-solid fa-pen-to-square"></i>
-Fill Program Report
+
+<span>Fill Program Report</span>
+
 </a>
 
-<a href="#" class="report-btn green-btn">
+<a href="#" class="report-action secondary">
+
 <i class="fa-solid fa-user-check"></i>
-Submit Attendance
+
+<span>Submit Attendance</span>
+
 </a>
 
 </div>
 
 </div>
+
+</div>
+
+</section>
 
 <div class="premium-reports-grid" id="reportsFeed"></div>
 <div class="reports-button-wrap">
