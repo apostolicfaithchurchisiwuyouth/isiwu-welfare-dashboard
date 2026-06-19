@@ -138,6 +138,67 @@ font-size:.8rem;
 color:#64748b;
 }
 
+.card-header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:20px;
+}
+
+.card-header h3{
+font-size:1rem;
+font-weight:700;
+margin-bottom:4px;
+}
+
+.card-header p{
+font-size:.75rem;
+color:#64748b;
+}
+
+.header-badge{
+padding:8px 14px;
+border-radius:999px;
+background:#f3e8ff;
+color:#7c3aed;
+font-size:.7rem;
+font-weight:600;
+}
+
+.modern-table{
+width:100%;
+border-collapse:separate;
+border-spacing:0 10px;
+}
+
+.modern-table tr{
+background:#fafafa;
+transition:.3s;
+}
+
+.modern-table tr:hover{
+background:#f4f4f5;
+transform:translateY(-2px);
+}
+
+.modern-table td{
+padding:14px;
+font-size:.82rem;
+border:none;
+}
+
+.modern-table td:first-child{
+border-radius:12px 0 0 12px;
+font-weight:500;
+}
+
+.modern-table td:last-child{
+border-radius:0 12px 12px 0;
+font-weight:700;
+color:#16a34a;
+text-align:right;
+}
+
 @media(max-width:768px){
 .dashboard-grid{gap:12px}
 .amount{font-size:.9rem}
@@ -198,15 +259,23 @@ throw new Error('Access Denied');
 
 </div>
 
-<div class="section-title">
-<i class="fas fa-clock-rotate-left"></i>
-<span>Recent Welfare Activities</span>
+<div class="activities">
+
+<div class="card-header">
+<div>
+<h3>Recent Welfare Activities</h3>
+<p>Latest transactions and updates</p>
 </div>
 
-<div class="activities">
-<table>
+<div class="header-badge">
+10 Recent
+</div>
+</div>
+
+<table class="modern-table">
 <tbody id="activityTable"></tbody>
 </table>
+
 </div>
 
 <div class="section-title">
