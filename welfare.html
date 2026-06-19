@@ -50,321 +50,53 @@ font-family:'Bricolage Grotesque',sans-serif;
 }
 
 
-/* =====================
-HEADER
-===================== */
-
+/* =========================
+   STICKY APP HEADER
+========================= */
 
 header{
 
-margin:18px;
-border-radius:32px;
+position:fixed;
 
-padding:70px 25px;
+top:0;
+left:0;
 
-position:relative;
+width:100%;
 
-overflow:hidden;
+height:72px;
 
-color:white;
+z-index:999999;
+
+display:flex;
+
+align-items:center;
 
 background:
 
-linear-gradient(
-135deg,
-#4a0754,
-#7b2cbf,
-#2563eb
-);
+rgba(255,255,255,.78);
+
+backdrop-filter:blur(18px);
+
+border-bottom:
+
+1px solid rgba(124,58,237,.12);
 
 box-shadow:
 
-0 25px 60px rgba(74,7,84,.25);
+0 10px 35px rgba(0,0,0,.06);
 
-}
-
-
-header::before{
-
-content:"";
-
-position:absolute;
-
-width:350px;
-height:350px;
-
-border-radius:50%;
-
-background:rgba(255,255,255,.12);
-
-top:-150px;
-right:-120px;
+padding:0 20px;
 
 }
 
 
 .header-content{
 
-position:relative;
+width:100%;
 
-z-index:2;
-
-max-width:700px;
-
-}
-
-
-.header-badge{
-
-display:inline-flex;
-
-align-items:center;
-
-gap:8px;
-
-padding:10px 18px;
-
-border-radius:999px;
-
-background:rgba(255,255,255,.15);
-
-backdrop-filter:blur(12px);
-
-font-size:.7rem;
-
-margin-bottom:20px;
-
-}
-
-
-
-header h1{
-
-font-size:2.1rem;
-
-margin-bottom:12px;
-
-}
-
-
-
-header p{
-
-opacity:.9;
-
-font-size:.9rem;
-
-line-height:1.7;
-
-}
-
-
-
-/* =====================
-MAIN
-===================== */
-
-
-.container{
-
-max-width:1200px;
+max-width:900px;
 
 margin:auto;
-
-padding:25px 18px;
-
-}
-
-
-
-.section-title{
-
-display:flex;
-
-align-items:center;
-
-gap:10px;
-
-margin:35px 0 18px;
-
-}
-
-
-.section-title i{
-
-width:35px;
-height:35px;
-
-display:flex;
-
-align-items:center;
-justify-content:center;
-
-border-radius:12px;
-
-background:#ede9fe;
-
-color:#7c3aed;
-
-}
-
-
-.section-title h2{
-
-font-size:1rem;
-
-}
-
-
-
-/* =====================
-SUMMARY GRID
-===================== */
-
-
-.dashboard-grid{
-
-display:grid;
-
-grid-template-columns:
-repeat(auto-fit,minmax(220px,1fr));
-
-gap:18px;
-
-}
-
-
-
-.stat-card{
-
-position:relative;
-
-padding:22px;
-
-border-radius:26px;
-
-background:rgba(255,255,255,.75);
-
-backdrop-filter:blur(18px);
-
-border:1px solid rgba(255,255,255,.5);
-
-box-shadow:
-
-0 18px 45px rgba(0,0,0,.07);
-
-transition:.3s;
-
-overflow:hidden;
-
-}
-
-
-
-.stat-card:hover{
-
-transform:translateY(-6px);
-
-}
-
-
-
-.stat-icon{
-
-width:52px;
-height:52px;
-
-border-radius:18px;
-
-display:flex;
-
-align-items:center;
-justify-content:center;
-
-font-size:1.4rem;
-
-margin-bottom:18px;
-
-}
-
-
-
-.purple-icon{
-
-background:#ede9fe;
-color:#7c3aed;
-
-}
-
-
-.green-icon{
-
-background:#dcfce7;
-color:#16a34a;
-
-}
-
-
-.red-icon{
-
-background:#fee2e2;
-color:#dc2626;
-
-}
-
-
-.blue-icon{
-
-background:#dbeafe;
-color:#2563eb;
-
-}
-
-
-
-.stat-card h3{
-
-font-size:.85rem;
-
-color:#64748b;
-
-margin-bottom:8px;
-
-}
-
-
-.amount{
-
-font-size:1.7rem;
-
-font-weight:800;
-
-}
-
-
-
-/* =====================
-ACTIVITY
-===================== */
-
-
-.activities{
-
-background:rgba(255,255,255,.75);
-
-border-radius:28px;
-
-padding:20px;
-
-box-shadow:
-
-0 18px 45px rgba(0,0,0,.06);
-
-}
-
-
-
-.activity-item{
 
 display:flex;
 
@@ -372,33 +104,29 @@ align-items:center;
 
 justify-content:space-between;
 
-padding:16px;
-
-border-radius:18px;
-
-margin-bottom:12px;
-
-background:#fafafa;
+gap:15px;
 
 }
 
 
 
-.activity-left{
+.header-title{
 
 display:flex;
 
 align-items:center;
 
-gap:14px;
+gap:12px;
 
 }
 
 
-.activity-icon{
 
-width:42px;
-height:42px;
+.header-title i{
+
+width:38px;
+
+height:38px;
 
 border-radius:14px;
 
@@ -408,9 +136,278 @@ align-items:center;
 
 justify-content:center;
 
-background:#f3e8ff;
+background:#ede9fe;
 
 color:#7c3aed;
+
+font-size:1rem;
+
+}
+
+
+
+.header-title h1{
+
+font-size:.95rem;
+
+font-weight:700;
+
+color:#24112f;
+
+margin:0;
+
+}
+
+
+
+.header-title p{
+
+display:none;
+
+}
+
+
+
+.back-btn{
+
+margin:0;
+
+padding:9px 14px;
+
+border-radius:14px;
+
+background:#4a0754;
+
+color:white;
+
+font-size:.72rem;
+
+font-weight:600;
+
+display:inline-flex;
+
+align-items:center;
+
+gap:7px;
+
+text-decoration:none;
+
+}
+
+
+.back-btn:hover{
+
+transform:translateY(-2px);
+
+}
+
+
+
+
+/* =========================
+   MAIN CONTAINER
+========================= */
+
+
+.container{
+
+max-width:900px;
+
+margin:auto;
+
+padding:
+
+95px 15px 30px;
+
+}
+
+
+
+
+/* =========================
+   SECTION TITLE
+========================= */
+
+
+.section-title{
+
+margin:
+
+22px 0 12px;
+
+}
+
+
+
+.section-title h2{
+
+font-size:.82rem;
+
+}
+
+
+
+.section-title i{
+
+width:32px;
+
+height:32px;
+
+border-radius:11px;
+
+font-size:.75rem;
+
+}
+
+
+
+
+
+/* =========================
+   DASHBOARD GRID
+========================= */
+
+
+.dashboard-grid{
+
+
+display:grid;
+
+
+grid-template-columns:
+
+repeat(2,1fr);
+
+
+gap:14px;
+
+
+}
+
+
+
+
+.stat-card{
+
+
+padding:16px;
+
+
+border-radius:22px;
+
+
+}
+
+
+
+.stat-icon{
+
+
+width:42px;
+
+height:42px;
+
+
+border-radius:14px;
+
+
+font-size:1rem;
+
+
+margin-bottom:12px;
+
+
+}
+
+
+
+.stat-card h3{
+
+
+font-size:.68rem;
+
+
+margin-bottom:6px;
+
+
+}
+
+
+
+.amount{
+
+
+font-size:1.15rem;
+
+
+}
+
+
+
+
+/* =========================
+   ACTIVITIES
+========================= */
+
+
+.activities{
+
+
+padding:14px;
+
+border-radius:22px;
+
+
+}
+
+
+
+.activity-item{
+
+
+display:grid;
+
+
+grid-template-columns:
+
+38px 1fr auto;
+
+
+align-items:center;
+
+
+gap:12px;
+
+
+padding:12px;
+
+
+margin-bottom:10px;
+
+
+border-radius:16px;
+
+
+background:#fafafa;
+
+
+}
+
+
+
+.activity-icon{
+
+
+width:38px;
+
+height:38px;
+
+
+border-radius:13px;
+
+
+font-size:.85rem;
+
 
 }
 
@@ -418,9 +415,11 @@ color:#7c3aed;
 
 .activity-name{
 
-font-weight:600;
 
-font-size:.85rem;
+font-size:.75rem;
+
+font-weight:700;
+
 
 }
 
@@ -428,78 +427,30 @@ font-size:.85rem;
 
 .activity-amount{
 
-font-weight:700;
-
-color:#7c3aed;
-
-}
-
-
-
-/* =====================
-CHART
-===================== */
-
-
-.chart-box{
-
-margin-top:20px;
-
-background:white;
-
-padding:20px;
-
-border-radius:28px;
-
-box-shadow:
-
-0 18px 45px rgba(0,0,0,.06);
-
-}
-
-
-
-/* BUTTON */
-
-
-.back-btn{
-
-display:inline-flex;
-
-align-items:center;
-
-gap:10px;
-
-margin-top:25px;
-
-padding:13px 20px;
-
-border-radius:15px;
-
-background:#4a0754;
-
-color:white;
-
-text-decoration:none;
-
-font-size:.85rem;
-
-}
-
-
-
-footer{
-
-padding:20px;
-
-text-align:center;
 
 font-size:.75rem;
 
-color:#64748b;
 
 }
 
+
+
+.activity-item small{
+
+
+font-size:.65rem;
+
+
+color:#64748b;
+
+
+}
+
+
+
+/* =========================
+ MOBILE
+========================= */
 
 
 @media(max-width:600px){
@@ -507,38 +458,100 @@ color:#64748b;
 
 header{
 
-padding:55px 20px;
+height:64px;
+
+padding:0 12px;
 
 }
 
 
-header h1{
 
-font-size:1.55rem;
+.header-title h1{
 
-}
-
-
-.amount{
-
-font-size:1.35rem;
+font-size:.78rem;
 
 }
 
 
-.activity-item{
 
-align-items:flex-start;
+.header-title i{
 
-flex-direction:column;
+width:34px;
+
+height:34px;
+
+}
+
+
+
+.back-btn{
+
+padding:8px 10px;
+
+font-size:.65rem;
+
+}
+
+
+
+
+.container{
+
+padding-top:85px;
+
+}
+
+
+
+
+.dashboard-grid{
+
+grid-template-columns:repeat(2,1fr);
 
 gap:10px;
 
 }
 
 
+
+.stat-card{
+
+padding:13px;
+
 }
 
+
+
+.amount{
+
+font-size:1rem;
+
+}
+
+
+
+.activity-item{
+
+
+grid-template-columns:
+
+34px 1fr;
+
+
+}
+
+
+.activity-amount{
+
+grid-column:2;
+
+font-size:.7rem;
+
+}
+
+
+
+}
 </style>
 
 </head>
@@ -596,13 +609,11 @@ throw new Error("Unauthorized");
 <div class="header-content">
 
 
-<div class="header-badge">
 
-<i class="fa-solid fa-shield-heart"></i>
+<div class="header-title">
 
-PRIVATE WELFARE SYSTEM
 
-</div>
+<i class="fa-solid fa-heart-pulse"></i>
 
 
 <h1>
@@ -610,16 +621,28 @@ AFC Isiwu Welfare Dashboard
 </h1>
 
 
-<p>
-Manage contributions, expenses and welfare activities from a modern centralized dashboard.
-</p>
+</div>
+
+
+
+
+<a href="index.html" class="back-btn">
+
+
+<i class="fa-solid fa-arrow-left"></i>
+
+
+Back
+
+
+</a>
+
 
 
 </div>
 
 
 </header>
-
 
 
 <div class="container">
