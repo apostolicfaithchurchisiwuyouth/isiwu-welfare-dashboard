@@ -40,6 +40,186 @@ min-height:100vh;
 
 }
 
+  #loadingScreen{
+
+position:fixed;
+
+inset:0;
+
+background:white;
+
+display:flex;
+
+flex-direction:column;
+
+align-items:center;
+
+justify-content:center;
+
+z-index:999999;
+
+}
+
+
+.loader{
+
+width:55px;
+
+height:55px;
+
+border-radius:50%;
+
+border:5px solid #eee;
+
+border-top-color:#4a0754;
+
+animation:spin 1s linear infinite;
+
+}
+
+
+@keyframes spin{
+
+to{
+transform:rotate(360deg);
+}
+
+}
+
+
+#successBox{
+
+position:fixed;
+
+inset:0;
+
+background:white;
+
+display:none;
+
+flex-direction:column;
+
+align-items:center;
+
+justify-content:center;
+
+z-index:999999;
+
+}
+
+
+
+.success-icon{
+
+width:90px;
+
+height:90px;
+
+border-radius:50%;
+
+background:#4a0754;
+
+color:white;
+
+font-size:55px;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+animation:pop .4s ease;
+
+}
+
+
+@keyframes pop{
+
+from{
+transform:scale(.5);
+}
+
+to{
+transform:scale(1);
+}
+
+}
+
+#loginOverlay{
+
+position:fixed;
+
+inset:0;
+
+background:
+linear-gradient(
+135deg,
+#0a0016,
+#4a0754
+);
+
+display:none;
+
+align-items:center;
+
+justify-content:center;
+
+z-index:99999;
+
+}
+
+
+
+.login-modal{
+
+width:90%;
+
+max-width:390px;
+
+background:white;
+
+padding:30px;
+
+border-radius:20px;
+
+text-align:center;
+
+box-shadow:
+0 30px 70px rgba(0,0,0,.3);
+
+}
+
+
+
+.login-logo{
+
+width:65px;
+
+height:65px;
+
+margin:auto;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+border-radius:18px;
+
+background:
+linear-gradient(
+135deg,
+#0a0016,
+#4a0754
+);
+
+color:white;
+
+font-size:25px;
+
+}
 
 /* HEADER */
 
@@ -140,7 +320,11 @@ margin:35px auto;
 
 }
 
+#formContent{
 
+display:none;
+
+}
 
 .form-card{
 
@@ -247,7 +431,83 @@ min-height:1000px;
 <body>
 
 
+<div id="loadingScreen">
 
+<div class="loader"></div>
+
+<p>
+Loading Report Form...
+</p>
+
+</div>
+
+
+
+<div id="loginOverlay">
+
+
+<div class="login-modal">
+
+
+<div class="login-logo">
+
+<i class="fas fa-users"></i>
+
+</div>
+
+
+<h2>Secretariat</h2>
+
+<p class="login-subtitle">
+Registered Secretary Only
+</p>
+
+
+<input
+id="username"
+placeholder="Username">
+
+
+<input
+id="password"
+type="password"
+placeholder="Password">
+
+
+<button id="loginBtn">
+Continue
+</button>
+
+
+<p id="loginError"></p>
+
+
+</div>
+
+</div>
+
+  <div id="successBox">
+
+
+<div class="success-icon">
+
+✓
+
+</div>
+
+
+<h2>
+Submitted Successfully
+</h2>
+
+
+<p>
+Your response has been recorded.
+</p>
+
+
+</div>
+  
 <header>
 
 
@@ -256,7 +516,7 @@ min-height:1000px;
 <i class="fas fa-file-signature"></i>
 
 <span>
-Welfare Registration
+Secretary Registration
 </span>
 
 </div>
@@ -274,6 +534,7 @@ Back
 
 
 
+<div id="formContent">
 
 <div class="container">
 
@@ -309,8 +570,106 @@ src="https://docs.google.com/forms/d/e/1FAIpQLSc3Hv8kbfN7oBKW488fryGIKeQL3W6xWas
 
 </div>
 
+</div>
+</div>
+  <script>
+const SCRIPT_URL =
+"YOUR_APPS_SCRIPT_URL";
 
 
+window.onload=()=>{
+
+
+setTimeout(()=>{
+
+
+document
+.getElementById("loadingScreen")
+.style.display="none";
+
+
+document
+.getElementById("loginOverlay")
+.style.display="flex";
+
+
+},1200);
+
+
+};
+
+
+
+loginBtn.onclick=async()=>{
+
+
+let username =
+document.getElementById("username").value;
+
+
+let password =
+document.getElementById("password").value;
+
+
+
+const res =
+await fetch(
+SCRIPT_URL,
+{
+
+method:"POST",
+
+headers:{
+"Content-Type":
+"text/plain"
+},
+
+body:JSON.stringify({
+
+username,
+
+password
+
+})
+
+});
+
+
+
+const data =
+await res.json();
+
+
+
+if(data.success){
+
+
+sessionStorage.setItem(
+"formAccess",
+"true"
+);
+
+
+loginOverlay.style.display="none";
+
+
+formContent.style.display="block";
+
+
+
+}else{
+
+
+loginError.innerText=
+"Access denied. Not registered.";
+
+
+}
+
+
+};
+
+</script>
 </body>
 
 </html>
