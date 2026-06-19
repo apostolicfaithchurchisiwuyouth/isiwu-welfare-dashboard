@@ -1,327 +1,711 @@
-
 <!DOCTYPE html>
+
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8" />
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+
+
 <title>Weekly Lessons | AFC Isiwu Youth</title>
 
+
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
+
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap" rel="stylesheet">
+
+<link rel="stylesheet"href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
 <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 
+
+
 <style>
-*{margin:0;padding:0;box-sizing:border-box;}
+
+*{
+
+margin:0;
+
+padding:0;
+
+box-sizing:border-box;
+
+}
+
+
 
 body{
+
 font-family:'DM Sans',sans-serif;
+
+font-weight:400;
+
+background:#f5f5f5;
+
 color:#222;
-background:
-radial-gradient(circle at top left,rgba(74,7,84,.08),transparent 35%),
-radial-gradient(circle at top right,rgba(10,0,22,.08),transparent 35%),
-#f8fafc;
-min-height:100vh;
+
 }
+
+
 
 h1,h2,h3{
+
 font-family:'Bricolage Grotesque',sans-serif;
+
 }
+
+
+
+/* HEADER */
 
 header{
+
 position:sticky;
-top:12px;
-width:92%;
-max-width:950px;
+
+top:0;
+
+
+
+width:90%;
+
+max-width:970px;
+
+
+
 margin:0 auto;
-padding:16px 22px;
+
+
+
+padding:14px 18px;
+
+
+
 display:flex;
+
 justify-content:space-between;
+
 align-items:center;
-background:rgba(255,255,255,.78);
-backdrop-filter:blur(20px);
--webkit-backdrop-filter:blur(20px);
-border:1px solid rgba(255,255,255,.8);
-box-shadow:0 10px 40px rgba(0,0,0,.08);
-border-radius:18px;
+
+
+
+background: linear-gradient(135deg,#4A0754,#0A0016);
+
+
+
+backdrop-filter:blur(15px);
+
+-webkit-backdrop-filter:blur(15px);
+
+
+
+border:1px solid rgba(255,255,255,.3);
+
+
+
+border-radius: 0 0 15px 15px;
+
+
+
+box-shadow:
+
+0 8px 30px rgba(0,0,0,.08);
+
+
+
 z-index:1000;
-transition:.3s ease;
+
+transition:all .3s ease;
+
 }
+
+
 
 header h2{
-font-size:1rem;
-font-weight:700;
-color:#0A0016;
+
+font-size:0.9rem;
+
+color:white;
+
 }
+
+
 
 .back{
-text-decoration:none;
-background:linear-gradient(135deg,#4A0754,#6d0a7b);
+
 color:white;
-padding:11px 18px;
-border-radius:999px;
-font-size:.8rem;
-font-weight:600;
+
+text-decoration:none;
+
+font-size:0.8rem;
+
+background:#4A0754;
+
+padding:10px 14px;
+
+border-radius:50px;
+
+-webkit-tap-highlight-color: transparent;
+
+-webkit-touch-callout: none;
+
+outline:none;
+
+user-select:none;
+
 }
+
+
+
+/* CONTAINER */
+
+
 
 .container{
+
 width:100%;
-max-width:920px;
+
+max-width:900px;
+
 margin:auto;
+
 padding:30px 18px;
+
 }
 
-.tabs{
-display:flex;
-gap:12px;
-flex-wrap:wrap;
-margin-bottom:24px;
-}
 
-.tab{
-padding:12px 18px;
-border:none;
-border-radius:14px;
-background:white;
-font-size:.85rem;
-font-weight:700;
-color:#666;
-cursor:pointer;
-transition:.3s ease;
-box-shadow:0 4px 14px rgba(0,0,0,.05);
-font-family:'Bricolage Grotesque',sans-serif;
-}
 
-.tab.active{
-background:linear-gradient(135deg,#4A0754,#0A0016);
-color:white;
-box-shadow:0 12px 30px rgba(74,7,84,.35);
-}
+/* CARD */
 
 .card{
-background:rgba(255,255,255,.75);
-backdrop-filter:blur(18px);
-border:1px solid rgba(255,255,255,.7);
-border-radius:28px;
-padding:28px;
-box-shadow:0 20px 60px rgba(0,0,0,.08);
-}
 
-.lesson-hero{
-padding:24px;
-border-radius:20px;
-background:linear-gradient(135deg,#4A0754,#0A0016);
-color:white;
-margin-bottom:24px;
-position:relative;
-overflow:hidden;
-}
-
-.lesson-hero::before{
-content:'';
-position:absolute;
-width:250px;
-height:250px;
-background:rgba(255,255,255,.08);
-border-radius:50%;
-top:-100px;
-right:-70px;
-}
-
-.badge{
-display:inline-flex;
-padding:8px 14px;
-background:rgba(255,255,255,.15);
-backdrop-filter:blur(10px);
-border-radius:999px;
-font-size:.75rem;
-font-weight:700;
-margin-bottom:15px;
-}
-
-.topic{
-font-size:1.7rem;
-font-weight:800;
-line-height:1.25;
-font-family:'Bricolage Grotesque',sans-serif;
-}
-
-.grid{
-display:grid;
-grid-template-columns:repeat(2,1fr);
-gap:18px;
-}
-
-.info-card,.content-section{
 background:white;
-padding:20px;
-border-radius:18px;
-border:1px solid #eef2f7;
-box-shadow:0 4px 12px rgba(0,0,0,.03);
+
+border-radius:15px;
+
+padding:22px;
+
+box-shadow:0 10px 25px rgba(0,0,0,0.06);
+
+margin-bottom:20px;
+
 }
 
-.content-section{
-margin-top:20px;
+
+
+/* TABS */
+
+.tabs{
+
+display:flex;
+
+gap:10px;
+
+flex-wrap:wrap;
+
+margin-bottom:20px;
+
 }
+
+
+
+.tab{
+
+padding:8px 13px;
+
+border:none;
+
+border-radius:999px;
+
+cursor:pointer;
+
+background:#e7e3e9;
+
+color:#333;
+
+font-weight:600;
+
+font-size:0.75rem;
+
+transition:all .25s ease;
+
+
+
+-webkit-tap-highlight-color: rgba(0,0,0,0);
+
+-webkit-touch-callout: none;
+
+outline:none;
+
+}
+
+
+
+.tab.active{
+
+background:#0a0016;
+
+color:white;
+
+}
+
+
+
+/* SECTIONS */
 
 .section-title{
-font-size:.85rem;
-font-weight:800;
-color:#4A0754;
-margin-bottom:12px;
-text-transform:uppercase;
-letter-spacing:.08em;
+
+font-size:0.85rem;
+
+margin-bottom:8px;
+
+color:#4a0754;
+
+font-weight:700;
+
 }
+
+
 
 .text{
-font-size:.9rem;
+
+font-size:0.8rem;
+
 line-height:1.8;
+
+color:#333;
+
 white-space:pre-wrap;
+
 }
 
-#audioWrap{
-margin-top:18px;
-padding:20px;
-background:linear-gradient(135deg,rgba(74,7,84,.05),rgba(10,0,22,.03));
-border:1px solid rgba(74,7,84,.08);
-border-radius:18px;
-display:none;
+
+
+/* TOP INFO */
+
+.topic{
+
+font-size:1.1rem;
+
+font-weight:800;
+
+margin-bottom:10px;
+
 }
 
-audio{
+
+
+.meta{
+
+font-size:0.85rem;
+
+color:#666;
+
+margin-bottom:15px;
+
+}
+
+
+
+/* GRID */
+
+.grid{
+
+display:grid;
+
+grid-template-columns:1fr 1fr;
+
+gap:15px;
+
+}
+
+
+
+.audio-title{
+
+font-size:0.75rem;
+
+font-weight:700;
+
+color:#4a0754;
+
+margin-top:15px;
+
+margin-bottom:10px;
+
+}
+
+
+
+#yorubaAudioContainer{
+
+margin-top:15px;
+
+padding:14px;
+
+background:#fafafa;
+
+border-radius:12px;
+
+}
+
+
+
+#yorubaAudioPlayer{
+
 width:100%;
-margin-top:10px;
+
 }
+
+
 
 @media(max-width:768px){
-.container{padding:20px 14px;}
-.card{padding:18px;}
-.topic{font-size:1.35rem;}
+
 .grid{grid-template-columns:1fr;}
-.lesson-hero{padding:20px;}
+
 }
+
 </style>
+
 </head>
+
+
+
 <body>
 
+  
+
+
+
 <header>
+
 <h2>Weekly Lessons</h2>
+
 <a class="back" href="index.html">← Back</a>
+
 </header>
+
+
+
+
 
 <div class="container">
 
 <div class="tabs">
-<button class="tab active" onclick="switchClass('Senior')">Senior</button>
-<button class="tab" onclick="switchClass('Junior')">Junior</button>
-<button class="tab" onclick="switchClass('Elementary')">Elementary</button>
+
+<button class="tab active" onclick="switchClass('Senior')" style="font-family:Bricolage Grotesque;">Senior</button>
+
+<button class="tab" onclick="switchClass('Junior')" style="font-family:Bricolage Grotesque;">Junior</button>
+
+<button class="tab" onclick="switchClass('Elementary')" style="font-family:Bricolage Grotesque;">Elementary</button>
+
 </div>
+
+
 
 <div class="card">
 
-<div class="lesson-hero">
-<div class="badge" id="meta">Loading</div>
+
+
 <div class="topic" id="topic">Loading...</div>
-</div>
+
+<div class="meta" id="meta"></div>
+
+
 
 <div class="grid">
 
-<div class="info-card">
+
+
+<div>
+
 <div class="section-title">Bible Text</div>
+
 <div class="text" id="bibleText"></div>
+
 </div>
 
-<div class="info-card">
+
+
+<div>
+
 <div class="section-title">Memory Verse</div>
+
 <div class="text" id="memoryVerse"></div>
-</div>
 
 </div>
 
-<div id="audioWrap">
-<div class="section-title">Memory Verse In Yoruba (Audio)</div>
-<audio id="yorubaAudioPlayer" controls preload="none">
-<source id="yorubaAudioSource" src="" type="audio/mpeg">
+
+
+
+
+<div id="yorubaAudioContainer" style="display:none;">
+
+
+
+<div class="audio-title">
+
+Memory Verse In Yoruba (Audio)
+
+</div>
+
+
+
+<audio
+
+id="yorubaAudioPlayer"
+
+controls
+
+preload="none">
+
+
+
+<source
+
+id="yorubaAudioSource"
+
+src=""
+
+type="audio/mpeg">
+
+
+
 </audio>
+
+
+
 </div>
 
-<div class="content-section">
+
+
+</div>
+
+
+
+<br>
+
+
+
 <div class="section-title">Combined Lesson Note</div>
+
 <div class="text" id="summary"></div>
-</div>
 
-<div class="content-section">
+
+
+<br>
+
+
+
 <div class="section-title">Discussion</div>
+
 <div class="text" id="discussion"></div>
-</div>
+
+
 
 </div>
+
+
+
 </div>
+
+
 
 <script>
+
+
+
+// 🔴 YOUR CSV (UNCHANGED)
+
 const weeklyLessonCSV =
+
 "https://docs.google.com/spreadsheets/d/e/2PACX-1vQHlE5IpmFYaQyW5u-rentH2fGC5VZJ2w9Ql1WI-X8bE76qlN5_ttDIitwlXX1CM4sqdEW8RroDUNSU/pub?gid=201183837&single=true&output=csv";
 
-let lessons=[];
+
+
+let lessons = [];
+
+
 
 async function loadLessons(){
-const res=await fetch(weeklyLessonCSV);
-const csv=await res.text();
 
-const result=Papa.parse(csv,{
+
+
+const res = await fetch(weeklyLessonCSV);
+
+const csv = await res.text();
+
+
+
+const result = Papa.parse(csv, {
+
 header:true,
+
 skipEmptyLines:true
+
 });
 
-lessons=result.data;
+
+
+lessons = result.data;
+
+
+
 switchClass('Senior');
+
 }
+
+
 
 function switchClass(cls){
 
-const lesson=lessons.find(
-l=>l.Class?.trim()===cls
-);
+
+
+const lesson = lessons.find(l => l.Class?.trim() === cls);
+
+
 
 if(!lesson) return;
 
-topic.innerText=lesson.Topic||"";
-meta.innerText=cls;
 
-bibleText.innerText=lesson.BibleText||"";
-memoryVerse.innerText=lesson.MemoryVerse||"";
 
-const audioWrap=document.getElementById("audioWrap");
-const player=document.getElementById("yorubaAudioPlayer");
-const source=document.getElementById("yorubaAudioSource");
+document.getElementById("topic").innerText = lesson.Topic || "";
 
-if(lesson.YorubaAudio && lesson.YorubaAudio.trim()!==""){
-source.src=lesson.YorubaAudio;
-player.load();
-audioWrap.style.display="block";
+document.getElementById("meta").innerText = cls;
+
+
+
+document.getElementById("bibleText").innerText = lesson.BibleText || "";
+
+document.getElementById("memoryVerse").innerText = lesson.MemoryVerse || "";
+
+
+
+const audioContainer =
+
+document.getElementById("yorubaAudioContainer");
+
+
+
+const audioPlayer =
+
+document.getElementById("yorubaAudioPlayer");
+
+
+
+const audioSource =
+
+document.getElementById("yorubaAudioSource");
+
+
+
+if(
+
+lesson.YorubaAudio &&
+
+lesson.YorubaAudio.trim() !== ""
+
+){
+
+
+
+audioSource.src =
+
+lesson.YorubaAudio;
+
+
+
+audioPlayer.load();
+
+
+
+audioContainer.style.display = "block";
+
+
+
 }else{
-audioWrap.style.display="none";
-source.src="";
-player.load();
+
+
+
+audioContainer.style.display = "none";
+
+
+
+audioSource.src = "";
+
+
+
+audioPlayer.load();
+
+
+
 }
 
-summary.innerHTML=lesson.Summary||"";
-discussion.innerText=lesson.Discussion||"";
+document.getElementById("summary").innerHTML = lesson.Summary || "";
 
-document.querySelectorAll(".tab").forEach(tab=>{
-tab.classList.remove("active");
-if(tab.innerText===cls) tab.classList.add("active");
+document.getElementById("discussion").innerText = lesson.Discussion || "";
+
+
+
+// tabs UI
+
+document.querySelectorAll(".tab").forEach(t => {
+
+t.classList.remove("active");
+
+if(t.innerText === cls) t.classList.add("active");
+
 });
+
 }
+
+
 
 loadLessons();
 
+  
+
 window.addEventListener('scroll',()=>{
-const header=document.querySelector('header');
-header.style.padding=window.scrollY>50?"12px 22px":"16px 22px";
+
+
+
+const header =
+
+document.querySelector('header');
+
+
+
+if(window.scrollY > 50){
+
+
+
+header.style.padding = "10px 18px";
+
+
+
+}else{
+
+
+
+header.style.padding = "14px 18px";
+
+
+
+}
+
+
+
 });
+
 </script>
 
+
+
 </body>
+
 </html>
