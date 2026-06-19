@@ -1,957 +1,200 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>AFC Isiwu Youth Welfare Dashboard</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
-
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700;800&family=Host+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-
 <style>
-
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
--webkit-tap-highlight-color:transparent;
-}
-
-
+*{margin:0;padding:0;box-sizing:border-box}
 body{
-
 font-family:'Host Grotesk',sans-serif;
-
 background:
 radial-gradient(circle at top left,#eadcff,transparent 30%),
 radial-gradient(circle at bottom right,#dbeafe,transparent 30%),
 #f8fafc;
-
 color:#202033;
-
-overflow-x:hidden;
-
 }
-
-
-h1,h2,h3{
-
-font-family:'Bricolage Grotesque',sans-serif;
-
-}
-
-
-/* =========================
-   STICKY APP HEADER
-========================= */
 
 header{
-
-position:fixed;
-
+position:sticky;
 top:0;
-left:0;
-
-width:100%;
-
-height:72px;
-
-z-index:999999;
-
-display:flex;
-
-align-items:center;
-
-background:
-
-rgba(255,255,255,.78);
-
-backdrop-filter:blur(18px);
-
-border-bottom:
-
-1px solid rgba(124,58,237,.12);
-
-box-shadow:
-
-0 10px 35px rgba(0,0,0,.06);
-
-padding:0 20px;
-
-}
-
-
-.header-content{
-
-width:100%;
-
-max-width:900px;
-
+z-index:1000;
+width:88%;
+max-width:820px;
 margin:auto;
-
+padding:14px 18px;
 display:flex;
-
-align-items:center;
-
 justify-content:space-between;
-
-gap:15px;
-
+align-items:center;
+background:linear-gradient(135deg,#4A0754,#0A0016);
+border-radius:0 0 18px 18px;
+box-shadow:0 10px 30px rgba(0,0,0,.12);
 }
-
-
 
 .header-title{
-
 display:flex;
-
 align-items:center;
-
 gap:12px;
-
+color:#fff;
+font-family:'Bricolage Grotesque',sans-serif;
+font-weight:700;
 }
-
-
 
 .header-title i{
-
-width:38px;
-
-height:38px;
-
-border-radius:14px;
-
-display:flex;
-
-align-items:center;
-
-justify-content:center;
-
-background:#ede9fe;
-
-color:#7c3aed;
-
-font-size:1rem;
-
+width:38px;height:38px;border-radius:12px;
+display:flex;align-items:center;justify-content:center;
+background:rgba(255,255,255,.12);
 }
-
-
-
-.header-title h1{
-
-font-size:.95rem;
-
-font-weight:700;
-
-color:#24112f;
-
-margin:0;
-
-}
-
-
-
-.header-title p{
-
-display:none;
-
-}
-
-
 
 .back-btn{
-
-margin:0;
-
-padding:9px 14px;
-
-border-radius:14px;
-
-background:#4a0754;
-
-color:white;
-
-font-size:.72rem;
-
-font-weight:600;
-
-display:inline-flex;
-
-align-items:center;
-
-gap:7px;
-
 text-decoration:none;
-
+color:#fff;
+padding:10px 14px;
+border-radius:999px;
+background:rgba(255,255,255,.12);
+font-size:.8rem;
 }
-
-
-.back-btn:hover{
-
-transform:translateY(-2px);
-
-}
-
-
-
-
-/* =========================
-   MAIN CONTAINER
-========================= */
-
 
 .container{
-
+width:88%;
 max-width:820px;
-
-margin:auto;
-
-padding:
-
-95px 15px 30px;
-
+margin:24px auto 40px;
 }
-
-
-
-
-/* =========================
-   SECTION TITLE
-========================= */
-
 
 .section-title{
-
 display:flex;
-
 align-items:center;
-
 gap:10px;
-
-margin:24px 0 14px;
-
+margin:22px 0 14px;
+font-family:'Bricolage Grotesque',sans-serif;
 }
-
-
 
 .section-title i{
-
-width:34px;
-height:34px;
-
-display:flex;
-
-align-items:center;
-justify-content:center;
-
+width:34px;height:34px;
+display:flex;align-items:center;justify-content:center;
 border-radius:12px;
-
-background:#ede9fe;
-
-color:#7c3aed;
-
+background:#f3e8ff;color:#7c3aed;
 }
-
-
-
-.section-title h2{
-
-font-size:.9rem;
-
-font-weight:700;
-
-}
-
-
-
-
-
-/* =========================
-   DASHBOARD GRID
-========================= */
-
 
 .dashboard-grid{
-
-
 display:grid;
-
-
-grid-template-columns:
-
-repeat(2,1fr);
-
-
-gap:14px;
-
-
-}
-
-/* =========================
-PREMIUM CARD STYLES
-========================= */
-
-.stat-card{
-
-background:
-rgba(255,255,255,.75);
-
-backdrop-filter:blur(18px);
-
-border:
-1px solid rgba(255,255,255,.55);
-
-box-shadow:
-0 18px 45px rgba(0,0,0,.06);
-
-transition:.3s;
-
-overflow:hidden;
-
-}
-
-.stat-card:hover{
-
-transform:translateY(-4px);
-
-}
-
-
-
-.activities{
-
-background:
-rgba(255,255,255,.75);
-
-backdrop-filter:blur(18px);
-
-border:
-1px solid rgba(255,255,255,.55);
-
-box-shadow:
-0 18px 45px rgba(0,0,0,.06);
-
-}
-
-
-
-.chart-box{
-
-background:
-rgba(255,255,255,.75);
-
-backdrop-filter:blur(18px);
-
-border:
-1px solid rgba(255,255,255,.55);
-
-box-shadow:
-0 18px 45px rgba(0,0,0,.06);
-
-border-radius:28px;
-
-padding:20px;
-
-}
-
-
-
-.purple-icon{
-
-background:#ede9fe;
-color:#7c3aed;
-
-}
-
-
-
-.green-icon{
-
-background:#dcfce7;
-color:#16a34a;
-
-}
-
-
-
-.red-icon{
-
-background:#fee2e2;
-color:#dc2626;
-
-}
-
-
-
-.blue-icon{
-
-background:#dbeafe;
-color:#2563eb;
-
-}
-
-
-.stat-card{
-
-
-padding:16px;
-
-
-border-radius:22px;
-
-
-}
-
-
-
-.stat-icon{
-
-
-width:42px;
-
-height:42px;
-
-
-border-radius:14px;
-
-
-font-size:1rem;
-
-
-margin-bottom:12px;
-
-
-}
-
-
-
-.stat-card h3{
-
-
-font-size:.68rem;
-
-
-margin-bottom:6px;
-
-
-}
-
-
-
-.amount{
-
-
-font-size:1.15rem;
-
-
-}
-
-
-
-
-/* =========================
-   ACTIVITIES
-========================= */
-
-
-.activities{
-
-
-padding:14px;
-
-border-radius:22px;
-
-
-}
-
-
-
-.activity-item{
-
-
-display:grid;
-
-
-grid-template-columns:
-
-38px 1fr auto;
-
-
-align-items:center;
-
-
-gap:12px;
-
-
-padding:12px;
-
-
-margin-bottom:10px;
-
-
-border-radius:16px;
-
-
-background:#fafafa;
-
-
-}
-
-
-
-.activity-icon{
-
-
-width:38px;
-
-height:38px;
-
-
-border-radius:13px;
-
-
-font-size:.85rem;
-
-
-}
-
-
-
-.activity-name{
-
-
-font-size:.75rem;
-
-font-weight:700;
-
-
-}
-
-
-
-.activity-amount{
-
-
-font-size:.75rem;
-
-
-}
-
-
-
-.activity-item small{
-
-
-font-size:.65rem;
-
-
-color:#64748b;
-
-
-}
-
-
-
-/* =========================
- MOBILE
-========================= */
-
-
-@media(max-width:600px){
-
-
-header{
-
-height:64px;
-
-padding:0 12px;
-
-}
-
-
-
-.header-title h1{
-
-font-size:.78rem;
-
-}
-
-
-
-.header-title i{
-
-width:34px;
-
-height:34px;
-
-}
-
-
-
-.back-btn{
-
-padding:8px 10px;
-
-font-size:.65rem;
-
-}
-
-
-
-
-.container{
-
-padding-top:85px;
-
-}
-
-
-
-
-.dashboard-grid{
-
 grid-template-columns:repeat(2,1fr);
-
-gap:10px;
-
+gap:16px;
 }
 
-
-
-.stat-card{
-
-padding:13px;
-
+.card{
+background:linear-gradient(135deg,#fff,#faf5ff);
+border:1px solid rgba(74,7,84,.08);
+border-radius:22px;
+padding:18px;
+box-shadow:0 10px 30px rgba(74,7,84,.08);
 }
 
+.icon{
+width:44px;height:44px;
+display:flex;align-items:center;justify-content:center;
+border-radius:14px;
+margin-bottom:12px;
+}
 
+.green{background:#dcfce7;color:#16a34a}
+.red{background:#fee2e2;color:#dc2626}
+.blue{background:#dbeafe;color:#2563eb}
+.purple{background:#ede9fe;color:#7c3aed}
 
+.label{font-size:.72rem;color:#64748b}
 .amount{
-
-font-size:1rem;
-
+font-family:'Bricolage Grotesque',sans-serif;
+font-weight:800;
+font-size:1.15rem;
+margin-top:6px;
 }
 
-
-
-.activity-item{
-
-
-grid-template-columns:
-
-34px 1fr;
-
-
+.activities,.chart-box{
+background:#fff;
+border-radius:24px;
+padding:18px;
+border:1px solid rgba(74,7,84,.08);
+box-shadow:0 10px 30px rgba(74,7,84,.08);
 }
 
-
-.activity-amount{
-
-grid-column:2;
-
-font-size:.7rem;
-
+.activity{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:14px;
+border-radius:16px;
+background:#fafafa;
+margin-bottom:10px;
 }
 
+footer{
+text-align:center;
+padding:25px;
+font-size:.8rem;
+color:#64748b;
+}
 
-
+@media(max-width:768px){
+.dashboard-grid{gap:12px}
+.amount{font-size:1rem}
+.header-title span{font-size:.85rem}
 }
 </style>
-
 </head>
-
-
 <body>
 
-
-<script>
-
-const dashboardPassword="1";
-
-const enteredPassword=prompt("Enter Welfare Dashboard Password");
-
-
-if(enteredPassword!==dashboardPassword){
-
-document.body.innerHTML=`
-
-<div style="
-height:100vh;
-display:flex;
-align-items:center;
-justify-content:center;
-flex-direction:column;
-background:#4a0754;
-color:white;
-font-family:Arial;
-text-align:center;
-padding:20px;
-">
-
-<h1>Access Denied</h1>
-
-<p>
-Incorrect password. Unauthorized access.
-</p>
-
-</div>
-
-`;
-
-throw new Error("Unauthorized");
-
-}
-
-
-</script>
-
-
-
 <header>
-
-
-<div class="header-content">
-
-
-
 <div class="header-title">
-
-
 <i class="fa-solid fa-heart-pulse"></i>
-
-
-<h1>
-AFC Isiwu Welfare Dashboard
-</h1>
-
-
+<span>AFC Isiwu Welfare Dashboard</span>
 </div>
-
-
-
-
-<a href="index.html" class="back-btn">
-
-
-<i class="fa-solid fa-arrow-left"></i>
-
-
-Back
-
-
-</a>
-
-
-
-</div>
-
-
+<a href="index.html" class="back-btn">Back</a>
 </header>
-
 
 <div class="container">
 
-
 <div class="section-title">
-
 <i class="fa-solid fa-chart-pie"></i>
-
 <h2>Financial Overview</h2>
-
 </div>
-
-
 
 <div class="dashboard-grid">
-
-
-
-<div class="stat-card">
-
-<div class="stat-icon green-icon">
-
-<i class="fa-solid fa-hand-holding-dollar"></i>
-
+<div class="card"><div class="icon green"><i class="fa-solid fa-hand-holding-dollar"></i></div><div class="label">Total Contributions</div><div class="amount">₦0</div></div>
+<div class="card"><div class="icon red"><i class="fa-solid fa-wallet"></i></div><div class="label">Total Expenses</div><div class="amount">₦0</div></div>
+<div class="card"><div class="icon blue"><i class="fa-solid fa-building-columns"></i></div><div class="label">Current Balance</div><div class="amount">₦0</div></div>
+<div class="card"><div class="icon purple"><i class="fa-solid fa-users"></i></div><div class="label">Welfare Status</div><div class="amount">Active</div></div>
 </div>
-
-
-<h3>Total Contributions</h3>
-
-<div class="amount" id="totalContributions">
-Updating...
-</div>
-
-</div>
-
-
-
-<div class="stat-card">
-
-<div class="stat-icon red-icon">
-
-<i class="fa-solid fa-wallet"></i>
-
-</div>
-
-
-<h3>Total Expenses</h3>
-
-<div class="amount" id="totalExpenses">
-Updating...
-</div>
-
-</div>
-
-
-
-<div class="stat-card">
-
-<div class="stat-icon blue-icon">
-
-<i class="fa-solid fa-building-columns"></i>
-
-</div>
-
-
-<h3>Current Balance</h3>
-
-<div class="amount" id="currentBalance">
-Updating...
-</div>
-
-</div>
-
-
-
-<div class="stat-card">
-
-<div class="stat-icon purple-icon">
-
-<i class="fa-solid fa-users"></i>
-
-</div>
-
-
-<h3>Welfare Status</h3>
-
-<div class="amount">
-Active
-</div>
-
-</div>
-
-
-</div>
-<!-- =========================
-ACTIVITY SECTION
-========================= -->
-
 
 <div class="section-title">
-
 <i class="fa-solid fa-clock-rotate-left"></i>
-
-<h2>Recent Welfare Activities</h2>
-
+<h2>Recent Activities</h2>
 </div>
 
-
-<div class="activities" id="activityFeed">
-
-
-<div class="activity-item">
-
-<div class="activity-left">
-
-<div class="activity-icon">
-
-<i class="fa-solid fa-spinner fa-spin"></i>
-
+<div class="activities">
+<div class="activity"><span>Contribution Received</span><strong>₦0</strong></div>
+<div class="activity"><span>Medical Support</span><strong>₦0</strong></div>
 </div>
-
-
-<div>
-
-<div class="activity-name">
-Loading activities...
-</div>
-
-</div>
-
-
-</div>
-
-
-</div>
-
-
-</div>
-
-
-
-
-
-<!-- =========================
-CHART SECTION
-========================= -->
-
 
 <div class="section-title">
-
 <i class="fa-solid fa-chart-line"></i>
-
 <h2>Financial Analytics</h2>
-
 </div>
-
-
 
 <div class="chart-box">
-
-
-<canvas id="financeChart"></canvas>
-
+<p>Insert your Chart.js canvas here.</p>
+</div>
 
 </div>
 
-
-
-
-
-<a href="index.html" class="back-btn">
-
-<i class="fa-solid fa-arrow-left"></i>
-
-Back To Homepage
-
-</a>
-
-
-
-</div>
-
-
-
-<footer>
-
-AFC Isiwu Youth Welfare System © 2026
-
-</footer>
-
-
-
-
-
-<script>
+<footer>AFC Isiwu Youth Welfare System © 2026</footer>
+   <script>
 
 
 /*
@@ -1292,8 +535,5 @@ fetchSheetData,
 
 </script>
 
-
-
 </body>
-
 </html>
