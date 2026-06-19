@@ -717,6 +717,39 @@ document.getElementById(
 
 }
 
+
+const logoutBtn = document.getElementById("logoutBtn");
+
+logoutBtn.addEventListener("click", function(){
+
+    // remove saved login session
+    sessionStorage.removeItem("welfareLoggedIn");
+    sessionStorage.removeItem("username");
+
+    // hide dashboard
+    document.getElementById(
+        "dashboardContent"
+    ).style.display = "none";
+
+
+    // show login screen again
+    document.getElementById(
+        "loginOverlay"
+    ).style.display = "flex";
+
+
+    // clear inputs
+    document.getElementById(
+        "username"
+    ).value = "";
+
+    document.getElementById(
+        "password"
+    ).value = "";
+
+
+});
+
 </script>
 
 </body>
