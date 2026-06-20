@@ -491,6 +491,143 @@ box-shadow:
 
 }
 
+.form-row{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:16px;
+margin-bottom:16px;
+}
+
+.field{
+margin-bottom:16px;
+}
+
+.field label{
+display:block;
+margin-bottom:8px;
+font-size:13px;
+font-weight:600;
+color:#0a0016;
+}
+
+.field input,
+.field select,
+.field textarea{
+
+width:100%;
+
+padding:14px;
+
+border:1px solid #ddd;
+
+border-radius:12px;
+
+font-size:14px;
+
+font-family:inherit;
+
+outline:none;
+
+transition:.3s;
+
+}
+
+.field textarea{
+resize:vertical;
+min-height:140px;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus{
+
+border-color:#4a0754;
+
+box-shadow:
+0 0 0 4px rgba(74,7,84,.1);
+
+}
+
+.section-title{
+
+margin:25px 0 15px;
+
+font-size:18px;
+
+font-weight:700;
+
+color:#0a0016;
+
+}
+
+#submitBtn{
+
+width:100%;
+
+padding:15px;
+
+border:none;
+
+border-radius:14px;
+
+background:
+linear-gradient(
+135deg,
+#0a0016,
+#4a0754
+);
+
+color:white;
+
+font-size:15px;
+
+font-weight:600;
+
+cursor:pointer;
+
+}
+
+#successMsg{
+
+display:none;
+
+margin-top:16px;
+
+padding:14px;
+
+border-radius:12px;
+
+background:#ecfdf5;
+
+color:#166534;
+
+font-weight:600;
+
+text-align:center;
+
+}
+
+@media(max-width:600px){
+
+.form-row{
+
+grid-template-columns:1fr 1fr;
+
+gap:10px;
+
+}
+
+.field input,
+.field select{
+
+padding:12px;
+
+font-size:13px;
+
+}
+
+}
+
 
 
 /* TITLE */
@@ -690,35 +827,321 @@ Back
 
 
 
-<div id="formContent">
+<form id="reportForm">
 
-<div class="container">
+<div class="form-row">
 
+<div class="field">
+<label>Program Date</label>
+<input
+type="date"
+id="programDate"
+required>
+</div>
 
-<div class="form-title">
+<div class="field">
+<label>Program Day</label>
 
-<h2>Welfare Form</h2>
+<select
+id="programDay"
+required>
 
-<p>Complete the form below</p>
+<option value="">
+Select Day
+</option>
+
+<option>Sunday</option>
+<option>Monday</option>
+<option>Tuesday</option>
+<option>Wednesday</option>
+<option>Thursday</option>
+<option>Friday</option>
+<option>Saturday</option>
+
+</select>
 
 </div>
 
-<div class="section">
+</div>
 
-<iframe
-src="https://docs.google.com/forms/d/e/1FAIpQLSc3Hv8kbfN7oBKW488fryGIKeQL3W6xWasR1qQMCp6dVkuAkg/viewform?usp=header">
-</iframe>
+
+<div class="field">
+
+<label>
+Program Name / Title
+</label>
+
+<input
+type="text"
+id="programTitle"
+required>
 
 </div>
 
 
+
+<div class="form-row">
+
+<div class="field">
+
+<label>
+Program Type
+</label>
+
+<select
+id="programType"
+required>
+
+<option value="">
+Select Type
+</option>
+
+<option>
+Physical
+</option>
+
+<option>
+Virtual
+</option>
+
+</select>
+
 </div>
 
+
+<div class="field">
+
+<label>
+Reporter's Name
+</label>
+
+<select
+id="reporterName"
+required>
+
+<option>
+John Doe
+</option>
+
+</select>
+
+</div>
+
+</div>
+
+
+
+<div class="field">
+
+<label>
+Program Coordinator
+</label>
+
+<input
+type="text"
+id="programCoordinator"
+required>
+
+</div>
+
+
+
+<div class="field">
+
+<label>
+What Went Well?
+</label>
+
+<textarea
+id="whatWentWell"
+rows="6"
+required>
+</textarea>
+
+</div>
+
+
+
+<div class="field">
+
+<label>
+Challenges
+</label>
+
+<textarea
+id="challenges"
+rows="6"
+required>
+</textarea>
+
+</div>
+
+
+
+<h3 class="section-title">
+Attendance
+</h3>
+
+
+<div class="field">
+
+<label>
+Total Attendance
+</label>
+
+<input
+type="number"
+id="totalAttendance"
+required>
+
+</div>
+
+
+
+<div class="form-row">
+
+<div class="field">
+
+<label>
+Number Of Male Present
+</label>
+
+<input
+type="number"
+id="malePresent">
+
+</div>
+
+
+<div class="field">
+
+<label>
+Number Of Female Present
+</label>
+
+<input
+type="number"
+id="femalePresent">
+
+</div>
+
+</div>
+
+
+
+<h3 class="section-title">
+Record Of Blessings
+</h3>
+
+
+
+<div class="form-row">
+
+<div class="field">
+
+<label>
+Salvation
+</label>
+
+<input
+type="number"
+id="salvation">
+
+</div>
+
+<div class="field">
+
+<label>
+Santification
+</label>
+
+<input
+type="number"
+id="santification">
+
+</div>
+
+</div>
+
+
+
+<div class="form-row">
+
+<div class="field">
+
+<label>
+Holy Ghost Baptism
+</label>
+
+<input
+type="number"
+id="holyGhostBaptism">
+
+</div>
+
+<div class="field">
+
+<label>
+Re-anointing
+</label>
+
+<input
+type="number"
+id="reanointing">
+
+</div>
+
+</div>
+
+
+
+<div class="form-row">
+
+<div class="field">
+
+<label>
+Healing
+</label>
+
+<input
+type="number"
+id="healing">
+
+</div>
+
+<div class="field">
+
+<label>
+Others
+</label>
+
+<input
+type="number"
+id="others">
+
+</div>
+
+</div>
+
+
+
+<button
+type="submit"
+id="submitBtn">
+
+Submit Report
+
+</button>
+
+
+<p id="successMsg"></p>
+
+</form>
 </div>
 </div>
   <script>
 const SCRIPT_URL =
-"https://script.google.com/macros/s/AKfycbw1mVwpgAcIOSNbpgzy52TFyozEGMtWWwVWUDFaofGNzpsguBIaKR4q1dXVtgVHO2xZ1w/exec";
+"https://script.google.com/macros/s/AKfycbxaptzMYOMpnjGg3MqHaHTDoKWfzeyQAsRHSHP3EbQPFUCspvFkklMu9w52L4yICEOSdw/exec";
 
 
 window.onload=()=>{
@@ -829,6 +1252,223 @@ loginBtn.classList.remove(
 
 };
 
+document
+.getElementById("reportForm")
+.addEventListener(
+"submit",
+async function(e){
+
+e.preventDefault();
+
+const submitBtn =
+document.getElementById(
+"submitBtn"
+);
+
+const successMsg =
+document.getElementById(
+"successMsg"
+);
+
+const originalText =
+submitBtn.innerHTML;
+
+
+/* BUTTON LOADING */
+
+submitBtn.disabled = true;
+
+submitBtn.innerHTML = `
+<span class="btn-spinner"></span>
+Submitting Report...
+`;
+
+
+
+const payload = {
+
+programDate:
+document.getElementById(
+"programDate"
+).value,
+
+programDay:
+document.getElementById(
+"programDay"
+).value,
+
+programTitle:
+document.getElementById(
+"programTitle"
+).value,
+
+programType:
+document.getElementById(
+"programType"
+).value,
+
+reporterName:
+document.getElementById(
+"reporterName"
+).value,
+
+programCoordinator:
+document.getElementById(
+"programCoordinator"
+).value,
+
+whatWentWell:
+document.getElementById(
+"whatWentWell"
+).value,
+
+challenges:
+document.getElementById(
+"challenges"
+).value,
+
+totalAttendance:
+document.getElementById(
+"totalAttendance"
+).value,
+
+malePresent:
+document.getElementById(
+"malePresent"
+).value,
+
+femalePresent:
+document.getElementById(
+"femalePresent"
+).value,
+
+salvation:
+document.getElementById(
+"salvation"
+).value,
+
+santification:
+document.getElementById(
+"santification"
+).value,
+
+holyGhostBaptism:
+document.getElementById(
+"holyGhostBaptism"
+).value,
+
+reanointing:
+document.getElementById(
+"reanointing"
+).value,
+
+healing:
+document.getElementById(
+"healing"
+).value,
+
+others:
+document.getElementById(
+"others"
+).value
+
+};
+
+
+
+try{
+
+const response =
+await fetch(
+SCRIPT_URL,
+{
+method:"POST",
+
+headers:{
+"Content-Type":
+"application/json"
+},
+
+body:
+JSON.stringify(
+payload
+)
+
+}
+);
+
+const result =
+await response.json();
+
+
+
+if(result.success){
+
+successMsg.style.display =
+"block";
+
+successMsg.innerHTML =
+"✓ Report Submitted Successfully";
+
+document
+.getElementById(
+"reportForm"
+)
+.reset();
+
+
+
+setTimeout(()=>{
+
+successMsg.style.display =
+"none";
+
+},4000);
+
+}else{
+
+successMsg.style.display =
+"block";
+
+successMsg.style.background =
+"#fef2f2";
+
+successMsg.style.color =
+"#dc2626";
+
+successMsg.innerHTML =
+"Submission failed.";
+
+}
+
+}catch(error){
+
+successMsg.style.display =
+"block";
+
+successMsg.style.background =
+"#fef2f2";
+
+successMsg.style.color =
+"#dc2626";
+
+successMsg.innerHTML =
+"Connection error.";
+
+console.log(error);
+
+}
+
+
+/* RESET BUTTON */
+
+submitBtn.disabled =
+false;
+
+submitBtn.innerHTML =
+originalText;
+
+});
 </script>
 </body>
 
