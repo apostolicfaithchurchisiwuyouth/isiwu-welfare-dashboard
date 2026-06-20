@@ -1070,8 +1070,11 @@ Submit Report
 </div>
 </div>
   <script>
-const SCRIPT_URL ="https://script.google.com/macros/s/AKfycbw1mVwpgAcIOSNbpgzy52TFyozEGMtWWwVWUDFaofGNzpsguBIaKR4q1dXVtgVHO2xZ1w/exec";
+const LOGIN_URL =
+"https://script.google.com/macros/s/AKfycbw1mVwpgAcIOSNbpgzy52TFyozEGMtWWwVWUDFaofGNzpsguBIaKR4q1dXVtgVHO2xZ1w/exec";
 
+const REPORT_URL =
+"https://script.google.com/macros/s/AKfycbxaptzMYOMpnjGg3MqHaHTDoKWfzeyQAsRHSHP3EbQPFUCspvFkklMu9w52L4yICEOSdw/exec";
 
 window.onload=()=>{
 
@@ -1117,7 +1120,7 @@ loginBtn.innerHTML =
 try{
 
 const res = await fetch(
-SCRIPT_URL,
+LOGIN_URL,
 {
 method:"POST",
 headers:{
@@ -1146,7 +1149,8 @@ sessionStorage.setItem(
 );
 
 loginOverlay.style.display="none";
-
+const formContent =
+document.getElementById("formContent");
 formContent.style.display="block";
 
 },700);
@@ -1307,16 +1311,13 @@ document.getElementById(
 
 try{
 
-const response =
-await fetch(
-SCRIPT_URL,
+const response = await fetch(
+REPORT_URL,
 {
 method:"POST",
-
-headers:{
-"Content-Type":
-"application/json"
-},
+body:JSON.stringify(payload)
+}
+);
 
 body:
 JSON.stringify(
