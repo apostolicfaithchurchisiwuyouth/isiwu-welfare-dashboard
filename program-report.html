@@ -494,8 +494,8 @@ box-shadow:
 .form-row{
 display:grid;
 grid-template-columns:1fr 1fr;
-gap:16px;
-margin-bottom:16px;
+gap:14px;
+
 }
 
 .field{
@@ -504,8 +504,8 @@ margin-bottom:16px;
 
 .field label{
 display:block;
-margin-bottom:8px;
-font-size:13px;
+margin-bottom:6px;
+font-size:12px;
 font-weight:600;
 color:#0a0016;
 }
@@ -516,13 +516,13 @@ color:#0a0016;
 
 width:100%;
 
-padding:14px;
+padding:12px 14px;
 
-border:1px solid #ddd;
+border:1px solid #dcdcdc;
 
 border-radius:12px;
 
-font-size:14px;
+font-size:13px;
 
 font-family:inherit;
 
@@ -564,7 +564,7 @@ color:#0a0016;
 
 width:100%;
 
-padding:15px;
+padding:14px;
 
 border:none;
 
@@ -579,14 +579,21 @@ linear-gradient(
 
 color:white;
 
-font-size:15px;
+font-size:14px;
 
 font-weight:600;
 
 cursor:pointer;
 
+transition:.3s;
+
 }
 
+#submitBtn:hover{
+
+transform:translateY(-2px);
+
+}
 #successMsg{
 
 display:none;
@@ -633,29 +640,34 @@ font-size:13px;
 /* TITLE */
 
 
-.form-title{
-text-align:center;
-margin-bottom:20px;
+.form-card{
+
+background:white;
+
+border-radius:22px;
+
+padding:20px;
+
+margin-bottom:18px;
+
+box-shadow:
+0 15px 40px rgba(0,0,0,.08);
+
+border:1px solid rgba(74,7,84,.06);
+
 }
 
+.card-title{
 
-.form-title h2{
-margin:0;
-font-size:22px;
+font-size:16px;
+
+font-weight:700;
+
+margin-bottom:16px;
+
 color:#0a0016;
-}
-
-
-
-.form-title p{
-
-color:#64748b;
-
-font-size:12px;
 
 }
-
-
 
 
 /* GOOGLE FORM */
@@ -827,29 +839,30 @@ Back
 
 
 
+<div class="container">
+
 <form id="reportForm">
+
+<!-- PROGRAM INFORMATION -->
+
+<div class="form-card">
+
+<h3 class="card-title">
+Program Information
+</h3>
 
 <div class="form-row">
 
 <div class="field">
 <label>Program Date</label>
-<input
-type="date"
-id="programDate"
-required>
+<input type="date" id="programDate" required>
 </div>
 
 <div class="field">
 <label>Program Day</label>
 
-<select
-id="programDay"
-required>
-
-<option value="">
-Select Day
-</option>
-
+<select id="programDay" required>
+<option value="">Select Day</option>
 <option>Sunday</option>
 <option>Monday</option>
 <option>Tuesday</option>
@@ -857,100 +870,59 @@ Select Day
 <option>Thursday</option>
 <option>Friday</option>
 <option>Saturday</option>
-
 </select>
 
 </div>
 
 </div>
 
-
 <div class="field">
-
-<label>
-Program Name / Title
-</label>
-
-<input
-type="text"
-id="programTitle"
-required>
-
+<label>Program Name / Title</label>
+<input type="text" id="programTitle" required>
 </div>
 
-
-<div class="container">
 <div class="form-row">
 
 <div class="field">
+<label>Program Type</label>
 
-<label>
-Program Type
-</label>
-
-<select
-id="programType"
-required>
-
-<option value="">
-Select Type
-</option>
-
-<option>
-Physical
-</option>
-
-<option>
-Virtual
-</option>
-
+<select id="programType" required>
+<option value="">Select Type</option>
+<option>Physical</option>
+<option>Virtual</option>
 </select>
 
 </div>
 
-
 <div class="field">
+<label>Reporter's Name</label>
 
-<label>
-Reporter's Name
-</label>
-
-<select
-id="reporterName"
-required>
-
-<option>
-John Doe
-</option>
-
+<select id="reporterName" required>
+<option>John Doe</option>
 </select>
 
 </div>
 
 </div>
 
-
-
-<div class="field">
-
-<label>
-Program Coordinator
-</label>
-
-<input
-type="text"
-id="programCoordinator"
-required>
-
 </div>
 
 
+<!-- PROGRAM DETAILS -->
+
+<div class="form-card">
+
+<h3 class="card-title">
+Program Details
+</h3>
 
 <div class="field">
+<label>Program Coordinator</label>
+<input type="text" id="programCoordinator" required>
+</div>
 
-<label>
-What Went Well?
-</label>
+<div class="field">
+<label>What Went Well?</label>
 
 <textarea
 id="whatWentWell"
@@ -960,13 +932,8 @@ required>
 
 </div>
 
-
-
 <div class="field">
-
-<label>
-Challenges
-</label>
+<label>Challenges</label>
 
 <textarea
 id="challenges"
@@ -976,154 +943,95 @@ required>
 
 </div>
 
+</div>
 
 
-<h3 class="section-title">
+<!-- ATTENDANCE -->
+
+<div class="form-card">
+
+<h3 class="card-title">
 Attendance
 </h3>
 
-
 <div class="field">
-
-<label>
-Total Attendance
-</label>
-
-<input
-type="number"
-id="totalAttendance"
-required>
-
+<label>Total Attendance</label>
+<input type="number" id="totalAttendance" required>
 </div>
-
-
 
 <div class="form-row">
 
 <div class="field">
-
-<label>
-Number Of Male Present
-</label>
-
-<input
-type="number"
-id="malePresent">
-
+<label>Number Of Male Present</label>
+<input type="number" id="malePresent">
 </div>
-
 
 <div class="field">
-
-<label>
-Number Of Female Present
-</label>
-
-<input
-type="number"
-id="femalePresent">
+<label>Number Of Female Present</label>
+<input type="number" id="femalePresent">
+</div>
 
 </div>
 
 </div>
 
 
+<!-- RECORD OF BLESSINGS -->
 
-<h3 class="section-title">
+<div class="form-card">
+
+<h3 class="card-title">
 Record Of Blessings
 </h3>
 
+<div class="form-row">
 
+<div class="field">
+<label>Salvation</label>
+<input type="number" id="salvation">
+</div>
+
+<div class="field">
+<label>Santification</label>
+<input type="number" id="santification">
+</div>
+
+</div>
 
 <div class="form-row">
 
 <div class="field">
-
-<label>
-Salvation
-</label>
-
-<input
-type="number"
-id="salvation">
-
+<label>Holy Ghost Baptism</label>
+<input type="number" id="holyGhostBaptism">
 </div>
 
 <div class="field">
-
-<label>
-Santification
-</label>
-
-<input
-type="number"
-id="santification">
-
+<label>Re-anointing</label>
+<input type="number" id="reanointing">
 </div>
 
 </div>
-
-
 
 <div class="form-row">
 
 <div class="field">
-
-<label>
-Holy Ghost Baptism
-</label>
-
-<input
-type="number"
-id="holyGhostBaptism">
-
+<label>Healing</label>
+<input type="number" id="healing">
 </div>
 
 <div class="field">
-
-<label>
-Re-anointing
-</label>
-
-<input
-type="number"
-id="reanointing">
+<label>Others</label>
+<input type="number" id="others">
+</div>
 
 </div>
 
 </div>
 
 
+<!-- SUBMIT -->
 
-<div class="form-row">
-
-<div class="field">
-
-<label>
-Healing
-</label>
-
-<input
-type="number"
-id="healing">
-
-</div>
-
-<div class="field">
-
-<label>
-Others
-</label>
-
-<input
-type="number"
-id="others">
-
-</div>
-
-</div>
-
-
+<div class="form-card">
 
 <button
 type="submit"
@@ -1133,10 +1041,12 @@ Submit Report
 
 </button>
 
-
 <p id="successMsg"></p>
 
+</div>
+
 </form>
+
 </div>
 </div>
   <script>
