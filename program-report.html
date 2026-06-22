@@ -1490,26 +1490,26 @@ originalText;
 
 });
 
-window.onload = () => {
+const logoutBtn =
+document.getElementById("logoutBtn");
 
-  const logoutBtn =
-  document.getElementById("logoutBtn");
+if(logoutBtn){
 
-  if(logoutBtn){
+logoutBtn.addEventListener(
+"click",
+function(){
 
-    logoutBtn.onclick = () => {
+localStorage.removeItem(
+"formAccess"
+);
 
-      localStorage.removeItem("formAccess");
+location.reload();
 
-      location.reload();
+}
+);
 
-    };
-
-  }
-
-};
-
-
+}
+    
 </script>
 </body>
 
