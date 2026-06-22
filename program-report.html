@@ -560,7 +560,7 @@ padding:13px 16px;
 
 border:none;
 
-border-radius:14px;
+border-radius:10px;
 
 background:
 linear-gradient(
@@ -597,6 +597,48 @@ transform:translateY(-2px);
 margin-top:22px;
 
 margin-bottom:30px;
+
+}
+
+.back-home-btn{
+
+width:100%;
+
+margin-top:10px;
+
+padding:12px;
+
+border:none;
+
+border-radius:12px;
+
+background:#f8fafc;
+
+color:#475569;
+
+font-size:13px;
+
+font-family:"Bricolage Grotesque",sans-serif;
+
+font-weight:600;
+
+cursor:pointer;
+
+transition:.3s;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+gap:8px;
+
+}
+
+.back-home-btn:hover{
+
+background:#eef2f7;
 
 }
   
@@ -819,6 +861,15 @@ placeholder="Password">
 Login
 </button>
 
+<button
+type="button"
+class="back-home-btn"
+onclick="window.location.href='index.html'">
+
+<i class="fas fa-arrow-left"></i>
+Go Back
+
+</button>
 
 <p id="loginError"></p>
 
@@ -1096,7 +1147,7 @@ Record Of Blessings
 type="submit"
 id="submitBtn">
 
-Submit Report
+Submit Program Report
 
 </button>
 
