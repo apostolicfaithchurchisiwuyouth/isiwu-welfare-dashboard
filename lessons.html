@@ -152,7 +152,65 @@ user-select:none;
 
 }
 
+.archive-fab{
 
+position:fixed;
+
+right:20px;
+
+bottom:20px;
+
+width:58px;
+
+height:58px;
+
+border-radius:50%;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+text-decoration:none;
+
+background:
+linear-gradient(
+135deg,
+#4A0754,
+#0A0016
+);
+
+color:white;
+
+font-size:22px;
+
+box-shadow:
+0 15px 35px rgba(0,0,0,.25);
+
+z-index:999;
+
+transition:.3s;
+
+}
+
+.archive-fab:hover{
+
+transform:translateY(-3px);
+
+}
+
+.archive-fab:active{
+
+transform:scale(.95);
+
+}
+
+.archive-fab{
+
+-webkit-tap-highlight-color:transparent;
+
+}
 
 /* CONTAINER */
 
@@ -506,7 +564,11 @@ type="audio/mpeg">
 
 </div>
 
+<a href="lesson-archive.html" class="archive-fab">
 
+<i class="fas fa-book-open"></i>
+
+</a>
 
 <script>
 
