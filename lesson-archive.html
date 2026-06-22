@@ -128,11 +128,14 @@ padding:18px;
 box-shadow:0 8px 25px rgba(15,23,42,.05);
 cursor:pointer;
 transition:.3s;
+outline:none;
+-webkit-tap-highlight-color:transparent;
 }
 
-.lesson-card:hover{
-transform:translateY(-3px);
-box-shadow:0 18px 35px rgba(15,23,42,.08);
+.lesson-card:focus,
+.lesson-card:active{
+outline:none;
+box-shadow:0 8px 25px rgba(15,23,42,.05);
 }
 
 .lesson-topic{
@@ -186,6 +189,8 @@ color:white;
 padding:8px 14px;
 border-radius:20px;
 cursor:pointer;
+outline:none;
+-webkit-tap-highlight-color:transparent;
 }
 
 
@@ -209,6 +214,8 @@ padding:10px 18px;
 border-radius:30px;
 background:#eee;
 cursor:pointer;
+outline:none;
+-webkit-tap-highlight-color:transparent;
 }
 
 
@@ -259,6 +266,8 @@ color:white;
 border-radius:30px;
 text-decoration:none;
 font-size:12px;
+outline:none;
+-webkit-tap-highlight-color:transparent;
 }
 
 @media(max-width:600px){
@@ -412,12 +421,12 @@ ${lesson.topic}
 <div class="lesson-meta">
 
 <span>
-📅 ${lesson.date}
+Uploaded on: ${lesson.date}
 </span>
 
 
 <span>
-📝 ${lesson.id}
+📝 Combined Lesson Note: ${lesson.id}
 </span>
 
 
@@ -474,28 +483,7 @@ lesson.topic;
 
 
 document.getElementById("lessonDetails")
-.innerHTML = `
-
-<div class="detail-box">
-
-<h4>Lesson ID</h4>
-
-<p>${lesson.id}</p>
-
-</div>
-
-
-<div class="detail-box">
-
-<h4>Date</h4>
-
-<p>${lesson.date}</p>
-
-</div>
-
-`;
-
-
+.innerHTML = "";
 
 
 
@@ -505,34 +493,10 @@ document.getElementById("senior")
 
 <div class="detail-box">
 
-<h4>Senior Memory Verse</h4>
+<h4>Memory Verse</h4>
 
 <p>
 ${lesson.seniorMemoryVerse}
-</p>
-
-</div>
-
-
-
-<div class="detail-box">
-
-<h4>Senior Bible Text</h4>
-
-<p>
-${lesson.seniorBibleText}
-</p>
-
-</div>
-
-
-
-<div class="detail-box">
-
-<h4>Senior Lesson</h4>
-
-<p>
-${lesson.seniorLesson}
 </p>
 
 </div>
@@ -545,13 +509,36 @@ target="_blank">
 
 <i class="fa-solid fa-volume-high"></i>
 
-Play Yoruba Memory Verse Audio
+Play Yoruba Audio
 
 </a>
 
 
-`;
 
+<div class="detail-box">
+
+<h4>Bible Text</h4>
+
+<p>
+${lesson.seniorBibleText}
+</p>
+
+</div>
+
+
+
+<div class="detail-box">
+
+<h4>Lesson</h4>
+
+<p>
+${lesson.seniorLesson}
+</p>
+
+</div>
+
+
+`;
 
 
 
@@ -563,34 +550,10 @@ document.getElementById("junior")
 
 <div class="detail-box">
 
-<h4>Junior Memory Verse</h4>
+<h4>Memory Verse</h4>
 
 <p>
 ${lesson.juniorMemoryVerse}
-</p>
-
-</div>
-
-
-
-<div class="detail-box">
-
-<h4>Junior Bible Text</h4>
-
-<p>
-${lesson.juniorBibleText}
-</p>
-
-</div>
-
-
-
-<div class="detail-box">
-
-<h4>Junior Lesson</h4>
-
-<p>
-${lesson.juniorLesson}
 </p>
 
 </div>
@@ -603,13 +566,37 @@ target="_blank">
 
 <i class="fa-solid fa-volume-high"></i>
 
-Play Yoruba Memory Verse Audio
+Play Yoruba Audio
 
 </a>
 
 
-`;
 
+
+<div class="detail-box">
+
+<h4>Bible Text</h4>
+
+<p>
+${lesson.juniorBibleText}
+</p>
+
+</div>
+
+
+
+<div class="detail-box">
+
+<h4>Lesson</h4>
+
+<p>
+${lesson.juniorLesson}
+</p>
+
+</div>
+
+
+`;
 
 
 window.scrollTo({
