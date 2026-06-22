@@ -114,6 +114,126 @@ color:#64748b;
 line-height:1.6;
 }
 
+/* =========================
+SEARCH BAR
+========================= */
+
+.search-wrapper{
+
+margin-top:20px;
+position:relative;
+
+}
+
+
+.search-box{
+
+width:100%;
+height:52px;
+
+border-radius:18px;
+
+border:1px solid rgba(15,23,42,.08);
+
+background:rgba(255,255,255,.85);
+
+backdrop-filter:blur(15px);
+
+display:flex;
+align-items:center;
+
+padding:0 18px;
+
+gap:12px;
+
+box-shadow:
+0 10px 30px rgba(0,0,0,.05);
+
+transition:.3s;
+
+}
+
+
+.search-box:focus-within{
+
+border-color:#4A0754;
+
+box-shadow:
+0 15px 35px rgba(74,7,84,.15);
+
+}
+
+
+
+.search-box i{
+
+color:#4A0754;
+
+font-size:16px;
+
+}
+
+
+
+.search-box input{
+
+border:none;
+outline:none;
+
+width:100%;
+
+background:transparent;
+
+font-family:"DM Sans",sans-serif;
+
+font-size:13px;
+
+color:#0A0016;
+
+}
+
+
+
+.search-box input::placeholder{
+
+color:#94a3b8;
+
+}
+
+
+
+.search-result{
+
+margin-top:10px;
+
+font-size:11px;
+
+color:#64748b;
+
+padding-left:5px;
+
+}
+
+
+
+@media(max-width:600px){
+
+.search-box{
+
+height:48px;
+
+border-radius:16px;
+
+}
+
+.search-box input{
+
+font-size:12px;
+
+}
+
+}
+
 #archiveGrid{
 display:grid;
 gap:16px;
@@ -314,8 +434,37 @@ Back
 <div class="container">
 
 
+<div class="search-wrapper">
+
+<div class="search-box">
+
+<i class="fa-solid fa-magnifying-glass"></i>
+
+<input 
+type="text"
+id="lessonSearch"
+placeholder="Search lesson topic or ID..."
+oninput="searchLessons()"
+/>
+
+</div>
+
+
+<div class="search-result" id="searchResult">
+
+</div>
+
+
+</div>
+
+
+
 <div id="archiveGrid">
-<div class="loading">Loading lessons...</div>
+
+<div class="loading">
+Loading lessons...
+</div>
+
 </div>
 
 
@@ -405,7 +554,7 @@ grid.innerHTML="";
 
 
 
-data.lessons.reverse().forEach(lesson=>{
+allLessons.reverse().forEach(lesson=>{
 
 
 grid.innerHTML += `
@@ -429,7 +578,7 @@ Uploaded on: ${lesson.date}
 
 
 <span>
-📝 ${lesson.id}
+📝 ID: ${lesson.id}
 </span>
 
 
@@ -455,7 +604,127 @@ grid.innerHTML =
 
 }
 
+function searchLessons(){
 
+
+const value =
+document
+.getElementById("lessonSearch")
+.value
+.toLowerCase()
+.trim();
+
+
+
+const grid =
+document.getElementById("archiveGrid");
+
+
+
+let filtered =
+allLessons.filter(lesson=>{
+
+
+return (
+
+String(lesson.id)
+.toLowerCase()
+.includes(value)
+
+||
+
+String(lesson.topic)
+.toLowerCase()
+.includes(value)
+
+);
+
+
+});
+
+
+
+grid.innerHTML="";
+
+
+
+if(filtered.length === 0){
+
+
+grid.innerHTML = `
+
+<div class="loading">
+
+No lesson found.
+
+</div>
+
+`;
+
+
+document.getElementById("searchResult")
+.innerHTML =
+"0 lessons found";
+
+
+return;
+
+}
+
+
+
+filtered.forEach(lesson=>{
+
+
+grid.innerHTML += `
+
+
+<div class="lesson-card"
+
+onclick="openLesson('${lesson.id}')">
+
+
+<div class="lesson-topic">
+
+${lesson.topic}
+
+</div>
+
+
+
+<div class="lesson-meta">
+
+
+<span>
+Uploaded on: ${lesson.date}
+</span>
+
+
+
+<span>
+📝 ${lesson.id}
+</span>
+
+
+</div>
+
+
+</div>
+
+
+`;
+
+
+});
+
+
+
+document.getElementById("searchResult")
+.innerHTML =
+filtered.length + " lessons found";
+
+
+}
 
 
 
