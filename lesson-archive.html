@@ -158,6 +158,109 @@ color:#64748b;
 font-size:.7rem;
 }
 
+.lesson-viewer{
+display:none;
+margin-top:25px;
+background:white;
+border-radius:20px;
+padding:20px;
+box-shadow:0 15px 40px rgba(0,0,0,.08);
+}
+
+.viewer-header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:15px;
+}
+
+.viewer-header h3{
+font-family:"Bricolage Grotesque",sans-serif;
+font-size:15px;
+}
+
+.close-btn{
+border:none;
+background:#4A0754;
+color:white;
+padding:8px 14px;
+border-radius:20px;
+cursor:pointer;
+}
+
+
+.lesson-info{
+font-size:12px;
+line-height:1.8;
+color:#334155;
+}
+
+
+.tabs{
+display:flex;
+gap:10px;
+margin:20px 0;
+}
+
+
+.tab-btn{
+border:none;
+padding:10px 18px;
+border-radius:30px;
+background:#eee;
+cursor:pointer;
+}
+
+
+.tab-btn.active{
+background:#4A0754;
+color:white;
+}
+
+
+.tab-content{
+display:none;
+}
+
+
+.tab-content.active{
+display:block;
+}
+
+
+.detail-box{
+background:#f8fafc;
+padding:14px;
+border-radius:15px;
+margin-bottom:12px;
+}
+
+
+.detail-box h4{
+font-size:12px;
+color:#4A0754;
+margin-bottom:5px;
+}
+
+
+.detail-box p{
+font-size:12px;
+line-height:1.7;
+}
+
+
+.audio-btn{
+display:inline-flex;
+align-items:center;
+gap:8px;
+padding:10px 15px;
+background:#0A0016;
+color:white;
+border-radius:30px;
+text-decoration:none;
+font-size:12px;
+}
+
 @media(max-width:600px){
 
 .container{
@@ -209,66 +312,360 @@ Browse previous combined lesson notes, memory verses, Bible texts and Yoruba aud
 <div class="loading">Loading lessons...</div>
 </div>
 
+
+<div class="lesson-viewer" id="lessonViewer">
+
+<div class="viewer-header">
+
+<h3 id="viewerTitle">
+Lesson Details
+</h3>
+
+<button class="close-btn" onclick="closeLesson()">
+Close
+</button>
+
+</div>
+
+
+<div class="lesson-info" id="lessonDetails">
+
+</div>
+
+
+<div class="tabs">
+
+<button class="tab-btn active" onclick="showTab('senior')">
+Senior
+</button>
+
+
+<button class="tab-btn" onclick="showTab('junior')">
+Junior
+</button>
+
+
+</div>
+
+
+<div id="senior" class="tab-content active">
+
+</div>
+
+
+<div id="junior" class="tab-content">
+
+</div>
+
+
+</div>
+
 </div>
 
 <script>
 
-/*
-Replace the URL below with your Lesson Archive Apps Script URL
-ending with ?action=getLessons
-*/
-
 const LESSON_URL =
 "https://script.google.com/macros/s/AKfycbw1mVwpgAcIOSNbpgzy52TFyozEGMtWWwVWUDFaofGNzpsguBIaKR4q1dXVtgVHO2xZ1w/exec?action=getLessons";
 
+
+let allLessons = [];
+
+
+
 async function loadLessons(){
 
-const grid = document.getElementById("archiveGrid");
+const grid =
+document.getElementById("archiveGrid");
+
 
 try{
 
-const response = await fetch(LESSON_URL);
-const data = await response.json();
 
-grid.innerHTML = "";
+const response =
+await fetch(LESSON_URL);
 
-if(!data.lessons || data.lessons.length === 0){
 
-grid.innerHTML =
-'<div class="loading">No lessons found.</div>';
+const data =
+await response.json();
 
-return;
-}
+
+
+allLessons =
+data.lessons;
+
+
+
+grid.innerHTML="";
+
+
 
 data.lessons.reverse().forEach(lesson=>{
 
+
 grid.innerHTML += `
-<div class="lesson-card" data-id="${lesson.id}">
+
+<div class="lesson-card"
+onclick="openLesson('${lesson.id}')">
+
 
 <div class="lesson-topic">
+
 ${lesson.topic}
+
 </div>
+
 
 <div class="lesson-meta">
-<span>📅 ${lesson.date}</span>
-<span>📝 Lesson ID: ${lesson.id}</span>
-</div>
+
+<span>
+📅 ${lesson.date}
+</span>
+
+
+<span>
+📝 ${lesson.id}
+</span>
+
 
 </div>
+
+
+</div>
+
 `;
 
 });
 
+
 }catch(error){
 
+
 grid.innerHTML =
-'<div class="loading">Unable to load lessons.</div>';
+"Unable to load lessons";
 
-console.log(error);
+
+}
+
 
 }
 
+
+
+
+
+
+function openLesson(id){
+
+
+const lesson =
+allLessons.find(
+item=>item.id == id
+);
+
+
+
+if(!lesson) return;
+
+
+
+document.getElementById("lessonViewer")
+.style.display="block";
+
+
+
+document.getElementById("viewerTitle")
+.innerHTML =
+lesson.topic;
+
+
+
+document.getElementById("lessonDetails")
+.innerHTML = `
+
+<div class="detail-box">
+
+<h4>Lesson ID</h4>
+
+<p>${lesson.id}</p>
+
+</div>
+
+
+<div class="detail-box">
+
+<h4>Date</h4>
+
+<p>${lesson.date}</p>
+
+</div>
+
+`;
+
+
+
+
+
+document.getElementById("senior")
+.innerHTML = `
+
+
+<div class="detail-box">
+
+<h4>Senior Memory Verse</h4>
+
+<p>
+${lesson.seniorMemoryVerse}
+</p>
+
+</div>
+
+
+
+<div class="detail-box">
+
+<h4>Senior Bible Text</h4>
+
+<p>
+${lesson.seniorBibleText}
+</p>
+
+</div>
+
+
+
+<div class="detail-box">
+
+<h4>Senior Lesson</h4>
+
+<p>
+${lesson.seniorLesson}
+</p>
+
+</div>
+
+
+
+<a class="audio-btn"
+href="${lesson.seniorYorubaAudio}"
+target="_blank">
+
+<i class="fa-solid fa-volume-high"></i>
+
+Play Yoruba Audio
+
+</a>
+
+
+`;
+
+
+
+
+
+
+document.getElementById("junior")
+.innerHTML = `
+
+
+<div class="detail-box">
+
+<h4>Junior Memory Verse</h4>
+
+<p>
+${lesson.juniorMemoryVerse}
+</p>
+
+</div>
+
+
+
+<div class="detail-box">
+
+<h4>Junior Bible Text</h4>
+
+<p>
+${lesson.juniorBibleText}
+</p>
+
+</div>
+
+
+
+<div class="detail-box">
+
+<h4>Junior Lesson</h4>
+
+<p>
+${lesson.juniorLesson}
+</p>
+
+</div>
+
+
+
+<a class="audio-btn"
+href="${lesson.juniorYorubaAudio}"
+target="_blank">
+
+<i class="fa-solid fa-volume-high"></i>
+
+Play Yoruba Audio
+
+</a>
+
+
+`;
+
+
+
+window.scrollTo({
+top:
+document.getElementById("lessonViewer")
+.offsetTop - 20,
+behavior:"smooth"
+});
+
+
 }
+
+
+
+
+
+function showTab(tab){
+
+
+document.querySelectorAll(".tab-content")
+.forEach(x=>x.classList.remove("active"));
+
+
+document.querySelectorAll(".tab-btn")
+.forEach(x=>x.classList.remove("active"));
+
+
+
+document.getElementById(tab)
+.classList.add("active");
+
+
+
+event.target.classList.add("active");
+
+
+}
+
+
+
+
+
+function closeLesson(){
+
+document.getElementById("lessonViewer")
+.style.display="none";
+
+}
+
+
 
 loadLessons();
 
