@@ -127,7 +127,7 @@ background:#4a0754;
 
 color:white;
 
-font-size:55px;
+font-size:30px;
 
 display:flex;
 
@@ -556,7 +556,7 @@ color:#0a0016;
 
 width:100%;
 
-padding:14px;
+padding:13px 16px;
 
 border:none;
 
@@ -569,15 +569,20 @@ linear-gradient(
 #4a0754
 );
 
-color:white;
+color:#fff;
 
-font-size:14px;
+font-family:"Bricolage Grotesque",sans-serif;
 
-font-weight:600;
+font-size:13px;
+
+font-weight:700;
 
 cursor:pointer;
 
 transition:.3s;
+
+box-shadow:
+0 10px 25px rgba(74,7,84,.18);
 
 }
 
@@ -586,23 +591,58 @@ transition:.3s;
 transform:translateY(-2px);
 
 }
+
+.submit-area{
+
+margin-top:22px;
+
+margin-bottom:30px;
+
+}
+  
 #successMsg{
 
 display:none;
 
-margin-top:16px;
+margin-top:12px;
 
-padding:14px;
+padding:10px 12px;
 
 border-radius:12px;
 
-background:#ecfdf5;
-
-color:#166534;
+font-size:12px;
 
 font-weight:600;
 
-text-align:center;
+font-family:"Bricolage Grotesque",sans-serif;
+
+line-height:1.4;
+
+}
+
+@media(max-width:600px){
+
+#successMsg{
+
+font-size:11px;
+
+padding:8px 10px;
+
+}
+
+#submitBtn{
+
+font-size:12px;
+
+padding:12px;
+
+}
+
+.card-title{
+
+font-size:14px;
+
+}
 
 }
 
@@ -651,13 +691,17 @@ border:1px solid rgba(74,7,84,.06);
 
 .card-title{
 
-font-size:14px;
+font-family:"Bricolage Grotesque",sans-serif;
+
+font-size:15px;
 
 font-weight:700;
 
-margin-bottom:16px;
+letter-spacing:-0.3px;
 
 color:#0a0016;
+
+margin-bottom:16px;
 
 }
 
@@ -1046,7 +1090,7 @@ Record Of Blessings
 
 <!-- SUBMIT -->
 
-<div class="form-card">
+<div class="submit-area">
 
 <button
 type="submit"
@@ -1056,10 +1100,10 @@ Submit Report
 
 </button>
 
-<p id="successMsg"></p>
+<div id="successMsg"></div>
 
 </div>
-
+  
 </form>
 
 </div>
