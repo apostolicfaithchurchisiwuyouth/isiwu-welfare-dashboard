@@ -152,27 +152,110 @@ user-select:none;
 
 }
 
-.lesson-actions{
-
-margin-top:24px;
+.archive-card{
 
 display:flex;
 
-justify-content:center;
+align-items:center;
+
+justify-content:space-between;
+
+gap:14px;
+
+padding:16px 18px;
+
+margin-top:24px;
+
+background:#fff;
+
+border:1px solid rgba(74,7,84,.08);
+
+border-radius:18px;
+
+box-shadow:
+0 8px 25px rgba(15,23,42,.05);
+
+transition:.3s;
 
 }
 
-.archive-btn{
+.archive-card:hover{
 
-display:inline-flex;
+transform:translateY(-2px);
+
+box-shadow:
+0 15px 35px rgba(15,23,42,.08);
+
+}
+
+.archive-card-icon{
+
+width:44px;
+
+height:44px;
+
+border-radius:14px;
+
+display:flex;
 
 align-items:center;
 
-gap:10px;
+justify-content:center;
 
-padding:12px 18px;
+background:
+linear-gradient(
+135deg,
+rgba(74,7,84,.08),
+rgba(10,0,22,.08)
+);
 
-border-radius:14px;
+color:#4A0754;
+
+font-size:18px;
+
+flex-shrink:0;
+
+}
+
+.archive-card-content{
+
+flex:1;
+
+min-width:0;
+
+}
+
+.archive-card-content h3{
+
+margin:0 0 4px;
+
+font-family:"Bricolage Grotesque",sans-serif;
+
+font-size:15px;
+
+font-weight:700;
+
+color:#0A0016;
+
+}
+
+.archive-card-content p{
+
+margin:0;
+
+font-size:12px;
+
+line-height:1.5;
+
+color:#64748b;
+
+}
+
+.archive-card-btn{
+
+padding:10px 14px;
+
+border-radius:12px;
 
 text-decoration:none;
 
@@ -187,20 +270,51 @@ color:#fff;
 
 font-family:"Bricolage Grotesque",sans-serif;
 
-font-size:14px;
+font-size:12px;
 
 font-weight:600;
 
-box-shadow:
-0 10px 25px rgba(74,7,84,.18);
+white-space:nowrap;
 
 transition:.3s;
 
 }
 
-.archive-btn:hover{
+.archive-card-btn:hover{
 
-transform:translateY(-2px);
+transform:translateY(-1px);
+
+}
+
+@media(max-width:600px){
+
+.archive-card{
+
+padding:14px;
+
+gap:12px;
+
+}
+
+.archive-card-content h3{
+
+font-size:14px;
+
+}
+
+.archive-card-content p{
+
+font-size:11px;
+
+}
+
+.archive-card-btn{
+
+padding:9px 12px;
+
+font-size:11px;
+
+}
 
 }
 
@@ -435,14 +549,26 @@ width:100%;
 
 
 <br>
-<div class="lesson-actions">
+<div class="archive-card">
 
-<a href="lesson-archive.html" class="archive-btn">
-
+<div class="archive-card-icon">
 <i class="fas fa-book-open"></i>
+</div>
 
-View Previous Lessons
+<div class="archive-card-content">
 
+<h3>
+All Combined Lessons
+</h3>
+
+<p>
+Browse all available combined lesson notes, memory verses, Bible texts and Yoruba audio memory verses.
+</p>
+
+</div>
+
+<a href="lesson-archive.html" class="archive-card-btn">
+Open All Combined Lessons
 </a>
 
 </div>
