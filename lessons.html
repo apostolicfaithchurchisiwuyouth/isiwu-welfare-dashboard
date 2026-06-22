@@ -290,25 +290,21 @@ transform:translateY(-1px);
 
 .archive-card{
 
-display:flex;
-
-flex-direction:column;
-
-align-items:flex-start;
+display:block;
 
 padding:16px;
 
-gap:12px;
-
 }
 
-.archive-card-icon{
+.archive-header{
 
-width:42px;
+display:flex;
 
-height:42px;
+align-items:center;
 
-font-size:16px;
+gap:10px;
+
+margin-bottom:10px;
 
 }
 
@@ -320,17 +316,21 @@ width:100%;
 
 .archive-card-content h3{
 
+margin:0;
+
 font-size:14px;
 
-margin-bottom:4px;
+font-family:"Bricolage Grotesque",sans-serif;
 
 }
 
 .archive-card-content p{
 
+margin-top:10px;
+
 font-size:11px;
 
-line-height:1.5;
+line-height:1.6;
 
 }
 
@@ -338,17 +338,13 @@ line-height:1.5;
 
 width:100%;
 
-display:flex;
+margin-top:14px;
 
-align-items:center;
+display:flex;
 
 justify-content:center;
 
-padding:11px;
-
-font-size:12px;
-
-border-radius:12px;
+align-items:center;
 
 }
 
@@ -589,29 +585,7 @@ width:100%;
 
 
 <div class="container">
-<div class="archive-card">
 
-<div class="archive-card-icon">
-<i class="fas fa-book-open"></i>
-</div>
-
-<div class="archive-card-content">
-
-<h3>
-All Combined Lessons
-</h3>
-
-<p>
-Browse all available combined lesson notes, memory verses, Bible texts and Yoruba audio memory verses.
-</p>
-
-</div>
-
-<a href="lesson-archive.html" class="archive-card-btn">
-Open All Combined Lessons
-</a>
-
-</div>
 <div class="tabs">
 
 <button class="tab active" onclick="switchClass('Senior')" style="font-family:Bricolage Grotesque;">Senior</button>
@@ -727,7 +701,36 @@ type="audio/mpeg">
 </div>
 
 
+<div class="archive-card">
 
+<div class="archive-header">
+
+<div class="archive-card-icon">
+<i class="fas fa-book-open"></i>
+</div>
+
+<div class="archive-card-content">
+
+<h3>All Combined Lessons</h3>
+
+<p>
+Browse all available lesson notes,
+memory verses, Bible texts and
+Yoruba audio archives.
+</p>
+
+</div>
+
+</div>
+
+<a href="lesson-archive.html"
+class="archive-card-btn">
+
+Open All Combined Lessons
+
+</a>
+
+</div>
 </div>
 
 
