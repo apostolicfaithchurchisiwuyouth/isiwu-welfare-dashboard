@@ -1490,6 +1490,25 @@ originalText;
 
 });
 
+window.onload = () => {
+
+  const logoutBtn =
+  document.getElementById("logoutBtn");
+
+  if(logoutBtn){
+
+    logoutBtn.onclick = () => {
+
+      localStorage.removeItem("formAccess");
+
+      location.reload();
+
+    };
+
+  }
+
+};
+
 
 </script>
 </body>
