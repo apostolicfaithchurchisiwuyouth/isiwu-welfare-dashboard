@@ -158,32 +158,30 @@ display:flex;
 
 align-items:center;
 
-gap:18px;
-
-padding:18px;
+padding:18px 22px;
 
 background:#fff;
 
-border:1px solid rgba(74,7,84,.08);
+border:1px solid rgba(15,23,42,.08);
 
-border-radius:18px;
+border-radius:20px;
 
 box-shadow:
-0 8px 25px rgba(15,23,42,.05);
+0 8px 30px rgba(15,23,42,.05);
 
 margin-top:24px;
+
+gap:18px;
 
 }
 
 .archive-card-icon{
 
-width:48px;
+width:50px;
 
-height:48px;
+height:50px;
 
-flex-shrink:0;
-
-border-radius:14px;
+min-width:50px;
 
 display:flex;
 
@@ -191,12 +189,9 @@ align-items:center;
 
 justify-content:center;
 
-background:
-linear-gradient(
-135deg,
-rgba(74,7,84,.08),
-rgba(10,0,22,.08)
-);
+border-radius:14px;
+
+background:#f8f7ff;
 
 color:#4A0754;
 
@@ -208,7 +203,11 @@ font-size:18px;
 
 flex:1;
 
-min-width:0;
+display:flex;
+
+flex-direction:column;
+
+justify-content:center;
 
 }
 
@@ -240,22 +239,17 @@ color:#64748b;
 
 .archive-card-btn{
 
-flex-shrink:0;
+margin-left:auto;
 
-padding:11px 16px;
+padding:11px 18px;
 
 border-radius:12px;
 
-text-decoration:none;
-
-background:
-linear-gradient(
-135deg,
-#4A0754,
-#0A0016
-);
+background:#0f172a;
 
 color:#fff;
+
+text-decoration:none;
 
 font-family:"Bricolage Grotesque",sans-serif;
 
@@ -264,6 +258,16 @@ font-size:12px;
 font-weight:600;
 
 white-space:nowrap;
+
+transition:.3s;
+
+}
+
+.archive-card-btn:hover{
+
+transform:translateY(-2px);
+
+background:#020617;
 
 }
   
