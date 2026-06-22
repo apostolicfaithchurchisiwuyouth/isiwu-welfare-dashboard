@@ -158,13 +158,9 @@ display:flex;
 
 align-items:center;
 
-justify-content:space-between;
+gap:18px;
 
-gap:14px;
-
-padding:16px 18px;
-
-margin-top:24px;
+padding:18px;
 
 background:#fff;
 
@@ -175,24 +171,17 @@ border-radius:18px;
 box-shadow:
 0 8px 25px rgba(15,23,42,.05);
 
-transition:.3s;
-
-}
-
-.archive-card:hover{
-
-transform:translateY(-2px);
-
-box-shadow:
-0 15px 35px rgba(15,23,42,.08);
+margin-top:24px;
 
 }
 
 .archive-card-icon{
 
-width:44px;
+width:48px;
 
-height:44px;
+height:48px;
+
+flex-shrink:0;
 
 border-radius:14px;
 
@@ -212,8 +201,6 @@ rgba(10,0,22,.08)
 color:#4A0754;
 
 font-size:18px;
-
-flex-shrink:0;
 
 }
 
@@ -245,7 +232,7 @@ margin:0;
 
 font-size:12px;
 
-line-height:1.5;
+line-height:1.6;
 
 color:#64748b;
 
@@ -253,9 +240,11 @@ color:#64748b;
 
 .archive-card-btn{
 
-padding:10px 14px;
+flex-shrink:0;
 
-border-radius:10px;
+padding:11px 16px;
+
+border-radius:12px;
 
 text-decoration:none;
 
@@ -276,16 +265,8 @@ font-weight:600;
 
 white-space:nowrap;
 
-transition:.3s;
-
 }
-
-.archive-card-btn:hover{
-
-transform:translateY(-1px);
-
-}
-
+  
 @media(max-width:600px){
 
 .archive-card{
@@ -585,7 +566,24 @@ width:100%;
 
 
 <div class="container">
+<div class="archive-card">
 
+<div class="archive-header">
+
+<div class="archive-card-icon">
+<i class="fas fa-book-open"></i>
+</div>
+
+<div class="archive-card-content">
+
+<h3>All Combined Lessons</h3>
+
+<p>
+Browse all available combined lesson notes and
+Yoruba audio memory verses.
+</p>
+
+</div> <br>
 <div class="tabs">
 
 <button class="tab active" onclick="switchClass('Senior')" style="font-family:Bricolage Grotesque;">Senior</button>
@@ -701,24 +699,7 @@ type="audio/mpeg">
 </div>
 
 
-<div class="archive-card">
 
-<div class="archive-header">
-
-<div class="archive-card-icon">
-<i class="fas fa-book-open"></i>
-</div>
-
-<div class="archive-card-content">
-
-<h3>All Combined Lessons</h3>
-
-<p>
-Browse all available combined lesson notes and
-Yoruba audio memory verses.
-</p>
-
-</div>
 
 </div>
 
