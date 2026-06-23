@@ -245,20 +245,49 @@ margin-bottom:12px;
 
 display:block;
 
-padding:12px;
+padding:14px;
 
-border-radius:14px;
+border-radius:16px;
 
 background:#f8fafc;
 
-margin-bottom:8px;
+margin-bottom:10px;
 
 font-size:13px;
 
 cursor:pointer;
 
+border:1px solid transparent;
+
+transition:.25s ease;
+
+-webkit-tap-highlight-color:transparent;
+
 }
 
+
+
+.option:hover{
+
+border:1px solid rgba(74,7,84,.15);
+
+transform:translateY(-2px);
+
+box-shadow:0 8px 20px rgba(74,7,84,.06);
+
+}
+
+
+
+.option:has(input:checked){
+
+background:rgba(74,7,84,.08);
+
+border:1px solid #4A0754;
+
+box-shadow:0 10px 20px rgba(74,7,84,.08);
+
+}
 
 
 .option input{
@@ -273,7 +302,19 @@ margin-right:8px;
 .result{
 
 display:none;
+
 text-align:center;
+
+padding:30px;
+
+background:
+linear-gradient(
+135deg,
+#ffffff,
+#faf5ff
+);
+
+border:1px solid rgba(74,7,84,.08);
 
 }
 
@@ -289,20 +330,133 @@ font-family:"Bricolage Grotesque";
 
 .big{
 
-font-size:25px;
+font-size:42px;
+
 font-weight:800;
+
 color:#4A0754;
-margin:10px;
+
+margin:15px 0;
+
+font-family:
+"Bricolage Grotesque";
 
 }
 
 
 
-.loading{
+.loading-btn{
 
-text-align:center;
-padding:30px;
-color:#64748b;
+opacity:.75;
+
+pointer-events:none;
+
+}
+
+
+
+.quiz-hero{
+
+position:relative;
+
+overflow:hidden;
+
+background:
+linear-gradient(
+135deg,
+#4A0754,
+#23022b
+);
+
+color:white;
+
+padding:22px;
+
+border-radius:22px;
+
+margin-bottom:18px;
+
+}
+
+
+
+.quiz-hero::before{
+
+content:"";
+
+position:absolute;
+
+right:-40px;
+
+top:-40px;
+
+width:140px;
+
+height:140px;
+
+border-radius:50%;
+
+background:rgba(255,255,255,.08);
+
+}
+
+
+
+.hero-badge{
+
+display:inline-flex;
+
+align-items:center;
+
+gap:8px;
+
+padding:8px 12px;
+
+border-radius:999px;
+
+background:rgba(255,255,255,.12);
+
+font-size:11px;
+
+margin-bottom:12px;
+
+}
+
+
+
+.hero-title{
+
+font-family:"Bricolage Grotesque";
+
+font-size:22px;
+
+font-weight:800;
+
+margin-bottom:8px;
+
+}
+
+
+
+.hero-text{
+
+font-size:12px;
+
+line-height:1.7;
+
+opacity:.9;
+
+}
+
+
+
+.question{
+
+margin-bottom:28px;
+
+padding-bottom:18px;
+
+border-bottom:1px solid rgba(0,0,0,.05);
 
 }
 
@@ -344,6 +498,25 @@ Back
 
 
 <div class="container">
+
+
+
+<div class="quiz-hero">
+
+<div class="hero-badge">
+<i class="fa-solid fa-trophy"></i>
+Weekly Bible Quiz
+</div>
+
+<div class="hero-title">
+Test Your Knowledge
+</div>
+
+<div class="hero-text">
+Answer the weekly lesson questions and earn points automatically.
+</div>
+
+</div>
 
 
 
@@ -397,7 +570,10 @@ Add My Name
 
 
 
-<button class="primary" onclick="submitQuiz()">
+<button
+class="primary"
+id="submitBtn"
+onclick="submitQuiz()">
 
 Submit Quiz
 
@@ -415,8 +591,15 @@ Submit Quiz
 <div class="card result" id="resultBox">
 
 
+<div style="
+font-size:55px;
+margin-bottom:10px;
+">
+🏆
+</div>
+
 <h2>
-🎉 Quiz Completed
+Quiz Completed Successfully
 </h2>
 
 
@@ -508,13 +691,42 @@ data.questions;
 box.innerHTML =
 `
 
-<h2>
-Weekly Quiz
+<div style="
+display:flex;
+justify-content:space-between;
+align-items:center;
+flex-wrap:wrap;
+gap:10px;
+">
+
+<div>
+
+<h2 style="
+margin-bottom:6px;
+">
+Lesson ${data.lessonNo}
 </h2>
 
 <p>
-Lesson ${data.lessonNo}
+${data.questionCount} Questions Available
 </p>
+
+</div>
+
+<div style="
+background:#f8fafc;
+padding:10px 14px;
+border-radius:14px;
+font-size:12px;
+font-weight:600;
+color:#4A0754;
+">
+
+🏆 Earn Points
+
+</div>
+
+</div>
 
 `;
 
@@ -665,11 +877,13 @@ ${q.optionD}
 
 async function addNewMember(){
 
+const btn =
+event.target;
 
 const name =
-document.getElementById("newName").value.trim();
-
-
+document.getElementById("newName")
+.value
+.trim();
 
 if(!name){
 
@@ -679,7 +893,12 @@ return;
 
 }
 
+btn.innerHTML =
+'<i class="fa-solid fa-spinner fa-spin"></i> Adding Name...';
 
+btn.classList.add("loading-btn");
+
+try{
 
 const res =
 await fetch(API,{
@@ -696,22 +915,30 @@ name:name
 
 });
 
-
-
 const data =
 await res.json();
 
-
-alert(
-"Added successfully"
-);
-
+alert("Name added successfully");
 
 loadMembers();
 
+document
+.getElementById("newName")
+.value="";
+
+}
+catch(error){
+
+alert("Unable to add name");
 
 }
 
+btn.innerHTML =
+'Add My Name';
+
+btn.classList.remove("loading-btn");
+
+}
 
 
 
@@ -719,38 +946,42 @@ loadMembers();
 
 async function submitQuiz(){
 
+const submitBtn =
+document.getElementById("submitBtn");
+
+submitBtn.innerHTML =
+'<i class="fa-solid fa-spinner fa-spin"></i> Submitting Quiz...';
+
+submitBtn.classList.add("loading-btn");
+
+submitBtn.disabled = true;
+
 
 const memberId =
 document.getElementById("memberSelect").value;
 
 
-
-let answers={};
-
+let answers = {};
 
 
 quizData.forEach((q,index)=>{
-
 
 const checked =
 document.querySelector(
 `input[name="q${index}"]:checked`
 );
 
-
-
 if(checked){
 
-answers[index+1]=
+answers[index+1] =
 checked.value;
 
 }
 
-
 });
 
 
-
+try{
 
 const res =
 await fetch(API,{
@@ -772,15 +1003,20 @@ answers:answers
 });
 
 
-
 const data =
 await res.json();
-
 
 
 if(!data.success){
 
 alert(data.message);
+
+submitBtn.innerHTML =
+"Submit Quiz";
+
+submitBtn.classList.remove("loading-btn");
+
+submitBtn.disabled = false;
 
 return;
 
@@ -788,11 +1024,9 @@ return;
 
 
 
-
 document
 .getElementById("quizBox")
 .classList.add("hidden");
-
 
 
 document
@@ -811,22 +1045,42 @@ data.score;
 document
 .getElementById("points")
 .innerHTML =
-"Points Earned: "+data.pointsEarned;
+"Points Earned: " +
+data.pointsEarned;
 
 
 
 document
 .getElementById("total")
 .innerHTML =
-"Total Points: "+data.totalPoints;
+"Total Points: " +
+data.totalPoints;
 
 
+
+window.scrollTo({
+
+top:0,
+
+behavior:"smooth"
+
+});
+
+
+}catch(error){
+
+alert("Unable to submit quiz.");
+
+submitBtn.innerHTML =
+"Submit Quiz";
+
+submitBtn.classList.remove("loading-btn");
+
+submitBtn.disabled = false;
 
 }
 
-
-
-
+}
 
 
 loadQuiz();
