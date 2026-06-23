@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Leaderboard</title>
+
+
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+
+<style>
+
+
+*{
+box-sizing:border-box;
+margin:0;
+padding:0;
+}
+
+
+body{
+
+font-family:"DM Sans",sans-serif;
+
+background:#fafafa;
+
+padding-bottom:40px;
+
+}
+
+
+header{
+
+width:88%;
+max-width:820px;
+
+margin:auto;
+
+padding:18px;
+
+background:
+linear-gradient(
+135deg,
+#4A0754,
+#16001d
+);
+
+border-radius:0 0 25px 25px;
+
+color:white;
+
+display:flex;
+justify-content:space-between;
+align-items:center;
+
+box-shadow:
+0 15px 40px rgba(0,0,0,.15);
+
+}
+
+
+
+.title{
+
+font-family:"Bricolage Grotesque";
+
+font-size:1rem;
+
+display:flex;
+
+gap:10px;
+
+align-items:center;
+
+}
+
+
+
+.title i{
+
+width:40px;
+height:40px;
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+border-radius:14px;
+
+background:rgba(255,255,255,.15);
+
+}
+
+
+
+.back{
+
+text-decoration:none;
+
+color:white;
+
+font-size:.8rem;
+
+background:rgba(255,255,255,.15);
+
+padding:10px 15px;
+
+border-radius:30px;
+
+}
+
+
+
+.container{
+
+width:88%;
+max-width:820px;
+
+margin:30px auto;
+
+}
+
+
+
+
+.hero{
+
+background:white;
+
+border-radius:25px;
+
+padding:25px;
+
+text-align:center;
+
+box-shadow:
+0 15px 40px rgba(0,0,0,.08);
+
+}
+
+
+
+.hero h1{
+
+font-family:"Bricolage Grotesque";
+
+font-size:1rem;
+
+color:#4A0754;
+
+}
+
+
+
+.hero p{
+
+font-size:.75rem;
+
+color:#64748b;
+
+margin-top:8px;
+
+}
+
+
+
+
+
+.podium{
+
+margin-top:25px;
+
+display:flex;
+
+justify-content:center;
+
+gap:15px;
+
+align-items:flex-end;
+
+}
+
+
+
+.rank-card{
+
+background:white;
+
+padding:20px 10px;
+
+border-radius:20px;
+
+width:30%;
+
+text-align:center;
+
+box-shadow:
+0 10px 30px rgba(0,0,0,.08);
+
+}
+
+
+
+.rank-card:first-child{
+
+transform:translateY(-20px);
+
+}
+
+
+
+.crown{
+
+font-size:28px;
+
+}
+
+
+
+.rank-name{
+
+font-family:"Bricolage Grotesque";
+
+font-size:.8rem;
+
+margin-top:10px;
+
+}
+
+
+
+.rank-point{
+
+font-size:.75rem;
+
+color:#4A0754;
+
+font-weight:700;
+
+margin-top:5px;
+
+}
+
+
+
+
+
+.list{
+
+margin-top:25px;
+
+}
+
+
+
+.item{
+
+background:white;
+
+border-radius:18px;
+
+padding:15px;
+
+margin-bottom:12px;
+
+display:flex;
+
+align-items:center;
+
+justify-content:space-between;
+
+box-shadow:
+0 10px 25px rgba(0,0,0,.06);
+
+}
+
+
+
+.left{
+
+display:flex;
+
+gap:12px;
+
+align-items:center;
+
+}
+
+
+
+.number{
+
+width:35px;
+height:35px;
+
+border-radius:50%;
+
+background:#f3e8ff;
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+font-weight:700;
+
+color:#4A0754;
+
+}
+
+
+
+.name{
+
+font-size:.85rem;
+
+font-weight:600;
+
+}
+
+
+
+.id{
+
+font-size:.7rem;
+
+color:#64748b;
+
+}
+
+
+
+.points{
+
+font-family:"Bricolage Grotesque";
+
+color:#4A0754;
+
+font-size:.9rem;
+
+}
+
+
+.loading{
+
+text-align:center;
+
+padding:30px;
+
+}
+
+
+</style>
+
+
+</head>
+
+
+<body>
+
+
+<header>
+
+
+<div class="title">
+
+<i class="fa-solid fa-ranking-star"></i>
+
+Leaderboard
+
+</div>
+
+
+<a href="index.html" class="back">
+Back
+</a>
+
+
+</header>
+
+
+
+
+<div class="container">
+
+
+
+<div class="hero">
+
+
+<h1>
+Youth Quiz Leaderboard
+</h1>
+
+
+<p>
+Total accumulated points
+</p>
+
+
+</div>
+
+
+
+<div id="podium" class="podium"></div>
+
+
+
+<div id="leaderboard" class="list">
+
+<div class="loading">
+
+Loading leaderboard...
+
+</div>
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+<script>
+
+
+const API =
+"https://script.google.com/macros/s/AKfycbw1mVwpgAcIOSNbpgzy52TFyozEGMtWWwVWUDFaofGNzpsguBIaKR4q1dXVtgVHO2xZ1w/exec";
+
+
+
+
+async function loadLeaderboard(){
+
+
+const res =
+await fetch(
+API+"?action=getLeaderboard"
+);
+
+
+const data =
+await res.json();
+
+
+
+const board =
+data.leaderboard;
+
+
+
+showTop(board);
+
+
+const list =
+document.getElementById("leaderboard");
+
+
+list.innerHTML="";
+
+
+
+board.forEach((m,index)=>{
+
+
+list.innerHTML += `
+
+
+<div class="item">
+
+
+<div class="left">
+
+
+<div class="number">
+
+${index+1}
+
+</div>
+
+
+<div>
+
+
+<div class="name">
+
+${m.name}
+
+</div>
+
+
+<div class="id">
+
+${m.memberId}
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+
+<div class="points">
+
+${m.points}
+
+pts
+
+</div>
+
+
+</div>
+
+
+`;
+
+
+});
+
+
+}
+
+
+
+function showTop(data){
+
+
+const podium =
+document.getElementById("podium");
+
+
+podium.innerHTML="";
+
+
+let top =
+data.slice(0,3);
+
+
+
+top.forEach((m,index)=>{
+
+
+let icon =
+index===0 ? "🥇" :
+index===1 ? "🥈" :
+"🥉";
+
+
+
+podium.innerHTML += `
+
+
+<div class="rank-card">
+
+
+<div class="crown">
+
+${icon}
+
+</div>
+
+
+<div class="rank-name">
+
+${m.name}
+
+</div>
+
+
+<div class="rank-point">
+
+${m.points} pts
+
+</div>
+
+
+</div>
+
+
+`;
+
+
+
+});
+
+
+}
+
+
+
+loadLeaderboard();
+
+
+</script>
+
+
+
+</body>
+
+</html>
