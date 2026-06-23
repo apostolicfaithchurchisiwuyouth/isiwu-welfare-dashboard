@@ -297,7 +297,9 @@ margin-bottom:12px;
 
 .option{
 
-display:block;
+display:flex;
+align-items:center;
+gap:10px;
 
 padding:12px 14px;
 
@@ -307,31 +309,58 @@ background:#f8fafc;
 
 margin-bottom:10px;
 
-font-size:13px;
+font-size:.8rem;
 
 cursor:pointer;
 
-transition:.25s ease;
+border:1px solid #e5e7eb;
 
-outline:none;
+transition:all .25s ease;
 
 -webkit-tap-highlight-color:transparent;
+
+user-select:none;
 
 }
 
 .option:hover{
 
-background:#f1f5f9;
+background:#fdfcff;
+
+border-color:rgba(74,7,84,.25);
+
+transform:translateY(-1px);
+
+box-shadow:
+0 6px 16px rgba(74,7,84,.05);
+
+}
+
+.option:has(input:checked){
+
+background:rgba(74,7,84,.06);
+
+border-color:#4A0754;
+
+box-shadow:
+0 8px 18px rgba(74,7,84,.08);
+
+}
+
+.option input{
+
+width:18px;
+
+height:18px;
+
+margin:0;
+
+flex-shrink:0;
+
+accent-color:#4A0754;
 
 }
   
-.option input{
-
-width:auto;
-margin-right:8px;
-
-}
-
 
 
 .result{
