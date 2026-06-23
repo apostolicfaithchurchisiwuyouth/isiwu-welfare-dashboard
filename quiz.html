@@ -785,8 +785,7 @@ return;
 selectedLesson =
 data.lessonNo;
 
-quizCloseTime =
-data.closeTime;
+quizCloseTime = new Date(data.closeTime);
 
 console.log("Close Time:", data.closeTime);
   
@@ -851,9 +850,7 @@ countdownInterval =
 setInterval(()=>{
 
 const end =
-new Date(
-quizCloseTime
-).getTime();
+quizCloseTime.getTime();
 
 const now =
 new Date().getTime();
