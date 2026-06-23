@@ -129,7 +129,23 @@ margin:30px auto;
 
 }
 
+#quizCountdown{
 
+margin-top:12px;
+
+display:inline-block;
+
+padding:10px 14px;
+
+border-radius:999px;
+
+background:rgba(255,255,255,.12);
+
+font-size:.75rem;
+
+font-weight:600;
+
+}
 
 .card{
 
@@ -158,7 +174,7 @@ text-align:center;
 .status h2{
 
 font-family:"Bricolage Grotesque";
-font-size:18px;
+font-size:.95rem;
 margin-bottom:8px;
 
 }
@@ -176,10 +192,14 @@ line-height:1.6;
 
 
 
-select,input{
+select,
+input{
 
 width:100%;
-padding:14px;
+
+height:52px;
+
+padding:0 16px;
 
 border-radius:14px;
 
@@ -187,13 +207,47 @@ border:1px solid #ddd;
 
 outline:none;
 
-font-size:13px;
+font-size:.8rem;
 
 margin-top:10px;
+
+background:white;
+
+appearance:none;
+
+-webkit-appearance:none;
+
+-moz-appearance:none;
+
+}
+
+.select-wrap{
+
+position:relative;
+
+width:100%;
 
 }
 
 
+
+.select-wrap i{
+
+position:absolute;
+
+right:16px;
+
+top:50%;
+
+transform:translateY(-50%);
+
+font-size:.8rem;
+
+color:#64748b;
+
+pointer-events:none;
+
+}
 
 button{
 
@@ -233,7 +287,7 @@ margin-bottom:20px;
 
 .question h3{
 
-font-size:14px;
+font-size:.85rem;
 line-height:1.6;
 margin-bottom:12px;
 
@@ -253,7 +307,7 @@ background:#f8fafc;
 
 margin-bottom:10px;
 
-font-size:13px;
+font-size:.8rem;
 
 cursor:pointer;
 
@@ -428,7 +482,7 @@ margin-bottom:12px;
 
 font-family:"Bricolage Grotesque";
 
-font-size:22px;
+font-size:1rem;
 
 font-weight:800;
 
@@ -440,7 +494,7 @@ margin-bottom:8px;
 
 .hero-text{
 
-font-size:12px;
+font-size:.75rem;
 
 line-height:1.7;
 
@@ -516,7 +570,7 @@ Test Your Knowledge
 Answer the weekly lesson questions and earn points automatically.
 </div>
 
-</div>
+<div id="quizCountdown"></div>
 
 
 
@@ -540,13 +594,19 @@ Select Your Name
 </h3>
 
 
+<div class="select-wrap">
+
 <select id="memberSelect">
 
-<option>
-Loading members...
+<option value="">
+Select Your Name
 </option>
 
 </select>
+
+<i class="fa-solid fa-chevron-down"></i>
+
+</div>
 
 
 
@@ -563,8 +623,7 @@ Add My Name
 
 </button>
 
-
-
+<div style="height:30px;"></div>
 
 <div id="questions"></div>
 
@@ -635,7 +694,8 @@ Quiz Completed Successfully
 const API =
 "https://script.google.com/macros/s/AKfycbw1mVwpgAcIOSNbpgzy52TFyozEGMtWWwVWUDFaofGNzpsguBIaKR4q1dXVtgVHO2xZ1w/exec";
 
-
+let quizCloseTime = "";
+let countdownInterval;
 
 let quizData=[];
 
@@ -682,6 +742,8 @@ return;
 selectedLesson =
 data.lessonNo;
 
+quizCloseTime =
+data.closeTime;
 
 quizData =
 data.questions;
@@ -730,6 +792,78 @@ color:#4A0754;
 
 `;
 
+function startCountdown(){
+
+clearInterval(
+countdownInterval
+);
+
+countdownInterval =
+setInterval(()=>{
+
+const end =
+new Date(
+quizCloseTime
+).getTime();
+
+const now =
+new Date().getTime();
+
+const diff =
+end - now;
+
+if(diff <= 0){
+
+document
+.getElementById("quizCountdown")
+.innerHTML =
+"Quiz Closed";
+
+clearInterval(
+countdownInterval
+);
+
+return;
+
+}
+
+const days =
+Math.floor(
+diff / 86400000
+);
+
+const hours =
+Math.floor(
+(diff % 86400000)
+/ 3600000
+);
+
+const mins =
+Math.floor(
+(diff % 3600000)
+/ 60000
+);
+
+const secs =
+Math.floor(
+(diff % 60000)
+/ 1000
+);
+
+document
+.getElementById("quizCountdown")
+.innerHTML =
+
+"⏳ Closes In: " +
+
+days+"d " +
+hours+"h " +
+mins+"m " +
+secs+"s";
+
+},1000);
+
+}
 
 
 document
@@ -741,55 +875,45 @@ loadMembers();
 
 renderQuestions();
 
+startCountdown();
 
 }
-
 
 
 
 
 async function loadMembers(){
 
-
 const res =
 await fetch(
 API+"?action=getMembers"
 );
 
-
 const data =
 await res.json();
-
-
 
 const select =
 document.getElementById("memberSelect");
 
-
-select.innerHTML="";
-
-
+select.innerHTML =
+`
+<option value="">
+Select Your Name
+</option>
+`;
 
 data.members.forEach(m=>{
 
-
 select.innerHTML +=
 `
-
 <option value="${m.memberId}">
-
 ${m.name}
-
 </option>
-
 `;
-
 
 });
 
-
 }
-
 
 
 
@@ -960,6 +1084,22 @@ submitBtn.disabled = true;
 const memberId =
 document.getElementById("memberSelect").value;
 
+if(!memberId){
+
+alert(
+"Please select your name before submitting."
+);
+
+submitBtn.innerHTML =
+"Submit Quiz";
+
+submitBtn.classList.remove("loading-btn");
+
+submitBtn.disabled = false;
+
+return;
+
+}
 
 let answers = {};
 
