@@ -120,6 +120,8 @@ padding:18px 10px;
 text-align:center;
 overflow:hidden;
 border:1px solid rgba(74,7,84,.08);
+
+min-width:0;
 }
 
 
@@ -168,6 +170,9 @@ font-weight:700;
 .name{
 font-family:"Bricolage Grotesque";
 font-size:.78rem;
+
+word-break:break-word;
+overflow-wrap:anywhere;
 }
 
 
@@ -175,6 +180,8 @@ font-size:.78rem;
 font-size:.65rem;
 color:#64748b;
 margin-top:4px;
+
+word-break:break-word;
 }
 
 
@@ -187,11 +194,16 @@ color:#4A0754;
 
 
 
+/* REMOVE LEADERBOARD SCROLL */
+
 .list{
-max-height:420px;
-overflow:auto;
+max-height:none;
+overflow:visible;
 }
 
+
+
+/* LEADERBOARD ITEMS */
 
 .item{
 
@@ -210,45 +222,53 @@ border-radius:20px;
 }
 
 
-.rank{
 
-width:34px;
-height:34px;
-
-border-radius:50%;
-
-display:flex;
-align-items:center;
-justify-content:center;
-
-background:#f3e8ff;
-color:#4A0754;
-
-font-weight:700;
-}
-
-
-.name2{
-font-size:.8rem;
-font-weight:700;
-}
-
-
-.score{
-font-family:"Bricolage Grotesque";
-font-size:.8rem;
-color:#4A0754;
-}
-
+/* MOBILE */
 
 @media(max-width:600px){
 
 .podium{
-grid-template-columns:1fr;
+grid-template-columns:repeat(3,1fr);
+gap:7px;
 }
 
+
 .performer{
-padding:16px;
+padding:12px 5px;
+border-radius:18px;
+}
+
+
+.avatar{
+width:36px;
+height:36px;
+font-size:12px;
+}
+
+
+.crown{
+font-size:18px;
+}
+
+
+.name{
+font-size:.62rem;
+line-height:1.15;
+}
+
+
+.id{
+font-size:.55rem;
+}
+
+
+.points{
+font-size:.65rem;
+}
+
+
+.item{
+padding:10px;
 }
 
 }
