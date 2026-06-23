@@ -315,6 +315,141 @@ padding:10px;
 
 }
 
+/* =========================
+   PREMIUM LEADERBOARD RANK
+========================= */
+
+.rank{
+
+width:36px;
+height:36px;
+
+border-radius:50%;
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+font-family:"Bricolage Grotesque";
+font-size:.78rem;
+font-weight:900;
+
+color:white;
+
+background:
+linear-gradient(
+135deg,
+#4A0754,
+#a855f7
+);
+
+box-shadow:
+0 10px 25px rgba(74,7,84,.25);
+
+flex-shrink:0;
+
+position:relative;
+overflow:hidden;
+
+}
+
+
+/* glass reflection */
+
+.rank::after{
+
+content:"";
+
+position:absolute;
+
+width:18px;
+height:18px;
+
+border-radius:50%;
+
+background:rgba(255,255,255,.25);
+
+top:-6px;
+right:-5px;
+
+}
+
+
+
+/* GOLD - FIRST */
+
+.item:nth-child(1) .rank{
+
+background:
+linear-gradient(
+135deg,
+#fbbf24,
+#f97316
+);
+
+box-shadow:
+0 10px 25px rgba(249,115,22,.35);
+
+}
+
+
+/* SILVER - SECOND */
+
+.item:nth-child(2) .rank{
+
+background:
+linear-gradient(
+135deg,
+#cbd5e1,
+#64748b
+);
+
+}
+
+
+/* BRONZE - THIRD */
+
+.item:nth-child(3) .rank{
+
+background:
+linear-gradient(
+135deg,
+#fb923c,
+#92400e
+);
+
+}
+
+
+
+/* keep rows aligned */
+
+.item{
+
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:12px;
+
+}
+
+
+
+/* mobile */
+
+@media(max-width:600px){
+
+.rank{
+
+width:30px;
+height:30px;
+
+font-size:.65rem;
+
+}
+
+}
+
 </style>
 
 </head>
