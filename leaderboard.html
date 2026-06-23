@@ -1,605 +1,473 @@
+
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Leaderboard</title>
 
-
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
 
-
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 <style>
 
-
 *{
-box-sizing:border-box;
 margin:0;
 padding:0;
+box-sizing:border-box;
 }
 
-
 body{
-
 font-family:"DM Sans",sans-serif;
-
 background:#fafafa;
-
 padding-bottom:40px;
-
 }
 
 
 header{
-
-width:88%;
-max-width:820px;
-
+width:90%;
+max-width:850px;
 margin:auto;
+padding:16px 18px;
 
-padding:18px;
+background:linear-gradient(135deg,#4A0754,#16001d);
 
-background:
-linear-gradient(
-135deg,
-#4A0754,
-#16001d
-);
-
-border-radius:0 0 25px 25px;
-
-color:white;
+border-radius:0 0 24px 24px;
 
 display:flex;
 justify-content:space-between;
 align-items:center;
 
-box-shadow:
-0 15px 40px rgba(0,0,0,.15);
-
+color:white;
+box-shadow:0 15px 40px rgba(0,0,0,.15);
 }
-
 
 
 .title{
-
 font-family:"Bricolage Grotesque";
-
-font-size:1rem;
-
+font-size:.9rem;
 display:flex;
-
 gap:10px;
-
 align-items:center;
-
 }
-
 
 
 .title i{
-
-width:40px;
-height:40px;
-
+width:38px;
+height:38px;
 display:flex;
 align-items:center;
 justify-content:center;
-
-border-radius:14px;
-
+border-radius:12px;
 background:rgba(255,255,255,.15);
-
 }
-
 
 
 .back{
-
-text-decoration:none;
-
 color:white;
-
-font-size:.8rem;
-
+text-decoration:none;
+font-size:.75rem;
 background:rgba(255,255,255,.15);
-
-padding:10px 15px;
-
+padding:9px 14px;
 border-radius:30px;
-
 }
-
 
 
 .container{
-
-width:88%;
-max-width:820px;
-
-margin:30px auto;
-
+width:90%;
+max-width:850px;
+margin:25px auto;
 }
 
 
-
-
-.hero{
-
+.card{
 background:white;
-
-border-radius:25px;
-
-padding:25px;
-
-text-align:center;
-
-box-shadow:
-0 15px 40px rgba(0,0,0,.08);
-
+border-radius:24px;
+padding:20px;
+margin-bottom:18px;
+box-shadow:0 15px 40px rgba(0,0,0,.07);
 }
 
 
-
-.hero h1{
-
+.card-title{
 font-family:"Bricolage Grotesque";
-
-font-size:1rem;
-
+font-size:.95rem;
 color:#4A0754;
-
+margin-bottom:15px;
 }
 
 
-
-.hero p{
-
+.subtitle{
 font-size:.75rem;
-
 color:#64748b;
-
-margin-top:8px;
-
+margin-bottom:15px;
 }
 
 
 
-
-
-.podium{
-
-margin-top:25px;
-
-display:flex;
-
-justify-content:center;
-
-gap:15px;
-
-align-items:flex-end;
-
+.top-grid{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:12px;
 }
 
 
-
-.rank-card{
-
-background:white;
-
-padding:20px 10px;
-
-border-radius:20px;
-
-width:30%;
-
+.top{
 text-align:center;
-
-box-shadow:
-0 10px 30px rgba(0,0,0,.08);
-
+padding:15px 8px;
+border-radius:18px;
+background:#faf5ff;
 }
 
 
-
-.rank-card:first-child{
-
-transform:translateY(-20px);
-
+.medal{
+font-size:24px;
 }
 
 
-
-.crown{
-
-font-size:28px;
-
-}
-
-
-
-.rank-name{
-
+.top h3{
 font-family:"Bricolage Grotesque";
-
-font-size:.8rem;
-
-margin-top:10px;
-
-}
-
-
-
-.rank-point{
-
 font-size:.75rem;
-
-color:#4A0754;
-
-font-weight:700;
-
-margin-top:5px;
-
+margin-top:8px;
 }
 
 
+.top p{
+font-size:.7rem;
+color:#64748b;
+margin-top:5px;
+}
+
+
+.points{
+font-weight:700;
+color:#4A0754;
+font-size:.75rem;
+}
 
 
 
 .list{
-
-margin-top:25px;
-
+max-height:430px;
+overflow-y:auto;
 }
-
 
 
 .item{
+display:flex;
+justify-content:space-between;
+align-items:center;
 
-background:white;
+padding:14px;
 
 border-radius:18px;
 
-padding:15px;
+background:#fafafa;
 
-margin-bottom:12px;
-
-display:flex;
-
-align-items:center;
-
-justify-content:space-between;
-
-box-shadow:
-0 10px 25px rgba(0,0,0,.06);
-
+margin-bottom:10px;
 }
-
 
 
 .left{
-
 display:flex;
-
-gap:12px;
-
 align-items:center;
-
+gap:12px;
 }
 
 
-
-.number{
-
-width:35px;
-height:35px;
-
+.rank{
+width:34px;
+height:34px;
 border-radius:50%;
-
-background:#f3e8ff;
 
 display:flex;
 align-items:center;
 justify-content:center;
 
-font-weight:700;
-
+background:#f3e8ff;
 color:#4A0754;
-
+font-weight:700;
+font-size:.8rem;
 }
-
 
 
 .name{
-
-font-size:.85rem;
-
 font-weight:600;
-
+font-size:.8rem;
 }
-
 
 
 .id{
-
 font-size:.7rem;
-
 color:#64748b;
-
 }
 
 
-
-.points{
-
+.score{
 font-family:"Bricolage Grotesque";
-
+font-size:.8rem;
 color:#4A0754;
-
-font-size:.9rem;
-
 }
 
 
-.loading{
+@media(max-width:600px){
 
-text-align:center;
-
-padding:30px;
-
+.top-grid{
+grid-template-columns:1fr;
 }
 
+header{
+width:94%;
+}
+
+.container{
+width:94%;
+}
+
+}
 
 </style>
 
-
 </head>
-
 
 <body>
 
 
 <header>
 
-
 <div class="title">
-
 <i class="fa-solid fa-ranking-star"></i>
-
 Leaderboard
-
 </div>
 
-
-<a href="index.html" class="back">
+<a class="back" href="index.html">
 Back
 </a>
 
-
 </header>
-
 
 
 
 <div class="container">
 
 
+<div class="card">
 
-<div class="hero">
+<div class="card-title">
+Top 3 Performance
+</div>
 
-
-<h1>
-Youth Quiz Leaderboard
-</h1>
-
-
-<p>
-Total accumulated points
-</p>
-
+<div class="top-grid" id="topThree">
+</div>
 
 </div>
 
 
 
-<div id="podium" class="podium"></div>
+<div class="card">
 
+<div class="card-title">
+Overall Leaderboard
+</div>
 
+<div class="subtitle">
+Total accumulated points ranking
+</div>
 
-<div id="leaderboard" class="list">
+<div class="list" id="leaderboard">
 
-<div class="loading">
+Loading...
 
-Loading leaderboard...
+</div>
 
 </div>
 
 
+
+<div class="card">
+
+<div class="card-title">
+Most Improved
+</div>
+
+<div class="subtitle">
+Members with strong point growth
+</div>
+
+<div class="list" id="improved">
+
+Loading...
+
+</div>
+
 </div>
 
 
 
 </div>
-
-
 
 
 
 <script>
 
-
 const API =
 "https://script.google.com/macros/s/AKfycbw1mVwpgAcIOSNbpgzy52TFyozEGMtWWwVWUDFaofGNzpsguBIaKR4q1dXVtgVHO2xZ1w/exec";
-
-
 
 
 async function loadLeaderboard(){
 
 
-const res =
-await fetch(
-API+"?action=getLeaderboard"
-);
+const res = await fetch(API+"?action=getLeaderboard");
+
+const data = await res.json();
 
 
-const data =
-await res.json();
+const board = data.leaderboard || [];
 
 
+renderTop(board.slice(0,3));
 
-const board =
-data.leaderboard;
-
-
-
-showTop(board);
+renderList(board);
 
 
-const list =
-document.getElementById("leaderboard");
+renderImproved(board);
 
 
-list.innerHTML="";
+}
 
 
 
-board.forEach((m,index)=>{
+function renderTop(top){
+
+const box=document.getElementById("topThree");
+
+box.innerHTML="";
 
 
-list.innerHTML += `
+top.forEach((m,i)=>{
 
+let medal =
+i===0 ? "🥇":
+i===1 ? "🥈":"🥉";
+
+
+box.innerHTML += `
+
+<div class="top">
+
+<div class="medal">${medal}</div>
+
+<h3>${m.name}</h3>
+
+<p>${m.memberId}</p>
+
+<div class="points">
+${m.points} pts
+</div>
+
+</div>
+
+`;
+
+});
+
+}
+
+
+
+function renderList(data){
+
+const box=document.getElementById("leaderboard");
+
+box.innerHTML="";
+
+
+data.forEach((m,i)=>{
+
+
+box.innerHTML += `
 
 <div class="item">
 
-
 <div class="left">
 
-
-<div class="number">
-
-${index+1}
-
-</div>
-
+<div class="rank">${i+1}</div>
 
 <div>
 
+<div class="name">${m.name}</div>
 
-<div class="name">
-
-${m.name}
+<div class="id">${m.memberId}</div>
 
 </div>
 
+</div>
+
+
+<div class="score">
+${m.points} pts
+</div>
+
+
+</div>
+
+`;
+
+});
+
+
+}
+
+
+
+function renderImproved(data){
+
+const box=document.getElementById("improved");
+
+box.innerHTML="";
+
+
+data.slice(0,10).forEach((m,i)=>{
+
+
+box.innerHTML += `
+
+<div class="item">
+
+<div class="left">
+
+<div class="rank">
+↑
+</div>
+
+<div>
+
+<div class="name">${m.name}</div>
 
 <div class="id">
-
 ${m.memberId}
+</div>
+
+</div>
 
 </div>
 
 
-</div>
-
-
-</div>
-
-
-
-<div class="points">
-
+<div class="score">
 ${m.points}
-
-pts
-
 </div>
 
 
 </div>
-
 
 `;
-
 
 });
 
 
 }
-
-
-
-function showTop(data){
-
-
-const podium =
-document.getElementById("podium");
-
-
-podium.innerHTML="";
-
-
-let top =
-data.slice(0,3);
-
-
-
-top.forEach((m,index)=>{
-
-
-let icon =
-index===0 ? "🥇" :
-index===1 ? "🥈" :
-"🥉";
-
-
-
-podium.innerHTML += `
-
-
-<div class="rank-card">
-
-
-<div class="crown">
-
-${icon}
-
-</div>
-
-
-<div class="rank-name">
-
-${m.name}
-
-</div>
-
-
-<div class="rank-point">
-
-${m.points} pts
-
-</div>
-
-
-</div>
-
-
-`;
-
-
-
-});
-
-
-}
-
 
 
 loadLeaderboard();
@@ -608,7 +476,5 @@ loadLeaderboard();
 </script>
 
 
-
 </body>
-
 </html>
