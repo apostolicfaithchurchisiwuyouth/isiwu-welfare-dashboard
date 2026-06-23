@@ -50,6 +50,26 @@ z-index:-1;
 }
 
 
+body,
+input,
+select,
+button,
+option,
+p,
+label{
+
+font-family:"DM Sans",sans-serif;
+
+}
+
+.hero-title,
+.status h2,
+.question h3,
+#resultBox h2{
+
+font-family:"Bricolage Grotesque",sans-serif;
+
+}
 
 header{
 
@@ -147,6 +167,13 @@ font-weight:600;
 
 }
 
+#addNameBtn{
+
+font-family:"Bricolage Grotesque",sans-serif;
+font-weight:700;
+
+}
+
 .card{
 
 background:white;
@@ -207,6 +234,7 @@ border:1px solid #ddd;
 
 outline:none;
 
+font-family:"DM Sans",sans-serif;
 font-size:.8rem;
 
 margin-top:10px;
@@ -299,50 +327,41 @@ margin-bottom:12px;
 
 display:block;
 
-padding:14px;
+padding:12px;
 
-border-radius:16px;
+border-radius:14px;
 
 background:#f8fafc;
 
-margin-bottom:10px;
+margin-bottom:8px;
 
 font-size:.8rem;
 
 cursor:pointer;
 
-border:1px solid transparent;
-
 transition:.25s ease;
 
--webkit-tap-highlight-color:transparent;
+border:1px solid transparent;
 
 }
-
-
 
 .option:hover{
 
-border:1px solid rgba(74,7,84,.15);
+background:#f1f5f9;
 
-transform:translateY(-2px);
-
-box-shadow:0 8px 20px rgba(74,7,84,.06);
+transform:translateY(-1px);
 
 }
-
-
 
 .option:has(input:checked){
 
-background:rgba(74,7,84,.08);
+background:#f1f5f9;
 
-border:1px solid #4A0754;
+border:1px solid rgba(74,7,84,.15);
 
-box-shadow:0 10px 20px rgba(74,7,84,.08);
+box-shadow:none;
 
 }
-
 
 .option input{
 
@@ -514,6 +533,16 @@ border-bottom:1px solid rgba(0,0,0,.05);
 
 }
 
+.primary:focus,
+.primary:active,
+button:focus,
+button:active{
+
+outline:none;
+box-shadow:none;
+
+}
+
 
 .hidden{
 
@@ -616,7 +645,10 @@ placeholder="If your name is not listed, enter your name"
 
 
 
-<button class="primary" onclick="addNewMember()">
+<button
+id="addNameBtn"
+class="primary"
+onclick="addNewMember()">
 
 Add My Name
 
@@ -760,15 +792,19 @@ flex-wrap:wrap;
 gap:10px;
 ">
 
-<div>
+<div style="
+text-align:left;
+">
 
 <h2 style="
-margin-bottom:6px;
+margin:0 0 6px 0;
 ">
 Lesson ${data.lessonNo}
 </h2>
 
-<p>
+<p style="
+margin:0;
+">
 ${data.questionCount} Questions Available
 </p>
 
@@ -778,7 +814,7 @@ ${data.questionCount} Questions Available
 background:#f8fafc;
 padding:10px 14px;
 border-radius:14px;
-font-size:12px;
+font-size:11px;
 font-weight:600;
 color:#4A0754;
 ">
