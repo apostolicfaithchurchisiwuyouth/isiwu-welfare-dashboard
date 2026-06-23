@@ -234,6 +234,59 @@ font-size:12px;
 
 }
 
+.lesson-html{
+
+font-size:.8rem;
+line-height:1.5;
+color:#334155;
+
+}
+
+.lesson-html p{
+
+margin:0 0 14px 0;
+
+}
+
+.lesson-html div{
+
+margin-bottom:12px;
+
+}
+
+.lesson-html h1,
+.lesson-html h2,
+.lesson-html h3,
+.lesson-html h4{
+
+margin:0 0 10px 0;
+
+font-family:"Bricolage Grotesque",sans-serif;
+
+}
+
+.lesson-html ul,
+.lesson-html ol{
+
+padding-left:20px;
+margin:10px 0;
+
+}
+
+.lesson-html li{
+
+margin-bottom:8px;
+
+}
+
+.lesson-html img{
+
+max-width:100%;
+height:auto;
+border-radius:12px;
+
+}
+
 #archiveGrid{
 display:grid;
 gap:16px;
@@ -799,16 +852,17 @@ ${lesson.seniorBibleText}
 
 
 
-<div class="detail-box">
+<div class="detail-box lesson-content">
 
 <h4>Lesson</h4>
 
-<p>
+<div class="lesson-html">
+
 ${lesson.seniorLesson}
-</p>
 
 </div>
 
+</div>
 
 `;
 
@@ -857,13 +911,15 @@ ${lesson.juniorBibleText}
 
 
 
-<div class="detail-box">
+<div class="detail-box lesson-content">
 
 <h4>Lesson</h4>
 
-<p>
+<div class="lesson-html">
+
 ${lesson.juniorLesson}
-</p>
+
+</div>
 
 </div>
 
