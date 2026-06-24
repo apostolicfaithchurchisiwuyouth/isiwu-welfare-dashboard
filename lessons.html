@@ -182,29 +182,58 @@ color:white;
 
 
 
-.back{
-
-color:white;
+.back-btn{
 
 text-decoration:none;
 
-font-size:0.8rem;
-
-background:#4A0754;
+color:#fff;
 
 padding:10px 14px;
 
-border-radius:50px;
+border-radius:999px;
 
--webkit-tap-highlight-color: transparent;
+background:
+linear-gradient(
+135deg,
+#4A0754,
+#7c3aed
+);
 
--webkit-touch-callout: none;
+font-size:.8rem;
 
-outline:none;
+border:none;
 
-user-select:none;
+-webkit-tap-highlight-color:transparent;
+
+display:inline-flex;
+align-items:center;
+justify-content:center;
+
+transition:
+transform .2s ease,
+box-shadow .2s ease,
+filter .2s ease;
+
+box-shadow:
+0 8px 20px rgba(74,7,84,.25);
 
 }
+
+
+/* pressed effect */
+
+.back-btn:active{
+
+transform:translateY(-4px) scale(.96);
+
+filter:
+brightness(1.25);
+
+box-shadow:
+0 14px 30px rgba(124,58,237,.45);
+
+}
+  
 
 .archive-card{
 
