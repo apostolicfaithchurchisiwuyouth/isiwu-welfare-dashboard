@@ -651,8 +651,9 @@ SCRIPT_URL,
 {
 method:"POST",
 body:JSON.stringify({
-username,
-password
+    action:"login",
+    username,
+    password
 })
 }
 );
