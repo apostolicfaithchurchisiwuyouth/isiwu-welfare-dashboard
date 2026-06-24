@@ -537,8 +537,17 @@ const welfareCSV='https://docs.google.com/spreadsheets/d/e/2PACX-1vQHlE5IpmFYaQy
 const activitiesCSV='https://docs.google.com/spreadsheets/d/e/2PACX-1vQHlE5IpmFYaQyW5u-rentH2fGC5VZJ2w9Ql1WI-X8bE76qlN5_ttDIitwlXX1CM4sqdEW8RroDUNSU/pub?gid=493023062&single=true&output=csv';
 
 async function load(){
+let rows = [];
+
 try{
-const rows=(await(await fetch(welfareCSV)).text()).trim().split('\n').map(r=>r.split(','));
+  rows = (await (await fetch(welfareCSV))
+    .text())
+    .trim()
+    .split('\n')
+    .map(r => r.split(','));
+}catch(err){
+  console.error("CSV Load Failed:", err);
+}
 
 totalContributions.innerText='₦'+Number(rows[0]?.[1]||0).toLocaleString();
 totalExpenses.innerText='₦'+Number(rows[1]?.[1]||0).toLocaleString();
