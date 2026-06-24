@@ -1378,8 +1378,8 @@ LOGIN_URL,
 }
 );
 
-const data =
-await res.json();
+const data = await res.json();
+console.log("Login Response:", data);
 
 if(data.success){
 
