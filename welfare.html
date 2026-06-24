@@ -574,8 +574,18 @@ data:[Number(rows[0]?.[1]||0),Number(rows[1]?.[1]||0),Number(rows[2]?.[1]||0)]
 options:{plugins:{legend:{display:false}},responsive:true}
 });
 
-}catch(e){console.error(e)}
+async function load(){
+
+  try{
+
+    // entire load code
+
+  }catch(e){
+    console.error(e);
+  }
+
 }
+
 
 load();
 setInterval(load,30000);
