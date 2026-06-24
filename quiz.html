@@ -811,13 +811,7 @@ Submit Quiz
 
 </button>
 
-</div></div>
-
-
-
-
-
-
+</div>
 <div class="card result" id="resultBox">
 
 
@@ -850,6 +844,15 @@ Quiz Completed Successfully
 
 
 </div>
+
+
+</div>
+
+
+
+
+
+
 
 
 
@@ -1042,11 +1045,15 @@ secs+"s";
 
 document
 .getElementById("quizBox")
-.classList.remove("hidden");
+.classList.add("hidden");
 
 document
 .getElementById("questionsCard")
-.classList.remove("hidden");
+.classList.add("hidden");
+
+document
+.getElementById("resultBox")
+.style.display="block";
 
 
 loadMembers();
