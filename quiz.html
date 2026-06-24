@@ -199,7 +199,7 @@ border:1px solid rgba(255,255,255,.12);
 
 font-size:.7rem;
 
-font-weight:700;
+font-weight:600;
 
 }
 #addNameBtn{
@@ -213,7 +213,7 @@ font-size:.7rem;
 .card{
 
 background:white;
-border-radius:22px;
+border-radius:15px;
 padding:20px;
 margin-bottom:18px;
 
@@ -569,7 +569,71 @@ margin-bottom:20px;
 
 }
 
+.questions-header{
 
+margin-bottom:25px;
+
+padding-bottom:18px;
+
+border-bottom:1px solid rgba(74,7,84,.08);
+
+}
+
+
+.questions-badge{
+
+display:inline-flex;
+
+align-items:center;
+
+gap:8px;
+
+padding:8px 12px;
+
+border-radius:999px;
+
+background:rgba(74,7,84,.06);
+
+color:#4A0754;
+
+font-size:.68rem;
+
+font-weight:700;
+
+margin-bottom:14px;
+
+}
+
+
+.questions-header h3{
+
+font-family:"Bricolage Grotesque";
+
+font-size:.95rem;
+
+margin-bottom:8px;
+
+color:#111827;
+
+}
+
+
+.questions-header p{
+
+font-size:.72rem;
+
+color:#64748b;
+
+line-height:1.6;
+
+}
+
+
+#questions{
+
+margin-top:10px;
+
+}
 
 .question{
 
@@ -746,11 +810,33 @@ Add My Name
 
 </button>
 
-<div style="height:30px;"></div>
+<div style="height:10px;"></div>
+
+</div>
+
+
+<!-- QUESTIONS CARD -->
+
+<div class="card hidden" id="questionsCard">
+
+<div class="questions-header">
+
+<div class="questions-badge">
+<i class="fa-solid fa-circle-question"></i>
+Quiz Questions
+</div>
+
+<h3>
+Answer all questions below
+</h3>
+
+<p>
+Select the correct answer for each question.
+</p>
+
+</div>
 
 <div id="questions"></div>
-
-
 
 <button
 class="primary"
@@ -760,8 +846,6 @@ onclick="submitQuiz()">
 Submit Quiz
 
 </button>
-
-
 
 </div></div>
 
@@ -994,7 +1078,11 @@ secs+"s";
 
 document
 .getElementById("quizBox")
-.classList.remove("hidden");
+.classList.add("hidden");
+
+document
+.getElementById("questionsCard")
+.classList.add("hidden");
 
 
 loadMembers();
