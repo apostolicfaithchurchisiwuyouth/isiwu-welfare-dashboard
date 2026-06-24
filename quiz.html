@@ -1043,13 +1043,9 @@ secs+"s";
 }
 
 
-document
-.getElementById("quizBox")
-.classList.add("hidden");
-
-document
-.getElementById("resultBox")
-.style.display="block";
+document.getElementById("quizBox").classList.remove("hidden");
+document.getElementById("questionsCard").classList.remove("hidden");
+document.getElementById("resultBox").style.display="none";
 
 
 loadMembers();
@@ -1345,9 +1341,9 @@ return;
 
 
 
-document
-.getElementById("quizBox")
-.classList.add("hidden");
+document.getElementById("quizBox").style.display = "none";
+document.getElementById("questionsCard").style.display = "none";
+document.getElementById("statusCard").style.display = "none";
 
 
 document
@@ -1379,12 +1375,9 @@ data.totalPoints;
 
 
 
-window.scrollTo({
-
-top:0,
-
-behavior:"smooth"
-
+document.getElementById("resultBox").scrollIntoView({
+ behavior:"smooth",
+ block:"start"
 });
 
 
@@ -1397,6 +1390,9 @@ submitBtn.innerHTML =
 
 submitBtn.classList.remove("loading-btn");
 
+submitBtn.innerHTML = "Quiz Submitted";
+submitBtn.classList.remove("loading-btn");
+  
 submitBtn.disabled = false;
 
 }
