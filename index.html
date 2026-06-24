@@ -1359,61 +1359,6 @@ box-shadow:
   
 
   
-/* =========================
-GALLERY
-========================= */
-
-.gallery{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
-gap:18px;
-}
-
-.gallery-card{
-position:relative;
-overflow:hidden;
-border-radius:18px;
-}
-
-.gallery-card img{
-width:100%;
-height:230px;
-object-fit:cover;
-transition:0.4s;
-display:block;
-}
-
-.gallery-card:hover img{
-transform:scale(1.06);
-}
-
-.gallery-overlay{
-position:absolute;
-left:0;
-right:0;
-bottom:0;
-padding:16px;
-background:linear-gradient(to top, rgba(0,0,0,0.75), transparent);
-color:white;
-font-size:0.8rem;
-}
-
-.more-gallery{
-display:flex;
-align-items:center;
-justify-content:center;
-background:linear-gradient(135deg,#1565c0,#42a5f5);
-min-height:230px;
-border-radius:18px;
-padding:20px;
-text-align:center;
-}
-
-.more-gallery a{
-color:white;
-font-weight:600;
-font-size:0.9rem;
-}
 
 /* =========================
 LESSON HERO
@@ -2020,7 +1965,6 @@ AFC Isiwu Youth
 <a href="welfare.html">Welfare Reports</a>
 <a href="reports.html">Secretariat Reports</a>
 <a href="#leaderboard">Challenge</a>
-<a href="#gallery">Gallery</a>
 </div>
 
 <div class="hamburger" id="hamburger">
@@ -2144,35 +2088,6 @@ Read Combined Lesson Note
 
 </section>
 
-<div class="section" id="gallery">
-<div class="section-title">
-<i class="fa-solid fa-image"></i>
-<h2>Youth Gallery</h2>
-</div>
-
-<div class="gallery">
-
-<div class="gallery-card">
-<img src="images/image1.jpeg">
-<div class="gallery-overlay">Youth Fellowship Moments</div>
-</div>
-
-<div class="gallery-card">
-<img src="images/image2.jpeg">
-<div class="gallery-overlay">Welfare Support Session</div>
-</div>
-
-<div class="gallery-card">
-<img src="images/image3.jpeg">
-<div class="gallery-overlay">Leadership & Training</div>
-</div>
-
-<div class="more-gallery">
-<a href="#">
-<i class="fa-solid fa-photo-film"></i><br><br>
-View More Images & Videos
-</a>
-</div>
 
 </div>
 </div>
