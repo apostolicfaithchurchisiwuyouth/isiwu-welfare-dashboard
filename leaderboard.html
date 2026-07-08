@@ -5,7 +5,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}body{font-family:"DM Sans",sans-serif;background:#fafafa}
-header{position:sticky;top:0;width:88%;max-width:820px;margin:auto;padding:14px 18px;display:flex;justify-content:space-between;align-items:center;background:linear-gradient(135deg,#4A0754,#0A0016);border-radius:0 0 18px 18px;color:#fff}
+header{position:sticky;top:0;width:88%;max-width:820px;margin:auto;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;background:linear-gradient(135deg,#4A0754,#0A0016);border-radius:0 0 18px 18px;color:#fff}
 .container{width:88%;max-width:820px;margin:24px auto}
 .card{background:#fff;border-radius:10px;padding:18px;transition:.25s ease;box-shadow:0 12px 35px rgba(0,0,0,.08);margin-bottom:18px;border:1px solid #eee}
  .card:hover{transform:translateY(-2px);box-shadow:0 18px 40px rgba(0,0,0,.12)} .card-title{font:700 .9rem "Bricolage Grotesque";color:#4A0754;margin-bottom:12px}
@@ -18,11 +18,12 @@ header{position:sticky;top:0;width:88%;max-width:820px;margin:auto;padding:14px 
 .manual{display:grid;grid-template-columns:1fr;gap:10px}
 .manual .item{border:1px solid #eee;border-radius:10px;padding:14px;background:linear-gradient(180deg,#fff,#faf9ff)}
 
-.back-btn{text-decoration:none;color:#fff;padding:10px 14px;border-radius:999px;background:linear-gradient(135deg,#4A0754,#7c3aed);font-size:.82rem;transition:transform .2s,box-shadow .2s,filter .2s;box-shadow:0 8px 20px rgba(74,7,84,.25)}
+.back-btn{text-decoration:none;color:#fff;padding:7px 11px;border-radius:999px;background:linear-gradient(135deg,#4A0754,#7c3aed);font-size:.72rem;transition:transform .2s,box-shadow .2s,filter .2s;box-shadow:0 8px 20px rgba(74,7,84,.25) -webkit-tap-highlight-color: transparent;
+  outline: none;}
 .back-btn:hover{transform:translateY(-2px)}
 .back-btn:active{transform:translateY(-4px) scale(.96);filter:brightness(1.2);box-shadow:0 14px 30px rgba(124,58,237,.45)}
 </style></head><body>
-<header><div style='display:flex;align-items:center;gap:10px;font-family:"Bricolage Grotesque";font-weight:700;font-size:.9rem'><span>🏆</span><span>Weekly Challenge Progress</span></div><a href="index.html" class="back-btn">← Back</a></header>
+<header><div style='display:flex;align-items:center;gap:10px;font-family:"Bricolage Grotesque";font-weight:700;font-size:.8rem'><span style="font-size:.8rem;">🏆</span><span>Weekly Challenge Progress</span></div><a href="index.html" class="back-btn">← Back</a></header>
 <div class="container">
 <div class="card">
 <div class="card-title">Participant Progress</div>
@@ -45,7 +46,7 @@ const r=await fetch(API+"?action=getLeaderboard",{cache:"no-store"});
 const d=await r.json();
 const total=d.totalWeeks||d.totalweeks||d.seasonWeeks||0;
 b.className="";
-b.innerHTML=(d.leaderboard||[]).map(m=>`<div class=row><div><div class=name>${m.name}</div><div class=id>${m.memberId}</div></div><div class=weeks><span class=badge>${m.weeks}/${total}</span></div><div class=points>${Number(m.points).toLocaleString()} pts</div></div>`).join("");
+b.innerHTML=(d.leaderboard||[]).map(m=>`<div class=row><div><div class=name>${m.name}</div><div class=id>${m.memberId}</div></div><div class=weeks><span class=badge>${m.weeks}/${total}</span></div><div class=points>${Number(m.points).toLocaleString()}</div></div>`).join("");
 }catch(e){b.textContent="Unable to load leaderboard.";}}
 load();
 </script></body></html>
