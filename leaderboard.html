@@ -1,18 +1,48 @@
 
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Leaderboard</title>
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Leaderboard</title>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
-*{box-sizing:border-box;margin:0;padding:0}body{font-family:"DM Sans",sans-serif;background:#fafafa;overflow-x:hidden}
-body:before,body:after{content:"";position:fixed;border-radius:50%;filter:blur(90px);z-index:-1}body:before{top:-120px;right:-120px;width:320px;height:320px;background:rgba(168,85,247,.08)}body:after{bottom:-150px;left:-150px;width:350px;height:350px;background:rgba(59,130,246,.08)}
-header{position:sticky;top:0;z-index:1000;width:88%;max-width:820px;margin:auto;padding:14px 18px;display:flex;justify-content:space-between;align-items:center;background:linear-gradient(135deg,#4A0754,#0A0016);border-radius:0 0 18px 18px;box-shadow:0 10px 30px rgba(0,0,0,.12)}
-.header-title{display:flex;align-items:center;gap:12px;color:#fff;font-family:"Bricolage Grotesque";font-size:.9rem;font-weight:700}.header-title i{width:30px;height:30px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.12)}
-.back-btn{text-decoration:none;color:#fff;padding:10px 14px;border-radius:999px;background:linear-gradient(135deg,#4A0754,#7c3aed);font-size:.9rem;transition:transform .2s,box-shadow .2s,filter .2s;box-shadow:0 8px 20px rgba(74,7,84,.25)}.back-btn:active{transform:translateY(-4px) scale(.96);filter:brightness(1.25);box-shadow:0 14px 30px rgba(124,58,237,.45)}
-.container{width:88%;max-width:820px;margin:24px auto}.card{background:#fff;border-radius:16px;padding:20px;box-shadow:0 18px 45px rgba(0,0,0,.08);margin-bottom:18px}.card-title{font:700 .85rem "Bricolage Grotesque";color:#4A0754}.subtitle{font-size:.75rem;color:#64748b;margin:8px 0 16px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}.feature{padding:16px;border:1px solid rgba(74,7,84,.08);border-radius:14px;background:linear-gradient(145deg,#fff,#faf5ff)}.feature h3{font-size:.9rem;color:#4A0754;margin-bottom:6px}.feature p,.feature li{font-size:.8rem;line-height:1.5}
-.head,.row{display:grid;grid-template-columns:2fr .8fr .9fr;align-items:center;gap:8px}.head{font-size:.7rem;font-weight:700;color:#4A0754;background:#f6f3fb;padding:10px;border-radius:12px}.row{padding:12px 8px;border-bottom:1px solid #eee}.name{font-size:.75rem;font-weight:700}.id{font-size:.65rem;color:#64748b}.weeks{text-align:center;font-size:.68rem}.badge{padding:5px 10px;border-radius:999px;background:#f3e8ff}.points{text-align:right;font-size:.75rem;font-weight:700;color:#4A0754}
-@media(max-width:600px){.container{width:88%}.header-title{font-size:.75rem}.back-btn{font-size:.72rem;padding:8px 12px}.card{padding:16px}.head{font-size:.62rem}.name{font-size:.66rem}.id{font-size:.56rem}.weeks,.points{font-size:.62rem}.grid{grid-template-columns:1fr}}
-</style></head><body><header><div class="header-title"><i>🏆</i><span>Weekly Challenge Progress</span></div><a href="index.html" class="back-btn">← Back</a></header><div class="container"><div class="card"><div class="card-title">🌱 Our Purpose</div><div class="subtitle">Growing through God's Word together.</div><div class="grid"><div class="feature"><h3>Purpose</h3><p>Encourage consistent study and practical Christian living.</p></div><div class="feature"><h3>Commitment</h3><ul><li>Study</li><li>Participate</li><li>Grow</li></ul></div><div class="feature"><h3>Goal</h3><p>Celebrate faithfulness and growth through God's Word.</p></div></div></div><div class="card"><div class="card-title">Participant Progress</div><div class="subtitle">Member participation and total points.</div><div class="head"><div>Member</div><div style="text-align:center">Weeks</div><div style="text-align:right">Points</div></div><div id="leaderboard">Loading...</div></div></div><script>
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:"DM Sans",sans-serif;background:#fafafa}
+header{position:sticky;top:0;width:88%;max-width:820px;margin:auto;padding:14px 18px;display:flex;justify-content:space-between;align-items:center;background:linear-gradient(135deg,#4A0754,#0A0016);border-radius:0 0 18px 18px;color:#fff}
+.container{width:88%;max-width:820px;margin:24px auto}
+.card{background:#fff;border-radius:10px;padding:18px;box-shadow:0 12px 35px rgba(0,0,0,.08);margin-bottom:18px;border:1px solid #eee}
+.card-title{font:700 .9rem "Bricolage Grotesque";color:#4A0754;margin-bottom:12px}
+.head,.row{display:grid;grid-template-columns:2fr .9fr .9fr;gap:8px;align-items:center}
+.head{padding:10px;border-radius:10px;background:#f7f7fb;font-size:.9rem;font-weight:700}
+.row{margin-top:8px;padding:12px;border:1px solid #f0eef6;border-radius:10px;background:#fff}
+.name{font-size:.75rem;font-weight:700}.id{font-size:.65rem;color:#666}.weeks{text-align:center;font-size:.68rem}.points{text-align:right;font-size:.75rem;font-weight:700;color:#4A0754}
+.badge{display:inline-block;padding:5px 10px;border-radius:999px;background:#f3e8ff}
+.loading{font-size:.7rem;color:#777;padding:10px}
+.manual{display:grid;grid-template-columns:1fr;gap:10px}
+.manual .item{border:1px solid #eee;border-radius:10px;padding:14px;background:linear-gradient(180deg,#fff,#faf9ff)}
+</style></head><body>
+<header><div>🏆 Weekly Challenge Progress</div><a href="index.html" style="color:#fff;text-decoration:none">← Back</a></header>
+<div class="container">
+<div class="card">
+<div class="card-title">Participant Progress</div>
+<div class="head"><div>Member</div><div style="text-align:center">Weeks</div><div style="text-align:right">Points</div></div>
+<div id="leaderboard" class="loading">Loading participant progress...</div>
+</div>
+<div class="card">
+<div class="card-title">Season 1 Recognition</div>
+<div class="manual">
+<div class="item"><strong>Participant 1</strong><br><small>Add manually</small></div>
+<div class="item"><strong>Participant 2</strong><br><small>Add manually</small></div>
+<div class="item"><strong>Participant 3</strong><br><small>Add manually</small></div>
+</div>
+</div></div>
+<script>
 const API="https://script.google.com/macros/s/AKfycbw1mVwpgAcIOSNbpgzy52TFyozEGMtWWwVWUDFaofGNzpsguBIaKR4q1dXVtgVHO2xZ1w/exec";
-async function load(){const b=document.getElementById("leaderboard");try{const r=await fetch(API+"?action=getLeaderboard",{cache:"no-store"});const d=await r.json();b.innerHTML=(d.leaderboard||[]).map(m=>`<div class=row><div><div class=name>${m.name}</div><div class=id>${m.memberId}</div></div><div class=weeks><span class=badge>${m.weeks}</span></div><div class=points>${Number(m.points).toLocaleString()} pts</div></div>`).join("")}catch(e){b.textContent="Unable to load leaderboard.";}}
+async function load(){
+const b=document.getElementById("leaderboard");
+try{
+const r=await fetch(API+"?action=getLeaderboard",{cache:"no-store"});
+const d=await r.json();
+const total=d.totalWeeks||d.totalweeks||d.seasonWeeks||0;
+b.className="";
+b.innerHTML=(d.leaderboard||[]).map(m=>`<div class=row><div><div class=name>${m.name}</div><div class=id>${m.memberId}</div></div><div class=weeks><span class=badge>${m.weeks}/${total}</span></div><div class=points>${Number(m.points).toLocaleString()} pts</div></div>`).join("");
+}catch(e){b.textContent="Unable to load leaderboard.";}}
 load();
 </script></body></html>
