@@ -145,28 +145,43 @@ margin:30px auto;
 
 display:grid;
 
-grid-template-columns:
-2fr
-12px
-.9fr
-12px
-.9fr;
+grid-template-columns:2fr .9fr .9fr;
 
 align-items:center;
 
+background:#f7f7fb;
+
+border-radius:8px;
+
+padding:10px;
+
+position:relative;
+
 }
 
-.divider{
+.head div{
+
+position:relative;
+
+}
+
+.head div:not(:last-child)::after{
+
+content:"";
+
+position:absolute;
+
+right:-4px;
+
+top:50%;
+
+transform:translateY(-50%);
 
 width:1px;
 
 height:14px;
 
-background:#dadada;
-
-justify-self:center;
-
-border-radius:999px;
+background:#d8d8d8;
 
 }
 .row{margin-top:8px;padding:12px;border:1px solid #f0eef6;border-radius:10px;background:#fff}
@@ -175,11 +190,81 @@ border-radius:999px;
 .loading{font-size:.7rem;color:#777;padding:10px}
 .manual{display:grid;grid-template-columns:1fr;gap:10px}
 .manual .item{border:1px solid #eee;border-radius:10px;padding:14px;background:linear-gradient(180deg,#fff,#faf9ff)}
+.section-header{
 
+display:flex;
+
+justify-content:space-between;
+
+align-items:flex-start;
+
+margin-bottom:14px;
+
+gap:12px;
+
+}
+
+.section-text{
+
+flex:1;
+
+min-width:0;
+
+}
+
+.card-title{
+
+font-family:"Bricolage Grotesque",sans-serif;
+
+font-size:.9rem;
+
+font-weight:700;
+
+color:#4A0754;
+
+margin-bottom:4px;
+
+}
+
+.card-subtitle{
+
+font-size:.68rem;
+
+color:#64748b;
+
+line-height:1.5;
+
+}
+
+.section-badge{
+
+padding:6px 12px;
+
+border-radius:999px;
+
+background:#ECFDF5;
+
+color:#15803d;
+
+font-size:.65rem;
+
+font-weight:700;
+
+white-space:nowrap;
+
+}
+
+.section-badge.archive{
+
+background:#F3E8FF;
+
+color:#7C3AED;
+
+}
 </style></head><body>
 <header>
 <div class="header-title">
-<i class="fas fa-cup"></i>
+<i class="fas fa-trophy"></i>
 <span>SLC Growth Tracker</span>
 </div>
 
@@ -191,79 +276,41 @@ border-radius:999px;
 <div class="container">
 <div class="card">
 <div class="section-header">
-
-    <div>
-
-        <h2 class="card-title">
-            Participant Progress
-        </h2>
-
-        <p class="card-subtitle">
-            Track each participant's consistency and cumulative progress.
-        </p>
-
+    <div class="section-text">
+        <div class="card-title">Participant Progress</div>
+        <div class="card-subtitle">
+            Track each participant's lesson consistency and overall progress.
+        </div>
     </div>
 
-    <span class="section-tag">
+    <span class="section-badge">
         Live
     </span>
-
 </div>
 <div class="head">
-
-<div>Member</div>
-
-<div class="divider"></div>
-
-<div style="text-align:center">
-Weeks
-</div>
-
-<div class="divider"></div>
-
-<div style="text-align:right">
-Points
-</div>
-
+    <div>Member</div>
+    <div style="text-align:center">Weeks</div>
+    <div style="text-align:right">Points</div>
 </div>
 <div id="leaderboard" class="loading">Loading participant progress...</div>
 </div>
 <div class="card">
 <div class="section-header">
-
-    <div>
-
-        <h2 class="card-title">
-            Season 1 Recognition
-        </h2>
-
-        <p class="card-subtitle">
-            Celebrating participants who remained faithful throughout the season.
-        </p>
-
+    <div class="section-text">
+        <div class="card-title">Season 1 Recognition</div>
+        <div class="card-subtitle">
+            Celebrating members for their faithfulness throughout Season 1.
+        </div>
     </div>
 
-    <span class="section-tag">
+    <span class="section-badge archive">
         Archive
     </span>
-
 </div>
 <div class="head">
-
-<div>Member</div>
-
-<div class="divider"></div>
-
-<div style="text-align:center">
-Weeks
-</div>
-
-<div class="divider"></div>
-
-<div style="text-align:right">
-Points
-</div>
-
+    <div>Member</div>
+    <div style="text-align:center">Weeks</div>
+    <div style="text-align:right">Points</div>
 </div>
 <div class="row"><div><div class="name">Oluwatimilehin Mercy</div><div class="id">AFC001</div></div><div class="weeks"><span class="badge">10/10</span></div><div class="points">18,450 pts</div></div>
 <div class="row"><div><div class="name">Adesanya Adeola</div><div class="id">AFC002</div></div><div class="weeks"><span class="badge">10/10</span></div><div class="points">17,900 pts</div></div>
