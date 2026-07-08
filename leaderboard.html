@@ -141,8 +141,34 @@ margin:30px auto;
 }
 .card{background:#fff;border-radius:22px;padding:18px;transition:.25s ease;box-shadow:0 12px 35px rgba(0,0,0,.08);margin-bottom:18px;border:1px solid #eee}
 .card:hover{transform:translateY(-2px);box-shadow:0 18px 40px rgba(0,0,0,.12)} .card-title{font:700 .9rem "Bricolage Grotesque";color:#4A0754;margin-bottom:12px}
-.head,.row{display:grid;grid-template-columns:2fr .9fr .9fr;gap:8px;align-items:center}
-.head{padding:10px;border-radius:6px;background:#f7f7fb;font-size:.72rem;font-weight:700}
+.head{
+
+display:grid;
+
+grid-template-columns:
+2fr
+12px
+.9fr
+12px
+.9fr;
+
+align-items:center;
+
+}
+
+.divider{
+
+width:1px;
+
+height:14px;
+
+background:#dadada;
+
+justify-self:center;
+
+border-radius:999px;
+
+}
 .row{margin-top:8px;padding:12px;border:1px solid #f0eef6;border-radius:10px;background:#fff}
 .name{font-size:.68rem;font-weight:700}.id{font-size:.60rem;color:#666}.weeks{text-align:center;font-size:.65rem}.points{text-align:right;font-size:.65rem;font-weight:700;color:#4A0754}
 .badge{display:inline-block;padding:5px 10px;border-radius:999px;background:#f3e8ff}
@@ -164,13 +190,81 @@ margin:30px auto;
 
 <div class="container">
 <div class="card">
-<div class="card-title">Participant Progress</div>
-<div class="head"><div>Member</div><div style="text-align:center">Weeks</div><div style="text-align:right">Points</div></div>
+<div class="section-header">
+
+    <div>
+
+        <h2 class="card-title">
+            Participant Progress
+        </h2>
+
+        <p class="card-subtitle">
+            Track each participant's consistency and cumulative progress.
+        </p>
+
+    </div>
+
+    <span class="section-tag">
+        Live
+    </span>
+
+</div>
+<div class="head">
+
+<div>Member</div>
+
+<div class="divider"></div>
+
+<div style="text-align:center">
+Weeks
+</div>
+
+<div class="divider"></div>
+
+<div style="text-align:right">
+Points
+</div>
+
+</div>
 <div id="leaderboard" class="loading">Loading participant progress...</div>
 </div>
 <div class="card">
-<div class="card-title">Season 1 Recognition</div>
-<div class="head"><div>Member</div><div style="text-align:center">Weeks</div><div style="text-align:right">Points</div></div><div class="manual">
+<div class="section-header">
+
+    <div>
+
+        <h2 class="card-title">
+            Season 1 Recognition
+        </h2>
+
+        <p class="card-subtitle">
+            Celebrating participants who remained faithful throughout the season.
+        </p>
+
+    </div>
+
+    <span class="section-tag">
+        Archive
+    </span>
+
+</div>
+<div class="head">
+
+<div>Member</div>
+
+<div class="divider"></div>
+
+<div style="text-align:center">
+Weeks
+</div>
+
+<div class="divider"></div>
+
+<div style="text-align:right">
+Points
+</div>
+
+</div>
 <div class="row"><div><div class="name">Oluwatimilehin Mercy</div><div class="id">AFC001</div></div><div class="weeks"><span class="badge">10/10</span></div><div class="points">18,450 pts</div></div>
 <div class="row"><div><div class="name">Adesanya Adeola</div><div class="id">AFC002</div></div><div class="weeks"><span class="badge">10/10</span></div><div class="points">17,900 pts</div></div>
 <div class="row"><div><div class="name">Ashaolu Bisola</div><div class="id">AFC003</div></div><div class="weeks"><span class="badge">9/10</span></div><div class="points">17,250 pts</div></div>
