@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css">
 <style>
 
 /* =========================
@@ -1992,7 +1993,7 @@ max-width:100%;
 
 <header>
 
-<section class="hero-section">
+<section class="hero-section" data-aos="fade-up">
 
 <div class="hero-content">
 
@@ -2048,7 +2049,7 @@ AFC Isiwu Youth
 <div class="container" style="margin-top:-50px;">
 <div class="section">
 
-<div class="lesson-hero">
+<div class="lesson-hero" data-aos="zoom-in">
 
 <div class="lesson-overlay"></div>
 
@@ -2115,7 +2116,7 @@ Read Combined Lesson Note
 
   
 
-<section class="reports-section" id="reports">
+<section class="reports-section" data-aos="fade-up" id="reports">
 
 <div class="reports-container">
 
@@ -2166,7 +2167,17 @@ Read Combined Lesson Note
 <footer>
 AFC Isiwu Youth Department Portal © 2026
 </footer>
+<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
 
+<script>
+AOS.init({
+    duration: 900,
+    easing: "ease-out-cubic",
+    once: true,
+    offset: 120
+});
+</script>
+    
 <script>
 const texts = [
     "Growing in Grace and the Knowledge of Christ",
