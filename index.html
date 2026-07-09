@@ -40,6 +40,25 @@ h1,h2,h3,h4,.logo{
 font-family:'Bricolage Grotesque',sans-serif;
 }
 
+#heroTitle::after{
+content:"";
+display:inline-block;
+width:3px;
+height:1em;
+margin-left:4px;
+background:#4a0754;
+animation:blink .8s infinite;
+vertical-align:middle;
+}
+
+@keyframes blink{
+
+50%{
+opacity:0;
+}
+
+}
+
 button,
 a{
 outline:none;
@@ -1981,7 +2000,7 @@ max-width:100%;
 AFC ISIWU YOUTH
 </div>
 
-<h1>
+<h1 id="heroTitle">
 Youth Fellowship &
 Spiritual Growth
 </h1>
@@ -2152,27 +2171,43 @@ AFC Isiwu Youth Department Portal © 2026
 </footer>
 
 <script>
-const slides = document.querySelectorAll('.slide');
+const heroText = "Youth Fellowship &\nSpiritual Growth";
+const heroTitle = document.getElementById("heroTitle");
 
-let currentSlide = 0;
+function startTyping(){
 
-function autoSlide(){
+    heroTitle.innerHTML = "";
 
-slides.forEach(slide => {
-slide.classList.remove('active');
-});
+    let i = 0;
 
-currentSlide++;
+    function type(){
 
-if(currentSlide >= slides.length){
-currentSlide = 0;
+        if(i < heroText.length){
+
+            if(heroText[i] === "\n"){
+                heroTitle.innerHTML += "<br>";
+            }else{
+                heroTitle.innerHTML += heroText[i];
+            }
+
+            i++;
+
+            setTimeout(type,60);
+
+        }else{
+
+            setTimeout(startTyping,2500);
+
+        }
+
+    }
+
+    type();
+
 }
 
-slides[currentSlide].classList.add('active');
-
-}
-
-setInterval(autoSlide, 5000);
+startTyping();
+  
 /*
 ==============================
 MOBILE MENU
