@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>All Combined Lesson Notes</title>
-
+<link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
@@ -529,7 +529,7 @@ font-size:14px;
 </a>
 </header>
 
-<div class="container">
+<div class="container" data-aos="fade-up">
 
 
 <div class="search-wrapper">
@@ -557,7 +557,7 @@ oninput="searchLessons()"
 
 
 
-<div id="archiveGrid">
+<div id="archiveGrid" data-aos="fade-up">
 
 <div class="loading">
 Loading lessons...
@@ -570,7 +570,7 @@ Loading lessons...
 
 <div class="viewer-header">
 
-<h3 id="viewerTitle">
+<h3 id="viewerTitle" data-aos="fade-right">
 Lesson Details
 </h3>
 
@@ -581,7 +581,7 @@ Close
 </div>
 
 
-<div class="lesson-info" id="lessonDetails">
+<div class="lesson-info" id="lessonDetails" data-aos="fade-up">
 
 </div>
 
@@ -614,7 +614,17 @@ Junior
 </div>
 
 </div>
+  
+<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
 
+<script>
+AOS.init({
+    duration: 800,
+    easing: "ease-out-quart",
+    once: true,
+    offset: 100
+});
+</script>
 <script>
 
 const LESSON_URL =
