@@ -858,7 +858,6 @@ Review My Answers
 
 </button>
 
-<div id="reviewArea" style="display:none;margin-top:25px;"></div>
 
 </div>
 
@@ -1432,7 +1431,161 @@ submitBtn.disabled = false;
 
 loadQuiz();
 
+function showReview(){
 
+if(!reviewData || reviewData.length===0){
+
+alert("No review data available.");
+
+return;
+
+}
+
+const resultBox =
+document.getElementById("resultBox");
+
+let html=`
+
+<div style="margin-top:25px;">
+
+<h2 style="margin-bottom:20px;font-size:1rem;">
+📖 Review My Answers
+</h2>
+
+`;
+
+reviewData.forEach((item,index)=>{
+
+const q=quizData[index];
+
+html+=`
+
+<div style="
+background:#fff;
+padding:20px;
+border-radius:16px;
+margin-bottom:20px;
+border:1px solid #ececec;
+box-shadow:0 8px 25px rgba(0,0,0,.05);
+">
+
+<h3 style="
+margin-bottom:18px;
+font-size:.82rem;
+line-height:1.6;
+">
+
+${index+1}. ${q.question}
+
+</h3>
+
+`;
+
+["A","B","C","D"].forEach(letter=>{
+
+const text=q["option"+letter];
+
+let bg="#f8fafc";
+
+let border="#e5e7eb";
+
+let badge="";
+
+if(letter===item.correctAnswer){
+
+bg="#ecfdf5";
+
+border="#22c55e";
+
+badge="✅ Correct Answer";
+
+}
+
+if(letter===item.userAnswer && !item.correct){
+
+bg="#fef2f2";
+
+border="#ef4444";
+
+badge="❌ Your Answer";
+
+}
+
+html+=`
+
+<div style="
+padding:14px;
+margin-bottom:10px;
+border-radius:12px;
+background:${bg};
+border:2px solid ${border};
+">
+
+<div style="font-size:.78rem;">
+
+<strong>${letter}.</strong>
+
+${text}
+
+</div>
+
+${badge!=""?`
+
+<div style="
+margin-top:8px;
+font-size:.68rem;
+font-weight:bold;
+">
+
+${badge}
+
+</div>
+
+`:""}
+
+</div>
+
+`;
+
+});
+
+html+=`
+
+</div>
+
+`;
+
+});
+
+html+=`
+
+<button
+class="primary"
+onclick="hideReview()">
+
+Back To Result
+
+</button>
+
+</div>
+
+`;
+
+resultBox.innerHTML=html;
+
+resultBox.scrollIntoView({
+
+behavior:"smooth"
+
+});
+
+}
+
+function hideReview(){
+
+location.reload();
+
+}
 
 </script>
 
