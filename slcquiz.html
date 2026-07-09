@@ -848,7 +848,17 @@ Quiz Completed Successfully
 
 </p>
 
+<button
+id="reviewBtn"
+class="primary"
+style="margin-top:25px;display:none;"
+onclick="showReview()">
 
+Review My Answers
+
+</button>
+
+<div id="reviewArea" style="display:none;margin-top:25px;"></div>
 
 </div>
 
@@ -891,7 +901,7 @@ let quizData=[];
 
 let selectedLesson="";
 
-
+let reviewData = [];
 
 
 
@@ -1390,6 +1400,10 @@ document
 data.totalPoints;
 
 
+reviewData = data.review;
+
+document.getElementById("reviewBtn").style.display="block";
+  
 
 document.getElementById("resultBox").scrollIntoView({
  behavior:"smooth",
