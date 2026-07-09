@@ -41,20 +41,20 @@ font-family:'Bricolage Grotesque',sans-serif;
 }
 
 #heroTitle::after{
-content:"";
-display:inline-block;
-width:3px;
-height:1em;
-margin-left:4px;
-background:#4a0754;
-animation:blink .8s infinite;
-vertical-align:middle;
+    content:"";
+    display:inline-block;
+    width:3px;
+    height:1em;
+    margin-left:4px;
+    background:#4a0754;
+    animation:blink .8s infinite;
+    vertical-align:middle;
 }
 
 @keyframes blink{
-
-50%{
-opacity:0;
+    50%{
+        opacity:0;
+    }
 }
 
 }
@@ -2000,10 +2000,7 @@ max-width:100%;
 AFC ISIWU YOUTH
 </div>
 
-<h1 id="heroTitle">
-Youth Fellowship &
-Spiritual Growth
-</h1>
+<h1 id="heroTitle"></h1>
 
 <p>
 Building young believers through fellowship, Bible study, leadership development and practical Christian living.
@@ -2190,6 +2187,7 @@ function typeEffect() {
     const currentText = texts[textIndex];
 
     if (!deleting) {
+
         heroTitle.innerHTML = currentText
             .substring(0, charIndex)
             .replace(/\n/g, "<br>");
@@ -2198,11 +2196,12 @@ function typeEffect() {
 
         if (charIndex > currentText.length) {
             deleting = true;
-            setTimeout(typeEffect, 1800); // Pause after typing
+            setTimeout(typeEffect, 2000); // Pause after typing
             return;
         }
 
     } else {
+
         heroTitle.innerHTML = currentText
             .substring(0, charIndex)
             .replace(/\n/g, "<br>");
@@ -2211,15 +2210,18 @@ function typeEffect() {
 
         if (charIndex < 0) {
             deleting = false;
-            textIndex = (textIndex + 1) % texts.length;
+            textIndex = (textIndex + 1) % texts.length; // Loop forever
             charIndex = 0;
         }
+
     }
 
     setTimeout(typeEffect, deleting ? 35 : 70);
 }
 
-typeEffect();
+window.addEventListener("load", typeEffect);
+
+  
 ==============================
 MOBILE MENU
 ==============================
