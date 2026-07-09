@@ -5,13 +5,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Weekly Quiz</title>
+<title>Weekly SLC Quiz</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
-
+<link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 
@@ -704,7 +704,7 @@ display:none;
 
 
 
-<div class="quiz-hero">
+<div class="quiz-hero" data-aos="fade-up">
 
 <div class="hero-badge">
 <i class="fa-solid fa-trophy"></i>
@@ -723,7 +723,8 @@ Grow in God's Word by answering the weekly Sunday School lesson questions and bu
 
 </div>
 
-<div class="card status" id="statusCard">
+<div class="card status" id="statusCard" data-aos="fade-up"
+     data-aos-delay="100">
 
 <div class="loading" style="font-size:.75rem;">
 Loading quiz...
@@ -733,7 +734,8 @@ Loading quiz...
 
 
 
-<div class="card hidden" id="quizBox">
+<div class="card hidden" id="quizBox" data-aos="fade-up"
+     data-aos-delay="150">
 
 
 
@@ -781,9 +783,10 @@ Add My Name
 
 <!-- QUESTIONS CARD -->
 
-<div class="card hidden" id="questionsCard">
+<div class="card hidden" id="questionsCard" data-aos="fade-up"
+     data-aos-delay="200">
 
-<div class="questions-header">
+<div class="questions-header" data-aos="fade-right">
 
 <div class="questions-badge">
 <i class="fa-solid fa-circle-question"></i>
@@ -800,7 +803,8 @@ Select the correct answer for each question.
 
 </div>
 
-<div id="questions"></div>
+<div id="questions" data-aos="fade-up"
+     data-aos-delay="${index*50}"></div>
 
 <button
 class="primary"
@@ -812,7 +816,8 @@ Submit Quiz
 </button>
 
 </div>
-<div class="card result" id="resultBox">
+<div class="card result" id="resultBox" data-aos="fade-up"
+     data-aos-delay="200">
 
 
 <div style="
@@ -860,7 +865,16 @@ Quiz Completed Successfully
 
 
 
+<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
 
+<script>
+AOS.init({
+    duration: 800,
+    easing: "ease-out-quart",
+    once: true,
+    offset: 100
+});
+</script>
 
 <script>
 
