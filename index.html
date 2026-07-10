@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AFC Isiwu Youth Portal</title>
+<title>AFC Isiu Youth Portal</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1022,32 +1022,38 @@ NAVBAR - MODERN NEXT.JS STYLE
 
     display:none;
 
-    width:42px;
-
-    height:42px;
-
-    border-radius:12px;
-
-    background:
-
-        rgba(74,7,84,.06);
-
     color:#4A0754;
 
-    font-size:1.1rem;
+    font-size:1.35rem;
 
     cursor:pointer;
 
-    align-items:center;
+    padding:8px;
 
-    justify-content:center;
+    border:none;
+
+    background:transparent;
+
+    outline:none;
+
+    -webkit-tap-highlight-color:transparent;
 
     position:relative;
 
-    z-index:2;
+    z-index:1000001;
+
+    flex-shrink:0;
 
 }
 
+.hamburger:focus,
+.hamburger:active{
+
+    outline:none;
+
+    box-shadow:none;
+
+}
 @media(max-width:768px){
 
     .navbar{
