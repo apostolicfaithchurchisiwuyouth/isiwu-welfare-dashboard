@@ -1778,13 +1778,44 @@ loadQuiz();
 
 function showReview(){
 
-if(!reviewData || reviewData.length===0){
+    if(
+        !reviewData ||
+        reviewData.length === 0
+    ){
 
-alert("No review data available.");
+        const savedReview =
+            localStorage.getItem(
+                "lastQuizReview"
+            );
 
-return;
+        if(savedReview){
 
-}
+            reviewData =
+                JSON.parse(savedReview);
+
+        }
+
+    }
+
+    if(
+        !reviewData ||
+        reviewData.length === 0
+    ){
+
+        alert(
+            "No review data available."
+        );
+
+        return;
+    }
+  
+quizData = JSON.parse(
+
+    localStorage.getItem(
+        "lastQuizQuestions"
+    )
+
+) || [];
 
 const reviewContainer =
 document.getElementById("reviewContainer");
