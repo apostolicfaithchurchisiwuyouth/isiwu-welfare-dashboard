@@ -952,9 +952,9 @@ NAVBAR - MODERN NEXT.JS STYLE
 
 .logo i{
 
-    width:40px;
+    width:30px;
 
-    height:40px;
+    height:30px;
 
     display:flex;
 
@@ -978,7 +978,7 @@ NAVBAR - MODERN NEXT.JS STYLE
 
     color:white;
 
-    font-size:1rem;
+    font-size:.8rem;
 
     box-shadow:
 
@@ -1064,9 +1064,36 @@ NAVBAR - MODERN NEXT.JS STYLE
 
     }
 
-    .menu{
+    .menu {
 
-        display:none;
+        position: fixed;
+
+        top: 64px;
+
+        left: -100%;
+
+        width: 78%;
+
+        height: calc(100vh - 64px);
+
+        display: flex;
+
+        flex-direction: column;
+
+        gap: 10px;
+
+        padding: 24px 18px;
+
+        background: white;
+
+        transition: left .35s ease;
+
+        z-index: 999998;
+    }
+
+    .menu.active {
+
+        left: 0;
 
     }
 
