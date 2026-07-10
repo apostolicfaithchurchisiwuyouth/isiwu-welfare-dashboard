@@ -680,6 +680,84 @@ display:none;
 }
 
 
+.saved-actions{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:14px;
+
+    margin-top:20px;
+
+}
+
+.saved-btn{
+
+    width:100%;
+
+    padding:16px 18px;
+
+    border:none;
+
+    border-radius:18px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:12px;
+
+    font-size:.78rem;
+
+    font-weight:700;
+
+    cursor:pointer;
+
+    transition:.25s ease;
+
+    box-shadow:0 14px 30px rgba(0,0,0,.08);
+
+}
+
+.saved-btn i{
+
+    font-size:1rem;
+
+}
+
+.saved-btn:active{
+
+    transform:scale(.97);
+
+}
+
+.review-btn{
+
+    background:linear-gradient(
+        135deg,
+        #0ea5e9,
+        #2563eb
+    );
+
+    color:white;
+
+}
+
+.score-btn{
+
+    background:linear-gradient(
+        135deg,
+        #f59e0b,
+        #ea580c
+    );
+
+    color:white;
+
+}
+
 </style>
 
 </head>
@@ -724,15 +802,33 @@ Grow in God's Word by answering the weekly Sunday School lesson questions and bu
 <div id="quizCountdown"></div>
 
 </div>
-<button
-    id="openSavedReview"
-    class="primary"
-    style="display:none;"
-    onclick="openSavedReview()">
+<div id="savedActions" class="saved-actions">
 
-Review My Answers
+    <button
+        id="openSavedReview"
+        class="saved-btn review-btn"
+        style="display:none;"
+        onclick="openSavedReview()">
 
-</button><br>
+        <i class="fa-solid fa-book-open"></i>
+
+        Review My Answers
+
+    </button>
+
+    <button
+        id="openSavedScore"
+        class="saved-btn score-btn"
+        style="display:none;"
+        onclick="openSavedScore()">
+
+        <i class="fa-solid fa-trophy"></i>
+
+        View My Score
+
+    </button>
+
+</div>
 <div class="card status" id="statusCard" data-aos="fade-up"
      data-aos-delay="100">
 
@@ -1478,6 +1574,10 @@ function checkSavedReview() {
             .style.display = "block";
 
     }
+        document
+            .getElementById("openSavedScore")
+            .style.display = "flex";
+    }
 
 }
 
@@ -1508,6 +1608,41 @@ function openSavedReview(){
 
     showReview();
 }
+
+function openSavedScore(){
+
+    const savedScore =
+        localStorage.getItem("lastQuizScore");
+
+    if(!savedScore){
+
+        alert("You have not taken any quiz yet.");
+
+        return;
+    }
+
+    document.getElementById("quizBox").style.display = "none";
+
+    document.getElementById("questionsCard").style.display = "none";
+
+    document.getElementById("statusCard").style.display = "none";
+
+    document.getElementById("resultBox").style.display = "block";
+
+    document.getElementById("score").innerHTML =
+        localStorage.getItem("lastQuizScore");
+
+    document.getElementById("points").innerHTML =
+        "Points Earned: " +
+        localStorage.getItem("lastQuizPoints");
+
+    document.getElementById("total").innerHTML =
+        "Total Points: " +
+        localStorage.getItem("lastQuizTotal");
+
+    document.getElementById("reviewBtn").style.display =
+        "block";
+}
   
 loadQuiz();
 
@@ -1529,7 +1664,7 @@ let html=`
 <div style="margin-top:25px;">
 
 <h2 style="margin-bottom:20px;font-size:1rem;">
-📖 Review My Answers
+Review My Answers
 </h2>
 
 `;
@@ -1643,7 +1778,7 @@ html+=`
 class="primary"
 onclick="hideReview()">
 
-Back To Result
+Back To Quiz
 
 </button>
 
