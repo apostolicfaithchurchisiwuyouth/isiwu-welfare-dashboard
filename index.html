@@ -2033,7 +2033,7 @@ max-width:100%;
 
         <div class="logo">
             <i class="fa-solid fa-shield-heart"></i>
-            AFC Isiu Youth
+            AFC Isiu Youth Portal
         </div>
 
         <div class="menu" id="menu">
@@ -2055,7 +2055,7 @@ max-width:100%;
         <div class="hero-content">
 
             <div class="hero-badge">
-                AFC ISIU YOUTH
+                AFC ISIU YOUTH PORTAL
             </div>
 
             <h1 id="heroTitle"></h1>
@@ -2290,6 +2290,25 @@ hamburger.addEventListener("click", () => {
     menu.classList.toggle("active");
 
 });
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const hamburger = document.getElementById("hamburger");
+    const menu = document.getElementById("menu");
+
+    if (!hamburger || !menu) {
+        console.log("Menu elements not found.");
+        return;
+    }
+
+    hamburger.addEventListener("click", function () {
+
+        menu.classList.toggle("active");
+
+    });
+
+});
+
 
 if (hamburger && menu) {
 
