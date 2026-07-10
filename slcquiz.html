@@ -698,25 +698,26 @@ display:none;
 
     overflow:hidden;
 
-    background:
-        linear-gradient(
-            135deg,
-            rgba(255,255,255,.96),
-            rgba(250,247,255,.94)
-        );
+    display:none;
 
-    border:1px solid rgba(255,255,255,.85);
+    margin:18px 0 22px;
+
+    padding:22px;
 
     border-radius:26px;
 
-    padding:20px;
+    background:
+        linear-gradient(
+            145deg,
+            #ffffff 0%,
+            #fcfaff 55%,
+            #f7f4ff 100%
+        );
 
-    margin:20px 0;
-
-    backdrop-filter:blur(20px);
+    border:1px solid rgba(124,58,237,.08);
 
     box-shadow:
-        0 24px 60px rgba(0,0,0,.08);
+        0 18px 50px rgba(15,23,42,.08);
 
 }
 
@@ -726,27 +727,49 @@ display:none;
 
     position:absolute;
 
-    inset:0;
+    width:180px;
+
+    height:180px;
+
+    top:-90px;
+
+    right:-70px;
+
+    border-radius:50%;
 
     background:
 
-        linear-gradient(
-            45deg,
-            transparent 48%,
-            rgba(124,58,237,.03) 50%,
-            transparent 52%
-        ),
-
-        linear-gradient(
-            -45deg,
-            transparent 48%,
-            rgba(16,185,129,.03) 50%,
-            transparent 52%
+        radial-gradient(
+            circle,
+            rgba(124,58,237,.12),
+            transparent 70%
         );
 
-    background-size:40px 40px;
+}
 
-    pointer-events:none;
+.saved-card::after{
+
+    content:"";
+
+    position:absolute;
+
+    width:140px;
+
+    height:140px;
+
+    bottom:-70px;
+
+    left:-60px;
+
+    border-radius:50%;
+
+    background:
+
+        radial-gradient(
+            circle,
+            rgba(245,158,11,.10),
+            transparent 70%
+        );
 
 }
 
