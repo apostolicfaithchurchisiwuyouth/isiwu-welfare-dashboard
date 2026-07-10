@@ -1564,19 +1564,26 @@ submitBtn.disabled = false;
 
 function checkSavedReview() {
 
-    const saved =
+    const savedReview =
         localStorage.getItem("lastQuizReview");
 
-    if (saved) {
+    const savedScore =
+        localStorage.getItem("lastQuizScore");
+
+    if (savedReview) {
 
         document
             .getElementById("openSavedReview")
-            .style.display = "block";
+            .style.display = "flex";
 
     }
+
+    if (savedScore) {
+
         document
             .getElementById("openSavedScore")
             .style.display = "flex";
+
     }
 
 }
