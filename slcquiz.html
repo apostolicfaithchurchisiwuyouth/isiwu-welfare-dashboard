@@ -692,6 +692,79 @@ display:none;
 
 }
 
+.saved-card{
+
+    background:rgba(255,255,255,.9);
+
+    backdrop-filter:blur(16px);
+
+    border:1px solid rgba(255,255,255,.7);
+
+    border-radius:24px;
+
+    padding:18px;
+
+    margin:18px 0 22px;
+
+    box-shadow:
+        0 18px 45px rgba(0,0,0,.08);
+
+}
+
+.saved-card-title{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    margin-bottom:14px;
+
+    font-family:"Bricolage Grotesque",sans-serif;
+
+    font-size:.8rem;
+
+    font-weight:700;
+
+    color:#1f2937;
+
+}
+
+.saved-card-title i{
+
+    width:34px;
+
+    height:34px;
+
+    border-radius:12px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    background:linear-gradient(
+        135deg,
+        #4A0754,
+        #7c3aed
+    );
+
+    color:#fff;
+
+}
+
+.saved-actions{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:14px;
+
+}
+
 .saved-btn{
 
     width:100%;
@@ -718,9 +791,21 @@ display:none;
 
     transition:.25s ease;
 
-    box-shadow:0 14px 30px rgba(0,0,0,.08);
+    outline:none;
+
+    -webkit-tap-highlight-color:transparent;
+}
+
+.saved-btn:focus,
+.saved-btn:active,
+.saved-btn:focus-visible{
+
+    outline:none !important;
+
+    box-shadow:none !important;
 
 }
+
 
 .saved-btn i{
 
@@ -736,13 +821,14 @@ display:none;
 
 .review-btn{
 
-    background:linear-gradient(
+ background:linear-gradient(
         135deg,
-        #0ea5e9,
-        #2563eb
+        #10b981,
+        #059669
     );
 
     color:white;
+
 
 }
 
@@ -755,6 +841,19 @@ display:none;
     );
 
     color:white;
+
+}
+
+.saved-btn,
+.saved-btn:focus,
+.saved-btn:active,
+.saved-btn:focus-visible{
+
+    outline:none !important;
+
+    box-shadow:none !important;
+
+    -webkit-tap-highlight-color:transparent;
 
 }
 
@@ -802,31 +901,46 @@ Grow in God's Word by answering the weekly Sunday School lesson questions and bu
 <div id="quizCountdown"></div>
 
 </div>
-<div id="savedActions" class="saved-actions">
+<div
+    id="savedCard"
+    class="saved-card"
+    style="display:none;">
 
-    <button
-        id="openSavedReview"
-        class="saved-btn review-btn"
-        style="display:none;"
-        onclick="openSavedReview()">
+    <div class="saved-card-title">
 
-        <i class="fa-solid fa-book-open"></i>
+        <i class="fa-solid fa-clock-rotate-left"></i>
 
-        Review My Answers
+        <span>Your Previous Quiz</span>
 
-    </button>
+    </div>
 
-    <button
-        id="openSavedScore"
-        class="saved-btn score-btn"
-        style="display:none;"
-        onclick="openSavedScore()">
+    <div id="savedActions" class="saved-actions">
 
-        <i class="fa-solid fa-trophy"></i>
+        <button
+            id="openSavedReview"
+            class="saved-btn review-btn"
+            style="display:none;"
+            onclick="openSavedReview()">
 
-        View My Score
+            <i class="fa-solid fa-book-open"></i>
 
-    </button>
+            Review My Answers
+
+        </button>
+
+        <button
+            id="openSavedScore"
+            class="saved-btn score-btn"
+            style="display:none;"
+            onclick="openSavedScore()">
+
+            <i class="fa-solid fa-trophy"></i>
+
+            View My Score
+
+        </button>
+
+    </div>
 
 </div>
 <div class="card status" id="statusCard" data-aos="fade-up"
@@ -1562,7 +1676,7 @@ submitBtn.disabled = false;
 
 }
 
-function checkSavedReview() {
+function checkSavedReview(){
 
     const savedReview =
         localStorage.getItem("lastQuizReview");
@@ -1570,7 +1684,15 @@ function checkSavedReview() {
     const savedScore =
         localStorage.getItem("lastQuizScore");
 
-    if (savedReview) {
+    if(savedReview || savedScore){
+
+        document
+            .getElementById("savedCard")
+            .style.display = "block";
+
+    }
+
+    if(savedReview){
 
         document
             .getElementById("openSavedReview")
@@ -1578,7 +1700,7 @@ function checkSavedReview() {
 
     }
 
-    if (savedScore) {
+    if(savedScore){
 
         document
             .getElementById("openSavedScore")
@@ -1663,8 +1785,8 @@ return;
 
 }
 
-const resultBox =
-document.getElementById("resultBox");
+const reviewContainer =
+document.getElementById("reviewContainer");
 
 let html=`
 
@@ -1793,12 +1915,14 @@ Back To Quiz
 
 `;
 
-resultBox.innerHTML=html;
+reviewContainer.innerHTML = html;
 
-resultBox.scrollIntoView({
+document.getElementById("score").parentElement.style.display = "none";
 
-behavior:"smooth"
+reviewContainer.style.display = "block";
 
+reviewContainer.scrollIntoView({
+    behavior:"smooth"
 });
 
 }
