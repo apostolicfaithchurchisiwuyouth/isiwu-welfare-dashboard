@@ -1904,56 +1904,79 @@ color:#666;
 MOBILE
 ========================= */
 
-@media(max-width:768px){
+@media (max-width: 768px) {
 
-header{
-min-height:auto;
-height:auto;
-}
+    .menu {
 
-}
+        position: fixed;
 
-.hero-btn{
-padding:13px 20px;
-font-size:0.74rem;
-}
+        top: 72px;
 
-.navbar{
-padding:16px 5%;
-}
+        left: -100%;
 
-.logo{
-font-size:0.88rem;
-}
+        width: 78%;
 
-.menu{
-position:absolute;
-top:75px;
-left:50%;
-transform:translateX(-50%);
-width:92%;
-display:none;
-flex-direction:column;
-background:#ffffff;
-padding:18px;
-border-radius:22px;
-z-index:999999;
-box-shadow:0 20px 45px rgba(0,0,0,0.18);
-}
+        height: calc(100vh - 72px);
 
-.menu.active{
-display:flex;
-}
+        background: rgba(255,255,255,.98);
 
-.menu a{
-color:#222;
-padding:10px 0;
-border-bottom:1px solid #eee;
-width:100%;
-}
+        backdrop-filter: blur(24px);
 
-.hamburger{
-display:block;
+        -webkit-backdrop-filter: blur(24px);
+
+        display: flex;
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 8px;
+
+        padding: 24px 18px;
+
+        border-right: 1px solid rgba(74,7,84,.08);
+
+        box-shadow: 0 20px 50px rgba(0,0,0,.12);
+
+        transition: left .35s ease;
+
+        z-index: 999998;
+    }
+
+    .menu.active {
+
+        left: 0;
+
+    }
+
+    .menu a {
+
+        width: 100%;
+
+        padding: 14px 16px;
+
+        border-radius: 12px;
+
+        color: #334155;
+
+        font-size: .82rem;
+
+        font-weight: 600;
+    }
+
+    .menu a:hover {
+
+        background: rgba(74,7,84,.06);
+
+        color: #4A0754;
+
+    }
+
+    .hamburger {
+
+        display: block;
+
+    }
 }
 
 .container{
@@ -2062,7 +2085,7 @@ max-width:100%;
 
         <div class="logo">
             <i class="fa-solid fa-shield-heart"></i>
-            AFC Isiwu Youth
+            AFC Isiu Youth
         </div>
 
         <div class="menu" id="menu">
@@ -2084,7 +2107,7 @@ max-width:100%;
         <div class="hero-content">
 
             <div class="hero-badge">
-                AFC ISIWU YOUTH
+                AFC ISIU YOUTH
             </div>
 
             <h1 id="heroTitle"></h1>
