@@ -2218,61 +2218,73 @@ AOS.init({
     offset: 120
 });
 </script>
-    
+
 <script>
-const texts = [
-    "Growing in Grace and the Knowledge of Christ",
-    "Helping Young Believers Stand Firm in the Faith",
-    "Studying God's Word, Living God's Truth",
-    "Preparing Youth for Service and Eternity",
-    "Walking Together on the Path of Holiness"
-];
+/*
+==============================
+HERO TYPING EFFECT
+==============================
+*/
 
-const heroTitle = document.getElementById("heroTitle");
+document.addEventListener("DOMContentLoaded", () => {
 
-let textIndex = 0;
-let charIndex = 0;
-let deleting = false;
+    const texts = [
+        "Growing in Grace and the Knowledge of Christ",
+        "Helping Young Believers Stand Firm in the Faith",
+        "Studying God's Word, Living God's Truth",
+        "Preparing Youth for Service and Eternity",
+        "Walking Together on the Path of Holiness"
+    ];
 
-function typeEffect() {
+    const heroTitle = document.getElementById("heroTitle");
 
-    const currentText = texts[textIndex];
+    if (!heroTitle) return;
 
-    if (!deleting) {
+    let textIndex = 0;
+    let charIndex = 0;
+    let deleting = false;
 
-        heroTitle.innerHTML = currentText
-            .substring(0, charIndex)
-            .replace(/\n/g, "<br>");
+    function typeEffect() {
 
-        charIndex++;
-
-        if (charIndex > currentText.length) {
-            deleting = true;
-            setTimeout(typeEffect, 2000); // Pause after typing
-            return;
-        }
-
-    } else {
+        const currentText = texts[textIndex];
 
         heroTitle.innerHTML = currentText
             .substring(0, charIndex)
             .replace(/\n/g, "<br>");
 
-        charIndex--;
+        if (!deleting) {
 
-        if (charIndex < 0) {
-            deleting = false;
-            textIndex = (textIndex + 1) % texts.length; // Loop forever
-            charIndex = 0;
+            charIndex++;
+
+            if (charIndex > currentText.length) {
+
+                deleting = true;
+
+                setTimeout(typeEffect, 2000);
+
+                return;
+            }
+
+        } else {
+
+            charIndex--;
+
+            if (charIndex < 0) {
+
+                deleting = false;
+
+                textIndex = (textIndex + 1) % texts.length;
+
+                charIndex = 0;
+            }
         }
 
+        setTimeout(typeEffect, deleting ? 35 : 70);
     }
 
-    setTimeout(typeEffect, deleting ? 35 : 70);
-}
+    typeEffect();
 
-window.addEventListener("load", typeEffect);
-
+});
 /*
 ==============================
 MOBILE MENU (REPLACE EVERYTHING)
