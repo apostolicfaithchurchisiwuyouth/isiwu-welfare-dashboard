@@ -2302,35 +2302,32 @@ document.addEventListener("DOMContentLoaded", () => {
     const hamburger = document.getElementById("hamburger");
     const menu = document.getElementById("menu");
 
-    if (!hamburger || !menu) {
-        console.log("Hamburger or menu not found");
-        return;
-    }
+    hamburger.addEventListener("click", function (e) {
 
-    hamburger.addEventListener("click", (e) => {
+        e.preventDefault();
         e.stopPropagation();
+
         menu.classList.toggle("active");
+
+        console.log(menu.classList.contains("active"));
+
     });
 
-    menu.addEventListener("click", (e) => {
-        e.stopPropagation();
-    });
+    document.addEventListener("click", function (e) {
 
-    document.addEventListener("click", () => {
-        menu.classList.remove("active");
-    });
+        if (
+            !menu.contains(e.target) &&
+            !hamburger.contains(e.target)
+        ) {
 
-    window.addEventListener("scroll", () => {
-        menu.classList.remove("active");
-    });
-
-    menu.querySelectorAll("a").forEach(link => {
-        link.addEventListener("click", () => {
             menu.classList.remove("active");
-        });
+
+        }
+
     });
 
 });
+    
  /*
 ==============================
 CSV LINKS (UNCHANGED)
