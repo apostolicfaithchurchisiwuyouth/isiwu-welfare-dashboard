@@ -58,7 +58,6 @@ font-family:'Bricolage Grotesque',sans-serif;
     }
 }
 
-}
 
 button,
 a{
@@ -1064,38 +1063,45 @@ NAVBAR - MODERN NEXT.JS STYLE
 
     }
 
-    .menu {
+   .menu {
 
-        position: fixed;
+    position: fixed;
 
-        top: 64px;
+    top: 64px;
 
-        left: -100%;
+    left: -100%;
 
-        width: 78%;
+    width: 78%;
 
-        height: calc(100vh - 64px);
+    height: calc(100vh - 64px);
 
-        display: flex;
+    display: flex;
 
-        flex-direction: column;
+    flex-direction: column;
 
-        gap: 10px;
+    gap: 10px;
 
-        padding: 24px 18px;
+    padding: 24px 18px;
 
-        background: white;
+    background: white;
 
-        transition: left .35s ease;
+    transition: all .35s ease;
 
-        z-index: 999998;
-    }
+    z-index: 999999;
 
-    .menu.active {
+    visibility: hidden;
 
-        left: 0;
+    opacity: 0;
+}
 
-    }
+.menu.active {
+
+    left: 0;
+
+    visibility: visible;
+
+    opacity: 1;
+}
 
     .hamburger{
 
