@@ -2273,75 +2273,47 @@ function typeEffect() {
 
 window.addEventListener("load", typeEffect);
 
-This is my JS Code: /*
+/*
 ==============================
-MOBILE MENU
+MOBILE MENU (REPLACE EVERYTHING)
 ==============================
 */
 
-const hamburger =
-    document.getElementById("hamburger");
-
-const menu =
-    document.getElementById("menu");
-
-hamburger.addEventListener("click", () => {
-
-    menu.classList.toggle("active");
-
-});
-
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", () => {
 
     const hamburger = document.getElementById("hamburger");
     const menu = document.getElementById("menu");
 
     if (!hamburger || !menu) {
-        console.log("Menu elements not found.");
+        console.log("Hamburger or menu not found");
         return;
     }
 
-    hamburger.addEventListener("click", function () {
-
-        menu.classList.toggle("active");
-
-    });
-
-});
-
-
-if (hamburger && menu) {
-
-    // Toggle menu
-    hamburger.addEventListener("click", function (e) {
-        e.stopPropagation(); // Prevent immediate closing
+    hamburger.addEventListener("click", (e) => {
+        e.stopPropagation();
         menu.classList.toggle("active");
     });
 
-    // Prevent clicks inside the menu from closing it
-    menu.addEventListener("click", function (e) {
+    menu.addEventListener("click", (e) => {
         e.stopPropagation();
     });
 
-    // Close menu when clicking anywhere else
-    document.addEventListener("click", function () {
+    document.addEventListener("click", () => {
         menu.classList.remove("active");
     });
 
-    // Close menu when a menu link is clicked
+    window.addEventListener("scroll", () => {
+        menu.classList.remove("active");
+    });
+
     menu.querySelectorAll("a").forEach(link => {
-        link.addEventListener("click", function () {
+        link.addEventListener("click", () => {
             menu.classList.remove("active");
         });
     });
 
-}
-window.addEventListener("scroll", function () {
-    menu.classList.remove("active");
 });
-
-/*
-    
+  */  
 ==============================
 CSV LINKS (UNCHANGED)
 ==============================
