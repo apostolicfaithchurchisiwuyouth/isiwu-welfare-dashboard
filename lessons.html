@@ -65,32 +65,7 @@ filter:blur(90px);
 z-index:-1;
 }
 
-header {
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-
-    width: 100%;
-    padding: 14px 22px;
-
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    background: #ffffff;
-
-    border-bottom: 1px solid rgba(74, 7, 84, 0.08);
-
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-
-    overflow: hidden;
-
-    transform: translateZ(0);
-    -webkit-transform: translateZ(0);
-
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
-}
+header{ position:sticky; top:0; z-index:1000; width:100%; padding:14px 22px; display:flex; justify-content:space-between; align-items:center; background: linear-gradient( 180deg, rgba(255,255,255,.98), rgba(250,250,252,.96) ); border-bottom: 1px solid rgba(74,7,84,.08); backdrop-filter: blur(24px); box-shadow: 0 8px 30px rgba(0,0,0,.05); }
     
 header::before{
 
