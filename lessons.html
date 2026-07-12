@@ -67,47 +67,33 @@ filter:blur(90px);
 z-index:-1;
 }
 
-header{
+header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
 
-    position:sticky;
+    width: 100%;
+    padding: 14px 22px;
 
-    top:0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 
-    z-index:1000;
+    background: #ffffff;
 
-    width:100%;
+    border-bottom: 1px solid rgba(74, 7, 84, 0.08);
 
-    padding:14px 22px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 
-    display:flex;
-    overflow:hidden;
+    overflow: hidden;
 
-    justify-content:space-between;
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
 
-    align-items:center;
-
-    background:
-
-        linear-gradient(
-
-            180deg,
-
-            rgba(255,255,255,.98),
-
-            rgba(250,250,252,.96)
-
-        );
-
-    border-bottom:
-
-        1px solid rgba(74,7,84,.08);
-
-    box-shadow:
-
-        0 8px 30px rgba(0,0,0,.05);
-
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
 }
-
+    
 header::before{
 
     content:"";
@@ -830,7 +816,8 @@ AOS.init({
     duration: 800,
     easing: "ease-out-quart",
     once: true,
-    offset: 100
+    offset: 100,
+    disable: window.innerWidth < 768
 });
 </script>
 <script>
