@@ -823,7 +823,7 @@ left:-80px;
 ========================================== */
 
 .hub {
-    width:min(1200px, 92%);
+    width:min(1200px, 100%);
     padding: 1.5rem 1rem 2rem;
 
 }
