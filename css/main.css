@@ -17,9 +17,9 @@ scroll-behavior:smooth;
 
 :root{
 
-    --primary:#6C2BD9;
+    --primary:#0A0016;
 
-    --primary-dark:#4B138A;
+    --primary-dark:#4a0754;
 
     --secondary:#8B5CF6;
 
@@ -311,10 +311,10 @@ background:#f3e8ff;
 color:#4a0754;
 
 
-font-size:.68rem;
+font-size:.6rem;
 
 
-font-weight:700;
+font-weight:500;
 
 
 border-radius:35px;
@@ -1152,7 +1152,7 @@ left:-80px;
 
     gap:6px;
 
-    color:#888;
+    color:#4a0754;
 
     font-size:.75rem;
 
