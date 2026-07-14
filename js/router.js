@@ -3,6 +3,8 @@ async function loadPage(page) {
     const html = await response.text();
 
     document.getElementById("app").innerHTML = html;
+
+    if (page === "welfare") {
+        initWelfare();
+    }
 }
-
-
