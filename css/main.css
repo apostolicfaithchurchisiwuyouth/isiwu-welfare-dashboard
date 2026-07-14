@@ -819,236 +819,226 @@ left:-80px;
 }
 
 /* ==========================================
-   MINISTRY HUB
+   MODERN MINISTRY HUB
 ========================================== */
 
-.hub{
+.hub {
 
-    padding:30px 24px;
-
-}
-
-.section-title{
-
-    margin-bottom:24px;
+    padding: 1.5rem 1rem 2rem;
 
 }
 
-.section-title h3{
+.section-title {
 
-    font-size:.9rem;
-
-    font-weight:700;
-
-    color:var(--text);
+    margin-bottom: 1.3rem;
 
 }
 
-.section-title p{
+.section-title h3 {
 
-    margin-top:6px;
+    font-size: .95rem;
 
-    color:var(--text-light);
+    font-weight: 700;
 
-    font-size:.75rem;
-    font-weight:500;
-
-}
-
-.hub-grid{
-
-    display:grid;
-
-    grid-template-columns:repeat(2,1fr);
-
-    gap:18px;
+    color: var(--text);
 
 }
 
-.hub-item{
+.section-title p {
 
-    background:white;
+    margin-top: .35rem;
 
-    border-radius:25px;
+    font-size: .72rem;
 
-    padding:24px 18px;
-
-    display:flex;
-
-    flex-direction:column;
-
-    justify-content:center;
-
-    align-items:center;
-
-    gap:14px;
-
-    box-shadow:0 15px 35px rgba(0,0,0,.06);
-
-    transition:var(--transition);
-
-    cursor:pointer;
-
-    position:relative;
-
-    overflow:hidden;
+    color: var(--text-light);
 
 }
 
-.hub-item::before{
+/* GRID */
 
-    content:"";
+.hub-grid {
 
-    position:absolute;
+    display: grid;
 
-    width:120px;
+    grid-template-columns: repeat(2, 1fr);
 
-    height:120px;
-
-    border-radius:50%;
-
-    background:rgba(108,43,217,.06);
-
-    top:-60px;
-
-    right:-60px;
+    gap: .9rem;
 
 }
 
-.hub-item:hover{
+/* CARD */
 
-    transform:translateY(-8px);
+.hub-item {
 
-    box-shadow:0 25px 45px rgba(108,43,217,.18);
+    position: relative;
 
-}
+    background: rgba(255,255,255,.9);
 
-.hub-item i{
+    border: 1px solid rgba(230,230,240,.8);
 
-    width:30px;
+    border-radius: 1.4rem;
 
-    height:30px;
+    padding: 1rem;
 
-    border-radius:20px;
+    overflow: hidden;
 
-    display:flex;
+    cursor: pointer;
 
-    align-items:center;
+    transition: all .35s ease;
 
-    justify-content:center;
+    box-shadow:
 
-    color:white;
-
-    font-size:.9rem;
-
-    background:linear-gradient(
-        135deg,
-        var(--primary),
-        var(--secondary)
-    );
-
-    position:relative;
-
-    z-index:2;
+        0 .4rem 1.4rem rgba(15,23,42,.05);
 
 }
 
-.hub-item span{
+.hub-item:hover {
 
-    font-size:.75rem;
+    transform: translateY(-.35rem);
 
-    font-weight:500;
+    box-shadow:
 
-    color:var(--text);
-
-    position:relative;
-
-    z-index:2;
+        0 1rem 2rem rgba(108,43,217,.12);
 
 }
 
+/* Decorative gradient */
 
-/* ==========================================
-   SECTION ANIMATION
-========================================== */
+.hub-item::before {
 
-.feature-card,
-.hub-item{
+    content: "";
 
-    animation:fadeUp .6s ease forwards;
+    position: absolute;
+
+    top: 0;
+
+    left: 0;
+
+    width: 100%;
+
+    height: .18rem;
+
+    background:
+
+        linear-gradient(
+
+            90deg,
+
+            var(--primary),
+
+            var(--secondary)
+
+        );
 
 }
 
-@keyframes fadeUp{
+/* CONTENT */
 
-    from{
+.hub-top {
 
-        opacity:0;
+    display: flex;
 
-        transform:translateY(20px);
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    gap: .8rem;
+
+}
+
+/* ICON */
+
+.hub-icon {
+
+    width: 2.7rem;
+
+    height: 2.7rem;
+
+    border-radius: .9rem;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background:
+
+        linear-gradient(
+
+            135deg,
+
+            var(--primary),
+
+            var(--secondary)
+
+        );
+
+    box-shadow:
+
+        0 .5rem 1rem rgba(108,43,217,.15);
+
+}
+
+.hub-icon i {
+
+    font-size: .95rem;
+
+    color: white;
+
+}
+
+/* TEXT */
+
+.hub-text h4 {
+
+    font-size: .82rem;
+
+    font-weight: 650;
+
+    color: var(--text);
+
+    margin-bottom: .35rem;
+
+    line-height: 1.35;
+
+}
+
+.hub-text p {
+
+    font-size: .68rem;
+
+    color: var(--text-light);
+
+    line-height: 1.55;
+
+}
+
+/* MOBILE */
+
+@media (max-width: 23.75rem) {
+
+    .hub-grid {
+
+        gap: .7rem;
 
     }
 
-    to{
+    .hub-item {
 
-        opacity:1;
-
-        transform:translateY(0);
+        padding: .85rem;
 
     }
 
-}
+    .hub-text h4 {
 
-
-/* ==========================================
-   CARD ACTIVE EFFECT
-========================================== */
-
-.feature-card:active,
-.hub-item:active{
-
-    transform:scale(.97);
-
-}
-
-
-/* ==========================================
-   SMALL SCREEN ADJUSTMENT
-========================================== */
-
-@media(max-width:380px){
-
-    .feature-grid,
-    .hub-grid{
-
-        gap:14px;
+        font-size: .76rem;
 
     }
 
-    .feature-card,
-    .hub-item{
+    .hub-text p {
 
-        padding:20px 14px;
-
-    }
-
-    .feature-card i{
-
-        width:30px;
-
-        height:30px;
-
-        font-size:.9rem;
-
-    }
-
-    .hub-item i{
-
-        width:30px;
-
-        height:30px;
-
-        font-size:.9rem;
+        font-size: .64rem;
 
     }
 
