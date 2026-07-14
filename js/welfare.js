@@ -91,6 +91,7 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw1mVwpgAcIOSNbpgzy5
 let attempts = 0;
 
 });
+}
 
 document
 .getElementById("loginBtn")
