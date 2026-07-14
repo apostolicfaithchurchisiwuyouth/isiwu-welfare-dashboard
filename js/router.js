@@ -5,5 +5,4 @@ async function loadPage(page) {
     document.getElementById("app").innerHTML = html;
 }
 
-// Default page
-loadPage("index");
+
