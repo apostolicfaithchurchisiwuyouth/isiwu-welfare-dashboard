@@ -2046,6 +2046,7 @@ max-width:100%;
 
 <body>
 
+<div id="app">
 <header>
 
     <!-- NAVBAR -->
@@ -2058,9 +2059,9 @@ max-width:100%;
 
         <div class="menu" id="menu">
             <a href="#">Home</a>
-            <a href="welfare.html">Welfare Reports</a>
-            <a href="reports.html">Secretariat Reports</a>
-            <a href="slcquiz.html">Weekly SLC Quiz</a>
+            <a href="#" onclick="loadPage('welfare'); return false;">Welfare Reports</a>
+            <a href="#" onclick="loadPage('reports'); return false;">Secretariat Reports</a>
+            <a href="#" onclick="loadPage('slcquiz'); return false;">Weekly SLC Quiz</a>
         </div>
 
         <div class="hamburger" id="hamburger">
@@ -2087,15 +2088,11 @@ max-width:100%;
 
             <div class="hero-actions">
 
-                <a href="slcquiz.html"
-                   class="hero-btn primary-btn"
-                   style="font-family:Bricolage Grotesque;">
+                <a href="#" onclick="loadPage('slcquiz'); return false;" class="hero-btn primary-btn" style="font-family:Bricolage Grotesque;">
                     Take This Week's SLC Quiz
                 </a>
 
-                <a href="growthtracker.html"
-                   class="hero-btn secondary-btn"
-                   style="font-family:Bricolage Grotesque;">
+                <a href="#" onclick="loadPage('growthtracker'); return false;" class="hero-btn secondary-btn" style="font-family:Bricolage Grotesque;">
                     View SLC Growth Tracker
                 </a>
 
@@ -2162,8 +2159,7 @@ Loading...
 
 </div></div>
   
-<a href="lessons.html" class="lesson-read-more">
-
+<a href="#" onclick="loadPage('lesson'); return false;" class="lesson-read-more">
 Read Combined Lesson Note
 <i class="fa-solid fa-arrow-right"></i>
 
@@ -2229,7 +2225,7 @@ Read Combined Lesson Note
 AFC Isiwu Youth Department Portal © 2026
 </footer>
 <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
-
+<script src="js/router.js"></script>
 <script>
 AOS.init({
     duration: 900,
