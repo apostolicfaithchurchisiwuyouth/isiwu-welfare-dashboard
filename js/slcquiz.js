@@ -1,0 +1,855 @@
+const API =
+"https://script.google.com/macros/s/AKfycbw1mVwpgAcIOSNbpgzy52TFyozEGMtWWwVWUDFaofGNzpsguBIaKR4q1dXVtgVHO2xZ1w/exec";
+
+let quizCloseTime = "";
+let countdownInterval;
+
+let quizData=[];
+
+let selectedLesson="";
+
+let reviewData = [];
+
+
+
+async function loadQuiz(){
+
+
+const res =
+await fetch(
+API+"?action=getQuiz"
+);
+
+
+const data =
+await res.json();
+
+
+
+const box =
+document.getElementById("statusCard");
+
+
+
+if(!data.success){
+
+
+box.innerHTML =
+`
+<h2>${data.message}</h2>
+<p>Please check back every Thursday by 6PM.</p>
+`;
+
+return;
+
+}
+
+
+
+selectedLesson =
+data.lessonNo;
+
+quizCloseTime = new Date(data.closeTime);
+
+console.log("Close Time:", data.closeTime);
+  
+quizData =
+data.questions;
+
+
+
+box.innerHTML =
+`
+
+<div style="
+display:flex;
+justify-content:space-between;
+align-items:center;
+flex-wrap:wrap;
+gap:10px;
+">
+
+<div style="
+text-align:left;
+">
+
+<h2 style="
+margin:0 0 6px 0;
+">
+Lesson ${data.lessonNo}
+</h2>
+
+<p style="
+margin:0;
+">
+${data.questionCount} Questions Available
+</p>
+
+</div>
+
+<div style="
+background:#f8fafc;
+padding:10px 14px;
+border-radius:14px;
+font-size:.68rem;
+font-weight:500;
+color:#4A0754;
+">
+
+🏆 Spiritual Growth
+
+</div>
+
+</div>
+
+`;
+
+function startCountdown(){
+
+clearInterval(
+countdownInterval
+);
+
+countdownInterval =
+setInterval(()=>{
+
+const end =
+quizCloseTime.getTime();
+
+const now =
+new Date().getTime();
+
+const diff =
+end - now;
+
+if(diff <= 0){
+
+document
+.getElementById("quizCountdown")
+.innerHTML =
+"Quiz Closed";
+
+clearInterval(
+countdownInterval
+);
+
+return;
+
+}
+
+const days =
+Math.floor(
+diff / 86400000
+);
+
+const hours =
+Math.floor(
+(diff % 86400000)
+/ 3600000
+);
+
+const mins =
+Math.floor(
+(diff % 3600000)
+/ 60000
+);
+
+const secs =
+Math.floor(
+(diff % 60000)
+/ 1000
+);
+
+document
+.getElementById("quizCountdown")
+.innerHTML =
+
+"⏳ Closes In: " +
+
+days+"d " +
+hours+"h " +
+mins+"m " +
+secs+"s";
+
+},1000);
+
+}
+
+
+document.getElementById("quizBox").classList.remove("hidden");
+document.getElementById("questionsCard").classList.remove("hidden");
+document.getElementById("resultBox").style.display="none";
+
+
+loadMembers();
+
+renderQuestions();
+
+startCountdown();
+
+}
+
+
+
+
+async function loadMembers(){
+
+const res =
+await fetch(
+API+"?action=getMembers"
+);
+
+const data =
+await res.json();
+
+const select =
+document.getElementById("memberSelect");
+
+select.innerHTML =
+`
+<option value="">
+Select Your Name
+</option>
+`;
+
+data.members.forEach(m=>{
+
+select.innerHTML +=
+`
+<option value="${m.memberId}">
+${m.name}
+</option>
+`;
+
+});
+
+}
+
+
+
+
+function renderQuestions(){
+
+
+const area =
+document.getElementById("questions");
+
+
+
+area.innerHTML="";
+
+
+
+quizData.forEach((q,index)=>{
+
+
+area.innerHTML +=
+
+`
+
+<div class="question">
+
+
+<h3>
+
+${index+1}. ${q.question}
+
+</h3>
+
+
+
+<label class="option">
+
+<input type="radio" name="q${index}" value="A">
+
+${q.optionA}
+
+</label>
+
+
+<label class="option">
+
+<input type="radio" name="q${index}" value="B">
+
+${q.optionB}
+
+</label>
+
+
+<label class="option">
+
+<input type="radio" name="q${index}" value="C">
+
+${q.optionC}
+
+</label>
+
+
+<label class="option">
+
+<input type="radio" name="q${index}" value="D">
+
+${q.optionD}
+
+</label>
+
+
+</div>
+
+`;
+
+
+
+});
+
+
+
+}
+
+
+
+
+async function addNewMember(){
+
+const btn =
+event.target;
+
+const name =
+document.getElementById("newName")
+.value
+.trim();
+
+if(!name){
+
+alert("Enter your name");
+
+return;
+
+}
+
+btn.innerHTML =
+'<i class="fa-solid fa-spinner fa-spin"></i> Adding Name...';
+
+btn.classList.add("loading-btn");
+
+try{
+
+const res =
+await fetch(API,{
+
+method:"POST",
+
+body:JSON.stringify({
+
+action:"addMember",
+
+name:name
+
+})
+
+});
+
+const data =
+await res.json();
+
+alert("Name added successfully");
+
+loadMembers();
+
+document
+.getElementById("newName")
+.value="";
+
+}
+catch(error){
+
+alert("Unable to add name");
+
+}
+
+btn.innerHTML =
+'Add My Name';
+
+btn.classList.remove("loading-btn");
+
+}
+
+
+
+
+
+async function submitQuiz(){
+
+const submitBtn =
+document.getElementById("submitBtn");
+
+submitBtn.innerHTML =
+'<i class="fa-solid fa-spinner fa-spin"></i> Submitting Quiz...';
+
+submitBtn.classList.add("loading-btn");
+
+submitBtn.disabled = true;
+
+
+const memberId =
+document.getElementById("memberSelect").value;
+
+if(!memberId){
+
+alert(
+"Please select your name before submitting."
+);
+
+submitBtn.innerHTML =
+"Submit Quiz";
+
+submitBtn.classList.remove("loading-btn");
+
+submitBtn.disabled = false;
+
+return;
+
+}
+
+let answers = {};
+
+
+quizData.forEach((q,index)=>{
+
+const checked =
+document.querySelector(
+`input[name="q${index}"]:checked`
+);
+
+if(checked){
+
+answers[index+1] =
+checked.value;
+
+}
+
+});
+
+
+try{
+
+const res =
+await fetch(API,{
+
+method:"POST",
+
+body:JSON.stringify({
+
+action:"scoreQuiz",
+
+memberId:memberId,
+
+lessonNo:selectedLesson,
+
+answers:answers
+
+})
+
+});
+
+
+const data =
+await res.json();
+
+
+if(!data.success){
+
+alert(data.message);
+
+submitBtn.innerHTML =
+"Submit Quiz";
+
+submitBtn.classList.remove("loading-btn");
+
+submitBtn.disabled = false;
+
+return;
+
+}
+
+
+
+document.getElementById("quizBox").style.display = "none";
+document.getElementById("questionsCard").style.display = "none";
+document.getElementById("statusCard").style.display = "none";
+
+
+document
+.getElementById("resultBox")
+.style.display="block";
+
+
+
+document
+.getElementById("score")
+.innerHTML =
+data.score;
+
+
+
+document
+.getElementById("points")
+.innerHTML =
+"Points Earned: " +
+data.pointsEarned;
+
+
+
+document
+.getElementById("total")
+.innerHTML =
+"Total Points: " +
+data.totalPoints;
+
+
+reviewData = data.review;
+
+localStorage.setItem(
+    "lastQuizReview",
+    JSON.stringify(data.review)
+);
+
+localStorage.setItem(
+    "lastQuizScore",
+    data.score
+);
+
+localStorage.setItem(
+    "lastQuizPoints",
+    data.pointsEarned
+);
+
+localStorage.setItem(
+    "lastQuizTotal",
+    data.totalPoints
+);
+
+localStorage.setItem(
+    "lastQuizLesson",
+    selectedLesson
+);
+
+localStorage.setItem(
+    "lastQuizQuestions",
+    JSON.stringify(quizData)
+);
+  
+document.getElementById("reviewBtn").style.display="block";
+  
+
+document.getElementById("resultBox").scrollIntoView({
+ behavior:"smooth",
+ block:"start"
+});
+
+
+}catch(error){
+
+alert("Unable to submit quiz.");
+
+submitBtn.innerHTML =
+"Submit Quiz";
+
+submitBtn.classList.remove("loading-btn");
+
+submitBtn.innerHTML = "Quiz Submitted";
+submitBtn.classList.remove("loading-btn");
+  
+submitBtn.disabled = false;
+
+}
+
+}
+
+function checkSavedReview(){
+
+    const savedReview =
+        localStorage.getItem("lastQuizReview");
+
+    const savedScore =
+        localStorage.getItem("lastQuizScore");
+
+    if(savedReview || savedScore){
+
+        document
+            .getElementById("savedCard")
+            .style.display = "block";
+
+    }
+
+    if(savedReview){
+
+        document
+            .getElementById("openSavedReview")
+            .style.display = "flex";
+
+    }
+
+    if(savedScore){
+
+        document
+            .getElementById("openSavedScore")
+            .style.display = "flex";
+
+    }
+
+}
+
+checkSavedReview();
+
+function openSavedReview(){
+
+    reviewData = JSON.parse(
+        localStorage.getItem("lastQuizReview")
+    );
+
+    quizData = JSON.parse(
+        localStorage.getItem("lastQuizQuestions")
+    );
+
+    document.getElementById("score").innerHTML =
+        localStorage.getItem("lastQuizScore");
+
+    document.getElementById("points").innerHTML =
+        "Points Earned: " +
+        localStorage.getItem("lastQuizPoints");
+
+    document.getElementById("total").innerHTML =
+        "Total Points: " +
+        localStorage.getItem("lastQuizTotal");
+
+    document.getElementById("resultBox").style.display = "block";
+
+    showReview();
+}
+
+function openSavedScore(){
+
+    const savedScore =
+        localStorage.getItem("lastQuizScore");
+
+    if(!savedScore){
+
+        alert("You have not taken any quiz yet.");
+
+        return;
+    }
+
+    document.getElementById("quizBox").style.display = "none";
+
+    document.getElementById("questionsCard").style.display = "none";
+
+    document.getElementById("statusCard").style.display = "none";
+
+    document.getElementById("resultBox").style.display = "block";
+
+    document.getElementById("score").innerHTML =
+        localStorage.getItem("lastQuizScore");
+
+    document.getElementById("points").innerHTML =
+        "Points Earned: " +
+        localStorage.getItem("lastQuizPoints");
+
+    document.getElementById("total").innerHTML =
+        "Total Points: " +
+        localStorage.getItem("lastQuizTotal");
+
+    document.getElementById("reviewBtn").style.display =
+        "block";
+}
+  
+loadQuiz();
+
+function showReview(){
+
+    if(
+        !reviewData ||
+        reviewData.length === 0
+    ){
+
+        const savedReview =
+            localStorage.getItem(
+                "lastQuizReview"
+            );
+
+        if(savedReview){
+
+            reviewData =
+                JSON.parse(savedReview);
+
+        }
+
+    }
+
+    if(
+        !reviewData ||
+        reviewData.length === 0
+    ){
+
+        alert(
+            "No review data available."
+        );
+
+        return;
+    }
+  
+quizData = JSON.parse(
+
+    localStorage.getItem(
+        "lastQuizQuestions"
+    )
+
+) || [];
+
+const reviewContainer =
+document.getElementById("reviewContainer");
+
+let html=`
+
+<div style="margin-top:25px;">
+
+<h2 style="margin-bottom:20px;font-size:1rem;">
+Review My Answers
+</h2>
+
+`;
+
+reviewData.forEach((item,index)=>{
+
+const q=quizData[index];
+
+html+=`
+
+<div style="
+background:#fff;
+padding:20px;
+border-radius:16px;
+margin-bottom:20px;
+border:1px solid #ececec;
+box-shadow:0 8px 25px rgba(0,0,0,.05);
+">
+
+<h3 style="
+margin-bottom:18px;
+font-size:.82rem;
+line-height:1.6;
+">
+
+${index+1}. ${q.question}
+
+</h3>
+
+`;
+
+["A","B","C","D"].forEach(letter=>{
+
+const text=q["option"+letter];
+
+let bg="#f8fafc";
+
+let border="#e5e7eb";
+
+let badge="";
+
+if(letter===item.correctAnswer){
+
+bg="#ecfdf5";
+
+border="#22c55e";
+
+badge="✅ Correct Answer";
+
+}
+
+if(letter===item.userAnswer && !item.correct){
+
+bg="#fef2f2";
+
+border="#ef4444";
+
+badge="❌ Your Answer";
+
+}
+
+html+=`
+
+<div style="
+padding:14px;
+margin-bottom:10px;
+border-radius:12px;
+background:${bg};
+border:2px solid ${border};
+">
+
+<div style="font-size:.78rem;">
+
+<strong>${letter}.</strong>
+
+${text}
+
+</div>
+
+${badge!=""?`
+
+<div style="
+margin-top:8px;
+font-size:.68rem;
+font-weight:bold;
+">
+
+${badge}
+
+</div>
+
+`:""}
+
+</div>
+
+`;
+
+});
+
+html+=`
+
+</div>
+
+`;
+
+});
+
+html+=`
+
+<button
+class="primary"
+onclick="hideReview()">
+
+Back To Quiz
+
+</button>
+
+</div>
+
+`;
+
+reviewContainer.innerHTML = html;
+
+document.getElementById("score").parentElement.style.display = "none";
+
+reviewContainer.style.display = "block";
+
+reviewContainer.scrollIntoView({
+    behavior:"smooth"
+});
+
+}
+
+function hideReview(){
+
+location.reload();
+
+}
