@@ -354,14 +354,12 @@ INIT
 ==============================
 */
 
-fetchSheetData();
-fetchSecretariatReports();
-fetchWeeklyLesson();
+function initHome() {
 
-/*
-==============================
-AUTO REFRESH
-==============================
-*/
+    fetchSecretariatReports();
 
-setInterval(fetchSecretariatReports, 30000);
+    fetchWeeklyLesson();
+
+    setInterval(fetchSecretariatReports, 30000);
+
+}
