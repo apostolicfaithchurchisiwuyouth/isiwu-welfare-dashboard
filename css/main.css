@@ -1076,8 +1076,8 @@ left:-80px;
 
     margin-top: .55rem;
 
-    font-size: .7rem;
-
+    font-size: .65rem;
+    font-weight:500;
     line-height: 1.7;
 
     color: var(--text-light);
