@@ -1,7 +1,17 @@
-function initWelfare() {
+function initWelfare(){
+
     load();
-    // attach login listeners
-    // attach logout listener
+
+    setInterval(load,30000);
+
+    document
+        .getElementById("loginBtn")
+        .addEventListener("click", loginUser);
+
+    document
+        .getElementById("logoutBtn")
+        .addEventListener("click", logoutUser);
+
 }
 
 const welfareCSV='https://docs.google.com/spreadsheets/d/e/2PACX-1vQHlE5IpmFYaQyW5u-rentH2fGC5VZJ2w9Ql1WI-X8bE76qlN5_ttDIitwlXX1CM4sqdEW8RroDUNSU/pub?gid=439044630&single=true&output=csv';
