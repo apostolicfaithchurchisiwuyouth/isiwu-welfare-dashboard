@@ -102,7 +102,7 @@ position:relative;
 overflow:hidden;
 isolation:isolate;
 
-width:min(800px, 90%);
+width:min(1200px, 90%);
 margin:0 auto;
 
 padding:120px 24px 50px;
