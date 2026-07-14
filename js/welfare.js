@@ -90,23 +90,6 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw1mVwpgAcIOSNbpgzy5
   
 let attempts = 0;
 
-window.addEventListener("load",()=>{
-  
-if(
-sessionStorage.getItem("welfareLoggedIn")
-==="true"
-){
-
-document.getElementById(
-"dashboardContent"
-).style.display="block";
-
-document.getElementById(
-"loginOverlay"
-).style.display="none";
-
-}
-
 });
 
 document
