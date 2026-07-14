@@ -1046,11 +1046,10 @@ left:-80px;
 /* label */
 
 .hub-count {
-
+    margin-right: 4rem;
+    margin-top: .3rem;
     font-size: .65rem;
-
     font-weight: 700;
-
     color: var(--text-light);
 
 }
