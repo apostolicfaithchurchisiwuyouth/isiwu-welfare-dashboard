@@ -854,55 +854,60 @@ left:-80px;
 
 }
 
-/* GRID */
+/* ==================================
+   HUB GRID
+================================== */
 
 .hub-grid {
 
     display: grid;
 
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
 
     gap: .9rem;
 
 }
 
-/* CARD */
+/* ==================================
+   CARD
+================================== */
 
 .hub-item {
 
     position: relative;
 
-    background: rgba(255,255,255,.9);
+    overflow: hidden;
 
-    border: 1px solid rgba(230,230,240,.8);
-
-    border-radius: 1.4rem;
+    min-height: 10rem;
 
     padding: 1rem;
 
-    overflow: hidden;
+    border-radius: 1.7rem;
 
-    cursor: pointer;
+    background:
 
-    transition: all .35s ease;
+        linear-gradient(
+            180deg,
+            rgba(255,255,255,.96),
+            rgba(248,248,252,.92)
+        );
 
-    box-shadow:
-
-        0 .4rem 1.4rem rgba(15,23,42,.05);
-
-}
-
-.hub-item:hover {
-
-    transform: translateY(-.35rem);
+    border: 1px solid rgba(255,255,255,.85);
 
     box-shadow:
 
-        0 1rem 2rem rgba(108,43,217,.12);
+        0 .5rem 1.4rem rgba(0,0,0,.05),
+
+        inset 0 1px 0 rgba(255,255,255,.8);
+
+    transition:
+
+        transform .35s ease,
+        box-shadow .35s ease;
 
 }
 
-/* Decorative gradient */
+/* glow */
 
 .hub-item::before {
 
@@ -910,51 +915,105 @@ left:-80px;
 
     position: absolute;
 
-    top: 0;
+    width: 8rem;
+    height: 8rem;
 
-    left: 0;
+    border-radius: 50%;
 
-    width: 100%;
+    background:
 
-    height: .18rem;
+        radial-gradient(
+
+            rgba(131, 80, 255, .14),
+
+            transparent 70%
+
+        );
+
+    top: -4rem;
+    right: -4rem;
+
+}
+
+/* hover */
+
+.hub-item:hover {
+
+    transform: translateY(-.35rem);
+
+    box-shadow:
+
+        0 1.2rem 2.2rem rgba(80, 50, 180, .12);
+
+}
+
+/* featured */
+
+.featured {
+
+    grid-column: span 2;
+
+    min-height: 12rem;
 
     background:
 
         linear-gradient(
-
-            90deg,
-
-            var(--primary),
-
-            var(--secondary)
-
+            135deg,
+            #ffffff,
+            rgba(246,242,255,.95)
         );
 
 }
 
-/* CONTENT */
+/* badge */
 
-.hub-top {
+.hub-badge {
 
-    display: flex;
+    position: absolute;
 
-    flex-direction: column;
+    top: 1rem;
+    right: 1rem;
 
-    align-items: flex-start;
+    padding: .3rem .65rem;
 
-    gap: .8rem;
+    border-radius: 999px;
+
+    font-size: .58rem;
+
+    font-weight: 700;
+
+    letter-spacing: .08rem;
+
+    background:
+
+        rgba(108,43,217,.10);
+
+    color:
+
+        var(--primary);
 
 }
 
-/* ICON */
+/* top */
+
+.hub-header {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+}
+
+/* icon */
 
 .hub-icon {
 
-    width: 2.7rem;
+    width: 3rem;
+    height: 3rem;
 
-    height: 2.7rem;
-
-    border-radius: .9rem;
+    border-radius: 1rem;
 
     display: flex;
 
@@ -965,85 +1024,86 @@ left:-80px;
     background:
 
         linear-gradient(
-
             135deg,
-
             var(--primary),
-
             var(--secondary)
-
         );
 
     box-shadow:
 
-        0 .5rem 1rem rgba(108,43,217,.15);
+        0 .75rem 1.5rem rgba(108,43,217,.22);
 
 }
 
 .hub-icon i {
 
-    font-size: .95rem;
-
     color: white;
 
-}
-
-/* TEXT */
-
-.hub-text h4 {
-
-    font-size: .82rem;
-
-    font-weight: 650;
-
-    color: var(--text);
-
-    margin-bottom: .35rem;
-
-    line-height: 1.35;
+    font-size: 1rem;
 
 }
 
-.hub-text p {
+/* label */
 
-    font-size: .68rem;
+.hub-count {
+
+    font-size: .65rem;
+
+    font-weight: 700;
 
     color: var(--text-light);
 
-    line-height: 1.55;
+}
+
+/* title */
+
+.hub-item h4 {
+
+    margin-top: 1rem;
+
+    font-size: .9rem;
+
+    font-weight: 700;
+
+    line-height: 1.3;
+
+    color: var(--text);
 
 }
 
-/* MOBILE */
+/* description */
 
-@media (max-width: 23.75rem) {
+.hub-item p {
+
+    margin-top: .55rem;
+
+    font-size: .7rem;
+
+    line-height: 1.7;
+
+    color: var(--text-light);
+
+}
+
+/* tablets */
+
+@media (min-width: 48rem) {
 
     .hub-grid {
 
-        gap: .7rem;
+        grid-template-columns:
+
+            repeat(4, minmax(0, 1fr));
 
     }
 
-    .hub-item {
+    .featured {
 
-        padding: .85rem;
-
-    }
-
-    .hub-text h4 {
-
-        font-size: .76rem;
-
-    }
-
-    .hub-text p {
-
-        font-size: .64rem;
+        grid-column: span 2;
 
     }
 
 }
-
 /* ==========================================
    PART 2C
    BOTTOM NAVIGATION
