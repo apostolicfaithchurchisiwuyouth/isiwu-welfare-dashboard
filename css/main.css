@@ -36,7 +36,7 @@ scroll-behavior:smooth;
     --shadow:
         0 20px 45px rgba(108,43,217,.12);
 
-    --radius:24px;
+    --radius:25px;
 
     --transition:.35s ease;
 
@@ -311,13 +311,13 @@ background:#f3e8ff;
 color:#4a0754;
 
 
-font-size:.6rem;
+font-size:.68rem;
 
 
 font-weight:700;
 
 
-border-radius:10px;
+border-radius:35px;
 
 
 margin-bottom:16px;
@@ -356,8 +356,8 @@ margin-bottom:14px;
 .hero-content p{
 
 
-font-size:.78rem;
-
+font-size:.75rem;
+font-weight:500;
 
 line-height:1.8;
 
@@ -641,7 +641,7 @@ margin-bottom:12px;
 .hero-card h3{
 
 
-font-size:.85rem;
+font-size:.9rem;
 
 
 color:#4a0754;
@@ -658,8 +658,8 @@ margin-bottom:8px;
 .hero-card p{
 
 
-font-size:.72rem;
-
+font-size:.75rem;
+font-weight:500;
 
 color:#64748b;
 
@@ -720,11 +720,8 @@ line-height:1.3;
 
 
 .hero-content p{
-
-
-font-size:.7rem;
-
-
+font-size:.75rem;
+font-weight:500;
 line-height:1.7;
 
 }
