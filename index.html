@@ -42,104 +42,131 @@
 
     </div>
 
-<section class="hero-section">
+<div class="section">
 
-    <div class="hero-card">
+    <div class="lesson-hero" data-aos="zoom-in" data-aos-delay="200">
 
-        <div class="hero-top">
+        <div class="lesson-overlay"></div>
 
-            <div class="hero-badge">
+        <div class="lesson-content">
 
-                THIS WEEK'S LESSON
+            <div class="lesson-header">
+
+                <div class="lesson-top-badge">
+
+                    THIS WEEK'S LESSON
+
+                </div>
+
+                <div class="lesson-status">
+
+                    Updated Weekly
+
+                </div>
 
             </div>
 
-            <span class="hero-week" id="heroWeek">
+            <h1 id="lessonTopic">
 
                 Loading...
 
-            </span>
+            </h1>
 
-        </div>
+            <p class="lesson-subtitle">
 
-        <h1 id="heroLessonTopic">
+                Explore the weekly lessons, memory verses, and Bible texts across all classes.
 
-            Loading lesson...
+            </p>
 
-        </h1>
+            <div class="lesson-tabs">
 
-        <p id="heroLessonSummary">
+                <button class="lesson-tab active"
+                    onclick="switchLesson('Senior')">
 
-            Please wait while the lesson loads.
+                    Senior
 
-        </p>
+                </button>
 
-        <!-- Tabs -->
+                <button class="lesson-tab"
+                    onclick="switchLesson('Junior')">
 
-        <div class="lesson-tabs">
+                    Junior
 
-            <button class="lesson-tab active"
-                    data-class="senior">
+                </button>
 
-                Senior
+                <button class="lesson-tab"
+                    onclick="switchLesson('Elementary')">
 
-            </button>
+                    Elementary
 
-            <button class="lesson-tab"
-                    data-class="junior">
-
-                Junior
-
-            </button>
-
-            <button class="lesson-tab"
-                    data-class="elementary">
-
-                Elementary
-
-            </button>
-
-            <button class="lesson-tab"
-                    data-class="primary">
-
-                Primary
-
-            </button>
-
-        </div>
-
-        <!-- Lesson Card -->
-
-        <div class="lesson-preview">
-
-            <div class="lesson-meta">
-
-                <span id="lessonMemoryVerse">
-
-                    Memory Verse
-
-                </span>
-
-                <span id="lessonBibleText">
-
-                    Bible Text
-
-                </span>
+                </button>
 
             </div>
 
-            <div id="LessonBody">
+            <div class="lesson-mini-grid">
 
-                Loading...
+                <div class="mini-card">
+
+                    <div class="mini-icon">
+
+                        <i class="fa-solid fa-book-open"></i>
+
+                    </div>
+
+                    <div>
+
+                        <h3>Bible Text</h3>
+
+                        <p id="lessonBibleText">
+
+                            Loading...
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <div class="mini-card">
+
+                    <div class="mini-icon">
+
+                        <i class="fa-solid fa-quote-left"></i>
+
+                    </div>
+
+                    <div>
+
+                        <h3>Memory Verse</h3>
+
+                        <p id="lessonMemoryVerse">
+
+                            Loading...
+
+                        </p>
+
+                    </div>
+
+                </div>
 
             </div>
+
+            <a href="#"
+               onclick="loadPage('lesson'); return false;"
+               class="lesson-read-more">
+
+                Read Combined Lesson Note
+
+                <i class="fa-solid fa-arrow-right"></i>
+
+            </a>
 
         </div>
 
     </div>
 
+</div>
 </section>
-
 </header>
 
 <br>
