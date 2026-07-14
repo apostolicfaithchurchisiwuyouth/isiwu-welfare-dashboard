@@ -2203,18 +2203,17 @@ box-shadow:
 
     position: relative;
 
-    margin: 1rem;
+    margin: .5rem;
 
     overflow: hidden;
 
-    border-radius: 2rem;
+    border-radius: 1.5rem;
 
     background: #ffffff;
 
     border: 1px solid rgba(233,236,242,.9);
 
     box-shadow:
-
         0 1rem 2.5rem rgba(15,23,42,.08);
 
 }
@@ -2235,17 +2234,11 @@ box-shadow:
 
     border-radius: 50%;
 
-    background:
-
-        radial-gradient(
-
-            circle,
-
-            rgba(108,43,217,.16),
-
-            transparent 70%
-
-        );
+    background: radial-gradient(
+        circle,
+        rgba(108,43,217,.16),
+        transparent 70%
+    );
 
     pointer-events: none;
 
@@ -2259,41 +2252,41 @@ box-shadow:
 
     z-index: 2;
 
-    padding: 1.4rem;
+    padding: 1rem;
 
 }
 
-/* Header */
+/* ======================================
+   HEADER
+====================================== */
 
 .lesson-header {
 
-    display: flex;
+    display: grid;
 
-    align-items: center;
+    grid-template-columns: 1fr auto;
 
-    justify-content: space-between;
+    align-items: start;
 
-    margin-bottom: 1rem;
+    gap: .75rem;
+
+    margin-bottom: .9rem;
 
 }
 
 .lesson-top-badge {
 
-    padding: .45rem .85rem;
+    justify-self: start;
+
+    padding: .42rem .8rem;
 
     border-radius: 999rem;
 
-    background:
-
-        linear-gradient(
-
-            135deg,
-
-            rgba(108,43,217,.10),
-
-            rgba(165,108,255,.08)
-
-        );
+    background: linear-gradient(
+        135deg,
+        rgba(108,43,217,.10),
+        rgba(165,108,255,.08)
+    );
 
     color: var(--primary);
 
@@ -2307,7 +2300,13 @@ box-shadow:
 
 .lesson-status {
 
-    font-size: .68rem;
+    justify-self: end;
+
+    text-align: right;
+
+    white-space: nowrap;
+
+    font-size: .65rem;
 
     font-weight: 600;
 
@@ -2315,11 +2314,13 @@ box-shadow:
 
 }
 
-/* Title */
+/* ======================================
+   TITLE
+====================================== */
 
 .lesson-content h1 {
 
-    font-size: 1.55rem;
+    font-size: 1.2rem;
 
     line-height: 1.15;
 
@@ -2327,31 +2328,31 @@ box-shadow:
 
     color: var(--text);
 
-    margin-bottom: .7rem;
+    margin-bottom: .6rem;
 
 }
 
-/* Subtitle */
-
 .lesson-subtitle {
 
-    font-size: .76rem;
+    font-size: .72rem;
 
-    line-height: 1.7;
+    line-height: 1.65;
 
     color: var(--text-light);
 
 }
 
-/* Tabs */
+/* ======================================
+   TABS
+====================================== */
 
 .lesson-tabs {
 
     display: flex;
 
-    gap: .7rem;
+    gap: .55rem;
 
-    margin-top: 1.5rem;
+    margin-top: 1rem;
 
     padding-bottom: .25rem;
 
@@ -2375,15 +2376,15 @@ box-shadow:
 
     color: var(--text-light);
 
-    padding: .85rem 1rem;
+    padding: .75rem .9rem;
 
-    border-radius: 1rem;
+    border-radius: .95rem;
 
     white-space: nowrap;
 
     cursor: pointer;
 
-    font-size: .72rem;
+    font-size: .68rem;
 
     font-weight: 600;
 
@@ -2395,45 +2396,42 @@ box-shadow:
 
     color: #fff;
 
-    background:
-
-        linear-gradient(
-
-            135deg,
-
-            var(--primary),
-
-            var(--secondary)
-
-        );
+    background: linear-gradient(
+        135deg,
+        var(--primary),
+        var(--secondary)
+    );
 
     box-shadow:
-
         0 .7rem 1.6rem rgba(108,43,217,.18);
 
 }
 
-/* Main layout */
+/* ======================================
+   MAIN LAYOUT
+====================================== */
 
 .lesson-layout {
 
     display: grid;
 
-    grid-template-columns: 1.6fr 1fr;
+    grid-template-columns: 1fr;
 
-    gap: 1rem;
+    gap: .8rem;
 
-    margin-top: 1.5rem;
+    margin-top: 1.2rem;
 
 }
 
-/* Bible text card */
+/* ======================================
+   BIBLE TEXT CARD
+====================================== */
 
 .lesson-main-card {
 
-    padding: 1.2rem;
+    padding: 1rem;
 
-    border-radius: 1.3rem;
+    border-radius: 1.2rem;
 
     background: #f8f9fd;
 
@@ -2441,7 +2439,9 @@ box-shadow:
 
 }
 
-/* Right side */
+/* ======================================
+   RIGHT SIDE
+====================================== */
 
 .lesson-side {
 
@@ -2449,15 +2449,17 @@ box-shadow:
 
     flex-direction: column;
 
-    gap: .9rem;
+    gap: .8rem;
 
 }
 
-/* Memory verse block */
+/* ======================================
+   MEMORY BLOCK
+====================================== */
 
 .memory-block {
 
-    padding: 1rem;
+    padding: .95rem;
 
     background: rgba(108,43,217,.05);
 
@@ -2467,15 +2469,17 @@ box-shadow:
 
 }
 
-/* Labels */
+/* ======================================
+   LABELS
+====================================== */
 
 .lesson-label {
 
     display: inline-block;
 
-    margin-bottom: .55rem;
+    margin-bottom: .5rem;
 
-    font-size: .64rem;
+    font-size: .62rem;
 
     font-weight: 700;
 
@@ -2487,20 +2491,24 @@ box-shadow:
 
 }
 
-/* Text */
+/* ======================================
+   TEXT
+====================================== */
 
 .lesson-main-card p,
 .memory-block p {
 
-    font-size: .75rem;
+    font-size: .72rem;
 
-    line-height: 1.7;
+    line-height: 1.65;
 
     color: var(--text);
 
 }
 
-/* Button */
+/* ======================================
+   BUTTON
+====================================== */
 
 .lesson-read-more {
 
@@ -2510,29 +2518,25 @@ box-shadow:
 
     justify-content: center;
 
-    gap: .6rem;
+    gap: .55rem;
 
     text-decoration: none;
 
-    padding: 1rem;
+    width: 100%;
+
+    padding: .95rem;
 
     border-radius: 1rem;
 
-    background:
+    background: linear-gradient(
+        135deg,
+        var(--primary),
+        var(--secondary)
+    );
 
-        linear-gradient(
+    color: #fff;
 
-            135deg,
-
-            var(--primary),
-
-            var(--secondary)
-
-        );
-
-    color: white;
-
-    font-size: .75rem;
+    font-size: .72rem;
 
     font-weight: 700;
 
@@ -2546,45 +2550,61 @@ box-shadow:
 
 }
 
-/* Mobile */
+/* ======================================
+   TABLET
+====================================== */
 
-@media (max-width: 48rem) {
+@media (min-width: 48rem) {
+
+    .lesson-hero {
+
+        margin: 1rem;
+
+        border-radius: 2rem;
+
+    }
 
     .lesson-content {
 
-        padding: 1.2rem;
+        padding: 1.8rem;
 
     }
 
     .lesson-content h1 {
 
-        font-size: 1.2rem;
+        font-size: 1.7rem;
 
     }
 
     .lesson-layout {
 
-        grid-template-columns: 1fr;
+        grid-template-columns: 1.6fr 1fr;
+
+        gap: 1rem;
+
+    }
+
+    .lesson-tab {
+
+        font-size: .72rem;
+
+        padding: .85rem 1rem;
 
     }
 
 }
 
-/* Tablet */
+/* ======================================
+   DESKTOP
+====================================== */
 
-@media (min-width: 48rem) {
+@media (min-width: 75rem) {
 
     .lesson-content {
 
         padding: 2rem;
 
     }
-
-}
-
-/* Desktop */
-
-@media (min-width: 75rem) {
 
     .lesson-content h1 {
 
@@ -2593,7 +2613,6 @@ box-shadow:
     }
 
 }
-
 /* =========================
 FOOTER
 ========================= */
@@ -2656,16 +2675,6 @@ width:70px;
 height:70px;
 font-size:1.4rem;
 }
-
-.lesson-hero{
-min-height:auto;
-padding:30px 22px;
-}
-
-.lesson-content h1{
-font-size:1.15rem;
-}
-
 }
 
 @media (max-width:768px){
