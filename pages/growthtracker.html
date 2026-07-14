@@ -65,26 +65,3 @@
 <div class="row" data-aos="fade-up"><div><div class="name">Onomakpor Daniel</div><div class="id">M014</div></div><div class="weeks"><span class="badge">1/9</span></div><div class="points">1,300</div></div>
 </div></div></div></div>
 
-<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
-
-<script>
-AOS.init({
-    duration: 900,
-    easing: "ease-out-cubic",
-    once: true,
-    offset: 120
-});
-</script>
-<script>
-const API="https://script.google.com/macros/s/AKfycbw1mVwpgAcIOSNbpgzy52TFyozEGMtWWwVWUDFaofGNzpsguBIaKR4q1dXVtgVHO2xZ1w/exec";
-async function load(){
-const b=document.getElementById("leaderboard");
-try{
-const r=await fetch(API+"?action=getLeaderboard",{cache:"no-store"});
-const d=await r.json();
-const total=d.totalWeeks||d.totalweeks||d.seasonWeeks||13;
-b.className="";
-b.innerHTML=(d.leaderboard||[]).map(m=>`<div class=row><div><div class=name>${m.name}</div><div class=id>${m.memberId}</div></div><div class=weeks><span class=badge>${m.weeks}/${total}</span></div><div class=points>${Number(m.points).toLocaleString()}</div></div>`).join("");
-}catch(e){b.textContent="Unable to load leaderboard.";}}
-load();
-</script></body></html>
