@@ -45,7 +45,7 @@
 
     <div class="lesson-hero" data-aos="zoom-in" data-aos-delay="200">
 
-        <div class="lesson-overlay"></div>
+        <div class="hero-gradient"></div>
 
         <div class="lesson-content">
 
@@ -73,28 +73,31 @@
 
             <p class="lesson-subtitle">
 
-                Explore the weekly lessons, memory verses, and Bible texts across all classes.
+                Study the lesson notes, memory verses and Bible texts across all classes.
 
             </p>
 
             <div class="lesson-tabs">
 
                 <button class="lesson-tab active"
-                    onclick="switchLesson('Senior')">
+                    onclick="switchLesson('Senior')"
+                    style="font-family:DM Sans;">
 
                     Senior
 
                 </button>
 
                 <button class="lesson-tab"
-                    onclick="switchLesson('Junior')">
+                    onclick="switchLesson('Junior')"
+                    style="font-family:DM Sans;">
 
                     Junior
 
                 </button>
 
                 <button class="lesson-tab"
-                    onclick="switchLesson('Elementary')">
+                    onclick="switchLesson('Elementary')"
+                    style="font-family:DM Sans;">
 
                     Elementary
 
@@ -102,41 +105,33 @@
 
             </div>
 
-            <div class="lesson-mini-grid">
+            <div class="lesson-layout">
 
-                <div class="mini-card">
+                <div class="lesson-main-card">
 
-                    <div class="mini-icon">
+                    <span class="lesson-label">
 
-                        <i class="fa-solid fa-book-open"></i>
+                        Bible Text
 
-                    </div>
+                    </span>
 
-                    <div>
+                    <p id="lessonBibleText">
 
-                        <h3>Bible Text</h3>
+                        Loading...
 
-                        <p id="lessonBibleText">
-
-                            Loading...
-
-                        </p>
-
-                    </div>
+                    </p>
 
                 </div>
 
-                <div class="mini-card">
+                <div class="lesson-side">
 
-                    <div class="mini-icon">
+                    <div class="memory-block">
 
-                        <i class="fa-solid fa-quote-left"></i>
+                        <span class="lesson-label">
 
-                    </div>
+                            Memory Verse
 
-                    <div>
-
-                        <h3>Memory Verse</h3>
+                        </span>
 
                         <p id="lessonMemoryVerse">
 
@@ -146,19 +141,19 @@
 
                     </div>
 
+                    <a href="#"
+                       onclick="loadPage('lesson'); return false;"
+                       class="lesson-read-more">
+
+                        Read Combined Lesson Note
+
+                        <i class="fa-solid fa-arrow-right"></i>
+
+                    </a>
+
                 </div>
 
             </div>
-
-            <a href="#"
-               onclick="loadPage('lesson'); return false;"
-               class="lesson-read-more">
-
-                Read Combined Lesson Note
-
-                <i class="fa-solid fa-arrow-right"></i>
-
-            </a>
 
         </div>
 
