@@ -102,7 +102,7 @@ position:relative;
 overflow:hidden;
 isolation:isolate;
 
-width:min(100%, 90%);
+width:min(1200px, 92%);
 margin:0 auto;
 
 padding:120px 24px 50px;
@@ -823,7 +823,7 @@ left:-80px;
 ========================================== */
 
 .hub {
-
+    width:min(1200px, 92%);
     padding: 1.5rem 1rem 2rem;
 
 }
@@ -1766,13 +1766,13 @@ GENERAL LAYOUT
 
 .container{
 width:100%;
-max-width:850px;
+max-width:1200px;
 margin:auto;
 padding:30px 18px;
 }
 
 .section{
-margin-top:-100px;
+margin-top:10px;
 padding:20px 16px;
 width:100%;
 border-radius:25px;
