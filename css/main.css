@@ -13,6 +13,35 @@ html{
 scroll-behavior:smooth;
 }
 
+/* ---------- VARIABLES ---------- */
+
+:root{
+
+    --primary:#6C2BD9;
+
+    --primary-dark:#4B138A;
+
+    --secondary:#8B5CF6;
+
+    --light:#ffffff;
+
+    --background:#f7f7fb;
+
+    --text:#1d1d1f;
+
+    --text-light:#6b7280;
+
+    --border:#ececf2;
+
+    --shadow:
+        0 20px 45px rgba(108,43,217,.12);
+
+    --radius:24px;
+
+    --transition:.35s ease;
+
+}
+
 body{
 font-family:'DM Sans',sans-serif;
 background:#eef3f9;
