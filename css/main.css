@@ -86,7 +86,7 @@ HEADER + HERO
 header{
 width:100%;
 position:relative;
-min-height:100vh;
+min-height:auto;
 height:auto;
 overflow:visible;
 
