@@ -944,6 +944,42 @@ left:-80px;
 
 }
 
+.quiz-icon {
+
+    background: linear-gradient(135deg, #7c3aed, #a855f7);
+
+}
+
+.lesson-icon {
+
+    background: linear-gradient(135deg, #2563eb, #3b82f6);
+
+}
+
+.event-icon {
+
+    background: linear-gradient(135deg, #ea580c, #fb923c);
+
+}
+
+.welfare-icon {
+
+    background: linear-gradient(135deg, #16a34a, #22c55e);
+
+}
+
+.prayer-icon {
+
+    background: linear-gradient(135deg, #dc2626, #f43f5e);
+
+}
+
+.gallery-icon {
+
+    background: linear-gradient(135deg, #0891b2, #06b6d4);
+
+}
+
 /* featured */
 
 .featured {
