@@ -44,7 +44,7 @@ scroll-behavior:smooth;
 }
 
 body{
-font-family:'Manrope',sans-serif;
+font-family:'Google Sans',sans-serif;
 background:#eef3f9;
 color:#222;
 overflow-x:hidden;
@@ -2204,7 +2204,7 @@ box-shadow:
 
     position: relative;
 
-    margin: .5rem;
+    margin: 5rem;
 
     overflow: hidden;
 
@@ -2335,8 +2335,8 @@ box-shadow:
 
 .lesson-subtitle {
 
-    font-size: .72rem;
-
+    font-size: .75rem;
+    font-weight:500;
     line-height: 1.65;
 
     color: var(--text-light);
@@ -2379,7 +2379,7 @@ box-shadow:
 
     padding: .75rem .9rem;
 
-    border-radius: .95rem;
+    border-radius: 35px;
 
     white-space: nowrap;
 
@@ -2499,7 +2499,7 @@ box-shadow:
 .lesson-main-card p,
 .memory-block p {
 
-    font-size: .72rem;
+    font-size: .75rem;
 
     line-height: 1.65;
 
@@ -2527,7 +2527,7 @@ box-shadow:
 
     padding: .95rem;
 
-    border-radius: 1rem;
+    border-radius: 35px;
 
     background: linear-gradient(
         135deg,
