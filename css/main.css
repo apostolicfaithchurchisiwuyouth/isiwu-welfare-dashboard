@@ -809,7 +809,7 @@ left:-80px;
 
 }
 
-/* ==========================================
+/* =========================================
    MODERN MINISTRY HUB
 ========================================== */
 
@@ -1047,14 +1047,6 @@ left:-80px;
     align-items: center;
 
     justify-content: center;
-
-    background:
-
-        linear-gradient(
-            135deg,
-            var(--primary),
-            var(--secondary)
-        );
 
     box-shadow:
 
