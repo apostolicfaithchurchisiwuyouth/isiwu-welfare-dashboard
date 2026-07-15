@@ -151,13 +151,12 @@ border-radius:50%;
 
 
 background:
-
-radial-gradient(
-circle,
-rgba(168,85,247,.45),
-rgba(168,85,247,.12) 45%,
-transparent 75%
-);
+    radial-gradient(
+        circle,
+        rgba(8, 145, 178, 0.25),
+        rgba(6, 182, 212, 0.15) 45%,
+        transparent 75%
+    );
 
 
 
@@ -2252,10 +2251,12 @@ box-shadow:
 
     border-radius: 50%;
 
-    background: radial-gradient(
+    background:
+    radial-gradient(
         circle,
-        rgba(108,43,217,.16),
-        transparent 70%
+        rgba(8, 145, 178, 0.25),
+        rgba(6, 182, 212, 0.15) 45%,
+        transparent 75%
     );
 
     pointer-events: none;
@@ -2314,7 +2315,6 @@ box-shadow:
 
     font-weight: 700;
 
-    letter-spacing: .06rem;
 
 }
 
@@ -2355,8 +2355,6 @@ box-shadow:
 .lesson-subtitle {
 
     font-size: .75rem;
-
-    line-height: 1.7;
 
     color: var(--text-light);
 
@@ -2404,7 +2402,7 @@ box-shadow:
 
     justify-content: center;
 
-    background: #f3f5fb;
+    background: linear-gradient(135deg, #dc2626, #f43f5e);
 
     color: var(--text-light);
 
@@ -2425,14 +2423,9 @@ box-shadow:
     color: #fff;
 
     background: linear-gradient(
-        135deg,
-        var(--primary),
-        var(--secondary)
+        135deg, #7c3aed,
+        #a855f7
     );
-
-    box-shadow:
-        0 .7rem 1.6rem rgba(108,43,217,.18);
-
 }
 
 /* ======================================
@@ -2560,8 +2553,8 @@ box-shadow:
 
     background: linear-gradient(
         135deg,
-        var(--primary),
-        var(--secondary)
+        #16a34a,
+        #22c55e
     );
 
     color: #fff;
