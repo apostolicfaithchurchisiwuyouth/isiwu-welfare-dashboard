@@ -2293,7 +2293,7 @@ box-shadow:
 
     color: var(--primary);
 
-    font-size: .68rem;
+    font-size: .6rem;
 
     font-weight: 700;
 
@@ -2309,7 +2309,7 @@ box-shadow:
 
     text-align: right;
 
-    font-size: .75rem;
+    font-size: .62rem;
 
     font-weight: 600;
 
@@ -2323,7 +2323,7 @@ box-shadow:
 
 .lesson-content h1 {
 
-    font-size: 1.45rem;
+    font-size: 1rem;
 
     line-height: 1.2;
 
@@ -2337,7 +2337,7 @@ box-shadow:
 
 .lesson-subtitle {
 
-    font-size: .82rem;
+    font-size: .75rem;
 
     line-height: 1.7;
 
@@ -2395,7 +2395,7 @@ box-shadow:
 
     cursor: pointer;
 
-    font-size: .78rem;
+    font-size: .75rem;
 
     font-weight: 600;
 
@@ -2509,7 +2509,7 @@ box-shadow:
 .lesson-main-card p,
 .memory-block p {
 
-    font-size: .82rem;
+    font-size: .75rem;
 
     line-height: 1.7;
 
@@ -2549,9 +2549,9 @@ box-shadow:
 
     color: #fff;
 
-    font-size: .82rem;
+    font-size: .75rem;
 
-    font-weight: 700;
+    font-weight: 600;
 
     transition: all .3s ease;
 
@@ -2585,13 +2585,13 @@ box-shadow:
 
     .lesson-content h1 {
 
-        font-size: 1.9rem;
+        font-size: 1.2rem;
 
     }
 
     .lesson-subtitle {
 
-        font-size: .9rem;
+        font-size: .8rem;
 
     }
 
@@ -2635,7 +2635,7 @@ box-shadow:
 
     .lesson-content h1 {
 
-        font-size: 2.2rem;
+        font-size: 1.8rem;
 
     }
 
