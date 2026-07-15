@@ -807,6 +807,287 @@ left:-80px;
 
 }
 
+/* ==================================
+   WELCOME PANEL
+================================== */
+
+.welcome-panel {
+
+    position: relative;
+
+    margin: 5rem .5rem -3rem;
+
+    padding: 1.25rem;
+
+    border-radius: 2rem;
+
+    overflow: hidden;
+
+    background:
+
+        linear-gradient(
+            135deg,
+            #4a0754 0%,
+            #6c2bd9 55%,
+            #8b5cf6 100%
+        );
+
+    box-shadow:
+
+        0 1.25rem 3rem rgba(76, 29, 149, .25);
+
+}
+
+/* Decorative circles */
+
+.welcome-panel::before {
+
+    content: "";
+
+    position: absolute;
+
+    width: 14rem;
+
+    height: 14rem;
+
+    border-radius: 50%;
+
+    top: -7rem;
+
+    right: -6rem;
+
+    background:
+
+        radial-gradient(
+
+            circle,
+
+            rgba(255,255,255,.18),
+
+            transparent 70%
+
+        );
+
+}
+
+.welcome-panel::after {
+
+    content: "";
+
+    position: absolute;
+
+    width: 10rem;
+
+    height: 10rem;
+
+    border-radius: 50%;
+
+    bottom: -5rem;
+
+    left: -4rem;
+
+    background:
+
+        radial-gradient(
+
+            circle,
+
+            rgba(255,255,255,.10),
+
+            transparent 70%
+
+        );
+
+}
+
+/* Top row */
+
+.welcome-info {
+
+    position: relative;
+
+    z-index: 2;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 1rem;
+
+}
+
+/* Circle icon */
+
+.welcome-avatar {
+
+    flex-shrink: 0;
+
+    width: 3.5rem;
+
+    height: 3.5rem;
+
+    border-radius: 50%;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background:
+
+        rgba(255,255,255,.16);
+
+    backdrop-filter: blur(12px);
+
+}
+
+.welcome-avatar i {
+
+    font-size: 1.35rem;
+
+    color: white;
+
+}
+
+/* Text */
+
+.welcome-text h2 {
+
+    color: white;
+
+    font-size: 1rem;
+
+    font-weight: 700;
+
+    margin-bottom: .3rem;
+
+}
+
+.welcome-text p {
+
+    color: rgba(255,255,255,.85);
+
+    font-size: .78rem;
+
+    line-height: 1.6;
+
+}
+
+/* Buttons */
+
+.welcome-actions {
+
+    position: relative;
+
+    z-index: 2;
+
+    display: flex;
+
+    gap: .75rem;
+
+    margin-top: 1.25rem;
+
+}
+
+.welcome-btn {
+
+    flex: 1;
+
+    height: 2.75rem;
+
+    border-radius: 999rem;
+
+    text-decoration: none;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: .78rem;
+
+    font-weight: 700;
+
+    transition: .3s ease;
+
+}
+
+.welcome-btn.primary {
+
+    background: white;
+
+    color: #5b21b6;
+
+}
+
+.welcome-btn.secondary {
+
+    color: white;
+
+    border: 1px solid rgba(255,255,255,.25);
+
+    background: rgba(255,255,255,.10);
+
+}
+
+.welcome-btn:hover {
+
+    transform: translateY(-.15rem);
+
+}
+
+/* Move lesson card upward */
+
+.lesson-hero {
+
+    position: relative;
+
+    z-index: 5;
+
+}
+
+/* Mobile */
+
+@media (max-width: 48rem) {
+
+    .welcome-panel {
+
+        padding: 1rem;
+
+        margin: 5rem .5rem -2.5rem;
+
+    }
+
+    .welcome-text h2 {
+
+        font-size: .92rem;
+
+    }
+
+    .welcome-text p {
+
+        font-size: .72rem;
+
+    }
+
+}
+
+/* Desktop */
+
+@media (min-width: 48rem) {
+
+    .welcome-panel {
+
+        margin: 6rem 1rem -3rem;
+
+        padding: 1.75rem;
+
+    }
+
+}
+
 /* =========================================
    MODERN MINISTRY HUB
 ========================================== */
