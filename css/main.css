@@ -2254,8 +2254,8 @@ box-shadow:
     radial-gradient(
         circle,
         rgba(8, 145, 178, 0.25),
-        rgba(6, 182, 212, 0.15) 45%,
-        transparent 55%
+        rgba(6, 182, 212, 0.15) 35%,
+        transparent 75%
     );
 
     pointer-events: none;
@@ -2481,7 +2481,7 @@ box-shadow:
 
     background: #fafaf7;
 
-    border-left: .2rem solid var #ea580c;
+    border-left: .2rem solid #ea580c;
 
     border-radius: 0 1rem 1rem 0;
 
