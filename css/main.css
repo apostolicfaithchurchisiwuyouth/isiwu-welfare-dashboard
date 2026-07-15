@@ -34,9 +34,6 @@ scroll-behavior:smooth;
 
     --border:#ececf2;
 
-    --shadow:
-        0 20px 45px rgba(108,43,217,.12);
-
     --radius:25px;
 
     --transition:.35s ease;
@@ -836,7 +833,7 @@ left:-80px;
 
 .section-title h3 {
 
-    font-size: .95rem;
+    font-size: 1rem;
 
     font-weight: 700;
 
@@ -1010,8 +1007,8 @@ left:-80px;
 
 .hub-icon {
 
-    width: 3rem;
-    height: 3rem;
+    width: 2rem;
+    height: 2rem;
 
     border-radius: 1rem;
 
@@ -1039,7 +1036,7 @@ left:-80px;
 
     color: white;
 
-    font-size: 1rem;
+    font-size: .9rem;
 
 }
 
@@ -1060,7 +1057,7 @@ left:-80px;
 
     margin-top: 1rem;
 
-    font-size: .85rem;
+    font-size: .90rem;
 
     font-weight: 700;
 
@@ -1076,7 +1073,7 @@ left:-80px;
 
     margin-top: .55rem;
 
-    font-size: .65rem;
+    font-size: .7rem;
     font-weight:500;
     line-height: 1.7;
 
@@ -2323,7 +2320,7 @@ box-shadow:
 
 .lesson-content h1 {
 
-    font-size: 1rem;
+    font-size: 1.3rem;
 
     line-height: 1.2;
 
