@@ -2204,7 +2204,7 @@ box-shadow:
 
     position: relative;
 
-    margin: 5rem;
+    margin: 5rem .5rem .5rem;
 
     overflow: hidden;
 
@@ -2245,7 +2245,9 @@ box-shadow:
 
 }
 
-/* Main content */
+/* ======================================
+   CONTENT
+====================================== */
 
 .lesson-content {
 
@@ -2271,7 +2273,7 @@ box-shadow:
 
     gap: .75rem;
 
-    margin-bottom: .9rem;
+    margin-bottom: 1rem;
 
 }
 
@@ -2279,7 +2281,7 @@ box-shadow:
 
     justify-self: start;
 
-    padding: .42rem .8rem;
+    padding: .45rem .85rem;
 
     border-radius: 999rem;
 
@@ -2291,11 +2293,11 @@ box-shadow:
 
     color: var(--primary);
 
-    font-size: .62rem;
+    font-size: .68rem;
 
     font-weight: 700;
 
-    letter-spacing: .08rem;
+    letter-spacing: .06rem;
 
 }
 
@@ -2303,11 +2305,11 @@ box-shadow:
 
     justify-self: end;
 
-    text-align: right;
-
     white-space: nowrap;
 
-    font-size: .65rem;
+    text-align: right;
+
+    font-size: .75rem;
 
     font-weight: 600;
 
@@ -2321,23 +2323,23 @@ box-shadow:
 
 .lesson-content h1 {
 
-    font-size: 1.2rem;
+    font-size: 1.45rem;
 
-    line-height: 1.15;
+    line-height: 1.2;
 
     font-weight: 800;
 
     color: var(--text);
 
-    margin-bottom: .6rem;
+    margin-bottom: .75rem;
 
 }
 
 .lesson-subtitle {
 
-    font-size: .75rem;
-    font-weight:500;
-    line-height: 1.65;
+    font-size: .82rem;
+
+    line-height: 1.7;
 
     color: var(--text-light);
 
@@ -2351,13 +2353,13 @@ box-shadow:
 
     display: flex;
 
-    gap: .55rem;
+    gap: .6rem;
 
-    margin-top: 1rem;
-
-    padding-bottom: .25rem;
+    margin-top: 1.2rem;
 
     overflow-x: auto;
+
+    padding-bottom: .25rem;
 
     scrollbar-width: none;
 
@@ -2373,19 +2375,27 @@ box-shadow:
 
     border: none;
 
+    height: 35px;
+
+    padding: 0 1rem;
+
+    border-radius: 35px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
     background: #f3f5fb;
 
     color: var(--text-light);
-
-    padding: .75rem .9rem;
-
-    border-radius: 35px;
 
     white-space: nowrap;
 
     cursor: pointer;
 
-    font-size: .68rem;
+    font-size: .78rem;
 
     font-weight: 600;
 
@@ -2418,9 +2428,9 @@ box-shadow:
 
     grid-template-columns: 1fr;
 
-    gap: .8rem;
+    gap: .9rem;
 
-    margin-top: 1.2rem;
+    margin-top: 1.3rem;
 
 }
 
@@ -2450,17 +2460,17 @@ box-shadow:
 
     flex-direction: column;
 
-    gap: .8rem;
+    gap: .9rem;
 
 }
 
 /* ======================================
-   MEMORY BLOCK
+   MEMORY VERSE
 ====================================== */
 
 .memory-block {
 
-    padding: .95rem;
+    padding: 1rem;
 
     background: rgba(108,43,217,.05);
 
@@ -2478,15 +2488,15 @@ box-shadow:
 
     display: inline-block;
 
-    margin-bottom: .5rem;
+    margin-bottom: .55rem;
 
-    font-size: .62rem;
+    font-size: .72rem;
 
     font-weight: 700;
 
     text-transform: uppercase;
 
-    letter-spacing: .08rem;
+    letter-spacing: .06rem;
 
     color: var(--primary);
 
@@ -2499,9 +2509,9 @@ box-shadow:
 .lesson-main-card p,
 .memory-block p {
 
-    font-size: .75rem;
+    font-size: .82rem;
 
-    line-height: 1.65;
+    line-height: 1.7;
 
     color: var(--text);
 
@@ -2519,15 +2529,17 @@ box-shadow:
 
     justify-content: center;
 
-    gap: .55rem;
-
-    text-decoration: none;
+    gap: .6rem;
 
     width: 100%;
 
-    padding: .95rem;
+    min-height: 35px;
+
+    padding: .95rem 1.2rem;
 
     border-radius: 35px;
+
+    text-decoration: none;
 
     background: linear-gradient(
         135deg,
@@ -2537,7 +2549,7 @@ box-shadow:
 
     color: #fff;
 
-    font-size: .72rem;
+    font-size: .82rem;
 
     font-weight: 700;
 
@@ -2559,7 +2571,7 @@ box-shadow:
 
     .lesson-hero {
 
-        margin: 1rem;
+        margin: 6rem 1rem 1rem;
 
         border-radius: 2rem;
 
@@ -2573,7 +2585,13 @@ box-shadow:
 
     .lesson-content h1 {
 
-        font-size: 1.7rem;
+        font-size: 1.9rem;
+
+    }
+
+    .lesson-subtitle {
+
+        font-size: .9rem;
 
     }
 
@@ -2587,9 +2605,11 @@ box-shadow:
 
     .lesson-tab {
 
-        font-size: .72rem;
+        height: 38px;
 
-        padding: .85rem 1rem;
+        padding: 0 1.2rem;
+
+        font-size: .82rem;
 
     }
 
@@ -2601,6 +2621,12 @@ box-shadow:
 
 @media (min-width: 75rem) {
 
+    .lesson-hero {
+
+        margin: 6rem 1rem 1rem;
+
+    }
+
     .lesson-content {
 
         padding: 2rem;
@@ -2609,7 +2635,14 @@ box-shadow:
 
     .lesson-content h1 {
 
-        font-size: 2rem;
+        font-size: 2.2rem;
+
+    }
+
+    .lesson-main-card p,
+    .memory-block p {
+
+        font-size: .9rem;
 
     }
 
