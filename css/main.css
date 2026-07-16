@@ -807,49 +807,46 @@ left:-80px;
 
 }
 
-/* =====================================
+/* ==================================
    HERO WRAPPER
-===================================== */
+================================== */
 
 .hero-wrapper {
 
     position: relative;
 
-    margin-top: 4.5rem;
+    width: 100vw;
+
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    margin-top: 4.8rem;
 
 }
 
-/* =====================================
-   FULL BACKGROUND
-===================================== */
+/* ==================================
+   PURPLE BACKGROUND
+================================== */
 
 .hero-background {
 
-    position: relative;
-
     width: 100%;
 
-    padding: 1.2rem .75rem 6rem;
+    background: linear-gradient(
+        135deg,
+        #4a0754 0%,
+        #6c2bd9 55%,
+        #8b5cf6 100%
+    );
 
-    background:
+    padding: 1.2rem .8rem 6rem;
 
-        linear-gradient(
-
-            135deg,
-
-            #4a0754 0%,
-
-            #6c2bd9 50%,
-
-            #8b5cf6 100%
-
-        );
+    position: relative;
 
     overflow: hidden;
 
 }
-
-/* Decorative glow */
 
 .hero-background::before {
 
@@ -861,23 +858,17 @@ left:-80px;
 
     height: 18rem;
 
-    top: -9rem;
-
-    right: -8rem;
-
     border-radius: 50%;
 
-    background:
+    top: -9rem;
 
-        radial-gradient(
+    right: -7rem;
 
-            circle,
-
-            rgba(255,255,255,.18),
-
-            transparent 70%
-
-        );
+    background: radial-gradient(
+        circle,
+        rgba(255,255,255,.16),
+        transparent 70%
+    );
 
 }
 
@@ -891,39 +882,33 @@ left:-80px;
 
     height: 12rem;
 
-    left: -5rem;
+    bottom: -5rem;
 
-    bottom: -6rem;
+    left: -4rem;
 
     border-radius: 50%;
 
-    background:
-
-        radial-gradient(
-
-            circle,
-
-            rgba(255,255,255,.08),
-
-            transparent 70%
-
-        );
+    background: radial-gradient(
+        circle,
+        rgba(255,255,255,.08),
+        transparent 70%
+    );
 
 }
 
-/* =====================================
-   WELCOME CONTENT
-===================================== */
+/* ==================================
+   CONTENT
+================================== */
 
 .welcome-content {
+
+    max-width: 1100px;
+
+    margin: auto;
 
     position: relative;
 
     z-index: 2;
-
-    max-width: 1100px;
-
-    margin: 0 auto;
 
 }
 
@@ -939,15 +924,15 @@ left:-80px;
 
 .welcome-avatar {
 
-    width: 3.5rem;
+    width: 3.3rem;
 
-    height: 3.5rem;
+    height: 3.3rem;
 
     border-radius: 50%;
 
-    background: rgba(255,255,255,.15);
+    flex-shrink: 0;
 
-    backdrop-filter: blur(12px);
+    background: rgba(255,255,255,.16);
 
     display: flex;
 
@@ -959,19 +944,25 @@ left:-80px;
 
 .welcome-avatar i {
 
-    color: white;
+    color: #fff;
 
-    font-size: 1.3rem;
+    font-size: 1.2rem;
+
+}
+
+.welcome-text {
+
+    flex: 1;
 
 }
 
 .welcome-text h2 {
 
-    color: white;
+    color: #fff;
 
-    font-size: 1rem;
+    font-size: .95rem;
 
-    margin-bottom: .25rem;
+    margin-bottom: .3rem;
 
 }
 
@@ -979,11 +970,15 @@ left:-80px;
 
     color: rgba(255,255,255,.85);
 
-    font-size: .78rem;
+    font-size: .75rem;
 
     line-height: 1.6;
 
 }
+
+/* ==================================
+   BUTTONS
+================================== */
 
 .welcome-actions {
 
@@ -991,7 +986,7 @@ left:-80px;
 
     gap: .75rem;
 
-    margin-top: 1.2rem;
+    margin-top: 1rem;
 
 }
 
@@ -999,11 +994,9 @@ left:-80px;
 
     flex: 1;
 
-    height: 2.75rem;
+    height: 2.8rem;
 
     border-radius: 999px;
-
-    text-decoration: none;
 
     display: flex;
 
@@ -1011,7 +1004,9 @@ left:-80px;
 
     justify-content: center;
 
-    font-size: .8rem;
+    text-decoration: none;
+
+    font-size: .78rem;
 
     font-weight: 700;
 
@@ -1029,23 +1024,27 @@ left:-80px;
 
     color: white;
 
-    background: rgba(255,255,255,.1);
+    border: 1px solid rgba(255,255,255,.22);
 
-    border: 1px solid rgba(255,255,255,.2);
+    background: rgba(255,255,255,.1);
 
 }
 
-/* =====================================
-   FLOATING LESSON CARD
-===================================== */
+/* ==================================
+   LESSON CARD FLOATING
+================================== */
 
 .lesson-hero {
 
     position: relative;
 
-    z-index: 10;
+    z-index: 20;
 
-    margin: -4rem .5rem 0;
+    max-width: 1100px;
+
+    margin: -4rem auto 0;
+
+    padding: 0 .5rem;
 
 }
 
