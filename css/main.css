@@ -2659,8 +2659,8 @@ box-shadow:
     );
 
     color: var(--primary);
-
-    font-size: .8rem;
+    font-weight: 600;
+    font-size: .78rem;
 
 
 }
@@ -2900,7 +2900,7 @@ box-shadow:
 
     color: #fff;
     font-family: "Bricolage Grotesque", sans-serif;
-    font-size: .7rem;
+    font-size: .78rem;
 
     font-weight: 700;
 
