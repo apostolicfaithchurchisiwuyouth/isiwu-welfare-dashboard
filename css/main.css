@@ -807,54 +807,65 @@ left:-80px;
 
 }
 
-/* ==================================
-   WELCOME PANEL
-================================== */
+/* =====================================
+   HERO WRAPPER
+===================================== */
 
-.welcome-panel {
+.hero-wrapper {
 
     position: relative;
 
-    margin: 5rem .5rem -3rem;
+    margin-top: 4.5rem;
 
-    padding: 1.25rem;
+}
 
-    border-radius: 2rem;
+/* =====================================
+   FULL BACKGROUND
+===================================== */
 
-    overflow: hidden;
+.hero-background {
+
+    position: relative;
+
+    width: 100%;
+
+    padding: 1.2rem .75rem 6rem;
 
     background:
 
         linear-gradient(
+
             135deg,
+
             #4a0754 0%,
-            #6c2bd9 55%,
+
+            #6c2bd9 50%,
+
             #8b5cf6 100%
+
         );
 
-    box-shadow:
-
-        0 1.25rem 3rem rgba(76, 29, 149, .25);
+    overflow: hidden;
 
 }
 
-/* Decorative circles */
+/* Decorative glow */
 
-.welcome-panel::before {
+.hero-background::before {
 
     content: "";
 
     position: absolute;
 
-    width: 14rem;
+    width: 18rem;
 
-    height: 14rem;
+    height: 18rem;
+
+    top: -9rem;
+
+    right: -8rem;
 
     border-radius: 50%;
-
-    top: -7rem;
-
-    right: -6rem;
 
     background:
 
@@ -870,21 +881,21 @@ left:-80px;
 
 }
 
-.welcome-panel::after {
+.hero-background::after {
 
     content: "";
 
     position: absolute;
 
-    width: 10rem;
+    width: 12rem;
 
-    height: 10rem;
+    height: 12rem;
+
+    left: -5rem;
+
+    bottom: -6rem;
 
     border-radius: 50%;
-
-    bottom: -5rem;
-
-    left: -4rem;
 
     background:
 
@@ -892,7 +903,7 @@ left:-80px;
 
             circle,
 
-            rgba(255,255,255,.10),
+            rgba(255,255,255,.08),
 
             transparent 70%
 
@@ -900,13 +911,23 @@ left:-80px;
 
 }
 
-/* Top row */
+/* =====================================
+   WELCOME CONTENT
+===================================== */
 
-.welcome-info {
+.welcome-content {
 
     position: relative;
 
     z-index: 2;
+
+    max-width: 1100px;
+
+    margin: 0 auto;
+
+}
+
+.welcome-info {
 
     display: flex;
 
@@ -916,11 +937,7 @@ left:-80px;
 
 }
 
-/* Circle icon */
-
 .welcome-avatar {
-
-    flex-shrink: 0;
 
     width: 3.5rem;
 
@@ -928,29 +945,25 @@ left:-80px;
 
     border-radius: 50%;
 
+    background: rgba(255,255,255,.15);
+
+    backdrop-filter: blur(12px);
+
     display: flex;
 
     align-items: center;
 
     justify-content: center;
 
-    background:
-
-        rgba(255,255,255,.16);
-
-    backdrop-filter: blur(12px);
-
 }
 
 .welcome-avatar i {
 
-    font-size: 1.35rem;
-
     color: white;
 
-}
+    font-size: 1.3rem;
 
-/* Text */
+}
 
 .welcome-text h2 {
 
@@ -958,9 +971,7 @@ left:-80px;
 
     font-size: 1rem;
 
-    font-weight: 700;
-
-    margin-bottom: .3rem;
+    margin-bottom: .25rem;
 
 }
 
@@ -974,19 +985,13 @@ left:-80px;
 
 }
 
-/* Buttons */
-
 .welcome-actions {
-
-    position: relative;
-
-    z-index: 2;
 
     display: flex;
 
     gap: .75rem;
 
-    margin-top: 1.25rem;
+    margin-top: 1.2rem;
 
 }
 
@@ -996,7 +1001,7 @@ left:-80px;
 
     height: 2.75rem;
 
-    border-radius: 999rem;
+    border-radius: 999px;
 
     text-decoration: none;
 
@@ -1006,11 +1011,9 @@ left:-80px;
 
     justify-content: center;
 
-    font-size: .78rem;
+    font-size: .8rem;
 
     font-weight: 700;
-
-    transition: .3s ease;
 
 }
 
@@ -1026,43 +1029,41 @@ left:-80px;
 
     color: white;
 
-    border: 1px solid rgba(255,255,255,.25);
+    background: rgba(255,255,255,.1);
 
-    background: rgba(255,255,255,.10);
-
-}
-
-.welcome-btn:hover {
-
-    transform: translateY(-.15rem);
+    border: 1px solid rgba(255,255,255,.2);
 
 }
 
-/* Move lesson card upward */
+/* =====================================
+   FLOATING LESSON CARD
+===================================== */
 
 .lesson-hero {
 
     position: relative;
 
-    z-index: 5;
+    z-index: 10;
+
+    margin: -4rem .5rem 0;
 
 }
 
-/* Mobile */
+/* =====================================
+   MOBILE
+===================================== */
 
 @media (max-width: 48rem) {
 
-    .welcome-panel {
+    .hero-background {
 
-        padding: 1rem;
-
-        margin: 5rem .5rem -2.5rem;
+        padding: 1rem .5rem 5.5rem;
 
     }
 
     .welcome-text h2 {
 
-        font-size: .92rem;
+        font-size: .9rem;
 
     }
 
@@ -1074,15 +1075,15 @@ left:-80px;
 
 }
 
-/* Desktop */
+/* =====================================
+   DESKTOP
+===================================== */
 
 @media (min-width: 48rem) {
 
-    .welcome-panel {
+    .lesson-hero {
 
-        margin: 6rem 1rem -3rem;
-
-        padding: 1.75rem;
+        margin: -4rem 1rem 0;
 
     }
 
