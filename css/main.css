@@ -2613,7 +2613,7 @@ box-shadow:
 
     color: var(--primary);
 
-    font-size: .6rem;
+    font-size: .8rem;
 
 
 }
@@ -2626,7 +2626,7 @@ box-shadow:
 
     text-align: right;
 
-    font-size: .62rem;
+    font-size: .75rem;
 
     font-weight: 600;
 
@@ -2709,7 +2709,7 @@ box-shadow:
     white-space: nowrap;
 
     cursor: pointer;
-
+    font-family:'Afacad',sans-serif;
     font-size: .85rem;
 
     font-weight: 600;
@@ -2723,8 +2723,8 @@ box-shadow:
     color: #fff;
 
     background: linear-gradient(
-        135deg, #7c3aed,
-        #a855f7
+        135deg, #ea580c,
+        #fb923c
     );
 }
 
@@ -2847,15 +2847,15 @@ box-shadow:
 
     background: linear-gradient(
         135deg,
-        #16a34a,
-        #22c55e
+        #0891b2,
+        #06b6d4
     );
 
     color: #fff;
     font-family:'Bricolage Grotesque',sans-serif;
     font-size: .7rem;
 
-    font-weight: 600;
+    font-weight: 700;
 
     transition: all .3s ease;
 
