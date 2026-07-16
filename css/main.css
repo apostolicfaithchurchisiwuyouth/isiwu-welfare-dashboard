@@ -821,7 +821,7 @@ left:-80px;
 
     transform: translateX(-50%);
 
-    margin-top: 4.8rem;
+    margin-top: 0;
 
 }
 
@@ -833,6 +833,10 @@ left:-80px;
 
     width: 100%;
 
+    position: relative;
+
+    overflow: hidden;
+
     background: linear-gradient(
         135deg,
         #4a0754 0%,
@@ -840,11 +844,7 @@ left:-80px;
         #8b5cf6 100%
     );
 
-    padding: 1.2rem .8rem 6rem;
-
-    position: relative;
-
-    overflow: hidden;
+    padding: 6.5rem .75rem 8rem;
 
 }
 
@@ -858,11 +858,11 @@ left:-80px;
 
     height: 18rem;
 
-    border-radius: 50%;
-
     top: -9rem;
 
     right: -7rem;
+
+    border-radius: 50%;
 
     background: radial-gradient(
         circle,
@@ -882,9 +882,9 @@ left:-80px;
 
     height: 12rem;
 
-    bottom: -5rem;
-
     left: -4rem;
+
+    bottom: -6rem;
 
     border-radius: 50%;
 
@@ -1048,19 +1048,19 @@ left:-80px;
 
 }
 
-/* =====================================
+/* ======================================
    MOBILE
-===================================== */
+====================================== */
 
 @media (max-width: 48rem) {
 
     .hero-background {
 
-        padding: 1rem .5rem 5.5rem;
+        padding: 5.8rem .75rem 9rem;
 
     }
 
-    .welcome-text h2 {
+     .welcome-text h2 {
 
         font-size: .9rem;
 
@@ -1072,21 +1072,38 @@ left:-80px;
 
     }
 
-}
-
-/* =====================================
-   DESKTOP
-===================================== */
-
-@media (min-width: 48rem) {
-
     .lesson-hero {
 
-        margin: -4rem 1rem 0;
+        width: 92%;
+
+        margin-top: -4.5rem;
 
     }
 
 }
+
+/* ======================================
+   DESKTOP
+====================================== */
+
+@media (min-width: 48rem) {
+
+    .hero-background {
+
+        padding: 7rem 2rem 9rem;
+
+    }
+
+    .lesson-hero {
+
+        width: 90%;
+
+        margin-top: -5rem;
+
+    }
+
+}
+
 
 /* =========================================
    MODERN MINISTRY HUB
@@ -2502,11 +2519,11 @@ box-shadow:
 
     z-index: 20;
 
+    width: 90%;
+
     max-width: 1100px;
 
-    margin: -4rem auto 0;
-
-    padding: 0 .5rem;
+    margin: -5rem auto 0;
 
     overflow: hidden;
 
@@ -2857,14 +2874,6 @@ box-shadow:
 
 @media (min-width: 48rem) {
 
-    .lesson-hero {
-
-        margin: 6rem 1rem 1rem;
-
-        border-radius: 2rem;
-
-    }
-
     .lesson-content {
 
         padding: 1.8rem;
@@ -2908,12 +2917,6 @@ box-shadow:
 ====================================== */
 
 @media (min-width: 75rem) {
-
-    .lesson-hero {
-
-        margin: 6rem 1rem 1rem;
-
-    }
 
     .lesson-content {
 
