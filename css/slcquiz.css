@@ -103,12 +103,16 @@ GENERAL ELEMENTS
 ===================================== */
 
 
-button,
-input,
-select {
+button {
 
     font-family: "Bricolage Grotesque", sans-serif;
 
+}
+
+input,
+select {
+    font-family: "Afacad", sans-serif;
+    font-size:.85rem;
 }
 
 
@@ -564,9 +568,9 @@ CARDS
 
     gap: 10px;
 
-    font-size: 1.05rem;
+    font-size: .7rem;
 
-    font-weight: 700;
+    font-weight: 600;
 
     margin-bottom: 20px;
 
