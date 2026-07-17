@@ -349,7 +349,7 @@ HERO SECTION
 
     margin-top:-35px;
 
-    border-radius: 0 0 150px 0;
+    border-radius: 0 0 150px 150px;
 
     padding:70px 0;
 
@@ -1230,8 +1230,8 @@ MOBILE RESPONSIVE
     margin-left:calc(50% - 50vw);
 
     margin-top:-35px;
-
-    border-bottom-right-radius: 80px;
+    border-bottom-left-radius: 60px;
+    border-bottom-right-radius: 60px;
 
     padding:70px 0;
 
