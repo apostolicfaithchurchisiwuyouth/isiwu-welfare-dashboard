@@ -471,3 +471,87 @@ button {
     }
 
 }
+
+.question-card {
+
+    background: white;
+
+    border-radius: 18px;
+
+    padding: 24px;
+
+    margin-bottom: 20px;
+
+    box-shadow:
+
+        0 10px 30px
+
+        rgba(
+
+            0,
+
+            0,
+
+            0,
+
+            .05
+
+        );
+
+}
+
+.question-number {
+
+    font-size: .75rem;
+
+    color: #4a0754;
+
+    font-weight: 700;
+
+    margin-bottom: 10px;
+
+}
+
+.question-card h3 {
+
+    margin-bottom: 18px;
+
+    line-height: 1.7;
+
+}
+
+.options {
+
+    display: grid;
+
+    gap: 12px;
+
+}
+
+.option {
+
+    display: flex;
+
+    gap: 12px;
+
+    align-items: flex-start;
+
+    border: 1px solid #ececec;
+
+    border-radius: 14px;
+
+    padding: 16px;
+
+    cursor: pointer;
+
+}
+
+.option input {
+
+    width: auto;
+
+    height: auto;
+
+    margin-top: 4px;
+
+}
