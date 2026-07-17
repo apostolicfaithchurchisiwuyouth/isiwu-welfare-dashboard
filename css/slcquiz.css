@@ -239,17 +239,18 @@ HEADER
 
     color: white;
 
-    background:
+   background:
 
-linear-gradient(
+        linear-gradient(
 
-135deg,
+            135deg,
 
-#0891b2,
+            #ea580c,
 
-#06b6d4
+            #fb925c
 
-);
+        );
+
     box-shadow:
 
     0 8px 20px rgba(74,7,84,.25);
