@@ -399,6 +399,7 @@ HERO SECTION
     width:min(1100px,90%);
 
     margin:auto;
+    text-align: center;
 
 }
 
@@ -1230,8 +1231,8 @@ MOBILE RESPONSIVE
     margin-left:calc(50% - 50vw);
 
     margin-top:-35px;
-    border-bottom-left-radius: 60px;
-    border-bottom-right-radius: 60px;
+    border-bottom-left-radius: 80px;
+    border-bottom-right-radius: 80px;
 
     padding:70px 0;
 
