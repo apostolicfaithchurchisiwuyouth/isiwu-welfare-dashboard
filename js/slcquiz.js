@@ -760,85 +760,125 @@ function renderQuestions() {
 
 async function submitQuiz() {
 
-    const submitBtn =
-        document.getElementById(
-            "submitBtn"
-        );
-
     const memberId =
+
         document.getElementById(
+
             "memberSelect"
+
         ).value;
 
     if (!memberId) {
 
         alert(
+
             "Please select your name."
+
         );
 
         return;
 
     }
 
+    const submitBtn =
+
+        document.getElementById(
+
+            "submitBtn"
+
+        );
+
     submitBtn.disabled = true;
 
     submitBtn.innerHTML =
 
-        `<i class="fa-solid fa-spinner fa-spin"></i>
+        "Submitting...";
 
-        Submitting...`;
+    const answers = {};
 
-    let answers = {};
+    quizData.forEach(
 
-    quizData.forEach((question, index) => {
+        (
 
-        const checked =
+            question,
 
-            document.querySelector(
+            index
 
-                `input[name="q${index}"]:checked`
+        ) => {
 
-            );
+            const checked =
 
-        if (checked) {
+                document.querySelector(
 
-            answers[index + 1] =
+                    `input[name="q${index}"]:checked`
 
-                checked.value;
+                );
+
+            if (
+
+                checked
+
+            ) {
+
+                answers[
+
+                    index + 1
+
+                ] =
+
+                    checked.value;
+
+            }
 
         }
 
-    });
+    );
 
     try {
 
         const response =
 
-            await fetch(API, {
+            await fetch(
 
-                method: "POST",
+                API,
 
-                body: JSON.stringify({
+                {
 
-                    action: "scoreQuiz",
+                    method:
 
-                    memberId,
+                        "POST",
 
-                    lessonNo:
+                    body:
 
-                        selectedLesson,
+                        JSON.stringify({
 
-                    answers
+                            action:
 
-                })
+                                "scoreQuiz",
 
-            });
+                            memberId,
+
+                            lessonNo:
+
+                                selectedLesson,
+
+                            answers
+
+                        })
+
+                }
+
+            );
 
         const data =
 
             await response.json();
 
-        if (!data.success) {
+        if (
+
+            !data.success
+
+        ) {
 
             alert(
 
@@ -860,127 +900,69 @@ async function submitQuiz() {
 
         reviewData =
 
-            data.review || [];
+            data.review;
 
-        localStorage.setItem(
+        reviewQuestions =
 
-            "lastQuizReview",
+            data.questions;
 
-            JSON.stringify(
+        document.getElementById(
 
-                reviewData
+            "quizSection"
 
-            )
+        ).classList.add(
 
-        );
-
-        localStorage.setItem(
-
-            "lastQuizQuestions",
-
-            JSON.stringify(
-
-                quizData
-
-            )
-
-        );
-
-        localStorage.setItem(
-
-            "lastQuizScore",
-
-            data.score
-
-        );
-
-        localStorage.setItem(
-
-            "lastQuizPoints",
-
-            data.pointsEarned
-
-        );
-
-        localStorage.setItem(
-
-            "lastQuizTotal",
-
-            data.totalPoints
+            "hidden"
 
         );
 
         document.getElementById(
 
-            "quizBox"
+            "resultSection"
 
-        ).style.display =
+        ).classList.remove(
 
-            "none";
+            "hidden"
 
-        document.getElementById(
-
-            "questionsCard"
-
-        ).style.display =
-
-            "none";
+        );
 
         document.getElementById(
 
-            "statusCard"
+            "scoreText"
 
-        ).style.display =
-
-            "none";
-
-        document.getElementById(
-
-            "resultBox"
-
-        ).style.display =
-
-            "block";
-
-        document.getElementById(
-
-            "score"
-
-        ).innerHTML =
+        ).textContent =
 
             data.score;
 
         document.getElementById(
 
-            "points"
+            "pointsText"
 
-        ).innerHTML =
+        ).textContent =
 
-            `Points Earned: ${data.pointsEarned}`;
-
-        document.getElementById(
-
-            "total"
-
-        ).innerHTML =
-
-            `Total Points: ${data.totalPoints}`;
+            `Points earned: ${data.pointsEarned}`;
 
         document.getElementById(
 
-            "reviewBtn"
+            "totalPointsText"
 
-        ).style.display =
+        ).textContent =
 
-            "block";
-
-        checkSavedReview();
+            `Total points: ${data.totalPoints}`;
 
     }
 
-    catch (error) {
+    catch (
 
-        console.error(error);
+        error
+
+    ) {
+
+        console.error(
+
+            error
+
+        );
 
         alert(
 
