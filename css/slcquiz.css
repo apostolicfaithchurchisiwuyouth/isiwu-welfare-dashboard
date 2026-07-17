@@ -343,7 +343,7 @@ linear-gradient(
 
     color: white;
 
-    border-radius: 28px;
+    border-radius: 25px;
 
     padding:
 
@@ -434,11 +434,11 @@ linear-gradient(
     "Bricolage Grotesque",
     sans-serif;
 
-    font-size:
+       font-size:
 
-    clamp(2rem,5vw,3.8rem);
+    clamp(1.8rem,3vw,2.8rem);
 
-    line-height: 1.1;
+    line-height:1.15;
 
     margin-bottom: 18px;
 
@@ -484,13 +484,13 @@ linear-gradient(
 
     padding: 14px 20px;
 
-    border-radius: 16px;
+    border-radius: 35px;
 
     background:
 
     rgba(255,255,255,.12);
 
-    font-size: .9rem;
+    font-size: .85rem;
 
 }
 
@@ -538,7 +538,7 @@ CARDS
 
     background: white;
 
-    border-radius: 24px;
+    border-radius: 25px;
 
     padding:
 
@@ -605,7 +605,7 @@ input {
 
     height: 55px;
 
-    border-radius: 14px;
+    border-radius: 15px;
 
     border:
 
@@ -619,7 +619,7 @@ input {
 
     background: white;
 
-    font-size: .9rem;
+    font-size: .85rem;
 
     transition:
 
@@ -670,7 +670,7 @@ button {
 
     13px 20px;
 
-    border-radius: 14px;
+    border-radius: 35px;
 
     color: white;
 
@@ -686,8 +686,8 @@ linear-gradient(
 
 );
     font-weight: 700;
-
-    font-size: .85rem;
+    font-family:"Bricolage Grotesque", sans-serif;
+    font-size: .75rem;
 
     box-shadow:
 
@@ -735,7 +735,7 @@ QUESTIONS
 
     #ffffff;
 
-    border-radius: 20px;
+    border-radius: 25px;
 
     padding:
 
@@ -833,9 +833,11 @@ QUESTIONS
 
     1px solid #e5e7eb;
 
-    cursor:
+    cursor:pointer;
 
-    pointer;
+    -webkit-tap-highlight-color:transparent;
+
+    user-select:none;
 
     transition:
 
@@ -1114,7 +1116,7 @@ MOBILE RESPONSIVE
 
         font-size:
 
-        .7rem;
+        .85rem;
 
     }
 
@@ -1125,7 +1127,7 @@ MOBILE RESPONSIVE
 
         border-radius:
 
-        22px;
+        25px;
 
         padding:
 
@@ -1140,7 +1142,7 @@ MOBILE RESPONSIVE
 
         font-size:
 
-        1.1rem;
+        1.5rem;
 
     }
 
@@ -1152,6 +1154,7 @@ MOBILE RESPONSIVE
         font-size:
 
         .85rem;
+        line-height:1.25;
 
     }
 
@@ -1165,7 +1168,7 @@ MOBILE RESPONSIVE
 
         border-radius:
 
-        18px;
+        25px;
 
         padding:
 
@@ -1223,7 +1226,7 @@ MOBILE RESPONSIVE
 
         border-radius:
 
-        16px;
+        25px;
 
     }
 
@@ -1267,7 +1270,7 @@ VERY SMALL DEVICES
 
     .header-title span {
 
-        display:none;
+        display:block;
 
     }
 
@@ -1276,11 +1279,18 @@ VERY SMALL DEVICES
 
         font-size:
 
-        1rem;
+        1.5rem;
 
     }
 
+    .quiz-hero p {
 
+        font-size:
+
+        .85rem;
+
+    }
+    
     button {
 
         font-size:
@@ -1289,5 +1299,20 @@ VERY SMALL DEVICES
 
     }
 
+
+}
+
+* {
+
+    -webkit-tap-highlight-color: transparent;
+
+}
+
+button,
+.option,
+select,
+input {
+
+    outline:none;
 
 }
