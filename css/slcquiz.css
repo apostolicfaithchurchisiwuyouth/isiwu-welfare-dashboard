@@ -438,9 +438,7 @@ linear-gradient(
     "Bricolage Grotesque",
     sans-serif;
 
-       font-size:
-
-    clamp(1.8rem,3vw,2.8rem);
+       font-size:2rem;
 
     line-height:1.15;
 
@@ -494,7 +492,7 @@ linear-gradient(
 
     rgba(255,255,255,.12);
 
-    font-size: .85rem;
+    font-size: .73rem;
 
 }
 
@@ -676,7 +674,7 @@ button {
 
     padding:14px 20px;
 
-    border-radius:14px;
+    border-radius:35px;
 
     color:white;
 
@@ -700,13 +698,13 @@ button {
 
     linear-gradient(
         135deg,
-        #4A0754,
-        #7c3aed
+        #24002f,
+        #5b0a72
     );
 
     box-shadow:
 
-    0 10px 25px rgba(74,7,84,.25);
+    0 10px 25px rgba(36,0,47,.35);
 
 }
 
@@ -1245,7 +1243,7 @@ MOBILE RESPONSIVE
 
         font-size:
 
-        1.5rem;
+        1.2rem;
 
     }
 
@@ -1382,7 +1380,7 @@ VERY SMALL DEVICES
 
         font-size:
 
-        1.5rem;
+        1.2rem;
 
     }
 
