@@ -34,149 +34,185 @@ async function loadQuiz() {
         `;
 
         const response = await fetch(
-            `${API}?action=getQuiz`
-        );
+    `${API}?action=getQuiz`
+);
 
-        const data = await response.json();
+const data = await response.json();
 
-        console.log(data);
+console.log("Quiz response:", data);
 
-        if (!data.success) {
+const statusCard =
+    document.getElementById(
+        "statusCard"
+    );
 
-            statusCard.innerHTML = `
-                <h2>${data.message}</h2>
-                <p>Please check back later.</p>
-            `;
+if (!data.success) {
 
-            return;
-        }
+    statusCard.innerHTML = `
 
-        quizData = data.questions || [];
+        <h2 style="margin-bottom:10px;">
 
-        selectedLesson = data.lessonNo;
+            📚 Weekly Quiz
 
-        quizCloseTime =
-            new Date(data.closeTime);
+        </h2>
 
-        statusCard.innerHTML = `
+        <p>
 
-            <div style="
-                display:flex;
-                justify-content:space-between;
-                align-items:center;
-                gap:10px;
-                flex-wrap:wrap;
-            ">
+            ${data.message ||
+            "No quiz is available at the moment."}
 
-                <div>
+        </p>
 
-                    <h2>
-                        Lesson ${data.lessonNo}
-                    </h2>
+    `;
 
-                    <p>
-                        ${quizData.length} Questions
-                    </p>
+    document.getElementById(
+        "quizCountdown"
+    ).style.display = "none";
 
-                </div>
+    return;
+}
 
-                <div style="
-                    background:#f8fafc;
-                    padding:10px 14px;
-                    border-radius:12px;
-                    font-size:.7rem;
-                    color:#4A0754;
-                ">
-                    🏆 Spiritual Growth
-                </div>
+if (!data.questions ||
+    data.questions.length === 0) {
 
-            </div>
+    statusCard.innerHTML = `
 
-        `;
+        <h2>
 
-        document
-            .getElementById("quizBox")
-            .classList.remove("hidden");
+            No Questions Found
 
-        document
-            .getElementById("questionsCard")
-            .classList.remove("hidden");
+        </h2>
 
-        await loadMembers();
+        <p>
 
-        renderQuestions();
+            Please contact the administrator.
 
-        startCountdown();
+        </p>
 
-    }
+    `;
 
-    catch (error) {
+    document.getElementById(
+        "quizCountdown"
+    ).style.display = "none";
 
-        console.error(error);
+    return;
+}
 
-        statusCard.innerHTML = `
-            <h2>Unable to load quiz</h2>
-            <p>Please refresh the page.</p>
-        `;
+quizData = data.questions;
+
+selectedLesson = data.lessonNo;
+
+quizCloseTime =
+    new Date(data.closeTime);
+
+statusCard.innerHTML = `
+
+    <div style="
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        gap:10px;
+        flex-wrap:wrap;
+    ">
+
+        <div>
+
+            <h2>
+
+                Lesson ${data.lessonNo}
+
+            </h2>
+
+            <p>
+
+                ${quizData.length}
+                Questions Available
+
+            </p>
+
+        </div>
+
+        <div style="
+            background:#f8fafc;
+            padding:10px 14px;
+            border-radius:12px;
+            color:#4A0754;
+            font-size:.7rem;
+        ">
+
+            🏆 Quiz Open
+
+        </div>
+
+    </div>
+
+`;
     }
 }
 
 function startCountdown() {
 
+    const countdown =
+        document.getElementById(
+            "quizCountdown"
+        );
+
     clearInterval(
         countdownInterval
     );
 
-    countdownInterval = setInterval(() => {
+    countdownInterval =
+        setInterval(() => {
 
-        const box =
-            document.getElementById(
-                "quizCountdown"
-            );
+            const diff =
+                quizCloseTime -
+                new Date();
 
-        const diff =
-            quizCloseTime - new Date();
+            if (diff <= 0) {
 
-        if (diff <= 0) {
+                countdown.style.display =
+                    "none";
 
-            box.innerHTML =
-                "Quiz Closed";
+                clearInterval(
+                    countdownInterval
+                );
 
-            clearInterval(
-                countdownInterval
-            );
+                return;
+            }
 
-            return;
-        }
+            const days =
+                Math.floor(
+                    diff / 86400000
+                );
 
-        const days =
-            Math.floor(
-                diff / 86400000
-            );
+            const hours =
+                Math.floor(
+                    (diff % 86400000)
+                    / 3600000
+                );
 
-        const hours =
-            Math.floor(
-                (diff % 86400000) /
-                3600000
-            );
+            const mins =
+                Math.floor(
+                    (diff % 3600000)
+                    / 60000
+                );
 
-        const mins =
-            Math.floor(
-                (diff % 3600000) /
-                60000
-            );
+            const secs =
+                Math.floor(
+                    (diff % 60000)
+                    / 1000
+                );
 
-        const secs =
-            Math.floor(
-                (diff % 60000) /
-                1000
-            );
+            countdown.innerHTML =
 
-        box.innerHTML =
+                `⏳ Closes in:
+                ${days}d
+                ${hours}h
+                ${mins}m
+                ${secs}s`;
 
-            `⏳ Closes In: ${days}d ${hours}h ${mins}m ${secs}s`;
+        }, 1000);
 
-    }, 1000);
 }
 
 async function loadMembers() {
