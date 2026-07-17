@@ -237,16 +237,15 @@ HEADER
 
     background:
 
-    linear-gradient(
+linear-gradient(
 
-        135deg,
+135deg,
 
-        #4A0754,
+#0891b2,
 
-        #7c3aed
+#06b6d4
 
-    );
-
+);
     box-shadow:
 
     0 8px 20px rgba(74,7,84,.25);
@@ -278,15 +277,15 @@ HEADER
 
     background:
 
-    linear-gradient(
+linear-gradient(
 
-        135deg,
+135deg,
 
-        #4A0754,
+#0f172a,
 
-        #7c3aed
+#0891b2
 
-    );
+);
 
     box-shadow:
 
@@ -314,17 +313,11 @@ MAIN CONTAINER
 
 .quiz-page {
 
-    width:
+    width:min(1100px,90%);
 
-    min(1100px,92%);
+    margin:auto;
 
-    margin:
-
-    auto;
-
-    padding:
-
-    40px 0 80px;
+    padding:35px 0 60px;
 
 }
 
@@ -336,17 +329,17 @@ HERO SECTION
 
 .quiz-hero {
 
-    background:
+background:
 
-    linear-gradient(
+linear-gradient(
 
-        135deg,
+135deg,
 
-        #0a0016,
+#0f172a,
 
-        #4A0754
+#0891b2
 
-    );
+);
 
     color: white;
 
@@ -476,7 +469,7 @@ HERO SECTION
 
     font-weight: 700;
 
-    font-size: .95rem;
+    font-size: .85rem;
 
 }
 
@@ -523,7 +516,7 @@ HERO SECTION
 
     margin-top: 18px;
 
-    font-size: .8rem;
+    font-size: .85rem;
 
     opacity: .85;
 
@@ -683,16 +676,15 @@ button {
 
     background:
 
-    linear-gradient(
+linear-gradient(
 
-        135deg,
+135deg,
 
-        #4A0754,
+#ea580c,
 
-        #0a0016
+#fb925c
 
-    );
-
+);
     font-weight: 700;
 
     font-size: .85rem;
@@ -795,7 +787,7 @@ QUESTIONS
 
     line-height:
 
-    1.6;
+    1.3;
 
     margin-bottom: 18px;
 
@@ -897,11 +889,11 @@ QUESTIONS
 
     font-size:
 
-    .9rem;
+    .85rem;
 
     line-height:
 
-    1.5;
+    1.3;
 
 }
 
@@ -1067,7 +1059,7 @@ MOBILE RESPONSIVE
 
         width:
 
-        94%;
+        90%;
 
         padding:
 
@@ -1148,7 +1140,7 @@ MOBILE RESPONSIVE
 
         font-size:
 
-        2rem;
+        1.1rem;
 
     }
 
@@ -1159,7 +1151,7 @@ MOBILE RESPONSIVE
 
         font-size:
 
-        .9rem;
+        .85rem;
 
     }
 
@@ -1243,7 +1235,7 @@ MOBILE RESPONSIVE
 
         font-size:
 
-        .95rem;
+        .75rem;
 
     }
 
@@ -1284,7 +1276,7 @@ VERY SMALL DEVICES
 
         font-size:
 
-        1.7rem;
+        1rem;
 
     }
 
@@ -1293,7 +1285,7 @@ VERY SMALL DEVICES
 
         font-size:
 
-        .78rem;
+        .85rem;
 
     }
 
