@@ -25,6 +25,12 @@ async function loadQuiz() {
     const statusCard =
         document.getElementById("statusCard");
 
+    const quizBox =
+        document.getElementById("quizBox");
+
+    const questionsCard =
+        document.getElementById("questionsCard");
+
     const countdown =
         document.getElementById("quizCountdown");
 
@@ -48,21 +54,33 @@ async function loadQuiz() {
 
         const data = await response.json();
 
-        console.log("Quiz response:", data);
+        console.log(data);
 
         /*
-        ======================
-        QUIZ NOT OPEN YET
-        ======================
+        =====================
+        QUIZ NOT AVAILABLE
+        =====================
         */
 
-        if (
+        if (!data.success) {
 
-            !data.success &&
+            let message =
+                data.message ||
+                "No quiz available.";
 
-            data.status === "not_open"
+            if (data.status === "not_open") {
 
-        ) {
+                message =
+                    "⏳ Quiz will open soon. Check back later.";
+
+            }
+
+            if (data.status === "closed") {
+
+                message =
+                    "🔒 This week's quiz has closed.";
+
+            }
 
             statusCard.innerHTML = `
 
@@ -74,17 +92,15 @@ async function loadQuiz() {
 
                 <p>
 
-                    Quiz opens soon.
-
-                </p>
-
-                <p style="font-size:.75rem;opacity:.7;">
-
-                    Check back later.
+                    ${message}
 
                 </p>
 
             `;
+
+            quizBox.classList.add("hidden");
+
+            questionsCard.classList.add("hidden");
 
             countdown.style.display = "none";
 
@@ -93,84 +109,13 @@ async function loadQuiz() {
         }
 
         /*
-        ======================
-        QUIZ CLOSED
-        ======================
-        */
-
-        if (
-
-            !data.success &&
-
-            data.status === "closed"
-
-        ) {
-
-            statusCard.innerHTML = `
-
-                <h2>
-
-                    🔒 Quiz Closed
-
-                </h2>
-
-                <p>
-
-                    This week's quiz has ended.
-
-                </p>
-
-            `;
-
-            countdown.style.display = "none";
-
-            return;
-
-        }
-
-        /*
-        ======================
-        OTHER ERRORS
-        ======================
-        */
-
-        if (!data.success) {
-
-            statusCard.innerHTML = `
-
-                <h2>
-
-                    ⚠️ Quiz Unavailable
-
-                </h2>
-
-                <p>
-
-                    ${data.message}
-
-                </p>
-
-            `;
-
-            countdown.style.display = "none";
-
-            return;
-
-        }
-
-        /*
-        ======================
+        =====================
         NO QUESTIONS
-        ======================
+        =====================
         */
 
-        if (
-
-            !data.questions ||
-
-            data.questions.length === 0
-
-        ) {
+        if (!data.questions ||
+            data.questions.length === 0) {
 
             statusCard.innerHTML = `
 
@@ -182,11 +127,15 @@ async function loadQuiz() {
 
                 <p>
 
-                    Please contact the administrator.
+                    The quiz exists, but there are no questions.
 
                 </p>
 
             `;
+
+            quizBox.classList.add("hidden");
+
+            questionsCard.classList.add("hidden");
 
             countdown.style.display = "none";
 
@@ -195,29 +144,34 @@ async function loadQuiz() {
         }
 
         /*
-        ======================
-        LOAD QUIZ
-        ======================
+        =====================
+        SAVE QUIZ DATA
+        =====================
         */
 
         quizData = data.questions;
 
         selectedLesson = data.lessonNo;
 
-        quizCloseTime = new Date(
+        quizCloseTime =
+            new Date(data.closeTime);
 
-            data.closeTime
-
-        );
+        /*
+        =====================
+        SHOW STATUS
+        =====================
+        */
 
         statusCard.innerHTML = `
 
             <div style="
+
                 display:flex;
                 justify-content:space-between;
                 align-items:center;
                 gap:10px;
                 flex-wrap:wrap;
+
             ">
 
                 <div>
@@ -238,12 +192,13 @@ async function loadQuiz() {
                 </div>
 
                 <div style="
-                    background:#f8fafc;
+
+                    background:#ecfdf5;
+                    color:#15803d;
                     padding:10px 14px;
                     border-radius:12px;
-                    color:#4A0754;
-                    font-size:.72rem;
-                    font-weight:600;
+                    font-size:.75rem;
+
                 ">
 
                     🏆 Quiz Open
@@ -254,31 +209,29 @@ async function loadQuiz() {
 
         `;
 
-        document
-            .getElementById("quizBox")
-            .classList.remove("hidden");
+        /*
+        =====================
+        SHOW QUIZ
+        =====================
+        */
 
-        document
-            .getElementById("questionsCard")
-            .classList.remove("hidden");
+        quizBox.classList.remove("hidden");
 
-        document
-            .getElementById("resultBox")
-            .style.display = "none";
+        questionsCard.classList.remove("hidden");
+
+        countdown.style.display = "block";
+
+        /*
+        =====================
+        LOAD DATA
+        =====================
+        */
 
         await loadMembers();
 
         renderQuestions();
 
         startCountdown();
-
-        console.log(
-
-            "Questions loaded:",
-
-            quizData.length
-
-        );
 
     }
 
@@ -296,13 +249,13 @@ async function loadQuiz() {
 
             <h2>
 
-                ⚠️ Error Loading Quiz
+                Error loading quiz
 
             </h2>
 
             <p>
 
-                Please refresh the page.
+                Check your internet connection.
 
             </p>
 
@@ -317,33 +270,25 @@ function startCountdown() {
     const countdown =
 
         document.getElementById(
-
             "quizCountdown"
-
         );
 
     if (!quizCloseTime) {
 
         countdown.style.display =
-
             "none";
 
         return;
-
     }
 
     countdown.style.display =
-
         "block";
 
     clearInterval(
-
         countdownInterval
-
     );
 
     countdownInterval =
-
         setInterval(() => {
 
             const diff =
@@ -359,13 +304,10 @@ function startCountdown() {
                     "🔒 Quiz Closed";
 
                 clearInterval(
-
                     countdownInterval
-
                 );
 
                 return;
-
             }
 
             const days = Math.floor(
@@ -376,25 +318,25 @@ function startCountdown() {
 
             const hours = Math.floor(
 
-                (diff % 86400000)
+                (diff % 86400000) /
 
-                / 3600000
+                3600000
 
             );
 
             const mins = Math.floor(
 
-                (diff % 3600000)
+                (diff % 3600000) /
 
-                / 60000
+                60000
 
             );
 
             const secs = Math.floor(
 
-                (diff % 60000)
+                (diff % 60000) /
 
-                / 1000
+                1000
 
             );
 
@@ -415,6 +357,7 @@ function startCountdown() {
         }, 1000);
 
 }
+
 async function loadMembers() {
 
     try {
