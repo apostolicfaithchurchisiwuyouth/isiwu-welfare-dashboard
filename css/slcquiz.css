@@ -619,7 +619,7 @@ input {
 
     background: white;
 
-    font-size: .85rem;
+    font-size: .68rem;
 
     transition:
 
@@ -850,36 +850,97 @@ QUESTIONS
 
 .option:hover {
 
-    border-color:
+    border-color:#0891b2;
 
-    #4A0754;
+    background:
+    rgba(8,145,178,.05);
+
+}
+
+
+.option {
+
+    transform:none;
+
+    transition:
+
+    background .2s ease,
+
+    border-color .2s ease;
+
+}
+
+.option:has(input:checked){
+
+    border-color:#ea580c;
 
     background:
 
-    rgba(74,7,84,.03);
+    rgba(234,88,12,.06);
 
 }
 
 
 
-
 .option input {
 
-    width:
+    appearance:none;
 
-    auto;
+    -webkit-appearance:none;
 
-    height:
+    width:18px;
 
-    auto;
+    height:18px;
 
-    margin-top:
+    min-width:18px;
 
-    4px;
+    border-radius:50%;
 
-    accent-color:
+    border:2px solid #0891b2;
 
-    #4A0754;
+    margin-top:3px;
+
+    position:relative;
+
+    cursor:pointer;
+
+    outline:none;
+
+    transition:.2s ease;
+
+}
+
+
+/* Selected radio circle */
+
+.option input:checked {
+
+    border-color:#ea580c;
+
+}
+
+
+/* Inner circle */
+
+.option input:checked::after {
+
+    content:"";
+
+    position:absolute;
+
+    width:8px;
+
+    height:8px;
+
+    border-radius:50%;
+
+    background:#ea580c;
+
+    top:50%;
+
+    left:50%;
+
+    transform:translate(-50%,-50%);
 
 }
 
@@ -1314,5 +1375,14 @@ select,
 input {
 
     outline:none;
+
+}
+
+.option,
+.option *,
+button,
+button * {
+
+    -webkit-tap-highlight-color:transparent;
 
 }
