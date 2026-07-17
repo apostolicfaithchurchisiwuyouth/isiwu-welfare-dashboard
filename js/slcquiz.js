@@ -147,7 +147,51 @@ statusCard.innerHTML = `
     </div>
 
 `;
-    }
+
+document
+    .getElementById("quizBox")
+    .classList.remove("hidden");
+
+document
+    .getElementById("questionsCard")
+    .classList.remove("hidden");
+
+document
+    .getElementById("resultBox")
+    .style.display = "none";
+
+await loadMembers();
+
+renderQuestions();
+
+startCountdown();
+
+}
+
+catch(error) {
+
+    console.error(
+        "Quiz loading error:",
+        error
+    );
+
+    statusCard.innerHTML = `
+
+        <h2>
+
+            Error loading quiz
+
+        </h2>
+
+        <p>
+
+            Please refresh the page.
+
+        </p>
+
+    `;
+
+}
     
 function startCountdown() {
 
