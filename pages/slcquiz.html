@@ -1,267 +1,655 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AFC Isiu Youth Portal</title>
 
-<!-- WEBSITE FONTS -->
+
+<title>
+AFC Isiwu Youth Portal | Weekly SLC Quiz
+</title>
+
+
+<!-- ========================= -->
+<!-- GOOGLE FONTS -->
+<!-- ========================= -->
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Afacad:ital,wght@0,400..700;1,400..700&family=Bricolage+Grotesque:opsz,wght@12..96,200..800&display=swap" rel="stylesheet">
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
-<link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css">
 
-<!-- SLCQUIZ CSS -->
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+
+<link href="https://fonts.googleapis.com/css2?family=Afacad:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&display=swap" rel="stylesheet">
+
+
+
+<!-- ========================= -->
+<!-- FONT AWESOME -->
+<!-- ========================= -->
+
+<link 
+rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+>
+
+
+
+<!-- ========================= -->
+<!-- AOS ANIMATION -->
+<!-- ========================= -->
+
+<link 
+rel="stylesheet"
+href="https://unpkg.com/aos@2.3.4/dist/aos.css"
+>
+
+
+
+<!-- ========================= -->
+<!-- CSS -->
+<!-- ========================= -->
+
 <link rel="stylesheet" href="../css/slcquiz.css">
+
+
+
 </head>
+
+
 
 <body>
 
-<header>
+
+
+<!-- ========================= -->
+<!-- HEADER -->
+<!-- ========================= -->
+
+
+<header class="main-header">
+
+
 <div class="header-title">
-<i class="fas fa-book"></i>
-<span>Weekly SLC Quiz</span>
+
+
+<i class="fa-solid fa-book-open"></i>
+
+
+<span>
+Weekly SLC Quiz
+</span>
+
+
 </div>
 
-<a href="index.html" class="back-btn">
-← Back
+
+
+<a 
+href="index.html"
+class="back-btn"
+>
+
+
+<i class="fa-solid fa-arrow-left"></i>
+
+Back
+
+
 </a>
+
+
 </header>
+
+
+<!-- ========================= -->
+<!-- MAIN QUIZ PAGE -->
+<!-- ========================= -->
 
 <main class="quiz-page">
 
-    <!-- HERO -->
 
-    <section class="quiz-hero">
 
-        <div class="hero-content">
+<!-- ========================= -->
+<!-- HERO SECTION -->
+<!-- ========================= -->
 
-            <span class="hero-badge">
 
-                📚 Weekly SLC Quiz
+<section 
+class="quiz-hero"
+data-aos="fade-up"
+>
 
-            </span>
 
-            <h1>
 
-                Test Your Knowledge,
-                Grow in Christ
+<div class="hero-content">
 
-            </h1>
 
-            <p>
 
-                Answer this week's Sunday School lesson questions,
-                earn points automatically and track your spiritual growth.
+<span class="hero-badge">
 
-            </p>
+<i class="fa-solid fa-graduation-cap"></i>
 
-            <div id="quizStatus" class="quiz-status">
+Weekly SLC Quiz
 
-                Loading quiz...
+</span>
 
-            </div>
 
-            <div id="quizCountdown" class="countdown-card">
 
-                --:--:--
 
-            </div>
+<h1>
 
-            <div class="hero-note">
+Test Your Knowledge,
+<br>
+Grow in Christ
 
-                Each member can take the quiz only once.
+</h1>
 
-            </div>
 
-        </div>
 
-    </section>
 
-    <!-- SAVED RESULTS -->
+<p>
 
-    <section id="savedSection" class="saved-section">
+Answer this week's Sunday School lesson questions,
+earn points automatically and track your spiritual growth.
 
-        <div class="section-title">
+</p>
 
-            Your Previous Activity
 
-        </div>
 
-        <div class="saved-card">
 
-            <select id="reviewMemberSelect">
 
-                <option value="">
+<div 
+id="quizStatus"
+class="quiz-status"
+>
 
-                    Select your name
+Loading quiz...
 
-                </option>
+</div>
 
-            </select>
 
-            <div class="saved-actions">
 
-                <button
-                    id="viewScoreBtn"
-                    onclick="viewSavedScore()"
-                >
 
-                    View Score
 
-                </button>
+<div 
+id="quizCountdown"
+class="countdown-card"
+>
 
-                <button
-                    id="viewReviewBtn"
-                    onclick="viewSavedReview()"
-                >
+--:--:--
 
-                    Review Answers
+</div>
 
-                </button>
 
-            </div>
 
-        </div>
 
-    </section>
 
-    <!-- QUIZ -->
+<div class="hero-note">
 
-    <section id="quizSection">
+<i class="fa-solid fa-circle-info"></i>
 
-        <div class="quiz-card">
+Each member can take the quiz only once.
 
-            <div class="section-title">
+</div>
 
-                Take Quiz
 
-            </div>
 
-            <div class="member-box">
+</div>
 
-                <select id="memberSelect">
 
-                    <option value="">
 
-                        Select your name
+</section>
 
-                    </option>
 
-                </select>
 
-                <div class="add-member">
 
-                    <input
-                        type="text"
-                        id="newName"
-                        placeholder="Enter your name"
-                    >
 
-                    <button
-                        id="addNameBtn"
-                        onclick="addNewMember()"
-                    >
 
-                        Add Name
 
-                    </button>
+<!-- ========================= -->
+<!-- SAVED ACTIVITY SECTION -->
+<!-- ========================= -->
 
-                </div>
 
-            </div>
+<section 
+id="savedSection"
+class="saved-section hidden"
+data-aos="fade-up"
+>
 
-        </div>
 
-        <div
-            id="questionsCard"
-            class="questions-card hidden"
-        >
 
-            <div id="questions"></div>
 
-            <button
-                id="submitBtn"
-                onclick="submitQuiz()"
-            >
+<div class="section-title">
 
-                Submit Quiz
+<i class="fa-solid fa-clock-rotate-left"></i>
 
-            </button>
+Your Previous Activity
 
-        </div>
+</div>
 
-    </section>
 
-    <!-- RESULT -->
 
-    <section
-        id="resultSection"
-        class="result-section hidden"
-    >
 
-        <div class="result-card">
 
-            <h2>
+<div class="saved-card">
 
-                Quiz Completed 🎉
 
-            </h2>
 
-            <h1 id="scoreText">
 
-                0/0
 
-            </h1>
+<select id="reviewMemberSelect">
 
-            <p id="pointsText">
 
-                Points Earned
+<option value="">
 
-            </p>
+Select your name
 
-            <p id="totalPointsText">
+</option>
 
-                Total Points
 
-            </p>
+</select>
 
-            <div class="result-buttons">
 
-                <button onclick="openReview()">
 
-                    Review Answers
 
-                </button>
 
-                <button onclick="backToQuiz()">
+<div class="saved-actions">
 
-                    Back
 
-                </button>
 
-            </div>
 
-        </div>
 
-    </section>
+<button
+id="viewScoreBtn"
+onclick="openSavedScore()"
+>
 
-    <!-- REVIEW -->
 
-    <section
-        id="reviewSection"
-        class="hidden"
-    >
+<i class="fa-solid fa-chart-line"></i>
 
-        <div id="reviewContainer"></div>
+View Score
 
-    </section>
+
+</button>
+
+
+
+
+
+
+
+<button
+id="viewReviewBtn"
+onclick="openSavedReview()"
+>
+
+
+<i class="fa-solid fa-eye"></i>
+
+Review Answers
+
+
+</button>
+
+
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+</section>
+
+
+<!-- ========================= -->
+<!-- QUIZ SECTION -->
+<!-- ========================= -->
+
+
+<section 
+id="quizSection"
+data-aos="fade-up"
+>
+
+
+
+
+<div class="quiz-card">
+
+
+
+<div class="section-title">
+
+<i class="fa-solid fa-user"></i>
+
+Select Participant
+
+</div>
+
+
+
+
+
+<div class="member-box">
+
+
+
+
+
+<select id="memberSelect">
+
+
+<option value="">
+
+Select your name
+
+</option>
+
+
+</select>
+
+
+
+
+
+<div class="add-member">
+
+
+
+
+
+<input
+type="text"
+id="newName"
+placeholder="Enter your name"
+/>
+
+
+
+
+
+
+<button
+id="addNameBtn"
+onclick="addNewMember()"
+>
+
+
+<i class="fa-solid fa-user-plus"></i>
+
+Add Name
+
+
+</button>
+
+
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+
+
+<!-- ========================= -->
+<!-- QUESTIONS -->
+<!-- ========================= -->
+
+
+<div
+id="questionsCard"
+class="questions-card hidden"
+>
+
+
+
+
+
+<div 
+id="questions"
+>
+
+</div>
+
+
+
+
+
+
+
+<button
+id="submitBtn"
+onclick="submitQuiz()"
+>
+
+
+<i class="fa-solid fa-paper-plane"></i>
+
+Submit Quiz
+
+
+</button>
+
+
+
+
+
+</div>
+
+
+
+
+</section>
+
+
+<!-- ========================= -->
+<!-- RESULT SECTION -->
+<!-- ========================= -->
+
+
+<section
+id="resultSection"
+class="result-section hidden"
+data-aos="fade-up"
+>
+
+
+
+
+<div class="result-card">
+
+
+
+
+
+<h2>
+
+Quiz Completed 🎉
+
+</h2>
+
+
+
+
+
+<div 
+id="scoreText"
+class="score-number"
+>
+
+0/0
+
+</div>
+
+
+
+
+
+<p 
+id="pointsText"
+>
+
+Points earned: 0
+
+</p>
+
+
+
+
+
+<p 
+id="totalPointsText"
+>
+
+Total points: 0
+
+</p>
+
+
+
+
+
+
+
+<div class="result-buttons">
+
+
+
+
+
+<button
+onclick="showReview()"
+>
+
+
+<i class="fa-solid fa-eye"></i>
+
+Review Answers
+
+
+</button>
+
+
+
+
+
+
+
+<button
+onclick="backToQuiz()"
+>
+
+
+<i class="fa-solid fa-arrow-left"></i>
+
+Back
+
+
+</button>
+
+
+
+
+
+</div>
+
+
+
+
+
+</div>
+
+
+
+
+
+</section>
+
+
+
+
+
+
+
+<!-- ========================= -->
+<!-- REVIEW SECTION -->
+<!-- ========================= -->
+
+
+<section
+id="reviewSection"
+class="review-section hidden"
+data-aos="fade-up"
+>
+
+
+
+<div
+id="reviewContainer"
+>
+
+</div>
+
+
+
+</section>
+
+
+
+
+
 
 </main>
-<script src="../js/slcquiz.js">
+
+
+
+
+
+
+
+<!-- ========================= -->
+<!-- JAVASCRIPT LIBRARIES -->
+<!-- ========================= -->
+
+
+<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+
+
+
+
+
+<!-- ========================= -->
+<!-- QUIZ JAVASCRIPT -->
+<!-- ========================= -->
+
+
+<script src="../js/slcquiz.js"></script>
+
+
+
+
 
 </body>
+
 </html>
