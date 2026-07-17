@@ -960,6 +960,29 @@ async function submitQuiz() {
 
     }
 
+    const answers = [];
+
+for (let i = 0; i < quizData.length; i++) {
+
+    const selected = document.querySelector(
+        `input[name="q${i}"]:checked`
+    );
+
+    if (!selected) {
+
+        alert(
+            `Please answer question ${i + 1}.`
+        );
+
+        return;
+    }
+
+    answers.push(
+        selected.value
+    );
+
+}
+
     const submitBtn =
 
         document.getElementById(
@@ -974,7 +997,6 @@ async function submitQuiz() {
 
         "Submitting...";
 
-    let quizCloseTime = null;
     try {
 
         const response =
