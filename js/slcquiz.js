@@ -1,18 +1,3 @@
-console.log("Before loadMembers");
-
-loadMembers();
-
-console.log("After loadMembers");
-
-console.log("Quiz data:", quizData);
-
-renderQuestions();
-
-console.log("Questions rendered");
-
-startCountdown();
-
-console.log("Countdown started");
 
 const API =
 "https://script.google.com/macros/s/AKfycbw1mVwpgAcIOSNbpgzy52TFyozEGMtWWwVWUDFaofGNzpsguBIaKR4q1dXVtgVHO2xZ1w/exec";
