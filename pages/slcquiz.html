@@ -31,205 +31,236 @@
 </a>
 </header>
 
-<div class="container">
-    
-<div class="quiz-hero">
+<main class="quiz-page">
 
-<div class="hero-badge">
-<i class="fa-solid fa-trophy"></i>
-Our Weekly SLC Quiz
-</div>
+    <!-- HERO -->
 
-<div class="hero-title">
-Test Your Knowledge
-</div>
+    <section class="quiz-hero">
 
-<div class="hero-text">
-Grow in God's Word by answering the weekly Sunday School lesson questions and building consistent learning habits.
-</div>
+        <div class="hero-content">
 
-<div id="quizCountdown"></div>
+            <span class="hero-badge">
 
-</div>
-<div
-    id="savedCard"
-    class="saved-card"
-    style="display:none;">
+                📚 Weekly SLC Quiz
 
-    <div class="saved-card-title">
+            </span>
 
-        <i class="fa-solid fa-clock-rotate-left"></i>
+            <h1>
 
-        <span>Check My Previous Quiz Records</span>
+                Test Your Knowledge,
+                Grow in Christ
 
-    </div>
+            </h1>
 
-    <div id="savedActions" class="saved-actions">
+            <p>
 
-        <button
-            id="openSavedReview"
-            class="saved-btn review-btn"
-            style="display:none;"
-            onclick="openSavedReview()">
+                Answer this week's Sunday School lesson questions,
+                earn points automatically and track your spiritual growth.
 
-            <i class="fa-solid fa-book-open"></i>
+            </p>
 
-            Review My Answers
+            <div id="quizStatus" class="quiz-status">
 
-        </button>
-<div id="reviewContainer" style="display:none;"></div>
-        <button
-            id="openSavedScore"
-            class="saved-btn score-btn"
-            style="display:none;"
-            onclick="openSavedScore()">
+                Loading quiz...
 
-            <i class="fa-solid fa-trophy"></i>
+            </div>
 
-            View My Score
+            <div id="quizCountdown" class="countdown-card">
 
-        </button>
+                --:--:--
 
-    </div>
+            </div>
 
-</div>
-<div class="card status" id="statusCard">
+            <div class="hero-note">
 
-<div class="loading" style="font-size:.75rem;">
-Loading quiz...
-</div>
+                Each member can take the quiz only once.
 
-</div>
+            </div>
 
+        </div>
 
+    </section>
 
-<div class="card hidden" id="quizBox">
+    <!-- SAVED RESULTS -->
 
+    <section id="savedSection" class="saved-section">
 
+        <div class="section-title">
 
-<h3 style="margin-bottom:15px; font-size:.8rem;">
-Select Your Name
-</h3>
+            Your Previous Activity
 
+        </div>
 
-<div class="select-wrap">
+        <div class="saved-card">
 
-<select id="memberSelect">
+            <select id="reviewMemberSelect">
 
-<option value="">
-Select Your Name
-</option>
+                <option value="">
 
-</select>
+                    Select your name
 
-<i class="fa-solid fa-chevron-down"></i>
+                </option>
 
-</div>
-<br>
-<p style="font-size:.68rem; margin-top:5px; margin-bottom:3px;">If your name isn't listed above, add it below. Once added, select your name from the list above before starting the quiz.</p>
+            </select>
 
-<input
-id="newName"
-placeholder="Enter your fullname here"
->
+            <div class="saved-actions">
 
+                <button
+                    id="viewScoreBtn"
+                    onclick="viewSavedScore()"
+                >
 
+                    View Score
 
-<button
-id="addNameBtn"
-class="primary"
-onclick="addNewMember()">
+                </button>
 
-Add My Name
+                <button
+                    id="viewReviewBtn"
+                    onclick="viewSavedReview()"
+                >
 
-</button>
+                    Review Answers
 
-<div style="height:10px;"></div>
+                </button>
 
-</div>
+            </div>
 
+        </div>
 
-<!-- QUESTIONS CARD -->
+    </section>
 
-<div class="card hidden" id="questionsCard">
+    <!-- QUIZ -->
 
-<div class="questions-header">
+    <section id="quizSection">
 
-<div class="questions-badge">
-<i class="fa-solid fa-circle-question"></i>
-Quiz Questions
-</div>
+        <div class="quiz-card">
 
-<h3>
-Answer all questions below
-</h3>
+            <div class="section-title">
 
-<p>
-Select the correct answer for each question.
-</p>
+                Take Quiz
 
-</div>
+            </div>
 
-<div id="questions"></div>
+            <div class="member-box">
 
-<button
-class="primary"
-id="submitBtn"
-onclick="submitQuiz()">
+                <select id="memberSelect">
 
-Submit Quiz
+                    <option value="">
 
-</button>
+                        Select your name
 
-</div>
-<div class="card result" id="resultBox">
+                    </option>
 
+                </select>
 
-<div style="
-font-size:40px;
-margin-bottom:10px;
-">
-🏆
-</div>
+                <div class="add-member">
 
-<h2 style="font-size:.9rem;">
-Quiz Completed Successfully
-</h2>
+                    <input
+                        type="text"
+                        id="newName"
+                        placeholder="Enter your name"
+                    >
 
+                    <button
+                        id="addNameBtn"
+                        onclick="addNewMember()"
+                    >
 
-<div class="big" id="score">
+                        Add Name
 
-</div>
+                    </button>
 
+                </div>
 
-<p id="points" style="font-size:.74rem;">
+            </div>
 
-</p>
+        </div>
 
+        <div
+            id="questionsCard"
+            class="questions-card hidden"
+        >
 
-<p id="total" style="font-size:.74rem;">
+            <div id="questions"></div>
 
-</p>
+            <button
+                id="submitBtn"
+                onclick="submitQuiz()"
+            >
 
-<button
-id="reviewBtn"
-class="primary"
-style="margin-top:25px;display:none;"
-onclick="showReview()">
+                Submit Quiz
 
-Review My Answers
+            </button>
 
-</button>
+        </div>
 
+    </section>
 
-</div>
+    <!-- RESULT -->
 
+    <section
+        id="resultSection"
+        class="result-section hidden"
+    >
 
-</div>
+        <div class="result-card">
 
+            <h2>
 
-</div>
+                Quiz Completed 🎉
 
+            </h2>
+
+            <h1 id="scoreText">
+
+                0/0
+
+            </h1>
+
+            <p id="pointsText">
+
+                Points Earned
+
+            </p>
+
+            <p id="totalPointsText">
+
+                Total Points
+
+            </p>
+
+            <div class="result-buttons">
+
+                <button onclick="openReview()">
+
+                    Review Answers
+
+                </button>
+
+                <button onclick="backToQuiz()">
+
+                    Back
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- REVIEW -->
+
+    <section
+        id="reviewSection"
+        class="hidden"
+    >
+
+        <div id="reviewContainer"></div>
+
+    </section>
+
+</main>
 <script src="../js/slcquiz.js">
 
 </body>
