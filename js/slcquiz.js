@@ -1,856 +1,1041 @@
-
 const API =
 "https://script.google.com/macros/s/AKfycbw1mVwpgAcIOSNbpgzy52TFyozEGMtWWwVWUDFaofGNzpsguBIaKR4q1dXVtgVHO2xZ1w/exec";
 
-let quizCloseTime = "";
-let countdownInterval;
-
-let quizData=[];
-
-let selectedLesson="";
-
+let quizData = [];
+let selectedLesson = "";
 let reviewData = [];
+let quizCloseTime = null;
+let countdownInterval = null;
 
+document.addEventListener("DOMContentLoaded", () => {
 
+    AOS.init({
+        duration: 700,
+        once: true
+    });
 
-async function loadQuiz(){
+    checkSavedReview();
 
-
-const res =
-await fetch(
-API+"?action=getQuiz"
-);
-
-
-const data =
-await res.json();
-
-
-
-const box =
-document.getElementById("statusCard");
-
-
-
-if(!data.success){
-
-
-box.innerHTML =
-`
-<h2>${data.message}</h2>
-<p>Please check back every Thursday by 6PM.</p>
-`;
-
-return;
-
-}
-
-
-
-selectedLesson =
-data.lessonNo;
-
-quizCloseTime = new Date(data.closeTime);
-
-console.log("Close Time:", data.closeTime);
-  
-quizData =
-data.questions;
-
-
-
-box.innerHTML =
-`
-
-<div style="
-display:flex;
-justify-content:space-between;
-align-items:center;
-flex-wrap:wrap;
-gap:10px;
-">
-
-<div style="
-text-align:left;
-">
-
-<h2 style="
-margin:0 0 6px 0;
-">
-Lesson ${data.lessonNo}
-</h2>
-
-<p style="
-margin:0;
-">
-${data.questionCount} Questions Available
-</p>
-
-</div>
-
-<div style="
-background:#f8fafc;
-padding:10px 14px;
-border-radius:14px;
-font-size:.68rem;
-font-weight:500;
-color:#4A0754;
-">
-
-🏆 Spiritual Growth
-
-</div>
-
-</div>
-
-`;
-
-function startCountdown(){
-
-clearInterval(
-countdownInterval
-);
-
-countdownInterval =
-setInterval(()=>{
-
-const end =
-quizCloseTime.getTime();
-
-const now =
-new Date().getTime();
-
-const diff =
-end - now;
-
-if(diff <= 0){
-
-document
-.getElementById("quizCountdown")
-.innerHTML =
-"Quiz Closed";
-
-clearInterval(
-countdownInterval
-);
-
-return;
-
-}
-
-const days =
-Math.floor(
-diff / 86400000
-);
-
-const hours =
-Math.floor(
-(diff % 86400000)
-/ 3600000
-);
-
-const mins =
-Math.floor(
-(diff % 3600000)
-/ 60000
-);
-
-const secs =
-Math.floor(
-(diff % 60000)
-/ 1000
-);
-
-document
-.getElementById("quizCountdown")
-.innerHTML =
-
-"⏳ Closes In: " +
-
-days+"d " +
-hours+"h " +
-mins+"m " +
-secs+"s";
-
-},1000);
-
-}
-
-
-document.getElementById("quizBox").classList.remove("hidden");
-document.getElementById("questionsCard").classList.remove("hidden");
-document.getElementById("resultBox").style.display="none";
-
-
-loadMembers();
-
-renderQuestions();
-
-startCountdown();
-
-}
-
-
-
-
-async function loadMembers(){
-
-const res =
-await fetch(
-API+"?action=getMembers"
-);
-
-const data =
-await res.json();
-
-const select =
-document.getElementById("memberSelect");
-
-select.innerHTML =
-`
-<option value="">
-Select Your Name
-</option>
-`;
-
-data.members.forEach(m=>{
-
-select.innerHTML +=
-`
-<option value="${m.memberId}">
-${m.name}
-</option>
-`;
+    loadQuiz();
 
 });
 
-}
+async function loadQuiz() {
 
+    const statusCard =
+        document.getElementById("statusCard");
 
+    try {
 
+        statusCard.innerHTML = `
+            <div class="loading">
+                Loading quiz...
+            </div>
+        `;
 
-function renderQuestions(){
+        const response = await fetch(
+            `${API}?action=getQuiz`
+        );
 
+        const data = await response.json();
 
-const area =
-document.getElementById("questions");
+        console.log(data);
 
+        if (!data.success) {
 
+            statusCard.innerHTML = `
+                <h2>${data.message}</h2>
+                <p>Please check back later.</p>
+            `;
 
-area.innerHTML="";
+            return;
+        }
 
+        quizData = data.questions || [];
 
+        selectedLesson = data.lessonNo;
 
-quizData.forEach((q,index)=>{
+        quizCloseTime =
+            new Date(data.closeTime);
 
+        statusCard.innerHTML = `
 
-area.innerHTML +=
+            <div style="
+                display:flex;
+                justify-content:space-between;
+                align-items:center;
+                gap:10px;
+                flex-wrap:wrap;
+            ">
 
-`
+                <div>
 
-<div class="question">
+                    <h2>
+                        Lesson ${data.lessonNo}
+                    </h2>
 
+                    <p>
+                        ${quizData.length} Questions
+                    </p>
 
-<h3>
+                </div>
 
-${index+1}. ${q.question}
+                <div style="
+                    background:#f8fafc;
+                    padding:10px 14px;
+                    border-radius:12px;
+                    font-size:.7rem;
+                    color:#4A0754;
+                ">
+                    🏆 Spiritual Growth
+                </div>
 
-</h3>
+            </div>
 
-
-
-<label class="option">
-
-<input type="radio" name="q${index}" value="A">
-
-${q.optionA}
-
-</label>
-
-
-<label class="option">
-
-<input type="radio" name="q${index}" value="B">
-
-${q.optionB}
-
-</label>
-
-
-<label class="option">
-
-<input type="radio" name="q${index}" value="C">
-
-${q.optionC}
-
-</label>
-
-
-<label class="option">
-
-<input type="radio" name="q${index}" value="D">
-
-${q.optionD}
-
-</label>
-
-
-</div>
-
-`;
-
-
-
-});
-
-
-
-}
-
-
-
-
-async function addNewMember(){
-
-const btn =
-event.target;
-
-const name =
-document.getElementById("newName")
-.value
-.trim();
-
-if(!name){
-
-alert("Enter your name");
-
-return;
-
-}
-
-btn.innerHTML =
-'<i class="fa-solid fa-spinner fa-spin"></i> Adding Name...';
-
-btn.classList.add("loading-btn");
-
-try{
-
-const res =
-await fetch(API,{
-
-method:"POST",
-
-body:JSON.stringify({
-
-action:"addMember",
-
-name:name
-
-})
-
-});
-
-const data =
-await res.json();
-
-alert("Name added successfully");
-
-loadMembers();
-
-document
-.getElementById("newName")
-.value="";
-
-}
-catch(error){
-
-alert("Unable to add name");
-
-}
-
-btn.innerHTML =
-'Add My Name';
-
-btn.classList.remove("loading-btn");
-
-}
-
-
-
-
-
-async function submitQuiz(){
-
-const submitBtn =
-document.getElementById("submitBtn");
-
-submitBtn.innerHTML =
-'<i class="fa-solid fa-spinner fa-spin"></i> Submitting Quiz...';
-
-submitBtn.classList.add("loading-btn");
-
-submitBtn.disabled = true;
-
-
-const memberId =
-document.getElementById("memberSelect").value;
-
-if(!memberId){
-
-alert(
-"Please select your name before submitting."
-);
-
-submitBtn.innerHTML =
-"Submit Quiz";
-
-submitBtn.classList.remove("loading-btn");
-
-submitBtn.disabled = false;
-
-return;
-
-}
-
-let answers = {};
-
-
-quizData.forEach((q,index)=>{
-
-const checked =
-document.querySelector(
-`input[name="q${index}"]:checked`
-);
-
-if(checked){
-
-answers[index+1] =
-checked.value;
-
-}
-
-});
-
-
-try{
-
-const res =
-await fetch(API,{
-
-method:"POST",
-
-body:JSON.stringify({
-
-action:"scoreQuiz",
-
-memberId:memberId,
-
-lessonNo:selectedLesson,
-
-answers:answers
-
-})
-
-});
-
-
-const data =
-await res.json();
-
-
-if(!data.success){
-
-alert(data.message);
-
-submitBtn.innerHTML =
-"Submit Quiz";
-
-submitBtn.classList.remove("loading-btn");
-
-submitBtn.disabled = false;
-
-return;
-
-}
-
-
-
-document.getElementById("quizBox").style.display = "none";
-document.getElementById("questionsCard").style.display = "none";
-document.getElementById("statusCard").style.display = "none";
-
-
-document
-.getElementById("resultBox")
-.style.display="block";
-
-
-
-document
-.getElementById("score")
-.innerHTML =
-data.score;
-
-
-
-document
-.getElementById("points")
-.innerHTML =
-"Points Earned: " +
-data.pointsEarned;
-
-
-
-document
-.getElementById("total")
-.innerHTML =
-"Total Points: " +
-data.totalPoints;
-
-
-reviewData = data.review;
-
-localStorage.setItem(
-    "lastQuizReview",
-    JSON.stringify(data.review)
-);
-
-localStorage.setItem(
-    "lastQuizScore",
-    data.score
-);
-
-localStorage.setItem(
-    "lastQuizPoints",
-    data.pointsEarned
-);
-
-localStorage.setItem(
-    "lastQuizTotal",
-    data.totalPoints
-);
-
-localStorage.setItem(
-    "lastQuizLesson",
-    selectedLesson
-);
-
-localStorage.setItem(
-    "lastQuizQuestions",
-    JSON.stringify(quizData)
-);
-  
-document.getElementById("reviewBtn").style.display="block";
-  
-
-document.getElementById("resultBox").scrollIntoView({
- behavior:"smooth",
- block:"start"
-});
-
-
-}catch(error){
-
-alert("Unable to submit quiz.");
-
-submitBtn.innerHTML =
-"Submit Quiz";
-
-submitBtn.classList.remove("loading-btn");
-
-submitBtn.innerHTML = "Quiz Submitted";
-submitBtn.classList.remove("loading-btn");
-  
-submitBtn.disabled = false;
-
-}
-
-}
-
-function checkSavedReview(){
-
-    const savedReview =
-        localStorage.getItem("lastQuizReview");
-
-    const savedScore =
-        localStorage.getItem("lastQuizScore");
-
-    if(savedReview || savedScore){
+        `;
 
         document
-            .getElementById("savedCard")
-            .style.display = "block";
+            .getElementById("quizBox")
+            .classList.remove("hidden");
+
+        document
+            .getElementById("questionsCard")
+            .classList.remove("hidden");
+
+        await loadMembers();
+
+        renderQuestions();
+
+        startCountdown();
 
     }
 
-    if(savedReview){
+    catch (error) {
 
-        document
-            .getElementById("openSavedReview")
-            .style.display = "flex";
+        console.error(error);
 
+        statusCard.innerHTML = `
+            <h2>Unable to load quiz</h2>
+            <p>Please refresh the page.</p>
+        `;
     }
-
-    if(savedScore){
-
-        document
-            .getElementById("openSavedScore")
-            .style.display = "flex";
-
-    }
-
 }
 
-checkSavedReview();
+function startCountdown() {
 
-function openSavedReview(){
-
-    reviewData = JSON.parse(
-        localStorage.getItem("lastQuizReview")
+    clearInterval(
+        countdownInterval
     );
 
-    quizData = JSON.parse(
-        localStorage.getItem("lastQuizQuestions")
-    );
+    countdownInterval = setInterval(() => {
 
-    document.getElementById("score").innerHTML =
-        localStorage.getItem("lastQuizScore");
+        const box =
+            document.getElementById(
+                "quizCountdown"
+            );
 
-    document.getElementById("points").innerHTML =
-        "Points Earned: " +
-        localStorage.getItem("lastQuizPoints");
+        const diff =
+            quizCloseTime - new Date();
 
-    document.getElementById("total").innerHTML =
-        "Total Points: " +
-        localStorage.getItem("lastQuizTotal");
+        if (diff <= 0) {
 
-    document.getElementById("resultBox").style.display = "block";
+            box.innerHTML =
+                "Quiz Closed";
 
-    showReview();
+            clearInterval(
+                countdownInterval
+            );
+
+            return;
+        }
+
+        const days =
+            Math.floor(
+                diff / 86400000
+            );
+
+        const hours =
+            Math.floor(
+                (diff % 86400000) /
+                3600000
+            );
+
+        const mins =
+            Math.floor(
+                (diff % 3600000) /
+                60000
+            );
+
+        const secs =
+            Math.floor(
+                (diff % 60000) /
+                1000
+            );
+
+        box.innerHTML =
+
+            `⏳ Closes In: ${days}d ${hours}h ${mins}m ${secs}s`;
+
+    }, 1000);
 }
 
-function openSavedScore(){
+async function loadMembers() {
 
-    const savedScore =
-        localStorage.getItem("lastQuizScore");
+    try {
 
-    if(!savedScore){
+        const response = await fetch(
+            `${API}?action=getMembers`
+        );
 
-        alert("You have not taken any quiz yet.");
+        const data =
+            await response.json();
+
+        const select =
+            document.getElementById(
+                "memberSelect"
+            );
+
+        select.innerHTML = `
+            <option value="">
+                Select Your Name
+            </option>
+        `;
+
+        if (!data.members) {
+
+            console.log(
+                "No members found."
+            );
+
+            return;
+        }
+
+        data.members.forEach(member => {
+
+            select.innerHTML += `
+
+                <option value="${member.memberId}">
+
+                    ${member.name}
+
+                </option>
+
+            `;
+
+        });
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Unable to load members:",
+            error
+        );
+
+        alert(
+            "Unable to load members."
+        );
+
+    }
+
+}
+
+function renderQuestions() {
+
+    const container =
+        document.getElementById(
+            "questions"
+        );
+
+    container.innerHTML = "";
+
+    if (!quizData.length) {
+
+        container.innerHTML = `
+            <p>
+                No questions available.
+            </p>
+        `;
 
         return;
     }
 
-    document.getElementById("quizBox").style.display = "none";
+    quizData.forEach((question, index) => {
 
-    document.getElementById("questionsCard").style.display = "none";
+        let options = "";
 
-    document.getElementById("statusCard").style.display = "none";
+        ["A", "B", "C", "D"].forEach(letter => {
 
-    document.getElementById("resultBox").style.display = "block";
+            const optionText =
+                question[
+                    `option${letter}`
+                ];
 
-    document.getElementById("score").innerHTML =
-        localStorage.getItem("lastQuizScore");
+            if (!optionText) {
 
-    document.getElementById("points").innerHTML =
-        "Points Earned: " +
-        localStorage.getItem("lastQuizPoints");
+                return;
 
-    document.getElementById("total").innerHTML =
-        "Total Points: " +
-        localStorage.getItem("lastQuizTotal");
+            }
 
-    document.getElementById("reviewBtn").style.display =
-        "block";
+            options += `
+
+                <label class="option">
+
+                    <input
+                        type="radio"
+                        name="q${index}"
+                        value="${letter}"
+                    >
+
+                    ${optionText}
+
+                </label>
+
+            `;
+
+        });
+
+        container.innerHTML += `
+
+            <div class="question">
+
+                <h3>
+
+                    ${index + 1}.
+
+                    ${question.question}
+
+                </h3>
+
+                ${options}
+
+            </div>
+
+        `;
+
+    });
+
 }
-  
-loadQuiz();
 
-function showReview(){
+async function addNewMember() {
 
-    if(
-        !reviewData ||
-        reviewData.length === 0
-    ){
+    const button =
+        document.getElementById(
+            "addNameBtn"
+        );
 
-        const savedReview =
-            localStorage.getItem(
-                "lastQuizReview"
+    const input =
+        document.getElementById(
+            "newName"
+        );
+
+    const name =
+        input.value.trim();
+
+    if (!name) {
+
+        alert(
+            "Please enter your name."
+        );
+
+        return;
+    }
+
+    const originalText =
+        button.innerHTML;
+
+    button.innerHTML =
+
+        `<i class="fa-solid fa-spinner fa-spin"></i>
+
+        Adding...`;
+
+    button.disabled = true;
+
+    try {
+
+        const response =
+            await fetch(API, {
+
+                method: "POST",
+
+                body: JSON.stringify({
+
+                    action: "addMember",
+
+                    name: name
+
+                })
+
+            });
+
+        const data =
+            await response.json();
+
+        if (data.success) {
+
+            alert(
+                "Name added successfully."
             );
 
-        if(savedReview){
+            input.value = "";
 
-            reviewData =
-                JSON.parse(savedReview);
+            await loadMembers();
+
+        } else {
+
+            alert(
+                data.message ||
+                "Unable to add member."
+            );
 
         }
 
     }
 
-    if(
-        !reviewData ||
-        reviewData.length === 0
-    ){
+    catch (error) {
+
+        console.error(error);
 
         alert(
-            "No review data available."
+            "Unable to add member."
+        );
+
+    }
+
+    button.innerHTML =
+        originalText;
+
+    button.disabled = false;
+
+}
+
+async function submitQuiz() {
+
+    const submitBtn =
+        document.getElementById(
+            "submitBtn"
+        );
+
+    const memberId =
+        document.getElementById(
+            "memberSelect"
+        ).value;
+
+    if (!memberId) {
+
+        alert(
+            "Please select your name."
         );
 
         return;
+
     }
-  
-quizData = JSON.parse(
 
-    localStorage.getItem(
-        "lastQuizQuestions"
-    )
+    submitBtn.disabled = true;
 
-) || [];
+    submitBtn.innerHTML =
 
-const reviewContainer =
-document.getElementById("reviewContainer");
+        `<i class="fa-solid fa-spinner fa-spin"></i>
 
-let html=`
+        Submitting...`;
 
-<div style="margin-top:25px;">
+    let answers = {};
 
-<h2 style="margin-bottom:20px;font-size:1rem;">
-Review My Answers
-</h2>
+    quizData.forEach((question, index) => {
 
-`;
+        const checked =
 
-reviewData.forEach((item,index)=>{
+            document.querySelector(
 
-const q=quizData[index];
+                `input[name="q${index}"]:checked`
 
-html+=`
+            );
 
-<div style="
-background:#fff;
-padding:20px;
-border-radius:16px;
-margin-bottom:20px;
-border:1px solid #ececec;
-box-shadow:0 8px 25px rgba(0,0,0,.05);
-">
+        if (checked) {
 
-<h3 style="
-margin-bottom:18px;
-font-size:.82rem;
-line-height:1.6;
-">
+            answers[index + 1] =
 
-${index+1}. ${q.question}
+                checked.value;
 
-</h3>
+        }
 
-`;
+    });
 
-["A","B","C","D"].forEach(letter=>{
+    try {
 
-const text=q["option"+letter];
+        const response =
 
-let bg="#f8fafc";
+            await fetch(API, {
 
-let border="#e5e7eb";
+                method: "POST",
 
-let badge="";
+                body: JSON.stringify({
 
-if(letter===item.correctAnswer){
+                    action: "scoreQuiz",
 
-bg="#ecfdf5";
+                    memberId,
 
-border="#22c55e";
+                    lessonNo:
 
-badge="✅ Correct Answer";
+                        selectedLesson,
+
+                    answers
+
+                })
+
+            });
+
+        const data =
+
+            await response.json();
+
+        if (!data.success) {
+
+            alert(
+
+                data.message ||
+
+                "Unable to submit quiz."
+
+            );
+
+            submitBtn.disabled = false;
+
+            submitBtn.innerHTML =
+
+                "Submit Quiz";
+
+            return;
+
+        }
+
+        reviewData =
+
+            data.review || [];
+
+        localStorage.setItem(
+
+            "lastQuizReview",
+
+            JSON.stringify(
+
+                reviewData
+
+            )
+
+        );
+
+        localStorage.setItem(
+
+            "lastQuizQuestions",
+
+            JSON.stringify(
+
+                quizData
+
+            )
+
+        );
+
+        localStorage.setItem(
+
+            "lastQuizScore",
+
+            data.score
+
+        );
+
+        localStorage.setItem(
+
+            "lastQuizPoints",
+
+            data.pointsEarned
+
+        );
+
+        localStorage.setItem(
+
+            "lastQuizTotal",
+
+            data.totalPoints
+
+        );
+
+        document.getElementById(
+
+            "quizBox"
+
+        ).style.display =
+
+            "none";
+
+        document.getElementById(
+
+            "questionsCard"
+
+        ).style.display =
+
+            "none";
+
+        document.getElementById(
+
+            "statusCard"
+
+        ).style.display =
+
+            "none";
+
+        document.getElementById(
+
+            "resultBox"
+
+        ).style.display =
+
+            "block";
+
+        document.getElementById(
+
+            "score"
+
+        ).innerHTML =
+
+            data.score;
+
+        document.getElementById(
+
+            "points"
+
+        ).innerHTML =
+
+            `Points Earned: ${data.pointsEarned}`;
+
+        document.getElementById(
+
+            "total"
+
+        ).innerHTML =
+
+            `Total Points: ${data.totalPoints}`;
+
+        document.getElementById(
+
+            "reviewBtn"
+
+        ).style.display =
+
+            "block";
+
+        checkSavedReview();
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        alert(
+
+            "Unable to submit quiz."
+
+        );
+
+        submitBtn.disabled = false;
+
+        submitBtn.innerHTML =
+
+            "Submit Quiz";
+
+    }
 
 }
 
-if(letter===item.userAnswer && !item.correct){
+function showReview() {
 
-bg="#fef2f2";
+    if (
 
-border="#ef4444";
+        !reviewData ||
 
-badge="❌ Your Answer";
+        reviewData.length === 0
+
+    ) {
+
+        reviewData =
+
+            JSON.parse(
+
+                localStorage.getItem(
+
+                    "lastQuizReview"
+
+                )
+
+            ) || [];
+
+    }
+
+    const questions =
+
+        JSON.parse(
+
+            localStorage.getItem(
+
+                "lastQuizQuestions"
+
+            )
+
+        ) || [];
+
+    if (
+
+        reviewData.length === 0
+
+    ) {
+
+        alert(
+
+            "No review available."
+
+        );
+
+        return;
+
+    }
+
+    const container =
+
+        document.getElementById(
+
+            "reviewContainer"
+
+        );
+
+    let html =
+
+        `<div style="margin-top:25px;">`;
+
+    reviewData.forEach(
+
+        (item, index) => {
+
+            const q =
+
+                questions[index];
+
+            if (!q) return;
+
+            html += `
+
+                <div style="
+                    background:#fff;
+                    padding:20px;
+                    border-radius:16px;
+                    margin-bottom:18px;
+                    border:1px solid #ececec;
+                ">
+
+                    <h3 style="
+                        margin-bottom:16px;
+                        font-size:.8rem;
+                    ">
+
+                        ${index + 1}.
+
+                        ${q.question}
+
+                    </h3>
+
+            `;
+
+            ["A", "B", "C", "D"].forEach(
+
+                letter => {
+
+                    const text =
+
+                        q[`option${letter}`];
+
+                    if (!text)
+
+                        return;
+
+                    let bg =
+
+                        "#f8fafc";
+
+                    let border =
+
+                        "#e5e7eb";
+
+                    let badge =
+
+                        "";
+
+                    if (
+
+                        letter ===
+
+                        item.correctAnswer
+
+                    ) {
+
+                        bg =
+
+                            "#ecfdf5";
+
+                        border =
+
+                            "#22c55e";
+
+                        badge =
+
+                            "✅ Correct";
+
+                    }
+
+                    if (
+
+                        letter ===
+
+                        item.userAnswer &&
+
+                        !item.correct
+
+                    ) {
+
+                        bg =
+
+                            "#fef2f2";
+
+                        border =
+
+                            "#ef4444";
+
+                        badge =
+
+                            "❌ Your Answer";
+
+                    }
+
+                    html += `
+
+                        <div style="
+                            padding:14px;
+                            border-radius:12px;
+                            margin-bottom:10px;
+                            background:${bg};
+                            border:2px solid ${border};
+                        ">
+
+                            <strong>
+
+                                ${letter}.
+
+                            </strong>
+
+                            ${text}
+
+                            <div style="
+                                margin-top:8px;
+                                font-size:.68rem;
+                            ">
+
+                                ${badge}
+
+                            </div>
+
+                        </div>
+
+                    `;
+
+                }
+
+            );
+
+            html += `
+
+                </div>
+
+            `;
+
+        }
+
+    );
+
+    html += `
+
+        <button
+            class="primary"
+            onclick="hideReview()"
+        >
+
+            Back
+
+        </button>
+
+        </div>
+
+    `;
+
+    container.innerHTML =
+
+        html;
+
+    container.style.display =
+
+        "block";
+
+    document.getElementById(
+
+        "resultBox"
+
+    ).style.display =
+
+        "none";
 
 }
 
-html+=`
+function checkSavedReview() {
 
-<div style="
-padding:14px;
-margin-bottom:10px;
-border-radius:12px;
-background:${bg};
-border:2px solid ${border};
-">
+    const review =
 
-<div style="font-size:.78rem;">
+        localStorage.getItem(
 
-<strong>${letter}.</strong>
+            "lastQuizReview"
 
-${text}
+        );
 
-</div>
+    const score =
 
-${badge!=""?`
+        localStorage.getItem(
 
-<div style="
-margin-top:8px;
-font-size:.68rem;
-font-weight:bold;
-">
+            "lastQuizScore"
 
-${badge}
+        );
 
-</div>
+    if (review || score) {
 
-`:""}
+        document.getElementById(
 
-</div>
+            "savedCard"
 
-`;
+        ).style.display =
 
-});
+            "block";
 
-html+=`
+    }
 
-</div>
+    if (review) {
 
-`;
+        document.getElementById(
 
-});
+            "openSavedReview"
 
-html+=`
+        ).style.display =
 
-<button
-class="primary"
-onclick="hideReview()">
+            "flex";
 
-Back To Quiz
+    }
 
-</button>
+    if (score) {
 
-</div>
+        document.getElementById(
 
-`;
+            "openSavedScore"
 
-reviewContainer.innerHTML = html;
+        ).style.display =
 
-document.getElementById("score").parentElement.style.display = "none";
+            "flex";
 
-reviewContainer.style.display = "block";
-
-reviewContainer.scrollIntoView({
-    behavior:"smooth"
-});
+    }
 
 }
 
-function hideReview(){
+function openSavedScore() {
 
-location.reload();
+    document.getElementById(
+
+        "quizBox"
+
+    ).style.display =
+
+        "none";
+
+    document.getElementById(
+
+        "questionsCard"
+
+    ).style.display =
+
+        "none";
+
+    document.getElementById(
+
+        "statusCard"
+
+    ).style.display =
+
+        "none";
+
+    document.getElementById(
+
+        "resultBox"
+
+    ).style.display =
+
+        "block";
+
+    document.getElementById(
+
+        "score"
+
+    ).innerHTML =
+
+        localStorage.getItem(
+
+            "lastQuizScore"
+
+        );
+
+    document.getElementById(
+
+        "points"
+
+    ).innerHTML =
+
+        `Points Earned: ${localStorage.getItem("lastQuizPoints")}`;
+
+    document.getElementById(
+
+        "total"
+
+    ).innerHTML =
+
+        `Total Points: ${localStorage.getItem("lastQuizTotal")}`;
+
+}
+
+function openSavedReview() {
+
+    reviewData =
+
+        JSON.parse(
+
+            localStorage.getItem(
+
+                "lastQuizReview"
+
+            )
+
+        ) || [];
+
+    showReview();
+
+}
+
+function hideReview() {
+
+    location.reload();
 
 }
