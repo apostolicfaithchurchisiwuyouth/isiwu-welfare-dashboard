@@ -2,593 +2,761 @@ const API =
 "https://script.google.com/macros/s/AKfycbw1mVwpgAcIOSNbpgzy52TFyozEGMtWWwVWUDFaofGNzpsguBIaKR4q1dXVtgVHO2xZ1w/exec";
 
 let quizData = [];
+
 let selectedLesson = "";
+
 let reviewData = [];
+
+let reviewQuestions = [];
+
 let quizCloseTime = null;
+
+let quizOpenTime = null;
+
 let countdownInterval = null;
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener(
 
-    AOS.init({
-        duration: 700,
-        once: true
-    });
+    "DOMContentLoaded",
 
-    checkSavedReview();
+    async () => {
 
-    loadQuiz();
+        AOS.init({
 
-});
+            duration: 700,
 
-async function loadQuiz() {
+            once: true
 
-    const statusCard =
-        document.getElementById("statusCard");
+        });
 
-    const quizBox =
-        document.getElementById("quizBox");
-
-    const questionsCard =
-        document.getElementById("questionsCard");
-
-    const countdown =
-        document.getElementById("quizCountdown");
-
-    try {
-
-        statusCard.innerHTML = `
-
-            <div class="loading">
-
-                Loading quiz...
-
-            </div>
-
-        `;
-
-        const response = await fetch(
-
-            `${API}?action=getQuiz`
-
-        );
-
-        const data = await response.json();
-
-        console.log(data);
-
-        /*
-        =====================
-        QUIZ NOT AVAILABLE
-        =====================
-        */
-
-        if (!data.success) {
-
-            let message =
-                data.message ||
-                "No quiz available.";
-
-            if (data.status === "not_open") {
-
-                message =
-                    "⏳ Quiz will open soon. Check back later.";
-
-            }
-
-            if (data.status === "closed") {
-
-                message =
-                    "🔒 This week's quiz has closed.";
-
-            }
-
-            statusCard.innerHTML = `
-
-                <h2>
-
-                    📚 Weekly Quiz
-
-                </h2>
-
-                <p>
-
-                    ${message}
-
-                </p>
-
-            `;
-
-            quizBox.classList.add("hidden");
-
-            questionsCard.classList.add("hidden");
-
-            countdown.style.display = "none";
-
-            return;
-
-        }
-
-        /*
-        =====================
-        NO QUESTIONS
-        =====================
-        */
-
-        if (!data.questions ||
-            data.questions.length === 0) {
-
-            statusCard.innerHTML = `
-
-                <h2>
-
-                    No Questions Found
-
-                </h2>
-
-                <p>
-
-                    The quiz exists, but there are no questions.
-
-                </p>
-
-            `;
-
-            quizBox.classList.add("hidden");
-
-            questionsCard.classList.add("hidden");
-
-            countdown.style.display = "none";
-
-            return;
-
-        }
-
-        /*
-        =====================
-        SAVE QUIZ DATA
-        =====================
-        */
-
-        quizData = data.questions;
-
-        selectedLesson = data.lessonNo;
-
-        quizCloseTime =
-            new Date(data.closeTime);
-
-        /*
-        =====================
-        SHOW STATUS
-        =====================
-        */
-
-        statusCard.innerHTML = `
-
-            <div style="
-
-                display:flex;
-                justify-content:space-between;
-                align-items:center;
-                gap:10px;
-                flex-wrap:wrap;
-
-            ">
-
-                <div>
-
-                    <h2>
-
-                        Lesson ${data.lessonNo}
-
-                    </h2>
-
-                    <p>
-
-                        ${quizData.length}
-                        Questions Available
-
-                    </p>
-
-                </div>
-
-                <div style="
-
-                    background:#ecfdf5;
-                    color:#15803d;
-                    padding:10px 14px;
-                    border-radius:12px;
-                    font-size:.75rem;
-
-                ">
-
-                    🏆 Quiz Open
-
-                </div>
-
-            </div>
-
-        `;
-
-        /*
-        =====================
-        SHOW QUIZ
-        =====================
-        */
-
-        quizBox.classList.remove("hidden");
-
-        questionsCard.classList.remove("hidden");
-
-        countdown.style.display = "block";
-
-        /*
-        =====================
-        LOAD DATA
-        =====================
-        */
+        await loadQuiz();
 
         await loadMembers();
 
-        renderQuestions();
-
-        startCountdown();
+        await loadReviewMembers();
 
     }
 
-    catch (error) {
+);
+async function loadQuiz() {
 
-        console.error(
+    const status =
 
-            "Quiz loading error:",
+        document.getElementById(
 
-            error
+            "quizStatus"
 
         );
 
-        statusCard.innerHTML = `
+    const quizSection =
 
-            <h2>
+        document.getElementById(
 
-                Error loading quiz
+            "quizSection"
 
-            </h2>
-
-            <p>
-
-                Check your internet connection.
-
-            </p>
-
-        `;
-
-    }
-
-}
-
-function startCountdown() {
+        );
 
     const countdown =
 
         document.getElementById(
+
             "quizCountdown"
+
         );
-
-    if (!quizCloseTime) {
-
-        countdown.style.display =
-            "none";
-
-        return;
-    }
-
-    countdown.style.display =
-        "block";
-
-    clearInterval(
-        countdownInterval
-    );
-
-    countdownInterval =
-        setInterval(() => {
-
-            const diff =
-
-                quizCloseTime -
-
-                new Date();
-
-            if (diff <= 0) {
-
-                countdown.innerHTML =
-
-                    "🔒 Quiz Closed";
-
-                clearInterval(
-                    countdownInterval
-                );
-
-                return;
-            }
-
-            const days = Math.floor(
-
-                diff / 86400000
-
-            );
-
-            const hours = Math.floor(
-
-                (diff % 86400000) /
-
-                3600000
-
-            );
-
-            const mins = Math.floor(
-
-                (diff % 3600000) /
-
-                60000
-
-            );
-
-            const secs = Math.floor(
-
-                (diff % 60000) /
-
-                1000
-
-            );
-
-            countdown.innerHTML = `
-
-                ⏳ Closes in:
-
-                ${days}d
-
-                ${hours}h
-
-                ${mins}m
-
-                ${secs}s
-
-            `;
-
-        }, 1000);
-
-}
-
-async function loadMembers() {
 
     try {
 
-        const response = await fetch(
-            `${API}?action=getMembers`
-        );
+        status.innerHTML =
 
-        const data =
-            await response.json();
+            "Loading quiz...";
 
-        const select =
-            document.getElementById(
-                "memberSelect"
+        const response =
+
+            await fetch(
+
+                `${API}?action=getQuiz`
+
             );
 
-        select.innerHTML = `
-            <option value="">
-                Select Your Name
-            </option>
-        `;
+        const data =
 
-        if (!data.members) {
+            await response.json();
 
-            console.log(
-                "No members found."
+        console.log(
+
+            data
+
+        );
+
+        /*
+        ====================
+        QUIZ CLOSED
+        ====================
+        */
+
+        if (
+
+            data.status ===
+
+            "closed"
+
+        ) {
+
+            status.innerHTML =
+
+                "🔒 Quiz Closed";
+
+            countdown.style.display =
+
+                "none";
+
+            quizSection.classList.add(
+
+                "hidden"
+
             );
 
             return;
         }
 
-        data.members.forEach(member => {
+        /*
+        ====================
+        QUIZ NOT OPEN
+        ====================
+        */
 
-            select.innerHTML += `
+        if (
 
-                <option value="${member.memberId}">
+            data.status ===
 
-                    ${member.name}
+            "not_open"
 
-                </option>
+        ) {
 
-            `;
+            status.innerHTML =
 
-        });
+                "⏳ Opens Soon";
+
+            quizSection.classList.add(
+
+                "hidden"
+
+            );
+
+            quizOpenTime =
+
+                new Date(
+
+                    data.openTime
+
+                );
+
+            startCountdown(
+
+                "open"
+
+            );
+
+            return;
+        }
+
+        /*
+        ====================
+        API ERROR
+        ====================
+        */
+
+        if (
+
+            !data.success
+
+        ) {
+
+            status.innerHTML =
+
+                data.message ||
+
+                "Unable to load quiz.";
+
+            quizSection.classList.add(
+
+                "hidden"
+
+            );
+
+            return;
+        }
+
+        /*
+        ====================
+        QUIZ OPEN
+        ====================
+        */
+
+        quizData =
+
+            data.questions;
+
+        selectedLesson =
+
+            data.lessonNo;
+
+        quizCloseTime =
+
+            new Date(
+
+                data.closeTime
+
+            );
+
+        status.innerHTML = `
+
+            🟢 Lesson
+
+            ${data.lessonNo}
+
+            Quiz Open
+
+        `;
+
+        renderQuestions();
+
+        startCountdown(
+
+            "close"
+
+        );
 
     }
 
-    catch (error) {
+    catch (
+
+        error
+
+    ) {
 
         console.error(
-            "Unable to load members:",
+
             error
+
+        );
+
+        status.innerHTML =
+
+            "Unable to load quiz.";
+
+    }
+
+}
+
+function startCountdown(
+
+    mode
+
+) {
+
+    clearInterval(
+
+        countdownInterval
+
+    );
+
+    const countdown =
+
+        document.getElementById(
+
+            "quizCountdown"
+
+        );
+
+    countdownInterval =
+
+        setInterval(
+
+            () => {
+
+                const target =
+
+                    mode ===
+
+                    "open"
+
+                    ?
+
+                    quizOpenTime
+
+                    :
+
+                    quizCloseTime;
+
+                const diff =
+
+                    target -
+
+                    new Date();
+
+                if (
+
+                    diff <= 0
+
+                ) {
+
+                    clearInterval(
+
+                        countdownInterval
+
+                    );
+
+                    location.reload();
+
+                    return;
+                }
+
+                const days =
+
+                    Math.floor(
+
+                        diff /
+
+                        86400000
+
+                    );
+
+                const hours =
+
+                    Math.floor(
+
+                        (
+
+                            diff %
+
+                            86400000
+
+                        )
+
+                        /
+
+                        3600000
+
+                    );
+
+                const mins =
+
+                    Math.floor(
+
+                        (
+
+                            diff %
+
+                            3600000
+
+                        )
+
+                        /
+
+                        60000
+
+                    );
+
+                const secs =
+
+                    Math.floor(
+
+                        (
+
+                            diff %
+
+                            60000
+
+                        )
+
+                        /
+
+                        1000
+
+                    );
+
+                countdown.innerHTML = `
+
+                    ${
+
+                        mode ===
+
+                        "open"
+
+                        ?
+
+                        "⏳ Opens in"
+
+                        :
+
+                        "⏳ Closes in"
+
+                    }
+
+                    <strong>
+
+                        ${days}d
+
+                        ${hours}h
+
+                        ${mins}m
+
+                        ${secs}s
+
+                    </strong>
+
+                `;
+
+            },
+
+            1000
+
+        );
+
+}
+
+
+async function loadMembers() {
+
+    const select =
+
+        document.getElementById(
+
+            "memberSelect"
+
+        );
+
+    select.innerHTML = `
+
+        <option value="">
+
+            Select your name
+
+        </option>
+
+    `;
+
+    try {
+
+        const response =
+
+            await fetch(
+
+                `${API}?action=getMembers`
+
+            );
+
+        const data =
+
+            await response.json();
+
+        data.members.forEach(
+
+            member => {
+
+                select.innerHTML += `
+
+                    <option value="${member.memberId}">
+
+                        ${member.name}
+
+                    </option>
+
+                `;
+
+            }
+
+        );
+
+    }
+
+    catch (
+
+        error
+
+    ) {
+
+        console.error(
+
+            error
+
+        );
+
+    }
+
+}
+
+async function addNewMember() {
+
+    const input =
+
+        document.getElementById(
+
+            "newName"
+
+        );
+
+    const button =
+
+        document.getElementById(
+
+            "addNameBtn"
+
+        );
+
+    const name =
+
+        input.value.trim();
+
+    if (!name) {
+
+        alert(
+
+            "Please enter your name."
+
+        );
+
+        return;
+
+    }
+
+    const oldText =
+
+        button.innerHTML;
+
+    button.disabled = true;
+
+    button.innerHTML =
+
+        "Adding...";
+
+    try {
+
+        const response =
+
+            await fetch(
+
+                API,
+
+                {
+
+                    method:
+
+                        "POST",
+
+                    body:
+
+                        JSON.stringify({
+
+                            action:
+
+                                "addMember",
+
+                            name
+
+                        })
+
+                }
+
+            );
+
+        const data =
+
+            await response.json();
+
+        if (
+
+            !data.success
+
+        ) {
+
+            alert(
+
+                data.message ||
+
+                "Unable to add member."
+
+            );
+
+            return;
+
+        }
+
+        input.value = "";
+
+        await loadMembers();
+
+        await loadReviewMembers();
+
+        document.getElementById(
+
+            "memberSelect"
+
+        ).value =
+
+            data.memberId;
+
+        alert(
+
+            "Name added successfully."
+
+        );
+
+    }
+
+    catch (
+
+        error
+
+    ) {
+
+        console.error(
+
+            error
+
         );
 
         alert(
-            "Unable to load members."
+
+            "Unable to add member."
+
         );
 
     }
+
+    button.disabled = false;
+
+    button.innerHTML =
+
+        oldText;
 
 }
 
 function renderQuestions() {
 
     const container =
+
         document.getElementById(
+
             "questions"
+
         );
 
     container.innerHTML = "";
 
-    if (!quizData.length) {
+    quizData.forEach(
 
-        container.innerHTML = `
-            <p>
-                No questions available.
-            </p>
-        `;
+        (
 
-        return;
-    }
+            question,
 
-    quizData.forEach((question, index) => {
+            index
 
-        let options = "";
+        ) => {
 
-        ["A", "B", "C", "D"].forEach(letter => {
+            let options = "";
 
-            const optionText =
-                question[
-                    `option${letter}`
-                ];
+            [
 
-            if (!optionText) {
+                "A",
 
-                return;
+                "B",
 
-            }
+                "C",
 
-            options += `
+                "D"
 
-                <label class="option">
+            ].forEach(
 
-                    <input
-                        type="radio"
-                        name="q${index}"
-                        value="${letter}"
-                    >
+                letter => {
 
-                    ${optionText}
+                    const text =
 
-                </label>
+                        question[
+
+                            `option${letter}`
+
+                        ];
+
+                    if (
+
+                        !text
+
+                    ) {
+
+                        return;
+
+                    }
+
+                    options += `
+
+                        <label class="option">
+
+                            <input
+
+                                type="radio"
+
+                                name="q${index}"
+
+                                value="${letter}"
+
+                            >
+
+                            <span>
+
+                                <strong>
+
+                                    ${letter}.
+
+                                </strong>
+
+                                ${text}
+
+                            </span>
+
+                        </label>
+
+                    `;
+
+                }
+
+            );
+
+            container.innerHTML += `
+
+                <div class="question-card">
+
+                    <div class="question-number">
+
+                        Question
+
+                        ${index + 1}
+
+                    </div>
+
+                    <h3>
+
+                        ${question.question}
+
+                    </h3>
+
+                    <div class="options">
+
+                        ${options}
+
+                    </div>
+
+                </div>
 
             `;
 
-        });
-
-        container.innerHTML += `
-
-            <div class="question">
-
-                <h3>
-
-                    ${index + 1}.
-
-                    ${question.question}
-
-                </h3>
-
-                ${options}
-
-            </div>
-
-        `;
-
-    });
-
-}
-
-async function addNewMember() {
-
-    const button =
-        document.getElementById(
-            "addNameBtn"
-        );
-
-    const input =
-        document.getElementById(
-            "newName"
-        );
-
-    const name =
-        input.value.trim();
-
-    if (!name) {
-
-        alert(
-            "Please enter your name."
-        );
-
-        return;
-    }
-
-    const originalText =
-        button.innerHTML;
-
-    button.innerHTML =
-
-        `<i class="fa-solid fa-spinner fa-spin"></i>
-
-        Adding...`;
-
-    button.disabled = true;
-
-    try {
-
-        const response =
-            await fetch(API, {
-
-                method: "POST",
-
-                body: JSON.stringify({
-
-                    action: "addMember",
-
-                    name: name
-
-                })
-
-            });
-
-        const data =
-            await response.json();
-
-        if (data.success) {
-
-            alert(
-                "Name added successfully."
-            );
-
-            input.value = "";
-
-            await loadMembers();
-
-        } else {
-
-            alert(
-                data.message ||
-                "Unable to add member."
-            );
-
         }
 
-    }
-
-    catch (error) {
-
-        console.error(error);
-
-        alert(
-            "Unable to add member."
-        );
-
-    }
-
-    button.innerHTML =
-        originalText;
-
-    button.disabled = false;
+    );
 
 }
+
 
 async function submitQuiz() {
 
