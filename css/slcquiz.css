@@ -422,7 +422,7 @@ linear-gradient(
 
     rgba(255,255,255,.12);
 
-    font-size: .8rem;
+    font-size: .76rem;
 
     margin-bottom: 22px;
 
@@ -438,7 +438,7 @@ linear-gradient(
     "Bricolage Grotesque",
     sans-serif;
 
-       font-size:2rem;
+       font-size:1.5rem;
 
     line-height:1.15;
 
@@ -823,7 +823,7 @@ QUESTIONS
 
     font-size:
 
-    1rem;
+    .9rem;
 
     line-height:
 
@@ -1243,7 +1243,7 @@ MOBILE RESPONSIVE
 
         font-size:
 
-        1.2rem;
+        1rem;
 
     }
 
@@ -1380,7 +1380,7 @@ VERY SMALL DEVICES
 
         font-size:
 
-        1.2rem;
+        1rem;
 
     }
 
