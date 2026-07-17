@@ -148,8 +148,7 @@ statusCard.innerHTML = `
 
 `;
     }
-}
-
+    
 function startCountdown() {
 
     const countdown =
