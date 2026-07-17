@@ -6,7 +6,7 @@ box-sizing:border-box;
 
 
 body{
-font-family:"Manrope",sans-serif;
+font-family:"Afacad",sans-serif;
 background:#fafafa;
 min-height:100vh;
 position:relative;
@@ -412,7 +412,7 @@ background:#f8fafc;
 
 margin-bottom:10px;
 
-font-size:.75rem;
+font-size:.85rem;
 font-weight:500;
 cursor:pointer;
 
