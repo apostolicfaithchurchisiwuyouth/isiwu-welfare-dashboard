@@ -15,19 +15,25 @@ let quizOpenTime = null;
 
 let countdownInterval = null;
 
+
+
 document.addEventListener(
 
     "DOMContentLoaded",
 
     async () => {
 
-        AOS.init({
+        if (typeof AOS !== "undefined") {
 
-            duration: 700,
+            AOS.init({
 
-            once: true
+                duration: 700,
 
-        });
+                once: true
+
+            });
+
+        }
 
         await loadQuiz();
 
@@ -38,6 +44,16 @@ document.addEventListener(
     }
 
 );
+
+
+
+
+/*
+====================================
+LOAD QUIZ
+====================================
+*/
+
 async function loadQuiz() {
 
     const status =
@@ -75,7 +91,6 @@ async function loadQuiz() {
             await fetch(
 
                 `${API}?action=getQuiz`
-
             );
 
         const data =
@@ -87,6 +102,8 @@ async function loadQuiz() {
             data
 
         );
+
+
 
         /*
         ====================
@@ -117,7 +134,10 @@ async function loadQuiz() {
             );
 
             return;
+
         }
+
+
 
         /*
         ====================
@@ -158,7 +178,10 @@ async function loadQuiz() {
             );
 
             return;
+
         }
+
+
 
         /*
         ====================
@@ -185,7 +208,10 @@ async function loadQuiz() {
             );
 
             return;
+
         }
+
+
 
         /*
         ====================
@@ -221,6 +247,14 @@ async function loadQuiz() {
 
         renderQuestions();
 
+        document
+            .getElementById(
+                "questionsCard"
+            )
+            .classList.remove(
+                "hidden"
+            );
+
         startCountdown(
 
             "close"
@@ -248,6 +282,15 @@ async function loadQuiz() {
     }
 
 }
+
+
+
+
+/*
+====================================
+COUNTDOWN
+====================================
+*/
 
 function startCountdown(
 
@@ -310,6 +353,7 @@ function startCountdown(
                     location.reload();
 
                     return;
+
                 }
 
                 const days =
@@ -416,6 +460,11 @@ function startCountdown(
 
 }
 
+/*
+====================================
+LOAD MEMBERS
+====================================
+*/
 
 async function loadMembers() {
 
@@ -450,6 +499,16 @@ async function loadMembers() {
         const data =
 
             await response.json();
+
+        if (
+
+            !data.success
+
+        ) {
+
+            return;
+
+        }
 
         data.members.forEach(
 
@@ -487,6 +546,102 @@ async function loadMembers() {
 
 }
 
+
+
+/*
+====================================
+LOAD REVIEW MEMBERS
+====================================
+*/
+
+async function loadReviewMembers() {
+
+    const select =
+
+        document.getElementById(
+
+            "reviewMemberSelect"
+
+        );
+
+    select.innerHTML = `
+
+        <option value="">
+
+            Select your name
+
+        </option>
+
+    `;
+
+    try {
+
+        const response =
+
+            await fetch(
+
+                `${API}?action=getMembers`
+
+            );
+
+        const data =
+
+            await response.json();
+
+        if (
+
+            !data.success
+
+        ) {
+
+            return;
+
+        }
+
+        data.members.forEach(
+
+            member => {
+
+                select.innerHTML += `
+
+                    <option value="${member.memberId}">
+
+                        ${member.name}
+
+                    </option>
+
+                `;
+
+            }
+
+        );
+
+    }
+
+    catch (
+
+        error
+
+    ) {
+
+        console.error(
+
+            error
+
+        );
+
+    }
+
+}
+
+
+
+/*
+====================================
+ADD NEW MEMBER
+====================================
+*/
+
 async function addNewMember() {
 
     const input =
@@ -509,7 +664,11 @@ async function addNewMember() {
 
         input.value.trim();
 
-    if (!name) {
+    if (
+
+        !name
+
+    ) {
 
         alert(
 
@@ -579,6 +738,10 @@ async function addNewMember() {
 
             );
 
+            button.disabled = false;
+
+            button.innerHTML = oldText;
+
             return;
 
         }
@@ -632,6 +795,12 @@ async function addNewMember() {
         oldText;
 
 }
+
+/*
+====================================
+RENDER QUESTIONS
+====================================
+*/
 
 function renderQuestions() {
 
@@ -758,6 +927,13 @@ function renderQuestions() {
 }
 
 
+
+/*
+====================================
+SUBMIT QUIZ
+====================================
+*/
+
 async function submitQuiz() {
 
     const memberId =
@@ -768,7 +944,11 @@ async function submitQuiz() {
 
         ).value;
 
-    if (!memberId) {
+    if (
+
+        !memberId
+
+    ) {
 
         alert(
 
@@ -814,21 +994,21 @@ async function submitQuiz() {
 
                 );
 
-            if (
+            answers[
+
+                index + 1
+
+            ] =
 
                 checked
 
-            ) {
+                ?
 
-                answers[
+                checked.value
 
-                    index + 1
+                :
 
-                ] =
-
-                    checked.value;
-
-            }
+                "";
 
         }
 
@@ -906,6 +1086,54 @@ async function submitQuiz() {
 
             data.questions;
 
+        localStorage.setItem(
+
+            "lastQuizReview",
+
+            JSON.stringify(
+
+                data.review
+
+            )
+
+        );
+
+        localStorage.setItem(
+
+            "lastQuizQuestions",
+
+            JSON.stringify(
+
+                data.questions
+
+            )
+
+        );
+
+        localStorage.setItem(
+
+            "lastQuizScore",
+
+            data.score
+
+        );
+
+        localStorage.setItem(
+
+            "lastQuizPoints",
+
+            data.pointsEarned
+
+        );
+
+        localStorage.setItem(
+
+            "lastQuizTotal",
+
+            data.totalPoints
+
+        );
+
         document.getElementById(
 
             "quizSection"
@@ -980,6 +1208,12 @@ async function submitQuiz() {
 
 }
 
+/*
+====================================
+SHOW REVIEW
+====================================
+*/
+
 function showReview() {
 
     if (
@@ -1004,21 +1238,33 @@ function showReview() {
 
     }
 
-    const questions =
+    if (
 
-        JSON.parse(
+        !reviewQuestions ||
 
-            localStorage.getItem(
+        reviewQuestions.length === 0
 
-                "lastQuizQuestions"
+    ) {
 
-            )
+        reviewQuestions =
 
-        ) || [];
+            JSON.parse(
+
+                localStorage.getItem(
+
+                    "lastQuizQuestions"
+
+                )
+
+            ) || [];
+
+    }
 
     if (
 
-        reviewData.length === 0
+        reviewData.length === 0 ||
+
+        reviewQuestions.length === 0
 
     ) {
 
@@ -1040,36 +1286,45 @@ function showReview() {
 
         );
 
-    let html =
-
-        `<div style="margin-top:25px;">`;
+    let html = "";
 
     reviewData.forEach(
 
-        (item, index) => {
+        (
+
+            item,
+
+            index
+
+        ) => {
 
             const q =
 
-                questions[index];
+                reviewQuestions[
 
-            if (!q) return;
+                    index
+
+                ];
+
+            if (!q) {
+
+                return;
+
+            }
 
             html += `
 
-                <div style="
-                    background:#fff;
-                    padding:20px;
-                    border-radius:16px;
-                    margin-bottom:18px;
-                    border:1px solid #ececec;
-                ">
+                <div class="question-card">
 
-                    <h3 style="
-                        margin-bottom:16px;
-                        font-size:.8rem;
-                    ">
+                    <div class="question-number">
 
-                        ${index + 1}.
+                        Question
+
+                        ${index + 1}
+
+                    </div>
+
+                    <h3>
 
                         ${q.question}
 
@@ -1077,25 +1332,45 @@ function showReview() {
 
             `;
 
-            ["A", "B", "C", "D"].forEach(
+            [
+
+                "A",
+
+                "B",
+
+                "C",
+
+                "D"
+
+            ].forEach(
 
                 letter => {
 
                     const text =
 
-                        q[`option${letter}`];
+                        q[
 
-                    if (!text)
+                            `option${letter}`
+
+                        ];
+
+                    if (
+
+                        !text
+
+                    ) {
 
                         return;
 
+                    }
+
                     let bg =
 
-                        "#f8fafc";
+                        "#ffffff";
 
                     let border =
 
-                        "#e5e7eb";
+                        "#ececec";
 
                     let badge =
 
@@ -1119,7 +1394,7 @@ function showReview() {
 
                         badge =
 
-                            "✅ Correct";
+                            "✅ Correct Answer";
 
                     }
 
@@ -1150,8 +1425,8 @@ function showReview() {
                     html += `
 
                         <div style="
-                            padding:14px;
-                            border-radius:12px;
+                            padding:16px;
+                            border-radius:14px;
                             margin-bottom:10px;
                             background:${bg};
                             border:2px solid ${border};
@@ -1167,7 +1442,7 @@ function showReview() {
 
                             <div style="
                                 margin-top:8px;
-                                font-size:.68rem;
+                                font-size:.75rem;
                             ">
 
                                 ${badge}
@@ -1194,14 +1469,21 @@ function showReview() {
 
     html += `
 
-        <button
-            class="primary"
-            onclick="hideReview()"
+        <div
+            style="
+                display:flex;
+                justify-content:center;
+                margin-top:20px;
+            "
         >
 
-            Back
+            <button
+                onclick="hideReview()"
+            >
 
-        </button>
+                Back
+
+            </button>
 
         </div>
 
@@ -1211,29 +1493,67 @@ function showReview() {
 
         html;
 
-    container.style.display =
+    document.getElementById(
 
-        "block";
+        "resultSection"
+
+    ).classList.add(
+
+        "hidden"
+
+    );
 
     document.getElementById(
 
-        "resultBox"
+        "reviewSection"
 
-    ).style.display =
+    ).classList.remove(
 
-        "none";
+        "hidden"
+
+    );
 
 }
 
-function checkSavedReview() {
 
-    const review =
 
-        localStorage.getItem(
+/*
+====================================
+HIDE REVIEW
+====================================
+*/
 
-            "lastQuizReview"
+function hideReview() {
 
-        );
+    document.getElementById(
+
+        "reviewSection"
+
+    ).classList.add(
+
+        "hidden"
+
+    );
+
+    document.getElementById(
+
+        "resultSection"
+
+    ).classList.remove(
+
+        "hidden"
+
+    );
+
+}
+
+/*
+====================================
+OPEN SAVED SCORE
+====================================
+*/
+
+function openSavedScore() {
 
     const score =
 
@@ -1243,107 +1563,101 @@ function checkSavedReview() {
 
         );
 
-    if (review || score) {
-
-        document.getElementById(
-
-            "savedCard"
-
-        ).style.display =
-
-            "block";
-
-    }
-
-    if (review) {
-
-        document.getElementById(
-
-            "openSavedReview"
-
-        ).style.display =
-
-            "flex";
-
-    }
-
-    if (score) {
-
-        document.getElementById(
-
-            "openSavedScore"
-
-        ).style.display =
-
-            "flex";
-
-    }
-
-}
-
-function openSavedScore() {
-
-    document.getElementById(
-
-        "quizBox"
-
-    ).style.display =
-
-        "none";
-
-    document.getElementById(
-
-        "questionsCard"
-
-    ).style.display =
-
-        "none";
-
-    document.getElementById(
-
-        "statusCard"
-
-    ).style.display =
-
-        "none";
-
-    document.getElementById(
-
-        "resultBox"
-
-    ).style.display =
-
-        "block";
-
-    document.getElementById(
-
-        "score"
-
-    ).innerHTML =
+    const points =
 
         localStorage.getItem(
 
-            "lastQuizScore"
+            "lastQuizPoints"
 
         );
 
+    const total =
+
+        localStorage.getItem(
+
+            "lastQuizTotal"
+
+        );
+
+    if (
+
+        !score
+
+    ) {
+
+        alert(
+
+            "No saved score found."
+
+        );
+
+        return;
+
+    }
+
     document.getElementById(
 
-        "points"
+        "scoreText"
 
-    ).innerHTML =
+    ).textContent =
 
-        `Points Earned: ${localStorage.getItem("lastQuizPoints")}`;
+        score;
 
     document.getElementById(
 
-        "total"
+        "pointsText"
 
-    ).innerHTML =
+    ).textContent =
 
-        `Total Points: ${localStorage.getItem("lastQuizTotal")}`;
+        `Points earned: ${points}`;
+
+    document.getElementById(
+
+        "totalPointsText"
+
+    ).textContent =
+
+        `Total points: ${total}`;
+
+    document.getElementById(
+
+        "quizSection"
+
+    ).classList.add(
+
+        "hidden"
+
+    );
+
+    document.getElementById(
+
+        "reviewSection"
+
+    ).classList.add(
+
+        "hidden"
+
+    );
+
+    document.getElementById(
+
+        "resultSection"
+
+    ).classList.remove(
+
+        "hidden"
+
+    );
 
 }
+
+
+
+/*
+====================================
+OPEN SAVED REVIEW
+====================================
+*/
 
 function openSavedReview() {
 
@@ -1359,12 +1673,150 @@ function openSavedReview() {
 
         ) || [];
 
+    reviewQuestions =
+
+        JSON.parse(
+
+            localStorage.getItem(
+
+                "lastQuizQuestions"
+
+            )
+
+        ) || [];
+
+    if (
+
+        reviewData.length === 0 ||
+
+        reviewQuestions.length === 0
+
+    ) {
+
+        alert(
+
+            "No review available."
+
+        );
+
+        return;
+
+    }
+
     showReview();
 
 }
 
-function hideReview() {
 
-    location.reload();
+
+/*
+====================================
+BACK TO QUIZ
+====================================
+*/
+
+function backToQuiz() {
+
+    document.getElementById(
+
+        "resultSection"
+
+    ).classList.add(
+
+        "hidden"
+
+    );
+
+    document.getElementById(
+
+        "reviewSection"
+
+    ).classList.add(
+
+        "hidden"
+
+    );
+
+    document.getElementById(
+
+        "quizSection"
+
+    ).classList.remove(
+
+        "hidden"
+
+    );
 
 }
+
+
+
+/*
+====================================
+CHECK SAVED QUIZ
+====================================
+*/
+
+function checkSavedQuiz() {
+
+    const score =
+
+        localStorage.getItem(
+
+            "lastQuizScore"
+
+        );
+
+    const review =
+
+        localStorage.getItem(
+
+            "lastQuizReview"
+
+        );
+
+    const savedSection =
+
+        document.getElementById(
+
+            "savedSection"
+
+        );
+
+    if (
+
+        score ||
+
+        review
+
+    ) {
+
+        savedSection.classList.remove(
+
+            "hidden"
+
+        );
+
+    }
+
+}
+
+
+
+/*
+====================================
+INITIALIZE SAVED DATA
+====================================
+*/
+
+document.addEventListener(
+
+    "DOMContentLoaded",
+
+    () => {
+
+        checkSavedQuiz();
+
+    }
+
+);
