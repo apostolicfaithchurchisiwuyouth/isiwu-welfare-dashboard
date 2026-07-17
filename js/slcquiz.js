@@ -974,46 +974,7 @@ async function submitQuiz() {
 
         "Submitting...";
 
-    const answers = {};
-
-    quizData.forEach(
-
-        (
-
-            question,
-
-            index
-
-        ) => {
-
-            const checked =
-
-                document.querySelector(
-
-                    `input[name="q${index}"]:checked`
-
-                );
-
-            answers[
-
-                index + 1
-
-            ] =
-
-                checked
-
-                ?
-
-                checked.value
-
-                :
-
-                "";
-
-        }
-
-    );
-
+    let quizCloseTime = null;
     try {
 
         const response =
