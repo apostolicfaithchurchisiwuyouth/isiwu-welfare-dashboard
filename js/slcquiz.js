@@ -556,84 +556,48 @@ LOAD REVIEW MEMBERS
 
 async function loadReviewMembers() {
 
-    const select =
+    const select = document.getElementById(
+        "reviewMemberSelect"
+    );
 
-        document.getElementById(
-
-            "reviewMemberSelect"
-
-        );
+    if (!select) {
+        return;
+    }
 
     select.innerHTML = `
-
         <option value="">
-
             Select your name
-
         </option>
-
     `;
 
     try {
 
-        const response =
+        const response = await fetch(
+            `${API}?action=getMembers`
+        );
 
-            await fetch(
+        const data = await response.json();
 
-                `${API}?action=getMembers`
-
-            );
-
-        const data =
-
-            await response.json();
-
-        if (
-
-            !data.success
-
-        ) {
-
+        if (!data.success) {
             return;
-
         }
 
-        data.members.forEach(
+        data.members.forEach(member => {
 
-            member => {
+            select.innerHTML += `
+                <option value="${member.memberId}">
+                    ${member.name}
+                </option>
+            `;
 
-                select.innerHTML += `
+        });
 
-                    <option value="${member.memberId}">
+    } catch (error) {
 
-                        ${member.name}
-
-                    </option>
-
-                `;
-
-            }
-
-        );
+        console.error(error);
 
     }
-
-    catch (
-
-        error
-
-    ) {
-
-        console.error(
-
-            error
-
-        );
-
-    }
-
 }
-
 
 
 /*
