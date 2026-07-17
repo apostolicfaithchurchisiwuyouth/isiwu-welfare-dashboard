@@ -670,37 +670,75 @@ input:focus {
 
 button {
 
-    padding:
+    border:none;
 
-    13px 20px;
+    cursor:pointer;
 
-    border-radius: 35px;
+    padding:14px 20px;
 
-    color: white;
+    border-radius:14px;
+
+    color:white;
+
+    font-weight:700;
 
     background:
 
-linear-gradient(
+    linear-gradient(
+        135deg,
+        #ea580c,
+        #fb925c
+    );
 
-135deg,
+    transition:.25s ease;
 
-#ea580c,
+}
 
-#fb925c
+.purple-btn {
 
-);
-    font-weight: 600;
-    font-family:"Bricolage Grotesque", sans-serif;
-    font-size: .68rem;
+    background:
+
+    linear-gradient(
+        135deg,
+        #4A0754,
+        #7c3aed
+    );
 
     box-shadow:
 
-    0 10px 25px rgba(74,7,84,.22);
+    0 10px 25px rgba(74,7,84,.25);
 
 }
 
 
+.purple-btn:hover {
 
+    transform:translateY(-2px);
+
+}
+
+.green-btn {
+
+    background:
+
+    linear-gradient(
+        135deg,
+        #0891b2,
+        #06b6d4
+    );
+
+    box-shadow:
+
+    0 10px 25px rgba(8,145,178,.25);
+
+}
+
+
+.green-btn:hover {
+
+    transform:translateY(-2px);
+
+}
 
 
 button:disabled {
