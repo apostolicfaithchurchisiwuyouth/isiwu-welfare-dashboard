@@ -107,7 +107,7 @@ button,
 input,
 select {
 
-    font-family: "Afacad", sans-serif;
+    font-family: "Bricolage Grotesque", sans-serif;
 
 }
 
@@ -685,9 +685,9 @@ linear-gradient(
 #fb925c
 
 );
-    font-weight: 700;
+    font-weight: 600;
     font-family:"Bricolage Grotesque", sans-serif;
-    font-size: .75rem;
+    font-size: .68rem;
 
     box-shadow:
 
