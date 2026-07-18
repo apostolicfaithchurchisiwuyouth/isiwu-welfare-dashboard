@@ -547,3 +547,9 @@ STATUS BADGES
         font-size: .7rem;
     }
 }
+
+* {
+
+    -webkit-tap-highlight-color: transparent;
+
+}
