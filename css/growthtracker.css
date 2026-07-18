@@ -209,63 +209,6 @@ linear-gradient(
 
 }
 
-/* =====================================
-MOBILE RESPONSIVE
-===================================== */
-
-
-@media(max-width:700px){
-
-
-    .main-header {
-
-        padding:
-
-        12px 16px;
-
-    }
-
-
-
-
-    .header-title {
-
-        font-size:
-
-        .88rem;
-
-    }
-
-
-
-
-    .header-title i {
-
-        width:
-
-        30px;
-
-        height:
-
-        30px;
-
-    }
-
-
-
-
-    .back-btn {
-
-        padding:
-
-        9px 13px;
-
-        font-size:
-
-        .72rem;
-
-    }
-
 .container {
 
     width: 90%;
@@ -553,3 +496,60 @@ STATUS BADGES
     -webkit-tap-highlight-color: transparent;
 
 }
+
+/* =====================================
+MOBILE RESPONSIVE
+===================================== */
+
+
+@media(max-width:700px){
+
+
+    .main-header {
+
+        padding:
+
+        12px 16px;
+
+    }
+
+
+
+
+    .header-title {
+
+        font-size:
+
+        .88rem;
+
+    }
+
+
+
+
+    .header-title i {
+
+        width:
+
+        30px;
+
+        height:
+
+        30px;
+
+    }
+
+
+
+
+    .back-btn {
+
+        padding:
+
+        9px 13px;
+
+        font-size:
+
+        .72rem;
+
+    }
