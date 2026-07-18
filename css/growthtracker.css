@@ -347,7 +347,7 @@ STATUS BADGES
         );
 
     color: #0891b2;
-
+    font-weight:600;
     font-size: .65rem;
 
 }-badge {
