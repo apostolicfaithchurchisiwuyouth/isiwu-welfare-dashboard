@@ -107,17 +107,29 @@ HEADER
 
     align-items: center;
 
-    gap: 12px;
+    gap: 10px;
+
+    font-family:
+
+    "Bricolage Grotesque",
+    sans-serif;
+
+    font-weight: 700;
+
+    font-size: .88rem;
+
+    color: #111827;
 
 }
 
-.header-icon {
+
+
+
+.header-title i {
 
     width: 33px;
 
     height: 33px;
-
-    border-radius: 12px;
 
     display: flex;
 
@@ -125,17 +137,23 @@ HEADER
 
     justify-content: center;
 
+    border-radius: 12px;
+
     color: white;
 
-    background:
+   background:
 
         linear-gradient(
+
             135deg,
+
             #ea580c,
+
             #fb925c
+
         );
 
-box-shadow:
+    box-shadow:
 
     0 8px 20px rgba(74,7,84,.25);
 
