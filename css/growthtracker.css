@@ -437,9 +437,9 @@ STATUS BADGES
 
 .name {
 
-    font-size: .65rem;
+    font-size: .7rem;
 
-    font-weight: 700;
+    font-weight: 600;
 }
 
 .id {
@@ -482,7 +482,7 @@ STATUS BADGES
 
     text-align: center;
 
-    font-size: .75rem;
+    font-size: .72rem;
 
     color: #64748b;
 }
