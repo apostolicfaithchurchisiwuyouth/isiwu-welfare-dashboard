@@ -1,275 +1,372 @@
-*{box-sizing:border-box;margin:0;padding:0}body{font-family:"DM Sans",sans-serif;background:#fafafa}
-body{
-font-family:"DM Sans",sans-serif;
-background:#fafafa;
-min-height:100vh;
-position:relative;
-overflow-x:hidden;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-body::before{
-content:"";
-position:fixed;
-top:-120px;
-right:-120px;
-width:320px;
-height:320px;
-border-radius:50%;
-background:rgba(168,85,247,.08);
-filter:blur(90px);
-z-index:-1;
+body {
+
+    font-family: "DM Sans", sans-serif;
+
+    background: #fafafa;
+
+    color: #111827;
+
+    min-height: 100vh;
 }
 
-body::after{
-content:"";
-position:fixed;
-bottom:-150px;
-left:-150px;
-width:350px;
-height:350px;
-border-radius:50%;
-background:rgba(59,130,246,.08);
-filter:blur(90px);
-z-index:-1;
+body::before {
+
+    content: "";
+
+    position: fixed;
+
+    top: -150px;
+
+    right: -150px;
+
+    width: 320px;
+
+    height: 320px;
+
+    border-radius: 50%;
+
+    background: rgba(124, 58, 237, .08);
+
+    filter: blur(90px);
+
+    z-index: -1;
 }
 
-header{
-position:sticky;
-top:0;
-z-index:1000;
-width:88%;
-max-width:820px;
-margin:auto;
-padding:14px 18px;
-display:flex;
-justify-content:space-between;
-align-items:center;
-background:linear-gradient(135deg,#4A0754,#0A0016);
-border-radius:0 0 18px 18px;
-box-shadow:0 10px 30px rgba(0,0,0,.12);
+body::after {
+
+    content: "";
+
+    position: fixed;
+
+    bottom: -150px;
+
+    left: -150px;
+
+    width: 320px;
+
+    height: 320px;
+
+    border-radius: 50%;
+
+    background: rgba(59, 130, 246, .08);
+
+    filter: blur(90px);
+
+    z-index: -1;
 }
 
-.header-title{
-display:flex;
-align-items:center;
-gap:12px;
-color:#fff;
-font-family:"Bricolage Grotesque",sans-serif;
-font-size:.8rem;
-font-weight:700;
+.main-header {
+
+    width: 88%;
+
+    max-width: 860px;
+
+    margin: auto;
+
+    padding: 16px 20px;
+
+    background:
+
+        linear-gradient(
+            135deg,
+            #4A0754,
+            #0A0016
+        );
+
+    border-radius: 0 0 20px 20px;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    position: sticky;
+
+    top: 0;
+
+    z-index: 1000;
+
+    box-shadow:
+
+        0 12px 30px rgba(0, 0, 0, .12);
 }
 
-.header-title i{
-width:30px;
-height:30px;
-border-radius:12px;
-display:flex;
-align-items:center;
-justify-content:center;
-background:rgba(255,255,255,.12);
+.header-title {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    color: white;
 }
 
-.back-btn{
+.header-icon {
 
-text-decoration:none;
+    width: 40px;
 
-color:#fff;
+    height: 40px;
 
-padding:10px 14px;
+    border-radius: 14px;
 
-border-radius:999px;
+    background: rgba(255, 255, 255, .12);
 
-background:
-linear-gradient(
-135deg,
-#4A0754,
-#7c3aed
-);
+    display: flex;
 
-font-size:.8rem;
+    justify-content: center;
 
-border:none;
-
--webkit-tap-highlight-color:transparent;
-
-display:inline-flex;
-align-items:center;
-justify-content:center;
-
-transition:
-transform .2s ease,
-box-shadow .2s ease,
-filter .2s ease;
-
-box-shadow:
-0 8px 20px rgba(74,7,84,.25);
-
+    align-items: center;
 }
 
+.header-title h1 {
 
-/* pressed effect */
+    font-family:
 
-.back-btn:active{
+        "Bricolage Grotesque",
+        sans-serif;
 
-transform:translateY(-4px) scale(.96);
+    font-size: .95rem;
 
-filter:
-brightness(1.25);
-
-box-shadow:
-0 14px 30px rgba(124,58,237,.45);
-
+    font-weight: 700;
 }
 
- .container{
+.header-title p {
 
-width:88%;
-max-width:820px;
-margin:30px auto;
+    font-size: .65rem;
 
-}
-.card{background:#fff;border-radius:22px;padding:18px;transition:.25s ease;box-shadow:0 12px 35px rgba(0,0,0,.08);margin-bottom:18px;border:1px solid #eee}
-.card:hover{transform:translateY(-2px);box-shadow:0 18px 40px rgba(0,0,0,.12)} .card-title{font:700 .9rem "Bricolage Grotesque";color:#4A0754;margin-bottom:12px}
-.head,
-.row{
-display:grid;
-grid-template-columns:2fr .9fr .9fr;
-gap:8px;
-align-items:center;
+    opacity: .8;
 }
 
-.head{
-padding:10px;
-border-radius:6px;
-background:#f7f7fb;
-font-size:.72rem;
-font-weight:700;
+.back-btn {
+
+    text-decoration: none;
+
+    color: white;
+
+    padding: 10px 14px;
+
+    border-radius: 999px;
+
+    background:
+
+        linear-gradient(
+            135deg,
+            #7c3aed,
+            #4A0754
+        );
+
+    font-size: .75rem;
+
+    display: flex;
+
+    gap: 8px;
+
+    align-items: center;
 }
 
-.row{
-margin-top:8px;
-padding:12px;
-border:1px solid #f0eef6;
-border-radius:10px;
-background:#fff;
-}
-.head{
+.container {
 
-display:grid;
+    width: 88%;
 
-grid-template-columns:2fr .9fr .9fr;
+    max-width: 860px;
 
-align-items:center;
-
-background:#f7f7fb;
-
-border-radius:8px;
-
-padding:10px;
-
-position:relative;
-
+    margin: 28px auto;
 }
 
-.head div{
+.card {
 
-position:relative;
+    background: white;
 
+    border-radius: 22px;
+
+    padding: 18px;
+
+    margin-bottom: 20px;
+
+    border: 1px solid #ececec;
+
+    box-shadow:
+
+        0 12px 35px rgba(0, 0, 0, .06);
 }
 
-.head div:not(:last-child)::after{
+.section-header {
 
-content:"";
+    display: flex;
 
-position:absolute;
+    justify-content: space-between;
 
-right:-4px;
+    gap: 12px;
 
-top:50%;
-
-transform:translateY(-50%);
-
-width:1px;
-
-height:14px;
-
-background:#d8d8d8;
-
-}
-.row{margin-top:8px;padding:12px;border:1px solid #f0eef6;border-radius:10px;background:#fff}
-.name{font-size:.68rem;font-weight:700}.id{font-size:.60rem;color:#666}.weeks{text-align:center;font-size:.65rem}.points{text-align:right;font-size:.65rem;font-weight:700;color:#4A0754}
-.badge{display:inline-block;padding:5px 10px;border-radius:999px;background:#f3e8ff}
-.loading{font-size:.7rem;color:#777;padding:10px}
-.manual{display:grid;grid-template-columns:1fr;gap:10px}
-.manual .item{border:1px solid #eee;border-radius:10px;padding:14px;background:linear-gradient(180deg,#fff,#faf9ff)}
-.section-header{
-
-display:flex;
-
-justify-content:space-between;
-
-align-items:flex-start;
-
-margin-bottom:14px;
-
-gap:12px;
-
+    margin-bottom: 18px;
 }
 
-.section-text{
+.card-title {
 
-flex:1;
+    font-family:
 
-min-width:0;
+        "Bricolage Grotesque",
+        sans-serif;
 
+    color: #4A0754;
+
+    font-size: .9rem;
 }
 
-.card-title{
+.card-subtitle {
 
-font-family:"Bricolage Grotesque",sans-serif;
+    font-size: .68rem;
 
-font-size:.9rem;
+    color: #64748b;
 
-font-weight:700;
-
-color:#4A0754;
-
-margin-bottom:4px;
-
+    margin-top: 4px;
 }
 
-.card-subtitle{
+.section-badge {
 
-font-size:.68rem;
+    padding: 6px 12px;
 
-color:#64748b;
+    border-radius: 999px;
 
-line-height:1.5;
+    font-size: .65rem;
 
+    font-weight: 700;
 }
 
-.section-badge{
+.live {
 
-padding:6px 12px;
+    background: #ecfdf5;
 
-border-radius:999px;
-
-background:#ECFDF5;
-
-color:#15803d;
-
-font-size:.65rem;
-
-font-weight:700;
-
-white-space:nowrap;
-
+    color: #15803d;
 }
 
-.section-badge.archive{
+.archive {
 
-background:#F3E8FF;
+    background: #f3e8ff;
 
-color:#7C3AED;
+    color: #7c3aed;
+}
 
+.table-head,
+.row {
+
+    display: grid;
+
+    grid-template-columns: 2fr 1fr 1fr;
+
+    gap: 10px;
+
+    align-items: center;
+}
+
+.table-head {
+
+    padding: 12px;
+
+    background: #f8fafc;
+
+    border-radius: 10px;
+
+    font-size: .7rem;
+
+    font-weight: 700;
+}
+
+.table-head span:nth-child(2) {
+
+    text-align: center;
+}
+
+.table-head span:nth-child(3) {
+
+    text-align: right;
+}
+
+.row {
+
+    margin-top: 10px;
+
+    padding: 14px;
+
+    border: 1px solid #f0eef6;
+
+    border-radius: 12px;
+}
+
+.name {
+
+    font-size: .7rem;
+
+    font-weight: 700;
+}
+
+.id {
+
+    font-size: .6rem;
+
+    color: #6b7280;
+}
+
+.weeks {
+
+    text-align: center;
+}
+
+.points {
+
+    text-align: right;
+
+    font-size: .7rem;
+
+    font-weight: 700;
+
+    color: #4A0754;
+}
+
+.badge {
+
+    padding: 5px 10px;
+
+    border-radius: 999px;
+
+    background: #f3e8ff;
+
+    font-size: .65rem;
+}
+
+.loading {
+
+    padding: 20px;
+
+    text-align: center;
+
+    font-size: .75rem;
+
+    color: #64748b;
+}
+
+@media (max-width: 600px) {
+
+    .main-header {
+
+        padding: 14px;
+    }
+
+    .header-title h1 {
+
+        font-size: .85rem;
+    }
+
+    .back-btn {
+
+        font-size: .7rem;
+    }
 }
