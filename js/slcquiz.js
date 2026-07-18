@@ -1389,7 +1389,7 @@ function showReview() {
 
                             <div style="
                                 margin-top:8px;
-                                font-size:.75rem;
+                                font-size:.7rem;
                             ">
 
                                 ${badge}
