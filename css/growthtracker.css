@@ -159,40 +159,8 @@ HEADER
 
 }
 
-.header-text {
 
-    display: flex;
 
-    flex-direction: column;
-
-}
-
-.header-text h1 {
-
-    font-family:
-
-        "Bricolage Grotesque",
-        sans-serif;
-
-    font-size: .92rem;
-
-    font-weight: 700;
-
-    color: #111827;
-
-    line-height: 1.1;
-
-}
-
-.header-text p {
-
-    font-size: .66rem;
-
-    color: #64748b;
-
-    margin-top: 2px;
-
-}
 
 .back-btn {
 
@@ -214,30 +182,30 @@ HEADER
 
     background:
 
-        linear-gradient(
-            135deg,
-            #0f172a,
-            #0891b2
-        );
+linear-gradient(
+
+135deg,
+
+#0f172a,
+
+#0891b2
+
+);
 
     box-shadow:
 
-        0 10px 25px rgba(8,145,178,.20);
-
-    transition:
-
-        transform .25s ease,
-        box-shadow .25s ease;
+    0 8px 20px rgba(74,7,84,.25);
 
 }
 
-.back-btn:hover {
 
-    transform: translateY(-2px);
+
+
+.back-btn:hover {
 
     box-shadow:
 
-        0 15px 35px rgba(8,145,178,.28);
+    0 12px 30px rgba(74,7,84,.35);
 
 }
 
