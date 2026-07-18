@@ -21,7 +21,7 @@ html {
 
 body {
 
-    font-family: "Afacad", sans-serif;
+    font-family: "DM Sans", sans-serif;
 
     background: #fafafa;
 
@@ -111,8 +111,8 @@ button {
 
 input,
 select {
-    font-family: "Afacad", sans-serif;
-    font-size:.85rem;
+    font-family: "DM Sans", sans-serif;
+    font-size:.72rem;
 }
 
 
@@ -214,7 +214,7 @@ HEADER
 
     font-weight: 700;
 
-    font-size: .85rem;
+    font-size: .88rem;
 
     color: #111827;
 
@@ -225,9 +225,9 @@ HEADER
 
 .header-title i {
 
-    width: 34px;
+    width: 33px;
 
-    height: 34px;
+    height: 33px;
 
     display: flex;
 
@@ -272,7 +272,7 @@ HEADER
 
     color: white;
 
-    font-size: .85rem;
+    font-size: .72rem;
 
     padding: 10px 16px;
 
@@ -433,7 +433,7 @@ HERO SECTION
 
     rgba(255,255,255,.12);
 
-    font-size: .76rem;
+    font-size: .65rem;
 
     margin-bottom: 22px;
 
@@ -462,9 +462,7 @@ HERO SECTION
 
 .quiz-hero p {
 
-    font-size: 1rem;
-
-    line-height: 1.8;
+    font-size: .72rem;
 
     opacity: .9;
 
@@ -479,10 +477,10 @@ HERO SECTION
 .quiz-status {
 
     margin-top: 28px;
-
+    font-family:"Bricolage Grotesque", sans-serif;
     font-weight: 700;
 
-    font-size: .85rem;
+    font-size: .72rem;
 
 }
 
@@ -503,7 +501,7 @@ HERO SECTION
 
     rgba(255,255,255,.12);
 
-    font-size: .73rem;
+    font-size: .7rem;
 
 }
 
@@ -529,7 +527,7 @@ HERO SECTION
 
     margin-top: 18px;
 
-    font-size: .85rem;
+    font-size: .72rem;
 
     opacity: .85;
 
@@ -632,7 +630,7 @@ input {
 
     background: white;
 
-    font-size: .85rem;
+    font-size: .72rem;
 
     transition:
 
@@ -809,9 +807,9 @@ QUESTIONS
 
 .question-number {
 
-    font-size: .75rem;
-
-    font-weight: 700;
+    font-size: .65rem;
+    font-family:"Bricolage Grotesque", sans-serif;
+    font-weight:700;
 
     color:
 
@@ -1003,7 +1001,7 @@ QUESTIONS
 
     font-size:
 
-    .85rem;
+    .72rem;
 
     line-height:
 
@@ -1081,7 +1079,7 @@ RESULT SECTION
 
     font-size:
 
-    .95rem;
+    .75rem;
 
     margin-bottom:
 
@@ -1198,7 +1196,7 @@ MOBILE RESPONSIVE
 
         font-size:
 
-        .78rem;
+        .88rem;
 
     }
 
@@ -1228,7 +1226,7 @@ MOBILE RESPONSIVE
 
         font-size:
 
-        .85rem;
+        .72rem;
 
     }
 
@@ -1266,7 +1264,7 @@ MOBILE RESPONSIVE
 
         font-size:
 
-        .85rem;
+        .72rem;
         line-height:1.25;
 
     }
@@ -1400,7 +1398,7 @@ VERY SMALL DEVICES
 
         font-size:
 
-        .85rem;
+        .72rem;
 
     }
     
