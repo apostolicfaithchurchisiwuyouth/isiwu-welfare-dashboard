@@ -61,25 +61,21 @@ body::after {
     z-index: -1;
 }
 
+/* =====================================
+HEADER
+===================================== */
+
 .main-header {
 
-    width: 88%;
+    position: sticky;
 
-    max-width: 860px;
+    top: 0;
 
-    margin: auto;
+    z-index: 999;
 
-    padding: 16px 20px;
+    width: 100%;
 
-    background:
-
-        linear-gradient(
-            135deg,
-            #4A0754,
-            #0A0016
-        );
-
-    border-radius: 0 0 20px 20px;
+    padding: 14px clamp(16px, 4vw, 35px);
 
     display: flex;
 
@@ -87,15 +83,22 @@ body::after {
 
     align-items: center;
 
-    position: sticky;
+    background:
 
-    top: 0;
+        rgba(255,255,255,.88);
 
-    z-index: 1000;
+    backdrop-filter:
+
+        blur(20px);
+
+    border-bottom:
+
+        1px solid rgba(15,23,42,.08);
 
     box-shadow:
 
-        0 12px 30px rgba(0, 0, 0, .12);
+        0 8px 30px rgba(0,0,0,.05);
+
 }
 
 .header-title {
@@ -106,52 +109,88 @@ body::after {
 
     gap: 12px;
 
-    color: white;
 }
 
 .header-icon {
 
-    width: 40px;
+    width: 38px;
 
-    height: 40px;
+    height: 38px;
 
     border-radius: 14px;
 
-    background: rgba(255, 255, 255, .12);
-
     display: flex;
+
+    align-items: center;
 
     justify-content: center;
 
-    align-items: center;
+    color: white;
+
+    background:
+
+        linear-gradient(
+            135deg,
+            #ea580c,
+            #fb925c
+        );
+
+    box-shadow:
+
+        0 10px 24px rgba(234,88,12,.25);
+
 }
 
-.header-title h1 {
+.header-text {
+
+    display: flex;
+
+    flex-direction: column;
+
+}
+
+.header-text h1 {
 
     font-family:
 
         "Bricolage Grotesque",
         sans-serif;
 
-    font-size: .95rem;
+    font-size: .92rem;
 
     font-weight: 700;
+
+    color: #111827;
+
+    line-height: 1.1;
+
 }
 
-.header-title p {
+.header-text p {
 
-    font-size: .65rem;
+    font-size: .66rem;
 
-    opacity: .8;
+    color: #64748b;
+
+    margin-top: 2px;
+
 }
 
 .back-btn {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 7px;
 
     text-decoration: none;
 
     color: white;
 
-    padding: 10px 14px;
+    font-size: .72rem;
+
+    padding: 10px 16px;
 
     border-radius: 999px;
 
@@ -159,17 +198,29 @@ body::after {
 
         linear-gradient(
             135deg,
-            #7c3aed,
-            #4A0754
+            #0f172a,
+            #0891b2
         );
 
-    font-size: .75rem;
+    box-shadow:
 
-    display: flex;
+        0 10px 25px rgba(8,145,178,.20);
 
-    gap: 8px;
+    transition:
 
-    align-items: center;
+        transform .25s ease,
+        box-shadow .25s ease;
+
+}
+
+.back-btn:hover {
+
+    transform: translateY(-2px);
+
+    box-shadow:
+
+        0 15px 35px rgba(8,145,178,.28);
+
 }
 
 .container {
@@ -230,7 +281,37 @@ body::after {
     margin-top: 4px;
 }
 
-.section-badge {
+..section-badge.live {
+
+    background: rgba(8,145,178,.10);
+
+    color: #0891b2;
+
+}
+
+.section-badge.archive {
+
+    background: rgba(234,88,12,.10);
+
+    color: #ea580c;
+
+}
+
+.badge {
+
+    background:
+
+        linear-gradient(
+            135deg,
+            rgba(8,145,178,.10),
+            rgba(6,182,212,.10)
+        );
+
+    color: #0891b2;
+
+    font-size: .65rem;
+
+}-badge {
 
     padding: 6px 12px;
 
