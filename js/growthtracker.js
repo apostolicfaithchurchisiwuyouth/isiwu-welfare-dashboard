@@ -1,130 +1,115 @@
 const API =
-  "https://script.google.com/macros/s/AKfycbw1mVwpgAcIOSNbpgzy52TFyozEGMtWWwVWUDFaofGNzpsguBIaKR4q1dXVtgVHO2xZ1w/exec";
+    "https://script.google.com/macros/s/AKfycbw1mVwpgAcIOSNbpgzy52TFyozEGMtWWwVWUDFaofGNzpsguBIaKR4q1dXVtgVHO2xZ1w/exec";
 
-async function load() {
+async function loadLeaderboard() {
 
-  const leaderboard =
-    document.getElementById(
-      "leaderboard"
-    );
+    const container =
+        document.getElementById(
+            "leaderboard"
+        );
 
-  try {
+    try {
 
-    const response =
-      await fetch(
+        const response =
+            await fetch(
 
-        API +
-        "?action=getLeaderboard",
+                API +
+                "?action=getLeaderboard",
 
-        {
-          cache: "no-store"
-        }
+                {
+                    cache: "no-store"
+                }
 
-      );
+            );
 
-    const data =
-      await response.json();
+        const data =
+            await response.json();
 
-    console.log(data);
+        const totalWeeks =
+            data.totalWeeks || 13;
 
-    const totalWeeks =
+        const leaderboard =
+            data.leaderboard || [];
 
-      data.totalWeeks ||
+        container.innerHTML = "";
 
-      data.totalweeks ||
+        leaderboard.forEach(member => {
 
-      data.seasonWeeks ||
+            container.innerHTML += `
 
-      13;
+                <div class="row">
 
-    const rows =
+                    <div>
 
-      data.leaderboard || [];
+                        <div class="name">
 
-    leaderboard.classList.remove(
-      "loading"
-    );
+                            ${member.name}
 
-    if (
+                        </div>
 
-      rows.length === 0
+                        <div class="id">
 
-    ) {
+                            ${member.memberId}
 
-      leaderboard.innerHTML =
+                        </div>
 
-        "<p>No participants found.</p>";
+                    </div>
 
-      return;
+                    <div class="weeks">
+
+                        <span class="badge">
+
+                            ${member.weeks}/${totalWeeks}
+
+                        </span>
+
+                    </div>
+
+                    <div class="points">
+
+                        ${Number(
+                            member.points
+                        ).toLocaleString()}
+
+                    </div>
+
+                </div>
+
+            `;
+
+        });
 
     }
 
-    leaderboard.innerHTML =
+    catch (error) {
 
-      rows.map(
+        console.error(error);
 
-        member => `
+        container.innerHTML = `
 
-        <div class="row">
+            <div class="loading">
 
-          <div>
-
-            <div class="name">
-
-              ${member.name}
+                Unable to load leaderboard.
 
             </div>
 
-            <div class="id">
-
-              ${member.memberId}
-
-            </div>
-
-          </div>
-
-          <div class="weeks">
-
-            <span class="badge">
-
-              ${member.weeks}/${totalWeeks}
-
-            </span>
-
-          </div>
-
-          <div class="points">
-
-            ${Number(
-              member.points
-            ).toLocaleString()}
-
-          </div>
-
-        </div>
-
-      `
-
-      ).join("");
-
-  }
-
-  catch (error) {
-
-    console.error(error);
-
-    leaderboard.innerHTML =
-
-      "<p>Unable to load leaderboard.</p>";
-
-  }
-
+        `;
+    }
 }
 
 document.addEventListener(
 
-  "DOMContentLoaded",
+    "DOMContentLoaded",
 
-  load
+    () => {
+
+        AOS.init({
+
+            once: true
+
+        });
+
+        loadLeaderboard();
+    }
 
 );
