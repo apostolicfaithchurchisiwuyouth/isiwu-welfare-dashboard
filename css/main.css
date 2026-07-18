@@ -41,7 +41,7 @@ scroll-behavior:smooth;
 }
 
 body{
-font-family: "Afacad", sans-serif;
+font-family: "DM Sans", sans-serif;
 background:#eef3f9;
 color:#222;
 overflow-x:hidden;
@@ -52,8 +52,8 @@ font-family: "Bricolage Grotesque", sans-serif;
 }
 
 p{
-  font-family: "Afacad", sans-serif; 
-  font-size:.85rem;
+  font-family: "DM Sans", sans-serif; 
+  font-size:.72rem;
 }
 
 #heroTitle::after{
@@ -116,7 +116,7 @@ linear-gradient(
 #f8fafc
 );
 
-border-radius:24px;
+border-radius:25px;
 
 border:1px solid rgba(74,7,84,.06);
 
@@ -311,7 +311,7 @@ background:#f3e8ff;
 color:#4a0754;
 
 
-font-size:.6rem;
+font-size:.65rem;
 
 
 border-radius:35px;
@@ -353,7 +353,7 @@ margin-bottom:14px;
 .hero-content p{
 
 
-font-size:.85rem;
+font-size:.72rem;
 
 line-height:1.8;
 
@@ -654,7 +654,7 @@ margin-bottom:8px;
 .hero-card p{
 
 
-font-size:.85rem;
+font-size:.72rem;
 
 color:#64748b;
 
@@ -715,7 +715,7 @@ line-height:1.3;
 
 
 .hero-content p{
-font-size:.85rem;
+font-size:.72rem;
 line-height:1.3;
 
 }
@@ -989,7 +989,7 @@ background: radial-gradient(
     
     gap: .75rem;
 
-    margin-top: 1rem;
+    margin-top: .75rem;
 
 }
 
@@ -1099,7 +1099,7 @@ background: radial-gradient(
 
         .welcome-content {
 
-        width: 92%;
+        width: 90%;
 
         margin: 0 auto;
 
@@ -1119,7 +1119,7 @@ background: radial-gradient(
 
     .lesson-hero {
 
-        width: 92%;
+        width: 90%;
 
         margin-top: -5rem;
 
@@ -1168,7 +1168,7 @@ background: radial-gradient(
 
 .section-title h3 {
 
-    font-size: 1rem;
+    font-size: .9rem;
 
     font-weight: 700;
 
@@ -1346,7 +1346,7 @@ background: radial-gradient(
 
     border-radius: 999px;
 
-    font-size: .58rem;
+    font-size: .62rem;
 
     font-weight: 700;
 
@@ -1420,7 +1420,7 @@ background: radial-gradient(
 
     margin-top: 1rem;
 
-    font-size: .90rem;
+    font-size: .9rem;
 
     font-weight: 700;
 
@@ -1436,7 +1436,7 @@ background: radial-gradient(
 
     margin-top: .55rem;
 
-    font-size: .7rem;
+    font-size: .72rem;
 
     color: var(--text-light);
 
@@ -1512,9 +1512,7 @@ background: radial-gradient(
 
     color:#4a0754;
 
-    font-size:.85rem;
-
-    font-weight:500;
+    font-size:.72rem;
 
     flex:1;
 
@@ -1978,7 +1976,7 @@ NAVBAR - MODERN NEXT.JS STYLE
 
     text-decoration:none;
 
-    font-size:.85rem;
+    font-size:.72rem;
 
     font-weight:600;
 
@@ -2085,7 +2083,7 @@ NAVBAR - MODERN NEXT.JS STYLE
 
     color: #475569;
     text-decoration: none;
-    font-size: .78rem;
+    font-size: .72rem;
     font-weight: 600;
     padding: 10px 14px;
     border-radius: 10px;
@@ -2660,7 +2658,7 @@ box-shadow:
 
     color: var(--primary);
     font-weight: 500;
-    font-size: .71rem;
+    font-size: .72rem;
 
 
 }
@@ -2673,7 +2671,7 @@ box-shadow:
 
     text-align: right;
 
-    font-size: .75rem;
+    font-size: .65rem;
 
     font-weight: 600;
 
@@ -2701,7 +2699,7 @@ box-shadow:
 
 .lesson-subtitle {
 
-    font-size: .85rem;
+    font-size: .72rem;
 
     color: var(--text-light);
 
@@ -2756,10 +2754,8 @@ box-shadow:
     white-space: nowrap;
 
     cursor: pointer;
-    font-family: "Afacad", sans-serif;
-    font-size: .82rem;
-
-    font-weight: 600;
+    font-family: "DM Sans", sans-serif;
+    font-size: .72rem;
 
     transition: all .3s ease;
 
@@ -2862,7 +2858,7 @@ box-shadow:
 .lesson-main-card p,
 .memory-block p {
 
-    font-size: .85rem;
+    font-size: .72rem;
 
     color: var(--text);
 
@@ -2900,7 +2896,7 @@ box-shadow:
 
     color: #fff;
     font-family: "Bricolage Grotesque", sans-serif;
-    font-size: .78rem;
+    font-size: .75rem;
 
     font-weight: 700;
 
@@ -2934,7 +2930,7 @@ box-shadow:
 
     .lesson-subtitle {
 
-        font-size: .8rem;
+        font-size: .72rem;
 
     }
 
@@ -2952,7 +2948,7 @@ box-shadow:
 
         padding: 0 1.2rem;
 
-        font-size: .85rem;
+        font-size: .72rem;
 
     }
 
@@ -2979,7 +2975,7 @@ box-shadow:
     .lesson-main-card p,
     .memory-block p {
 
-        font-size: .9rem;
+        font-size: .72rem;
 
     }
 
