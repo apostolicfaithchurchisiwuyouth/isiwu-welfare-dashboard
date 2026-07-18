@@ -865,7 +865,7 @@ QUESTIONS
     flex;
 
     align-items:
-
+    
     flex-start;
 
     gap: 12px;
@@ -1077,10 +1077,10 @@ RESULT SECTION
 
 
 .result-card p {
-    font-family:"DM Sans", sans-serif;
+    font-family:"Bricolage Grotesque", sans-serif;
     font-size:
 
-    .75rem;
+    .72rem;
 
     margin-bottom:
 
@@ -1121,7 +1121,7 @@ REVIEW SECTION
 
 
 .review-section .question-card {
-
+    font-size:.72rem;
     margin-bottom:
 
     20px;
