@@ -10,7 +10,7 @@ body {
 
     background: #fafafa;
 
-    color: #111827;
+    color: #1F262A;
 
     min-height: 100vh;
 }
@@ -438,7 +438,7 @@ STATUS BADGES
 .name {
 
     font-size: .7rem;
-
+    color:#1F262A;
     font-weight: 600;
 }
 
