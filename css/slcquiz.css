@@ -1040,6 +1040,7 @@ RESULT SECTION
     margin-bottom:
 
     20px;
+    font-size:.78rem;
 
 }
 
@@ -1076,7 +1077,7 @@ RESULT SECTION
 
 
 .result-card p {
-
+    font-family:"DM Sans", sans-serif;
     font-size:
 
     .75rem;
