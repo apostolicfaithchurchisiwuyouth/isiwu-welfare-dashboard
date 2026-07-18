@@ -10,7 +10,7 @@ body {
 
     background: #fafafa;
 
-    color: #1F262A;
+    color: #0F172A;
 
     min-height: 100vh;
 }
@@ -438,7 +438,7 @@ STATUS BADGES
 .name {
 
     font-size: .7rem;
-    color:#1F262A;
+    color:#0F172A;
     font-weight: 600;
 }
 
@@ -462,7 +462,7 @@ STATUS BADGES
 
     font-weight: 700;
 
-    color: #333;
+    color: #0F172A;
 }
 
 .badge {
