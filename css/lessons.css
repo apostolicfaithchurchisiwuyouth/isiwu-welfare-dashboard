@@ -220,21 +220,29 @@ PAGE
 }
 
 /* =====================================
-HERO SECTION
+HERO WRAPPER
+===================================== */
+
+.hero-wrapper {
+
+    width: min(1100px, 90%);
+
+    margin: 26px auto 30px;
+}
+
+/* =====================================
+HERO
 ===================================== */
 
 .hero-section {
 
-    width: 100vw;
-
-    margin-left: calc(50% - 50vw);
-
-    margin-top: -1px;
-
-    padding: 60px 0;
     position: relative;
 
     overflow: hidden;
+
+    padding: 34px;
+
+    border-radius: 34px;
 
     background: linear-gradient(
         135deg,
@@ -243,9 +251,12 @@ HERO SECTION
         #0f172a 100%
     );
 
-    color: #fff;
+    color: white;
 
-    text-align: center;
+    box-shadow:
+        0 25px 60px rgba(8,145,178,.18);
+
+    border: 1px solid rgba(255,255,255,.12);
 }
 
 .hero-section::before {
@@ -254,47 +265,30 @@ HERO SECTION
 
     position: absolute;
 
+    width: 260px;
+
+    height: 260px;
+
     top: -120px;
 
     right: -120px;
 
-    width: 320px;
-
-    height: 320px;
-
     border-radius: 50%;
 
-    background: rgba(255,255,255,.08);
+    background: rgba(255,255,255,.10);
 
     filter: blur(50px);
 }
 
-.hero-section::after {
+.hero-top {
 
-    content: "";
+    display: flex;
 
-    position: absolute;
+    justify-content: space-between;
 
-    bottom: -120px;
+    align-items: center;
 
-    left: -120px;
-
-    width: 300px;
-
-    height: 300px;
-
-    border-radius: 50%;
-
-    background: rgba(255,255,255,.06);
-
-    filter: blur(60px);
-}
-
-.hero-section > * {
-
-    position: relative;
-
-    z-index: 2;
+    margin-bottom: 22px;
 }
 
 .hero-badge {
@@ -303,115 +297,112 @@ HERO SECTION
 
     align-items: center;
 
-    justify-content: center;
+    gap: 8px;
 
-    gap: 6px;
-
-    padding: 8px 14px;
+    padding: 10px 16px;
 
     border-radius: 999px;
 
-    background: rgba(255,255,255,.14);
+    background: rgba(255,255,255,.12);
 
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(16px);
 
-    font-size: .64rem;
+    font-size: .68rem;
 
     font-family: "Bricolage Grotesque", sans-serif;
 
     font-weight: 700;
-
-    margin-bottom: 18px;
 }
 
-.hero-badge i {
+.hero-icon {
 
-    font-size: .62rem;
-}
+    width: 58px;
 
-.hero-section h1 {
+    height: 58px;
 
-    font-family: "Bricolage Grotesque", sans-serif;
+    border-radius: 20px;
 
-    font-size: 1.65rem;
+    display: flex;
 
-    font-weight: 800;
+    align-items: center;
 
-    line-height: 1.15;
+    justify-content: center;
 
-    max-width: 760px;
+    background: rgba(255,255,255,.12);
 
-    margin: 0 auto 14px;
+    backdrop-filter: blur(20px);
+
+    font-size: 1.2rem;
 }
 
 .hero-title {
 
     font-family: "Bricolage Grotesque", sans-serif;
 
-    font-size: 1.65rem;
+    font-size: 1.7rem;
 
     line-height: 1.15;
 
-    font-weight: 800;
+    margin-bottom: 14px;
 }
-
 
 .topic-label {
 
     display: block;
 
-    font-size: .72rem;
-
-    font-weight: 600;
+    font-size: .7rem;
 
     opacity: .85;
 
-    margin-bottom: 10px;
-
     letter-spacing: .08em;
+
+    text-transform: uppercase;
+
+    margin-bottom: 10px;
 }
 
-.hero-section p {
+#meta {
 
-    max-width: 650px;
+    font-size: .75rem;
 
-    margin: 0 auto;
+    opacity: .9;
 
-    font-size: .74rem;
-
-    line-height: 1.45;
-
-    opacity: .95;
+    line-height: 1.5;
 }
-
-/* =====================================
-MOBILE
-===================================== */
 
 @media (max-width: 700px) {
 
     .hero-section {
 
-        padding: 48px 20px;
+        padding: 24px;
+
+        border-radius: 28px;
     }
 
-    .hero-badge {
+    .hero-top {
 
-        padding: 7px 12px;
+        flex-direction: column;
 
-        font-size: .62rem;
+        gap: 14px;
+
+        align-items: flex-start;
     }
 
-    .hero-section h1 {
+    .hero-title {
 
-        font-size: 1.8rem;
+        font-size: 1.2rem;
     }
 
-    .hero-section p {
+    .hero-icon {
 
-        font-size: .72rem;
+        width: 48px;
+
+        height: 48px;
+
+        font-size: 1rem;
     }
 }
+
 /* =====================================
 TABS
 ===================================== */
