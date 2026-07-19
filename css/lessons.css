@@ -1,0 +1,764 @@
+/* =====================================
+GLOBAL RESET
+===================================== */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+
+    font-family:"DM Sans",sans-serif;
+
+    background:#fafafa;
+
+    color:#0f172a;
+
+    min-height:100vh;
+
+    overflow-x:hidden;
+
+    position:relative;
+}
+
+
+/* =====================================
+BACKGROUND GLOW
+===================================== */
+
+body::before{
+
+    content:"";
+
+    position:fixed;
+
+    top:-150px;
+
+    right:-150px;
+
+    width:340px;
+
+    height:340px;
+
+    border-radius:50%;
+
+    background:
+
+        rgba(234,88,12,.10);
+
+    filter:blur(100px);
+
+    z-index:-1;
+}
+
+body::after{
+
+    content:"";
+
+    position:fixed;
+
+    bottom:-150px;
+
+    left:-150px;
+
+    width:340px;
+
+    height:340px;
+
+    border-radius:50%;
+
+    background:
+
+        rgba(8,145,178,.10);
+
+    filter:blur(100px);
+
+    z-index:-1;
+}
+
+
+/* =====================================
+GENERAL
+===================================== */
+
+button{
+
+    border:none;
+
+    cursor:pointer;
+
+    font-family:
+
+        "Bricolage Grotesque",
+        sans-serif;
+}
+
+a{
+
+    text-decoration:none;
+}
+
+button,
+a,
+input{
+
+    -webkit-tap-highlight-color:transparent;
+}
+
+
+/* =====================================
+HEADER
+===================================== */
+
+.main-header{
+
+    position:sticky;
+
+    top:0;
+
+    z-index:999;
+
+    width:100%;
+
+    padding:14px clamp(16px,4vw,35px);
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    background:
+
+        rgba(255,255,255,.88);
+
+    backdrop-filter:
+
+        blur(20px);
+
+    border-bottom:
+
+        1px solid rgba(15,23,42,.08);
+
+    box-shadow:
+
+        0 8px 30px rgba(0,0,0,.05);
+}
+
+.header-title{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    font-family:
+
+        "Bricolage Grotesque",
+        sans-serif;
+
+    font-weight:700;
+
+    font-size:.88rem;
+
+    color:#111827;
+}
+
+.header-title i{
+
+    width:32px;
+
+    height:32px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    border-radius:12px;
+
+    color:#fff;
+
+    background:
+
+        linear-gradient(
+            135deg,
+            #ea580c,
+            #fb923c
+        );
+
+    box-shadow:
+
+        0 8px 20px rgba(234,88,12,.25);
+}
+
+.back-btn{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    color:#fff;
+
+    font-size:.72rem;
+
+    padding:10px 16px;
+
+    border-radius:999px;
+
+    background:
+
+        linear-gradient(
+            135deg,
+            #0f172a,
+            #0891b2
+        );
+
+    box-shadow:
+
+        0 10px 25px rgba(8,145,178,.20);
+
+    transition:
+
+        transform .2s ease,
+        box-shadow .2s ease;
+}
+
+.back-btn:hover{
+
+    transform:translateY(-2px);
+
+    box-shadow:
+
+        0 15px 30px rgba(8,145,178,.30);
+}
+
+
+/* =====================================
+PAGE
+===================================== */
+
+.lessons-page{
+
+    width:min(1100px,90%);
+
+    margin:auto;
+
+    padding:
+
+        32px 0 70px;
+}
+
+
+/* =====================================
+HERO
+===================================== */
+
+.hero-section{
+
+    position:relative;
+
+    overflow:hidden;
+
+    border-radius:28px;
+
+    padding:
+
+        48px 30px;
+
+    margin-bottom:28px;
+
+    background:
+
+        linear-gradient(
+            135deg,
+            #0891b2 0%,
+            #06b6d4 45%,
+            #0f172a 100%
+        );
+
+    color:#fff;
+}
+
+.hero-section::before{
+
+    content:"";
+
+    position:absolute;
+
+    width:260px;
+
+    height:260px;
+
+    top:-120px;
+
+    right:-120px;
+
+    border-radius:50%;
+
+    background:
+
+        rgba(255,255,255,.08);
+
+    filter:blur(40px);
+}
+
+.hero-badge{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    padding:10px 16px;
+
+    border-radius:999px;
+
+    background:
+
+        rgba(255,255,255,.12);
+
+    font-size:.65rem;
+
+    margin-bottom:18px;
+}
+
+.hero-section h1{
+
+    font-family:
+
+        "Bricolage Grotesque",
+        sans-serif;
+
+    font-size:
+
+        clamp(1.2rem,4vw,2rem);
+
+    line-height:1.2;
+
+    margin-bottom:12px;
+}
+
+.hero-section p{
+
+    font-size:.74rem;
+
+    opacity:.9;
+}
+
+
+/* =====================================
+TABS
+===================================== */
+
+.tabs{
+
+    display:flex;
+
+    flex-wrap:wrap;
+
+    gap:12px;
+
+    margin-bottom:24px;
+}
+
+.tab{
+
+    padding:12px 18px;
+
+    border-radius:999px;
+
+    background:#fff;
+
+    border:1px solid #e5e7eb;
+
+    color:#475569;
+
+    font-size:.72rem;
+
+    font-weight:700;
+
+    transition:.25s ease;
+}
+
+.tab:hover{
+
+    transform:translateY(-2px);
+
+    border-color:#0891b2;
+}
+
+.tab.active{
+
+    color:#fff;
+
+    background:
+
+        linear-gradient(
+            135deg,
+            #0f172a,
+            #0891b2
+        );
+
+    border-color:transparent;
+}
+
+
+/* =====================================
+MAIN CARD
+===================================== */
+
+.lesson-card{
+
+    background:#fff;
+
+    border-radius:28px;
+
+    padding:
+
+        clamp(18px,4vw,32px);
+
+    box-shadow:
+
+        0 15px 45px rgba(0,0,0,.06);
+
+    margin-bottom:24px;
+}
+
+
+/* =====================================
+GRID
+===================================== */
+
+.lesson-grid{
+
+    display:grid;
+
+    grid-template-columns:
+
+        repeat(2,1fr);
+
+    gap:18px;
+
+    margin-bottom:20px;
+}
+
+.info-card{
+
+    background:#fafafa;
+
+    border:1px solid #eef2f7;
+
+    border-radius:20px;
+
+    padding:22px;
+}
+
+.info-card h3{
+
+    font-family:
+
+        "Bricolage Grotesque",
+        sans-serif;
+
+    color:#ea580c;
+
+    font-size:.8rem;
+
+    margin-bottom:14px;
+}
+
+
+/* =====================================
+CONTENT CARDS
+===================================== */
+
+.content-card{
+
+    margin-top:22px;
+
+    background:#fff;
+
+    border:1px solid #eef2f7;
+
+    border-radius:20px;
+
+    padding:22px;
+}
+
+.section-title{
+
+    font-family:
+
+        "Bricolage Grotesque",
+        sans-serif;
+
+    font-size:.82rem;
+
+    color:#0f172a;
+
+    margin-bottom:14px;
+}
+
+.lesson-text{
+
+    font-size:.74rem;
+
+    line-height:1.9;
+
+    color:#475569;
+
+    white-space:pre-wrap;
+}
+
+
+/* =====================================
+AUDIO
+===================================== */
+
+.audio-card{
+
+    margin-top:22px;
+
+    padding:22px;
+
+    border-radius:20px;
+
+    background:
+
+        linear-gradient(
+            180deg,
+            #fff,
+            #fafafa
+        );
+
+    border:1px solid #eef2f7;
+}
+
+.audio-card audio{
+
+    width:100%;
+
+    margin-top:10px;
+}
+
+
+/* =====================================
+ARCHIVE
+===================================== */
+
+.archive-card{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:18px;
+
+    background:#fff;
+
+    border-radius:24px;
+
+    padding:24px;
+
+    box-shadow:
+
+        0 10px 35px rgba(0,0,0,.06);
+
+    border:1px solid #ececec;
+}
+
+.archive-icon{
+
+    width:56px;
+
+    height:56px;
+
+    min-width:56px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    border-radius:16px;
+
+    color:#fff;
+
+    background:
+
+        linear-gradient(
+            135deg,
+            #ea580c,
+            #fb923c
+        );
+}
+
+.archive-content{
+
+    flex:1;
+}
+
+.archive-content h3{
+
+    font-family:
+
+        "Bricolage Grotesque",
+        sans-serif;
+
+    font-size:.85rem;
+
+    margin-bottom:6px;
+}
+
+.archive-content p{
+
+    font-size:.72rem;
+
+    color:#64748b;
+
+    line-height:1.6;
+}
+
+.archive-btn{
+
+    padding:12px 18px;
+
+    border-radius:999px;
+
+    color:#fff;
+
+    font-size:.72rem;
+
+    font-weight:700;
+
+    background:
+
+        linear-gradient(
+            135deg,
+            #0f172a,
+            #0891b2
+        );
+
+    white-space:nowrap;
+
+    transition:.25s ease;
+}
+
+.archive-btn:hover{
+
+    transform:translateY(-2px);
+}
+
+
+/* =====================================
+TABLET
+===================================== */
+
+@media (max-width:900px){
+
+    .lesson-grid{
+
+        grid-template-columns:1fr;
+    }
+}
+
+
+/* =====================================
+MOBILE
+===================================== */
+
+@media (max-width:700px){
+
+    .main-header{
+
+        padding:12px 16px;
+    }
+
+    .header-title{
+
+        font-size:.82rem;
+    }
+
+    .header-title i{
+
+        width:30px;
+
+        height:30px;
+    }
+
+    .back-btn{
+
+        font-size:.7rem;
+
+        padding:9px 13px;
+    }
+
+    .hero-section{
+
+        padding:36px 22px;
+    }
+
+    .hero-section h1{
+
+        font-size:1.1rem;
+    }
+
+    .lesson-card{
+
+        border-radius:24px;
+
+        padding:18px;
+    }
+
+    .archive-card{
+
+        flex-direction:column;
+
+        align-items:flex-start;
+    }
+
+    .archive-btn{
+
+        width:100%;
+
+        text-align:center;
+    }
+
+    .content-card,
+    .info-card,
+    .audio-card{
+
+        padding:18px;
+    }
+}
+
+
+/* =====================================
+VERY SMALL DEVICES
+===================================== */
+
+@media (max-width:380px){
+
+    .hero-section h1{
+
+        font-size:1rem;
+    }
+
+    .header-title{
+
+        font-size:.76rem;
+    }
+}
