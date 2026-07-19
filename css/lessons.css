@@ -431,7 +431,7 @@ TABS
 
 .tab{
 
-    padding:8px 14px;
+    padding:9px 15px;
 
     border-radius:999px;
 
@@ -439,7 +439,7 @@ TABS
 
     color:#0f172a;
 
-    font-size:.7rem;
+    font-size:.72rem;
 
     font-weight:700;
 
