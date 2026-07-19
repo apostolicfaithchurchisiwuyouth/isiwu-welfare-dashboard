@@ -53,212 +53,216 @@
 
     <!-- PAGE -->
 
-    <main class="lessons-page">
+  <main class="lessons-page">
 
-        <!-- HERO -->
+    <!-- HERO -->
 
-       <section class="hero-wrapper">
+    <section class="hero-wrapper">
 
-    <div class="hero-section">
+        <div class="hero-section">
 
-        <div class="hero-top">
+            <div class="hero-top">
 
-            <div class="hero-badge">
+                <div class="hero-badge">
 
-                <i class="fas fa-bookmark"></i>
+                    <i class="fas fa-bookmark"></i>
 
-                Sunday School For This Week
+                    Sunday School For This Week
+
+                </div>
+
+                <div class="hero-icon">
+
+                    <i class="fas fa-book-open"></i>
+
+                </div>
 
             </div>
 
-            <div class="hero-icon">
+            <h1 class="hero-title">
 
-                <i class="fas fa-book-open"></i>
+                <span class="topic-label">
+
+                    Topic of the Lesson
+
+                </span>
+
+                <span id="topic">
+
+                    Loading lesson...
+
+                </span>
+
+            </h1>
+
+            <p id="meta"></p>
+
+        </div>
+
+    </section>
+
+    <!-- TABS -->
+
+    <section class="tabs">
+
+        <button class="tab active" data-class="Senior">
+
+            Senior
+
+        </button>
+
+        <button class="tab" data-class="Junior">
+
+            Junior
+
+        </button>
+
+        <button class="tab" data-class="Elementary">
+
+            Elementary
+
+        </button>
+
+    </section>
+
+    <!-- MAIN LESSON CARD -->
+
+    <section class="lesson-card">
+
+        <!-- BIBLE TEXT + MEMORY VERSE -->
+
+        <div class="lesson-grid">
+
+            <div class="info-card">
+
+                <h3>
+
+                    Bible Text
+
+                </h3>
+
+                <div class="lesson-text" id="bibleText"></div>
+
+            </div>
+
+            <div class="info-card">
+
+                <h3>
+
+                    Memory Verse
+
+                </h3>
+
+                <div class="lesson-text" id="memoryVerse"></div>
 
             </div>
 
         </div>
 
-        <h1 class="hero-title">
+        <!-- YORUBA AUDIO -->
 
-            <span class="topic-label">
+        <div
+            id="yorubaAudioContainer"
+            class="audio-card"
+        >
 
-                Topic of the Lesson
+            <div class="section-title">
 
-            </span>
-
-            <span id="topic">
-
-                Loading lesson...
-
-            </span>
-
-        </h1>
-
-        <p id="meta"></p>
-
-    </div>
-
-</section>
-        <!-- TABS -->
-
-        <section class="tabs">
-
-            <button class="tab active" data-class="Senior">
-
-                Senior
-
-            </button>
-
-            <button class="tab" data-class="Junior">
-
-                Junior
-
-            </button>
-
-            <button class="tab" data-class="Elementary">
-
-                Elementary
-
-            </button>
-
-        </section>
-
-        <!-- CONTENT -->
-
-        <section class="lesson-card">
-
-            <div class="lesson-grid">
-
-                <div class="info-card">
-
-                    <h3>
-
-                        Bible Text
-
-                    </h3>
-
-                    <div class="lesson-text" id="bibleText"></div>
-
-                </div>
-
-                <div class="info-card">
-
-                    <h3>
-
-                        Memory Verse
-
-                    </h3>
-
-                    <div class="lesson-text" id="memoryVerse"></div>
-
-                </div>
+                Memory Verse In Yoruba
 
             </div>
 
-            <!-- AUDIO -->
-
-            <div
-                id="yorubaAudioContainer"
-                class="audio-card"
+            <audio
+                controls
+                preload="none"
+                id="yorubaAudioPlayer"
             >
 
-                <div class="section-title">
-
-                    Memory Verse In Yoruba
-
-                </div>
-
-                <audio
-                    controls
-                    preload="none"
-                    id="yorubaAudioPlayer"
+                <source
+                    id="yorubaAudioSource"
+                    src=""
+                    type="audio/mpeg"
                 >
 
-                    <source
-                        id="yorubaAudioSource"
-                        src=""
-                        type="audio/mpeg"
-                    >
+            </audio>
 
-                </audio>
+        </div>
 
-            </div>
+        <!-- COMBINED LESSON NOTE -->
 
-           <!-- LESSON -->
+        <section class="lesson-section">
 
-<section class="lesson-section">
+            <h2 class="section-title">
 
-    <h2 class="section-title">
+                Combined Lesson Note
 
-        Combined Lesson Note
+            </h2>
 
-    </h2>
-
-    <div
-        class="lesson-text"
-        id="summary"
-    ></div>
-
-</section>
-<br>
-
-<!-- DISCUSSION -->
-
-<section class="lesson-section">
-<div class="lesson-card">
-    <h2 class="section-title">
-
-        Discussion
-
-    </h2>
-
-    <div
-        class="lesson-text"
-        id="discussion"
-    ></div>
-</div>
-</section>
-        </section>
-        <!-- ARCHIVE -->
-
-        <section class="archive-card">
-
-            <div class="archive-icon">
-
-                <i class="fas fa-book"></i>
-
-            </div>
-
-            <div class="archive-content">
-
-                <h3>
-
-                    Combined Lesson Archive
-
-                </h3>
-
-                <p>
-
-                    Browse all combined lesson notes and Yoruba audio memory verses.
-
-                </p>
-
-            </div>
-
-            <a
-                href="lesson-archive.html"
-                class="archive-btn"
-            >
-
-                Open Archive
-
-            </a>
+            <div
+                class="lesson-text"
+                id="summary"
+            ></div>
 
         </section>
 
-    </main>
+        <!-- DISCUSSION -->
 
+        <section class="lesson-section">
+
+            <h2 class="section-title">
+
+                Discussion
+
+            </h2>
+
+            <div
+                class="lesson-text"
+                id="discussion"
+            ></div>
+
+        </section>
+
+    </section>
+
+    <!-- ARCHIVE -->
+
+    <section class="archive-card">
+
+        <div class="archive-icon">
+
+            <i class="fas fa-book"></i>
+
+        </div>
+
+        <div class="archive-content">
+
+            <h3>
+
+                Combined Lesson Archive
+
+            </h3>
+
+            <p>
+
+                Browse all combined lesson notes and Yoruba audio memory verses.
+
+            </p>
+
+        </div>
+
+        <a
+            href="lesson-archive.html"
+            class="archive-btn"
+        >
+
+            Open Archive
+
+        </a>
+
+    </section>
+
+</main>
+    
     <script src="../js/lessons.js"></script>
 
 </body>
