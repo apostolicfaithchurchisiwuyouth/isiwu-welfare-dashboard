@@ -378,7 +378,7 @@ MOBILE
 
     .hero-section h1 {
 
-        font-size: 1.2rem;
+        font-size: 1.8rem;
     }
 
     .hero-section p {
@@ -719,7 +719,7 @@ MOBILE
 
 .hero-section h1{
 
-    font-size:1.2rem;
+    font-size:1.8rem;
 }
 
     .tabs{
@@ -731,7 +731,7 @@ MOBILE
 
         padding:18px;
 
-        border-radius:24px;
+        border-radius:25px;
     }
 
     .info-card,
@@ -764,11 +764,11 @@ VERY SMALL DEVICES
 
     .header-title{
 
-        font-size:.76rem;
+        font-size:.88rem;
     }
 
     .hero-section h1{
 
-        font-size:.95rem;
+        font-size:1.4rem;
     }
 }
