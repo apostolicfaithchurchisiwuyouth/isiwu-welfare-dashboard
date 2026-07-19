@@ -261,100 +261,124 @@ PAGE
 
 
 /* =====================================
-HERO
+HERO SECTION
 ===================================== */
 
-.hero-section{
+.hero-section {
 
-    position:relative;
+    width: 100vw;
 
-    overflow:hidden;
+    margin-left: calc(50% - 50vw);
 
-    border-radius:28px;
+    margin-top: 0;
 
-    padding:
+    padding: 70px 0;
 
-        48px 30px;
+    border-radius: 0;
 
-    margin-bottom:28px;
+    position: relative;
+
+    overflow: hidden;
 
     background:
 
         linear-gradient(
+
             135deg,
-            #0891b2 0%,
-            #06b6d4 45%,
+
+            #ea580c 0%,
+
+            #fb923c 45%,
+
             #0f172a 100%
+
         );
 
-    color:#fff;
+    color: white;
+
 }
 
-.hero-section::before{
+.hero-section::before {
 
-    content:"";
+    content: "";
 
-    position:absolute;
+    position: absolute;
 
-    width:260px;
+    top: -120px;
 
-    height:260px;
+    right: -120px;
 
-    top:-120px;
+    width: 320px;
 
-    right:-120px;
+    height: 320px;
 
-    border-radius:50%;
+    border-radius: 50%;
 
     background:
 
         rgba(255,255,255,.08);
 
-    filter:blur(40px);
+    filter: blur(50px);
+
 }
 
-.hero-badge{
+.hero-section::after {
 
-    display:inline-flex;
+    content: "";
 
-    align-items:center;
+    position: absolute;
 
-    gap:8px;
+    bottom: -120px;
 
-    padding:10px 16px;
+    left: -120px;
 
-    border-radius:999px;
+    width: 300px;
+
+    height: 300px;
+
+    border-radius: 50%;
 
     background:
 
-        rgba(255,255,255,.12);
+        rgba(255,255,255,.06);
 
-    font-size:.65rem;
+    filter: blur(60px);
 
-    margin-bottom:18px;
 }
 
-.hero-section h1{
+.hero-content {
 
-    font-family:
+    width: min(1100px, 90%);
 
-        "Bricolage Grotesque",
-        sans-serif;
+    margin: auto;
 
-    font-size:
+    position: relative;
 
-        clamp(1.2rem,4vw,2rem);
-
-    line-height:1.2;
-
-    margin-bottom:12px;
+    z-index: 2;
 }
 
-.hero-section p{
+.hero-title {
 
-    font-size:.74rem;
+    font-family: "Bricolage Grotesque", sans-serif;
 
-    opacity:.9;
+    font-size: 1.45rem;
+
+    font-weight: 800;
+
+    margin-bottom: 14px;
+
+    line-height: 1.15;
+}
+
+.hero-text {
+
+    font-size: .72rem;
+    font-weight:600;
+    line-height: 1.7;
+
+    opacity: .95;
+
+    max-width: 650px;
 }
 
 
@@ -373,23 +397,27 @@ TABS
     margin-bottom:24px;
 }
 
-.tab{
+.tab {
 
-    padding:12px 18px;
+    padding: 7px 12px;
 
-    border-radius:999px;
+    border: none;
 
-    background:#fff;
+    border-radius: 999px;
 
-    border:1px solid #e5e7eb;
+    cursor: pointer;
 
-    color:#475569;
+    background: #f3f4f6;
 
-    font-size:.72rem;
+    color: #111827;
 
-    font-weight:700;
+    font-size: .7rem;
 
-    transition:.25s ease;
+    font-weight: 700;
+
+    font-family: "Bricolage Grotesque", sans-serif;
+
+    transition: .25s ease;
 }
 
 .tab:hover{
@@ -399,21 +427,26 @@ TABS
     border-color:#0891b2;
 }
 
-.tab.active{
-
-    color:#fff;
+.tab.active {
 
     background:
 
         linear-gradient(
+
             135deg,
-            #0f172a,
-            #0891b2
+
+            #ea580c,
+
+            #fb923c
+
         );
 
-    border-color:transparent;
-}
+    color: white;
 
+    box-shadow:
+
+        0 10px 25px rgba(234,88,12,.25);
+}
 
 /* =====================================
 MAIN CARD
@@ -517,7 +550,7 @@ CONTENT CARDS
 
     line-height:1.9;
 
-    color:#475569;
+    color:#0F172A;
 
     white-space:pre-wrap;
 }
