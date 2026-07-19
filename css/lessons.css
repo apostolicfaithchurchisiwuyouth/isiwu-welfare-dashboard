@@ -210,14 +210,17 @@ HEADER
 PAGE
 ===================================== */
 
-.lessons-page{
+.lessons-page {
 
-    width:min(1100px,90%);
+    width: 90%;
 
-    margin:auto;
+    max-width: 1100px;
 
-    padding:0 0 70px;
+    margin: 0 auto;
+
+    padding-bottom: 70px;
 }
+
 
 /* =====================================
 HERO WRAPPER
@@ -225,10 +228,13 @@ HERO WRAPPER
 
 .hero-wrapper {
 
-    width: min(1100px, 90%);
+    width: 100%;
 
-    margin: 26px auto 30px;
+    max-width: 1100px;
+
+    margin: 24px auto 30px;
 }
+
 
 /* =====================================
 HERO
@@ -253,10 +259,10 @@ HERO
 
     color: white;
 
+    border: 1px solid rgba(255,255,255,.12);
+
     box-shadow:
         0 25px 60px rgba(8,145,178,.18);
-
-    border: 1px solid rgba(255,255,255,.12);
 }
 
 .hero-section::before {
@@ -265,13 +271,13 @@ HERO
 
     position: absolute;
 
-    width: 260px;
-
-    height: 260px;
-
     top: -120px;
 
     right: -120px;
+
+    width: 260px;
+
+    height: 260px;
 
     border-radius: 50%;
 
@@ -288,7 +294,9 @@ HERO
 
     align-items: center;
 
-    margin-bottom: 22px;
+    gap: 18px;
+
+    margin-bottom: 24px;
 }
 
 .hero-badge {
@@ -299,7 +307,7 @@ HERO
 
     gap: 8px;
 
-    padding: 10px 16px;
+    padding: 8px 14px;
 
     border-radius: 999px;
 
@@ -307,20 +315,20 @@ HERO
 
     backdrop-filter: blur(16px);
 
-    font-size: .68rem;
-
     font-family: "Bricolage Grotesque", sans-serif;
+
+    font-size: .68rem;
 
     font-weight: 700;
 }
 
 .hero-icon {
 
-    width: 58px;
+    width: 56px;
 
-    height: 58px;
+    height: 56px;
 
-    border-radius: 20px;
+    min-width: 56px;
 
     display: flex;
 
@@ -328,79 +336,97 @@ HERO
 
     justify-content: center;
 
+    border-radius: 18px;
+
     background: rgba(255,255,255,.12);
 
     backdrop-filter: blur(20px);
 
-    font-size: 1.2rem;
-}
-
-.hero-title {
-
-    font-family: "Bricolage Grotesque", sans-serif;
-
-    font-size: 1.7rem;
-
-    line-height: 1.15;
-
-    margin-bottom: 14px;
+    font-size: 1.15rem;
 }
 
 .topic-label {
 
     display: block;
 
+    margin-bottom: 10px;
+
     font-size: .7rem;
 
-    opacity: .85;
-
-    letter-spacing: .08em;
+    font-weight: 600;
 
     text-transform: uppercase;
 
-    margin-bottom: 10px;
+    letter-spacing: .08em;
+
+    opacity: .85;
+}
+
+.hero-title {
+
+    font-family: "Bricolage Grotesque", sans-serif;
+
+    font-size: 1.75rem;
+
+    font-weight: 800;
+
+    line-height: 1.15;
+
+    margin-bottom: 14px;
 }
 
 #meta {
 
     font-size: .75rem;
 
-    opacity: .9;
+    line-height: 1.55;
 
-    line-height: 1.5;
+    opacity: .92;
 }
 
-@media (max-width: 700px) {
 
-    .hero-section {
+/* =====================================
+LESSON TEXT
+===================================== */
 
-        padding: 24px;
+.lesson-text {
 
-        border-radius: 28px;
-    }
+    font-size: .8rem;
 
-    .hero-top {
+    line-height: 1.8;
 
-        flex-direction: column;
+    color: #1e293b;
 
-        gap: 14px;
+    white-space: pre-wrap;
+}
 
-        align-items: flex-start;
-    }
 
-    .hero-title {
+/* =====================================
+LESSON SECTION
+===================================== */
 
-        font-size: 1.2rem;
-    }
+.lesson-section {
 
-    .hero-icon {
+    margin-top: 20px;
 
-        width: 48px;
+    padding: 24px;
 
-        height: 48px;
+    background: #fcfcfc;
 
-        font-size: 1rem;
-    }
+    border: 1px solid #eef2f7;
+
+    border-radius: 20px;
+}
+
+.section-title {
+
+    font-family: "Bricolage Grotesque", sans-serif;
+
+    font-size: .84rem;
+
+    color: #0f172a;
+
+    margin-bottom: 14px;
 }
 
 /* =====================================
@@ -534,29 +560,6 @@ CONTENT
     border-radius:18px;
 
     padding:24px;
-}
-
-.section-title{
-
-    font-family:"Bricolage Grotesque",sans-serif;
-
-    font-size:.8rem;
-
-    color:#0f172a;
-
-    margin-bottom:10px;
-}
-
-.lesson-text{
-
-    font-size:.76rem;
-
-    line-height:1.5;
-
-    color:#det629;
-
-
-    white-space:pre-wrap;
 }
 
 /* =====================================
@@ -704,73 +707,126 @@ TABLET
 MOBILE
 ===================================== */
 
-@media (max-width:700px){
+@media (max-width:700px) {
 
-    .main-header{
+    .main-header {
 
-        padding:12px 16px;
+        padding: 12px 16px;
     }
 
-    .header-title{
+    .header-title {
 
-        font-size:.82rem;
+        font-size: .82rem;
     }
 
-    .header-title i{
+    .header-title i {
 
-        width:28px;
+        width: 30px;
 
-        height:28px;
+        height: 30px;
     }
 
-    .back-btn{
+    .back-btn {
 
-        font-size:.7rem;
+        padding: 9px 13px;
 
-        padding:9px 13px;
+        font-size: .7rem;
     }
 
-    .hero-section{
+    .hero-wrapper {
 
-        padding:45px 0;
+        margin-top: 18px;
     }
 
-.hero-section h1{
+    .hero-section {
 
-    font-size:1.8rem;
-}
+        padding: 24px;
 
-    .tabs{
-
-        margin-top:22px;
+        border-radius: 26px;
     }
 
-    .lesson-card{
+    .hero-top {
 
-        padding:18px;
+        flex-direction: column;
 
-        border-radius:25px;
+        align-items: center;
+
+        text-align: center;
+
+        gap: 14px;
+    }
+
+    .hero-badge {
+
+        padding: 7px 12px;
+
+        font-size: .65rem;
+    }
+
+    .hero-icon {
+
+        width: 48px;
+
+        height: 48px;
+
+        min-width: 48px;
+
+        font-size: 1rem;
+    }
+
+    .hero-title {
+
+        font-size: 1.35rem;
+
+        text-align: center;
+    }
+
+    .topic-label {
+
+        font-size: .65rem;
+    }
+
+    #meta {
+
+        text-align: center;
+    }
+
+    .tabs {
+
+        margin-top: 22px;
+    }
+
+    .lesson-grid {
+
+        grid-template-columns: 1fr;
+    }
+
+    .lesson-card {
+
+        padding: 18px;
+
+        border-radius: 24px;
     }
 
     .info-card,
-    .content-card,
-    .audio-card{
+    .audio-card,
+    .lesson-section {
 
-        padding:18px;
+        padding: 18px;
     }
 
-    .archive-card{
+    .archive-card {
 
-        flex-direction:column;
+        flex-direction: column;
 
-        align-items:flex-start;
+        align-items: flex-start;
     }
 
-    .archive-btn{
+    .archive-btn {
 
-        width:100%;
+        width: 100%;
 
-        text-align:center;
+        text-align: center;
     }
 }
 
