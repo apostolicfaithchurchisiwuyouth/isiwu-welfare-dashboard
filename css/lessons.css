@@ -240,50 +240,108 @@ HERO WRAPPER
 HERO
 ===================================== */
 
-.hero-section {
+.hero-section{
 
-    position: relative;
+    position:relative;
 
-    overflow: hidden;
+    overflow:hidden;
 
-    padding: 34px;
+    padding:36px;
 
-    border-radius: 34px;
+    border-radius:34px;
 
-    background: linear-gradient(
-        135deg,
-        #0891b2 0%,
-        #06b6d4 45%,
-        #0f172a 100%
-    );
+    background:
 
-    color: white;
+        linear-gradient(
+            135deg,
+            #0f172a 0%,
+            #0b4f67 45%,
+            #08748f 100%
+        );
 
-    border: 1px solid rgba(255,255,255,.12);
+    color:#fff;
+
+    border:1px solid rgba(255,255,255,.08);
 
     box-shadow:
-        0 25px 60px rgba(8,145,178,.18);
+
+        0 25px 60px rgba(8,145,178,.14);
+
+    isolation:isolate;
 }
 
-.hero-section::before {
 
-    content: "";
+/* top texture */
 
-    position: absolute;
+.hero-section::before{
 
-    top: -120px;
+    content:"";
 
-    right: -120px;
+    position:absolute;
 
-    width: 260px;
+    inset:0;
 
-    height: 260px;
+    background:
 
-    border-radius: 50%;
+        radial-gradient(
+            circle at top right,
+            rgba(255,255,255,.12),
+            transparent 30%
+        ),
 
-    background: rgba(255,255,255,.10);
+        radial-gradient(
+            circle at bottom left,
+            rgba(255,255,255,.06),
+            transparent 35%
+        ),
 
-    filter: blur(50px);
+        linear-gradient(
+            120deg,
+            transparent 0%,
+            rgba(255,255,255,.03) 50%,
+            transparent 100%
+        );
+
+    z-index:-1;
+}
+
+
+/* grid texture */
+
+.hero-section::after{
+
+    content:"";
+
+    position:absolute;
+
+    inset:0;
+
+    background-image:
+
+        linear-gradient(
+            rgba(255,255,255,.04) 1px,
+            transparent 1px
+        ),
+
+        linear-gradient(
+            90deg,
+            rgba(255,255,255,.04) 1px,
+            transparent 1px
+        );
+
+    background-size:32px 32px;
+
+    opacity:.35;
+
+    mask-image:
+
+        radial-gradient(
+            circle,
+            black 50%,
+            transparent 100%
+        );
+
+    pointer-events:none;
 }
 
 .hero-top {
@@ -299,50 +357,58 @@ HERO
     margin-bottom: 24px;
 }
 
-.hero-badge {
+.hero-badge{
 
-    display: inline-flex;
+    display:inline-flex;
 
-    align-items: center;
+    align-items:center;
 
-    gap: 8px;
+    gap:8px;
 
-    padding: 8px 14px;
+    padding:10px 16px;
 
-    border-radius: 999px;
+    border-radius:999px;
 
-    background: rgba(255,255,255,.12);
+    background:rgba(255,255,255,.10);
 
-    backdrop-filter: blur(16px);
+    backdrop-filter:blur(18px);
 
-    font-family: "Bricolage Grotesque", sans-serif;
+    border:1px solid rgba(255,255,255,.08);
 
-    font-size: .68rem;
+    font-size:.68rem;
 
-    font-weight: 700;
+    font-family:"Bricolage Grotesque",sans-serif;
+
+    font-weight:700;
 }
 
-.hero-icon {
+.hero-icon{
 
-    width: 56px;
+    width:58px;
 
-    height: 56px;
+    height:58px;
 
-    min-width: 56px;
+    border-radius:18px;
 
-    display: flex;
+    display:flex;
 
-    align-items: center;
+    align-items:center;
 
-    justify-content: center;
+    justify-content:center;
 
-    border-radius: 18px;
+    background:
 
-    background: rgba(255,255,255,.12);
+        linear-gradient(
+            135deg,
+            rgba(255,255,255,.14),
+            rgba(255,255,255,.06)
+        );
 
-    backdrop-filter: blur(20px);
+    border:1px solid rgba(255,255,255,.08);
 
-    font-size: 1.15rem;
+    backdrop-filter:blur(20px);
+
+    font-size:1.15rem;
 }
 
 .topic-label {
