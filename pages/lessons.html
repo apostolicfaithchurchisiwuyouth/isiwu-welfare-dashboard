@@ -100,130 +100,142 @@
 
     </section>
       
+<!-- TABS -->
+
+<section class="tabs">
+
+    <button class="tab active" data-class="Senior">
+
+        Senior
+
+    </button>
+
+    <button class="tab" data-class="Junior">
+
+        Junior
+
+    </button>
+
+    <button class="tab" data-class="Elementary">
+
+        Elementary
+
+    </button>
+
+</section>
+
+<!-- MAIN LESSON CARD -->
+
 <section class="lesson-card">
-       <!-- TABS -->
 
-    <section class="tabs">
+    <!-- LESSON HEADER -->
 
-        <button class="tab active" data-class="Senior">
+    <div class="lesson-header">
 
-            Senior
+        <div class="lesson-header-top">
 
-        </button>
+            <span class="lesson-badge">
 
-        <button class="tab" data-class="Junior">
+                Weekly Lesson
 
-            Junior
+            </span>
 
-        </button>
+            <span id="meta" class="lesson-meta">
 
-        <button class="tab" data-class="Elementary">
+                Loading...
 
-            Elementary
-
-        </button>
-
-    </section>
-
-   
-    <!-- MAIN LESSON CARD -->
-
-    <section class="lesson-card">
-
-        <!-- BIBLE TEXT + MEMORY VERSE -->
-
-        <div class="lesson-grid">
-
-            <div class="info-card">
-
-                <h3>
-
-                    Bible Text
-
-                </h3>
-
-                <div class="lesson-text" id="bibleText"></div>
-
-            </div>
-
-            <div class="info-card">
-
-                <h3>
-
-                    Memory Verse
-
-                </h3>
-
-                <div class="lesson-text" id="memoryVerse"></div>
-
-            </div>
+            </span>
 
         </div>
 
-        <!-- YORUBA AUDIO -->
+        <h1 id="topic" class="lesson-topic">
 
-        <div
-            id="yorubaAudioContainer"
-            class="audio-card"
-        >
+            Loading lesson...
 
-            <div class="section-title">
+        </h1>
 
-                Memory Verse In Yoruba
+    </div>
 
-            </div>
+    <!-- BIBLE TEXT + MEMORY VERSE -->
 
-            <audio
-                controls
-                preload="none"
-                id="yorubaAudioPlayer"
-            >
+    <div class="lesson-grid">
 
-                <source
-                    id="yorubaAudioSource"
-                    src=""
-                    type="audio/mpeg"
-                >
+        <div class="info-card">
 
-            </audio>
+            <h3>
+
+                Bible Text
+
+            </h3>
+
+            <div class="lesson-text" id="bibleText"></div>
 
         </div>
 
-        <!-- COMBINED LESSON NOTE -->
+        <div class="info-card">
 
-        <section class="lesson-section">
+            <h3>
 
-            <h2 class="section-title">
+                Memory Verse
 
-                Combined Lesson Note
+            </h3>
 
-            </h2>
+            <div class="lesson-text" id="memoryVerse"></div>
 
-            <div
-                class="lesson-text"
-                id="summary"
-            ></div>
+        </div>
 
-        </section>
+    </div>
 
-        <!-- DISCUSSION -->
+    <!-- YORUBA AUDIO -->
 
-        <section class="lesson-section">
+    <div id="yorubaAudioContainer" class="audio-card">
 
-            <h2 class="section-title">
+        <div class="section-title">
 
-                Discussion
+            Memory Verse In Yoruba
 
-            </h2>
+        </div>
 
-            <div
-                class="lesson-text"
-                id="discussion"
-            ></div>
+        <audio controls preload="none" id="yorubaAudioPlayer">
 
-        </section>
+            <source
+                id="yorubaAudioSource"
+                src=""
+                type="audio/mpeg">
+
+        </audio>
+
+    </div>
+
+    <!-- COMBINED LESSON NOTE -->
+
+    <section class="lesson-section">
+
+        <h2 class="section-title">
+
+            Combined Lesson Note
+
+        </h2>
+
+        <div class="lesson-text" id="summary"></div>
 
     </section>
+
+    <!-- DISCUSSION -->
+
+    <section class="lesson-section">
+
+        <h2 class="section-title">
+
+            Discussion
+
+        </h2>
+
+        <div class="lesson-text" id="discussion"></div>
+
+    </section>
+
+</section>
 
     <!-- ARCHIVE -->
 
