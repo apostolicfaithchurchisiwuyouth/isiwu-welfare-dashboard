@@ -232,9 +232,6 @@ HERO SECTION
     margin-top: -1px;
 
     padding: 60px 0;
-    border-bottom-left-radius: 20px;
-
-    border-bottom-right-radius: 20px;
     position: relative;
 
     overflow: hidden;
@@ -565,7 +562,8 @@ CONTENT
 
     line-height:1.75;
 
-    color:#0f172a;
+    color:#det629;
+    font-weight:500;
 
     white-space:pre-wrap;
 }
