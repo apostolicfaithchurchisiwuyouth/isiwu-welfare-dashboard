@@ -232,9 +232,9 @@ HERO SECTION
     margin-top: -1px;
 
     padding: 60px 0;
-    border-bottom-left-radius: 40px;
+    border-bottom-left-radius: 20px;
 
-    border-bottom-right-radius: 40px;
+    border-bottom-right-radius: 20px;
     position: relative;
 
     overflow: hidden;
