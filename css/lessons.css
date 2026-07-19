@@ -411,43 +411,43 @@ HERO
     font-size:1.15rem;
 }
 
-.topic-label {
+/* =====================================
+HERO TEXT
+===================================== */
 
-    display: block;
+.hero-text-block{
 
-    margin-bottom: 10px;
+    max-width:520px;
 
-    font-size: .7rem;
+    position:relative;
 
-    font-weight: 600;
-
-    text-transform: uppercase;
-
-    letter-spacing: .08em;
-
-    opacity: .85;
+    z-index:2;
 }
 
-.hero-title {
+.hero-heading{
 
-    font-family: "Bricolage Grotesque", sans-serif;
+    font-family:"Bricolage Grotesque",sans-serif;
 
-    font-size: 1.75rem;
+    font-size:1.8rem;
 
-    font-weight: 800;
+    font-weight:800;
 
-    line-height: 1.15;
+    line-height:1.15;
 
-    margin-bottom: 14px;
+    margin-bottom:12px;
+
+    color:#fff;
 }
 
-#meta {
+.hero-description{
 
-    font-size: .75rem;
+    font-size:.78rem;
 
-    line-height: 1.55;
+    line-height:1.7;
 
-    opacity: .92;
+    color:rgba(255,255,255,.85);
+
+    max-width:470px;
 }
 
 
@@ -881,13 +881,9 @@ MOBILE
 
         padding: 24px;
 
-        border-radius: 26px;
+        border-radius: 25px;
     }
 
-  .hero-section{
-
-        padding:24px;
-    }
 
     .hero-top{
 
@@ -929,22 +925,17 @@ MOBILE
         font-size: 1rem;
     }
 
-    .hero-title {
+.hero-heading{
 
-        font-size: 1.35rem;
+    font-size:1.35rem;
+}
 
-        text-align: center;
-    }
+.hero-description{
 
-    .topic-label {
+    font-size:.74rem;
 
-        font-size: .65rem;
-    }
-
-    #meta {
-
-        text-align: center;
-    }
+    line-height:1.6;
+}
 
     .tabs {
 
