@@ -220,143 +220,172 @@ PAGE
 }
 
 /* =====================================
-HERO
+HERO SECTION
 ===================================== */
 
-.hero-section{
+.hero-section {
 
-    width:100vw;
+    width: 100vw;
 
-    margin-left:calc(50% - 50vw);
+    margin-left: calc(50% - 50vw);
 
-    padding:65px 0;
+    margin-top: -1px;
 
-    background:
+    padding: 60px 0;
 
-        linear-gradient(
-            135deg,
-            #0891b2 0%,
-            #06b6d4 45%,
-            #0f172a 100%
-        );
+    position: relative;
 
-    color:#fff;
+    overflow: hidden;
 
-    position:relative;
+    background: linear-gradient(
+        135deg,
+        #0891b2 0%,
+        #06b6d4 45%,
+        #0f172a 100%
+    );
 
-    overflow:hidden;
+    color: #fff;
+
+    text-align: center;
 }
 
-.hero-section::before{
+.hero-section::before {
 
-    content:"";
+    content: "";
 
-    position:absolute;
+    position: absolute;
 
-    top:-100px;
+    top: -120px;
 
-    right:-100px;
+    right: -120px;
 
-    width:260px;
+    width: 320px;
 
-    height:260px;
+    height: 320px;
 
-    border-radius:50%;
+    border-radius: 50%;
 
-    background:rgba(255,255,255,.08);
+    background: rgba(255,255,255,.08);
 
-    filter:blur(40px);
+    filter: blur(50px);
 }
 
-.hero-section::after{
+.hero-section::after {
 
-    content:"";
+    content: "";
 
-    position:absolute;
+    position: absolute;
 
-    bottom:-120px;
+    bottom: -120px;
 
-    left:-120px;
+    left: -120px;
 
-    width:280px;
+    width: 300px;
 
-    height:280px;
+    height: 300px;
 
-    border-radius:50%;
+    border-radius: 50%;
 
-    background:rgba(255,255,255,.06);
+    background: rgba(255,255,255,.06);
 
-    filter:blur(60px);
+    filter: blur(60px);
 }
 
-.hero-section > *{
+.hero-section > * {
 
-    width:min(1100px,90%);
+    position: relative;
 
-    margin-left:auto;
-
-    margin-right:auto;
-
-    position:relative;
-
-    z-index:2;
+    z-index: 2;
 }
 
-.hero-badge{
+.hero-badge {
 
-    display:inline-flex;
+    display: inline-flex;
 
-    align-items:center;
+    align-items: center;
 
-    gap:8px;
+    justify-content: center;
 
-    padding:10px 16px;
+    gap: 6px;
 
-    border-radius:999px;
+    padding: 8px 14px;
 
-    background:rgba(255,255,255,.14);
+    border-radius: 999px;
 
-    border:1px solid rgba(255,255,255,.12);
+    background: rgba(255,255,255,.14);
 
-    font-size:.68rem;
+    backdrop-filter: blur(10px);
 
-    font-weight:700;
+    font-size: .64rem;
 
-    font-family:"Bricolage Grotesque",sans-serif;
+    font-family: "Bricolage Grotesque", sans-serif;
 
-    margin-bottom:20px;
+    font-weight: 700;
 
-    white-space:nowrap;
-
-    backdrop-filter:blur(12px);
+    margin-bottom: 18px;
 }
 
-.hero-section h1{
+.hero-badge i {
 
-    font-family:"Bricolage Grotesque",sans-serif;
-
-    font-size:1.7rem;
-
-    line-height:1.1;
-
-    font-weight:800;
-
-    margin-bottom:10px;
-
-    max-width:700px;
+    font-size: .62rem;
 }
 
-.hero-section p{
+.hero-section h1 {
 
-    font-size:.72rem;
+    font-family: "Bricolage Grotesque", sans-serif;
 
-    font-weight:600;
+    font-size: 1.65rem;
 
-    line-height:1.35;
+    font-weight: 800;
 
-    opacity:.95;
+    line-height: 1.15;
+
+    max-width: 760px;
+
+    margin: 0 auto 14px;
 }
 
+.hero-section p {
+
+    max-width: 650px;
+
+    margin: 0 auto;
+
+    font-size: .74rem;
+
+    line-height: 1.45;
+
+    opacity: .95;
+}
+
+/* =====================================
+MOBILE
+===================================== */
+
+@media (max-width: 700px) {
+
+    .hero-section {
+
+        padding: 48px 20px;
+    }
+
+    .hero-badge {
+
+        padding: 7px 12px;
+
+        font-size: .62rem;
+    }
+
+    .hero-section h1 {
+
+        font-size: 1.2rem;
+    }
+
+    .hero-section p {
+
+        font-size: .72rem;
+    }
+}
 /* =====================================
 TABS
 ===================================== */
