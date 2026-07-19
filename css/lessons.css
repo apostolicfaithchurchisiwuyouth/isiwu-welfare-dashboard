@@ -13,20 +13,13 @@ html{
 }
 
 body{
-
     font-family:"DM Sans",sans-serif;
-
     background:#fafafa;
-
     color:#0f172a;
-
     min-height:100vh;
-
     overflow-x:hidden;
-
     position:relative;
 }
-
 
 /* =====================================
 BACKGROUND GLOW
@@ -48,9 +41,7 @@ body::before{
 
     border-radius:50%;
 
-    background:
-
-        rgba(234,88,12,.10);
+    background:rgba(8,145,178,.08);
 
     filter:blur(100px);
 
@@ -73,44 +64,32 @@ body::after{
 
     border-radius:50%;
 
-    background:
-
-        rgba(8,145,178,.10);
+    background:rgba(59,130,246,.08);
 
     filter:blur(100px);
 
     z-index:-1;
 }
 
-
 /* =====================================
 GENERAL
 ===================================== */
 
-button{
-
-    border:none;
-
-    cursor:pointer;
-
-    font-family:
-
-        "Bricolage Grotesque",
-        sans-serif;
+a{
+    text-decoration:none;
 }
 
-a{
-
-    text-decoration:none;
+button{
+    border:none;
+    cursor:pointer;
+    font-family:"Bricolage Grotesque",sans-serif;
 }
 
 button,
 a,
 input{
-
     -webkit-tap-highlight-color:transparent;
 }
-
 
 /* =====================================
 HEADER
@@ -134,21 +113,13 @@ HEADER
 
     align-items:center;
 
-    background:
+    background:rgba(255,255,255,.88);
 
-        rgba(255,255,255,.88);
+    backdrop-filter:blur(20px);
 
-    backdrop-filter:
+    border-bottom:1px solid rgba(15,23,42,.08);
 
-        blur(20px);
-
-    border-bottom:
-
-        1px solid rgba(15,23,42,.08);
-
-    box-shadow:
-
-        0 8px 30px rgba(0,0,0,.05);
+    box-shadow:0 8px 30px rgba(0,0,0,.05);
 }
 
 .header-title{
@@ -159,23 +130,20 @@ HEADER
 
     gap:10px;
 
-    font-family:
-
-        "Bricolage Grotesque",
-        sans-serif;
-
-    font-weight:700;
+    font-family:"Bricolage Grotesque",sans-serif;
 
     font-size:.88rem;
+
+    font-weight:700;
 
     color:#111827;
 }
 
 .header-title i{
 
-    width:32px;
+    width:30px;
 
-    height:32px;
+    height:30px;
 
     display:flex;
 
@@ -208,13 +176,13 @@ HEADER
 
     gap:8px;
 
-    color:#fff;
-
-    font-size:.72rem;
-
     padding:10px 16px;
 
     border-radius:999px;
+
+    color:#fff;
+
+    font-size:.72rem;
 
     background:
 
@@ -228,10 +196,7 @@ HEADER
 
         0 10px 25px rgba(8,145,178,.20);
 
-    transition:
-
-        transform .2s ease,
-        box-shadow .2s ease;
+    transition:.25s ease;
 }
 
 .back-btn:hover{
@@ -240,9 +205,8 @@ HEADER
 
     box-shadow:
 
-        0 15px 30px rgba(8,145,178,.30);
+        0 15px 35px rgba(8,145,178,.30);
 }
-
 
 /* =====================================
 PAGE
@@ -254,133 +218,136 @@ PAGE
 
     margin:auto;
 
-    padding:
-
-        32px 0 70px;
+    padding:0 0 70px;
 }
 
-
 /* =====================================
-HERO SECTION
+HERO
 ===================================== */
 
-.hero-section {
+.hero-section{
 
-    width: 100vw;
+    width:100vw;
 
-    margin-left: calc(50% - 50vw);
+    margin-left:calc(50% - 50vw);
 
-    margin-top: 0;
-
-    padding: 70px 0;
-
-    border-radius: 0;
-
-    position: relative;
-
-    overflow: hidden;
+    padding:65px 0;
 
     background:
 
         linear-gradient(
-
             135deg,
-
-            #ea580c 0%,
-
-            #fb923c 45%,
-
+            #0891b2 0%,
+            #06b6d4 45%,
             #0f172a 100%
-
         );
 
-    color: white;
+    color:#fff;
 
+    position:relative;
+
+    overflow:hidden;
 }
 
-.hero-section::before {
+.hero-section::before{
 
-    content: "";
+    content:"";
 
-    position: absolute;
+    position:absolute;
 
-    top: -120px;
+    top:-100px;
 
-    right: -120px;
+    right:-100px;
 
-    width: 320px;
+    width:260px;
 
-    height: 320px;
+    height:260px;
 
-    border-radius: 50%;
+    border-radius:50%;
 
-    background:
+    background:rgba(255,255,255,.08);
 
-        rgba(255,255,255,.08);
-
-    filter: blur(50px);
-
+    filter:blur(40px);
 }
 
-.hero-section::after {
+.hero-section::after{
 
-    content: "";
+    content:"";
 
-    position: absolute;
+    position:absolute;
 
-    bottom: -120px;
+    bottom:-120px;
 
-    left: -120px;
+    left:-120px;
 
-    width: 300px;
+    width:280px;
 
-    height: 300px;
+    height:280px;
 
-    border-radius: 50%;
+    border-radius:50%;
 
-    background:
+    background:rgba(255,255,255,.06);
 
-        rgba(255,255,255,.06);
-
-    filter: blur(60px);
-
+    filter:blur(60px);
 }
 
-.hero-content {
+.hero-section > *{
 
-    width: min(1100px, 90%);
+    width:min(1100px,90%);
 
-    margin: auto;
+    margin-left:auto;
 
-    position: relative;
+    margin-right:auto;
 
-    z-index: 2;
+    position:relative;
+
+    z-index:2;
 }
 
-.hero-title {
+.hero-badge{
 
-    font-family: "Bricolage Grotesque", sans-serif;
+    display:inline-flex;
 
-    font-size: 1.45rem;
+    align-items:center;
 
-    font-weight: 800;
+    gap:8px;
 
-    margin-bottom: 14px;
+    padding:9px 14px;
 
-    line-height: 1.15;
+    border-radius:999px;
+
+    background:rgba(255,255,255,.14);
+
+    font-size:.65rem;
+
+    margin-bottom:18px;
+
+    font-family:"Bricolage Grotesque",sans-serif;
 }
 
-.hero-text {
+.hero-section h1{
 
-    font-size: .72rem;
+    font-family:"Bricolage Grotesque",sans-serif;
+
+    font-size:1.45rem;
+
+    line-height:1.1;
+
+    margin-bottom:10px;
+
+    font-weight:800;
+}
+
+.hero-section p{
+
+    font-size:.72rem;
+
     font-weight:600;
-    line-height: 1.7;
 
-    opacity: .95;
+    line-height:1.35;
 
-    max-width: 650px;
+    opacity:.95;
 }
-
 
 /* =====================================
 TABS
@@ -392,56 +359,48 @@ TABS
 
     flex-wrap:wrap;
 
-    gap:12px;
+    gap:10px;
+
+    margin-top:28px;
 
     margin-bottom:24px;
 }
 
-.tab {
+.tab{
 
-    padding: 7px 12px;
+    padding:7px 12px;
 
-    border: none;
+    border-radius:999px;
 
-    border-radius: 999px;
+    background:#f1f5f9;
 
-    cursor: pointer;
+    color:#0f172a;
 
-    background: #f3f4f6;
+    font-size:.7rem;
 
-    color: #111827;
+    font-weight:700;
 
-    font-size: .7rem;
+    font-family:"Bricolage Grotesque",sans-serif;
 
-    font-weight: 700;
-
-    font-family: "Bricolage Grotesque", sans-serif;
-
-    transition: .25s ease;
+    transition:.25s ease;
 }
 
 .tab:hover{
 
     transform:translateY(-2px);
-
-    border-color:#0891b2;
 }
 
-.tab.active {
+.tab.active{
+
+    color:#fff;
 
     background:
 
         linear-gradient(
-
             135deg,
-
             #ea580c,
-
             #fb923c
-
         );
-
-    color: white;
 
     box-shadow:
 
@@ -449,7 +408,7 @@ TABS
 }
 
 /* =====================================
-MAIN CARD
+LESSON CARD
 ===================================== */
 
 .lesson-card{
@@ -458,17 +417,16 @@ MAIN CARD
 
     border-radius:28px;
 
-    padding:
+    padding:clamp(18px,4vw,30px);
 
-        clamp(18px,4vw,32px);
+    border:1px solid #ececec;
 
     box-shadow:
 
-        0 15px 45px rgba(0,0,0,.06);
+        0 15px 45px rgba(0,0,0,.05);
 
     margin-bottom:24px;
 }
-
 
 /* =====================================
 GRID
@@ -478,9 +436,7 @@ GRID
 
     display:grid;
 
-    grid-template-columns:
-
-        repeat(2,1fr);
+    grid-template-columns:repeat(2,1fr);
 
     gap:18px;
 
@@ -495,31 +451,27 @@ GRID
 
     border-radius:20px;
 
-    padding:22px;
+    padding:20px;
 }
 
 .info-card h3{
 
-    font-family:
-
-        "Bricolage Grotesque",
-        sans-serif;
+    font-family:"Bricolage Grotesque",sans-serif;
 
     color:#ea580c;
 
-    font-size:.8rem;
+    font-size:.78rem;
 
-    margin-bottom:14px;
+    margin-bottom:10px;
 }
 
-
 /* =====================================
-CONTENT CARDS
+CONTENT
 ===================================== */
 
 .content-card{
 
-    margin-top:22px;
+    margin-top:18px;
 
     background:#fff;
 
@@ -527,34 +479,30 @@ CONTENT CARDS
 
     border-radius:20px;
 
-    padding:22px;
+    padding:20px;
 }
 
 .section-title{
 
-    font-family:
+    font-family:"Bricolage Grotesque",sans-serif;
 
-        "Bricolage Grotesque",
-        sans-serif;
-
-    font-size:.82rem;
+    font-size:.8rem;
 
     color:#0f172a;
 
-    margin-bottom:14px;
+    margin-bottom:10px;
 }
 
 .lesson-text{
 
-    font-size:.74rem;
+    font-size:.72rem;
 
-    line-height:1.9;
+    line-height:1.55;
 
-    color:#0F172A;
+    color:#0f172a;
 
     white-space:pre-wrap;
 }
-
 
 /* =====================================
 AUDIO
@@ -562,19 +510,13 @@ AUDIO
 
 .audio-card{
 
-    margin-top:22px;
+    margin-top:18px;
 
-    padding:22px;
+    padding:20px;
 
     border-radius:20px;
 
-    background:
-
-        linear-gradient(
-            180deg,
-            #fff,
-            #fafafa
-        );
+    background:#fafafa;
 
     border:1px solid #eef2f7;
 }
@@ -585,7 +527,6 @@ AUDIO
 
     margin-top:10px;
 }
-
 
 /* =====================================
 ARCHIVE
@@ -599,17 +540,17 @@ ARCHIVE
 
     gap:18px;
 
+    padding:24px;
+
     background:#fff;
+
+    border:1px solid #ececec;
 
     border-radius:24px;
 
-    padding:24px;
-
     box-shadow:
 
-        0 10px 35px rgba(0,0,0,.06);
-
-    border:1px solid #ececec;
+        0 10px 35px rgba(0,0,0,.05);
 }
 
 .archive-icon{
@@ -620,13 +561,13 @@ ARCHIVE
 
     min-width:56px;
 
+    border-radius:16px;
+
     display:flex;
 
     align-items:center;
 
     justify-content:center;
-
-    border-radius:16px;
 
     color:#fff;
 
@@ -646,10 +587,7 @@ ARCHIVE
 
 .archive-content h3{
 
-    font-family:
-
-        "Bricolage Grotesque",
-        sans-serif;
+    font-family:"Bricolage Grotesque",sans-serif;
 
     font-size:.85rem;
 
@@ -660,9 +598,9 @@ ARCHIVE
 
     font-size:.72rem;
 
-    color:#64748b;
+    line-height:1.45;
 
-    line-height:1.6;
+    color:#64748b;
 }
 
 .archive-btn{
@@ -695,7 +633,6 @@ ARCHIVE
     transform:translateY(-2px);
 }
 
-
 /* =====================================
 TABLET
 ===================================== */
@@ -707,7 +644,6 @@ TABLET
         grid-template-columns:1fr;
     }
 }
-
 
 /* =====================================
 MOBILE
@@ -727,9 +663,9 @@ MOBILE
 
     .header-title i{
 
-        width:30px;
+        width:28px;
 
-        height:30px;
+        height:28px;
     }
 
     .back-btn{
@@ -741,17 +677,29 @@ MOBILE
 
     .hero-section{
 
-        padding:36px 22px;
+        padding:45px 0;
     }
 
     .hero-section h1{
 
-        font-size:1.1rem;
+        font-size:1.05rem;
+    }
+
+    .tabs{
+
+        margin-top:22px;
     }
 
     .lesson-card{
 
+        padding:18px;
+
         border-radius:24px;
+    }
+
+    .info-card,
+    .content-card,
+    .audio-card{
 
         padding:18px;
     }
@@ -769,15 +717,7 @@ MOBILE
 
         text-align:center;
     }
-
-    .content-card,
-    .info-card,
-    .audio-card{
-
-        padding:18px;
-    }
 }
-
 
 /* =====================================
 VERY SMALL DEVICES
@@ -785,13 +725,13 @@ VERY SMALL DEVICES
 
 @media (max-width:380px){
 
-    .hero-section h1{
-
-        font-size:1rem;
-    }
-
     .header-title{
 
         font-size:.76rem;
+    }
+
+    .hero-section h1{
+
+        font-size:.95rem;
     }
 }
