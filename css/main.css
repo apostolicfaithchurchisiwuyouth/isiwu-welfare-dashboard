@@ -109,12 +109,13 @@ margin:0 auto;
 padding:120px 24px 50px;
 
 background:
-linear-gradient(
-135deg,
-#ffffff,
-#faf5ff,
-#f8fafc
-);
+
+        linear-gradient(
+            135deg,
+            #0f172a 0%,
+            #0b4f67 45%,
+            #08748f 100%
+        );
 
 border-radius:25px;
 
