@@ -384,9 +384,9 @@ HERO
 
 .hero-icon{
 
-    width:58px;
+    width:45px;
 
-    height:58px;
+    height:45px;
 
     border-radius:18px;
 
@@ -428,7 +428,7 @@ HERO TEXT
 
     font-family:"Bricolage Grotesque",sans-serif;
 
-    font-size:1.8rem;
+    font-size:1.4rem;
 
     font-weight:800;
 
@@ -441,9 +441,7 @@ HERO TEXT
 
 .hero-description{
 
-    font-size:.78rem;
-
-    line-height:1.7;
+    font-size:.72rem;
 
     color:rgba(255,255,255,.85);
 
@@ -894,12 +892,12 @@ MOBILE
 
     .hero-heading{
 
-        font-size:1.15rem;
+        font-size:.9rem;
     }
 
     .lesson-topic{
 
-        font-size:1.1rem;
+        font-size:.9rem;
     }
 
     .lesson-header-top{
@@ -916,9 +914,9 @@ MOBILE
 
     .hero-icon {
 
-        width: 48px;
+        width: 45px;
 
-        height: 48px;
+        height: 45px;
 
         min-width: 48px;
 
@@ -927,14 +925,13 @@ MOBILE
 
 .hero-heading{
 
-    font-size:1.35rem;
+    font-size:.9rem;
 }
 
 .hero-description{
 
-    font-size:.74rem;
+    font-size:.72rem;
 
-    line-height:1.6;
 }
 
     .tabs {
@@ -989,6 +986,6 @@ VERY SMALL DEVICES
 
     .hero-section h1{
 
-        font-size:1.05rem;
+        font-size:.9rem;
     }
 }
