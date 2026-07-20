@@ -910,13 +910,13 @@ MOBILE
 
     .hero-icon {
 
-        width: 35px;
+        width: 45px;
 
-        height: 35px;
+        height: 45px;
 
         min-width: 48px;
 
-        font-size: 1rem;
+        font-size: .9rem;
     }
 
 .hero-heading{
