@@ -453,9 +453,7 @@ LESSON TEXT
 
 .lesson-text {
 
-    font-size: .8rem;
-
-    line-height: 1.8;
+    font-size: .72rem;
 
     color: #1e293b;
 
@@ -849,7 +847,7 @@ MOBILE
 
     .header-title {
 
-        font-size: .82rem;
+        font-size: .75rem;
     }
 
     .header-title i {
