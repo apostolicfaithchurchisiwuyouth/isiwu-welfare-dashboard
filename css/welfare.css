@@ -651,38 +651,19 @@ ACTIVITIES + CHART
 .activities,
 .chart-box{
 
-    background:
+    background:#fff;
 
-    radial-gradient(
-        circle at top right,
-        rgba(168,85,247,.10),
-        transparent 40%
-    ),
+    border-radius:24px;
 
-    radial-gradient(
-        circle at bottom left,
-        rgba(59,130,246,.08),
-        transparent 35%
-    ),
-
-    linear-gradient(
-        135deg,
-        #ffffff,
-        #faf5ff
-    );
+    padding:24px;
 
     border:1px solid rgba(74,7,84,.08);
 
-    border-radius:28px;
-
-    backdrop-filter:blur(20px);
-
     box-shadow:
 
-        0 10px 35px rgba(74,7,84,.08),
+        0 10px 30px rgba(74,7,84,.08),
 
-        0 2px 8px rgba(0,0,0,.04);
-
+        0 1px 3px rgba(0,0,0,.04);
 }
 
 /* =====================================
@@ -750,54 +731,52 @@ TABLE
 
 .modern-table{
 
-    width:100%;
-
-    border-collapse:separate;
-
-    border-spacing:0 12px;
+    border-spacing:0 14px;
 }
 
 .modern-table tr{
 
-    background:#fafafa;
+    background:
 
-    transition:.25s ease;
+    linear-gradient(
+        135deg,
+        #ffffff,
+        #faf5ff
+    );
+
+    border:1px solid rgba(74,7,84,.08);
+
+    box-shadow:
+
+        0 6px 18px rgba(74,7,84,.08);
+
+    transition:.3s ease;
 }
 
 .modern-table tr:hover{
 
-    transform:translateY(-2px);
-
-    background:#f8fafc;
+    transform:translateY(-3px);
 }
 
 .modern-table td{
 
-    padding:16px 18px;
-
-    font-size:.72rem;
-
-    border:none;
+    padding:16px;
 }
 
 .modern-table td:first-child{
 
-    border-radius:14px 0 0 14px;
-
-    color:#0f172a;
-
-    font-weight:500;
+    border-radius:16px 0 0 16px;
 }
 
 .modern-table td:last-child{
 
-    border-radius:0 14px 14px 0;
+    border-radius:0 16px 16px 0;
+
+    white-space:nowrap;
+
+    width:110px;
 
     text-align:right;
-
-     color:#dc2626;
-     white-space: nowrap;
-    font-weight:700;
 }
 
 
