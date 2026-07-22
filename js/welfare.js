@@ -1,3 +1,17 @@
+if (
+    localStorage.getItem(
+        "welfareLoggedIn"
+    ) === "true"
+){
+
+    document.getElementById(
+        "loginOverlay"
+    ).style.display = "none";
+
+    document.getElementById(
+        "dashboardContent"
+    ).style.display = "block";
+}
 
 const welfareCSV='https://docs.google.com/spreadsheets/d/e/2PACX-1vQHlE5IpmFYaQyW5u-rentH2fGC5VZJ2w9Ql1WI-X8bE76qlN5_ttDIitwlXX1CM4sqdEW8RroDUNSU/pub?gid=439044630&single=true&output=csv';
 const activitiesCSV='https://docs.google.com/spreadsheets/d/e/2PACX-1vQHlE5IpmFYaQyW5u-rentH2fGC5VZJ2w9Ql1WI-X8bE76qlN5_ttDIitwlXX1CM4sqdEW8RroDUNSU/pub?gid=493023062&single=true&output=csv';
@@ -146,16 +160,16 @@ await response.json();
 
 if(result.success){
 
-sessionStorage.setItem(
-"welfareLoggedIn",
-"true"
+localStorage.setItem(
+    "welfareLoggedIn",
+    "true"
 );
 
-sessionStorage.setItem(
-"username",
-result.user
+localStorage.setItem(
+    "username",
+    result.user
 );
-
+  
 document.getElementById(
 "loginOverlay"
 ).style.display="none";
@@ -207,9 +221,14 @@ const logoutBtn = document.getElementById("logoutBtn");
 logoutBtn.addEventListener("click", function(){
 
     // remove saved login session
-    sessionStorage.removeItem("welfareLoggedIn");
-    sessionStorage.removeItem("username");
+   localStorage.removeItem(
+    "welfareLoggedIn"
+);
 
+localStorage.removeItem(
+    "username"
+);
+  
     // hide dashboard
     document.getElementById(
         "dashboardContent"
