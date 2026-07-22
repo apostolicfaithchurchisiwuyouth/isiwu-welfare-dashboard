@@ -114,83 +114,8 @@ CSV LINKS (UNCHANGED)
 ==============================
 */
 
-const welfareCSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQHlE5IpmFYaQyW5u-rentH2fGC5VZJ2w9Ql1WI-X8bE76qlN5_ttDIitwlXX1CM4sqdEW8RroDUNSU/pub?gid=439044630&single=true&output=csv";
-
-const activitiesCSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQHlE5IpmFYaQyW5u-rentH2fGC5VZJ2w9Ql1WI-X8bE76qlN5_ttDIitwlXX1CM4sqdEW8RroDUNSU/pub?gid=493023062&single=true&output=csv";
-
-const secretariatCSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTE5Ds6_y0OYFL9_pYfRekpMx1Jq-kijbtdXsL-LCyg5KsC8LVootmeHOew2xiqV2sAXEVUKm_3vz17/pub?gid=1085033955&single=true&output=csv";
-
 const weeklyLessonCSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQHlE5IpmFYaQyW5u-rentH2fGC5VZJ2w9Ql1WI-X8bE76qlN5_ttDIitwlXX1CM4sqdEW8RroDUNSU/pub?gid=201183837&single=true&output=csv";
 
-/*
-==============================
-WELFARE SYSTEM (UNCHANGED LOGIC)
-==============================
-*/
-
-async function fetchSheetData() {
-  try {
-    const response = await fetch(welfareCSV);
-    const data = await response.text();
-
-    const rows = data.trim().split('\n').map(r => r.split(','));
-
-    const contributions = parseFloat(rows[0]?.[1]) || 0;
-    const expenses = parseFloat(rows[1]?.[1]) || 0;
-    const balance = parseFloat(rows[2]?.[1]) || 0;
-
-    document.getElementById('totalContributions').innerText = `₦${contributions.toLocaleString()}`;
-    document.getElementById('totalExpenses').innerText = `₦${expenses.toLocaleString()}`;
-    document.getElementById('currentBalance').innerText = `₦${balance.toLocaleString()}`;
-
-    const ctx = document.getElementById('financeChart');
-
-    if (ctx) {
-      new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels: ['Contributions', 'Expenses', 'Balance'],
-          datasets: [{
-            data: [contributions, expenses, balance],
-            borderRadius: 8,
-            backgroundColor: ['#42a5f5', '#ef5350', '#66bb6a']
-          }]
-        },
-        options: {
-          responsive: true,
-          plugins: { legend: { display: false } }
-        }
-      });
-    }
-
-    const activityResponse = await fetch(activitiesCSV);
-    const activityData = await activityResponse.text();
-
-    const activityRows = activityData.trim().split('\n').map(r => r.split(','));
-
-    const activityTable = document.getElementById('activityTable');
-    if (!activityTable) return;
-
-    activityTable.innerHTML = '';
-
-    activityRows.reverse().slice(0, 10).forEach(row => {
-      const purpose = row[0];
-      const amount = row[1];
-
-      if (purpose) {
-        activityTable.innerHTML += `
-          <tr>
-            <td>${purpose}</td>
-            <td>₦${Number(amount).toLocaleString()}</td>
-          </tr>
-        `;
-      }
-    });
-
-  } catch (err) {
-    console.log("Welfare Error:", err);
-  }
-}
 
 /*
 ==============================
@@ -364,7 +289,6 @@ INIT
 ==============================
 */
 
-fetchSheetData();
 fetchSecretariatReports();
 fetchWeeklyLesson();
 
