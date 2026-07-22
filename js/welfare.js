@@ -65,8 +65,6 @@ const expenseRows =
   .slice(1)
   .map(r => r.split(","));
 
-      console.log(expenseRows[0]);
-console.log(expenseRows[1]);
       
 transactions = [];
 
@@ -102,7 +100,7 @@ contributionRows.forEach(row => {
 expenseRows.forEach(row => {
 
     const amount = Number(
-        String(row[2] || "0")
+        String(row[1] || "0")
             .replace(/,/g, "")
             .replace(/₦/g, "")
             .trim()
@@ -110,13 +108,13 @@ expenseRows.forEach(row => {
 
     transactions.push({
 
-        date: row[1] || "",
+        date: "",
 
         amount: amount,
 
-        title: row[3] || "Expense",
+        title: row[0] || "Expense",
 
-        subtitle: row[1] || "",
+        subtitle: "Expense",
 
         type: "debit"
 
