@@ -2073,33 +2073,51 @@ NAVBAR - MODERN NEXT.JS STYLE
     }
 
 
-     .menu {
+      .menu {
+
         position: fixed;
-        top: 80px;
-        top: 75px;
-        left: 0;
-        width: 100%;
+
+        top: 85px;
+
+        left: 16px;
+
+        right: 16px;
+
+        display: flex;
+
         flex-direction: column;
 
-        background: #0a0016;
+        gap: 1rem;
 
-        padding: 1rem;
+        padding: 1.2rem;
 
-        transform: translateY(-20px);
+        background: rgba(10, 0, 22, 0.95);
+
+        border: 1px solid rgba(255,255,255,0.08);
+
+        border-radius: 20px;
+
+        backdrop-filter: blur(20px);
 
         opacity: 0;
 
         visibility: hidden;
-        transform: translateY(-15px);
-        transition: all 0.35s ease;
 
-        z-index: 9998;
-     }
-    
+        transform: translateY(-20px);
+
+        transition: all 0.3s ease;
+
+        z-index: 9999;
+    }
+
     .menu.active {
+
         opacity: 1;
+
         visibility: visible;
+
         transform: translateY(0);
+
     }
 
     .logo{
