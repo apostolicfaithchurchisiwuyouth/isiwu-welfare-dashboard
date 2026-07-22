@@ -66,39 +66,66 @@ const transactions = [];
 
 contributionRows.forEach(row => {
 
+    const amount = Number(
+
+        String(row[3] || "0")
+
+        .replace(/,/g, "")
+
+        .replace(/₦/g, "")
+
+        .trim()
+
+    );
+
     transactions.push({
 
         date: row[1] || "",
 
-        amount: Number(row[3] || 0),
+        amount: amount,
 
         title: row[5] || "Contribution",
+
+        subtitle: row[1] || "",
 
         type: "credit"
 
     });
 
 });
-
+      
 
 /* EXPENSES */
 
 expenseRows.forEach(row => {
 
+    const amount = Number(
+
+        String(row[2] || "0")
+
+        .replace(/,/g, "")
+
+        .replace(/₦/g, "")
+
+        .trim()
+
+    );
+
     transactions.push({
 
         date: row[1] || "",
 
-        amount: Number(row[2] || 0),
+        amount: amount,
 
         title: row[3] || "Expense",
+
+        subtitle: row[1] || "",
 
         type: "debit"
 
     });
 
 });
-
 
 transactions.sort((a, b) => {
 
@@ -109,39 +136,35 @@ transactions.sort((a, b) => {
 
 activityTable.innerHTML = "";
 
-transactions.slice(0, 10).forEach(item => {
+transactions
+.slice(currentPage * 10, currentPage * 10 + 10)
+.forEach(item => {
 
-    activityTable.innerHTML += `
+   activityTable.innerHTML += `
 
-    <tr>
+<tr>
 
-        <td>
+    <td>
 
-            <strong>${item.title}</strong>
+        <strong>${item.title}</strong>
 
-            <br>
+        <br>
 
-            <small>
+        <small>${item.subtitle}</small>
 
-                ${item.type === "credit"
-                    ? "Contribution"
-                    : "Expense"}
+    </td>
 
-            </small>
+    <td class="${item.type}">
 
-        </td>
+        ${item.type === "credit" ? "+" : "-"}
 
-        <td class="${item.type}">
+        ₦${item.amount.toLocaleString()}
 
-            ${item.type === "credit" ? "+" : "-"}
+    </td>
 
-            ₦${item.amount.toLocaleString()}
+</tr>
 
-        </td>
-
-    </tr>
-
-    `;
+`;
 
 });
 
@@ -338,3 +361,23 @@ localStorage.removeItem(
 
 
 });
+function nextPage() {
+
+    currentPage++;
+
+    load();
+}
+
+function prevPage() {
+
+    if (currentPage > 0) {
+
+        currentPage--;
+
+        load();
+    }
+
+}
+const totalPages = Math.ceil(
+    transactions.length / itemsPerPage
+);
