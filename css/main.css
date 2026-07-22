@@ -2063,64 +2063,41 @@ NAVBAR - MODERN NEXT.JS STYLE
 
     }
 
-   .menu {
+   .hamburger {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-size: 1.3rem;
+        z-index: 9999;
+    }
 
-    position: fixed;
+    .menu {
+        position: fixed;
+        top: 80px;
+        left: 0;
+        width: 100%;
+        flex-direction: column;
 
-    top: 64px;
+        background: #0a0016;
 
-    left: -100%;
+        padding: 1rem;
 
-    width: 78%;
+        transform: translateY(-20px);
 
-    height: calc(100vh - 64px);
+        opacity: 0;
 
-    display: flex;
+        visibility: hidden;
 
-    flex-direction: column;
+        transition: all 0.35s ease;
 
-    gap: 10px;
+        z-index: 9998;
+    }
 
-    padding: 24px 18px;
-
-    background: white;
-
-    transition: all .35s ease;
-
-    z-index: 999999;
-
-    visibility: hidden;
-
-    opacity: 0;
-}
-
-.menu a {
-
-    color: #475569;
-    text-decoration: none;
-    font-size: .72rem;
-    font-weight: 600;
-    padding: 10px 14px;
-    border-radius: 10px;
-    transition: .25s ease;
-    position: relative;
-    z-index: 2;
-
-}
-
-.menu.active {
-
-    left: 0;
-
-    visibility: visible;
-
-    opacity: 1;
-}
-
-    .hamburger{
-
-        display:block;
-
+    .menu.active {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
     }
 
     .logo{
