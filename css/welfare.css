@@ -476,9 +476,9 @@ DASHBOARD GRID
 
     display:grid;
 
-    grid-template-columns:repeat(4,1fr);
+    grid-template-columns:repeat(2,1fr);
 
-    gap:18px;
+    gap:14px;
 
     margin-bottom:30px;
 }
@@ -490,55 +490,40 @@ CARDS
 
 .card{
 
-    position:relative;
+    background:
 
-    overflow:hidden;
+        linear-gradient(
+            135deg,
+            #ffffff,
+            #fafafa
+        );
 
-    background:#fff;
+    border:1px solid rgba(15,23,42,.06);
 
-    border-radius:28px;
+    border-radius:22px;
 
-    padding:22px;
-
-    border:1px solid #edf2f7;
+    padding:18px;
 
     box-shadow:
 
-        0 15px 45px rgba(0,0,0,.05);
+        0 10px 30px rgba(0,0,0,.06);
 
     transition:.3s ease;
 }
 
 .card:hover{
 
-    transform:translateY(-6px);
+    transform:translateY(-4px);
 
     box-shadow:
 
-        0 20px 50px rgba(0,0,0,.08);
+        0 15px 40px rgba(0,0,0,.10);
 }
 
 .card::before{
 
-    content:"";
-
-    position:absolute;
-
-    top:-40px;
-
-    right:-40px;
-
-    width:120px;
-
-    height:120px;
-
-    border-radius:50%;
-
-    background:
-
-        rgba(8,145,178,.05);
+    display:none;
 }
-
 
 /* =====================================
 CARD ICONS
@@ -590,7 +575,6 @@ CARD ICONS
 
     color:#7c3aed;
 }
-
 
 /* =====================================
 CARD TEXT
@@ -650,11 +634,14 @@ CARD HEADER
 
     justify-content:space-between;
 
-    align-items:center;
+    align-items:flex-start;
 
-    gap:18px;
+    gap:12px;
+}
 
-    margin-bottom:24px;
+.header-badge{
+
+    flex-shrink:0;
 }
 
 .card-header h3{
@@ -774,9 +761,9 @@ MOBILE
 
 @media (max-width:900px){
 
-    .dashboard-grid{
+ .dashboard-grid{
 
-        grid-template-columns:repeat(2,1fr);
+        grid-template-columns:repeat(4,1fr);
     }
 }
 
@@ -835,12 +822,31 @@ MOBILE
         border-radius:24px;
     }
 
-    .card-header{
+.card-header{
 
-        flex-direction:column;
+    flex-direction:row;
 
-        align-items:flex-start;
-    }
+    align-items:flex-start;
+
+    justify-content:space-between;
+}
+
+.card-header h3{
+
+    font-size:.82rem;
+}
+
+.card-header p{
+
+    font-size:.66rem;
+}
+
+.header-badge{
+
+    font-size:.62rem;
+
+    padding:8px 12px;
+}
 
     .amount{
 
