@@ -65,6 +65,9 @@ const expenseRows =
   .slice(1)
   .map(r => r.split(","));
 
+      console.log(expenseRows[0]);
+console.log(expenseRows[1]);
+      
 transactions = [];
 
 
