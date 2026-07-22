@@ -651,21 +651,39 @@ ACTIVITIES + CHART
 .activities,
 .chart-box{
 
-    background:#fff;
+    background:
+
+    radial-gradient(
+        circle at top right,
+        rgba(168,85,247,.10),
+        transparent 40%
+    ),
+
+    radial-gradient(
+        circle at bottom left,
+        rgba(59,130,246,.08),
+        transparent 35%
+    ),
+
+    linear-gradient(
+        135deg,
+        #ffffff,
+        #faf5ff
+    );
+
+    border:1px solid rgba(74,7,84,.08);
 
     border-radius:28px;
 
-    padding:28px;
-
-    border:1px solid #edf2f7;
+    backdrop-filter:blur(20px);
 
     box-shadow:
 
-        0 15px 45px rgba(0,0,0,.05);
+        0 10px 35px rgba(74,7,84,.08),
 
-    margin-bottom:26px;
+        0 2px 8px rgba(0,0,0,.04);
+
 }
-
 
 /* =====================================
 CARD HEADER
