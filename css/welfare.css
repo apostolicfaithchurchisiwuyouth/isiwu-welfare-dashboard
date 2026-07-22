@@ -344,7 +344,7 @@ HEADER
 
     font-weight:700;
 
-    font-size:.88rem;
+    font-size:.75rem;
 
     color:#111827;
 }
@@ -782,7 +782,7 @@ MOBILE
 
     .header-title{
 
-        font-size:.82rem;
+        font-size:.75rem;
     }
 
     .header-title i{
@@ -873,7 +873,7 @@ VERY SMALL DEVICES
 
     .header-title{
 
-        font-size:.78rem;
+        font-size:.75rem;
     }
 
     .section-title{
