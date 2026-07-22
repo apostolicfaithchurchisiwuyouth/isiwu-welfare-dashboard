@@ -800,17 +800,27 @@ MOBILE
         font-size:.7rem;
     }
 
- .dashboard-grid{
+.dashboard-grid{
 
-        grid-template-columns:repeat(4,1fr);
-    }
+    grid-template-columns:repeat(2, 1fr);
 
-    .card{
+    gap:12px;
+}
+    
+   .card{
 
-        padding:18px;
+    padding:16px;
+}
 
-        border-radius:24px;
-    }
+.amount{
+
+    font-size:.95rem;
+}
+
+.label{
+
+    font-size:.66rem;
+}
 
     .activities,
     .chart-box{
@@ -846,10 +856,6 @@ MOBILE
     padding:8px 12px;
 }
 
-    .amount{
-
-        font-size:1.1rem;
-    }
 
     .modern-table td{
 
