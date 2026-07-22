@@ -778,7 +778,7 @@ TABLE
     text-align:right;
 
      color:#dc2626;
-
+     white-space: nowrap;
     font-weight:700;
 }
 
@@ -977,4 +977,12 @@ VERY SMALL DEVICES
     font-size: .72rem;
 
     font-weight: 700;
+}
+
+
+.credit,
+.debit {
+
+    white-space: nowrap;
+
 }
