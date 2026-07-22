@@ -309,15 +309,25 @@ async function fetchWeeklyLesson() {
 
     // normalize data
     lessonsData = result.data.map(row => ({
-      className: row.Class?.trim(),
-      topic: row.Topic?.trim(),
-      bibleText: row.BibleText?.trim(),
-      memoryVerse: row.MemoryVerse?.trim(),
-      summary: row.Summary?.trim(),
-      discussion: row.Discussion?.trim(),
-      image: row.Image?.trim()
-    }));
 
+    lesson: row.Lesson?.trim(),
+
+    className: row.Class?.trim(),
+
+    topic: row.Topic?.trim(),
+
+    bibleText: row.BibleText?.trim(),
+
+    memoryVerse: row.MemoryVerse?.trim(),
+
+    summary: row.Summary?.trim(),
+
+    discussion: row.Discussion?.trim(),
+
+    yorubaAudio: row.YorubaAudio?.trim()
+
+}));
+      
     switchLesson('Senior');
 
   } catch (error) {
