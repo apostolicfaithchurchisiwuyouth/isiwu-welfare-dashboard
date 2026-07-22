@@ -666,6 +666,18 @@ ACTIVITIES + CHART
         0 1px 3px rgba(0,0,0,.04);
 }
 
+.activities{
+
+    margin-top:30px;
+
+    margin-bottom:32px;
+}
+
+.chart-box{
+
+    margin-bottom:40px;
+}
+
 /* =====================================
 CARD HEADER
 ===================================== */
@@ -731,7 +743,13 @@ TABLE
 
 .modern-table{
 
-    border-spacing:0 14px;
+  width:100%;
+
+    border-collapse:separate;
+
+    border-spacing:0 12px;
+
+    overflow:hidden;
 }
 
 .modern-table tr{
