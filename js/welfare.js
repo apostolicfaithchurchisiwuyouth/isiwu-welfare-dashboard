@@ -94,13 +94,15 @@ contributionRows.forEach(row => {
 });
       
 
-// EXPENSES
+/* EXPENSES */
 
 expenseRows.forEach(row => {
 
     const amount = Number(
-        (row[2] || "")
-            .replace(/[^0-9.-]+/g, "")
+        String(row[2] || "0")
+            .replace(/,/g, "")
+            .replace(/₦/g, "")
+            .trim()
     );
 
     transactions.push({
@@ -118,7 +120,7 @@ expenseRows.forEach(row => {
     });
 
 });
-
+      
 transactions.sort((a, b) => {
 
     return new Date(b.date) - new Date(a.date);
