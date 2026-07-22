@@ -20,6 +20,12 @@ const contributionsCSV =
 const expensesCSV =
 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQHlE5IpmFYaQyW5u-rentH2fGC5VZJ2w9Ql1WI-X8bE76qlN5_ttDIitwlXX1CM4sqdEW8RroDUNSU/pub?gid=493023062&single=true&output=csv';
 
+let transactions = [];
+
+let currentPage = 0;
+
+const itemsPerPage = 10;
+
 async function load(){
 
   try{
@@ -59,7 +65,7 @@ const expenseRows =
   .slice(1)
   .map(r => r.split(","));
 
-const transactions = [];
+transactions = [];
 
 
 /* CONTRIBUTIONS */
@@ -133,6 +139,9 @@ transactions.sort((a, b) => {
 
 });
 
+      document.getElementById(
+    "pageNumber"
+).textContent = `Page ${currentPage + 1}`;
 
 activityTable.innerHTML = "";
 
@@ -361,11 +370,21 @@ localStorage.removeItem(
 
 
 });
+
 function nextPage() {
 
-    currentPage++;
+    const totalPages = Math.ceil(
+        transactions.length / itemsPerPage
+    );
 
-    load();
+    if (currentPage < totalPages - 1) {
+
+        currentPage++;
+
+        load();
+
+    }
+
 }
 
 function prevPage() {
@@ -375,9 +394,7 @@ function prevPage() {
         currentPage--;
 
         load();
+
     }
 
 }
-const totalPages = Math.ceil(
-    transactions.length / itemsPerPage
-);
