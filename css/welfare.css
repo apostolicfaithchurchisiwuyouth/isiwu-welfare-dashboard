@@ -657,7 +657,7 @@ CARD HEADER
 .card-header p{
 
     font-size:.72rem;
-    margin-top:8px;
+
     color:#64748b;
 }
 
@@ -840,7 +840,7 @@ MOBILE
 
 .card-header h3{
 
-    font-size:.82rem;
+    font-size:.85rem;
 }
 
 .card-header p{
