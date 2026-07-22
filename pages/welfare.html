@@ -1,116 +1,377 @@
-<div id="loginOverlay">
+<!DOCTYPE html>
 
-<div class="login-modal">
+<html lang="en">
 
-<div class="login-logo">
-<i class="fas fa-hand-holding-heart"></i>
-</div>
+<head>
 
-<h2>Welfare Dashboard</h2>
+    <meta charset="UTF-8">
 
-<p class="login-subtitle">
-Authorized Personnel Only
-</p>
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-<input
-type="text"
-id="username"
-placeholder="Username">
+    <title>
 
-<input
-type="password"
-id="password"
-placeholder="Password">
+        AFC Isiwu Youth Portal | Welfare Dashboard
 
-<button id="loginBtn">
-Login
-</button>
+    </title>
 
-<p id="loginError"></p>
+    <!-- Google Fonts -->
 
-</div>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
 
-</div>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-<div id="dashboardContent">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;700&display=swap"
+        rel="stylesheet"
+    >
 
-<header>
-<div class="header-title">
-<i class="fas fa-hand-holding-heart"></i>
-<span>Welfare Report</span>
-</div>
-<button id="logoutBtn" class="back-btn">
-Logout
-</button>
-</header>
+    <!-- Font Awesome -->
 
-<div class="container">
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    >
 
-<div class="section-title">
-<i class="fas fa-chart-line"></i>
-<span>Financial Overview</span>
-</div>
+    <!-- AOS -->
 
-<div class="dashboard-grid">
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/aos@2.3.4/dist/aos.css"
+    >
 
-<div class="card">
-<div class="icon green"><i class="fas fa-wallet"></i></div>
-<div class="label">Total Contributions</div>
-<div class="amount" id="totalContributions">Updating...</div>
-</div>
+    <!-- Chart.js -->
 
-<div class="card">
-<div class="icon red"><i class="fas fa-money-bill-wave"></i></div>
-<div class="label">Total Expenses</div>
-<div class="amount" id="totalExpenses">Updating...</div>
-</div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<div class="card">
-<div class="icon blue"><i class="fas fa-piggy-bank"></i></div>
-<div class="label">Current Balance</div>
-<div class="amount" id="currentBalance">Updating...</div>
-</div>
+    <!-- CSS -->
 
-<div class="card">
-<div class="icon purple"><i class="fas fa-shield-heart"></i></div>
-<div class="label">Welfare Status</div>
-<div class="amount">Active</div>
-</div>
+    <link
+        rel="stylesheet"
+        href="../css/welfare.css"
+    >
 
-</div>
+</head>
 
-<div class="activities" style="margin-top:30px;">
+<body>
 
-<div class="card-header">
-<div>
-<h3>Welfare Activities</h3>
-<p>Latest transactions and updates</p>
-</div>
+    <!-- LOGIN -->
 
-<div class="header-badge">
-10 Recent
-</div>
-</div>
+    <div id="loginOverlay">
 
-<table class="modern-table">
-<tbody id="activityTable"></tbody>
-</table>
+        <div class="login-modal">
 
-</div>
+            <div class="login-logo">
 
-<div class="chart-box" style="margin-top:30px;">
+                <i class="fas fa-hand-holding-heart"></i>
 
-<div class="card-header">
-<div>
-<h3>Financial Analytics</h3>
-<p>Overview</p>
-</div>
+            </div>
 
-<div class="header-badge">
-Live Data
-</div>
-</div>
+            <h2>
 
-<canvas id="financeChart"></canvas>
+                Welfare Dashboard
 
-</div></div>
+            </h2>
+
+            <p class="login-subtitle">
+
+                Authorized Personnel Only
+
+            </p>
+
+            <input
+                type="text"
+                id="username"
+                placeholder="Username"
+            >
+
+            <input
+                type="password"
+                id="password"
+                placeholder="Password"
+            >
+
+            <button id="loginBtn">
+
+                Login
+
+            </button>
+
+            <p id="loginError"></p>
+
+        </div>
+
+    </div>
+
+    <!-- DASHBOARD -->
+
+    <div id="dashboardContent">
+
+        <header class="main-header">
+
+            <div class="header-title">
+
+                <i class="fas fa-hand-holding-heart"></i>
+
+                <span>
+
+                    Welfare Dashboard
+
+                </span>
+
+            </div>
+
+            <button
+                id="logoutBtn"
+                class="back-btn"
+            >
+
+                <i class="fas fa-right-from-bracket"></i>
+
+                Logout
+
+            </button>
+
+        </header>
+
+        <main class="container">
+
+            <!-- Overview -->
+
+            <div
+                class="section-title"
+                data-aos="fade-up"
+            >
+
+                <i class="fas fa-chart-line"></i>
+
+                <span>
+
+                    Financial Overview
+
+                </span>
+
+            </div>
+
+            <div class="dashboard-grid">
+
+                <div
+                    class="card"
+                    data-aos="fade-up"
+                    data-aos-delay="100"
+                >
+
+                    <div class="icon green">
+
+                        <i class="fas fa-wallet"></i>
+
+                    </div>
+
+                    <div class="label">
+
+                        Total Contributions
+
+                    </div>
+
+                    <div
+                        class="amount"
+                        id="totalContributions"
+                    >
+
+                        Updating...
+
+                    </div>
+
+                </div>
+
+                <div
+                    class="card"
+                    data-aos="fade-up"
+                    data-aos-delay="150"
+                >
+
+                    <div class="icon red">
+
+                        <i class="fas fa-money-bill-wave"></i>
+
+                    </div>
+
+                    <div class="label">
+
+                        Total Expenses
+
+                    </div>
+
+                    <div
+                        class="amount"
+                        id="totalExpenses"
+                    >
+
+                        Updating...
+
+                    </div>
+
+                </div>
+
+                <div
+                    class="card"
+                    data-aos="fade-up"
+                    data-aos-delay="200"
+                >
+
+                    <div class="icon blue">
+
+                        <i class="fas fa-piggy-bank"></i>
+
+                    </div>
+
+                    <div class="label">
+
+                        Current Balance
+
+                    </div>
+
+                    <div
+                        class="amount"
+                        id="currentBalance"
+                    >
+
+                        Updating...
+
+                    </div>
+
+                </div>
+
+                <div
+                    class="card"
+                    data-aos="fade-up"
+                    data-aos-delay="250"
+                >
+
+                    <div class="icon purple">
+
+                        <i class="fas fa-shield-heart"></i>
+
+                    </div>
+
+                    <div class="label">
+
+                        Welfare Status
+
+                    </div>
+
+                    <div class="amount">
+
+                        Active
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Activities -->
+
+            <section
+                class="activities"
+                data-aos="fade-up"
+                data-aos-delay="300"
+            >
+
+                <div class="card-header">
+
+                    <div>
+
+                        <h3>
+
+                            Welfare Activities
+
+                        </h3>
+
+                        <p>
+
+                            Latest transactions and updates
+
+                        </p>
+
+                    </div>
+
+                    <div class="header-badge">
+
+                        10 Recent
+
+                    </div>
+
+                </div>
+
+                <table class="modern-table">
+
+                    <tbody id="activityTable"></tbody>
+
+                </table>
+
+            </section>
+
+            <!-- Chart -->
+
+            <section
+                class="chart-box"
+                data-aos="fade-up"
+                data-aos-delay="350"
+            >
+
+                <div class="card-header">
+
+                    <div>
+
+                        <h3>
+
+                            Financial Analytics
+
+                        </h3>
+
+                        <p>
+
+                            Live Overview
+
+                        </p>
+
+                    </div>
+
+                    <div class="header-badge">
+
+                        Live Data
+
+                    </div>
+
+                </div>
+
+                <canvas id="financeChart"></canvas>
+
+            </section>
+
+        </main>
+
+    </div>
+
+    <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+
+    <script>
+
+        AOS.init({
+
+            duration: 700,
+
+            once: true
+
+        });
+
+    </script>
+
+    <script src="../js/welfare.js"></script>
+
+</body>
+
+</html>
