@@ -68,20 +68,13 @@ const expenseRows =
 transactions = [];
 
 
-/* CONTRIBUTIONS */
+// CONTRIBUTIONS
 
 contributionRows.forEach(row => {
 
     const amount = Number(
-
-        String(row[3] || "0")
-
-        .replace(/,/g, "")
-
-        .replace(/₦/g, "")
-
-        .trim()
-
+        (row[3] || "")
+            .replace(/[^0-9.-]+/g, "")
     );
 
     transactions.push({
@@ -101,20 +94,13 @@ contributionRows.forEach(row => {
 });
       
 
-/* EXPENSES */
+// EXPENSES
 
 expenseRows.forEach(row => {
 
     const amount = Number(
-
-        String(row[2] || "0")
-
-        .replace(/,/g, "")
-
-        .replace(/₦/g, "")
-
-        .trim()
-
+        (row[2] || "")
+            .replace(/[^0-9.-]+/g, "")
     );
 
     transactions.push({
