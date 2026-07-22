@@ -949,3 +949,32 @@ VERY SMALL DEVICES
 
     font-size: .62rem;
 }
+
+.pagination {
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    gap: 12px;
+
+    margin-top: 20px;
+}
+
+.pagination button {
+
+    padding: 10px 16px;
+
+    border-radius: 999px;
+
+    font-size: .7rem;
+}
+
+#pageNumber {
+
+    font-size: .72rem;
+
+    font-weight: 700;
+}
