@@ -494,8 +494,9 @@ CARDS
 
         linear-gradient(
             135deg,
-            #ffffff,
-            #fafafa
+            #ffffff 0%,
+            #fcfcfc 55%,
+            #f3f9fb 100%
         );
 
     border:1px solid rgba(15,23,42,.06);
@@ -506,7 +507,7 @@ CARDS
 
     box-shadow:
 
-        0 10px 30px rgba(0,0,0,.06);
+        0 12px 35px rgba(0,0,0,.06);
 
     transition:.3s ease;
 }
@@ -636,7 +637,9 @@ CARD HEADER
 
     align-items:flex-start;
 
-    gap:12px;
+    gap:18px;
+
+    margin-bottom:28px;
 }
 
 .header-badge{
@@ -645,20 +648,16 @@ CARD HEADER
 }
 
 .card-header h3{
-
     font-family:"Bricolage Grotesque",sans-serif;
-
     font-size:1rem;
-
     color:#0f172a;
-
-    margin-bottom:5px;
+    margin-bottom:10px;
 }
 
 .card-header p{
 
     font-size:.72rem;
-
+    margin-top:8px;
     color:#64748b;
 }
 
@@ -737,7 +736,7 @@ TABLE
 
     text-align:right;
 
-    color:#16a34a;
+     color:#dc2626;
 
     font-weight:700;
 }
