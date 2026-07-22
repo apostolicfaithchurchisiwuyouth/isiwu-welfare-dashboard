@@ -927,3 +927,25 @@ VERY SMALL DEVICES
         font-size:1rem;
     }
 }
+
+
+.credit {
+
+    color: #16a34a !important;
+
+    font-weight: 700;
+}
+
+.debit {
+
+    color: #dc2626 !important;
+
+    font-weight: 700;
+}
+
+.modern-table small {
+
+    color: #64748b;
+
+    font-size: .62rem;
+}
