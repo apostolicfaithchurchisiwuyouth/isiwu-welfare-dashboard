@@ -18,7 +18,7 @@ const contributionsCSV =
 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQHlE5IpmFYaQyW5u-rentH2fGC5VZJ2w9Ql1WI-X8bE76qlN5_ttDIitwlXX1CM4sqdEW8RroDUNSU/pub?gid=1555365618&single=true&output=csv';
 
 const expensesCSV =
-'https://docs.google.com/spreadsheets/d/e/2PACX-1vQHlE5IpmFYaQyW5u-rentH2fGC5VZJ2w9Ql1WI-X8bE76qlN5_ttDIitwlXX1CM4sqdEW8RroDUNSU/pub?gid=493023062&single=true&output=csv';
+'https://docs.google.com/spreadsheets/d/e/2PACX-1vQHlE5IpmFYaQyW5u-rentH2fGC5VZJ2w9Ql1WI-X8bE76qlN5_ttDIitwlXX1CM4sqdEW8RroDUNSU/pub?gid=1621695140&single=true&output=csv';
 
 let transactions = [];
 
@@ -99,8 +99,10 @@ contributionRows.forEach(row => {
 
 expenseRows.forEach(row => {
 
-    const amount = Number(
-        String(row[1] || "0")
+    console.log(row);
+
+    const amount = parseFloat(
+        String(row[2] || "0")
             .replace(/,/g, "")
             .replace(/₦/g, "")
             .trim()
@@ -108,13 +110,13 @@ expenseRows.forEach(row => {
 
     transactions.push({
 
-        date: "",
+        date: row[1],
 
         amount: amount,
 
-        title: row[0] || "Expense",
+        title: row[3],
 
-        subtitle: "Expense",
+        subtitle: row[1],
 
         type: "debit"
 
@@ -124,7 +126,11 @@ expenseRows.forEach(row => {
       
 transactions.sort((a, b) => {
 
-    return new Date(b.date) - new Date(a.date);
+    const dateA = new Date(a.date);
+
+    const dateB = new Date(b.date);
+
+    return dateB - dateA;
 
 });
 
