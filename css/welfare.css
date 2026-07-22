@@ -800,11 +800,9 @@ MOBILE
         font-size:.7rem;
     }
 
-    .dashboard-grid{
+ .dashboard-grid{
 
-        grid-template-columns:1fr;
-
-        gap:14px;
+        grid-template-columns:repeat(4,1fr);
     }
 
     .card{
