@@ -14,7 +14,11 @@ if (
 }
 
 const welfareCSV='https://docs.google.com/spreadsheets/d/e/2PACX-1vQHlE5IpmFYaQyW5u-rentH2fGC5VZJ2w9Ql1WI-X8bE76qlN5_ttDIitwlXX1CM4sqdEW8RroDUNSU/pub?gid=439044630&single=true&output=csv';
-const activitiesCSV='https://docs.google.com/spreadsheets/d/e/2PACX-1vQHlE5IpmFYaQyW5u-rentH2fGC5VZJ2w9Ql1WI-X8bE76qlN5_ttDIitwlXX1CM4sqdEW8RroDUNSU/pub?gid=493023062&single=true&output=csv';
+const contributionsCSV =
+'https://docs.google.com/spreadsheets/d/e/2PACX-1vQHlE5IpmFYaQyW5u-rentH2fGC5VZJ2w9Ql1WI-X8bE76qlN5_ttDIitwlXX1CM4sqdEW8RroDUNSU/pub?gid=1555365618&single=true&output=csv';
+
+const expensesCSV =
+'https://docs.google.com/spreadsheets/d/e/2PACX-1vQHlE5IpmFYaQyW5u-rentH2fGC5VZJ2w9Ql1WI-X8bE76qlN5_ttDIitwlXX1CM4sqdEW8RroDUNSU/pub?gid=493023062&single=true&output=csv';
 
 async function load(){
 
@@ -41,23 +45,105 @@ async function load(){
     currentBalance.innerText =
       '₦' + Number(rows[2]?.[1] || 0).toLocaleString();
 
-    const activity =
-      (await (await fetch(activitiesCSV)).text())
-      .trim()
-      .split('\n')
-      .map(r => r.split(','));
+   const contributionRows =
+  (await (await fetch(contributionsCSV)).text())
+  .trim()
+  .split("\n")
+  .slice(1)
+  .map(r => r.split(","));
 
-    activityTable.innerHTML='';
+const expenseRows =
+  (await (await fetch(expensesCSV)).text())
+  .trim()
+  .split("\n")
+  .slice(1)
+  .map(r => r.split(","));
 
-    activity.reverse().slice(0,10).forEach(r=>{
+const transactions = [];
 
-      activityTable.innerHTML += `
-      <tr>
-        <td>${r[0] || ''}</td>
-        <td>₦${Number(r[1] || 0).toLocaleString()}</td>
-      </tr>`;
+
+/* CONTRIBUTIONS */
+
+contributionRows.forEach(row => {
+
+    transactions.push({
+
+        date: row[1] || "",
+
+        amount: Number(row[3] || 0),
+
+        title: row[5] || "Contribution",
+
+        type: "credit"
 
     });
+
+});
+
+
+/* EXPENSES */
+
+expenseRows.forEach(row => {
+
+    transactions.push({
+
+        date: row[1] || "",
+
+        amount: Number(row[2] || 0),
+
+        title: row[3] || "Expense",
+
+        type: "debit"
+
+    });
+
+});
+
+
+transactions.sort((a, b) => {
+
+    return new Date(b.date) - new Date(a.date);
+
+});
+
+
+activityTable.innerHTML = "";
+
+transactions.slice(0, 10).forEach(item => {
+
+    activityTable.innerHTML += `
+
+    <tr>
+
+        <td>
+
+            <strong>${item.title}</strong>
+
+            <br>
+
+            <small>
+
+                ${item.type === "credit"
+                    ? "Contribution"
+                    : "Expense"}
+
+            </small>
+
+        </td>
+
+        <td class="${item.type}">
+
+            ${item.type === "credit" ? "+" : "-"}
+
+            ₦${item.amount.toLocaleString()}
+
+        </td>
+
+    </tr>
+
+    `;
+
+});
 
     const c = document.getElementById('financeChart');
 
