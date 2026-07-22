@@ -2072,26 +2072,26 @@ NAVBAR - MODERN NEXT.JS STYLE
         z-index: 9999;
     }
 
+    #nav-toggle {
+    display: none;
+}
+
     .menu {
         position: fixed;
-        top: 80px;
+        top: 75px;
         left: 0;
         width: 100%;
         flex-direction: column;
-
-        background: #0a0016;
-
-        padding: 1rem;
-
-        transform: translateY(-20px);
-
         opacity: 0;
-
         visibility: hidden;
+        transform: translateY(-15px);
+        transition: .3s ease;
+    }
 
-        transition: all 0.35s ease;
-
-        z-index: 9998;
+    #nav-toggle:checked ~ .menu {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
     }
 
     .menu.active {
