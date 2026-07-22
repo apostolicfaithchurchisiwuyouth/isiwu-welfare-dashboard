@@ -143,12 +143,23 @@ transactions.sort((a, b) => {
     "pageNumber"
 ).textContent = `Page ${currentPage + 1}`;
 
+      const totalPages = Math.ceil(
+    transactions.length / itemsPerPage
+);
+
+document.getElementById(
+    "pageNumber"
+).textContent =
+    `Page ${currentPage + 1} of ${totalPages}`;
 activityTable.innerHTML = "";
 
 transactions
-.slice(currentPage * 10, currentPage * 10 + 10)
+.slice(
+    currentPage * itemsPerPage,
+    currentPage * itemsPerPage + itemsPerPage
+)
 .forEach(item => {
-
+    
    activityTable.innerHTML += `
 
 <tr>
