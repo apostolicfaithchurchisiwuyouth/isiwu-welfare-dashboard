@@ -2608,12 +2608,7 @@ box-shadow:
 
     border-radius: 50%;
 
-background: radial-gradient(
-    circle,
-    color-mix(in srgb, var(--brand) 25%, transparent),
-    color-mix(in srgb, var(--brand-dark) 15%, transparent) 35%,
-    transparent 75%
-);
+background: var(--surface);
 
     pointer-events: none;
 
