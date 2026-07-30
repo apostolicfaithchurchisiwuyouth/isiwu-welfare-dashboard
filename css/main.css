@@ -112,17 +112,17 @@ background:
 
         linear-gradient(
             135deg,
-            #0f172a 0%,
-            #0b4f67 45%,
-            #08748f 100%
+            var(--primary-dark) 0%,
+            var(--ink) 45%,
+            var(--ink-soft) 100%
         );
 
 border-radius:25px;
 
-border:1px solid rgba(74,7,84,.06);
+border:1px solid color-mix(in srgb, var(--ink) 8%, transparent);
 
 box-shadow:
-0 25px 70px rgba(74,7,84,.05);
+0 25px 70px color-mix(in srgb, var(--ink) 10%, transparent);
 }
 
 
@@ -218,8 +218,8 @@ background:
 
 radial-gradient(
 circle,
-rgba(14,165,233,.35),
-rgba(14,165,233,.08) 45%,
+var(--ink-soft),
+var(--ink) 45%,
 transparent 75%
 );
 
