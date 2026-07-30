@@ -846,7 +846,7 @@ left:-80px;
 }
 
 /* ==================================
-   GREEN BACKGROUND
+   INK BACKGROUND
 ================================== */
 
 .hero-background {
@@ -1033,9 +1033,9 @@ left:-80px;
 
 .welcome-btn.primary {
 
-    background: white;
+    background: var(--brand-dark);
     font-family: "Bricolage Grotesque", sans-serif;
-    color: var(--ink-soft);
+    color: var(--surface);
 
 }
 
