@@ -18,24 +18,24 @@ scroll-behavior:smooth;
 
 :root{
 
+    --brand: #ff4e53;
+    --brand-dark: #e6353a;
+    --brand-light: #ff4e5314;
+    --ink: #0D1B35;
+    --ink-soft: #374357;
+    --ink-mute: #7A8BA8;
+    --bg: #F3E8FF;
+    --surface: #FFFFFF;
+    --green: #0EA472;
     --primary:#4a0754;
-
     --primary-dark:#0A0016;
-
     --secondary:#4a0754;
-
     --light:#ffffff;
-
     --background:#f7f7fb;
-
     --text:#0F172A;
-    
     --text-light:#6b7280;
-
     --border:#ececf2;
-
     --radius:25px;
-
     --transition:.35s ease;
 
 }
@@ -43,7 +43,7 @@ scroll-behavior:smooth;
 body{
 font-family: "DM Sans", sans-serif;
 background:#eef3f9;
-color:#222;
+color: var(--ink-soft);
 overflow-x:hidden;
 }
 
@@ -320,10 +320,10 @@ display:inline-block;
 padding:8px 14px;
 
 
-background:#f3e8ff;
+background: var(--bg);
 
 
-color:#4a0754;
+color: var(--ink-soft);
 
 
 font-size:.65rem;
@@ -353,7 +353,7 @@ line-height:1.2;
 font-weight:800;
 
 
-color:#4a0754;
+color: var(--ink-soft);
 
 
 margin-bottom:14px;
@@ -373,7 +373,7 @@ font-size:.72rem;
 line-height:1.8;
 
 
-color:#64748b;
+color: var(--ink-mute);
 
 
 margin-bottom:24px;
@@ -410,7 +410,7 @@ border-radius:35px;
 text-decoration:none;
 font-size:.92rem;
 letter-spacing:.35px;
-font-weight:700;
+font-weight:800;
 transition:
 transform .35s cubic-bezier(.2,.8,.2,1),
 box-shadow .35s ease,
@@ -478,11 +478,11 @@ transition:.12s;
 background:
 linear-gradient(
 135deg,
-#74208a 0%,
-#4a0754 45%,
-#0A0016 100%
+#e6353a 0%,
+#e6353a 45%,
+#ff4e53 100%
 );
-color:#fff;
+color: var(--surface);
 box-shadow:
 0 10px 30px rgba(74,7,84,.28),
 0 0 0 1px rgba(255,255,255,.08) inset;
@@ -500,7 +500,7 @@ box-shadow:
 background:rgba(255,255,255,.92);
 backdrop-filter:blur(18px);
 -webkit-backdrop-filter:blur(18px);
-color:#4a0754;
+color: var(--ink);
 border:1px solid rgba(74,7,84,.12);
 box-shadow:
 0 8px 24px rgba(20,20,20,.08),
@@ -655,7 +655,7 @@ margin-bottom:12px;
 font-size:.9rem;
 
 
-color:#4a0754;
+color: var(--ink-soft);
 
 
 margin-bottom:8px;
@@ -671,7 +671,7 @@ margin-bottom:8px;
 
 font-size:.72rem;
 
-color:#64748b;
+color: var(--ink-mute);
 
 }
 
@@ -964,7 +964,7 @@ background: radial-gradient(
 
 .welcome-avatar i {
 
-    color: #fff;
+    color: var(--surface);
 
     font-size: 1.2rem;
 
@@ -978,7 +978,7 @@ background: radial-gradient(
 
 .welcome-text h2 {
 
-    color: #fff;
+    color: var(--surface);
     font-family: "Bricolage Grotesque", sans-serif;
     font-size: .9rem;
 
@@ -1037,7 +1037,7 @@ background: radial-gradient(
 
     background: white;
     font-family: "Bricolage Grotesque", sans-serif;
-    color: #222;
+    color: var(--ink-soft);
 
 }
 
