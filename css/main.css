@@ -2609,13 +2609,7 @@ box-shadow:
 
     border-radius: 50%;
 
-background:
-radial-gradient(
-    circle,
-    var(--primary-dark),
-    var(--ink) 45%,
-    transparent 75%
-);
+background: radial-gradient( circle, rgba(8, 145, 178, 0.25), rgba(6, 182, 212, 0.15) 35%, transparent 75% );
 
     pointer-events: none;
 
