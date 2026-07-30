@@ -858,11 +858,11 @@ left:-80px;
     overflow: hidden;
 
     background: linear-gradient(
-    135deg,
-    #0891b2 0%,
-    #06b6d4 45%,
-    #0f172a 100%
-);
+        135deg,
+        var(--primary-dark) 0%,
+        var(--ink) 45%,
+        var(--ink-soft) 100%
+    );
 
     padding: 6.5rem .75rem 8rem;
 
@@ -884,11 +884,11 @@ left:-80px;
 
     border-radius: 50%;
 
-   background: radial-gradient(
-    circle,
-    rgba(34, 211, 238, .22),
-    transparent 70%
-);
+    background: radial-gradient(
+        circle,
+        color-mix(in srgb, var(--ink-soft) 22%, transparent),
+        transparent 70%
+    );
 
 }
 
@@ -908,14 +908,13 @@ left:-80px;
 
     border-radius: 50%;
 
-background: radial-gradient(
-    circle,
-    rgba(8, 145, 178, .20),
-    transparent 70%
-);
+    background: radial-gradient(
+        circle,
+        color-mix(in srgb, var(--ink) 20%, transparent),
+        transparent 70%
+    );
 
 }
-
 /* ==================================
    CONTENT
 ================================== */
