@@ -332,3 +332,56 @@ hubButton.onclick = openSidebar;
 menuBtn.onclick = openSidebar;
 
 overlay.onclick = closeSidebar;
+
+
+
+
+/* ==========================================
+   DASHBOARD GREETING
+========================================== */
+
+const greetingText = document.getElementById("greetingText");
+const currentDate = document.getElementById("currentDate");
+
+if(greetingText && currentDate){
+
+    const now = new Date();
+
+    const hour = now.getHours();
+
+    let greeting = "Good Evening 👋";
+
+    if(hour >= 5 && hour < 12){
+
+        greeting = "Good Morning 🌅";
+
+    }else if(hour >= 12 && hour < 17){
+
+        greeting = "Good Afternoon ☀️";
+
+    }else if(hour >= 17 && hour < 21){
+
+        greeting = "Good Evening 🌇";
+
+    }else{
+
+        greeting = "Good Night 🌙";
+
+    }
+
+    greetingText.textContent = greeting;
+
+    currentDate.textContent =
+        now.toLocaleDateString("en-GB",{
+
+            weekday:"long",
+
+            day:"numeric",
+
+            month:"long",
+
+            year:"numeric"
+
+        });
+
+}
