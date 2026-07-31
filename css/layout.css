@@ -805,7 +805,6 @@ font-size:.82rem;
     align-items:center;
 
     gap:30px;
-
     padding:28px;
 
     background:#ffffff;
@@ -925,7 +924,7 @@ font-size:.82rem;
         align-items:flex-start;
 
         padding:22px;
-
+        width:100%;
         gap:20px;
 
     }
@@ -1149,7 +1148,7 @@ UPCOMING EVENTS
 
     margin:0 auto;
 
-    padding:28px 36px 120px;
+    padding:22px;
 
     box-sizing:border-box;
 
@@ -1208,8 +1207,6 @@ UPCOMING EVENTS
     max-width:none;
 
     padding:16px;
-
-    box-sizing:border-box;
     }
 }
 
