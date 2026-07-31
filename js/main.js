@@ -349,23 +349,23 @@ if(greetingText && currentDate){
 
     const hour = now.getHours();
 
-    let greeting = "Good Evening 👋";
+    let greeting = "Good Evening, Dear User.";
 
     if(hour >= 5 && hour < 12){
 
-        greeting = "Good Morning 🌅";
+        greeting = "Good Morning, Dear User.";
 
     }else if(hour >= 12 && hour < 17){
 
-        greeting = "Good Afternoon ☀️";
+        greeting = "Good Afternoon, Dear User.";
 
     }else if(hour >= 17 && hour < 21){
 
-        greeting = "Good Evening 🌇";
+        greeting = "Good Evening, Dear User.";
 
     }else{
 
-        greeting = "Good Night 🌙";
+        greeting = "Good Night, Dear User.";
 
     }
 
