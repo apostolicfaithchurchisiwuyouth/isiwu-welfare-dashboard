@@ -3220,24 +3220,6 @@ max-width:100%;
     font-size:.95rem;
 }
 
-.sidebar-menu a:not(:last-child)::after{
-
-    content:"";
-
-    position:absolute;
-
-    left:56px;
-
-    right:16px;
-
-    bottom:0;
-
-    height:1px;
-
-    background:rgba(0,0,0,.05);
-
-}
-
 .sidebar-menu a:hover,
 .sidebar-bottom a:hover{
 
