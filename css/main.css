@@ -18,12 +18,12 @@ scroll-behavior:smooth;
 
 :root{
 
-    --brand: #ff4e53;
-    --brand-dark: #e6353a;
+    --brand: #ea580c;
+    --brand-dark: #fb923c;
     --brand-light: #ff4e5314;
-    --ink: #0D1B35;
-    --ink-soft: #374357;
-    --ink-mute: #7A8BA8;
+    --ink: #0891b2;
+    --ink-soft: #06b6d4;
+    --ink-mute: #f0f8fa;
     --bg: #F3E8FF;
     --surface: #FFFFFF;
     --green: #0EA472;
