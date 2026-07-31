@@ -2657,11 +2657,11 @@ background: var(--surface);
 
     background: linear-gradient(
         135deg,
-        rgba(108,43,217,.10),
-        rgba(165,108,255,.08)
+        var(--brand-dark),
+        var(--brand)
     );
 
-    color: var(--text);
+    color: white;
     font-weight: 600;
     font-size: .6rem;
 
