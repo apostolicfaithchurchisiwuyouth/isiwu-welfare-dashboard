@@ -300,3 +300,35 @@ AUTO REFRESH
 */
 
 setInterval(fetchSecretariatReports, 30000);
+
+
+
+const sidebar = document.getElementById("sidebar");
+
+const hubButton = document.getElementById("hubButton");
+
+const menuBtn = document.getElementById("mobileMenuBtn");
+
+const overlay = document.getElementById("sidebarOverlay");
+
+function openSidebar(){
+
+    sidebar.classList.add("show");
+
+    overlay.classList.add("show");
+
+}
+
+function closeSidebar(){
+
+    sidebar.classList.remove("show");
+
+    overlay.classList.remove("show");
+
+}
+
+hubButton.onclick = openSidebar;
+
+menuBtn.onclick = openSidebar;
+
+overlay.onclick = closeSidebar;
