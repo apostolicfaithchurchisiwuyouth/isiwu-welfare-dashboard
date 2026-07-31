@@ -984,7 +984,7 @@ UPCOMING EVENTS
 
     color:var(--primary);
 
-    font-size:.65rem;
+    font-size:.6rem;
 
     font-weight:700;
 
@@ -998,7 +998,7 @@ UPCOMING EVENTS
 
     font-family:"Bricolage Grotesque",sans-serif;
 
-    font-size:1.25rem;
+    font-size:.9rem;
 
     color:var(--primary-dark);
 
@@ -1008,7 +1008,7 @@ UPCOMING EVENTS
 
     text-decoration:none;
 
-    font-size:.82rem;
+    font-size:.68rem;
 
     font-weight:600;
 
@@ -1056,11 +1056,11 @@ UPCOMING EVENTS
 
 .event-date{
 
-    width:72px;
+    width:55px;
 
-    min-width:72px;
+    min-width:55px;
 
-    height:72px;
+    height:55px;
 
     border-radius:18px;
 
@@ -1091,7 +1091,7 @@ UPCOMING EVENTS
 
 .event-date h3{
 
-    font-size:1.5rem;
+    font-size:.9rem;
 
     margin-top:2px;
 
@@ -1105,7 +1105,7 @@ UPCOMING EVENTS
 
 .event-details h4{
 
-    font-size:1rem;
+    font-size:.9rem;
 
     font-family:"Bricolage Grotesque",sans-serif;
 
@@ -1117,7 +1117,7 @@ UPCOMING EVENTS
 
 .event-details p{
 
-    font-size:.82rem;
+    font-size:.7rem;
 
     color:var(--text-light);
 
@@ -1133,7 +1133,7 @@ UPCOMING EVENTS
 
     color:#2f8a46;
 
-    font-size:.72rem;
+    font-size:.68rem;
 
     font-weight:700;
 
@@ -1180,9 +1180,9 @@ UPCOMING EVENTS
 
     .event-date{
 
-        width:65px;
+        width:45px;
 
-        height:65px;
+        height:45px;
 
     }
 
