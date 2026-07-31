@@ -24,7 +24,7 @@ scroll-behavior:smooth;
     --ink: #0891b2;
     --ink-soft: #06b6d4;
     --ink-mute: #f0f8fa;
-    --bg: #F3E8FF;
+    --bg: #f7faf8;
     --surface: #FFFFFF;
     --green: #0EA472;
     --primary:#4a0754;
@@ -2661,7 +2661,7 @@ background: var(--surface);
         rgba(165,108,255,.08)
     );
 
-    color: var(--ink-soft);
+    color: var(--text);
     font-weight: 600;
     font-size: .6rem;
 
@@ -2696,7 +2696,7 @@ background: var(--surface);
 
     font-weight: 800;
 
-    color: var(--ink-soft);
+    color: var(--text);
 
     margin-bottom: .75rem;
 
@@ -2706,7 +2706,7 @@ background: var(--surface);
 
     font-size: .7rem;
 
-    color: var(--ink-mute);
+    color: var(--text-light);
 
 }
 
@@ -2754,7 +2754,7 @@ background: var(--surface);
 
     background: var(--bg);
 
-    color: var(--ink-mute);
+    color: var(--text);
 
     white-space: nowrap;
 
@@ -2771,8 +2771,8 @@ background: var(--surface);
     color: #fff;
 
     background: linear-gradient(
-        135deg, #e6353a,
-        #ff4e53
+        135deg, var(--brand),
+        var(--brand-dark)
     );
 }
 
@@ -2832,7 +2832,7 @@ background: var(--surface);
 
     background: #fafaf7;
 
-    border-left: .2rem solid #ff4e53;
+    border-left: .2rem solid var(--brand);
 
     border-radius: 0 1rem 1rem 0;
 
@@ -2865,7 +2865,7 @@ background: var(--surface);
 
     font-size: .7rem;
 
-    color: var(--ink-soft);
+    color: var(--text);
 
 }
 
