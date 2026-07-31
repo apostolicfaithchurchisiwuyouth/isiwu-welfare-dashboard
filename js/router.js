@@ -17,29 +17,17 @@ const loader = document.getElementById("pageLoader");
 ROUTES
 ====================================================*/
 
-const routes = {
+function navigate(){
 
-    dashboard: "pages/dashboard.html",
+    const page =
 
-    "weekly-lessons": "pages/weekly-lessons.html",
+    location.hash.replace("#","") ||
 
-    "lesson-archive": "pages/lesson-archive.html",
+    "dashboard";
 
-    quizzes: "pages/quizzes.html",
+    loadPage(page);
 
-    leaderboard: "pages/leaderboard.html",
-
-    reports: "pages/reports.html",
-
-    members: "pages/members.html",
-
-    gallery: "pages/gallery.html",
-
-    welfare: "pages/welfare.html",
-
-    settings: "pages/settings.html"
-
-};
+}
 
 /*====================================================
 SHOW LOADER
@@ -77,27 +65,7 @@ async function loadPage(page){
 
     if(!content) return;
 
-    const file = routes[page];
-
-    if(!file){
-
-        content.innerHTML = `
-
-            <div class="content-card">
-
-                <h2>
-
-                    Page Not Found
-
-                </h2>
-
-            </div>
-
-        `;
-
-        return;
-
-    }
+    const file = `pages/${page}.html`;
 
     showLoader();
 
@@ -107,7 +75,7 @@ async function loadPage(page){
 
         if(!response.ok){
 
-            throw new Error();
+            throw new Error("Page not found");
 
         }
 
@@ -121,21 +89,13 @@ async function loadPage(page){
 
         content.innerHTML = `
 
-            <div class="content-card">
+        <div class="content-card">
 
-                <h2>
+            <h2>404</h2>
 
-                    Unable to load page.
+            <p>The page "${page}" could not be found.</p>
 
-                </h2>
-
-                <p>
-
-                    Please try again.
-
-                </p>
-
-            </div>
+        </div>
 
         `;
 
