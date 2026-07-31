@@ -1142,15 +1142,19 @@ UPCOMING EVENTS
 .dashboard-container{
 
     width:100%;
-
     max-width:1700px;
 
     margin:0 auto;
 
     padding:24px;
 
-    box-sizing:border-box;
+    display:flex;
+    flex-direction:column;
+
     gap:28px;
+
+    box-sizing:border-box;
+
 }
 
 
@@ -1188,14 +1192,23 @@ UPCOMING EVENTS
 
     }
 
-    .dashboard-container{
+.dashboard-container{
 
     width:100%;
 
-    max-width:none;
+    max-width:100%;
 
-    padding:16px;
-    }
+    padding:10px 10px 100px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:20px;
+
+    box-sizing:border-box;
+
+}
 }
 
 .lesson-section{
@@ -1211,3 +1224,24 @@ UPCOMING EVENTS
 }
 
 
+.dashboard-container > section,
+
+.dashboard-container > div,
+
+.hub,
+
+.reports-section,
+
+.events-section,
+
+.lesson-section{
+
+    width:100%;
+
+    max-width:100%;
+
+    margin:0;
+
+    box-sizing:border-box;
+
+}
