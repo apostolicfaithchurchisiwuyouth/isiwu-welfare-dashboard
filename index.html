@@ -23,6 +23,9 @@
 
 <div class="app-layout">
 
+    <div class="sidebar-overlay"
+     id="sidebarOverlay"></div>
+
     <!-- ========================================= -->
     <!-- DESKTOP SIDEBAR -->
     <!-- ========================================= -->
@@ -161,9 +164,65 @@
 
 
 
-        <header class="topbar">
+<header class="topbar">
 
-        </header>
+    <div class="topbar-left">
+
+        <button
+            class="mobile-menu-btn"
+            id="mobileMenuBtn"
+            type="button">
+
+            <i class="fa-solid fa-bars"></i>
+
+        </button>
+
+        <div class="portal-brand">
+
+            <img
+                src="images/logo.png"
+                alt="AFC Logo"
+                class="portal-logo">
+
+            <div>
+
+                <h2>AFC Isiwu Youth Portal</h2>
+
+                <p>Building young people for Christ</p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="topbar-right">
+
+        <button
+            class="header-icon"
+            id="notificationBtn"
+            type="button">
+
+            <i class="fa-regular fa-bell"></i>
+
+            <span class="notify-dot"></span>
+
+        </button>
+
+
+        <button
+            class="header-icon"
+            id="themeBtn"
+            type="button">
+
+            <i class="fa-solid fa-moon"></i>
+
+        </button>
+
+    </div>
+
+</header>
 
 
 
@@ -378,28 +437,48 @@
 
 <nav class="bottom-nav">
 
-    <a href="/" class="nav-item active">
+    <a href="/" class="active">
+
         <i class="fa-solid fa-house"></i>
+
         <span>Home</span>
+
     </a>
 
-    <a href="pages/lessons" class="nav-item">
+    <a href="pages/weekly-lessons.html">
+
         <i class="fa-solid fa-book-open"></i>
+
         <span>Lessons</span>
+
     </a>
 
-    <button class="hub-button" id="hubButton" type="button">
+
+    <button
+        class="hub-button"
+        id="hubButton"
+        type="button">
+
         <i class="fa-solid fa-bars"></i>
+
     </button>
 
-    <a href="pages/gallery" class="nav-item">
+
+    <a href="pages/gallery.html">
+
         <i class="fa-solid fa-images"></i>
+
         <span>Gallery</span>
+
     </a>
 
-    <a href="pages/profile" class="nav-item">
+
+    <a href="pages/profile.html">
+
         <i class="fa-solid fa-user"></i>
+
         <span>Profile</span>
+
     </a>
 
 </nav>
