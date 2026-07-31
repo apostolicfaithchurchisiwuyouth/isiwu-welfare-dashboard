@@ -3391,234 +3391,141 @@ max-width:100%;
         display:block;
     }
 
-    .sidebar{
+.sidebar{
 
-        position:fixed;
+    width:320px;
+    max-width:85%;
 
-        top:0;
-        left:-100%;
+    padding:24px 18px;
 
-        width:320px;
-        max-width:85%;
+}
 
-        height:100vh;
+.sidebar-logo{
 
-        background:#ffffff;
+    margin-bottom:24px;
+    padding-bottom:20px;
 
-        border-radius:0 28px 28px 0;
+    border-bottom:1px solid rgba(0,0,0,.08);
 
-        padding:24px 18px;
+}
 
-        overflow-y:auto;
+/* SHOW THE LOGO TEXT */
 
-        transition:left .35s ease;
+.sidebar-logo div{
 
-        box-shadow:
-        0 25px 60px rgba(0,0,0,.18);
+    display:block !important;
 
-        z-index:99999;
+}
 
-    }
+/* SHOW THE MENU TEXT */
 
-    .sidebar.show{
+.sidebar-menu span,
+.sidebar-bottom span{
 
-        left:0;
+    display:block !important;
 
-    }
+}
 
-    /* Logo */
+/* MENU */
 
-    .sidebar-logo{
+.sidebar-menu,
+.sidebar-bottom{
 
-        display:flex;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
 
-        align-items:center;
+}
 
-        gap:14px;
+/* MENU ITEMS */
 
-        padding-bottom:22px;
+.sidebar-menu a,
+.sidebar-bottom a{
 
-        margin-bottom:22px;
+    display:flex;
+    align-items:center;
 
-        border-bottom:1px solid rgba(0,0,0,.08);
+    gap:16px;
 
-    }
+    width:100%;
 
-    .sidebar-logo div{
+    height:56px;
 
-        display:block;
+    padding:0 18px;
 
-    }
+    border-radius:18px;
 
-    .sidebar-logo h2{
+    text-decoration:none;
 
-        font-size:1rem;
+    color:var(--text);
 
-        margin:0;
+    font-size:.85rem;
 
-    }
+    font-weight:600;
 
-    .sidebar-logo span{
+    transition:.3s;
 
-        display:block;
+}
 
-        margin-top:4px;
+/* ICON */
 
-        font-size:.72rem;
+.sidebar-menu a i,
+.sidebar-bottom a i{
 
-        color:#7b8190;
+    width:24px;
+    min-width:24px;
 
-    }
+    text-align:center;
 
-    /* Menu */
+    font-size:1rem;
 
-    .sidebar-menu{
+}
 
-        display:flex;
+/* TEXT */
 
-        flex-direction:column;
+.sidebar-menu a span,
+.sidebar-bottom a span{
 
-        gap:8px;
+    flex:1;
 
-    }
+    display:block !important;
 
-    /* Section Titles */
+    white-space:nowrap;
 
-    .menu-title{
+}
 
-        font-size:.65rem;
+/* HOVER */
 
-        font-weight:700;
+.sidebar-menu a:hover,
+.sidebar-bottom a:hover{
 
-        letter-spacing:1px;
+    background:#f7f4fb;
 
-        text-transform:uppercase;
+}
 
-        color:#9aa0ad;
+/* ACTIVE */
 
-        margin:20px 14px 8px;
+.sidebar-menu a.active{
 
-    }
-
-    /* Links */
-
-    .sidebar-menu a,
-    .sidebar-bottom a{
-
-        display:flex;
-
-        align-items:center;
-
-        gap:16px;
-
-        height:54px;
-
-        padding:0 16px;
-
-        border-radius:16px;
-
-        text-decoration:none;
-
-        color:#2d3345;
-
-        font-size:.82rem;
-
-        font-weight:600;
-
-        transition:.25s ease;
-
-    }
-
-    .sidebar-menu a:hover,
-    .sidebar-bottom a:hover{
-
-        background:#f6f6fb;
-
-    }
-
-    .sidebar-menu a.active{
-
-        background:linear-gradient(
+    background:linear-gradient(
         135deg,
         var(--primary),
-        var(--primary-dark));
+        var(--primary-dark)
+    );
 
-        color:#ffffff;
+    color:#fff;
 
-        box-shadow:
-        0 10px 25px rgba(74,7,84,.18);
+    box-shadow:
+    0 12px 24px rgba(74,7,84,.18);
 
-    }
+}
 
-    .sidebar-menu a.active i{
+.sidebar-menu a.active i{
 
-        color:#ffffff;
+    color:#fff;
 
-    }
-
-    /* Icons */
-
-    .sidebar-menu a i,
-    .sidebar-bottom a i{
-
-        width:22px;
-
-        min-width:22px;
-
-        text-align:center;
-
-        font-size:1rem;
-
-    }
-
-    /* Bottom Section */
-
-    .sidebar-bottom{
-
-        margin-top:28px;
-
-        padding-top:22px;
-
-        border-top:1px solid rgba(0,0,0,.08);
-
-        display:flex;
-
-        flex-direction:column;
-
-        gap:8px;
-
-    }
-
-    /* Overlay */
-
-    .sidebar-overlay{
-
-        position:fixed;
-
-        inset:0;
-
-        background:rgba(0,0,0,.45);
-
-        backdrop-filter:blur(4px);
-
-        opacity:0;
-
-        visibility:hidden;
-
-        transition:.3s ease;
-
-        z-index:99998;
-
-    }
-
-    .sidebar-overlay.show{
-
-        opacity:1;
-
-        visibility:visible;
-
-    }
-
+}
+    
     .topbar{
 
         height:74px;
