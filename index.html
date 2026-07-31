@@ -21,186 +21,25 @@
 
 <body>
 
+<div class="app-layout">
 
-<header>
+    <!-- ========================================= -->
+    <!-- DESKTOP SIDEBAR -->
+    <!-- ========================================= -->
 
-    <!-- NAVBAR -->
-    <div class="navbar">
+    <aside class="sidebar" id="sidebar">
 
-        <div class="logo">
-            <i class="fa-solid fa-shield-heart"></i>
-            AFC Isiu Youth Portal
-        </div>
+        <div class="sidebar-top">
 
-        <div class="menu" id="menu">
-            <a href="/">Home</a>
-            <a href="pages/welfare">Welfare Reports</a>
-            <a href="pages/reports">Secretariat Reports</a>
-            <a href="pages/slcquiz">Weekly SLC Quiz</a>
-        </div>
+            <div class="sidebar-logo">
 
-<div class="hamburger" id="hamburger">
-    <i class="fa-solid fa-bars-staggered"></i>
-</div>
-        
-    </div>
+                <i class="fa-solid fa-shield-heart"></i>
 
-    <div class="hero-wrapper">
+                <div>
 
-    <div class="hero-background" data-aos="fade-down" data-aos-delay="100"><br>
+                    <h2>AFC Isiwu</h2>
 
-        <div class="welcome-content">
-
-            <div class="welcome-info">
-
-                <div class="welcome-avatar">
-
-                    <i class="fa-solid fa-users"></i>
-
-                </div>
-
-                <div class="welcome-text">
-
-                    <h2>
-
-                        AFC Isiu Youth Portal
-
-                    </h2>
-
-                    <p>
-
-                        Helping young people grow in faith through Bible study and fellowship.
-
-                    </p>
-
-                </div>
-
-            </div>
-
-            <div class="welcome-actions">
-
-                <a href="pages/slcquiz" class="welcome-btn primary">
-
-                    Take SLC Quiz
-
-                </a>
-
-                <a href="pages/growthtracker"
-                   class="welcome-btn secondary">
-
-                    Check SLC Results
-
-                </a>
-
-            </div>
-
-        </div>
-
-    </div>
-
-    <div class="lesson-hero" data-aos="zoom-in" data-aos-delay="200">
-
-        <div class="hero-gradient"></div>
-
-        <div class="lesson-content">
-
-            <div class="lesson-header">
-
-                <div class="lesson-top-badge">
-
-                    THIS WEEK'S LESSON
-
-                </div>
-
-                <div class="lesson-status">
-
-                    Updated Weekly
-
-                </div>
-
-            </div><br>
-
-            <h1 id="lessonTopic">
-
-                Loading...
-
-            </h1>
-
-            <p class="lesson-subtitle">
-
-                Study the lesson notes, memory verses and Bible texts across all classes.
-
-            </p>
-
-            <div class="lesson-tabs">
-
-                <button class="lesson-tab active"
-                    onclick="switchLesson('Senior')">
-
-                    Senior
-
-                </button>
-
-                <button class="lesson-tab"
-                    onclick="switchLesson('Junior')">
-
-                    Junior
-
-                </button>
-
-                <button class="lesson-tab"
-                    onclick="switchLesson('Elementary')">
-
-                    Elementary
-
-                </button>
-
-            </div>
-
-            <div class="lesson-layout">
-
-                <div class="lesson-main-card">
-
-                    <span class="lesson-label">
-
-                        Bible Text
-
-                    </span>
-
-                    <p id="lessonBibleText">
-
-                        Loading...
-
-                    </p>
-
-                </div>
-
-                <div class="lesson-side">
-
-                    <div class="memory-block">
-
-                        <span class="lesson-label">
-
-                            Memory Verse
-
-                        </span>
-
-                        <p id="lessonMemoryVerse">
-
-                            Loading...
-
-                        </p>
-
-                    </div>
-
-                    <a href="pages/lessons"
-                       class="lesson-read-more">
-
-                        Read Combined Lesson Note
-
-                        <i class="fa-solid fa-arrow-right"></i>
-
-                    </a>
+                    <span>Youth Portal</span>
 
                 </div>
 
@@ -208,11 +47,132 @@
 
         </div>
 
-    </div>
 
-</div>
-</header>
+        <nav class="sidebar-menu">
 
+            <a href="/" class="active">
+
+                <i class="fa-solid fa-house"></i>
+
+                <span>Dashboard</span>
+
+            </a>
+
+            <a href="pages/weekly-lessons.html">
+
+                <i class="fa-solid fa-book-open"></i>
+
+                <span>Weekly Lessons</span>
+
+            </a>
+
+            <a href="pages/slcquiz.html">
+
+                <i class="fa-solid fa-clipboard-question"></i>
+
+                <span>Weekly SLC Quiz</span>
+
+            </a>
+
+            <a href="pages/growthtracker.html">
+
+                <i class="fa-solid fa-chart-line"></i>
+
+                <span>Growth Tracker</span>
+
+            </a>
+
+            <a href="pages/gallery.html">
+
+                <i class="fa-solid fa-images"></i>
+
+                <span>Gallery</span>
+
+            </a>
+
+            <a href="pages/events.html">
+
+                <i class="fa-solid fa-calendar-days"></i>
+
+                <span>Youth Events</span>
+
+            </a>
+
+            <a href="pages/welfare.html">
+
+                <i class="fa-solid fa-hand-holding-heart"></i>
+
+                <span>Welfare</span>
+
+            </a>
+
+            <a href="pages/prayer.html">
+
+                <i class="fa-solid fa-hands-praying"></i>
+
+                <span>Prayer Requests</span>
+
+            </a>
+
+            <a href="pages/program-report.html">
+
+                <i class="fa-solid fa-file-lines"></i>
+
+                <span>Secretariat</span>
+
+            </a>
+
+        </nav>
+
+
+        <div class="sidebar-bottom">
+
+            <a href="pages/profile.html">
+
+                <i class="fa-solid fa-user"></i>
+
+                <span>Profile</span>
+
+            </a>
+
+            <a href="pages/settings.html">
+
+                <i class="fa-solid fa-gear"></i>
+
+                <span>Settings</span>
+
+            </a>
+
+        </div>
+
+    </aside>
+
+
+
+    <!-- ========================================= -->
+    <!-- MAIN CONTENT -->
+    <!-- ========================================= -->
+
+    <div class="main-area">
+
+
+
+        <!-- Header will come in Part 1B -->
+
+
+
+        <header class="topbar">
+
+        </header>
+
+
+
+        <!-- Dashboard Content -->
+
+
+
+        <main class="dashboard-content">
+            
 <br>
 <!-- ========================= -->
 <!-- MINISTRY HUB -->
@@ -448,6 +408,11 @@
 AFC Isiwu Youth Department Portal © 2026
 </footer>
 
+        </main>
+
+    </div>
+
+</div>
     
 <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
 
