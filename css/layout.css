@@ -1150,8 +1150,9 @@ UPCOMING EVENTS
     padding:24px;
 
     box-sizing:border-box;
-
+    gap:28px;
 }
+
 
 @media(max-width:768px){
 
