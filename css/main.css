@@ -3079,3 +3079,377 @@ max-width:100%;
 }
 
 }
+
+
+
+
+
+/* ==========================================================
+   PART 1B
+   APPLICATION LAYOUT
+========================================================== */
+
+.app-layout{
+    display:flex;
+    min-height:100vh;
+    background:var(--background);
+}
+
+/* ==========================================================
+   SIDEBAR
+========================================================== */
+
+.sidebar{
+    width:290px;
+    flex-shrink:0;
+
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+
+    position:sticky;
+    top:0;
+
+    height:100vh;
+
+    padding:28px 18px;
+
+    background:#ffffff;
+
+    border-right:1px solid rgba(0,0,0,.06);
+
+    overflow-y:auto;
+}
+
+/* ==========================================================
+   LOGO
+========================================================== */
+
+.sidebar-logo{
+    display:flex;
+    align-items:center;
+    gap:14px;
+
+    margin-bottom:40px;
+}
+
+.sidebar-logo i{
+
+    width:48px;
+    height:48px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:16px;
+
+    background:
+    linear-gradient(
+    135deg,
+    var(--brand),
+    var(--brand-dark));
+
+    color:#fff;
+
+    font-size:1rem;
+}
+
+.sidebar-logo h2{
+
+    font-family:"Bricolage Grotesque",sans-serif;
+
+    font-size:1rem;
+
+    color:var(--primary-dark);
+
+    margin-bottom:2px;
+}
+
+.sidebar-logo span{
+
+    font-size:.7rem;
+
+    color:var(--text-light);
+}
+
+/* ==========================================================
+   MENU
+========================================================== */
+
+.sidebar-menu{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:6px;
+}
+
+.sidebar-menu a,
+.sidebar-bottom a{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:14px;
+
+    padding:14px 16px;
+
+    border-radius:18px;
+
+    text-decoration:none;
+
+    color:var(--text);
+
+    font-size:.78rem;
+
+    font-weight:600;
+
+    transition:.30s ease;
+}
+
+.sidebar-menu a i,
+.sidebar-bottom a i{
+
+    width:22px;
+
+    text-align:center;
+
+    font-size:.95rem;
+}
+
+.sidebar-menu a:hover,
+.sidebar-bottom a:hover{
+
+    background:#f6f4fb;
+
+    color:var(--primary);
+
+    transform:translateX(4px);
+}
+
+.sidebar-menu a.active{
+
+    background:
+
+    linear-gradient(
+    135deg,
+    var(--primary),
+    var(--primary-dark));
+
+    color:#fff;
+
+    box-shadow:
+    0 15px 30px rgba(74,7,84,.18);
+}
+
+.sidebar-bottom{
+
+    margin-top:35px;
+
+    padding-top:22px;
+
+    border-top:1px solid rgba(0,0,0,.08);
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:6px;
+}
+
+/* ==========================================================
+   MAIN AREA
+========================================================== */
+
+.main-area{
+
+    flex:1;
+
+    min-width:0;
+
+    display:flex;
+
+    flex-direction:column;
+}
+
+/* ==========================================================
+   HEADER PLACEHOLDER
+========================================================== */
+
+.topbar{
+
+    position:sticky;
+
+    top:0;
+
+    z-index:100;
+
+    height:82px;
+
+    background:#ffffff;
+
+    border-bottom:1px solid rgba(0,0,0,.06);
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    padding:0 32px;
+}
+
+/* ==========================================================
+   PAGE CONTENT
+========================================================== */
+
+.dashboard-content{
+
+    padding:30px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:32px;
+}
+
+/* remove old spacing */
+
+.dashboard-content br{
+
+    display:none;
+}
+
+/* ==========================================================
+   DESKTOP
+========================================================== */
+
+@media (min-width:1200px){
+
+    .hub{
+
+        width:100%;
+
+        padding:0;
+    }
+
+    .reports-container{
+
+        width:100%;
+
+        max-width:none;
+    }
+
+}
+
+/* ==========================================================
+   TABLET
+========================================================== */
+
+@media (max-width:1100px){
+
+    .sidebar{
+
+        width:90px;
+
+        padding:22px 12px;
+    }
+
+    .sidebar-logo div{
+
+        display:none;
+    }
+
+    .sidebar-menu span,
+    .sidebar-bottom span{
+
+        display:none;
+    }
+
+    .sidebar-menu a,
+    .sidebar-bottom a{
+
+        justify-content:center;
+
+        padding:16px;
+    }
+
+}
+
+/* ==========================================================
+   MOBILE
+========================================================== */
+
+@media (max-width:768px){
+
+    .app-layout{
+
+        display:block;
+    }
+
+    .sidebar{
+
+        position:fixed;
+
+        left:-100%;
+
+        top:0;
+
+        width:300px;
+
+        z-index:99999;
+
+        transition:.35s ease;
+    }
+
+    .sidebar.show{
+
+        left:0;
+    }
+
+    .sidebar-logo div{
+
+        display:block;
+    }
+
+    .sidebar-menu span,
+    .sidebar-bottom span{
+
+        display:block;
+    }
+
+    .topbar{
+
+        height:74px;
+
+        padding:0 18px;
+    }
+
+    .dashboard-content{
+
+        padding:18px 16px 110px;
+    }
+
+}
+
+/* ==========================================================
+   LARGE DESKTOP
+========================================================== */
+
+@media (min-width:1500px){
+
+    .sidebar{
+
+        width:320px;
+    }
+
+    .dashboard-content{
+
+        padding:40px;
+    }
+
+}
