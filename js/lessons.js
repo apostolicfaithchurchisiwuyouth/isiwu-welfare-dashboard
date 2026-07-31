@@ -343,3 +343,42 @@ document.addEventListener(
     "DOMContentLoaded",
     loadLessons
 );
+
+
+function updateReadingTime(){
+
+    const lesson =
+
+        document.getElementById("lessonContent");
+
+    const readingTime =
+
+        document.getElementById("readingTime");
+
+    if(!lesson || !readingTime){
+
+        return;
+
+    }
+
+    const words =
+
+        lesson.innerText.trim().split(/\s+/).length;
+
+    const minutes =
+
+        Math.max(1, Math.ceil(words / 200));
+
+    readingTime.textContent =
+
+        minutes + " min";
+
+}
+
+window.addEventListener(
+
+    "load",
+
+    updateReadingTime
+
+);
