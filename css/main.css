@@ -4270,10 +4270,25 @@ UPCOMING EVENTS
 }
 
 .dashboard-container{
-    max-width: 1200px;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
-    padding: 24px;
+
+    width:100%;
+
+    max-width:1450px;
+
+    margin:0 auto;
+
+    padding:24px 30px 120px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:28px;
+
+}
+
+.dashboard-container > section{
+
+    width:100%;
+
 }
