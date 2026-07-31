@@ -125,8 +125,6 @@
 
     font-size:.7rem;
 
-    font-weight:600;
-
     transition:.30s ease;
 }
 
@@ -156,8 +154,8 @@
 
     linear-gradient(
     135deg,
-    var(--primary),
-    var(--primary-dark));
+    var(--brand),
+    var(--brand-dark));
 
     color:#fff;
 
@@ -418,9 +416,7 @@
 
     color:var(--text);
 
-    font-size:.85rem;
-
-    font-weight:600;
+    font-size:.7rem;
 
     transition:.3s;
 
