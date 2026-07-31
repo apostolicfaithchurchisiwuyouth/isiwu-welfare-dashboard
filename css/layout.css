@@ -4,10 +4,15 @@
 ========================================================== */
 
 .app-layout{
+
     display:grid;
-    grid-template-columns:300px minmax(0,1fr);
+
+    grid-template-columns:320px 1fr;
+
     min-height:100vh;
     background:var(--background);
+    width:100%;
+
 }
 
 /* ==========================================================
@@ -222,7 +227,8 @@
 
 .dashboard-content{
 
-    padding:30px;
+    width:100%;
+    padding:0;
 
     display:flex;
 
@@ -1135,6 +1141,32 @@ UPCOMING EVENTS
 
 }
 
+.dashboard-container{
+
+    width:100%;
+
+    max-width:1700px;
+
+    margin:0 auto;
+
+    padding:28px 36px 120px;
+
+    box-sizing:border-box;
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:28px;
+
+}
+
+.dashboard-container > section{
+
+    width:100%;
+
+}
+
 @media(max-width:768px){
 
     .section-header{
@@ -1169,6 +1201,16 @@ UPCOMING EVENTS
 
     }
 
+    .dashboard-container{
+
+    width:100%;
+
+    max-width:none;
+
+    padding:16px;
+
+    box-sizing:border-box;
+    }
 }
 
 .lesson-section{
@@ -1183,26 +1225,4 @@ UPCOMING EVENTS
     box-shadow: 0 12px 30px rgba(0,0,0,.05);
 }
 
-.dashboard-container{
 
-    width:100%;
-
-    max-width:1450px;
-
-    margin:0 auto;
-
-    padding:24px 30px 120px;
-
-    display:flex;
-
-    flex-direction:column;
-
-    gap:28px;
-
-}
-
-.dashboard-container > section{
-
-    width:100%;
-
-}
