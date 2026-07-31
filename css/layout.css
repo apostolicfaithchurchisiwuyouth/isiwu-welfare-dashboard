@@ -602,10 +602,9 @@ PAGE CONTENT
 
     flex-direction:column;
 
-    gap:18px;
+    gap:28px;
 
 }
-
 
 /*====================================================
 DYNAMIC CONTENT
@@ -628,9 +627,9 @@ CONTENT CARD
 
     border:1px solid var(--border);
 
-    border-radius:14px;
+    border-radius:15px;
 
-    padding:18px;
+    padding:24px;
 
 }
 
@@ -1179,7 +1178,7 @@ COMMON GRID
 
     grid-template-columns:repeat(2,1fr);
 
-    gap:16px;
+    gap:24px;
 
 }
 
@@ -1189,7 +1188,7 @@ COMMON GRID
 
     grid-template-columns:repeat(3,1fr);
 
-    gap:16px;
+    gap:24px;
 
 }
 
@@ -1199,7 +1198,7 @@ COMMON GRID
 
     grid-template-columns:repeat(4,1fr);
 
-    gap:16px;
+    gap:24px;
 
 }
 
@@ -1858,7 +1857,7 @@ MOBILE
 
     .content-card{
 
-        padding:14px;
+        padding:24px;
 
     }
 
