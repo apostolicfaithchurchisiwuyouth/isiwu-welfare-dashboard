@@ -3203,7 +3203,7 @@ max-width:100%;
 
     color:var(--text);
 
-    font-size:.78rem;
+    font-size:.7rem;
 
     font-weight:600;
 
@@ -3218,6 +3218,24 @@ max-width:100%;
     text-align:center;
 
     font-size:.95rem;
+}
+
+.sidebar-menu a:not(:last-child)::after{
+
+    content:"";
+
+    position:absolute;
+
+    left:56px;
+
+    right:16px;
+
+    bottom:0;
+
+    height:1px;
+
+    background:rgba(0,0,0,.05);
+
 }
 
 .sidebar-menu a:hover,
