@@ -3090,7 +3090,8 @@ max-width:100%;
 ========================================================== */
 
 .app-layout{
-    display:flex;
+    display:grid;
+    grid-template-columns:300px minmax(0,1fr);
     min-height:100vh;
     background:var(--background);
 }
@@ -3267,11 +3268,10 @@ max-width:100%;
 .main-area{
 
     flex:1;
-
+    width:100%;
     min-width:0;
-
+    overflow-x:hidden;
     display:flex;
-
     flex-direction:column;
 }
 
