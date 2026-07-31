@@ -4256,3 +4256,24 @@ UPCOMING EVENTS
     }
 
 }
+
+.lesson-section{
+    margin: 0;
+}
+
+.lesson-card{
+    background: #fff;
+    border-radius: 24px;
+    border: 1px solid rgba(0,0,0,.06);
+    padding: 28px;
+    box-shadow: 0 12px 30px rgba(0,0,0,.05);
+}
+
+.dashboard-container{
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    padding: 24px;
+}
