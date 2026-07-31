@@ -3940,7 +3940,7 @@ font-size:.82rem;
 
     font-family:"Bricolage Grotesque",sans-serif;
 
-    font-size:1.2rem;
+    font-size:1rem;
 
     color:var(--primary-dark);
 
@@ -3952,7 +3952,7 @@ font-size:.82rem;
 
     max-width:620px;
 
-    font-size:.7rem;
+    font-size:.68rem;
 
     line-height:1.7;
 
@@ -3972,13 +3972,13 @@ font-size:.82rem;
 
     display:block;
 
-    font-size:.68rem;
+    font-size:.6rem;
 
     color:var(--text-light);
 
     margin-bottom:8px;
 
-    text-transform:uppercase;
+    text-transform:uppercase
 
     letter-spacing:1px;
 
@@ -3988,7 +3988,7 @@ font-size:.82rem;
 
     font-family:"Bricolage Grotesque",sans-serif;
 
-    font-size:1rem;
+    font-size:.68rem;
 
     color:var(--primary-dark);
 
