@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>AFC Isiwu Youth Portal</title>
+
+<meta name="theme-color" content="#4a0754">
+
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+
+<!-- Remix Icons -->
+<link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet"/>
+
+<!-- CSS -->
+<link rel="stylesheet" href="css/layout.css">
+<link rel="stylesheet" href="css/sidebar.css">
+<link rel="stylesheet" href="css/dashboard.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/mobile.css">
+
+</head>
+
+<body>
+
+<!-- ===================================================== -->
+<!-- OVERLAY -->
+<!-- ===================================================== -->
+
+<div class="overlay" id="overlay"></div>
+
+<!-- ===================================================== -->
+<!-- APP WRAPPER -->
+<!-- ===================================================== -->
+
+<div class="portal">
+
+    <!-- ========================================= -->
+    <!-- LEFT SIDEBAR -->
+    <!-- ========================================= -->
+
+    <aside class="sidebar-left" id="sidebarLeft">
+
+        <!-- Logo -->
+
+        <div class="sidebar-logo">
+
+            <img src="images/logo.png" alt="AFC Logo">
+
+            <div>
+
+                <h2>AFC Isiwu</h2>
+
+                <span>Youth Portal</span>
+
+            </div>
+
+        </div>
+
+        <!-- ========================================= -->
+        <!-- MENU -->
+        <!-- ========================================= -->
+
+        <div class="sidebar-scroll">
+
+            <p class="menu-title">
+                MAIN MENU
+            </p>
+
+            <nav>
+
+                <ul class="sidebar-menu">
+
+                    <li>
+
+                        <a href="#dashboard" class="active">
+
+                            <i class="ri-home-5-line"></i>
+
+                            <span>Dashboard</span>
+
+                        </a>
+
+                    </li>
+
+                    <li>
+
+                        <a href="#weekly-lessons">
+
+                            <i class="ri-book-open-line"></i>
+
+                            <span>Weekly Lessons</span>
+
+                        </a>
+
+                    </li>
+
+                    <li>
+
+                        <a href="#lesson-archive">
+
+                            <i class="ri-archive-line"></i>
+
+                            <span>Lesson Archive</span>
+
+                        </a>
+
+                    </li>
+
+                    <li>
+
+                        <a href="#quizzes">
+
+                            <i class="ri-question-answer-line"></i>
+
+                            <span>Quizzes</span>
+
+                        </a>
+
+                    </li>
+
+                    <li>
+
+                        <a href="#leaderboard">
+
+                            <i class="ri-trophy-line"></i>
+
+                            <span>Leaderboard</span>
+
+                        </a>
+
+                    </li>
+
+                    <li>
+
+                        <a href="#gallery">
+
+                            <i class="ri-gallery-line"></i>
+
+                            <span>Gallery</span>
+
+                        </a>
+
+                    </li>
+
+                    <li>
+
+                        <a href="#reports">
+
+                            <i class="ri-file-chart-line"></i>
+
+                            <span>Reports</span>
+
+                        </a>
+
+                    </li>
+
+                    <li>
+
+                        <a href="#members">
+
+                            <i class="ri-team-line"></i>
+
+                            <span>Members</span>
+
+                        </a>
+
+                    </li>
+
+                    <li>
+
+                        <a href="#events">
+
+                            <i class="ri-calendar-event-line"></i>
+
+                            <span>Events</span>
+
+                        </a>
+
+                    </li>
+
+                    <li>
+
+                        <a href="#welfare">
+
+                            <i class="ri-heart-3-line"></i>
+
+                            <span>Welfare</span>
+
+                        </a>
+
+                    </li>
+
+                    <li>
+
+                        <a href="#notifications">
+
+                            <i class="ri-notification-3-line"></i>
+
+                            <span>Notifications</span>
+
+                        </a>
+
+                    </li>
+
+                    <li>
+
+                        <a href="#downloads">
+
+                            <i class="ri-download-cloud-line"></i>
+
+                            <span>Downloads</span>
+
+                        </a>
+
+                    </li>
+
+                </ul>
+
+            </nav>
+
+        </div>
+
+        <!-- ========================================= -->
+        <!-- ACCOUNT -->
+        <!-- ========================================= -->
+
+        <div class="sidebar-account">
+
+            <p class="menu-title">
+
+                ACCOUNT
+
+            </p>
+
+            <ul class="sidebar-menu">
+
+                <li>
+
+                    <a href="#profile">
+
+                        <i class="ri-user-line"></i>
+
+                        <span>Profile</span>
+
+                    </a>
+
+                </li>
+
+                <li>
+
+                    <a href="#settings">
+
+                        <i class="ri-settings-3-line"></i>
+
+                        <span>Settings</span>
+
+                    </a>
+
+                </li>
+
+                <li>
+
+                    <a href="#help">
+
+                        <i class="ri-customer-service-2-line"></i>
+
+                        <span>Help</span>
+
+                    </a>
+
+                </li>
+
+                <li>
+
+                    <a
+                    href="#logout"
+                    class="logout">
+
+                        <i class="ri-logout-box-r-line"></i>
+
+                        <span>Logout</span>
+
+                    </a>
+
+                </li>
+
+            </ul>
+
+        </div>
+
+    </aside>
+
+    <!-- ========================================= -->
+    <!-- MAIN COLUMN STARTS HERE -->
+    <!-- PART 1B CONTINUES FROM THIS POINT -->
+    <!-- ========================================= -->
+
+    <main class="main-content" id="mainContent">
+
+            <!-- ===================================================== -->
+        <!-- TOP HEADER -->
+        <!-- ===================================================== -->
+
+        <header class="top-header">
+
+            <div class="header-left">
+
+                <button
+                    class="menu-btn"
+                    id="menuBtn">
+
+                    <i class="ri-menu-line"></i>
+
+                </button>
+
+                <div class="header-title">
+
+                    <h1>Dashboard</h1>
+
+                    <span>
+                        Welcome to AFC Isiwu Youth Portal
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="header-center">
+
+                <div class="search-box">
+
+                    <i class="ri-search-line"></i>
+
+                    <input
+                        type="search"
+                        placeholder="Search lessons, quizzes, reports...">
+
+                </div>
+
+            </div>
+
+
+            <div class="header-right">
+
+                <button class="header-icon">
+
+                    <i class="ri-notification-3-line"></i>
+
+                </button>
+
+                <button class="header-icon">
+
+                    <i class="ri-moon-line"></i>
+
+                </button>
+
+                <div class="header-profile">
+
+                    <img
+                        src="images/avatar.jpg"
+                        alt="Profile">
+
+                    <div>
+
+                        <h4>Youth Member</h4>
+
+                        <span>Online</span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- ===================================================== -->
+        <!-- PAGE CONTENT -->
+        <!-- ===================================================== -->
+
+        <section class="page-content" id="pageContent">
+
+
+            <!-- Dashboard Hero -->
+
+            <section class="dashboard-hero">
+
+                <div>
+
+                    <h2>
+                        Welcome Back 👋
+                    </h2>
+
+                    <p>
+
+                        Explore weekly lessons, participate in quizzes,
+                        monitor your progress and stay connected with
+                        AFC Isiwu Youth Fellowship.
+
+                    </p>
+
+                </div>
+
+            </section>
+
+
+            <!-- Quick Statistics -->
+
+            <section class="stats-grid">
+
+                <div class="stat-card">
+
+                    <i class="ri-book-open-line"></i>
+
+                    <h3>24</h3>
+
+                    <span>Lessons</span>
+
+                </div>
+
+                <div class="stat-card">
+
+                    <i class="ri-question-answer-line"></i>
+
+                    <h3>16</h3>
+
+                    <span>Quizzes</span>
+
+                </div>
+
+                <div class="stat-card">
+
+                    <i class="ri-team-line"></i>
+
+                    <h3>86</h3>
+
+                    <span>Members</span>
+
+                </div>
+
+                <div class="stat-card">
+
+                    <i class="ri-trophy-line"></i>
+
+                    <h3>5</h3>
+
+                    <span>Top Winners</span>
+
+                </div>
+
+            </section>
+
+
+            <!-- Dynamic Page Loader -->
+
+            <section id="dynamicContent" class="dynamic-content">
+
+                <!--
+
+                    All pages will be loaded here.
+
+                    dashboard.html
+                    weekly-lessons.html
+                    quizzes.html
+                    leaderboard.html
+                    reports.html
+                    welfare.html
+                    members.html
+                    gallery.html
+                    settings.html
+
+                -->
+
+            </section>
+
+        </section>
+
+    </main>
+
+
+    <!-- ===================================================== -->
+    <!-- RIGHT SIDEBAR -->
+    <!-- ===================================================== -->
+
+    <aside
+        class="sidebar-right"
+        id="sidebarRight">
+
+
+        <!-- Gallery -->
+
+        <div class="right-card">
+
+            <div class="card-title">
+
+                <h3>
+
+                    Gallery
+
+                </h3>
+
+            </div>
+
+            <div class="gallery-grid">
+
+                <img src="images/gallery1.jpg" alt="">
+                <img src="images/gallery2.jpg" alt="">
+                <img src="images/gallery3.jpg" alt="">
+                <img src="images/gallery4.jpg" alt="">
+                <img src="images/gallery5.jpg" alt="">
+                <img src="images/gallery6.jpg" alt="">
+
+            </div>
+
+        </div>
+
+
+        <!-- Resources -->
+
+        <div class="right-card">
+
+            <div class="card-title">
+
+                <h3>
+
+                    Educational Resources
+
+                </h3>
+
+            </div>
+
+            <ul class="resource-list">
+
+                <li>
+
+                    <i class="ri-book-line"></i>
+
+                    Sunday School Notes
+
+                </li>
+
+                <li>
+
+                    <i class="ri-volume-up-line"></i>
+
+                    Memory Verse Audio
+
+                </li>
+
+                <li>
+
+                    <i class="ri-download-line"></i>
+
+                    PDF Downloads
+
+                </li>
+
+                <li>
+
+                    <i class="ri-video-line"></i>
+
+                    Video Teachings
+
+                </li>
+
+                <li>
+
+                    <i class="ri-file-copy-line"></i>
+
+                    Past Quiz Questions
+
+                </li>
+
+            </ul>
+
+        </div>
+
+
+        <!-- Upcoming Event -->
+
+        <div class="right-card">
+
+            <div class="card-title">
+
+                <h3>
+
+                    Upcoming Event
+
+                </h3>
+
+            </div>
+
+            <div class="event-box">
+
+                <h4>
+
+                    Youth Fellowship
+
+                </h4>
+
+                <p>
+
+                    Every Sunday
+
+                </p>
+
+                <span>
+
+                    8:30 AM
+
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- Contact -->
+
+        <div class="right-card">
+
+            <div class="card-title">
+
+                <h3>
+
+                    Contact Us
+
+                </h3>
+
+            </div>
+
+            <ul class="contact-list">
+
+                <li>
+
+                    <i class="ri-map-pin-line"></i>
+
+                    AFC Isiwu Youth Fellowship
+
+                </li>
+
+                <li>
+
+                    <i class="ri-phone-line"></i>
+
+                    +234 XXX XXX XXXX
+
+                </li>
+
+                <li>
+
+                    <i class="ri-mail-line"></i>
+
+                    youth@afcisiwu.org
+
+                </li>
+
+            </ul>
+
+            <div class="social-links">
+
+                <a href="#"><i class="ri-facebook-fill"></i></a>
+
+                <a href="#"><i class="ri-instagram-line"></i></a>
+
+                <a href="#"><i class="ri-whatsapp-line"></i></a>
+
+                <a href="#"><i class="ri-youtube-line"></i></a>
+
+            </div>
+
+        </div>
+
+    </aside>
+
+    <!-- ===================================================== -->
+    <!-- PART 1C STARTS FROM HERE -->
+    <!-- MOBILE NAVIGATION + MOBILE DRAWERS + CLOSING TAGS -->
+    <!-- ===================================================== -->
+
+      <!-- ===================================================== -->
+    <!-- MOBILE LEFT DRAWER -->
+    <!-- ===================================================== -->
+
+    <aside class="mobile-drawer left-drawer" id="leftDrawer">
+
+        <div class="drawer-header">
+
+            <img src="images/logo.png" alt="AFC Logo">
+
+            <div>
+
+                <h3>AFC Isiwu</h3>
+
+                <span>Youth Portal</span>
+
+            </div>
+
+            <button id="closeLeftDrawer">
+
+                <i class="ri-close-line"></i>
+
+            </button>
+
+        </div>
+
+        <nav class="drawer-menu">
+
+            <a href="#dashboard">
+                <i class="ri-home-5-line"></i>
+                <span>Dashboard</span>
+            </a>
+
+            <a href="#weekly-lessons">
+                <i class="ri-book-open-line"></i>
+                <span>Weekly Lessons</span>
+            </a>
+
+            <a href="#lesson-archive">
+                <i class="ri-archive-line"></i>
+                <span>Lesson Archive</span>
+            </a>
+
+            <a href="#quizzes">
+                <i class="ri-question-answer-line"></i>
+                <span>Quizzes</span>
+            </a>
+
+            <a href="#leaderboard">
+                <i class="ri-trophy-line"></i>
+                <span>Leaderboard</span>
+            </a>
+
+            <a href="#reports">
+                <i class="ri-file-chart-line"></i>
+                <span>Reports</span>
+            </a>
+
+            <a href="#members">
+                <i class="ri-team-line"></i>
+                <span>Members</span>
+            </a>
+
+            <a href="#gallery">
+                <i class="ri-gallery-line"></i>
+                <span>Gallery</span>
+            </a>
+
+            <a href="#events">
+                <i class="ri-calendar-event-line"></i>
+                <span>Events</span>
+            </a>
+
+            <a href="#welfare">
+                <i class="ri-heart-3-line"></i>
+                <span>Welfare</span>
+            </a>
+
+            <a href="#notifications">
+                <i class="ri-notification-3-line"></i>
+                <span>Notifications</span>
+            </a>
+
+            <a href="#settings">
+                <i class="ri-settings-3-line"></i>
+                <span>Settings</span>
+            </a>
+
+        </nav>
+
+    </aside>
+
+
+    <!-- ===================================================== -->
+    <!-- MOBILE RIGHT DRAWER -->
+    <!-- ===================================================== -->
+
+    <aside class="mobile-drawer right-drawer" id="rightDrawer">
+
+        <div class="drawer-header">
+
+            <h3>Resources</h3>
+
+            <button id="closeRightDrawer">
+
+                <i class="ri-close-line"></i>
+
+            </button>
+
+        </div>
+
+        <div class="drawer-section">
+
+            <h4>Educational Resources</h4>
+
+            <a href="#">
+                Sunday School Notes
+            </a>
+
+            <a href="#">
+                Memory Verse Audio
+            </a>
+
+            <a href="#">
+                PDF Downloads
+            </a>
+
+            <a href="#">
+                Video Teachings
+            </a>
+
+        </div>
+
+        <div class="drawer-section">
+
+            <h4>Quick Links</h4>
+
+            <a href="#">
+                Gallery
+            </a>
+
+            <a href="#">
+                Contact Us
+            </a>
+
+            <a href="#">
+                About Youth
+            </a>
+
+        </div>
+
+        <div class="drawer-section">
+
+            <h4>Contact</h4>
+
+            <p>AFC Isiwu Youth Fellowship</p>
+
+            <p>+234 XXX XXX XXXX</p>
+
+            <p>youth@afcisiwu.org</p>
+
+        </div>
+
+    </aside>
+
+
+    <!-- ===================================================== -->
+    <!-- MOBILE BOTTOM NAVIGATION -->
+    <!-- ===================================================== -->
+
+    <nav class="mobile-bottom-nav">
+
+        <a href="#dashboard" class="active">
+
+            <i class="ri-home-5-line"></i>
+
+            <span>Home</span>
+
+        </a>
+
+        <a href="#weekly-lessons">
+
+            <i class="ri-book-open-line"></i>
+
+            <span>Lessons</span>
+
+        </a>
+
+        <button
+            id="openLeftDrawer"
+            class="menu-fab">
+
+            <i class="ri-apps-2-line"></i>
+
+        </button>
+
+        <a href="#quizzes">
+
+            <i class="ri-question-answer-line"></i>
+
+            <span>Quiz</span>
+
+        </a>
+
+        <button
+            id="openRightDrawer"
+            class="profile-button">
+
+            <i class="ri-user-3-line"></i>
+
+            <span>More</span>
+
+        </button>
+
+    </nav>
+
+
+    <!-- ===================================================== -->
+    <!-- PAGE LOADER -->
+    <!-- ===================================================== -->
+
+    <div id="pageLoader" class="page-loader">
+
+        <div class="loader-circle"></div>
+
+    </div>
+
+
+</div>
+
+<!-- ===================================================== -->
+<!-- JAVASCRIPT -->
+<!-- ===================================================== -->
+
+<script src="js/app.js"></script>
+<script src="js/router.js"></script>
+<script src="js/sidebar.js"></script>
+<script src="js/bottom-nav.js"></script>
+<script src="js/dashboard.js"></script>
+
+</body>
+</html>
