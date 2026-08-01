@@ -20,7 +20,6 @@ body{
 body{
     font-family:"DM Sans", sans-serif;
     color:var(--text);
-    overflow-x:hidden;
     background:transparent;
 }
 
