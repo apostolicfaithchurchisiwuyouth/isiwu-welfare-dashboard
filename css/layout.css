@@ -24,6 +24,16 @@
 
 }
 
+.sidebar{
+    overflow-y:auto;
+    overscroll-behavior:contain;
+}
+
+.dashboard-content{
+    overflow-y:auto;
+    overscroll-behavior:contain;
+}
+
 /* ==========================================================
    PART 1B
    APPLICATION LAYOUT
