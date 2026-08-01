@@ -60,7 +60,7 @@
 
     padding:28px 18px;
 
-    background:var(--brand);
+    background:var(--primary-dark);
     border-right:1px solid rgba(0,0,0,.06);
 
     overflow-y:auto;
@@ -353,7 +353,7 @@
 
         height:100dvh;
 
-        background:var(--brand);
+        background:var(--primary-dark);
          color:white;
         border-radius:0 28px 28px 0;
 
@@ -522,7 +522,7 @@
 
     letter-spacing:1px;
 
-    color:#8b8f9a;
+    color:var(--ink-mute);
 
 }
 
@@ -534,7 +534,7 @@
 
     height:1px;
 
-    background:rgba(0,0,0,.08);
+    background:rgba(0,0,0,.08;
 
 }
     
