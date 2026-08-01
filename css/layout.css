@@ -328,8 +328,8 @@
 
         height:100dvh;
 
-        background:#fff;
-
+        background:var(--brand);
+         color:white;
         border-radius:0 28px 28px 0;
 
         padding:24px 18px;
@@ -414,10 +414,10 @@
 
     text-decoration:none;
 
-    color:var(--text);
+    color:white;
 
-    font-size:.7rem;
-
+    font-size:.75rem;
+    font-weight:500;
     transition:.3s;
 
 }
@@ -1057,7 +1057,7 @@ UPCOMING EVENTS
 .events-section,
 .lesson-section{
 
-    width:110%;
+    width:100%;
 }
 
 }
