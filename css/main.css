@@ -10,8 +10,18 @@ box-sizing:border-box;
 }
 
 
-html{
-    overscroll-behavior:smooth;
+html,
+body{
+    margin:0;
+    padding:0;
+    height:100%;
+}
+
+body{
+    font-family:"DM Sans", sans-serif;
+    color:var(--text);
+    overflow-x:hidden;
+    background:transparent;
 }
 
 /* ---------- VARIABLES ---------- */
@@ -40,10 +50,6 @@ html{
 
 }
 
-body{
-font-family: "DM Sans", sans-serif;
-overflow-x:hidden;
-}
 
 h1,h2,h3,h4,.logo{
 font-family: "Bricolage Grotesque", sans-serif;
