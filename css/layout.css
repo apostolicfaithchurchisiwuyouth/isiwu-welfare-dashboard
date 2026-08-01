@@ -357,7 +357,7 @@
          color:white;
 
         padding:24px 18px;
-        padding-bottom:110px;
+        padding-bottom:20px;
         overflow-y:auto;
         -ms-overflow-style:none;
         scrollbar-width:none;
@@ -546,7 +546,7 @@
 
     .dashboard-content{
 
-        padding:18px 16px 110px;
+        padding:18px 16px 20px;
     }
 
 }
@@ -1062,7 +1062,7 @@ UPCOMING EVENTS
 
 .dashboard-container{
 
-    padding:10px 10px 100px;
+    padding:10px 10px 20px;
 
     display:flex;
 
