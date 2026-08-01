@@ -24,15 +24,6 @@
 
 }
 
-.sidebar{
-    overflow-y:auto;
-    overscroll-behavior:contain;
-}
-
-.dashboard-content{
-    overflow-y:auto;
-    overscroll-behavior:contain;
-}
 
 /* ==========================================================
    PART 1B
@@ -45,9 +36,10 @@
 
     grid-template-columns:290px 1fr;
 
-    min-height:100vh;
+    height:100vh;
     background:var(--background);
     width:100%;
+    overflow:hidden;
 
 }
 
@@ -224,6 +216,7 @@
     min-width:0;
     display:flex;
     flex-direction:column;
+    overflow:hidden;
 }
 
 /* ==========================================
