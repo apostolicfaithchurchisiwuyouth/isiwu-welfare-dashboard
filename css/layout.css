@@ -39,6 +39,7 @@
     min-height:100vh;
     background:var(--background);
     width:100%;
+    overflow:hidden;
 
 }
 
@@ -215,7 +216,6 @@
     min-width:0;
     display:flex;
     flex-direction:column;
-    overflow:hidden;
 }
 
 /* ==========================================
