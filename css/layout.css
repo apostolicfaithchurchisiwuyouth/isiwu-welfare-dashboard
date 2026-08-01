@@ -106,7 +106,7 @@
 
     font-size:1rem;
 
-    color:var(--primary-dark);
+    color:white;
 
     margin-bottom:2px;
 }
@@ -115,7 +115,7 @@
 
     font-size:.7rem;
 
-    color:var(--text-light);
+    color:var(--ink-mute);
 }
 
 /* ==========================================================
