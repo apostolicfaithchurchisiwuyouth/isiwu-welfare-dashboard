@@ -1057,9 +1057,7 @@ UPCOMING EVENTS
 .events-section,
 .lesson-section{
 
-    width:calc(100% + 20px);
-    margin-left:-10px;
-
+    width:110%;
 }
 
 }
