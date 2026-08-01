@@ -1038,10 +1038,6 @@ UPCOMING EVENTS
 
 .dashboard-container{
 
-    width:100%;
-
-    max-width:100%;
-
     padding:10px 10px 100px;
 
     display:flex;
@@ -1053,6 +1049,19 @@ UPCOMING EVENTS
     box-sizing:border-box;
 
 }
+
+   .dashboard-container > section,
+.dashboard-container > div,
+.hub,
+.reports-section,
+.events-section,
+.lesson-section{
+
+    width:calc(100% + 20px);
+    margin-left:-10px;
+
+}
+
 }
 
 .lesson-section{
@@ -1080,7 +1089,7 @@ UPCOMING EVENTS
 
 .lesson-section{
 
-    width:340px;
+    width:100%;
     max-width:none;
     margin:0;
 
