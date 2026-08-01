@@ -2848,11 +2848,11 @@ background: var(--surface);
 
     margin-bottom: .55rem;
 
-    font-size: .78rem;
+    font-size: .68rem;
     font-family: "Bricolage Grotesque", sans-serif;
     font-weight: 700;
 
-    color: var(--ink);
+    color: var(--primary);
 
 }
 
@@ -2863,7 +2863,7 @@ background: var(--surface);
 .lesson-main-card p,
 .memory-block p {
 
-    font-size: .7rem;
+    font-size: .72rem;
 
     color: var(--text);
 
@@ -2895,8 +2895,8 @@ background: var(--surface);
 
     background: linear-gradient(
         135deg,
-        var(--ink),
-        var(--ink-soft)
+        var(--primary-dark),
+        var(--primary-dark)
     );
 
     color: #fff;
