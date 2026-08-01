@@ -358,7 +358,6 @@
          color:white;
 
         padding:24px 18px;
-        padding-bottom:20px;
         overflow-y:auto;
         -ms-overflow-style:none;
         scrollbar-width:none;
@@ -547,7 +546,7 @@
 
     .dashboard-content{
 
-        padding:18px 16px 20px;
+        padding:18px 16px;
     }
 
 }
@@ -565,7 +564,7 @@
 
     .dashboard-content{
 
-        padding:40px;
+        padding:10px;
     }
 
 }
