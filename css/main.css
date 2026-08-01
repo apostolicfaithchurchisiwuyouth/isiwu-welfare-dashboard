@@ -1568,7 +1568,7 @@ left:-80px;
 
     background:linear-gradient(
         135deg,
-        var(--primary),
+        var(--primary-dark),
         var(--secondary)
     );
 
