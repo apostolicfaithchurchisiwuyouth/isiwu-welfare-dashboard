@@ -1568,8 +1568,8 @@ left:-80px;
 
     background:linear-gradient(
         135deg,
-        var(--primary-dark),
-        var(--secondary)
+        var(--brand),
+        var(--brand-dark)
     );
 
     display:flex;
@@ -1584,8 +1584,7 @@ left:-80px;
 
     margin-top:-42px;
 
-    box-shadow:
-        0 18px 40px rgba(108,43,217,.35);
+    box-shadow: 0 18px 40px rgba(234, 88, 12, 0.20);
 
     cursor:pointer;
 
