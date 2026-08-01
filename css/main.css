@@ -44,7 +44,6 @@ body{
 font-family: "DM Sans", sans-serif;
 background:#eef3f9;
 color: var(--ink-soft);
-overflow-x:hidden;
 }
 
 h1,h2,h3,h4,.logo{
