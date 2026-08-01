@@ -2658,10 +2658,10 @@ background: var(--surface);
     background: linear-gradient(
         135deg,
         var(--ink-mute),
-        var(--text-light)
+        var(--ink-mute)
     );
 
-    color: var(primary-dark);
+    color: var(--primary-dark);
     font-weight: 600;
     font-size: .55rem;
 
