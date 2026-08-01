@@ -1080,10 +1080,10 @@ UPCOMING EVENTS
 
 .lesson-section{
 
-    width:330px;
-
-    max-width:100%;
-
+    width:100%;
+    
+    max-width:none;
+    padding:8px;
     margin:0;
 
     box-sizing:border-box;
