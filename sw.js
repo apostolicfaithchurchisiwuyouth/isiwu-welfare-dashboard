@@ -1,4 +1,4 @@
-const CACHE_NAME = "afc-isiu-pwa-v1";
+const CACHE_NAME = "afc-isiu-pwa-v2";
 
 const APP_SHELL = [
     "/",
