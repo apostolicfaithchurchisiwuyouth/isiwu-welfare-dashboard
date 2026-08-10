@@ -28,6 +28,102 @@ if ("serviceWorker" in navigator) {
     });
 
 }
+
+/* =========================================
+   PWA INSTALL PROMPT
+========================================= */
+
+let deferredInstallPrompt = null;
+
+window.addEventListener("beforeinstallprompt", event => {
+
+    event.preventDefault();
+
+    deferredInstallPrompt = event;
+
+    console.log("AFC Isiu PWA: Installation is available.");
+
+    const installButton =
+        document.getElementById("installAppBtn");
+
+    if (installButton) {
+        installButton.style.display = "flex";
+    }
+
+});
+
+
+document.addEventListener("click", async event => {
+
+    const installButton =
+        event.target.closest("#installAppBtn");
+
+    if (!installButton) {
+        return;
+    }
+
+    if (!deferredInstallPrompt) {
+        return;
+    }
+
+    deferredInstallPrompt.prompt();
+
+    const { outcome } =
+        await deferredInstallPrompt.userChoice;
+
+    console.log(
+        "AFC Isiu PWA installation:",
+        outcome
+    );
+
+    deferredInstallPrompt = null;
+
+    installButton.style.display = "none";
+
+});
+
+
+window.addEventListener("appinstalled", () => {
+
+    console.log(
+        "AFC Isiu PWA: App installed successfully."
+    );
+
+    deferredInstallPrompt = null;
+
+    const installButton =
+        document.getElementById("installAppBtn");
+
+    if (installButton) {
+        installButton.style.display = "none";
+    }
+
+});
+
+/* =========================================
+   PWA DISPLAY MODE
+========================================= */
+
+function updatePWADisplayMode() {
+
+    const isStandalone =
+        window.matchMedia("(display-mode: standalone)").matches ||
+        window.navigator.standalone === true;
+
+    document.documentElement.classList.toggle(
+        "pwa-standalone",
+        isStandalone
+    );
+
+}
+
+updatePWADisplayMode();
+
+window
+    .matchMedia("(display-mode: standalone)")
+    .addEventListener("change", updatePWADisplayMode);
+
+
 AOS.init({
     duration: 900,
     easing: "ease-out-cubic",
