@@ -100,42 +100,7 @@ document.addEventListener("DOMContentLoaded", () => {
     typeEffect();
 
 });
-/*
-==============================
-MOBILE MENU (REPLACE EVERYTHING)
-==============================
-*/
 
-document.addEventListener("DOMContentLoaded", () => {
-
-    const hamburger = document.getElementById("hamburger");
-    const menu = document.getElementById("menu");
-
-    hamburger.addEventListener("click", function (e) {
-
-        e.preventDefault();
-        e.stopPropagation();
-
-        menu.classList.toggle("active");
-
-        console.log(menu.classList.contains("active"));
-
-    });
-
-    document.addEventListener("click", function (e) {
-
-        if (
-            !menu.contains(e.target) &&
-            !hamburger.contains(e.target)
-        ) {
-
-            menu.classList.remove("active");
-
-        }
-
-    });
-
-});
     
  /*
 ==============================
