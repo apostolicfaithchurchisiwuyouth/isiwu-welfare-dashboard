@@ -35,70 +35,168 @@ if ("serviceWorker" in navigator) {
 
 let deferredInstallPrompt = null;
 
-window.addEventListener("beforeinstallprompt", event => {
+const installButton = () => {
+    return document.getElementById("installAppBtn");
+};
 
-    event.preventDefault();
 
-    deferredInstallPrompt = event;
+/* =========================================
+   INSTALL AVAILABLE
+========================================= */
 
-    console.log("AFC Isiu PWA: Installation is available.");
+window.addEventListener(
+    "beforeinstallprompt",
+    event => {
 
-    const installButton =
-        document.getElementById("installAppBtn");
+        event.preventDefault();
 
-    if (installButton) {
-        installButton.style.display = "flex";
+        deferredInstallPrompt = event;
+
+        console.log(
+            "AFC Isiwu PWA: Install prompt available."
+        );
+
+        const button = installButton();
+
+        if (button) {
+
+            button.style.display = "flex";
+
+            button.disabled = false;
+
+            button.innerHTML = `
+                <i class="fa-solid fa-download"></i>
+                Install App
+            `;
+
+        }
+
     }
+);
 
-});
+
+/* =========================================
+   INSTALL BUTTON
+========================================= */
+
+document.addEventListener(
+    "click",
+    async event => {
+
+        const button =
+            event.target.closest("#installAppBtn");
+
+        if (!button) {
+            return;
+        }
 
 
-document.addEventListener("click", async event => {
+        /* No install prompt */
 
-    const installButton =
-        event.target.closest("#installAppBtn");
+        if (!deferredInstallPrompt) {
 
-    if (!installButton) {
-        return;
+            console.warn(
+                "AFC Isiwu PWA: Installation prompt is not available."
+            );
+
+            button.innerHTML = `
+                <i class="fa-solid fa-circle-info"></i>
+                Install Unavailable
+            `;
+
+            setTimeout(() => {
+
+                button.innerHTML = `
+                    <i class="fa-solid fa-download"></i>
+                    Install App
+                `;
+
+            }, 2500);
+
+            return;
+
+        }
+
+
+        /* Show browser installation prompt */
+
+        try {
+
+            await deferredInstallPrompt.prompt();
+
+            const { outcome } =
+                await deferredInstallPrompt.userChoice;
+
+            console.log(
+                "AFC Isiwu PWA installation:",
+                outcome
+            );
+
+            deferredInstallPrompt = null;
+
+
+            if (outcome === "accepted") {
+
+                button.innerHTML = `
+                    <i class="fa-solid fa-check"></i>
+                    Installing...
+                `;
+
+            }
+
+            else {
+
+                button.innerHTML = `
+                    <i class="fa-solid fa-download"></i>
+                    Install App
+                `;
+
+            }
+
+        }
+
+        catch (error) {
+
+            console.error(
+                "AFC Isiwu PWA installation error:",
+                error
+            );
+
+        }
+
     }
+);
 
-    if (!deferredInstallPrompt) {
-        return;
+
+/* =========================================
+   APP INSTALLED
+========================================= */
+
+window.addEventListener(
+    "appinstalled",
+    () => {
+
+        console.log(
+            "AFC Isiwu PWA: App installed successfully."
+        );
+
+        deferredInstallPrompt = null;
+
+        const button = installButton();
+
+        if (button) {
+
+            button.innerHTML = `
+                <i class="fa-solid fa-circle-check"></i>
+                Installed
+            `;
+
+            button.disabled = true;
+
+        }
+
     }
-
-    deferredInstallPrompt.prompt();
-
-    const { outcome } =
-        await deferredInstallPrompt.userChoice;
-
-    console.log(
-        "AFC Isiu PWA installation:",
-        outcome
-    );
-
-    deferredInstallPrompt = null;
-
-    installButton.style.display = "none";
-
-});
-
-
-window.addEventListener("appinstalled", () => {
-
-    console.log(
-        "AFC Isiu PWA: App installed successfully."
-    );
-
-    deferredInstallPrompt = null;
-
-    const installButton =
-        document.getElementById("installAppBtn");
-
-    if (installButton) {
-        installButton.style.display = "none";
-    }
-
-});
+);
 
 /* =========================================
    PWA DISPLAY MODE
