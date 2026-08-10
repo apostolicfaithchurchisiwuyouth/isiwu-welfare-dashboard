@@ -3080,5 +3080,20 @@ max-width:100%;
 
 }
 
+/* =========================================
+   PWA STANDALONE MODE
+========================================= */
 
+html.pwa-standalone .topbar {
+
+    padding-top: env(safe-area-inset-top);
+
+}
+
+html.pwa-standalone .bottom-nav {
+
+    padding-bottom:
+        calc(8px + env(safe-area-inset-bottom));
+
+}
 
