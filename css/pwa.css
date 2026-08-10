@@ -111,7 +111,7 @@ html.pwa-standalone .bottom-nav {
 
 .pwa-install-card .settings-action-btn {
 
-    display: none;
+    display: flex;
 
     align-items: center;
     justify-content: center;
