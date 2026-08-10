@@ -1,3 +1,21 @@
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker
+      .register("/sw.js")
+      .then(registration => {
+        console.log(
+          "AFC Isiu PWA: Service worker registered.",
+          registration.scope
+        );
+      })
+      .catch(error => {
+        console.error(
+          "AFC Isiu PWA: Service worker registration failed.",
+          error
+        );
+      });
+  });
+}
 
 AOS.init({
     duration: 900,
