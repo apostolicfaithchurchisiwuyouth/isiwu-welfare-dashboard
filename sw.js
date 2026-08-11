@@ -25,11 +25,15 @@ const APP_SHELL = [
 
     "/manifest.json",
 
+    /* Main dashboard */
     "/css/main.css",
     "/css/layout.css",
-
     "/js/main.js",
-    "/js/pwa.js"
+
+    /* Weekly lessons */
+    "/pages/lessons.html",
+    "/css/lessons.css",
+    "/js/lessons.js"
 
 ];
 
