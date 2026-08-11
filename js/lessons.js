@@ -664,52 +664,71 @@ function switchClass(className) {
 
 
     /* =====================================================
-       AUDIO
-    ===================================================== */
+   AUDIO
+===================================================== */
 
-    const audio =
-        lesson.YorubaAudio;
-
-
-    if (
-        audio &&
-        audio.trim() !== ""
-    ) {
-
-        audioSource.src =
-            audio.trim();
+const audio =
+    lesson.YorubaAudio;
 
 
-        audioPlayer.load();
+if (
+    audio &&
+    audio.trim() !== ""
+) {
+
+    const audioURL =
+        audio.trim();
 
 
-        audioContainer.style.display =
-            "block";
+    audioSource.src =
+        audioURL;
 
 
-        /*
-        Let the service worker see the audio request
-        when the browser loads it.
-        */
+    audioPlayer.load();
 
-        console.log(
-            "AFC Isiu: Yoruba audio available:",
-            audio
-        );
 
-    }
+    audioContainer.style.display =
+        "block";
 
-    else {
 
-        audioSource.src =
-            "";
+    /*
+    -----------------------------------------------------
+    AUDIO OFFLINE SUPPORT
+    -----------------------------------------------------
+    */
 
-        audioPlayer.load();
+    audioPlayer.addEventListener(
+        "play",
+        async () => {
 
-        audioContainer.style.display =
-            "none";
+            console.log(
+                "AFC Isiu: Yoruba audio requested."
+            );
 
-    }
+            /*
+            The service worker will intercept the
+            audio request and cache it.
+            */
+
+        },
+        {
+            once: true
+        }
+    );
+
+
+}
+else {
+
+    audioSource.src =
+        "";
+
+    audioPlayer.load();
+
+    audioContainer.style.display =
+        "none";
+
+}
 
 
     /* =====================================================
