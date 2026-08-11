@@ -1,279 +1,473 @@
-/* =========================================================
-   AFC ISIU YOUTH PORTAL
-   SERVICE WORKER
-   PHASE 3 — OFFLINE APP SHELL
-========================================================= */
+const CACHE_VERSION = "afc-isiu-pwa-v4";
 
-const CACHE_NAME = "afc-isiu-pwa-v4";
+const STATIC_CACHE = `${CACHE_VERSION}-static`;
+
+const PAGE_CACHE = `${CACHE_VERSION}-pages`;
+
+const OFFLINE_CACHE = `${CACHE_VERSION}-offline`;
 
 /* =========================================================
-   CORE APP FILES
+FILES REQUIRED FOR THE BASIC APP
 ========================================================= */
 
 const APP_SHELL = [
 
-    "/",
-    "/index.html",
+```
+"/",
 
-    "/manifest.json",
+"/index.html",
 
-    "/css/main.css",
-    "/css/layout.css",
+"/offline.html",
 
-    "/js/main.js",
+"/manifest.json",
 
-    "/images/logo.png"
+"/css/main.css",
+
+"/css/layout.css",
+
+"/js/main.js",
+
+"/images/logo.png"
+```
 
 ];
 
 /* =========================================================
-   LESSON PAGE FILES
+OFFLINE PAGE
 ========================================================= */
 
-const LESSON_FILES = [
-
-    "/pages/lessons.html",
-    "/css/lessons.css",
-    "/js/lessons.js"
-
-];
+const OFFLINE_PAGE = "/offline.html";
 
 /* =========================================================
-   INSTALL
+INSTALL
 ========================================================= */
 
 self.addEventListener("install", event => {
 
-    console.log(
-        "AFC Isiu SW: Installing",
-        CACHE_NAME
-    );
+```
+event.waitUntil(
 
-    event.waitUntil(
+    Promise.all([
 
-        caches.open(CACHE_NAME)
-
+        caches
+            .open(STATIC_CACHE)
             .then(cache => {
 
-                return cache.addAll([
-                    ...APP_SHELL,
-                    ...LESSON_FILES
-                ]);
+                return cache.addAll(APP_SHELL);
+
+            }),
+
+        caches
+            .open(OFFLINE_CACHE)
+            .then(cache => {
+
+                return cache.add(OFFLINE_PAGE);
 
             })
 
-            .then(() => {
+    ])
 
-                console.log(
-                    "AFC Isiu SW: App shell cached."
-                );
+    .then(() => {
 
-                return self.skipWaiting();
+        console.log(
+            "AFC Isiu PWA: Service worker installed."
+        );
 
-            })
+        return self.skipWaiting();
 
-            .catch(error => {
+    })
 
-                console.error(
-                    "AFC Isiu SW: Cache installation failed:",
-                    error
-                );
-
-            })
-
-    );
+);
+```
 
 });
 
 /* =========================================================
-   ACTIVATE
+ACTIVATE
 ========================================================= */
 
 self.addEventListener("activate", event => {
 
-    console.log(
-        "AFC Isiu SW: Activating",
-        CACHE_NAME
-    );
+```
+event.waitUntil(
 
-    event.waitUntil(
+    caches.keys()
 
-        caches.keys()
+        .then(cacheNames => {
 
-            .then(cacheNames => {
+            return Promise.all(
 
-                return Promise.all(
+                cacheNames
+                    .filter(cacheName => {
 
-                    cacheNames
+                        return (
 
-                        .filter(
-                            cacheName =>
-                                cacheName !== CACHE_NAME
-                        )
+                            cacheName.startsWith(
+                                "afc-isiu-pwa-"
+                            )
 
-                        .map(
-                            cacheName => {
+                            &&
 
-                                console.log(
-                                    "AFC Isiu SW: Removing old cache:",
-                                    cacheName
-                                );
+                            cacheName !== STATIC_CACHE
 
-                                return caches.delete(
-                                    cacheName
-                                );
+                            &&
 
-                            }
-                        )
+                            cacheName !== PAGE_CACHE
 
-                );
+                            &&
 
-            })
+                            cacheName !== OFFLINE_CACHE
 
-            .then(() => {
+                        );
 
-                return self.clients.claim();
+                    })
 
-            })
+                    .map(cacheName => {
 
-    );
+                        console.log(
+                            "AFC Isiu PWA: Removing old cache:",
+                            cacheName
+                        );
+
+                        return caches.delete(
+                            cacheName
+                        );
+
+                    })
+
+            );
+
+        })
+
+        .then(() => {
+
+            console.log(
+                "AFC Isiu PWA: Service worker activated."
+            );
+
+            return self.clients.claim();
+
+        })
+
+);
+```
 
 });
 
 /* =========================================================
-   FETCH
+FETCH HANDLER
 ========================================================= */
 
 self.addEventListener("fetch", event => {
 
-    const request = event.request;
+```
+const request = event.request;
 
-    /* Only handle GET requests */
 
-    if (request.method !== "GET") {
-        return;
-    }
+/* -----------------------------------------------------
+   Only GET requests
+----------------------------------------------------- */
 
-    /* =====================================================
-       PAGE NAVIGATION
-    ===================================================== */
+if (
+    request.method !== "GET"
+) {
 
-    if (request.mode === "navigate") {
+    return;
 
-        event.respondWith(
+}
 
-            fetch(request)
 
-                .then(response => {
+const url =
+    new URL(request.url);
 
-                    /*
-                    Save successful HTML pages
-                    for future offline use.
-                    */
 
-                    const responseClone =
-                        response.clone();
+/* -----------------------------------------------------
+   Ignore external websites
+   Example: Google Sheets, Google Fonts, CDNs
+----------------------------------------------------- */
 
-                    caches.open(CACHE_NAME)
-                        .then(cache => {
+if (
+    url.origin !== self.location.origin
+) {
 
-                            cache.put(
-                                request,
-                                responseClone
-                            );
+    return;
 
-                        });
+}
 
-                    return response;
 
-                })
+/* =====================================================
+   PAGE NAVIGATION
+===================================================== */
 
-                .catch(() => {
-
-                    /*
-                    NETWORK FAILED
-                    */
-
-                    return caches.match(
-                        request
-                    )
-
-                    .then(cachedPage => {
-
-                        if (cachedPage) {
-                            return cachedPage;
-                        }
-
-                        /*
-                        If the exact requested page
-                        isn't cached, return homepage.
-                        */
-
-                        return caches.match(
-                            "/index.html"
-                        );
-
-                    });
-
-                })
-
-        );
-
-        return;
-    }
-
-    /* =====================================================
-       OTHER FILES
-       CACHE FIRST
-    ===================================================== */
+if (
+    request.mode === "navigate"
+) {
 
     event.respondWith(
 
-        caches.match(request)
-
-            .then(cachedResponse => {
-
-                if (cachedResponse) {
-
-                    return cachedResponse;
-
-                }
-
-                return fetch(request)
-
-                    .then(response => {
-
-                        /*
-                        Only cache successful responses.
-                        */
-
-                        if (
-                            response &&
-                            response.status === 200 &&
-                            response.type !== "opaque"
-                        ) {
-
-                            const responseClone =
-                                response.clone();
-
-                            caches.open(CACHE_NAME)
-                                .then(cache => {
-
-                                    cache.put(
-                                        request,
-                                        responseClone
-                                    );
-
-                                });
-
-                        }
-
-                        return response;
-
-                    });
-
-            })
+        handleNavigation(request)
 
     );
 
+    return;
+
+}
+
+
+/* =====================================================
+   OTHER ASSETS
+===================================================== */
+
+event.respondWith(
+
+    handleAsset(request)
+
+);
+```
+
 });
+
+/* =========================================================
+NAVIGATION HANDLER
+========================================================= */
+
+async function handleNavigation(request) {
+
+```
+const pageCache =
+    await caches.open(PAGE_CACHE);
+
+
+/* -----------------------------------------------------
+   FIRST:
+   Check whether this exact page already exists.
+----------------------------------------------------- */
+
+const cachedPage =
+    await pageCache.match(request);
+
+
+if (cachedPage) {
+
+    try {
+
+        const networkResponse =
+            await fetch(request);
+
+
+        if (
+            networkResponse &&
+            networkResponse.ok
+        ) {
+
+            await pageCache.put(
+                request,
+                networkResponse.clone()
+            );
+
+            return networkResponse;
+
+        }
+
+    }
+
+    catch (error) {
+
+        console.log(
+            "AFC Isiu PWA: Offline. Using cached page."
+        );
+
+    }
+
+
+    return cachedPage;
+
+}
+
+
+/* -----------------------------------------------------
+   SECOND:
+   Try the network.
+----------------------------------------------------- */
+
+try {
+
+    const networkResponse =
+        await fetch(request);
+
+
+    if (
+        networkResponse &&
+        networkResponse.ok
+    ) {
+
+        await pageCache.put(
+            request,
+            networkResponse.clone()
+        );
+
+    }
+
+
+    return networkResponse;
+
+}
+
+catch (error) {
+
+    console.log(
+        "AFC Isiu PWA: Page unavailable offline."
+    );
+
+
+    /* -------------------------------------------------
+       THIRD:
+       Return our custom offline page.
+    ------------------------------------------------- */
+
+    const offlineCache =
+        await caches.open(
+            OFFLINE_CACHE
+        );
+
+
+    const offlinePage =
+        await offlineCache.match(
+            OFFLINE_PAGE
+        );
+
+
+    if (offlinePage) {
+
+        return offlinePage;
+
+    }
+
+
+    /* -------------------------------------------------
+       Last-resort response.
+    ------------------------------------------------- */
+
+    return new Response(
+
+        `
+        <!DOCTYPE html>
+
+        <html>
+
+        <head>
+
+            <meta charset="UTF-8">
+
+            <meta
+                name="viewport"
+                content="width=device-width,initial-scale=1"
+            >
+
+            <title>Offline</title>
+
+        </head>
+
+        <body>
+
+            <h1>You're offline</h1>
+
+            <p>
+                Please reconnect to the internet
+                and try again.
+            </p>
+
+        </body>
+
+        </html>
+        `,
+
+        {
+
+            status: 503,
+
+            headers: {
+
+                "Content-Type":
+                    "text/html"
+
+            }
+
+        }
+
+    );
+
+}
+```
+
+}
+
+/* =========================================================
+ASSET HANDLER
+========================================================= */
+
+async function handleAsset(request) {
+
+```
+const cachedResponse =
+    await caches.match(request);
+
+
+if (cachedResponse) {
+
+    return cachedResponse;
+
+}
+
+
+try {
+
+    const networkResponse =
+        await fetch(request);
+
+
+    if (
+        networkResponse &&
+        networkResponse.ok
+    ) {
+
+        const cache =
+            await caches.open(
+                PAGE_CACHE
+            );
+
+
+        await cache.put(
+            request,
+            networkResponse.clone()
+        );
+
+    }
+
+
+    return networkResponse;
+
+}
+
+catch (error) {
+
+    console.log(
+        "AFC Isiu PWA: Asset unavailable offline:",
+        request.url
+    );
+
+
+    /*
+    For CSS, JS, images and other assets,
+    simply allow the request to fail.
+
+    The navigation handler above is what
+    supplies offline.html for page navigation.
+    */
+
+    throw error;
+
+}
+```
+
+}
