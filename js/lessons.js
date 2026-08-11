@@ -22,231 +22,25 @@ const LESSON_STORAGE_KEY =
 
 
 /* =========================================================
+   INDEXEDDB
+========================================================= */
+
+const LESSON_DB_NAME =
+    "AFC_Isiu_Lessons";
+
+const LESSON_DB_VERSION =
+    1;
+
+const LESSON_STORE =
+    "lessons";
+
+
+/* =========================================================
    LESSON DATA
 ========================================================= */
 
 let lessons = [];
 
-/* =====================================================
-   OFFLINE LESSON DATABASE
-===================================================== */
-
-const LESSON_DB_NAME = "AFC_Isiu_Lessons";
-const LESSON_DB_VERSION = 1;
-const LESSON_STORE = "lessons";
-
-
-function openLessonDB() {
-
-    return new Promise((resolve, reject) => {
-
-        const request =
-            indexedDB.open(
-                LESSON_DB_NAME,
-                LESSON_DB_VERSION
-            );
-
-
-        request.onupgradeneeded = event => {
-
-            const db = event.target.result;
-
-
-            if (!db.objectStoreNames.contains(LESSON_STORE)) {
-
-                db.createObjectStore(
-                    LESSON_STORE,
-                    {
-                        keyPath: "id",
-                        autoIncrement: true
-                    }
-                );
-
-            }
-
-        };
-
-
-        request.onsuccess = () => {
-
-            resolve(request.result);
-
-        };
-
-
-        request.onerror = () => {
-
-            reject(request.error);
-
-        };
-
-    });
-
-}
-
-/* =====================================================
-   SAVE LESSONS OFFLINE
-===================================================== */
-
-async function saveLessonsOffline(lessonData) {
-
-    try {
-
-        const db =
-            await openLessonDB();
-
-
-        const transaction =
-            db.transaction(
-                LESSON_STORE,
-                "readwrite"
-            );
-
-
-        const store =
-            transaction.objectStore(
-                LESSON_STORE
-            );
-
-
-        /*
-        Clear the old lesson data first.
-
-        This keeps the archive synchronized with
-        the latest Google Sheet data.
-        */
-
-        store.clear();
-
-
-        lessonData.forEach((lesson, index) => {
-
-            store.put({
-
-                id: index + 1,
-
-                Class:
-                    lesson.Class || "",
-
-                Topic:
-                    lesson.Topic || "",
-
-                BibleText:
-                    lesson.BibleText || "",
-
-                MemoryVerse:
-                    lesson.MemoryVerse || "",
-
-                Summary:
-                    lesson.Summary || "",
-
-                Discussion:
-                    lesson.Discussion || "",
-
-                YorubaAudio:
-                    lesson.YorubaAudio || ""
-
-            });
-
-        });
-
-
-        transaction.oncomplete = () => {
-
-            console.log(
-                "AFC Isiu: Lessons saved offline."
-            );
-
-        };
-
-
-        transaction.onerror = () => {
-
-            console.error(
-                "AFC Isiu: Unable to save lessons offline."
-            );
-
-        };
-
-    }
-
-    catch (error) {
-
-        console.error(
-            "Offline lesson database error:",
-            error
-        );
-
-    }
-
-}
-
-/* =====================================================
-   GET OFFLINE LESSONS
-===================================================== */
-
-async function getOfflineLessons() {
-
-    try {
-
-        const db =
-            await openLessonDB();
-
-
-        return new Promise(
-            (resolve, reject) => {
-
-                const transaction =
-                    db.transaction(
-                        LESSON_STORE,
-                        "readonly"
-                    );
-
-
-                const store =
-                    transaction.objectStore(
-                        LESSON_STORE
-                    );
-
-
-                const request =
-                    store.getAll();
-
-
-                request.onsuccess = () => {
-
-                    resolve(
-                        request.result || []
-                    );
-
-                };
-
-
-                request.onerror = () => {
-
-                    reject(
-                        request.error
-                    );
-
-                };
-
-            }
-        );
-
-    }
-
-    catch (error) {
-
-        console.error(
-            "Unable to retrieve offline lessons:",
-            error
-        );
-
-        return [];
-
-    }
-
-}
 
 /* =========================================================
    ELEMENTS
@@ -284,9 +78,234 @@ const tabs =
 
 
 /* =========================================================
-   CSV PARSER
-   Self-contained fallback parser so the lesson page does
-   not completely depend on PapaParse being available.
+   OPEN INDEXEDDB
+========================================================= */
+
+function openLessonDB() {
+
+    return new Promise((resolve, reject) => {
+
+        const request =
+            indexedDB.open(
+                LESSON_DB_NAME,
+                LESSON_DB_VERSION
+            );
+
+
+        request.onupgradeneeded = event => {
+
+            const db =
+                event.target.result;
+
+
+            if (
+                !db.objectStoreNames.contains(
+                    LESSON_STORE
+                )
+            ) {
+
+                db.createObjectStore(
+                    LESSON_STORE,
+                    {
+                        keyPath: "id",
+                        autoIncrement: true
+                    }
+                );
+
+            }
+
+        };
+
+
+        request.onsuccess = () => {
+
+            resolve(request.result);
+
+        };
+
+
+        request.onerror = () => {
+
+            reject(request.error);
+
+        };
+
+    });
+
+}
+
+
+/* =========================================================
+   SAVE LESSONS TO INDEXEDDB
+========================================================= */
+
+async function saveLessonsOffline(lessonData) {
+
+    try {
+
+        const db =
+            await openLessonDB();
+
+
+        const transaction =
+            db.transaction(
+                LESSON_STORE,
+                "readwrite"
+            );
+
+
+        const store =
+            transaction.objectStore(
+                LESSON_STORE
+            );
+
+
+        store.clear();
+
+
+        lessonData.forEach(
+            (lesson, index) => {
+
+                store.put({
+
+                    id:
+                        index + 1,
+
+                    Class:
+                        lesson.Class || "",
+
+                    Topic:
+                        lesson.Topic || "",
+
+                    BibleText:
+                        lesson.BibleText || "",
+
+                    MemoryVerse:
+                        lesson.MemoryVerse || "",
+
+                    Summary:
+                        lesson.Summary || "",
+
+                    Discussion:
+                        lesson.Discussion || "",
+
+                    YorubaAudio:
+                        lesson.YorubaAudio || ""
+
+                });
+
+            }
+        );
+
+
+        transaction.oncomplete = () => {
+
+            console.log(
+                "AFC Isiu: Lessons saved to IndexedDB."
+            );
+
+            db.close();
+
+        };
+
+
+        transaction.onerror = () => {
+
+            console.error(
+                "AFC Isiu: Unable to save lessons to IndexedDB.",
+                transaction.error
+            );
+
+        };
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "AFC Isiu: IndexedDB save error:",
+            error
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   GET LESSONS FROM INDEXEDDB
+========================================================= */
+
+async function getOfflineLessons() {
+
+    try {
+
+        const db =
+            await openLessonDB();
+
+
+        return new Promise(
+            (resolve, reject) => {
+
+                const transaction =
+                    db.transaction(
+                        LESSON_STORE,
+                        "readonly"
+                    );
+
+
+                const store =
+                    transaction.objectStore(
+                        LESSON_STORE
+                    );
+
+
+                const request =
+                    store.getAll();
+
+
+                request.onsuccess = () => {
+
+                    db.close();
+
+                    resolve(
+                        request.result || []
+                    );
+
+                };
+
+
+                request.onerror = () => {
+
+                    db.close();
+
+                    reject(
+                        request.error
+                    );
+
+                };
+
+            }
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "AFC Isiu: Unable to retrieve offline lessons:",
+            error
+        );
+
+        return [];
+
+    }
+
+}
+
+
+/* =========================================================
+   CSV PARSER FALLBACK
 ========================================================= */
 
 function parseCSV(text) {
@@ -300,11 +319,17 @@ function parseCSV(text) {
     let insideQuotes = false;
 
 
-    for (let i = 0; i < text.length; i++) {
+    for (
+        let i = 0;
+        i < text.length;
+        i++
+    ) {
 
-        const char = text[i];
+        const char =
+            text[i];
 
-        const next = text[i + 1];
+        const next =
+            text[i + 1];
 
 
         if (char === '"') {
@@ -341,8 +366,10 @@ function parseCSV(text) {
         }
 
         else if (
-            (char === "\n" ||
-             char === "\r") &&
+            (
+                char === "\n" ||
+                char === "\r"
+            ) &&
             !insideQuotes
         ) {
 
@@ -416,6 +443,7 @@ function parseCSV(text) {
 
             const object = {};
 
+
             headers.forEach(
                 (header, index) => {
 
@@ -427,6 +455,7 @@ function parseCSV(text) {
                 }
             );
 
+
             return object;
 
         });
@@ -435,7 +464,61 @@ function parseCSV(text) {
 
 
 /* =========================================================
-   SAVE LESSONS LOCALLY
+   NORMALIZE LESSON DATA
+========================================================= */
+
+function normalizeLessons(data) {
+
+    return data
+        .map(lesson => {
+
+            return {
+
+                Class:
+                    (
+                        lesson.Class || ""
+                    ).trim(),
+
+                Topic:
+                    (
+                        lesson.Topic || ""
+                    ).trim(),
+
+                BibleText:
+                    (
+                        lesson.BibleText || ""
+                    ).trim(),
+
+                MemoryVerse:
+                    (
+                        lesson.MemoryVerse || ""
+                    ).trim(),
+
+                Summary:
+                    lesson.Summary || "",
+
+                Discussion:
+                    lesson.Discussion || "",
+
+                YorubaAudio:
+                    (
+                        lesson.YorubaAudio || ""
+                    ).trim()
+
+            };
+
+        })
+        .filter(
+            lesson =>
+                lesson.Class ||
+                lesson.Topic
+        );
+
+}
+
+
+/* =========================================================
+   SAVE TO LOCAL STORAGE
 ========================================================= */
 
 function saveLessonsLocally(data) {
@@ -458,8 +541,9 @@ function saveLessonsLocally(data) {
 
         );
 
+
         console.log(
-            "AFC Isiu: Lessons saved locally."
+            "AFC Isiu: Lessons saved to LocalStorage."
         );
 
     }
@@ -477,7 +561,7 @@ function saveLessonsLocally(data) {
 
 
 /* =========================================================
-   GET SAVED LESSONS
+   GET FROM LOCAL STORAGE
 ========================================================= */
 
 function getSavedLessons() {
@@ -531,22 +615,26 @@ function getSavedLessons() {
 }
 
 
-/* =====================================================
+/* =========================================================
    LOAD LESSONS
-===================================================== */
+   ONLINE FIRST → INDEXEDDB → LOCALSTORAGE
+========================================================= */
 
 async function loadLessons() {
 
     showLoading();
 
 
-    /*
-    =====================================================
-    TRY ONLINE FIRST
-    =====================================================
-    */
+    /* =====================================================
+       1. TRY ONLINE FIRST
+    ===================================================== */
 
     try {
+
+        console.log(
+            "AFC Isiu: Trying to load lessons online..."
+        );
+
 
         const response =
             await fetch(
@@ -560,7 +648,7 @@ async function loadLessons() {
         if (!response.ok) {
 
             throw new Error(
-                "Unable to fetch lessons."
+                `HTTP error: ${response.status}`
             );
 
         }
@@ -570,33 +658,100 @@ async function loadLessons() {
             await response.text();
 
 
-        const result =
-            Papa.parse(
-                csv,
-                {
-                    header: true,
-                    skipEmptyLines: true
-                }
+        if (!csv.trim()) {
+
+            throw new Error(
+                "Google Sheets returned empty data."
+            );
+
+        }
+
+
+        /* =================================================
+           PARSE CSV
+        ================================================= */
+
+        let result;
+
+
+        if (
+            typeof Papa !== "undefined" &&
+            typeof Papa.parse === "function"
+        ) {
+
+            console.log(
+                "AFC Isiu: Using PapaParse."
             );
 
 
+            const parsed =
+                Papa.parse(
+                    csv,
+                    {
+                        header: true,
+                        skipEmptyLines: true
+                    }
+                );
+
+
+            result =
+                parsed.data;
+
+        }
+
+        else {
+
+            console.log(
+                "AFC Isiu: PapaParse unavailable. Using fallback parser."
+            );
+
+
+            result =
+                parseCSV(csv);
+
+        }
+
+
+        /* =================================================
+           NORMALIZE
+        ================================================= */
+
         lessons =
-            result.data;
+            normalizeLessons(result);
 
 
-        /*
-        Save the newly downloaded lessons locally.
-        */
+        if (!lessons.length) {
+
+            throw new Error(
+                "No lesson records were found in the CSV."
+            );
+
+        }
+
+
+        console.log(
+            "AFC Isiu: Online lessons loaded.",
+            lessons
+        );
+
+
+        /* =================================================
+           SAVE OFFLINE
+        ================================================= */
+
+        saveLessonsLocally(
+            lessons
+        );
+
 
         await saveLessonsOffline(
             lessons
         );
 
 
-        console.log(
-            "AFC Isiu: Online lessons loaded."
-        );
-
+        /* =================================================
+           DISPLAY SENIOR
+        ================================================= */
 
         switchClass(
             "Senior"
@@ -617,14 +772,16 @@ async function loadLessons() {
     }
 
 
-    /*
-    =====================================================
-    INTERNET FAILED
-    TRY OFFLINE DATABASE
-    =====================================================
-    */
+    /* =====================================================
+       2. TRY INDEXEDDB
+    ===================================================== */
 
     try {
+
+        console.log(
+            "AFC Isiu: Trying IndexedDB..."
+        );
+
 
         const offlineLessons =
             await getOfflineLessons();
@@ -636,11 +793,14 @@ async function loadLessons() {
         ) {
 
             lessons =
-                offlineLessons;
+                normalizeLessons(
+                    offlineLessons
+                );
 
 
             console.log(
-                "AFC Isiu: Offline lessons loaded."
+                "AFC Isiu: Lessons loaded from IndexedDB.",
+                lessons
             );
 
 
@@ -653,165 +813,28 @@ async function loadLessons() {
 
         }
 
-
-        /*
-        Nothing is available offline.
-        */
-
-        throw new Error(
-            "No offline lessons available."
-        );
-
-    }
-
-    catch (error) {
-
-        console.error(
-            "AFC Isiu: No offline lesson data.",
-            error
-        );
-
-
-        showError();
-
-    }
-
-}
-
-        /*
-        -----------------------------------------------------
-        PARSE CSV
-        -----------------------------------------------------
-        */
-
-        let result;
-
-
-        /*
-        Use PapaParse if it is available.
-        Otherwise use our internal parser.
-        */
-
-        if (
-            typeof Papa !== "undefined" &&
-            typeof Papa.parse === "function"
-        ) {
-
-            result =
-                Papa.parse(
-                    csv,
-                    {
-                        header: true,
-                        skipEmptyLines: true
-                    }
-                ).data;
-
-        }
-
-        else {
-
-            result =
-                parseCSV(csv);
-
-        }
-
-
-        /*
-        -----------------------------------------------------
-        CLEAN DATA
-        -----------------------------------------------------
-        */
-
-        lessons =
-            result.map(
-                lesson => {
-
-                    return {
-
-                        Class:
-                            (
-                                lesson.Class ||
-                                ""
-                            ).trim(),
-
-                        Topic:
-                            (
-                                lesson.Topic ||
-                                ""
-                            ).trim(),
-
-                        BibleText:
-                            (
-                                lesson.BibleText ||
-                                ""
-                            ).trim(),
-
-                        MemoryVerse:
-                            (
-                                lesson.MemoryVerse ||
-                                ""
-                            ).trim(),
-
-                        Summary:
-                            lesson.Summary ||
-                            "",
-
-                        Discussion:
-                            lesson.Discussion ||
-                            "",
-
-                        YorubaAudio:
-                            (
-                                lesson.YorubaAudio ||
-                                ""
-                            ).trim()
-
-                    };
-
-                }
-            );
-
-
-        /*
-        -----------------------------------------------------
-        SAVE LOCALLY
-        -----------------------------------------------------
-        */
-
-        saveLessonsLocally(
-            lessons
-        );
-
-
-        /*
-        -----------------------------------------------------
-        DISPLAY SENIOR
-        -----------------------------------------------------
-        */
-
-        switchClass("Senior");
-
-
-        console.log(
-            "AFC Isiu: Fresh lessons loaded online."
-        );
-
-
     }
 
     catch (error) {
 
         console.warn(
-            "AFC Isiu: Online lesson loading failed.",
+            "AFC Isiu: IndexedDB unavailable.",
             error
         );
 
+    }
 
-        /*
-        -----------------------------------------------------
-        OFFLINE FALLBACK
-        -----------------------------------------------------
-        */
+
+    /* =====================================================
+       3. TRY LOCAL STORAGE
+    ===================================================== */
+
+    try {
+
+        console.log(
+            "AFC Isiu: Trying LocalStorage..."
+        );
+
 
         const saved =
             getSavedLessons();
@@ -819,18 +842,24 @@ async function loadLessons() {
 
         if (
             saved &&
-            saved.lessons.length
+            saved.lessons &&
+            saved.lessons.length > 0
         ) {
 
             lessons =
-                saved.lessons;
-
-
-            switchClass("Senior");
+                normalizeLessons(
+                    saved.lessons
+                );
 
 
             console.log(
-                "AFC Isiu: Offline lesson loaded from local storage."
+                "AFC Isiu: Lessons loaded from LocalStorage.",
+                lessons
+            );
+
+
+            switchClass(
+                "Senior"
             );
 
 
@@ -838,16 +867,28 @@ async function loadLessons() {
 
         }
 
+    }
 
-        /*
-        -----------------------------------------------------
-        NOTHING AVAILABLE
-        -----------------------------------------------------
-        */
+    catch (error) {
 
-        showError();
+        console.warn(
+            "AFC Isiu: LocalStorage fallback failed.",
+            error
+        );
 
     }
+
+
+    /* =====================================================
+       4. NOTHING AVAILABLE
+    ===================================================== */
+
+    console.error(
+        "AFC Isiu: No lesson data is available."
+    );
+
+
+    showError();
 
 }
 
@@ -858,26 +899,60 @@ async function loadLessons() {
 
 function showLoading() {
 
-    topicEl.textContent =
-        "Loading lessons...";
+    if (topicEl) {
 
-    metaEl.textContent =
-        "";
+        topicEl.textContent =
+            "Loading lessons...";
 
-    bibleTextEl.textContent =
-        "";
+    }
 
-    memoryVerseEl.textContent =
-        "";
 
-    summaryEl.textContent =
-        "";
+    if (metaEl) {
 
-    discussionEl.textContent =
-        "";
+        metaEl.textContent =
+            "";
 
-    audioContainer.style.display =
-        "none";
+    }
+
+
+    if (bibleTextEl) {
+
+        bibleTextEl.textContent =
+            "";
+
+    }
+
+
+    if (memoryVerseEl) {
+
+        memoryVerseEl.textContent =
+            "";
+
+    }
+
+
+    if (summaryEl) {
+
+        summaryEl.textContent =
+            "";
+
+    }
+
+
+    if (discussionEl) {
+
+        discussionEl.textContent =
+            "";
+
+    }
+
+
+    if (audioContainer) {
+
+        audioContainer.style.display =
+            "none";
+
+    }
 
 }
 
@@ -888,26 +963,60 @@ function showLoading() {
 
 function showError() {
 
-    topicEl.textContent =
-        "Lesson unavailable";
+    if (topicEl) {
 
-    metaEl.textContent =
-        "Connect to the internet once to save this lesson.";
+        topicEl.textContent =
+            "Lesson unavailable";
 
-    bibleTextEl.textContent =
-        "";
+    }
 
-    memoryVerseEl.textContent =
-        "";
 
-    summaryEl.textContent =
-        "";
+    if (metaEl) {
 
-    discussionEl.textContent =
-        "";
+        metaEl.textContent =
+            "Connect to the internet once to save this lesson.";
 
-    audioContainer.style.display =
-        "none";
+    }
+
+
+    if (bibleTextEl) {
+
+        bibleTextEl.textContent =
+            "";
+
+    }
+
+
+    if (memoryVerseEl) {
+
+        memoryVerseEl.textContent =
+            "";
+
+    }
+
+
+    if (summaryEl) {
+
+        summaryEl.textContent =
+            "";
+
+    }
+
+
+    if (discussionEl) {
+
+        discussionEl.textContent =
+            "";
+
+    }
+
+
+    if (audioContainer) {
+
+        audioContainer.style.display =
+            "none";
+
+    }
 
 }
 
@@ -921,35 +1030,74 @@ function switchClass(className) {
     const lesson =
         lessons.find(
             item =>
-
                 item.Class &&
                 item.Class.trim() === className
-
         );
 
 
     if (!lesson) {
 
-        topicEl.textContent =
-            "Lesson unavailable";
+        console.warn(
+            `AFC Isiu: No lesson found for ${className}.`,
+            lessons
+        );
 
-        metaEl.textContent =
-            className;
 
-        bibleTextEl.textContent =
-            "";
+        if (topicEl) {
 
-        memoryVerseEl.textContent =
-            "";
+            topicEl.textContent =
+                "Lesson unavailable";
 
-        summaryEl.textContent =
-            "";
+        }
 
-        discussionEl.textContent =
-            "";
 
-        audioContainer.style.display =
-            "none";
+        if (metaEl) {
+
+            metaEl.textContent =
+                `${className} Class`;
+
+        }
+
+
+        if (bibleTextEl) {
+
+            bibleTextEl.textContent =
+                "";
+
+        }
+
+
+        if (memoryVerseEl) {
+
+            memoryVerseEl.textContent =
+                "";
+
+        }
+
+
+        if (summaryEl) {
+
+            summaryEl.textContent =
+                "";
+
+        }
+
+
+        if (discussionEl) {
+
+            discussionEl.textContent =
+                "";
+
+        }
+
+
+        if (audioContainer) {
+
+            audioContainer.style.display =
+                "none";
+
+        }
+
 
         return;
 
@@ -960,103 +1108,94 @@ function switchClass(className) {
        TOP SECTION
     ===================================================== */
 
-    topicEl.textContent =
-        lesson.Topic || "";
+    if (topicEl) {
 
-    metaEl.textContent =
-        `${className} Class`;
+        topicEl.textContent =
+            lesson.Topic || "";
+
+    }
+
+
+    if (metaEl) {
+
+        metaEl.textContent =
+            `${className} Class`;
+
+    }
 
 
     /* =====================================================
        LESSON CONTENT
     ===================================================== */
 
-    bibleTextEl.textContent =
-        lesson.BibleText || "";
+    if (bibleTextEl) {
 
-    memoryVerseEl.textContent =
-        lesson.MemoryVerse || "";
+        bibleTextEl.textContent =
+            lesson.BibleText || "";
 
-
-    /*
-    Summary intentionally uses innerHTML because your
-    Google Sheet may contain formatted HTML content.
-    */
-
-    summaryEl.innerHTML =
-        lesson.Summary || "";
+    }
 
 
-    discussionEl.textContent =
-        lesson.Discussion || "";
+    if (memoryVerseEl) {
+
+        memoryVerseEl.textContent =
+            lesson.MemoryVerse || "";
+
+    }
+
+
+    if (summaryEl) {
+
+        summaryEl.innerHTML =
+            lesson.Summary || "";
+
+    }
+
+
+    if (discussionEl) {
+
+        discussionEl.textContent =
+            lesson.Discussion || "";
+
+    }
 
 
     /* =====================================================
-   AUDIO
-===================================================== */
+       YORUBA AUDIO
+    ===================================================== */
 
-const audio =
-    lesson.YorubaAudio;
-
-
-if (
-    audio &&
-    audio.trim() !== ""
-) {
-
-    const audioURL =
-        audio.trim();
+    const audio =
+        lesson.YorubaAudio;
 
 
-    audioSource.src =
-        audioURL;
+    if (
+        audio &&
+        audio.trim() !== ""
+    ) {
+
+        audioSource.src =
+            audio.trim();
 
 
-    audioPlayer.load();
+        audioPlayer.load();
 
 
-    audioContainer.style.display =
-        "block";
+        audioContainer.style.display =
+            "block";
 
+    }
 
-    /*
-    -----------------------------------------------------
-    AUDIO OFFLINE SUPPORT
-    -----------------------------------------------------
-    */
+    else {
 
-    audioPlayer.addEventListener(
-        "play",
-        async () => {
+        audioSource.src =
+            "";
 
-            console.log(
-                "AFC Isiu: Yoruba audio requested."
-            );
+        audioPlayer.load();
 
-            /*
-            The service worker will intercept the
-            audio request and cache it.
-            */
+        audioContainer.style.display =
+            "none";
 
-        },
-        {
-            once: true
-        }
-    );
-
-
-}
-else {
-
-    audioSource.src =
-        "";
-
-    audioPlayer.load();
-
-    audioContainer.style.display =
-        "none";
-
-}
+    }
 
 
     /* =====================================================
@@ -1084,6 +1223,13 @@ else {
 
         }
     );
+
+
+    /* =====================================================
+       UPDATE READING TIME
+    ===================================================== */
+
+    updateReadingTime();
 
 }
 
@@ -1154,7 +1300,7 @@ if (header) {
 
 function updateReadingTime() {
 
-    const lesson =
+    const lessonContent =
         document.getElementById(
             "lessonContent"
         );
@@ -1167,7 +1313,7 @@ function updateReadingTime() {
 
 
     if (
-        !lesson ||
+        !lessonContent ||
         !readingTime
     ) {
 
@@ -1177,7 +1323,8 @@ function updateReadingTime() {
 
 
     const text =
-        lesson.innerText.trim();
+        lessonContent.innerText
+            .trim();
 
 
     if (!text) {
@@ -1188,9 +1335,7 @@ function updateReadingTime() {
 
 
     const words =
-        text
-            .split(/\s+/)
-            .length;
+        text.split(/\s+/).length;
 
 
     const minutes =
@@ -1214,11 +1359,32 @@ function updateReadingTime() {
 
 document.addEventListener(
     "DOMContentLoaded",
-    loadLessons
+    () => {
+
+        loadLessons();
+
+    }
 );
 
 
-window.addEventListener(
-    "load",
-    updateReadingTime
+/* =========================================================
+   ALSO HANDLE PAGES THAT ARE ALREADY LOADED
+========================================================= */
+
+if (
+    document.readyState === "interactive" ||
+    document.readyState === "complete"
+) {
+
+    loadLessons();
+
+}
+
+
+/* =========================================================
+   FINAL DEBUG MESSAGE
+========================================================= */
+
+console.log(
+    "AFC Isiu Weekly Lessons JavaScript loaded successfully."
 );
