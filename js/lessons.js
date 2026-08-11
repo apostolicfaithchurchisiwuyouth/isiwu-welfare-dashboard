@@ -27,6 +27,226 @@ const LESSON_STORAGE_KEY =
 
 let lessons = [];
 
+/* =====================================================
+   OFFLINE LESSON DATABASE
+===================================================== */
+
+const LESSON_DB_NAME = "AFC_Isiu_Lessons";
+const LESSON_DB_VERSION = 1;
+const LESSON_STORE = "lessons";
+
+
+function openLessonDB() {
+
+    return new Promise((resolve, reject) => {
+
+        const request =
+            indexedDB.open(
+                LESSON_DB_NAME,
+                LESSON_DB_VERSION
+            );
+
+
+        request.onupgradeneeded = event => {
+
+            const db = event.target.result;
+
+
+            if (!db.objectStoreNames.contains(LESSON_STORE)) {
+
+                db.createObjectStore(
+                    LESSON_STORE,
+                    {
+                        keyPath: "id",
+                        autoIncrement: true
+                    }
+                );
+
+            }
+
+        };
+
+
+        request.onsuccess = () => {
+
+            resolve(request.result);
+
+        };
+
+
+        request.onerror = () => {
+
+            reject(request.error);
+
+        };
+
+    });
+
+}
+
+/* =====================================================
+   SAVE LESSONS OFFLINE
+===================================================== */
+
+async function saveLessonsOffline(lessonData) {
+
+    try {
+
+        const db =
+            await openLessonDB();
+
+
+        const transaction =
+            db.transaction(
+                LESSON_STORE,
+                "readwrite"
+            );
+
+
+        const store =
+            transaction.objectStore(
+                LESSON_STORE
+            );
+
+
+        /*
+        Clear the old lesson data first.
+
+        This keeps the archive synchronized with
+        the latest Google Sheet data.
+        */
+
+        store.clear();
+
+
+        lessonData.forEach((lesson, index) => {
+
+            store.put({
+
+                id: index + 1,
+
+                Class:
+                    lesson.Class || "",
+
+                Topic:
+                    lesson.Topic || "",
+
+                BibleText:
+                    lesson.BibleText || "",
+
+                MemoryVerse:
+                    lesson.MemoryVerse || "",
+
+                Summary:
+                    lesson.Summary || "",
+
+                Discussion:
+                    lesson.Discussion || "",
+
+                YorubaAudio:
+                    lesson.YorubaAudio || ""
+
+            });
+
+        });
+
+
+        transaction.oncomplete = () => {
+
+            console.log(
+                "AFC Isiu: Lessons saved offline."
+            );
+
+        };
+
+
+        transaction.onerror = () => {
+
+            console.error(
+                "AFC Isiu: Unable to save lessons offline."
+            );
+
+        };
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Offline lesson database error:",
+            error
+        );
+
+    }
+
+}
+
+/* =====================================================
+   GET OFFLINE LESSONS
+===================================================== */
+
+async function getOfflineLessons() {
+
+    try {
+
+        const db =
+            await openLessonDB();
+
+
+        return new Promise(
+            (resolve, reject) => {
+
+                const transaction =
+                    db.transaction(
+                        LESSON_STORE,
+                        "readonly"
+                    );
+
+
+                const store =
+                    transaction.objectStore(
+                        LESSON_STORE
+                    );
+
+
+                const request =
+                    store.getAll();
+
+
+                request.onsuccess = () => {
+
+                    resolve(
+                        request.result || []
+                    );
+
+                };
+
+
+                request.onerror = () => {
+
+                    reject(
+                        request.error
+                    );
+
+                };
+
+            }
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Unable to retrieve offline lessons:",
+            error
+        );
+
+        return [];
+
+    }
+
+}
 
 /* =========================================================
    ELEMENTS
@@ -311,9 +531,9 @@ function getSavedLessons() {
 }
 
 
-/* =========================================================
+/* =====================================================
    LOAD LESSONS
-========================================================= */
+===================================================== */
 
 async function loadLessons() {
 
@@ -321,9 +541,9 @@ async function loadLessons() {
 
 
     /*
-    ---------------------------------------------------------
-    FIRST: TRY INTERNET
-    ---------------------------------------------------------
+    =====================================================
+    TRY ONLINE FIRST
+    =====================================================
     */
 
     try {
@@ -349,6 +569,114 @@ async function loadLessons() {
         const csv =
             await response.text();
 
+
+        const result =
+            Papa.parse(
+                csv,
+                {
+                    header: true,
+                    skipEmptyLines: true
+                }
+            );
+
+
+        lessons =
+            result.data;
+
+
+        /*
+        Save the newly downloaded lessons locally.
+        */
+
+        await saveLessonsOffline(
+            lessons
+        );
+
+
+        console.log(
+            "AFC Isiu: Online lessons loaded."
+        );
+
+
+        switchClass(
+            "Senior"
+        );
+
+
+        return;
+
+    }
+
+    catch (error) {
+
+        console.warn(
+            "AFC Isiu: Online lesson loading failed.",
+            error
+        );
+
+    }
+
+
+    /*
+    =====================================================
+    INTERNET FAILED
+    TRY OFFLINE DATABASE
+    =====================================================
+    */
+
+    try {
+
+        const offlineLessons =
+            await getOfflineLessons();
+
+
+        if (
+            offlineLessons &&
+            offlineLessons.length > 0
+        ) {
+
+            lessons =
+                offlineLessons;
+
+
+            console.log(
+                "AFC Isiu: Offline lessons loaded."
+            );
+
+
+            switchClass(
+                "Senior"
+            );
+
+
+            return;
+
+        }
+
+
+        /*
+        Nothing is available offline.
+        */
+
+        throw new Error(
+            "No offline lessons available."
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "AFC Isiu: No offline lesson data.",
+            error
+        );
+
+
+        showError();
+
+    }
+
+}
 
         /*
         -----------------------------------------------------
