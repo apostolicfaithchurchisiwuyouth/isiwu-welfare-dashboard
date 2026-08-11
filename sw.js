@@ -368,13 +368,97 @@ self.addEventListener("fetch", event => {
     }
 
 
-    /* =====================================================
-       OTHER EXTERNAL GET REQUESTS
-       
-       Let them go normally.
-       
-       We don't want the service worker blindly caching
-       every external resource.
-    ===================================================== */
+/* =====================================================
+   AUDIO FILES
+
+   Yoruba memory-verse audio is cached when requested.
+
+   Strategy:
+   - Try the network first.
+   - If successful, save the audio.
+   - If offline, use the previously cached audio.
+===================================================== */
+
+const isAudioRequest =
+    request.destination === "audio" ||
+    /\.(mp3|mpeg|wav|ogg|m4a|aac)(\?.*)?$/i.test(
+        url.pathname
+    );
+
+
+if (isAudioRequest) {
+
+    event.respondWith(
+
+        caches.match(request)
+
+            .then(cachedAudio => {
+
+                /*
+                If we already have the audio,
+                use the cached copy immediately.
+                */
+
+                if (cachedAudio) {
+
+                    return cachedAudio;
+
+                }
+
+
+                /*
+                Audio has not been cached yet.
+                Get it from the network.
+                */
+
+                return fetch(request)
+
+                    .then(response => {
+
+                        if (
+                            response &&
+                            response.status === 200
+                        ) {
+
+                            const responseClone =
+                                response.clone();
+
+
+                            caches.open(CACHE_NAME)
+
+                                .then(cache => {
+
+                                    cache.put(
+                                        request,
+                                        responseClone
+                                    );
+
+                                    console.log(
+                                        "AFC Isiu PWA: Audio cached:",
+                                        request.url
+                                    );
+
+                                });
+
+                        }
+
+
+                        return response;
+
+                    });
+
+            })
+
+    );
+
+    return;
+}
+
+
+/* =====================================================
+   OTHER EXTERNAL GET REQUESTS
+
+   Everything else is left alone.
+========================================================= */
 
 });
