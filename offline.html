@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+```
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<meta
+    name="theme-color"
+    content="#ea580c"
+>
+
+<title>You're Offline | AFC Isiu Youth</title>
+
+<link
+    rel="icon"
+    type="image/png"
+    href="/images/logo.png"
+>
+
+<link
+    rel="apple-touch-icon"
+    href="/images/logo.png"
+>
+
+<link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+>
+
+<style>
+
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+
+        min-height: 100vh;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        padding: 24px;
+
+        font-family:
+            "DM Sans",
+            Arial,
+            sans-serif;
+
+        background:
+            linear-gradient(
+                135deg,
+                #fff7ed,
+                #f7faf8
+            );
+
+        color: #202033;
+
+    }
+
+    .offline-container {
+
+        width: 100%;
+
+        max-width: 430px;
+
+        text-align: center;
+
+        background: #ffffff;
+
+        border-radius: 28px;
+
+        padding: 42px 28px;
+
+        box-shadow:
+            0 20px 60px
+            rgba(0, 0, 0, .08);
+
+    }
+
+    .offline-icon {
+
+        width: 82px;
+
+        height: 82px;
+
+        margin: 0 auto 24px;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        border-radius: 24px;
+
+        background: #fff1e8;
+
+        color: #ea580c;
+
+        font-size: 34px;
+
+    }
+
+    h1 {
+
+        font-family:
+            "Bricolage Grotesque",
+            Arial,
+            sans-serif;
+
+        font-size: 1.7rem;
+
+        margin-bottom: 12px;
+
+    }
+
+    .offline-message {
+
+        color: #64748b;
+
+        font-size: .95rem;
+
+        line-height: 1.6;
+
+        margin-bottom: 28px;
+
+    }
+
+    .offline-note {
+
+        padding: 14px 16px;
+
+        margin-bottom: 24px;
+
+        border-radius: 14px;
+
+        background: #f8fafc;
+
+        color: #475569;
+
+        font-size: .85rem;
+
+        line-height: 1.5;
+
+    }
+
+    .offline-actions {
+
+        display: flex;
+
+        flex-direction: column;
+
+        gap: 10px;
+
+    }
+
+    button,
+    a {
+
+        width: 100%;
+
+        min-height: 48px;
+
+        border: none;
+
+        border-radius: 14px;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        gap: 9px;
+
+        font-size: .9rem;
+
+        font-weight: 700;
+
+        text-decoration: none;
+
+        cursor: pointer;
+
+    }
+
+    .retry-btn {
+
+        background: #ea580c;
+
+        color: #ffffff;
+
+    }
+
+    .home-btn {
+
+        background: #f1f5f9;
+
+        color: #334155;
+
+    }
+
+    .offline-status {
+
+        margin-top: 22px;
+
+        font-size: .75rem;
+
+        color: #94a3b8;
+
+    }
+
+</style>
+```
+
+</head>
+
+<body>
+
+```
+<main class="offline-container">
+
+    <div class="offline-icon">
+
+        <i class="fa-solid fa-wifi"></i>
+
+    </div>
+
+    <h1>
+        You're currently offline
+    </h1>
+
+    <p class="offline-message">
+        This section of the AFC Isiu Youth Portal
+        needs an internet connection before it can
+        be opened.
+    </p>
+
+    <div class="offline-note">
+
+        <i class="fa-solid fa-book-open"></i>
+
+        Your saved lessons can still be accessed
+        offline.
+
+    </div>
+
+    <div class="offline-actions">
+
+        <button
+            class="retry-btn"
+            type="button"
+            onclick="retryPage()"
+        >
+
+            <i class="fa-solid fa-rotate-right"></i>
+
+            Try Again
+
+        </button>
+
+        <a
+            class="home-btn"
+            href="/"
+        >
+
+            <i class="fa-solid fa-house"></i>
+
+            Go to Home
+
+        </a>
+
+    </div>
+
+    <p class="offline-status">
+
+        AFC Isiu Youth Portal
+
+    </p>
+
+</main>
+
+
+<script>
+
+    function retryPage() {
+
+        window.location.reload();
+
+    }
+
+</script>
+```
+
+</body>
+
+</html>
