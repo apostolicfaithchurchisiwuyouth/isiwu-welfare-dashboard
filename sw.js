@@ -1,464 +1,389 @@
 /* =========================================================
    AFC ISIU YOUTH PORTAL
    SERVICE WORKER
-   PHASE 3 — SELECTIVE OFFLINE MODE
+   PHASE 3D — STABLE PWA + LESSON SUPPORT
 ========================================================= */
 
-
-/* =========================================================
-   CACHE VERSION
-========================================================= */
-
-const CACHE_NAME = "afc-isiu-pwa-v3";
+const CACHE_NAME = "afc-isiu-pwa-v4";
 
 
 /* =========================================================
    APP SHELL
-   These are the essential files needed for the portal
-   to open and function offline.
 ========================================================= */
 
 const APP_SHELL = [
 
     "/",
+
     "/index.html",
 
     "/manifest.json",
 
-    /* Main dashboard */
     "/css/main.css",
-    "/css/layout.css",
-    "/js/main.js",
 
-    /* Weekly lessons */
+    "/css/layout.css",
+
     "/pages/lessons.html",
+
     "/css/lessons.css",
+
     "/js/lessons.js"
 
 ];
 
 
 /* =========================================================
-   OFFLINE FALLBACK
-========================================================= */
-
-const OFFLINE_PAGE = "/index.html";
-
-
-/* =========================================================
    INSTALL
 ========================================================= */
 
-self.addEventListener("install", event => {
+self.addEventListener(
+    "install",
+    event => {
 
-    console.log(
-        "AFC Isiu PWA v3: Installing..."
-    );
+        console.log(
+            "AFC Isiu SW: Installing v4..."
+        );
 
 
-    event.waitUntil(
+        event.waitUntil(
 
-        caches.open(CACHE_NAME)
+            caches.open(CACHE_NAME)
 
-            .then(cache => {
+                .then(cache => {
 
-                return cache.addAll(APP_SHELL);
+                    return cache.addAll(
+                        APP_SHELL
+                    );
 
-            })
+                })
 
-            .then(() => {
+                .then(() => {
 
-                console.log(
-                    "AFC Isiu PWA v3: App shell cached."
-                );
+                    console.log(
+                        "AFC Isiu SW: App shell cached."
+                    );
 
-                return self.skipWaiting();
 
-            })
+                    return self.skipWaiting();
 
-    );
+                })
 
-});
+                .catch(error => {
+
+                    console.error(
+                        "AFC Isiu SW: App shell caching failed.",
+                        error
+                    );
+
+                })
+
+        );
+
+    }
+);
 
 
 /* =========================================================
    ACTIVATE
 ========================================================= */
 
-self.addEventListener("activate", event => {
+self.addEventListener(
+    "activate",
+    event => {
 
-    console.log(
-        "AFC Isiu PWA v3: Activating..."
-    );
+        console.log(
+            "AFC Isiu SW: Activating v4..."
+        );
 
 
-    event.waitUntil(
+        event.waitUntil(
 
-        caches.keys()
+            caches.keys()
 
-            .then(cacheNames => {
+                .then(cacheNames => {
 
-                return Promise.all(
+                    return Promise.all(
 
-                    cacheNames
+                        cacheNames
 
-                        .filter(
-                            cacheName =>
-                                cacheName !== CACHE_NAME
-                        )
+                            .filter(
+                                cacheName =>
+                                    cacheName !== CACHE_NAME
+                            )
 
-                        .map(cacheName => {
+                            .map(
+                                cacheName =>
+                                    caches.delete(
+                                        cacheName
+                                    )
+                            )
 
-                            console.log(
-                                "Deleting old cache:",
-                                cacheName
-                            );
+                    );
 
-                            return caches.delete(
-                                cacheName
-                            );
+                })
 
-                        })
+                .then(() => {
 
-                );
+                    console.log(
+                        "AFC Isiu SW: Old caches removed."
+                    );
 
-            })
 
-            .then(() => {
+                    return self.clients.claim();
 
-                return self.clients.claim();
+                })
 
-            })
+        );
 
-            .then(() => {
-
-                console.log(
-                    "AFC Isiu PWA v3: Activated."
-                );
-
-            })
-
-    );
-
-});
+    }
+);
 
 
 /* =========================================================
    FETCH HANDLER
 ========================================================= */
 
-self.addEventListener("fetch", event => {
+self.addEventListener(
+    "fetch",
+    event => {
 
-    const request = event.request;
-
-
-    /* -----------------------------------------------------
-       Only handle GET requests
-    ----------------------------------------------------- */
-
-    if (request.method !== "GET") {
-        return;
-    }
+        const request =
+            event.request;
 
 
-    const url = new URL(request.url);
+        /* -------------------------------------------------
+           ONLY HANDLE GET REQUESTS
+        ------------------------------------------------- */
+
+        if (
+            request.method !== "GET"
+        ) {
+
+            return;
+
+        }
 
 
-    /* -----------------------------------------------------
-       Ignore browser extensions and unsupported schemes
-    ----------------------------------------------------- */
-
-    if (
-        url.protocol !== "http:" &&
-        url.protocol !== "https:"
-    ) {
-        return;
-    }
+        const url =
+            new URL(request.url);
 
 
-    /* =====================================================
-       HTML / PAGE NAVIGATION
-       
-       Network first:
-       - Get the newest page when online.
-       - Fall back to cached page when offline.
-    ===================================================== */
+        /* -------------------------------------------------
+           DO NOT CACHE GOOGLE SHEETS
+           
+           Lessons must always try to get the newest
+           Google Sheet data when internet is available.
+        ------------------------------------------------- */
 
-    if (request.mode === "navigate") {
+        if (
+            url.hostname.includes(
+                "docs.google.com"
+            )
+        ) {
 
-        event.respondWith(
+            return;
 
-            fetch(request)
-
-                .then(response => {
-
-                    /*
-                     Save a fresh copy of the page.
-                    */
-
-                    if (
-                        response &&
-                        response.status === 200
-                    ) {
-
-                        const responseClone =
-                            response.clone();
-
-                        caches.open(CACHE_NAME)
-                            .then(cache => {
-
-                                cache.put(
-                                    request,
-                                    responseClone
-                                );
-
-                            });
-
-                    }
-
-                    return response;
-
-                })
-
-                .catch(() => {
-
-                    return caches.match(request)
-
-                        .then(cachedPage => {
-
-                            if (cachedPage) {
-
-                                return cachedPage;
-
-                            }
+        }
 
 
-                            return caches.match(
-                                OFFLINE_PAGE
-                            );
+        /* -------------------------------------------------
+           SAME-ORIGIN REQUESTS
+        ------------------------------------------------- */
 
-                        });
+        if (
+            url.origin === self.location.origin
+        ) {
 
-                })
+            event.respondWith(
 
-        );
+                networkFirst(
+                    request
+                )
 
-        return;
-    }
+            );
+
+            return;
+
+        }
 
 
-    /* =====================================================
-       GOOGLE SHEETS / EXTERNAL LESSON DATA
-       
-       Network first:
-       - Always try to get fresh lesson data.
-       - Save the latest successful copy.
-       - If offline, use the previously cached copy.
-    ===================================================== */
-
-    if (
-        url.hostname === "docs.google.com" ||
-        url.hostname === "docs.googleusercontent.com"
-    ) {
+        /* -------------------------------------------------
+           EXTERNAL RESOURCES
+           
+           Fonts, icons, libraries etc.
+        ------------------------------------------------- */
 
         event.respondWith(
 
-            fetch(request)
-
-                .then(response => {
-
-                    if (
-                        response &&
-                        response.status === 200
-                    ) {
-
-                        const responseClone =
-                            response.clone();
-
-                        caches.open(CACHE_NAME)
-                            .then(cache => {
-
-                                cache.put(
-                                    request,
-                                    responseClone
-                                );
-
-                            });
-
-                    }
-
-                    return response;
-
-                })
-
-                .catch(() => {
-
-                    return caches.match(request);
-
-                })
+            staleWhileRevalidate(
+                request
+            )
 
         );
 
-        return;
+    }
+);
+
+
+/* =========================================================
+   NETWORK FIRST
+========================================================= */
+
+async function networkFirst(request) {
+
+    try {
+
+        const networkResponse =
+            await fetch(request);
+
+
+        if (
+            networkResponse &&
+            networkResponse.ok
+        ) {
+
+            const cache =
+                await caches.open(
+                    CACHE_NAME
+                );
+
+
+            cache.put(
+                request,
+                networkResponse.clone()
+            );
+
+        }
+
+
+        return networkResponse;
+
     }
 
+    catch (error) {
 
-    /* =====================================================
-       SAME-ORIGIN STATIC FILES
-       
-       Cache first:
-       - CSS
-       - JavaScript
-       - Images
-       - Icons
-       - Fonts
-       - Other static resources
-       
-       If not cached, fetch from network and save.
-    ===================================================== */
-
-    if (url.origin === self.location.origin) {
-
-        event.respondWith(
-
-            caches.match(request)
-
-                .then(cachedResponse => {
-
-                    if (cachedResponse) {
-
-                        return cachedResponse;
-
-                    }
-
-
-                    return fetch(request)
-
-                        .then(response => {
-
-                            if (
-                                response &&
-                                response.status === 200
-                            ) {
-
-                                const responseClone =
-                                    response.clone();
-
-                                caches.open(CACHE_NAME)
-                                    .then(cache => {
-
-                                        cache.put(
-                                            request,
-                                            responseClone
-                                        );
-
-                                    });
-
-                            }
-
-                            return response;
-
-                        });
-
-                })
-
+        console.warn(
+            "AFC Isiu SW: Network unavailable:",
+            request.url
         );
 
-        return;
+
+        const cachedResponse =
+            await caches.match(
+                request
+            );
+
+
+        if (cachedResponse) {
+
+            return cachedResponse;
+
+        }
+
+
+        /* ---------------------------------------------
+           SPECIAL OFFLINE NAVIGATION FALLBACK
+        --------------------------------------------- */
+
+        if (
+            request.mode === "navigate"
+        ) {
+
+            const offlinePage =
+                await caches.match(
+                    "/index.html"
+                );
+
+
+            if (offlinePage) {
+
+                return offlinePage;
+
+            }
+
+        }
+
+
+        return new Response(
+            "AFC Isiu Youth Portal is currently offline.",
+            {
+                status: 503,
+                statusText: "Offline"
+            }
+        );
+
     }
 
-
-/* =====================================================
-   AUDIO FILES
-
-   Yoruba memory-verse audio is cached when requested.
-
-   Strategy:
-   - Try the network first.
-   - If successful, save the audio.
-   - If offline, use the previously cached audio.
-===================================================== */
-
-const isAudioRequest =
-    request.destination === "audio" ||
-    /\.(mp3|mpeg|wav|ogg|m4a|aac)(\?.*)?$/i.test(
-        url.pathname
-    );
+}
 
 
-if (isAudioRequest) {
+/* =========================================================
+   STALE WHILE REVALIDATE
+========================================================= */
 
-    event.respondWith(
+async function staleWhileRevalidate(request) {
 
-        caches.match(request)
+    const cachedResponse =
+        await caches.match(
+            request
+        );
 
-            .then(cachedAudio => {
 
-                /*
-                If we already have the audio,
-                use the cached copy immediately.
-                */
+    const networkFetch =
+        fetch(request)
 
-                if (cachedAudio) {
+            .then(response => {
 
-                    return cachedAudio;
+                if (
+                    response &&
+                    response.ok
+                ) {
+
+                    caches.open(
+                        CACHE_NAME
+                    )
+                    .then(cache => {
+
+                        cache.put(
+                            request,
+                            response.clone()
+                        );
+
+                    });
 
                 }
 
 
-                /*
-                Audio has not been cached yet.
-                Get it from the network.
-                */
-
-                return fetch(request)
-
-                    .then(response => {
-
-                        if (
-                            response &&
-                            response.status === 200
-                        ) {
-
-                            const responseClone =
-                                response.clone();
-
-
-                            caches.open(CACHE_NAME)
-
-                                .then(cache => {
-
-                                    cache.put(
-                                        request,
-                                        responseClone
-                                    );
-
-                                    console.log(
-                                        "AFC Isiu PWA: Audio cached:",
-                                        request.url
-                                    );
-
-                                });
-
-                        }
-
-
-                        return response;
-
-                    });
+                return response;
 
             })
 
+            .catch(() => null);
+
+
+    if (cachedResponse) {
+
+        return cachedResponse;
+
+    }
+
+
+    const networkResponse =
+        await networkFetch;
+
+
+    if (networkResponse) {
+
+        return networkResponse;
+
+    }
+
+
+    return new Response(
+        "",
+        {
+            status: 503
+        }
     );
 
-    return;
 }
-
-
-/* =====================================================
-   OTHER EXTERNAL GET REQUESTS
-
-   Everything else is left alone.
-========================================================= */
-
-});
