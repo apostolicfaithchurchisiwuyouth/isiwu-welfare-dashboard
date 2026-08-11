@@ -5,6 +5,188 @@ AOS.init({
     offset: 120
 });
 
+
+/* =========================================================
+   AFC ISIU PWA
+   PHASE 3E — OFFLINE STATUS
+========================================================= */
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    const offlineBanner = document.createElement("div");
+
+    offlineBanner.id = "offlineBanner";
+
+    offlineBanner.innerHTML = `
+        <div class="offline-banner-content">
+
+            <i class="fa-solid fa-wifi"></i>
+
+            <div>
+                <strong>You're offline</strong>
+                <span>
+                    Some features are unavailable until you reconnect.
+                </span>
+            </div>
+
+        </div>
+    `;
+
+    document.body.prepend(offlineBanner);
+
+
+    function updateOnlineStatus() {
+
+        if (navigator.onLine) {
+
+            offlineBanner.classList.remove("show");
+
+        } else {
+
+            offlineBanner.classList.add("show");
+
+        }
+
+    }
+
+
+    window.addEventListener(
+        "online",
+        updateOnlineStatus
+    );
+
+
+    window.addEventListener(
+        "offline",
+        updateOnlineStatus
+    );
+
+
+    updateOnlineStatus();
+
+});
+
+/* =========================================================
+   ONLINE-ONLY FEATURES
+========================================================= */
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    const onlineOnlyLinks =
+        document.querySelectorAll(
+            "[data-online-only]"
+        );
+
+
+    onlineOnlyLinks.forEach(link => {
+
+        link.addEventListener(
+            "click",
+            event => {
+
+                if (navigator.onLine) {
+
+                    return;
+
+                }
+
+
+                event.preventDefault();
+
+
+                showOfflineMessage(
+                    link.dataset.feature ||
+                    "This feature"
+                );
+
+            }
+        );
+
+    });
+
+});
+
+
+/* =========================================================
+   OFFLINE MESSAGE
+========================================================= */
+
+function showOfflineMessage(featureName) {
+
+    const existing =
+        document.getElementById(
+            "offlineMessage"
+        );
+
+
+    if (existing) {
+
+        existing.remove();
+
+    }
+
+
+    const message =
+        document.createElement("div");
+
+
+    message.id =
+        "offlineMessage";
+
+
+    message.innerHTML = `
+
+        <div class="offline-message-card">
+
+            <div class="offline-message-icon">
+
+                <i class="fa-solid fa-cloud-arrow-up"></i>
+
+            </div>
+
+            <h3>
+                Internet Connection Required
+            </h3>
+
+            <p>
+                ${featureName} requires an internet
+                connection. Please turn on your data
+                or connect to Wi-Fi and try again.
+            </p>
+
+            <button
+                type="button"
+                id="closeOfflineMessage">
+
+                Okay
+
+            </button>
+
+        </div>
+
+    `;
+
+
+    document.body.appendChild(
+        message
+    );
+
+
+    document
+        .getElementById(
+            "closeOfflineMessage"
+        )
+        .addEventListener(
+            "click",
+            () => {
+
+                message.remove();
+
+            }
+        );
+
+}
+
 /*
 ==============================
 HERO TYPING EFFECT
