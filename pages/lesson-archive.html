@@ -5,6 +5,24 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>All Combined Lesson Notes</title>
+<link rel="manifest" href="../manifest.json">
+
+<meta name="theme-color" content="#ea580c">
+
+<meta
+    name="mobile-web-app-capable"
+    content="yes"
+>
+
+<meta
+    name="apple-mobile-web-app-capable"
+    content="yes"
+>
+
+<link
+    rel="apple-touch-icon"
+    href="../images/logo.png"
+>
 <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -627,6 +645,326 @@ AOS.init({
 </script>
 <script>
 
+/* =====================================================
+   AFC ISIU — OFFLINE LESSON ARCHIVE
+===================================================== */
+
+const LESSON_DB_NAME =
+    "AFC_Isiu_Lessons";
+
+const LESSON_DB_VERSION =
+    1;
+
+const LESSON_STORE =
+    "lessons";
+
+
+/* =====================================================
+   OPEN DATABASE
+===================================================== */
+
+function openLessonDB() {
+
+    return new Promise(
+        (resolve, reject) => {
+
+            const request =
+                indexedDB.open(
+                    LESSON_DB_NAME,
+                    LESSON_DB_VERSION
+                );
+
+
+            request.onupgradeneeded =
+                event => {
+
+                    const db =
+                        event.target.result;
+
+
+                    if (
+                        !db.objectStoreNames.contains(
+                            LESSON_STORE
+                        )
+                    ) {
+
+                        db.createObjectStore(
+                            LESSON_STORE,
+                            {
+                                keyPath: "id",
+                                autoIncrement: true
+                            }
+                        );
+
+                    }
+
+                };
+
+
+            request.onsuccess =
+                () => {
+
+                    resolve(
+                        request.result
+                    );
+
+                };
+
+
+            request.onerror =
+                () => {
+
+                    reject(
+                        request.error
+                    );
+
+                };
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   LOAD ARCHIVE
+===================================================== */
+
+async function loadArchive() {
+
+    const container =
+        document.getElementById(
+            "lessonArchive"
+        );
+
+
+    if (!container) {
+
+        return;
+
+    }
+
+
+    try {
+
+        const db =
+            await openLessonDB();
+
+
+        const lessons =
+            await new Promise(
+                (resolve, reject) => {
+
+                    const transaction =
+                        db.transaction(
+                            LESSON_STORE,
+                            "readonly"
+                        );
+
+
+                    const store =
+                        transaction.objectStore(
+                            LESSON_STORE
+                        );
+
+
+                    const request =
+                        store.getAll();
+
+
+                    request.onsuccess =
+                        () => {
+
+                            resolve(
+                                request.result || []
+                            );
+
+                        };
+
+
+                    request.onerror =
+                        () => {
+
+                            reject(
+                                request.error
+                            );
+
+                        };
+
+                }
+            );
+
+
+        if (!lessons.length) {
+
+            container.innerHTML = `
+
+                <div class="archive-empty">
+
+                    <i class="fa-solid fa-book-open"></i>
+
+                    <h3>
+                        No offline lessons yet
+                    </h3>
+
+                    <p>
+                        Connect to the internet and open
+                        the Weekly Lessons page first.
+                        Lessons you load will then be
+                        available here offline.
+                    </p>
+
+                </div>
+
+            `;
+
+            return;
+
+        }
+
+
+        /*
+        Show newest lesson information first.
+        */
+
+        const sortedLessons =
+            [...lessons].reverse();
+
+
+        container.innerHTML = "";
+
+
+        sortedLessons.forEach(
+            lesson => {
+
+                const card =
+                    document.createElement(
+                        "article"
+                    );
+
+
+                card.className =
+                    "archive-lesson-card";
+
+
+                card.innerHTML = `
+
+                    <div class="archive-card-top">
+
+                        <span class="archive-class">
+                            ${lesson.Class || ""}
+                        </span>
+
+                        <i class="fa-solid fa-book"></i>
+
+                    </div>
+
+
+                    <h3>
+                        ${lesson.Topic || "Untitled Lesson"}
+                    </h3>
+
+
+                    <p>
+                        ${lesson.BibleText || ""}
+                    </p>
+
+
+                    <div class="archive-card-footer">
+
+                        <span>
+                            <i class="fa-solid fa-book-bible"></i>
+                            ${lesson.Class || ""}
+                        </span>
+
+                        ${
+                            lesson.YorubaAudio
+                                ? `
+                                <span>
+                                    <i class="fa-solid fa-volume-high"></i>
+                                    Audio
+                                </span>
+                                `
+                                : ""
+                        }
+
+                    </div>
+
+                `;
+
+
+                /*
+                Open lesson when card is clicked.
+                */
+
+                card.addEventListener(
+                    "click",
+                    () => {
+
+                        openArchivedLesson(
+                            lesson
+                        );
+
+                    }
+                );
+
+
+                container.appendChild(
+                    card
+                );
+
+            }
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Archive loading error:",
+            error
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   OPEN ARCHIVED LESSON
+===================================================== */
+
+function openArchivedLesson(lesson) {
+
+    /*
+    Store the selected lesson temporarily.
+    */
+
+    sessionStorage.setItem(
+        "selectedOfflineLesson",
+        JSON.stringify(lesson)
+    );
+
+
+    /*
+    Go back to lessons page.
+    */
+
+    window.location.href =
+        "lessons.html";
+
+}
+
+
+/* =====================================================
+   START
+===================================================== */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    loadArchive
+);
+  
 const LESSON_URL =
 "https://script.google.com/macros/s/AKfycbw1mVwpgAcIOSNbpgzy52TFyozEGMtWWwVWUDFaofGNzpsguBIaKR4q1dXVtgVHO2xZ1w/exec?action=getLessons";
 
