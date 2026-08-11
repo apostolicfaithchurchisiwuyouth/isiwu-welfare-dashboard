@@ -3080,4 +3080,328 @@ max-width:100%;
 
 }
 
+/* =========================================================
+   PHASE 3E
+   OFFLINE STATUS BANNER
+========================================================= */
 
+#offlineBanner {
+
+    position: fixed;
+
+    top: 0;
+    left: 0;
+
+    width: 100%;
+
+    z-index: 99999;
+
+    background: #7c2d12;
+
+    color: #ffffff;
+
+    padding: 10px 16px;
+
+    transform: translateY(-110%);
+
+    opacity: 0;
+
+    pointer-events: none;
+
+    transition:
+        transform .3s ease,
+        opacity .3s ease;
+
+}
+
+
+#offlineBanner.show {
+
+    transform: translateY(0);
+
+    opacity: 1;
+
+}
+
+
+.offline-banner-content {
+
+    max-width: 1200px;
+
+    margin: 0 auto;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 10px;
+
+}
+
+
+.offline-banner-content > i {
+
+    font-size: 1rem;
+
+}
+
+
+.offline-banner-content div {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 1px;
+
+}
+
+
+.offline-banner-content strong {
+
+    font-family: 'Bricolage Grotesque', sans-serif;
+
+    font-size: .82rem;
+
+}
+
+
+.offline-banner-content span {
+
+    font-family: 'DM Sans', sans-serif;
+
+    font-size: .72rem;
+
+    opacity: .9;
+
+}
+
+
+@media (max-width: 600px) {
+
+    #offlineBanner {
+
+        padding:
+            9px 12px;
+
+    }
+
+
+    .offline-banner-content {
+
+        justify-content: flex-start;
+
+    }
+
+
+    .offline-banner-content strong {
+
+        font-size: .78rem;
+
+    }
+
+
+    .offline-banner-content span {
+
+        font-size: .68rem;
+
+    }
+
+}
+
+/* =========================================================
+   PHASE 3E
+   OFFLINE FEATURE MESSAGE
+========================================================= */
+
+#offlineMessage {
+
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 100000;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 20px;
+
+    background:
+        rgba(10, 0, 22, .55);
+
+    backdrop-filter:
+        blur(6px);
+
+}
+
+
+.offline-message-card {
+
+    width: min(
+        100%,
+        390px
+    );
+
+    background:
+        #ffffff;
+
+    border-radius:
+        22px;
+
+    padding:
+        28px 22px;
+
+    text-align:
+        center;
+
+    box-shadow:
+        0 25px 70px rgba(0,0,0,.2);
+
+    animation:
+        offlineMessageIn
+        .25s ease;
+
+}
+
+
+.offline-message-icon {
+
+    width:
+        58px;
+
+    height:
+        58px;
+
+    margin:
+        0 auto 16px;
+
+    border-radius:
+        50%;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    background:
+        #fff7ed;
+
+    color:
+        #ea580c;
+
+    font-size:
+        1.35rem;
+
+}
+
+
+.offline-message-card h3 {
+
+    margin:
+        0 0 8px;
+
+    font-family:
+        'Bricolage Grotesque',
+        sans-serif;
+
+    font-size:
+        1.1rem;
+
+    color:
+        #202033;
+
+}
+
+
+.offline-message-card p {
+
+    margin:
+        0 auto 20px;
+
+    max-width:
+        320px;
+
+    font-family:
+        'DM Sans',
+        sans-serif;
+
+    font-size:
+        .82rem;
+
+    line-height:
+        1.5;
+
+    color:
+        #64748b;
+
+}
+
+
+#closeOfflineMessage {
+
+    border:
+        0;
+
+    border-radius:
+        12px;
+
+    padding:
+        11px 24px;
+
+    background:
+        #ea580c;
+
+    color:
+        #ffffff;
+
+    font-family:
+        'DM Sans',
+        sans-serif;
+
+    font-size:
+        .8rem;
+
+    font-weight:
+        700;
+
+    cursor:
+        pointer;
+
+}
+
+
+@keyframes offlineMessageIn {
+
+    from {
+
+        opacity:
+            0;
+
+        transform:
+            translateY(10px)
+            scale(.97);
+
+    }
+
+    to {
+
+        opacity:
+            1;
+
+        transform:
+            translateY(0)
+            scale(1);
+
+    }
+
+}
