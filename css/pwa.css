@@ -1,33 +1,19 @@
-/* =========================================
-   PWA STANDALONE MODE
-========================================= */
-
-html.pwa-standalone .topbar {
-
-    padding-top: env(safe-area-inset-top);
-
-}
-
-html.pwa-standalone .bottom-nav {
-
-    padding-bottom:
-        calc(8px + env(safe-area-inset-bottom));
-
-}
-
-/* =========================================
-   PWA INSTALL CARD
-========================================= */
+/* =========================================================
+   AFC ISIU PWA INSTALL UI
+========================================================= */
 
 .pwa-install-card {
     display: flex;
     align-items: center;
     gap: 18px;
+
+    width: 100%;
     padding: 20px;
-    margin-top: 20px;
 
     background: #ffffff;
+
     border: 1px solid rgba(15, 23, 42, 0.08);
+
     border-radius: 18px;
 
     box-shadow:
@@ -50,16 +36,16 @@ html.pwa-standalone .bottom-nav {
 
 .pwa-install-card .settings-card-icon {
 
-    width: 48px;
-    height: 48px;
+    width: 50px;
+    height: 50px;
 
-    flex: 0 0 48px;
+    min-width: 50px;
 
     display: flex;
     align-items: center;
     justify-content: center;
 
-    border-radius: 14px;
+    border-radius: 15px;
 
     background:
         linear-gradient(
@@ -77,7 +63,6 @@ html.pwa-standalone .bottom-nav {
 /* CONTENT */
 
 .pwa-install-card .settings-card-content {
-
     flex: 1;
     min-width: 0;
 }
@@ -86,9 +71,12 @@ html.pwa-standalone .bottom-nav {
 
     margin: 0 0 5px;
 
-    font-family: "Bricolage Grotesque", sans-serif;
+    font-family:
+        "Bricolage Grotesque",
+        sans-serif;
 
     font-size: 1rem;
+
     font-weight: 700;
 
     color: #172033;
@@ -98,9 +86,12 @@ html.pwa-standalone .bottom-nav {
 
     margin: 0;
 
-    font-family: "DM Sans", sans-serif;
+    font-family:
+        "DM Sans",
+        sans-serif;
 
-    font-size: 0.85rem;
+    font-size: 0.84rem;
+
     line-height: 1.5;
 
     color: #64748b;
@@ -120,10 +111,9 @@ html.pwa-standalone .bottom-nav {
 
     flex-shrink: 0;
 
-    border: none;
-    outline: none;
-
     padding: 11px 17px;
+
+    border: none;
 
     border-radius: 12px;
 
@@ -136,16 +126,20 @@ html.pwa-standalone .bottom-nav {
 
     color: #ffffff;
 
-    font-family: "DM Sans", sans-serif;
+    font-family:
+        "DM Sans",
+        sans-serif;
 
-    font-size: 0.85rem;
+    font-size: 0.84rem;
+
     font-weight: 700;
 
     cursor: pointer;
 
     transition:
         transform 0.2s ease,
-        box-shadow 0.2s ease;
+        box-shadow 0.2s ease,
+        opacity 0.2s ease;
 }
 
 .pwa-install-card .settings-action-btn:hover {
@@ -153,7 +147,7 @@ html.pwa-standalone .bottom-nav {
     transform: translateY(-1px);
 
     box-shadow:
-        0 8px 18px rgba(234, 88, 12, 0.25);
+        0 8px 20px rgba(234, 88, 12, 0.25);
 }
 
 .pwa-install-card .settings-action-btn:active {
@@ -162,8 +156,402 @@ html.pwa-standalone .bottom-nav {
 
 }
 
+.pwa-install-card .settings-action-btn:disabled {
 
-/* MOBILE */
+    cursor: default;
+
+    opacity: 0.75;
+
+}
+
+.pwa-install-card
+.settings-action-btn.installed {
+
+    background:
+        linear-gradient(
+            135deg,
+            #059669,
+            #10b981
+        );
+
+}
+
+
+/* =========================================================
+   INSTALL MODAL
+========================================================= */
+
+.pwa-install-modal {
+
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 99999;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+
+    opacity: 0;
+
+    visibility: hidden;
+
+    transition:
+        opacity 0.25s ease,
+        visibility 0.25s ease;
+}
+
+.pwa-install-modal.show {
+
+    opacity: 1;
+
+    visibility: visible;
+
+}
+
+
+/* BACKDROP */
+
+.pwa-install-backdrop {
+
+    position: absolute;
+
+    inset: 0;
+
+    background:
+        rgba(15, 23, 42, 0.55);
+
+    backdrop-filter:
+        blur(6px);
+}
+
+
+/* DIALOG */
+
+.pwa-install-dialog {
+
+    position: relative;
+
+    z-index: 2;
+
+    width: min(100%, 430px);
+
+    max-height: 90vh;
+
+    overflow-y: auto;
+
+    padding: 28px;
+
+    background: #ffffff;
+
+    border-radius: 24px;
+
+    box-shadow:
+        0 25px 70px rgba(15, 23, 42, 0.22);
+
+    transform:
+        translateY(20px)
+        scale(0.97);
+
+    transition:
+        transform 0.25s ease;
+}
+
+.pwa-install-modal.show
+.pwa-install-dialog {
+
+    transform:
+        translateY(0)
+        scale(1);
+
+}
+
+
+/* CLOSE */
+
+.pwa-install-close {
+
+    position: absolute;
+
+    top: 14px;
+    right: 14px;
+
+    width: 36px;
+    height: 36px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: none;
+
+    border-radius: 50%;
+
+    background: #f1f5f9;
+
+    color: #475569;
+
+    font-size: 16px;
+
+    cursor: pointer;
+}
+
+
+/* MODAL ICON */
+
+.pwa-install-modal-icon {
+
+    width: 60px;
+    height: 60px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-bottom: 18px;
+
+    border-radius: 18px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #ea580c,
+            #fb923c
+        );
+
+    color: #ffffff;
+
+    font-size: 25px;
+}
+
+.pwa-install-dialog h2 {
+
+    margin: 0 0 10px;
+
+    font-family:
+        "Bricolage Grotesque",
+        sans-serif;
+
+    font-size: 1.25rem;
+
+    color: #172033;
+}
+
+.pwa-install-modal-content > p {
+
+    margin: 0 0 20px;
+
+    font-family:
+        "DM Sans",
+        sans-serif;
+
+    font-size: 0.88rem;
+
+    line-height: 1.6;
+
+    color: #64748b;
+}
+
+
+/* =========================================================
+   INSTALL STEPS
+========================================================= */
+
+.pwa-install-steps {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 14px;
+
+}
+
+.pwa-step {
+
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 12px;
+
+    padding: 13px;
+
+    background: #f8fafc;
+
+    border-radius: 14px;
+
+}
+
+.pwa-step > span {
+
+    width: 30px;
+    height: 30px;
+
+    min-width: 30px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background:
+        #ea580c;
+
+    color: #ffffff;
+
+    font-family:
+        "DM Sans",
+        sans-serif;
+
+    font-size: 0.78rem;
+
+    font-weight: 700;
+}
+
+.pwa-step strong {
+
+    display: block;
+
+    margin-bottom: 2px;
+
+    font-family:
+        "DM Sans",
+        sans-serif;
+
+    font-size: 0.85rem;
+
+    color: #172033;
+}
+
+.pwa-step small {
+
+    display: block;
+
+    font-family:
+        "DM Sans",
+        sans-serif;
+
+    font-size: 0.78rem;
+
+    line-height: 1.45;
+
+    color: #64748b;
+}
+
+
+/* DONE BUTTON */
+
+.pwa-install-done {
+
+    width: 100%;
+
+    margin-top: 22px;
+
+    padding: 12px 18px;
+
+    border: none;
+
+    border-radius: 12px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #ea580c,
+            #fb923c
+        );
+
+    color: #ffffff;
+
+    font-family:
+        "DM Sans",
+        sans-serif;
+
+    font-size: 0.85rem;
+
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+.pwa-install-toast {
+
+    position: fixed;
+
+    left: 50%;
+
+    bottom: 25px;
+
+    z-index: 100000;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    width: min(
+        calc(100% - 30px),
+        420px
+    );
+
+    padding: 14px 16px;
+
+    border-radius: 14px;
+
+    background: #172033;
+
+    color: #ffffff;
+
+    font-family:
+        "DM Sans",
+        sans-serif;
+
+    font-size: 0.82rem;
+
+    box-shadow:
+        0 12px 35px rgba(15, 23, 42, 0.25);
+
+    transform:
+        translate(-50%, 20px);
+
+    opacity: 0;
+
+    transition:
+        transform 0.25s ease,
+        opacity 0.25s ease;
+}
+
+.pwa-install-toast.show {
+
+    transform:
+        translate(-50%, 0);
+
+    opacity: 1;
+
+}
+
+.pwa-install-toast.success {
+
+    background: #047857;
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
 
 @media (max-width: 600px) {
 
@@ -173,25 +561,33 @@ html.pwa-standalone .bottom-nav {
 
         flex-wrap: wrap;
 
-        gap: 14px;
-
         padding: 17px;
 
         border-radius: 16px;
 
     }
 
-    .pwa-install-card .settings-card-content {
+    .pwa-install-card
+    .settings-card-content {
 
-        flex: 1;
+        padding-top: 2px;
 
     }
 
-    .pwa-install-card .settings-action-btn {
+    .pwa-install-card
+    .settings-action-btn {
 
         width: 100%;
 
-        margin-top: 4px;
+        margin-top: 3px;
+
+    }
+
+    .pwa-install-dialog {
+
+        padding: 24px 20px;
+
+        border-radius: 22px;
 
     }
 
