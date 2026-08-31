@@ -1,999 +1,1481 @@
 /* ============================================================
    AFC ISIU YOUTH PORTAL V2
    FILE: lessons.css
-   PURPOSE: WEEKLY LESSON PAGE STYLES
-   PHASE 4B
-   ============================================================ */
+   PURPOSE: WEEKLY LESSONS PAGE
+============================================================ */
 
 
 /* ============================================================
-   LESSON PAGE
+   LESSON PAGE CONTAINER
 ============================================================ */
 
-.lessons-page{
+.lessons-container {
 
-    width:100%;
-    max-width:1100px;
+    width: 100%;
 
-    margin:0 auto;
+    max-width: 1200px;
 
-    padding:
-        24px
-        clamp(16px,4vw,35px)
-        40px;
+    margin: 0 auto;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 22px;
 
 }
 
 
 /* ============================================================
-   HERO
+   PAGE HEADER
 ============================================================ */
 
-.hero-wrapper{
+.lessons-page-header {
 
-    width:100%;
+    display: flex;
 
-    margin:
-        0 auto
-        28px;
+    align-items: flex-end;
 
-}
+    justify-content: space-between;
 
+    gap: 20px;
 
-.hero-section{
-
-    position:relative;
-
-    overflow:hidden;
-
-    padding:36px;
-
-    border-radius:34px;
-
-    background:
-        linear-gradient(
-            135deg,
-            #0f172a 0%,
-            #0b4f67 45%,
-            #08748f 100%
-        );
-
-    color:#fff;
-
-    border:
-        1px solid
-        rgba(255,255,255,.08);
-
-    box-shadow:
-        0 25px 60px
-        rgba(8,145,178,.14);
-
-    isolation:isolate;
+    padding: 4px 2px 8px;
 
 }
 
 
-.hero-section::before{
+.lessons-page-header .section-badge {
 
-    content:"";
-
-    position:absolute;
-
-    inset:0;
-
-    background:
-
-        radial-gradient(
-            circle at top right,
-            rgba(255,255,255,.12),
-            transparent 30%
-        ),
-
-        radial-gradient(
-            circle at bottom left,
-            rgba(255,255,255,.06),
-            transparent 35%
-        );
-
-    z-index:-1;
+    margin-bottom: 8px;
 
 }
 
 
-.hero-section::after{
+.lessons-page-header h1 {
 
-    content:"";
-
-    position:absolute;
-
-    inset:0;
-
-    background-image:
-
-        linear-gradient(
-            rgba(255,255,255,.04) 1px,
-            transparent 1px
-        ),
-
-        linear-gradient(
-            90deg,
-            rgba(255,255,255,.04) 1px,
-            transparent 1px
-        );
-
-    background-size:32px 32px;
-
-    opacity:.35;
-
-    mask-image:
-        radial-gradient(
-            circle,
-            black 50%,
-            transparent 100%
-        );
-
-    pointer-events:none;
-
-}
-
-
-.hero-top{
-
-    display:flex;
-
-    justify-content:space-between;
-
-    align-items:center;
-
-    gap:18px;
-
-    margin-bottom:24px;
-
-}
-
-
-.hero-badge{
-
-    display:inline-flex;
-
-    align-items:center;
-
-    gap:8px;
-
-    padding:10px 16px;
-
-    border-radius:999px;
-
-    background:
-        rgba(255,255,255,.10);
-
-    backdrop-filter:
-        blur(18px);
-
-    border:
-        1px solid
-        rgba(255,255,255,.08);
-
-    font-size:.68rem;
-
-}
-
-
-.hero-icon{
-
-    width:45px;
-    height:45px;
-
-    flex-shrink:0;
-
-    display:flex;
-
-    align-items:center;
-    justify-content:center;
-
-    border-radius:18px;
-
-    background:
-        rgba(255,255,255,.10);
-
-    border:
-        1px solid
-        rgba(255,255,255,.08);
-
-}
-
-
-.hero-text-block{
-
-    max-width:520px;
-
-    position:relative;
-
-    z-index:2;
-
-}
-
-
-.hero-heading{
-
-    margin-bottom:12px;
+    margin: 0;
 
     font-family:
         "Bricolage Grotesque",
         sans-serif;
 
-    font-size:1.4rem;
+    font-size: clamp(1.5rem, 3vw, 2rem);
 
-    font-weight:800;
+    line-height: 1.15;
 
-    line-height:1.15;
-
-    color:#fff;
+    color: var(--primary-dark);
 
 }
 
 
-.hero-description{
+.lessons-page-header p {
 
-    max-width:470px;
+    max-width: 650px;
+
+    margin: 8px 0 0;
 
     font-family:
         "DM Sans",
         sans-serif;
 
-    font-size:.72rem;
+    font-size: .78rem;
 
-    line-height:1.6;
+    line-height: 1.55;
 
-    color:
-        rgba(255,255,255,.85);
-
-}
-
-
-/* ============================================================
-   TABS
-============================================================ */
-
-.tabs{
-
-    display:flex;
-
-    flex-wrap:wrap;
-
-    gap:10px;
-
-    margin-bottom:24px;
+    color: var(--text-light);
 
 }
 
 
-.tab{
+.lesson-week-badge {
 
-    padding:
-        9px
-        15px;
+    flex-shrink: 0;
 
-    border:none;
+    display: flex;
 
-    border-radius:999px;
+    align-items: center;
 
-    background:#f1f5f9;
+    gap: 8px;
 
-    color:#0f172a;
+    padding: 10px 14px;
+
+    border-radius: 14px;
+
+    background: rgba(74,7,84,.06);
+
+    color: var(--primary);
 
     font-family:
         "DM Sans",
         sans-serif;
 
-    font-size:.72rem;
+    font-size: .68rem;
 
-    font-weight:500;
-
-    cursor:pointer;
-
-    transition:
-        transform .25s ease,
-        background .25s ease,
-        color .25s ease;
+    font-weight: 700;
 
 }
 
 
-.tab:hover{
+.lesson-week-badge i {
 
-    transform:
-        translateY(-2px);
-
-}
-
-
-.tab.active{
-
-    color:#fff;
-
-    background:
-        linear-gradient(
-            135deg,
-            #ea580c,
-            #fb923c
-        );
-
-    box-shadow:
-        0 10px 25px
-        rgba(234,88,12,.25);
+    font-size: .8rem;
 
 }
 
 
 /* ============================================================
-   LESSON CARD
+   LOADING
 ============================================================ */
 
-.lesson-card{
+.lesson-loading {
 
-    width:100%;
+    width: 100%;
 
-    background:#fff;
+}
+
+
+.lesson-loader {
+
+    min-height: 220px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 12px;
+
+    background: var(--surface);
 
     border:
-        1px solid
-        #ececec;
+        1px solid rgba(0,0,0,.06);
 
-    border-radius:28px;
-
-    padding:
-        clamp(18px,4vw,30px);
+    border-radius: 25px;
 
     box-shadow:
-        0 15px 45px
-        rgba(0,0,0,.05);
+        0 12px 30px rgba(0,0,0,.05);
+
+}
+
+
+.lesson-loader i {
+
+    font-size: 1.4rem;
+
+    color: var(--brand);
+
+}
+
+
+.lesson-loader p {
+
+    margin: 0;
+
+    font-family:
+        "DM Sans",
+        sans-serif;
+
+    font-size: .75rem;
+
+    color: var(--text-light);
 
 }
 
 
 /* ============================================================
-   LESSON HEADER
+   ERROR
 ============================================================ */
 
-.lesson-header{
+.lesson-error {
 
-    margin-bottom:28px;
+    padding: 40px 24px;
 
-    padding-bottom:22px;
+    text-align: center;
 
-    border-bottom:
-        1px solid
-        #edf2f7;
+    background: var(--surface);
 
-}
+    border:
+        1px solid rgba(0,0,0,.06);
 
+    border-radius: 25px;
 
-.lesson-header-top{
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:space-between;
-
-    gap:14px;
-
-    margin-bottom:14px;
+    box-shadow:
+        0 12px 30px rgba(0,0,0,.05);
 
 }
 
 
-.lesson-badge{
+.lesson-error-icon {
 
-    display:inline-flex;
+    width: 54px;
 
-    align-items:center;
+    height: 54px;
 
-    padding:
-        8px
-        14px;
+    margin: 0 auto 14px;
 
-    border-radius:999px;
+    display: flex;
 
-    background:
-        linear-gradient(
-            135deg,
-            rgba(234,88,12,.10),
-            rgba(251,146,60,.15)
-        );
+    align-items: center;
 
-    color:#ea580c;
+    justify-content: center;
 
-    font-family:
-        "DM Sans",
-        sans-serif;
+    border-radius: 17px;
 
-    font-size:.68rem;
+    background: rgba(255,78,83,.08);
+
+    color: #ff4e53;
+
+    font-size: 1.2rem;
 
 }
 
 
-.lesson-meta{
+.lesson-error h2 {
 
-    font-family:
-        "DM Sans",
-        sans-serif;
-
-    font-size:.68rem;
-
-    color:#64748b;
-
-    font-weight:600;
-
-}
-
-
-.lesson-topic{
+    margin: 0;
 
     font-family:
         "Bricolage Grotesque",
         sans-serif;
 
-    font-size:1.3rem;
+    font-size: 1rem;
 
-    line-height:1.3;
+    color: var(--primary-dark);
 
-    color:#0f172a;
+}
+
+
+.lesson-error p {
+
+    max-width: 500px;
+
+    margin: 8px auto 18px;
+
+    font-family:
+        "DM Sans",
+        sans-serif;
+
+    font-size: .72rem;
+
+    line-height: 1.5;
+
+    color: var(--text-light);
+
+}
+
+
+.lesson-retry-btn {
+
+    min-height: 42px;
+
+    padding: 0 18px;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    border: 0;
+
+    border-radius: 13px;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--brand),
+            var(--brand-dark)
+        );
+
+    color: #ffffff;
+
+    font-family:
+        "DM Sans",
+        sans-serif;
+
+    font-size: .7rem;
+
+    font-weight: 700;
+
+    cursor: pointer;
 
 }
 
 
 /* ============================================================
-   BIBLE / MEMORY GRID
+   LESSON READER
 ============================================================ */
 
-.lesson-grid{
+.lesson-reader {
 
-    display:grid;
+    width: 100%;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 18px;
+
+}
+
+
+/* ============================================================
+   LESSON HERO
+============================================================ */
+
+.lesson-hero-card {
+
+    position: relative;
+
+    overflow: hidden;
+
+    padding: 28px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #ffffff 0%,
+            #faf7fb 100%
+        );
+
+    border:
+        1px solid rgba(74,7,84,.08);
+
+    border-radius: 25px;
+
+    box-shadow:
+        0 14px 35px rgba(0,0,0,.05);
+
+}
+
+
+.lesson-hero-card::after {
+
+    content: "";
+
+    position: absolute;
+
+    width: 180px;
+
+    height: 180px;
+
+    right: -70px;
+
+    top: -70px;
+
+    border-radius: 50%;
+
+    background:
+        rgba(234,88,12,.07);
+
+    pointer-events: none;
+
+}
+
+
+.lesson-hero-top {
+
+    position: relative;
+
+    z-index: 1;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 12px;
+
+}
+
+
+.lesson-class-badge,
+.lesson-status-badge {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    min-height: 30px;
+
+    padding: 0 11px;
+
+    border-radius: 50px;
+
+    font-family:
+        "DM Sans",
+        sans-serif;
+
+    font-size: .6rem;
+
+    font-weight: 700;
+
+}
+
+
+.lesson-class-badge {
+
+    background: rgba(234,88,12,.09);
+
+    color: var(--brand);
+
+}
+
+
+.lesson-status-badge {
+
+    background: rgba(14,164,114,.09);
+
+    color: var(--green);
+
+}
+
+
+.lesson-hero-card h1 {
+
+    position: relative;
+
+    z-index: 1;
+
+    max-width: 900px;
+
+    margin: 18px 0 8px;
+
+    font-family:
+        "Bricolage Grotesque",
+        sans-serif;
+
+    font-size: clamp(1.45rem, 3vw, 2.2rem);
+
+    line-height: 1.12;
+
+    color: var(--primary-dark);
+
+}
+
+
+.lesson-introduction {
+
+    position: relative;
+
+    z-index: 1;
+
+    max-width: 850px;
+
+    margin: 0;
+
+    font-family:
+        "DM Sans",
+        sans-serif;
+
+    font-size: .78rem;
+
+    line-height: 1.65;
+
+    color: var(--text-light);
+
+}
+
+
+/* ============================================================
+   LESSON META
+============================================================ */
+
+.lesson-meta {
+
+    position: relative;
+
+    z-index: 1;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 28px;
+
+    margin-top: 22px;
+
+    padding-top: 18px;
+
+    border-top:
+        1px solid rgba(0,0,0,.07);
+
+}
+
+
+.lesson-meta-item {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+}
+
+
+.lesson-meta-item > i {
+
+    width: 34px;
+
+    height: 34px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 11px;
+
+    background: rgba(74,7,84,.07);
+
+    color: var(--primary);
+
+    font-size: .75rem;
+
+}
+
+
+.lesson-meta-item div {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 2px;
+
+}
+
+
+.lesson-meta-item span {
+
+    font-family:
+        "DM Sans",
+        sans-serif;
+
+    font-size: .58rem;
+
+    color: var(--text-light);
+
+}
+
+
+.lesson-meta-item strong {
+
+    font-family:
+        "DM Sans",
+        sans-serif;
+
+    font-size: .68rem;
+
+    color: var(--primary-dark);
+
+}
+
+
+/* ============================================================
+   MEMORY VERSE
+============================================================ */
+
+.lesson-memory-card {
+
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 16px;
+
+    padding: 22px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(74,7,84,.96),
+            rgba(10,0,22,.98)
+        );
+
+    border-radius: 22px;
+
+    box-shadow:
+        0 14px 32px rgba(74,7,84,.14);
+
+}
+
+
+.lesson-section-icon {
+
+    width: 42px;
+
+    height: 42px;
+
+    min-width: 42px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 13px;
+
+    background: rgba(255,255,255,.1);
+
+    color: #ffffff;
+
+    font-size: .9rem;
+
+}
+
+
+.lesson-section-content {
+
+    min-width: 0;
+
+}
+
+
+.lesson-section-label {
+
+    display: block;
+
+    margin-bottom: 7px;
+
+    font-family:
+        "DM Sans",
+        sans-serif;
+
+    font-size: .58rem;
+
+    font-weight: 800;
+
+    letter-spacing: 1px;
+
+    color: var(--brand);
+
+}
+
+
+.lesson-memory-card .lesson-section-label {
+
+    color: #fb923c;
+
+}
+
+
+.lesson-memory-card p {
+
+    margin: 0;
+
+    font-family:
+        "Bricolage Grotesque",
+        sans-serif;
+
+    font-size: .9rem;
+
+    line-height: 1.55;
+
+    color: #ffffff;
+
+}
+
+
+.memory-verse-reference {
+
+    display: block;
+
+    margin-top: 7px;
+
+    font-family:
+        "DM Sans",
+        sans-serif;
+
+    font-size: .62rem;
+
+    color: rgba(255,255,255,.65);
+
+}
+
+
+/* ============================================================
+   GENERAL INFO CARD
+============================================================ */
+
+.lesson-info-card,
+.lesson-content-card,
+.lesson-key-points-card {
+
+    padding: 24px;
+
+    background: #ffffff;
+
+    border:
+        1px solid rgba(0,0,0,.06);
+
+    border-radius: 22px;
+
+    box-shadow:
+        0 10px 28px rgba(0,0,0,.045);
+
+}
+
+
+.lesson-info-header {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    margin-bottom: 18px;
+
+}
+
+
+.lesson-info-icon {
+
+    width: 40px;
+
+    height: 40px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 12px;
+
+    background: rgba(234,88,12,.08);
+
+    color: var(--brand);
+
+}
+
+
+.lesson-info-header span {
+
+    display: block;
+
+    margin-bottom: 3px;
+
+    font-family:
+        "DM Sans",
+        sans-serif;
+
+    font-size: .56rem;
+
+    font-weight: 800;
+
+    letter-spacing: 1px;
+
+    color: var(--brand);
+
+}
+
+
+.lesson-info-header h2,
+.lesson-content-header h2 {
+
+    margin: 0;
+
+    font-family:
+        "Bricolage Grotesque",
+        sans-serif;
+
+    font-size: 1rem;
+
+    line-height: 1.25;
+
+    color: var(--primary-dark);
+
+}
+
+
+.bible-text {
+
+    margin: 0;
+
+    padding: 16px 18px;
+
+    border-left:
+        3px solid var(--brand);
+
+    border-radius: 0 12px 12px 0;
+
+    background: #fafafa;
+
+    font-family:
+        "DM Sans",
+        sans-serif;
+
+    font-size: .78rem;
+
+    line-height: 1.65;
+
+    font-weight: 600;
+
+    color: var(--primary-dark);
+
+}
+
+
+/* ============================================================
+   LESSON CONTENT
+============================================================ */
+
+.lesson-content-header {
+
+    margin-bottom: 20px;
+
+}
+
+
+.lesson-content-header .lesson-section-label {
+
+    margin-bottom: 5px;
+
+}
+
+
+.lesson-body {
+
+    width: 100%;
+
+    overflow-wrap: anywhere;
+
+    word-break: normal;
+
+    font-family:
+        "DM Sans",
+        sans-serif;
+
+    font-size: .82rem;
+
+    line-height: 1.72;
+
+    color: var(--text);
+
+}
+
+
+.lesson-body p {
+
+    margin: 0 0 16px;
+
+}
+
+
+.lesson-body p:last-child {
+
+    margin-bottom: 0;
+
+}
+
+
+.lesson-body h1,
+.lesson-body h2,
+.lesson-body h3,
+.lesson-body h4 {
+
+    margin: 24px 0 10px;
+
+    font-family:
+        "Bricolage Grotesque",
+        sans-serif;
+
+    line-height: 1.3;
+
+    color: var(--primary-dark);
+
+}
+
+
+.lesson-body h1 {
+
+    font-size: 1.25rem;
+
+}
+
+
+.lesson-body h2 {
+
+    font-size: 1.05rem;
+
+}
+
+
+.lesson-body h3 {
+
+    font-size: .95rem;
+
+}
+
+
+.lesson-body h4 {
+
+    font-size: .85rem;
+
+}
+
+
+.lesson-body ul,
+.lesson-body ol {
+
+    margin: 12px 0 18px;
+
+    padding-left: 22px;
+
+}
+
+
+.lesson-body li {
+
+    margin-bottom: 8px;
+
+}
+
+
+.lesson-body strong {
+
+    font-weight: 750;
+
+    color: var(--primary-dark);
+
+}
+
+
+.lesson-body blockquote {
+
+    margin: 18px 0;
+
+    padding: 15px 18px;
+
+    border-left:
+        3px solid var(--brand);
+
+    border-radius: 0 12px 12px 0;
+
+    background: rgba(234,88,12,.05);
+
+}
+
+
+/* ============================================================
+   KEY POINTS
+============================================================ */
+
+.lesson-key-points {
+
+    display: grid;
 
     grid-template-columns:
-        repeat(2,1fr);
+        repeat(2, minmax(0, 1fr));
 
-    gap:18px;
-
-    margin-bottom:20px;
+    gap: 10px;
 
 }
 
 
-.info-card{
+.key-point-item {
 
-    background:#fafafa;
+    display: flex;
 
-    border:
-        1px solid
-        #eef2f7;
+    align-items: flex-start;
 
-    border-radius:20px;
+    gap: 10px;
 
-    padding:20px;
+    padding: 13px;
 
-}
+    border-radius: 14px;
 
-
-.info-card h3{
-
-    margin-bottom:10px;
-
-    font-family:
-        "Bricolage Grotesque",
-        sans-serif;
-
-    font-size:.6rem;
-
-    color:#ea580c;
+    background: #fafafa;
 
 }
 
 
-/* ============================================================
-   LESSON TEXT
-============================================================ */
+.key-point-item i {
 
-.lesson-text{
+    margin-top: 2px;
+
+    color: var(--green);
+
+    font-size: .75rem;
+
+}
+
+
+.key-point-item span {
 
     font-family:
         "DM Sans",
         sans-serif;
 
-    font-size:.75rem;
+    font-size: .7rem;
 
-    line-height:1.8;
+    line-height: 1.5;
 
-    color:#1e293b;
-
-    white-space:pre-wrap;
+    color: var(--text);
 
 }
 
 
 /* ============================================================
-   AUDIO
+   FINISH READING
 ============================================================ */
 
-.audio-card{
+.finish-reading-card {
 
-    margin:
-        18px
-        0
-        15px;
+    position: relative;
 
-    padding:20px;
-
-    border-radius:20px;
-
-    background:#fafafa;
-
-    border:
-        1px solid
-        #eef2f7;
-
-}
-
-
-.audio-card audio{
-
-    width:100%;
-
-    margin-top:10px;
-
-}
-
-
-/* ============================================================
-   LESSON SECTIONS
-============================================================ */
-
-.lesson-section{
-
-    margin-top:20px;
-
-    padding:24px;
-
-    background:#fcfcfc;
-
-    border:
-        1px solid
-        #eef2f7;
-
-    border-radius:20px;
-
-}
-
-
-.section-title{
-
-    margin-bottom:14px;
-
-    font-family:
-        "Bricolage Grotesque",
-        sans-serif;
-
-    font-size:.84rem;
-
-    font-weight:700;
-
-    color:#0f172a;
-
-}
-
-
-/* ============================================================
-   READING COMPLETION
-============================================================ */
-
-.reading-completion{
-
-    margin-top:24px;
-
-    padding:24px;
-
-    border-radius:22px;
+    padding: 24px;
 
     background:
         linear-gradient(
             135deg,
-            #f8fafc,
-            #f1f5f9
+            #ffffff,
+            #faf8fb
         );
 
     border:
-        1px solid
-        #e2e8f0;
+        1px solid rgba(74,7,84,.1);
 
-}
-
-
-.reading-completion-header{
-
-    display:flex;
-
-    align-items:center;
-
-    gap:14px;
-
-    margin-bottom:20px;
-
-}
-
-
-.reading-completion-icon{
-
-    width:46px;
-
-    height:46px;
-
-    flex-shrink:0;
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    border-radius:15px;
-
-    background:
-        linear-gradient(
-            135deg,
-            #ea580c,
-            #fb923c
-        );
-
-    color:#fff;
+    border-radius: 22px;
 
     box-shadow:
-        0 8px 20px
-        rgba(234,88,12,.20);
+        0 12px 30px rgba(0,0,0,.05);
 
 }
 
 
-.reading-completion-title{
+.finish-reading-header {
+
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 14px;
+
+}
+
+
+.finish-reading-icon {
+
+    width: 42px;
+
+    height: 42px;
+
+    min-width: 42px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 13px;
+
+    background: rgba(14,164,114,.1);
+
+    color: var(--green);
+
+    font-size: .85rem;
+
+}
+
+
+.finish-reading-header h2 {
+
+    margin: 0;
 
     font-family:
         "Bricolage Grotesque",
         sans-serif;
 
-    font-size:.95rem;
+    font-size: 1rem;
 
-    font-weight:700;
-
-    color:#0f172a;
+    color: var(--primary-dark);
 
 }
 
 
-.reading-completion-subtitle{
+.finish-reading-header p {
 
-    margin-top:3px;
+    max-width: 650px;
+
+    margin: 6px 0 0;
 
     font-family:
         "DM Sans",
         sans-serif;
 
-    font-size:.68rem;
+    font-size: .7rem;
 
-    color:#64748b;
+    line-height: 1.55;
+
+    color: var(--text-light);
 
 }
 
 
 /* ============================================================
-   READING TIME
+   READING DETAILS
 ============================================================ */
 
-.reading-time{
+.finish-reading-details {
 
-    display:inline-flex;
+    display: flex;
 
-    align-items:center;
+    align-items: center;
 
-    gap:7px;
+    justify-content: space-between;
 
-    margin-bottom:16px;
+    gap: 18px;
 
-    padding:
-        8px
-        12px;
+    margin-top: 22px;
 
-    border-radius:999px;
+    padding: 16px;
 
-    background:#fff;
+    border-radius: 16px;
+
+    background: rgba(74,7,84,.035);
+
+}
+
+
+.reading-time-box {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+}
+
+
+.reading-time-box > i {
+
+    width: 34px;
+
+    height: 34px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 10px;
+
+    background: #ffffff;
+
+    color: var(--primary);
+
+    font-size: .75rem;
+
+}
+
+
+.reading-time-box div {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 2px;
+
+}
+
+
+.reading-time-box span {
+
+    font-family:
+        "DM Sans",
+        sans-serif;
+
+    font-size: .58rem;
+
+    color: var(--text-light);
+
+}
+
+
+.reading-time-box strong {
+
+    font-family:
+        "DM Sans",
+        sans-serif;
+
+    font-size: .68rem;
+
+    color: var(--primary-dark);
+
+}
+
+
+/* ============================================================
+   READ CONFIRMATION
+============================================================ */
+
+.read-confirmation {
+
+    position: relative;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    cursor: pointer;
+
+    user-select: none;
+
+}
+
+
+.read-confirmation input {
+
+    position: absolute;
+
+    opacity: 0;
+
+    width: 1px;
+
+    height: 1px;
+
+}
+
+
+.custom-check {
+
+    width: 24px;
+
+    height: 24px;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
 
     border:
-        1px solid
-        #e2e8f0;
+        1.5px solid #d6d3dc;
 
-    color:#475569;
+    border-radius: 7px;
 
-    font-family:
-        "DM Sans",
-        sans-serif;
+    background: #ffffff;
 
-    font-size:.68rem;
-
-    font-weight:600;
-
-}
-
-
-.reading-time i{
-
-    color:#ea580c;
-
-}
-
-
-/* ============================================================
-   CONFIRM READING BUTTON
-============================================================ */
-
-.reading-confirm{
-
-    width:100%;
-
-    min-height:48px;
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    gap:9px;
-
-    padding:
-        13px
-        18px;
-
-    border:none;
-
-    border-radius:14px;
-
-    background:
-        linear-gradient(
-            135deg,
-            #0f172a,
-            #0891b2
-        );
-
-    color:#fff;
-
-    font-family:
-        "Bricolage Grotesque",
-        sans-serif;
-
-    font-size:.76rem;
-
-    font-weight:700;
-
-    cursor:pointer;
-
-    box-shadow:
-        0 10px 25px
-        rgba(8,145,178,.18);
+    color: #ffffff;
 
     transition:
-        transform .25s ease,
-        box-shadow .25s ease,
-        opacity .25s ease;
+        .2s ease;
 
 }
 
 
-.reading-confirm:hover{
+.custom-check i {
 
-    transform:
-        translateY(-2px);
+    opacity: 0;
 
-    box-shadow:
-        0 15px 32px
-        rgba(8,145,178,.24);
-
-}
-
-
-.reading-confirm:active{
-
-    transform:
-        translateY(0);
-
-}
-
-
-.reading-confirm.completed{
-
-    background:
-        linear-gradient(
-            135deg,
-            #15803d,
-            #16a34a
-        );
-
-    box-shadow:
-        0 10px 25px
-        rgba(22,163,74,.18);
-
-}
-
-
-.reading-confirm:disabled{
-
-    cursor:default;
-
-}
-
-
-/* ============================================================
-   READING STATUS
-============================================================ */
-
-.reading-status{
-
-    margin-top:12px;
-
-    min-height:18px;
-
-    text-align:center;
-
-    font-family:
-        "DM Sans",
-        sans-serif;
-
-    font-size:.65rem;
-
-    color:#64748b;
-
-}
-
-
-.reading-status.success{
-
-    color:#15803d;
-
-    font-weight:600;
-
-}
-
-
-/* ============================================================
-   ARCHIVE
-============================================================ */
-
-.archive-card{
-
-    display:flex;
-
-    align-items:center;
-
-    gap:18px;
-
-    margin-top:24px;
-
-    padding:24px;
-
-    background:#fff;
-
-    border:
-        1px solid
-        #ececec;
-
-    border-radius:24px;
-
-    box-shadow:
-        0 10px 35px
-        rgba(0,0,0,.05);
-
-}
-
-
-.archive-icon{
-
-    width:56px;
-
-    height:56px;
-
-    min-width:56px;
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    border-radius:16px;
-
-    color:#fff;
-
-    background:
-        linear-gradient(
-            135deg,
-            #ea580c,
-            #fb923c
-        );
-
-}
-
-
-.archive-content{
-
-    flex:1;
-
-}
-
-
-.archive-content h3{
-
-    margin-bottom:6px;
-
-    font-family:
-        "Bricolage Grotesque",
-        sans-serif;
-
-    font-size:.85rem;
-
-}
-
-
-.archive-content p{
-
-    font-family:
-        "DM Sans",
-        sans-serif;
-
-    font-size:.72rem;
-
-    line-height:1.45;
-
-    color:#64748b;
-
-}
-
-
-.archive-btn{
-
-    padding:
-        12px
-        18px;
-
-    border-radius:999px;
-
-    color:#fff;
-
-    background:
-        linear-gradient(
-            135deg,
-            #0f172a,
-            #0891b2
-        );
-
-    font-family:
-        "DM Sans",
-        sans-serif;
-
-    font-size:.72rem;
-
-    font-weight:700;
-
-    white-space:nowrap;
+    font-size: .65rem;
 
     transition:
-        transform .25s ease;
+        .2s ease;
 
 }
 
 
-.archive-btn:hover{
+.read-confirmation input:checked
++ .custom-check {
+
+    border-color: var(--green);
+
+    background: var(--green);
+
+}
+
+
+.read-confirmation input:checked
++ .custom-check i {
+
+    opacity: 1;
+
+}
+
+
+.confirmation-text {
+
+    font-family:
+        "DM Sans",
+        sans-serif;
+
+    font-size: .7rem;
+
+    font-weight: 700;
+
+    color: var(--primary-dark);
+
+}
+
+
+/* ============================================================
+   CONTINUE BUTTON
+============================================================ */
+
+.continue-lesson-btn {
+
+    width: 100%;
+
+    min-height: 48px;
+
+    margin-top: 16px;
+
+    padding: 0 18px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 10px;
+
+    border: 0;
+
+    border-radius: 14px;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--brand),
+            var(--brand-dark)
+        );
+
+    color: #ffffff;
+
+    font-family:
+        "DM Sans",
+        sans-serif;
+
+    font-size: .72rem;
+
+    font-weight: 750;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 9px 22px rgba(234,88,12,.16);
+
+    transition:
+        transform .2s ease,
+        opacity .2s ease,
+        box-shadow .2s ease;
+
+}
+
+
+.continue-lesson-btn:not(:disabled):hover {
 
     transform:
-        translateY(-2px);
+        translateY(-1px);
+
+    box-shadow:
+        0 12px 25px rgba(234,88,12,.22);
+
+}
+
+
+.continue-lesson-btn:active {
+
+    transform:
+        scale(.99);
+
+}
+
+
+.continue-lesson-btn:disabled {
+
+    opacity: .45;
+
+    cursor: not-allowed;
+
+    box-shadow: none;
+
+}
+
+
+.login-required-message {
+
+    margin: 12px 0 0;
+
+    padding: 11px 13px;
+
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 8px;
+
+    border-radius: 12px;
+
+    background: rgba(234,88,12,.06);
+
+    color: #9a3412;
+
+    font-family:
+        "DM Sans",
+        sans-serif;
+
+    font-size: .64rem;
+
+    line-height: 1.5;
+
+}
+
+
+.login-required-message i {
+
+    margin-top: 2px;
+
+}
+
+
+/* ============================================================
+   FOCUS STATES
+============================================================ */
+
+.read-confirmation input:focus-visible
++ .custom-check {
+
+    outline:
+        2px solid rgba(234,88,12,.3);
+
+    outline-offset: 3px;
+
+}
+
+
+.continue-lesson-btn:focus-visible,
+.lesson-retry-btn:focus-visible {
+
+    outline:
+        2px solid rgba(74,7,84,.35);
+
+    outline-offset: 3px;
 
 }
 
@@ -1002,11 +1484,19 @@
    TABLET
 ============================================================ */
 
-@media(max-width:900px){
+@media (max-width: 900px) {
 
-    .lesson-grid{
+    .lessons-container {
 
-        grid-template-columns:1fr;
+        max-width: none;
+
+    }
+
+
+    .lesson-key-points {
+
+        grid-template-columns:
+            1fr;
 
     }
 
@@ -1017,135 +1507,264 @@
    MOBILE
 ============================================================ */
 
-@media(max-width:700px){
-
-    .lessons-page{
-
-        padding:
-            18px
-            16px
-            30px;
-
-    }
+@media (max-width: 768px) {
 
 
-    .hero-section{
+    .lessons-container {
 
-        padding:24px;
+        width: 100%;
 
-        border-radius:25px;
+        gap: 16px;
 
     }
 
 
-    .hero-heading{
+    .lessons-page-header {
 
-        font-size:.95rem;
+        align-items: flex-start;
 
-    }
+        flex-direction: column;
 
-
-    .hero-description{
-
-        font-size:.68rem;
+        gap: 12px;
 
     }
 
 
-    .hero-badge{
+    .lessons-page-header h1 {
 
-        padding:
-            7px
-            12px;
-
-        font-size:.6rem;
+        font-size: 1.45rem;
 
     }
 
 
-    .hero-icon{
+    .lessons-page-header p {
 
-        width:43px;
-        height:43px;
-
-        font-size:.9rem;
+        font-size: .7rem;
 
     }
 
 
-    .lesson-card{
+    .lesson-week-badge {
 
-        padding:18px;
+        padding: 8px 11px;
 
-        border-radius:24px;
-
-    }
-
-
-    .lesson-topic{
-
-        font-size:.97rem;
+        font-size: .6rem;
 
     }
 
 
-    .lesson-header-top{
+    .lesson-hero-card {
 
-        flex-wrap:wrap;
+        padding: 20px;
 
-    }
-
-
-    .info-card,
-    .audio-card,
-    .lesson-section{
-
-        padding:18px;
+        border-radius: 21px;
 
     }
 
 
-    .lesson-text{
+    .lesson-hero-top {
 
-        font-size:.72rem;
+        align-items: flex-start;
 
-        line-height:1.7;
-
-    }
-
-
-    .reading-completion{
-
-        padding:18px;
-
-        border-radius:18px;
+        flex-direction: column;
 
     }
 
 
-    .reading-confirm{
+    .lesson-hero-card h1 {
 
-        min-height:46px;
+        margin-top: 15px;
 
-        font-size:.72rem;
+        font-size: 1.35rem;
 
-    }
-
-
-    .archive-card{
-
-        flex-direction:column;
-
-        align-items:flex-start;
+        line-height: 1.2;
 
     }
 
 
-    .archive-btn{
+    .lesson-introduction {
 
-        width:100%;
+        font-size: .72rem;
 
-        text-align:center;
+        line-height: 1.6;
+
+    }
+
+
+    .lesson-meta {
+
+        gap: 16px;
+
+        flex-wrap: wrap;
+
+        margin-top: 18px;
+
+        padding-top: 15px;
+
+    }
+
+
+    .lesson-meta-item > i {
+
+        width: 31px;
+
+        height: 31px;
+
+    }
+
+
+    .lesson-meta-item span {
+
+        font-size: .54rem;
+
+    }
+
+
+    .lesson-meta-item strong {
+
+        font-size: .63rem;
+
+    }
+
+
+    .lesson-memory-card {
+
+        padding: 18px;
+
+        gap: 12px;
+
+        border-radius: 19px;
+
+    }
+
+
+    .lesson-section-icon {
+
+        width: 36px;
+
+        height: 36px;
+
+        min-width: 36px;
+
+        border-radius: 11px;
+
+    }
+
+
+    .lesson-memory-card p {
+
+        font-size: .78rem;
+
+    }
+
+
+    .lesson-info-card,
+    .lesson-content-card,
+    .lesson-key-points-card,
+    .finish-reading-card {
+
+        padding: 18px;
+
+        border-radius: 19px;
+
+    }
+
+
+    .lesson-info-header {
+
+        margin-bottom: 14px;
+
+    }
+
+
+    .lesson-info-header h2,
+    .lesson-content-header h2 {
+
+        font-size: .9rem;
+
+    }
+
+
+    .bible-text {
+
+        padding: 13px 14px;
+
+        font-size: .7rem;
+
+        line-height: 1.6;
+
+    }
+
+
+    .lesson-body {
+
+        font-size: .74rem;
+
+        line-height: 1.65;
+
+    }
+
+
+    .lesson-body h2 {
+
+        font-size: .95rem;
+
+    }
+
+
+    .lesson-body h3 {
+
+        font-size: .85rem;
+
+    }
+
+
+    .finish-reading-header h2 {
+
+        font-size: .88rem;
+
+    }
+
+
+    .finish-reading-header p {
+
+        font-size: .64rem;
+
+    }
+
+
+    .finish-reading-details {
+
+        align-items: flex-start;
+
+        flex-direction: column;
+
+        gap: 15px;
+
+        padding: 14px;
+
+    }
+
+
+    .read-confirmation {
+
+        width: 100%;
+
+    }
+
+
+    .confirmation-text {
+
+        font-size: .68rem;
+
+    }
+
+
+    .continue-lesson-btn {
+
+        min-height: 46px;
+
+        font-size: .68rem;
 
     }
 
@@ -1153,28 +1772,64 @@
 
 
 /* ============================================================
-   VERY SMALL DEVICES
+   SMALL MOBILE
 ============================================================ */
 
-@media(max-width:380px){
-
-    .hero-heading{
-
-        font-size:.9rem;
-
-    }
+@media (max-width: 380px) {
 
 
-    .lesson-topic{
+    .lesson-hero-card {
 
-        font-size:.92rem;
+        padding: 17px;
 
     }
 
 
-    .reading-completion-title{
+    .lesson-hero-card h1 {
 
-        font-size:.88rem;
+        font-size: 1.2rem;
+
+    }
+
+
+    .lesson-meta {
+
+        gap: 12px;
+
+    }
+
+
+    .lesson-memory-card {
+
+        padding: 16px;
+
+    }
+
+
+    .lesson-info-card,
+    .lesson-content-card,
+    .lesson-key-points-card,
+    .finish-reading-card {
+
+        padding: 16px;
+
+    }
+
+
+    .finish-reading-header {
+
+        gap: 10px;
+
+    }
+
+
+    .finish-reading-icon {
+
+        width: 36px;
+
+        height: 36px;
+
+        min-width: 36px;
 
     }
 
