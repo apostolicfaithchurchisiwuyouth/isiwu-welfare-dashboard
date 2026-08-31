@@ -3,121 +3,82 @@
 
 <head>
 
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
 
-<meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
->
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    >
 
-<title>Weekly Lessons — AFC Isiu Youth Portal</title>
+    <meta
+        name="theme-color"
+        content="#4a0754"
+    >
 
-<!-- PWA -->
+    <meta
+        name="description"
+        content="AFC Isiu Youth Portal — Weekly Bible Lessons"
+    >
 
-<link rel="manifest" href="/manifest.json">
-
-<meta
-    name="theme-color"
-    content="#ea580c"
->
-
-<meta
-    name="mobile-web-app-capable"
-    content="yes"
->
-
-<meta
-    name="apple-mobile-web-app-capable"
-    content="yes"
->
-
-<meta
-    name="apple-mobile-web-app-status-bar-style"
-    content="default"
->
-
-<meta
-    name="apple-mobile-web-app-title"
-    content="AFC Isiwu"
->
+    <title>Weekly Lessons — AFC Isiu Youth Portal</title>
 
 
-<!-- ICONS -->
+    <!-- =====================================================
+         GOOGLE FONTS
+    ====================================================== -->
 
-<link
-    rel="icon"
-    type="image/png"
-    href="../images/logo.png"
->
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
 
-<link
-    rel="apple-touch-icon"
-    href="../images/logo.png"
->
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
 
-
-<!-- FONTS -->
-
-<link
-    rel="preconnect"
-    href="https://fonts.googleapis.com"
->
-
-<link
-    rel="preconnect"
-    href="https://fonts.gstatic.com"
-    crossorigin
->
-
-<link
-    href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap"
-    rel="stylesheet"
->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@10..48,400;10..48,500;10..48,600;10..48,700;10..48,800&family=DM+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
 
 
-<!-- FONT AWESOME -->
+    <!-- =====================================================
+         ICONS
+    ====================================================== -->
 
-<link
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
-    rel="stylesheet"
->
-
-
-<!-- REMIX ICONS -->
-
-<link
-    href="https://cdn.jsdelivr.net/npm/remixicon@4.6.0/fonts/remixicon.css"
-    rel="stylesheet"
->
+    <script src="https://unpkg.com/lucide@latest"></script>
 
 
-<!-- AOS -->
+    <!-- =====================================================
+         PORTAL CSS
+    ====================================================== -->
 
-<link
-    rel="stylesheet"
-    href="https://unpkg.com/aos@2.3.4/dist/aos.css"
->
+    <link
+        rel="stylesheet"
+        href="../css/variables.css"
+    >
 
+    <link
+        rel="stylesheet"
+        href="../css/base.css"
+    >
 
-<!-- GLOBAL CSS -->
+    <link
+        rel="stylesheet"
+        href="../css/layout.css"
+    >
 
-<link
-    rel="stylesheet"
-    href="../css/main.css"
->
+    <link
+        rel="stylesheet"
+        href="../css/components.css"
+    >
 
-<link
-    rel="stylesheet"
-    href="../css/layout.css"
->
-
-
-<!-- LESSON CSS -->
-
-<link
-    rel="stylesheet"
-    href="../css/lessons.css"
->
+    <link
+        rel="stylesheet"
+        href="../css/lessons.css"
+    >
 
 </head>
 
@@ -125,850 +86,583 @@
 <body>
 
 
-<div class="app-layout">
+<div class="app-shell">
 
 
-<!-- =========================================================
-     MOBILE SIDEBAR OVERLAY
-========================================================= -->
+    <!-- =====================================================
+         MOBILE OVERLAY
+    ====================================================== -->
 
-<div
-    class="sidebar-overlay"
-    id="sidebarOverlay"
-></div>
-
-
-<!-- =========================================================
-     SIDEBAR
-========================================================= -->
-
-<aside
-    class="sidebar"
-    id="sidebar"
->
+    <div
+        class="mobile-overlay"
+        id="mobileOverlay"
+    ></div>
 
 
-    <div class="sidebar-top">
+    <!-- =====================================================
+         SIDEBAR
+    ====================================================== -->
+
+    <aside
+        class="sidebar"
+        id="sidebar"
+    >
 
 
-        <!-- LOGO -->
+        <!-- BRAND -->
 
-        <div class="sidebar-logo">
+        <div class="sidebar-brand">
 
-            <i class="fa-solid fa-shield-heart"></i>
+            <div class="brand-mark">
 
-            <div>
+                <span data-lucide="church"></span>
 
-                <h2>AFC Isiu</h2>
+            </div>
 
-                <span>Youth Portal</span>
+
+            <div class="brand-text">
+
+                <strong>
+                    AFC Isiu
+                </strong>
+
+                <span>
+                    Youth Portal
+                </span>
 
             </div>
 
         </div>
 
 
-        <!-- MAIN MENU -->
+        <!-- NAVIGATION -->
 
-        <nav class="sidebar-menu">
-
-
-            <div class="menu-title">
-                Ministry
-            </div>
+        <nav
+            class="sidebar-navigation"
+            aria-label="Main navigation"
+        >
 
 
-            <a href="../index.html">
+            <a
+                href="../index.html"
+                class="nav-item"
+            >
 
-                <i class="fa-solid fa-house"></i>
+                <span data-lucide="house"></span>
 
-                <span>Dashboard</span>
+                <span>
+                    Home
+                </span>
 
             </a>
 
 
             <a
                 href="lessons.html"
-                class="active"
+                class="nav-item active"
+                aria-current="page"
             >
 
-                <i class="fa-solid fa-book-open"></i>
+                <span data-lucide="book-open"></span>
 
-                <span>Weekly Lessons</span>
+                <span>
+                    Lessons
+                </span>
 
             </a>
 
 
             <a
-                href="slcquiz.html"
-                data-online-only
-                data-feature="Weekly SLC Quiz"
+                href="quiz.html"
+                class="nav-item"
             >
 
-                <i class="fa-solid fa-clipboard-question"></i>
+                <span data-lucide="clipboard-check"></span>
 
-                <span>Weekly SLC Quiz</span>
-
-            </a>
-
-
-            <a
-                href="growthtracker.html"
-                data-online-only
-                data-feature="Growth Tracker"
-            >
-
-                <i class="fa-solid fa-chart-line"></i>
-
-                <span>Growth Tracker</span>
+                <span>
+                    Quiz
+                </span>
 
             </a>
-
-
-            <div class="menu-title">
-                Community
-            </div>
 
 
             <a
                 href="gallery.html"
-                data-online-only
-                data-feature="Gallery"
+                class="nav-item"
             >
 
-                <i class="fa-solid fa-images"></i>
+                <span data-lucide="images"></span>
 
-                <span>Gallery</span>
+                <span>
+                    Gallery
+                </span>
 
             </a>
 
 
             <a
-                href="events.html"
-                data-online-only
-                data-feature="Youth Events"
+                href="profile.html"
+                class="nav-item member-only"
+                hidden
             >
 
-                <i class="fa-solid fa-calendar-days"></i>
+                <span data-lucide="user-round"></span>
 
-                <span>Youth Events</span>
+                <span>
+                    Profile
+                </span>
 
             </a>
 
 
             <a
-                href="welfare.html"
-                data-online-only
-                data-feature="Welfare"
+                href="notifications.html"
+                class="nav-item member-only"
+                hidden
             >
 
-                <i class="fa-solid fa-hand-holding-heart"></i>
+                <span data-lucide="bell"></span>
 
-                <span>Welfare</span>
+                <span>
+                    Notifications
+                </span>
 
-            </a>
-
-
-            <a
-                href="prayer.html"
-                data-online-only
-                data-feature="Prayer Requests"
-            >
-
-                <i class="fa-solid fa-hands-praying"></i>
-
-                <span>Prayer Requests</span>
-
-            </a>
-
-
-            <a
-                href="program-report.html"
-                data-online-only
-                data-feature="Secretariat Reports"
-            >
-
-                <i class="fa-solid fa-file-lines"></i>
-
-                <span>Secretariat Reports</span>
+                <span
+                    class="notification-badge"
+                    id="desktopNotificationBadge"
+                    hidden
+                >
+                    0
+                </span>
 
             </a>
 
         </nav>
 
-    </div>
+
+        <!-- =================================================
+             SIDEBAR FOOTER
+        ================================================== -->
+
+        <div class="sidebar-footer">
 
 
-    <!-- ACCOUNT -->
+            <!-- GUEST -->
 
-    <div class="sidebar-bottom">
-
-
-        <div class="menu-title">
-            Account
-        </div>
-
-
-        <a
-            href="profile.html"
-            data-online-only
-            data-feature="Profile"
-        >
-
-            <i class="fa-solid fa-user"></i>
-
-            <span>Profile</span>
-
-        </a>
-
-
-        <a
-            href="settings.html"
-            data-online-only
-            data-feature="Settings"
-        >
-
-            <i class="fa-solid fa-gear"></i>
-
-            <span>Settings</span>
-
-        </a>
-
-    </div>
-
-</aside>
-
-
-<!-- =========================================================
-     MAIN AREA
-========================================================= -->
-
-<div class="main-area">
-
-
-    <!-- =====================================================
-         TOPBAR
-    ====================================================== -->
-
-    <header class="topbar">
-
-
-        <div class="topbar-left">
-
-
-            <button
-                class="mobile-menu-btn"
-                id="mobileMenuBtn"
-                type="button"
-                aria-label="Open navigation menu"
-                aria-expanded="false"
+            <div
+                class="sidebar-guest"
+                id="sidebarGuest"
             >
 
-                <i class="fa-solid fa-bars"></i>
+                <div class="sidebar-guest-icon">
 
-            </button>
+                    <span data-lucide="user-round"></span>
 
-
-            <div class="portal-brand">
-
-
-                <img
-                    src="../images/logo.png"
-                    alt="AFC Logo"
-                    class="portal-logo"
-                >
+                </div>
 
 
-                <div>
+                <div class="sidebar-guest-copy">
 
-                    <h2>AFC Isiu Youth</h2>
+                    <strong>
+                        Welcome
+                    </strong>
 
-                    <p>
-                        Building young people for Christ
-                    </p>
+                    <small>
+                        Sign in to access your account
+                    </small>
 
                 </div>
 
             </div>
 
-        </div>
 
+            <!-- MEMBER -->
 
-        <div class="topbar-right">
-
-
-            <button
-                class="header-icon"
-                id="notificationBtn"
-                type="button"
-                aria-label="Notifications"
-            >
-
-                <i class="fa-regular fa-bell"></i>
-
-                <span class="notify-dot"></span>
-
-            </button>
-
-
-            <button
-                class="header-icon"
-                id="themeBtn"
-                type="button"
-                aria-label="Change theme"
-            >
-
-                <i class="fa-solid fa-moon"></i>
-
-            </button>
-
-        </div>
-
-    </header>
-
-
-    <!-- =====================================================
-         LESSON PAGE
-    ====================================================== -->
-
-    <main class="dashboard-content">
-
-
-        <div class="lessons-container">
-
-
-            <!-- PAGE HEADER -->
-
-            <section
-                class="lessons-page-header"
-                data-aos="fade-up"
-            >
-
-                <div>
-
-                    <span class="section-badge">
-                        WEEKLY BIBLE STUDY
-                    </span>
-
-                    <h1>
-                        Weekly Lessons
-                    </h1>
-
-                    <p>
-                        Study the weekly lesson, reflect on God's
-                        Word, and test what you have learned.
-                    </p>
-
-                </div>
-
-
-                <div class="lesson-week-badge">
-
-                    <i class="fa-solid fa-calendar-week"></i>
-
-                    <span id="lessonWeek">
-                        This Week
-                    </span>
-
-                </div>
-
-            </section>
-
-
-            <!-- LOADING -->
-
-            <section
-                class="lesson-loading"
-                id="lessonLoading"
-            >
-
-                <div class="lesson-loader">
-
-                    <i class="fa-solid fa-spinner fa-spin"></i>
-
-                    <p>
-                        Loading this week's lesson...
-                    </p>
-
-                </div>
-
-            </section>
-
-
-            <!-- ERROR -->
-
-            <section
-                class="lesson-error"
-                id="lessonError"
+            <div
+                class="sidebar-member"
+                id="sidebarMember"
                 hidden
             >
 
-                <div class="lesson-error-icon">
+                <a
+                    href="profile.html"
+                    class="sidebar-profile"
+                >
 
-                    <i class="fa-solid fa-circle-exclamation"></i>
+                    <div class="avatar">
 
-                </div>
+                        <span id="sidebarAvatar">
+                            A
+                        </span>
 
-                <h2>
-                    Unable to load lesson
-                </h2>
+                    </div>
 
-                <p id="lessonErrorMessage">
-                    Something went wrong while loading the lesson.
-                </p>
+
+                    <div>
+
+                        <strong id="sidebarUserName">
+                            Member
+                        </strong>
+
+                        <small>
+                            My Profile
+                        </small>
+
+                    </div>
+
+                </a>
+
 
                 <button
                     type="button"
-                    class="lesson-retry-btn"
-                    id="lessonRetryBtn"
+                    class="sidebar-logout"
+                    id="sidebarLogoutButton"
                 >
 
-                    <i class="fa-solid fa-rotate-right"></i>
+                    <span data-lucide="log-out"></span>
 
-                    Try Again
+                    <span>
+                        Logout
+                    </span>
 
                 </button>
 
-            </section>
-
-
-            <!-- LESSON -->
-
-            <section
-                class="lesson-reader"
-                id="lessonReader"
-                hidden
-            >
-
-
-                <!-- LESSON HERO -->
-
-                <article class="lesson-hero-card">
-
-
-                    <div class="lesson-hero-top">
-
-
-                        <div class="lesson-class-badge">
-
-                            <i class="fa-solid fa-book-bible"></i>
-
-                            <span id="lessonClass">
-                                Weekly Lesson
-                            </span>
-
-                        </div>
-
-
-                        <div
-                            class="lesson-status-badge"
-                            id="lessonStatus"
-                        >
-
-                            <i class="fa-solid fa-circle-check"></i>
-
-                            Current Lesson
-
-                        </div>
-
-                    </div>
-
-
-                    <h1 id="lessonTitle">
-                        Loading...
-                    </h1>
-
-
-                    <p
-                        class="lesson-introduction"
-                        id="lessonIntroduction"
-                    >
-                        Loading lesson introduction...
-                    </p>
-
-
-                    <div class="lesson-meta">
-
-
-                        <div class="lesson-meta-item">
-
-                            <i class="fa-regular fa-clock"></i>
-
-                            <div>
-
-                                <span>
-                                    Reading time
-                                </span>
-
-                                <strong id="readingTime">
-                                    10 min
-                                </strong>
-
-                            </div>
-
-                        </div>
-
-
-                        <div class="lesson-meta-item">
-
-                            <i class="fa-solid fa-book-open"></i>
-
-                            <div>
-
-                                <span>
-                                    Lesson
-                                </span>
-
-                                <strong id="lessonNumber">
-                                    This Week
-                                </strong>
-
-                            </div>
-
-                        </div>
-
-
-                    </div>
-
-                </article>
-
-
-                <!-- MEMORY VERSE -->
-
-                <article
-                    class="lesson-memory-card"
-                    id="memoryVerseCard"
-                >
-
-                    <div class="lesson-section-icon">
-
-                        <i class="fa-solid fa-bookmark"></i>
-
-                    </div>
-
-
-                    <div class="lesson-section-content">
-
-                        <span class="lesson-section-label">
-                            MEMORY VERSE
-                        </span>
-
-                        <p id="memoryVerse">
-                            Loading...
-                        </p>
-
-                        <span
-                            class="memory-verse-reference"
-                            id="memoryVerseReference"
-                        ></span>
-
-                    </div>
-
-                </article>
-
-
-                <!-- BIBLE TEXT -->
-
-                <article class="lesson-info-card">
-
-
-                    <div class="lesson-info-header">
-
-                        <div class="lesson-info-icon">
-
-                            <i class="fa-solid fa-book-bible"></i>
-
-                        </div>
-
-                        <div>
-
-                            <span>
-                                BIBLE TEXT
-                            </span>
-
-                            <h2>
-                                Scripture Reading
-                            </h2>
-
-                        </div>
-
-                    </div>
-
-
-                    <p
-                        class="bible-text"
-                        id="bibleText"
-                    >
-                        Loading...
-                    </p>
-
-                </article>
-
-
-                <!-- LESSON SECTIONS -->
-
-                <article class="lesson-content-card">
-
-
-                    <div class="lesson-content-header">
-
-                        <span class="lesson-section-label">
-                            LESSON NOTE
-                        </span>
-
-                        <h2 id="lessonContentHeading">
-                            Study the Word
-                        </h2>
-
-                    </div>
-
-
-                    <div
-                        class="lesson-body"
-                        id="lessonBody"
-                    >
-                        Loading lesson content...
-                    </div>
-
-                </article>
-
-
-                <!-- KEY LESSONS -->
-
-                <article
-                    class="lesson-key-points-card"
-                    id="keyPointsCard"
-                    hidden
-                >
-
-                    <div class="lesson-content-header">
-
-                        <span class="lesson-section-label">
-                            KEY TAKEAWAYS
-                        </span>
-
-                        <h2>
-                            What to Remember
-                        </h2>
-
-                    </div>
-
-
-                    <div
-                        class="lesson-key-points"
-                        id="keyPoints"
-                    ></div>
-
-                </article>
-
-
-                <!-- FINISH READING -->
-
-                <article class="finish-reading-card">
-
-
-                    <div class="finish-reading-header">
-
-
-                        <div class="finish-reading-icon">
-
-                            <i class="fa-solid fa-check"></i>
-
-                        </div>
-
-
-                        <div>
-
-                            <span class="lesson-section-label">
-                                FINISH READING
-                            </span>
-
-                            <h2>
-                                Have you finished this lesson?
-                            </h2>
-
-                            <p>
-                                Confirm that you have read the lesson
-                                before continuing to your reflection.
-                            </p>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="finish-reading-details">
-
-
-                        <div class="reading-time-box">
-
-                            <i class="fa-regular fa-clock"></i>
-
-                            <div>
-
-                                <span>
-                                    Reading time
-                                </span>
-
-                                <strong id="finishReadingTime">
-                                    10 minutes
-                                </strong>
-
-                            </div>
-
-                        </div>
-
-
-                        <label
-                            class="read-confirmation"
-                            for="lessonReadCheckbox"
-                        >
-
-                            <input
-                                type="checkbox"
-                                id="lessonReadCheckbox"
-                            >
-
-                            <span class="custom-check">
-
-                                <i class="fa-solid fa-check"></i>
-
-                            </span>
-
-
-                            <span class="confirmation-text">
-
-                                I've read this lesson
-
-                            </span>
-
-                        </label>
-
-                    </div>
-
-
-                    <button
-                        type="button"
-                        class="continue-lesson-btn"
-                        id="continueLessonBtn"
-                        disabled
-                    >
-
-                        <span>
-                            Continue to Reflection
-                        </span>
-
-                        <i class="fa-solid fa-arrow-right"></i>
-
-                    </button>
-
-
-                    <p
-                        class="login-required-message"
-                        id="loginRequiredMessage"
-                        hidden
-                    >
-
-                        <i class="fa-solid fa-lock"></i>
-
-                        Please log in to confirm your reading
-                        and continue to the reflection.
-
-                    </p>
-
-                </article>
-
-
-            </section>
-
+            </div>
 
         </div>
 
+    </aside>
+
+
+    <!-- =====================================================
+         MAIN AREA
+    ====================================================== -->
+
+    <main class="main-area">
+
+
+        <!-- =================================================
+             TOP HEADER
+        ================================================== -->
+
+        <header class="top-header">
+
+
+            <div class="header-left">
+
+
+                <button
+                    type="button"
+                    class="icon-button mobile-menu-button"
+                    id="mobileMenuButton"
+                    aria-label="Open navigation menu"
+                    aria-controls="sidebar"
+                    aria-expanded="false"
+                >
+
+                    <span data-lucide="menu"></span>
+
+                </button>
+
+
+                <a
+                    href="../index.html"
+                    class="mobile-brand"
+                    aria-label="AFC Isiu Youth Portal Home"
+                >
+
+                    <span class="mobile-brand-icon">
+
+                        <span data-lucide="church"></span>
+
+                    </span>
+
+
+                    <span class="mobile-brand-text">
+
+                        <strong>
+                            AFC Isiu
+                        </strong>
+
+                        <small>
+                            Youth Portal
+                        </small>
+
+                    </span>
+
+                </a>
+
+            </div>
+
+
+            <div class="header-actions">
+
+
+                <a
+                    href="notifications.html"
+                    class="header-icon-button member-only"
+                    id="headerNotificationButton"
+                    hidden
+                    aria-label="Notifications"
+                >
+
+                    <span data-lucide="bell"></span>
+
+                    <span
+                        class="header-notification-dot"
+                        id="headerNotificationDot"
+                        hidden
+                    ></span>
+
+                </a>
+
+
+                <a
+                    href="profile.html"
+                    class="header-avatar member-only"
+                    id="headerAccountButton"
+                    hidden
+                    aria-label="Profile"
+                >
+
+                    <span
+                        id="headerAvatarContent"
+                        class="header-avatar-content"
+                    >
+
+                        <span data-lucide="user-round"></span>
+
+                    </span>
+
+                </a>
+
+
+                <a
+                    href="../login.html"
+                    class="header-avatar guest-account-avatar"
+                    id="guestHeaderAccountButton"
+                    aria-label="Login"
+                >
+
+                    <span class="header-avatar-content">
+
+                        <span data-lucide="user-round"></span>
+
+                    </span>
+
+                </a>
+
+            </div>
+
+        </header>
+
+
+        <!-- =================================================
+             LESSON PAGE
+        ================================================== -->
+
+        <section
+            class="page-content lessons-page-content"
+            id="lessonsPage"
+        >
+
+            <!-- lessons.js renders everything here -->
+
+            <div
+                class="lessons-loading-state"
+                id="lessonsLoading"
+            >
+
+                <div class="lesson-loading-icon">
+
+                    <span data-lucide="book-open"></span>
+
+                </div>
+
+                <h1>
+                    Loading weekly lessons...
+                </h1>
+
+                <p>
+                    Please wait while we bring you this week's lessons.
+                </p>
+
+            </div>
+
+        </section>
+
     </main>
+
+
+    <!-- =====================================================
+         MOBILE BOTTOM NAVIGATION
+    ====================================================== -->
+
+    <nav
+        class="bottom-navigation"
+        aria-label="Mobile navigation"
+    >
+
+
+        <a
+            href="../index.html"
+            class="bottom-nav-item"
+        >
+
+            <span
+                class="bottom-nav-icon"
+                data-lucide="house"
+            ></span>
+
+            <span class="bottom-nav-label">
+                Home
+            </span>
+
+        </a>
+
+
+        <a
+            href="lessons.html"
+            class="bottom-nav-item active"
+            aria-current="page"
+        >
+
+            <span
+                class="bottom-nav-icon"
+                data-lucide="book-open"
+            ></span>
+
+            <span class="bottom-nav-label">
+                Lessons
+            </span>
+
+        </a>
+
+
+        <a
+            href="quiz.html"
+            class="bottom-nav-item bottom-nav-center"
+            aria-label="Quiz"
+        >
+
+            <span class="bottom-nav-main">
+
+                <span
+                    data-lucide="clipboard-check"
+                    class="bottom-nav-main-icon"
+                ></span>
+
+            </span>
+
+            <span class="bottom-nav-center-label">
+                Quiz
+            </span>
+
+        </a>
+
+
+        <a
+            href="gallery.html"
+            class="bottom-nav-item"
+        >
+
+            <span
+                class="bottom-nav-icon"
+                data-lucide="images"
+            ></span>
+
+            <span class="bottom-nav-label">
+                Gallery
+            </span>
+
+        </a>
+
+
+        <a
+            href="../login.html"
+            class="bottom-nav-item"
+            id="guestBottomProfile"
+        >
+
+            <span
+                class="bottom-nav-icon"
+                data-lucide="user-round"
+            ></span>
+
+            <span class="bottom-nav-label">
+                Account
+            </span>
+
+        </a>
+
+
+        <a
+            href="profile.html"
+            class="bottom-nav-item member-bottom-profile member-only"
+            id="memberBottomProfile"
+            hidden
+        >
+
+            <span
+                class="bottom-avatar"
+                id="bottomAvatar"
+            >
+                A
+            </span>
+
+            <span
+                class="bottom-nav-label"
+            >
+                Profile
+            </span>
+
+        </a>
+
+    </nav>
 
 </div>
 
 
-<!-- =========================================================
-     MOBILE BOTTOM NAVIGATION
-========================================================= -->
+<!-- =====================================================
+     APPLICATION SCRIPTS
+====================================================== -->
 
-<nav
-    class="bottom-nav"
-    aria-label="Mobile navigation"
->
+<script src="../js/config.js"></script>
 
+<script src="../js/api.js"></script>
 
-    <a href="../index.html">
+<script src="../js/global-loader.js"></script>
 
-        <i class="fa-solid fa-house"></i>
+<script src="../js/auth.js"></script>
 
-        <span>Home</span>
+<script src="../js/auth-state.js"></script>
 
-    </a>
+<script src="../js/app.js"></script>
 
-
-    <a
-        href="lessons.html"
-        class="active"
-    >
-
-        <i class="fa-solid fa-book-open"></i>
-
-        <span>Lessons</span>
-
-    </a>
+<script src="../js/pages/lessons.js"></script>
 
 
-    <button
-        class="hub-button"
-        id="hubButton"
-        type="button"
-        aria-label="Open main navigation"
-        aria-expanded="false"
-    >
+<script>
 
-        <i class="ri-apps-2-line"></i>
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
 
-    </button>
+        if (
+            window.lucide &&
+            typeof window.lucide.createIcons === "function"
+        ) {
 
+            window.lucide.createIcons();
 
-    <a
-        href="gallery.html"
-        data-online-only
-        data-feature="Gallery"
-    >
+        }
 
-        <i class="fa-solid fa-images"></i>
+    }
+);
 
-        <span>Gallery</span>
-
-    </a>
-
-
-    <a href="profile.html">
-
-        <i class="fa-solid fa-user"></i>
-
-        <span>Profile</span>
-
-    </a>
-
-</nav>
-
-
-<!-- =========================================================
-     SCRIPTS
-========================================================= -->
-
-<script
-    src="https://unpkg.com/aos@2.3.4/dist/aos.js"
-></script>
-
-<script src="../js/main.js"></script>
-
-<script src="../js/lessons.js"></script>
+</script>
 
 
 </body>
+
 </html>
