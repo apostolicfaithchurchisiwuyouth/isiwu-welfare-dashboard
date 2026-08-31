@@ -3,27 +3,7 @@
    FILE: shell.js
    PURPOSE: GLOBAL PORTAL SHELL
    PHASE 4B
-   ============================================================
-
-   RESPONSIBILITIES:
-
-   - Global portal header
-   - Desktop sidebar
-   - Mobile sidebar
-   - Sidebar overlay
-   - Mobile bottom navigation
-   - Active navigation state
-   - Global page structure
-
-   IMPORTANT:
-
-   Individual pages should NOT create their own:
-   - Header
-   - Sidebar
-   - Bottom navigation
-
-   They only provide page content.
-   ============================================================ */
+============================================================ */
 
 (function () {
 
@@ -36,11 +16,14 @@
 
     const SHELL_CONFIG = {
 
-        portalName: "AFC Isiwu Youth Portal",
+        portalName:
+            "AFC Isiwu Youth Portal",
 
-        portalShortName: "AFC Isiwu Youth",
+        portalShortName:
+            "AFC Isiwu Youth",
 
-        logo: "../assets/images/logo.png"
+        logo:
+            "../assets/images/logo.png"
 
     };
 
@@ -51,13 +34,15 @@
 
     function getCurrentPage() {
 
-        const path = window.location.pathname
-            .split("/")
-            .pop()
-            .toLowerCase();
+        let path =
+            window.location.pathname
+                .split("/")
+                .pop()
+                .toLowerCase();
+
 
         if (
-            path === "" ||
+            !path ||
             path === "index" ||
             path === "index.html"
         ) {
@@ -65,6 +50,7 @@
             return "home";
 
         }
+
 
         return path
             .replace(".html", "")
@@ -74,37 +60,38 @@
 
 
     /* ========================================================
-       SHELL HTML
+       CREATE SHELL
     ======================================================== */
 
     function createShell() {
 
-        const currentPage = getCurrentPage();
+        const currentPage =
+            getCurrentPage();
 
 
-        const shell = document.createElement("div");
+        const shell =
+            document.createElement("div");
 
-        shell.id = "portalShell";
+
+        shell.id =
+            "portalShell";
 
 
         shell.innerHTML = `
 
-            <!-- ==========================================
-                 APPLICATION LAYOUT
-            =========================================== -->
-
             <div class="app-layout">
 
 
-                <!-- ======================================
+                <!-- ==========================================
                      SIDEBAR
-                ======================================= -->
+                =========================================== -->
 
                 <aside
                     class="sidebar"
                     id="sidebar"
                     aria-label="Main navigation"
                 >
+
 
                     <!-- LOGO -->
 
@@ -115,6 +102,7 @@
                             <i class="fas fa-cross"></i>
 
                         </div>
+
 
                         <div>
 
@@ -135,15 +123,22 @@
 
                     <nav class="sidebar-menu">
 
+
                         <a
                             href="../index"
                             data-page="home"
-                            class="${currentPage === "home" ? "active" : ""}"
+                            class="${
+                                currentPage === "home"
+                                    ? "active"
+                                    : ""
+                            }"
                         >
 
                             <i class="fas fa-house"></i>
 
-                            <span>Home</span>
+                            <span>
+                                Home
+                            </span>
 
                         </a>
 
@@ -151,12 +146,18 @@
                         <a
                             href="lessons"
                             data-page="lessons"
-                            class="${currentPage === "lessons" ? "active" : ""}"
+                            class="${
+                                currentPage === "lessons"
+                                    ? "active"
+                                    : ""
+                            }"
                         >
 
                             <i class="fas fa-book-open"></i>
 
-                            <span>Lessons</span>
+                            <span>
+                                Lessons
+                            </span>
 
                         </a>
 
@@ -164,12 +165,18 @@
                         <a
                             href="leaderboard"
                             data-page="leaderboard"
-                            class="${currentPage === "leaderboard" ? "active" : ""}"
+                            class="${
+                                currentPage === "leaderboard"
+                                    ? "active"
+                                    : ""
+                            }"
                         >
 
                             <i class="fas fa-trophy"></i>
 
-                            <span>Leaderboard</span>
+                            <span>
+                                Leaderboard
+                            </span>
 
                         </a>
 
@@ -177,12 +184,18 @@
                         <a
                             href="gallery"
                             data-page="gallery"
-                            class="${currentPage === "gallery" ? "active" : ""}"
+                            class="${
+                                currentPage === "gallery"
+                                    ? "active"
+                                    : ""
+                            }"
                         >
 
                             <i class="fas fa-images"></i>
 
-                            <span>Gallery</span>
+                            <span>
+                                Gallery
+                            </span>
 
                         </a>
 
@@ -190,12 +203,18 @@
                         <a
                             href="profile"
                             data-page="profile"
-                            class="${currentPage === "profile" ? "active" : ""}"
+                            class="${
+                                currentPage === "profile"
+                                    ? "active"
+                                    : ""
+                            }"
                         >
 
                             <i class="fas fa-user"></i>
 
-                            <span>Profile</span>
+                            <span>
+                                Profile
+                            </span>
 
                         </a>
 
@@ -206,15 +225,22 @@
 
                     <div class="sidebar-bottom">
 
+
                         <a
                             href="settings"
                             data-page="settings"
-                            class="${currentPage === "settings" ? "active" : ""}"
+                            class="${
+                                currentPage === "settings"
+                                    ? "active"
+                                    : ""
+                            }"
                         >
 
                             <i class="fas fa-gear"></i>
 
-                            <span>Settings</span>
+                            <span>
+                                Settings
+                            </span>
 
                         </a>
 
@@ -226,7 +252,9 @@
 
                             <i class="fas fa-right-from-bracket"></i>
 
-                            <span>Logout</span>
+                            <span>
+                                Logout
+                            </span>
 
                         </a>
 
@@ -235,9 +263,9 @@
                 </aside>
 
 
-                <!-- ======================================
-                     MOBILE OVERLAY
-                ======================================= -->
+                <!-- ==========================================
+                     OVERLAY
+                =========================================== -->
 
                 <div
                     class="sidebar-overlay"
@@ -245,21 +273,19 @@
                 ></div>
 
 
-                <!-- ======================================
+                <!-- ==========================================
                      MAIN AREA
-                ======================================= -->
+                =========================================== -->
 
                 <div class="main-area">
 
 
-                    <!-- ==================================
-                         TOP HEADER
-                    =================================== -->
+                    <!-- ======================================
+                         TOPBAR
+                    ======================================= -->
 
                     <header class="topbar">
 
-
-                        <!-- LEFT -->
 
                         <div class="topbar-left">
 
@@ -269,6 +295,7 @@
                                 id="mobileMenuBtn"
                                 type="button"
                                 aria-label="Open menu"
+                                aria-expanded="false"
                             >
 
                                 <i class="fas fa-bars"></i>
@@ -284,6 +311,7 @@
                                         ${SHELL_CONFIG.portalName}
                                     </h2>
 
+
                                     <p>
                                         Growing together in Christ
                                     </p>
@@ -294,8 +322,6 @@
 
                         </div>
 
-
-                        <!-- RIGHT -->
 
                         <div class="topbar-right">
 
@@ -308,6 +334,7 @@
                             >
 
                                 <i class="fas fa-bell"></i>
+
 
                                 <span
                                     class="notify-dot"
@@ -332,26 +359,22 @@
                     </header>
 
 
-                    <!-- ==================================
+                    <!-- ======================================
                          PAGE CONTENT
-                    =================================== -->
+                    ======================================= -->
 
                     <main
                         class="page-content"
                         id="pageContent"
-                    >
-
-                        <!-- PAGE CONTENT IS INSERTED HERE -->
-
-                    </main>
+                    ></main>
 
 
                 </div>
 
 
-                <!-- ======================================
+                <!-- ==========================================
                      MOBILE BOTTOM NAV
-                ======================================= -->
+                =========================================== -->
 
                 <nav
                     class="bottom-nav"
@@ -359,15 +382,22 @@
                     aria-label="Mobile navigation"
                 >
 
+
                     <a
                         href="../index"
                         data-page="home"
-                        class="${currentPage === "home" ? "active" : ""}"
+                        class="${
+                            currentPage === "home"
+                                ? "active"
+                                : ""
+                        }"
                     >
 
                         <i class="fas fa-house"></i>
 
-                        <span>Home</span>
+                        <span>
+                            Home
+                        </span>
 
                     </a>
 
@@ -375,12 +405,18 @@
                     <a
                         href="lessons"
                         data-page="lessons"
-                        class="${currentPage === "lessons" ? "active" : ""}"
+                        class="${
+                            currentPage === "lessons"
+                                ? "active"
+                                : ""
+                        }"
                     >
 
                         <i class="fas fa-book-open"></i>
 
-                        <span>Lessons</span>
+                        <span>
+                            Lessons
+                        </span>
 
                     </a>
 
@@ -390,6 +426,7 @@
                         class="bottom-nav-center"
                         id="hubButton"
                         aria-label="Open menu"
+                        aria-expanded="false"
                     >
 
                         <i class="fas fa-plus"></i>
@@ -400,12 +437,18 @@
                     <a
                         href="gallery"
                         data-page="gallery"
-                        class="${currentPage === "gallery" ? "active" : ""}"
+                        class="${
+                            currentPage === "gallery"
+                                ? "active"
+                                : ""
+                        }"
                     >
 
                         <i class="fas fa-images"></i>
 
-                        <span>Gallery</span>
+                        <span>
+                            Gallery
+                        </span>
 
                     </a>
 
@@ -413,16 +456,23 @@
                     <a
                         href="profile"
                         data-page="profile"
-                        class="${currentPage === "profile" ? "active" : ""}"
+                        class="${
+                            currentPage === "profile"
+                                ? "active"
+                                : ""
+                        }"
                     >
 
                         <i class="fas fa-user"></i>
 
-                        <span>Profile</span>
+                        <span>
+                            Profile
+                        </span>
 
                     </a>
 
                 </nav>
+
 
             </div>
 
@@ -438,21 +488,30 @@
 
 
     /* ========================================================
-       MOVE PAGE CONTENT INTO SHELL
+       MOVE PAGE CONTENT
     ======================================================== */
 
     function movePageContent() {
 
         const pageContent =
-            document.getElementById("pageContent");
+            document.getElementById(
+                "pageContent"
+            );
+
 
         const existingContent =
-            document.querySelector("[data-page-content]");
+            document.querySelector(
+                "[data-page-content]"
+            );
 
-        if (!pageContent || !existingContent) {
+
+        if (
+            !pageContent ||
+            !existingContent
+        ) {
 
             console.warn(
-                "Portal Shell: Page content container not found."
+                "Portal Shell: [data-page-content] not found."
             );
 
             return;
@@ -460,7 +519,9 @@
         }
 
 
-        while (existingContent.firstChild) {
+        while (
+            existingContent.firstChild
+        ) {
 
             pageContent.appendChild(
                 existingContent.firstChild
@@ -481,43 +542,113 @@
     function setupSidebar() {
 
         const sidebar =
-            document.getElementById("sidebar");
+            document.getElementById(
+                "sidebar"
+            );
+
 
         const overlay =
-            document.getElementById("sidebarOverlay");
+            document.getElementById(
+                "sidebarOverlay"
+            );
+
 
         const menuButton =
-            document.getElementById("mobileMenuBtn");
+            document.getElementById(
+                "mobileMenuBtn"
+            );
+
 
         const hubButton =
-            document.getElementById("hubButton");
+            document.getElementById(
+                "hubButton"
+            );
 
 
-        if (!sidebar || !overlay) return;
+        if (
+            !sidebar ||
+            !overlay
+        ) {
+
+            return;
+
+        }
 
 
         function openSidebar() {
 
-            sidebar.classList.add("show");
+            sidebar.classList.add(
+                "show"
+            );
 
-            overlay.classList.add("show");
+
+            overlay.classList.add(
+                "show"
+            );
+
 
             document.body.classList.add(
                 "sidebar-open"
             );
+
+
+            if (menuButton) {
+
+                menuButton.setAttribute(
+                    "aria-expanded",
+                    "true"
+                );
+
+            }
+
+
+            if (hubButton) {
+
+                hubButton.setAttribute(
+                    "aria-expanded",
+                    "true"
+                );
+
+            }
 
         }
 
 
         function closeSidebar() {
 
-            sidebar.classList.remove("show");
+            sidebar.classList.remove(
+                "show"
+            );
 
-            overlay.classList.remove("show");
+
+            overlay.classList.remove(
+                "show"
+            );
+
 
             document.body.classList.remove(
                 "sidebar-open"
             );
+
+
+            if (menuButton) {
+
+                menuButton.setAttribute(
+                    "aria-expanded",
+                    "false"
+                );
+
+            }
+
+
+            if (hubButton) {
+
+                hubButton.setAttribute(
+                    "aria-expanded",
+                    "false"
+                );
+
+            }
 
         }
 
@@ -550,21 +681,25 @@
 
         sidebar
             .querySelectorAll("a")
-            .forEach(link => {
+            .forEach(
+                link => {
 
-                link.addEventListener(
-                    "click",
-                    closeSidebar
-                );
+                    link.addEventListener(
+                        "click",
+                        closeSidebar
+                    );
 
-            });
+                }
+            );
 
 
         document.addEventListener(
             "keydown",
             event => {
 
-                if (event.key === "Escape") {
+                if (
+                    event.key === "Escape"
+                ) {
 
                     closeSidebar();
 
@@ -587,7 +722,12 @@
                 "notificationButton"
             );
 
-        if (!button) return;
+
+        if (!button) {
+
+            return;
+
+        }
 
 
         button.addEventListener(
@@ -597,11 +737,6 @@
                 console.log(
                     "Notifications clicked."
                 );
-
-                /*
-                 * Notification system will be
-                 * connected in a later phase.
-                 */
 
             }
         );
@@ -620,7 +755,12 @@
                 '[data-shell-action="logout"]'
             );
 
-        if (!logout) return;
+
+        if (!logout) {
+
+            return;
+
+        }
 
 
         logout.addEventListener(
@@ -630,17 +770,18 @@
                 event.preventDefault();
 
 
-                /*
-                 * Authentication logout will be
-                 * connected to the Auth system.
-                 */
-
                 localStorage.removeItem(
                     "authToken"
                 );
 
+
                 localStorage.removeItem(
                     "currentUser"
+                );
+
+
+                localStorage.removeItem(
+                    "user"
                 );
 
 
@@ -669,6 +810,7 @@
 
         setupLogout();
 
+
         console.log(
             "AFC Portal Shell initialized."
         );
@@ -681,7 +823,8 @@
     ======================================================== */
 
     if (
-        document.readyState === "loading"
+        document.readyState ===
+        "loading"
     ) {
 
         document.addEventListener(
@@ -689,7 +832,9 @@
             initShell
         );
 
-    } else {
+    }
+
+    else {
 
         initShell();
 
