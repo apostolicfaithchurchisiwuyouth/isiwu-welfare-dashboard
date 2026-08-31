@@ -1,21 +1,43 @@
-AOS.init({
-    duration: 900,
-    easing: "ease-out-cubic",
-    once: true,
-    offset: 120
-});
+/* =========================================================
+   AFC ISIU YOUTH PORTAL
+   MAIN JAVASCRIPT
+========================================================= */
+
+"use strict";
 
 
 /* =========================================================
-   AFC ISIU PWA
-   PHASE 3E — OFFLINE STATUS
+   AOS
 ========================================================= */
 
 document.addEventListener("DOMContentLoaded", () => {
 
-    const offlineBanner = document.createElement("div");
+    if (typeof AOS !== "undefined") {
 
-    offlineBanner.id = "offlineBanner";
+        AOS.init({
+            duration: 900,
+            easing: "ease-out-cubic",
+            once: true,
+            offset: 120
+        });
+
+    }
+
+});
+
+
+/* =========================================================
+   OFFLINE STATUS BANNER
+========================================================= */
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    const offlineBanner =
+        document.createElement("div");
+
+    offlineBanner.id =
+        "offlineBanner";
+
 
     offlineBanner.innerHTML = `
         <div class="offline-banner-content">
@@ -23,27 +45,40 @@ document.addEventListener("DOMContentLoaded", () => {
             <i class="fa-solid fa-wifi"></i>
 
             <div>
-                <strong>You're offline</strong>
+
+                <strong>
+                    You're offline
+                </strong>
+
                 <span>
-                    Some features are unavailable until you reconnect.
+                    Some features are unavailable until
+                    you reconnect.
                 </span>
+
             </div>
 
         </div>
     `;
 
-    document.body.prepend(offlineBanner);
+
+    document.body.prepend(
+        offlineBanner
+    );
 
 
     function updateOnlineStatus() {
 
         if (navigator.onLine) {
 
-            offlineBanner.classList.remove("show");
+            offlineBanner.classList.remove(
+                "show"
+            );
 
         } else {
 
-            offlineBanner.classList.add("show");
+            offlineBanner.classList.add(
+                "show"
+            );
 
         }
 
@@ -65,6 +100,7 @@ document.addEventListener("DOMContentLoaded", () => {
     updateOnlineStatus();
 
 });
+
 
 /* =========================================================
    ONLINE-ONLY FEATURES
@@ -144,9 +180,11 @@ function showOfflineMessage(featureName) {
 
             </div>
 
+
             <h3>
                 Internet Connection Required
             </h3>
+
 
             <p>
                 ${featureName} requires an internet
@@ -154,12 +192,12 @@ function showOfflineMessage(featureName) {
                 or connect to Wi-Fi and try again.
             </p>
 
+
             <button
                 type="button"
-                id="closeOfflineMessage">
-
+                id="closeOfflineMessage"
+            >
                 Okay
-
             </button>
 
         </div>
@@ -172,11 +210,15 @@ function showOfflineMessage(featureName) {
     );
 
 
-    document
-        .getElementById(
+    const closeButton =
+        document.getElementById(
             "closeOfflineMessage"
-        )
-        .addEventListener(
+        );
+
+
+    if (closeButton) {
+
+        closeButton.addEventListener(
             "click",
             () => {
 
@@ -185,349 +227,1053 @@ function showOfflineMessage(featureName) {
             }
         );
 
+    }
+
+
+    message.addEventListener(
+        "click",
+        event => {
+
+            if (event.target === message) {
+
+                message.remove();
+
+            }
+
+        }
+    );
+
 }
 
-/*
-==============================
-HERO TYPING EFFECT
-==============================
-*/
+
+/* =========================================================
+   HERO TYPING EFFECT
+========================================================= */
 
 document.addEventListener("DOMContentLoaded", () => {
 
     const texts = [
+
         "Growing in Grace and the Knowledge of Christ",
+
         "Helping Young Believers Stand Firm in the Faith",
+
         "Studying God's Word, Living God's Truth",
+
         "Preparing Youth for Service and Eternity",
+
         "Walking Together on the Path of Holiness"
+
     ];
 
-    const heroTitle = document.getElementById("heroTitle");
 
-    if (!heroTitle) return;
+    const heroTitle =
+        document.getElementById(
+            "heroTitle"
+        );
+
+
+    if (!heroTitle) {
+
+        return;
+
+    }
+
 
     let textIndex = 0;
+
     let charIndex = 0;
+
     let deleting = false;
+
 
     function typeEffect() {
 
-        const currentText = texts[textIndex];
+        const currentText =
+            texts[textIndex];
 
-        heroTitle.innerHTML = currentText
-            .substring(0, charIndex)
-            .replace(/\n/g, "<br>");
+
+        heroTitle.innerHTML =
+            currentText
+                .substring(
+                    0,
+                    charIndex
+                )
+                .replace(
+                    /\n/g,
+                    "<br>"
+                );
+
 
         if (!deleting) {
 
             charIndex++;
 
-            if (charIndex > currentText.length) {
+
+            if (
+                charIndex >
+                currentText.length
+            ) {
 
                 deleting = true;
 
-                setTimeout(typeEffect, 2000);
+
+                setTimeout(
+                    typeEffect,
+                    2000
+                );
+
 
                 return;
+
             }
 
         } else {
 
             charIndex--;
 
+
             if (charIndex < 0) {
 
                 deleting = false;
 
-                textIndex = (textIndex + 1) % texts.length;
+                textIndex =
+                    (
+                        textIndex + 1
+                    )
+                    %
+                    texts.length;
+
 
                 charIndex = 0;
+
             }
+
         }
 
-        setTimeout(typeEffect, deleting ? 35 : 70);
+
+        setTimeout(
+
+            typeEffect,
+
+            deleting
+                ? 35
+                : 70
+
+        );
+
     }
+
 
     typeEffect();
 
 });
 
-    
- /*
-==============================
-CSV LINKS (UNCHANGED)
-==============================
-*/
 
-const weeklyLessonCSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQHlE5IpmFYaQyW5u-rentH2fGC5VZJ2w9Ql1WI-X8bE76qlN5_ttDIitwlXX1CM4sqdEW8RroDUNSU/pub?gid=201183837&single=true&output=csv";
+/* =========================================================
+   CSV LINKS
+========================================================= */
+
+const weeklyLessonCSV =
+    "https://docs.google.com/spreadsheets/d/e/2PACX-1vQHlE5IpmFYaQyW5u-rentH2fGC5VZJ2w9Ql1WI-X8bE76qlN5_ttDIitwlXX1CM4sqdEW8RroDUNSU/pub?gid=201183837&single=true&output=csv";
+
+
 const secretariatCSV =
-"https://docs.google.com/spreadsheets/d/e/2PACX-1vTE5Ds6_y0OYFL9_pYfRekpMx1Jq-kijbtdXsL-LCyg5KsC8LVootmeHOew2xiqV2sAXEVUKm_3vz17/pub?gid=1085033955&single=true&output=csv";
+    "https://docs.google.com/spreadsheets/d/e/2PACX-1vTE5Ds6_y0OYFL9_pYfRekpMx1Jq-kijbtdXsL-LCyg5KsC8LVootmeHOew2xiqV2sAXEVUKm_3vz17/pub?gid=1085033955&single=true&output=csv";
 
-/*
-==============================
-SECRETARIAT REPORTS (STABLE VERSION)
-==============================
-*/
+
+/* =========================================================
+   CSV PARSER
+========================================================= */
 
 function parseCSV(text) {
-  const rows = [];
-  let row = [];
-  let value = '';
-  let insideQuotes = false;
 
-  for (let i = 0; i < text.length; i++) {
-    const char = text[i];
-    const next = text[i + 1];
+    const rows = [];
 
-    if (char === '"') {
-      if (insideQuotes && next === '"') {
-        value += '"';
-        i++;
-      } else {
-        insideQuotes = !insideQuotes;
-      }
-    } 
-    else if (char === ',' && !insideQuotes) {
-      row.push(value.trim());
-      value = '';
-    } 
-    else if ((char === '\n' || char === '\r') && !insideQuotes) {
-      if (value || row.length) {
-        row.push(value.trim());
-        rows.push(row);
-        row = [];
-        value = '';
-      }
-    } 
-    else {
-      value += char;
+    let row = [];
+
+    let value = "";
+
+    let insideQuotes = false;
+
+
+    for (
+        let i = 0;
+        i < text.length;
+        i++
+    ) {
+
+        const char =
+            text[i];
+
+
+        const next =
+            text[i + 1];
+
+
+        if (char === '"') {
+
+            if (
+                insideQuotes &&
+                next === '"'
+            ) {
+
+                value += '"';
+
+                i++;
+
+            } else {
+
+                insideQuotes =
+                    !insideQuotes;
+
+            }
+
+        }
+
+
+        else if (
+
+            char === "," &&
+            !insideQuotes
+
+        ) {
+
+            row.push(
+                value.trim()
+            );
+
+            value = "";
+
+        }
+
+
+        else if (
+
+            (
+                char === "\n" ||
+                char === "\r"
+            )
+            &&
+            !insideQuotes
+
+        ) {
+
+            if (
+                value ||
+                row.length
+            ) {
+
+                row.push(
+                    value.trim()
+                );
+
+                rows.push(
+                    row
+                );
+
+                row = [];
+
+                value = "";
+
+            }
+
+        }
+
+
+        else {
+
+            value += char;
+
+        }
+
     }
-  }
 
-  if (value || row.length) {
-    row.push(value.trim());
-    rows.push(row);
-  }
 
-  return rows.filter(r => r.length > 1);
+    if (
+        value ||
+        row.length
+    ) {
+
+        row.push(
+            value.trim()
+        );
+
+        rows.push(
+            row
+        );
+
+    }
+
+
+    return rows.filter(
+        item =>
+            item.length > 1
+    );
+
 }
+
+
+/* =========================================================
+   SECRETARIAT REPORTS
+========================================================= */
 
 async function fetchSecretariatReports() {
-  try {
-    const res = await fetch(secretariatCSV);
-    const data = await res.text();
 
-    const reportsFeed = document.getElementById('reportsFeed');
-    if (!reportsFeed) return;
+    const reportsFeed =
+        document.getElementById(
+            "reportsFeed"
+        );
 
-    reportsFeed.innerHTML = '';
 
-    const rows = parseCSV(data);
+    /* Page does not use reports */
 
-    const headers = rows[0].map(h => h.toLowerCase());
+    if (!reportsFeed) {
 
-    const iDate = headers.indexOf("date");
-    const iTitle = headers.indexOf("program title");
-    const iType = headers.indexOf("program type");
-    const iSummary = headers.indexOf("what went well");
-    const iReporter = headers.indexOf("reporter");
+        return;
 
-    const reports = rows.slice(1).reverse().slice(0, 6);
+    }
 
-    reports.forEach(r => {
-      const date = r[iDate] || '';
-      const title = r[iTitle] || '';
-      const type = r[iType] || '';
-      const summary = r[iSummary] || '';
-      const reporter = r[iReporter] || '';
 
-      if (title.trim() !== '') {
-        reportsFeed.innerHTML += `
-          <div class="report-card">
-            <div class="report-badge">${type}</div>
-            <h3>${title}</h3>
-            <p class="report-summary">${summary}</p>
-            <div class="report-meta">
-              <div class="reporter">${reporter}</div>
-              <div class="report-date">${date}</div>
-            </div>
-          </div>
-        `;
-      }
-    });
+    try {
 
-  } catch (err) {
-    console.log("Secretariat Error:", err);
-  }
+        const response =
+            await fetch(
+                secretariatCSV
+            );
+
+
+        const data =
+            await response.text();
+
+
+        const rows =
+            parseCSV(data);
+
+
+        if (!rows.length) {
+
+            return;
+
+        }
+
+
+        reportsFeed.innerHTML =
+            "";
+
+
+        const headers =
+            rows[0].map(
+                header =>
+                    header
+                        .toLowerCase()
+                        .trim()
+            );
+
+
+        const iDate =
+            headers.indexOf(
+                "date"
+            );
+
+
+        const iTitle =
+            headers.indexOf(
+                "program title"
+            );
+
+
+        const iType =
+            headers.indexOf(
+                "program type"
+            );
+
+
+        const iSummary =
+            headers.indexOf(
+                "what went well"
+            );
+
+
+        const iReporter =
+            headers.indexOf(
+                "reporter"
+            );
+
+
+        const reports =
+            rows
+                .slice(1)
+                .reverse()
+                .slice(0, 6);
+
+
+        reports.forEach(
+            report => {
+
+                const date =
+                    iDate >= 0
+                        ? report[iDate] || ""
+                        : "";
+
+
+                const title =
+                    iTitle >= 0
+                        ? report[iTitle] || ""
+                        : "";
+
+
+                const type =
+                    iType >= 0
+                        ? report[iType] || ""
+                        : "";
+
+
+                const summary =
+                    iSummary >= 0
+                        ? report[iSummary] || ""
+                        : "";
+
+
+                const reporter =
+                    iReporter >= 0
+                        ? report[iReporter] || ""
+                        : "";
+
+
+                if (
+                    title.trim() === ""
+                ) {
+
+                    return;
+
+                }
+
+
+                reportsFeed.insertAdjacentHTML(
+                    "beforeend",
+
+                    `
+                    <div class="report-card">
+
+                        <div class="report-badge">
+                            ${type}
+                        </div>
+
+                        <h3>
+                            ${title}
+                        </h3>
+
+                        <p class="report-summary">
+                            ${summary}
+                        </p>
+
+                        <div class="report-meta">
+
+                            <div class="reporter">
+                                ${reporter}
+                            </div>
+
+                            <div class="report-date">
+                                ${date}
+                            </div>
+
+                        </div>
+
+                    </div>
+                    `
+                );
+
+            }
+        );
+
+
+    } catch (error) {
+
+        console.log(
+            "Secretariat Error:",
+            error
+        );
+
+    }
+
 }
-/*
-==============================
-WEEKLY LESSONS (FULL FIXED + SAFE)
-==============================
-*/
+
+
+/* =========================================================
+   WEEKLY LESSONS
+========================================================= */
 
 let lessonsData = [];
 
+
 async function fetchWeeklyLesson() {
-  try {
-    const response = await fetch(weeklyLessonCSV);
-    const csvText = await response.text();
 
-    const result = Papa.parse(csvText, {
-      header: true,
-      skipEmptyLines: true
-    });
-
-    // normalize data
-    lessonsData = result.data.map(row => ({
-
-    lesson: row.Lesson?.trim(),
-
-    className: row.Class?.trim(),
-
-    topic: row.Topic?.trim(),
-
-    bibleText: row.BibleText?.trim(),
-
-    memoryVerse: row.MemoryVerse?.trim(),
-
-    summary: row.Summary?.trim(),
-
-    discussion: row.Discussion?.trim(),
-
-    yorubaAudio: row.YorubaAudio?.trim()
-
-}));
-      
-    switchLesson('Senior');
-
-  } catch (error) {
-    console.log("Weekly lesson error:", error);
-  }
-}
-  
-function switchLesson(className) {
-  const lesson = lessonsData.find(item => item.className === className);
-  if (!lesson) return;
-
-  document.getElementById('lessonTopic').innerText = lesson.topic || "";
-
-  document.getElementById('lessonBibleText').innerText = lesson.bibleText || "";
-
-  // ❌ REMOVE trimming for memory verse
-  document.getElementById('lessonMemoryVerse').innerText = lesson.memoryVerse || "";
+    const lessonTopic =
+        document.getElementById(
+            "lessonTopic"
+        );
 
 
-document.querySelectorAll('.lesson-tab').forEach(tab => {
-  tab.classList.remove('active');
+    /* Page does not use lessons */
 
-  if (tab.textContent.trim() === className) {
-    tab.classList.add('active');
-  }
-});
+    if (!lessonTopic) {
 
-  localStorage.setItem('selectedLessonClass', className);
-}
-  console.log("Parsed Lessons:", lessonsData);
-/*
-==============================
-INIT
-==============================
-*/
-
-fetchSecretariatReports();
-fetchWeeklyLesson();
-
-/*
-==============================
-AUTO REFRESH
-==============================
-*/
-
-setInterval(fetchSecretariatReports, 30000);
-
-
-
-const sidebar = document.getElementById("sidebar");
-
-const hubButton = document.getElementById("hubButton");
-
-const menuBtn = document.getElementById("mobileMenuBtn");
-
-const overlay = document.getElementById("sidebarOverlay");
-
-function openSidebar(){
-
-    sidebar.classList.add("show");
-
-    overlay.classList.add("show");
-
-}
-
-function closeSidebar(){
-
-    sidebar.classList.remove("show");
-
-    overlay.classList.remove("show");
-
-}
-
-hubButton.onclick = openSidebar;
-
-menuBtn.onclick = openSidebar;
-
-overlay.onclick = closeSidebar;
-
-
-
-
-/* ==========================================
-   DASHBOARD GREETING
-========================================== */
-
-const greetingText = document.getElementById("greetingText");
-const currentDate = document.getElementById("currentDate");
-
-if(greetingText && currentDate){
-
-    const now = new Date();
-
-    const hour = now.getHours();
-
-    let greeting = "Good Evening, Dear User.";
-
-    if(hour >= 5 && hour < 12){
-
-        greeting = "Good Morning, Dear User.";
-
-    }else if(hour >= 12 && hour < 17){
-
-        greeting = "Good Afternoon, Dear User.";
-
-    }else if(hour >= 17 && hour < 21){
-
-        greeting = "Good Evening, Dear User.";
-
-    }else{
-
-        greeting = "Good Night, Dear User.";
+        return;
 
     }
 
-    greetingText.textContent = greeting;
 
-    currentDate.textContent =
-        now.toLocaleDateString("en-GB",{
+    try {
 
-            weekday:"long",
+        const response =
+            await fetch(
+                weeklyLessonCSV
+            );
 
-            day:"numeric",
 
-            month:"long",
+        const csvText =
+            await response.text();
 
-            year:"numeric"
 
-        });
+        if (
+            typeof Papa ===
+            "undefined"
+        ) {
+
+            console.log(
+                "PapaParse is not available."
+            );
+
+            return;
+
+        }
+
+
+        const result =
+            Papa.parse(
+                csvText,
+                {
+                    header: true,
+                    skipEmptyLines: true
+                }
+            );
+
+
+        lessonsData =
+            result.data.map(
+                row => ({
+
+                    lesson:
+                        row.Lesson
+                            ?.trim() || "",
+
+                    className:
+                        row.Class
+                            ?.trim() || "",
+
+                    topic:
+                        row.Topic
+                            ?.trim() || "",
+
+                    bibleText:
+                        row.BibleText
+                            ?.trim() || "",
+
+                    memoryVerse:
+                        row.MemoryVerse
+                            ?.trim() || "",
+
+                    summary:
+                        row.Summary
+                            ?.trim() || "",
+
+                    discussion:
+                        row.Discussion
+                            ?.trim() || "",
+
+                    yorubaAudio:
+                        row.YorubaAudio
+                            ?.trim() || ""
+
+                })
+            );
+
+
+        console.log(
+            "Parsed Lessons:",
+            lessonsData
+        );
+
+
+        const savedClass =
+            localStorage.getItem(
+                "selectedLessonClass"
+            );
+
+
+        switchLesson(
+            savedClass ||
+            "Senior"
+        );
+
+
+    } catch (error) {
+
+        console.log(
+            "Weekly lesson error:",
+            error
+        );
+
+    }
 
 }
+
+
+/* =========================================================
+   SWITCH LESSON
+========================================================= */
+
+function switchLesson(className) {
+
+    const lesson =
+        lessonsData.find(
+            item =>
+                item.className ===
+                className
+        );
+
+
+    if (!lesson) {
+
+        return;
+
+    }
+
+
+    const lessonTopic =
+        document.getElementById(
+            "lessonTopic"
+        );
+
+
+    const lessonBibleText =
+        document.getElementById(
+            "lessonBibleText"
+        );
+
+
+    const lessonMemoryVerse =
+        document.getElementById(
+            "lessonMemoryVerse"
+        );
+
+
+    if (lessonTopic) {
+
+        lessonTopic.innerText =
+            lesson.topic;
+
+    }
+
+
+    if (lessonBibleText) {
+
+        lessonBibleText.innerText =
+            lesson.bibleText;
+
+    }
+
+
+    if (lessonMemoryVerse) {
+
+        lessonMemoryVerse.innerText =
+            lesson.memoryVerse;
+
+    }
+
+
+    document
+        .querySelectorAll(
+            ".lesson-tab"
+        )
+        .forEach(
+            tab => {
+
+                tab.classList.remove(
+                    "active"
+                );
+
+
+                if (
+                    tab.textContent
+                        .trim() ===
+                    className
+                ) {
+
+                    tab.classList.add(
+                        "active"
+                    );
+
+                }
+
+            }
+        );
+
+
+    localStorage.setItem(
+        "selectedLessonClass",
+        className
+    );
+
+}
+
+
+/* =========================================================
+   SIDEBAR NAVIGATION
+========================================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+
+        const sidebar =
+            document.getElementById(
+                "sidebar"
+            );
+
+
+        const hubButton =
+            document.getElementById(
+                "hubButton"
+            );
+
+
+        const menuBtn =
+            document.getElementById(
+                "mobileMenuBtn"
+            );
+
+
+        const overlay =
+            document.getElementById(
+                "sidebarOverlay"
+            );
+
+
+        if (
+            !sidebar ||
+            !overlay
+        ) {
+
+            return;
+
+        }
+
+
+        function openSidebar() {
+
+            sidebar.classList.add(
+                "show"
+            );
+
+
+            overlay.classList.add(
+                "show"
+            );
+
+
+            document.body.style.overflow =
+                "hidden";
+
+
+            if (menuBtn) {
+
+                menuBtn.setAttribute(
+                    "aria-expanded",
+                    "true"
+                );
+
+            }
+
+
+            if (hubButton) {
+
+                hubButton.setAttribute(
+                    "aria-expanded",
+                    "true"
+                );
+
+            }
+
+        }
+
+
+        function closeSidebar() {
+
+            sidebar.classList.remove(
+                "show"
+            );
+
+
+            overlay.classList.remove(
+                "show"
+            );
+
+
+            document.body.style.overflow =
+                "";
+
+
+            if (menuBtn) {
+
+                menuBtn.setAttribute(
+                    "aria-expanded",
+                    "false"
+                );
+
+            }
+
+
+            if (hubButton) {
+
+                hubButton.setAttribute(
+                    "aria-expanded",
+                    "false"
+                );
+
+            }
+
+        }
+
+
+        if (menuBtn) {
+
+            menuBtn.addEventListener(
+                "click",
+                openSidebar
+            );
+
+        }
+
+
+        if (hubButton) {
+
+            hubButton.addEventListener(
+                "click",
+                openSidebar
+            );
+
+        }
+
+
+        overlay.addEventListener(
+            "click",
+            closeSidebar
+        );
+
+
+        /* CLOSE WHEN A SIDEBAR LINK IS CLICKED */
+
+        sidebar
+            .querySelectorAll("a")
+            .forEach(
+                link => {
+
+                    link.addEventListener(
+                        "click",
+                        () => {
+
+                            if (
+                                window.innerWidth <=
+                                768
+                            ) {
+
+                                closeSidebar();
+
+                            }
+
+                        }
+                    );
+
+                }
+            );
+
+
+        /* CLOSE WITH ESCAPE KEY */
+
+        document.addEventListener(
+            "keydown",
+            event => {
+
+                if (
+                    event.key === "Escape"
+                ) {
+
+                    closeSidebar();
+
+                }
+
+            }
+        );
+
+
+        /* RESET AFTER RETURNING TO DESKTOP */
+
+        window.addEventListener(
+            "resize",
+            () => {
+
+                if (
+                    window.innerWidth >
+                    768
+                ) {
+
+                    closeSidebar();
+
+                }
+
+            }
+        );
+
+    }
+);
+
+
+/* =========================================================
+   DASHBOARD GREETING
+========================================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+
+        const greetingText =
+            document.getElementById(
+                "greetingText"
+            );
+
+
+        const currentDate =
+            document.getElementById(
+                "currentDate"
+            );
+
+
+        if (
+            !greetingText ||
+            !currentDate
+        ) {
+
+            return;
+
+        }
+
+
+        const now =
+            new Date();
+
+
+        const hour =
+            now.getHours();
+
+
+        let greeting =
+            "Good Evening, Dear User.";
+
+
+        if (
+            hour >= 5 &&
+            hour < 12
+        ) {
+
+            greeting =
+                "Good Morning, Dear User.";
+
+        }
+
+
+        else if (
+            hour >= 12 &&
+            hour < 17
+        ) {
+
+            greeting =
+                "Good Afternoon, Dear User.";
+
+        }
+
+
+        else if (
+            hour >= 17 &&
+            hour < 21
+        ) {
+
+            greeting =
+                "Good Evening, Dear User.";
+
+        }
+
+
+        else {
+
+            greeting =
+                "Good Night, Dear User.";
+
+        }
+
+
+        greetingText.textContent =
+            greeting;
+
+
+        currentDate.textContent =
+            now.toLocaleDateString(
+                "en-GB",
+                {
+
+                    weekday:
+                        "long",
+
+                    day:
+                        "numeric",
+
+                    month:
+                        "long",
+
+                    year:
+                        "numeric"
+
+                }
+            );
+
+    }
+);
+
+
+/* =========================================================
+   PAGE INITIALIZATION
+========================================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+        fetchSecretariatReports();
+
+        fetchWeeklyLesson();
+
+    }
+);
+
+
+/* =========================================================
+   AUTO REFRESH REPORTS
+========================================================= */
+
+setInterval(
+    fetchSecretariatReports,
+    30000
+);
