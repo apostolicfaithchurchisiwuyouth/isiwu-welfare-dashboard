@@ -1,1 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<title>AFC Isiu Youth Portal</title>
+
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#ea580c">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="AFC Isiwu">
+
+<link rel="icon" type="image/png" href="images/logo.png">
+
+<link rel="apple-touch-icon" href="images/logo.png">
+
+<!-- WEBSITE FONTS -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap" rel="stylesheet">
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css">
+
+<!-- Remix Icons -->
+
+<link
+href="https://cdn.jsdelivr.net/npm/remixicon@4.6.0/fonts/remixicon.css"
+rel="stylesheet">
+
+<!-- INDEX CSS -->
+<link rel="stylesheet" href="css/main.css">
+<!-- LAYOUT CSS -->
+<link rel="stylesheet" href="css/layout.css">
+</head>
+
+<body>
+
+<div class="app-layout">
+
+<div class="sidebar-overlay"
+id="sidebarOverlay"></div>
+
+<!-- ========================================= -->
+<!-- DESKTOP / MOBILE SIDEBAR -->
+<!-- ========================================= -->
+
+<aside class="sidebar" id="sidebar">
+
+<!-- Logo -->
+
+<div class="sidebar-top">
+
+<div class="sidebar-logo">
+
+<i class="fa-solid fa-shield-heart"></i>
+
+<div>
+
+<h2>AFC Isiu</h2>
+
+<span>Youth Portal</span>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- Main Menu -->
+
+<nav class="sidebar-menu">
+
+<div class="menu-title">
+Ministry
+</div>
+
+<a href="/" class="active">
+
+<i class="fa-solid fa-house"></i>
+
+<span>Dashboard</span>
+
+</a>
+
+        <a href="pages/weekly-lessons.html">
+        <a href="pages/lessons.html">
+
+<i class="fa-solid fa-book-open"></i>
+
+<span>Weekly Lessons</span>
+
+</a>
+
+        <a href="pages/slcquiz.html">
+        <a href="pages/slcquiz.html" data-online-only data-feature="Weekly SLC Quiz">
+
+<i class="fa-solid fa-clipboard-question"></i>
+
+<span>Weekly SLC Quiz</span>
+
+</a>
+
+        <a href="pages/growthtracker.html">
+        <a href="pages/growthtracker.html" data-online-only data-feature="Growth Tracker">
+
+<i class="fa-solid fa-chart-line"></i>
+
+<span>Growth Tracker</span>
+
+</a>
+
+
+<div class="menu-title">
+Community
+</div>
+
+        <a href="pages/gallery.html">
+        <a href="pages/gallery.html" data-online-only data-feature="Gallery">
+
+<i class="fa-solid fa-images"></i>
+
+<span>Gallery</span>
+
+</a>
+
+        <a href="pages/events.html">
+        <a href="pages/events.html" data-online-only data-feature="Youth Events">
+
+<i class="fa-solid fa-calendar-days"></i>
+
+<span>Youth Events</span>
+
+</a>
+
+        <a href="pages/welfare.html">
+        <a href="pages/welfare.html" data-online-only data-feature="Welfare">
+
+<i class="fa-solid fa-hand-holding-heart"></i>
+
+<span>Welfare</span>
+
+</a>
+
+        <a href="pages/prayer.html">
+        <a href="pages/prayer.html" data-online-only data-feature="Prayer Requests">
+
+<i class="fa-solid fa-hands-praying"></i>
+
+<span>Prayer Requests</span>
+
+</a>
+
+        <a href="pages/program-report.html">
+        <a href="pages/program-report.html" data-online-only data-feature="Secretariat Reports">
+
+<i class="fa-solid fa-file-lines"></i>
+
+<span>Secretariat Reports</span>
+
+</a>
+
+</nav>
+
+
+<!-- Account -->
+
+<div class="sidebar-bottom">
+
+<div class="menu-title">
+Account
+</div>
+
+        <a href="pages/profile.html">
+        <a href="pages/profile.html" data-online-only data-feature="Profile">
+
+<i class="fa-solid fa-user"></i>
+
+<span>Profile</span>
+
+</a>
+
+        <a href="pages/settings.html">
+        <a href="pages/settings.html" data-online-only data-feature="Settings">
+
+<i class="fa-solid fa-gear"></i>
+
+<span>Settings</span>
+
+</a>
+
+</div>
+
+</aside>
+
+
+<!-- ========================================= -->
+<!-- MAIN CONTENT -->
+<!-- ========================================= -->
+
+<div class="main-area">
+
+
+
+<!-- Header will come in Part 1B -->
+
+
+
+<header class="topbar">
+
+<div class="topbar-left">
+
+<button
+class="mobile-menu-btn"
+id="mobileMenuBtn"
+type="button">
+
+<i class="fa-solid fa-bars"></i>
+
+</button>
+
+<div class="portal-brand">
+
+<img
+src="images/logo.png"
+alt="AFC Logo"
+class="portal-logo">
+
+<div>
+
+<h2>AFC Isiu Youth</h2>
+
+<p>Building young people for Christ</p>
+
+</div>
+
+</div>
+
+</div>
+
+
+<div class="topbar-right">
+
+<button
+class="header-icon"
+id="notificationBtn"
+type="button">
+
+<i class="fa-regular fa-bell"></i>
+
+<span class="notify-dot"></span>
+
+</button>
+
+
+<button
+class="header-icon"
+id="themeBtn"
+type="button">
+
+<i class="fa-solid fa-moon"></i>
+
+</button>
+
+</div>
+
+</header>
+
+
+<!-- Dashboard Content -->
+
+
+
+<main class="dashboard-content">
+
+
+<section class="lesson-section" data-aos="fade-up">
+
+<div class="lesson-card">
+<div class="lesson-content"> 
+<div class="lesson-header"> 
+<div class="lesson-top-badge"> THIS WEEK'S LESSON </div> 
+<div class="lesson-status"> Updated Weekly </div> </div><br> <h1 id="lessonTopic"> Loading... </h1> <p class="lesson-subtitle"> Study the lesson notes, memory verses and Bible texts across all classes. </p> <div class="lesson-tabs"> <button class="lesson-tab active" onclick="switchLesson('Senior')"> Senior </button> <button class="lesson-tab" onclick="switchLesson('Junior')"> Junior </button> <button class="lesson-tab" onclick="switchLesson('Elementary')"> Elementary </button> </div> <div class="lesson-layout"> <div class="lesson-main-card"> <span class="lesson-label"> Bible Text </span> <p id="lessonBibleText"> Loading... </p> </div> <div class="lesson-side"> <div class="memory-block"> <span class="lesson-label"> Memory Verse </span> <p id="lessonMemoryVerse"> Loading... </p> </div> <a href="pages/lessons" class="lesson-read-more"> Read Combined Lesson Note <i class="fa-solid fa-arrow-right"></i> </a> </div> </div> </section>
+<!-- ========================= -->
+<!-- MINISTRY HUB -->
+<!-- ========================= -->
+
+<section class="hub">
+
+<div class="hub-grid">
+
+<!-- Featured Card -->
+
+        <a href="pages/slcquiz" class="hub-item featured">
+        <a href="pages/slcquiz" class="hub-item featured" data-online-only data-feature="Weekly SLC Quiz">
+
+<div class="hub-badge">ACTIVE</div>
+
+<div class="hub-header">
+
+<div class="hub-icon quiz-icon">
+
+<i class="fa-solid fa-clipboard-question"></i>
+
+</div>
+
+<span class="hub-count">Weekly</span>
+
+</div>
+
+<h4>Weekly SLC Quiz</h4>
+
+<p>
+
+Answer the questions from our weekly lessons and grow spiritually.
+
+</p>
+
+</a>
+
+<!-- Lesson -->
+
+<a href="pages/lessons" class="hub-item">
+
+<div class="hub-header">
+
+<div class="hub-icon lesson-icon">
+
+<i class="fa-solid fa-book"></i>
+
+</div>
+
+</div>
+
+<h4>Weekly Lesson</h4>
+
+<p>
+
+Study the current Sunday school lesson.
+
+</p>
+
+</a>
+
+<!-- Events -->
+
+        <a href="#" class="hub-item">
+        <a href="#" class="hub-item" data-online-only data-feature="Youth Events">
+
+<div class="hub-header">
+
+<div class="hub-icon event-icon">
+
+<i class="fa-solid fa-calendar-days"></i>
+
+</div>
+
+</div>
+
+<h4>Youth Events</h4>
+
+<p>
+
+Upcoming programmes and youth activities.
+
+</p>
+
+</a>
+
+<!-- Welfare -->
+
+        <a href="#" class="hub-item">
+        <a href="#" class="hub-item" data-online-only data-feature="Welfare">
+
+<div class="hub-header">
+
+<div class="hub-icon welfare-icon">
+
+<i class="fa-solid fa-hand-holding-heart"></i>
+
+</div>
+
+</div>
+
+<h4>Welfare</h4>
+
+<p>
+
+Request support and welfare assistance.
+
+</p>
+
+</a>
+
+<!-- Prayer -->
+
+        <a href="#" class="hub-item">
+        <a href="#" class="hub-item" data-online-only data-feature="Prayer Request">
+
+<div class="hub-header">
+
+<div class="hub-icon prayer-icon">
+
+<i class="fa-solid fa-hands-praying"></i>
+
+</div>
+
+</div>
+
+<h4>Prayer Request</h4>
+
+<p>
+
+Send prayer requests and testimonies.
+
+</p>
+
+</a>
+
+<!-- Gallery -->
+
+        <a href="#" class="hub-item">
+        <a href="#" class="hub-item" data-online-only data-feature="Gallery">
+
+<div class="hub-header">
+
+<div class="hub-icon gallery-icon">
+
+<i class="fa-solid fa-images"></i>
+
+</div>
+
+</div>
+
+<h4>Gallery</h4>
+
+<p>
+
+Moments from previous programmes.
+
+</p>
+
+</a>
+
+</div>
+
+</section>
+
+
+
+
+<nav class="bottom-nav">
+
+<a href="/" class="active">
+
+<i class="fa-solid fa-house"></i>
+
+<span>Home</span>
+
+</a>
+
+    <a href="pages/weekly-lessons.html">
+    <a href="pages/lessons.html">
+
+<i class="fa-solid fa-book-open"></i>
+
+<span>Lessons</span>
+
+</a>
+
+
+<button
+class="hub-button"
+id="hubButton"
+type="button">
+
+<i class="ri-apps-2-line"></i>
+
+</button>
+
+
+    <a href="pages/gallery.html">
+    <a href="pages/gallery.html" data-online-only data-feature="Gallery">
+
+<i class="fa-solid fa-images"></i>
+
+<span>Gallery</span>
+
+</a>
+
+
+    <a href="pages/profile.html">
+    <a href="pages/profile.html" data-online-only data-feature="Profile">
+
+<i class="fa-solid fa-user"></i>
+
+<span>Profile</span>
+
+</a>
+
+</nav>
+
+
+</main>
+</div>
+</div>
+
+
+<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+
+<script src="js/main.js"></script>
+</body>
+</html>
