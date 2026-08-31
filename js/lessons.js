@@ -1258,14 +1258,10 @@ if (header) {
 function updateReadingTime() {
 
     const lessonContent =
-        document.getElementById(
-            "lessonContent"
-        );
+        document.getElementById("lessonContent");
 
     const readingTime =
-        document.getElementById(
-            "readingTime"
-        );
+        document.getElementById("readingTime");
 
 
     if (
@@ -1279,11 +1275,12 @@ function updateReadingTime() {
 
 
     const text =
-        lessonContent.innerText
-            .trim();
+        lessonContent.innerText.trim();
 
 
     if (!text) {
+
+        readingTime.textContent = "—";
 
         return;
 
@@ -1291,17 +1288,13 @@ function updateReadingTime() {
 
 
     const words =
-        text.split(
-            /\s+/
-        ).length;
+        text.split(/\s+/).filter(Boolean).length;
 
 
     const minutes =
         Math.max(
             1,
-            Math.ceil(
-                words / 200
-            )
+            Math.ceil(words / 200)
         );
 
 
@@ -1310,6 +1303,110 @@ function updateReadingTime() {
 
 }
 
+/* =========================================================
+   READING CONFIRMATION
+========================================================= */
+
+function setupReadingConfirmation() {
+
+    const checkbox =
+        document.getElementById(
+            "readConfirmation"
+        );
+
+    const button =
+        document.getElementById(
+            "confirmReadingBtn"
+        );
+
+    const message =
+        document.getElementById(
+            "readingMessage"
+        );
+
+
+    if (
+        !checkbox ||
+        !button
+    ) {
+
+        return;
+
+    }
+
+
+    checkbox.addEventListener(
+        "change",
+        () => {
+
+            button.disabled =
+                !checkbox.checked;
+
+
+            if (message) {
+
+                message.textContent = "";
+
+                message.className =
+                    "reading-message";
+
+            }
+
+        }
+    );
+
+
+    button.addEventListener(
+        "click",
+        () => {
+
+            if (!checkbox.checked) {
+
+                return;
+
+            }
+
+
+            /*
+             * PHASE 4B:
+             * This currently confirms locally.
+             *
+             * Later we will connect this
+             * to the authenticated user
+             * and Google Apps Script.
+             */
+
+
+            if (message) {
+
+                message.textContent =
+                    "Lesson reading confirmed.";
+
+                message.className =
+                    "reading-message success";
+
+            }
+
+
+            button.disabled = true;
+
+            checkbox.disabled = true;
+
+
+            localStorage.setItem(
+                "afc_lesson_reading_confirmed",
+                "true"
+            );
+
+
+            console.log(
+                "AFC Isiu: Lesson reading confirmed."
+            );
+
+        }
+    );
+
+}
 
 /* =========================================================
    START
@@ -1322,17 +1419,24 @@ if (
 
     document.addEventListener(
         "DOMContentLoaded",
-        loadLessons
+        () => {
+
+            setupReadingConfirmation();
+
+            loadLessons();
+
+        }
     );
 
 }
 
 else {
 
+    setupReadingConfirmation();
+
     loadLessons();
 
 }
-
 
 /* =========================================================
    DEBUG
