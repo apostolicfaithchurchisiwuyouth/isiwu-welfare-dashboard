@@ -10,276 +10,789 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>Weekly Lessons | AFC Isiwu Youth</title>
+    <title>Weekly Lessons | AFC Isiu Youth</title>
+
+    <!-- =====================================================
+         PWA
+    ====================================================== -->
 
     <link rel="manifest" href="../manifest.json">
-<meta name="theme-color" content="#ea580c">
+
+    <meta
+        name="theme-color"
+        content="#ea580c"
+    >
+
+    <!-- =====================================================
+         FONTS
+    ====================================================== -->
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
 
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
 
-    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;700&display=swap"
+        rel="stylesheet"
+    >
 
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <!-- =====================================================
+         FONT AWESOME
+    ====================================================== -->
 
-    <link rel="stylesheet" href="../css/lessons.css">
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    >
+
+    <!-- =====================================================
+         GLOBAL PORTAL CSS
+    ====================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="../css/layout.css"
+    >
+
+    <!-- =====================================================
+         LESSON PAGE CSS
+         Page-specific styling only
+    ====================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="../css/lessons.css"
+    >
+
+    <!-- =====================================================
+         PAPAPARSE
+    ====================================================== -->
 
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 
 </head>
 
+
 <body>
 
-    <!-- HEADER -->
+<!-- =========================================================
+     PORTAL SHELL
+========================================================== -->
 
-    <header class="main-header">
+<div class="app-layout">
 
-        <div class="header-title">
 
-            <i class="fas fa-book-open"></i>
+    <!-- =====================================================
+         SIDEBAR
+    ====================================================== -->
 
-            <span>Weekly Lessons</span>
+    <aside
+        class="sidebar"
+        id="sidebar"
+    >
 
-        </div>
+        <!-- LOGO -->
 
-        <a href="../index" class="back-btn">
+        <div>
 
-            <i class="fas fa-arrow-left"></i>
+            <div class="sidebar-logo">
 
-            Back
+                <div class="sidebar-logo-icon">
 
-        </a>
-
-    </header>
-
-    <!-- PAGE -->
-
-  <main class="lessons-page">
-
-    <!-- HERO -->
-
-    <section class="hero-wrapper">
-
-        <div class="hero-section">
-
-            <div class="hero-top">
-
-                <div class="hero-badge">
-
-                    <i class="fas fa-bookmark"></i>
-
-                    Sunday School For This Week
+                    <i class="fas fa-cross"></i>
 
                 </div>
 
-                <div class="hero-icon">
+                <div>
 
-                    <i class="fas fa-users"></i>
+                    <h2>
+                        AFC Isiwu Youth
+                    </h2>
+
+                    <span>
+                        Youth Portal
+                    </span>
 
                 </div>
 
             </div>
 
-           <div class="hero-text-block">
 
-    <h1 class="hero-heading">
+            <!-- MAIN MENU -->
 
-       Combined Lesson Note
-    </h1>
+            <nav class="sidebar-menu">
 
-    <p class="hero-description">
+                <a
+                    href="../index"
+                >
 
-        Study Sunday School lessons, memory verses,
-        Bible texts and discussion points for Senior, Junior
-        and Elementary classes.
+                    <i class="fas fa-house"></i>
 
-    </p>
+                    <span>
+                        Home
+                    </span>
 
-</div>
-        
+                </a>
+
+
+                <a
+                    href="profile"
+                >
+
+                    <i class="fas fa-user"></i>
+
+                    <span>
+                        Profile
+                    </span>
+
+                </a>
+
+
+                <a
+                    href="lessons"
+                    class="active"
+                >
+
+                    <i class="fas fa-book-open"></i>
+
+                    <span>
+                        Lessons
+                    </span>
+
+                </a>
+
+
+                <a
+                    href="quiz"
+                    data-online-only
+                    data-feature="Quiz"
+                >
+
+                    <i class="fas fa-circle-question"></i>
+
+                    <span>
+                        Quiz
+                    </span>
+
+                </a>
+
+
+                <a
+                    href="gallery"
+                >
+
+                    <i class="fas fa-images"></i>
+
+                    <span>
+                        Gallery
+                    </span>
+
+                </a>
+
+            </nav>
+
         </div>
 
-    </section>
-      
-<!-- TABS -->
 
-<section class="tabs">
+        <!-- SIDEBAR BOTTOM -->
 
-    <button class="tab active" data-class="Senior">
+        <div class="sidebar-bottom">
 
-        Senior
+            <a
+                href="settings"
+            >
 
-    </button>
+                <i class="fas fa-gear"></i>
 
-    <button class="tab" data-class="Junior">
+                <span>
+                    Settings
+                </span>
 
-        Junior
+            </a>
 
-    </button>
 
-    <button class="tab" data-class="Elementary">
+            <a
+                href="#"
+                id="logoutButton"
+            >
 
-        Elementary
+                <i class="fas fa-right-from-bracket"></i>
 
-    </button>
+                <span>
+                    Logout
+                </span>
 
-</section>
+            </a>
 
-<!-- MAIN LESSON CARD -->
+        </div>
 
-<section class="lesson-card">
+    </aside>
 
-    <!-- LESSON HEADER -->
 
-    <div class="lesson-header">
+    <!-- =====================================================
+         SIDEBAR OVERLAY
+    ====================================================== -->
 
-        <div class="lesson-header-top">
+    <div
+        class="sidebar-overlay"
+        id="sidebarOverlay"
+    ></div>
 
-            <span class="lesson-badge">
 
-                Topic Of The Lesson
+    <!-- =====================================================
+         MAIN AREA
+    ====================================================== -->
 
+    <div class="main-area">
+
+
+        <!-- =================================================
+             GLOBAL TOPBAR
+        ================================================== -->
+
+        <header class="topbar">
+
+
+            <!-- LEFT -->
+
+            <div class="topbar-left">
+
+
+                <!-- MOBILE MENU -->
+
+                <button
+                    type="button"
+                    class="mobile-menu-btn"
+                    id="mobileMenuBtn"
+                    aria-label="Open menu"
+                >
+
+                    <i class="fas fa-bars"></i>
+
+                </button>
+
+
+                <!-- PORTAL BRAND -->
+
+                <div class="portal-brand">
+
+                    <img
+                        src="../assets/logo.png"
+                        alt="AFC Isiwu Youth"
+                        class="portal-logo"
+                    >
+
+                    <div>
+
+                        <h2>
+                            AFC Isiwu Youth
+                        </h2>
+
+                        <p>
+                            Growing together in Christ
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- RIGHT -->
+
+            <div class="topbar-right">
+
+
+                <button
+                    type="button"
+                    class="header-icon"
+                    aria-label="Notifications"
+                >
+
+                    <i class="fas fa-bell"></i>
+
+                    <span class="notify-dot"></span>
+
+                </button>
+
+            </div>
+
+        </header>
+
+
+        <!-- =================================================
+             PAGE CONTENT
+        ================================================== -->
+
+        <main class="dashboard-content">
+
+
+            <div class="dashboard-container">
+
+
+                <!-- =========================================
+                     LESSON PAGE HERO
+                ========================================== -->
+
+                <section class="hero-wrapper">
+
+                    <div class="hero-section">
+
+
+                        <div class="hero-top">
+
+                            <div class="hero-badge">
+
+                                <i class="fas fa-bookmark"></i>
+
+                                Sunday School For This Week
+
+                            </div>
+
+
+                            <div class="hero-icon">
+
+                                <i class="fas fa-users"></i>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="hero-text-block">
+
+                            <h1 class="hero-heading">
+
+                                Combined Lesson Note
+
+                            </h1>
+
+
+                            <p class="hero-description">
+
+                                Study Sunday School lessons, memory verses,
+                                Bible texts and discussion points for Senior,
+                                Junior and Elementary classes.
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- =========================================
+                     CLASS TABS
+                ========================================== -->
+
+                <section class="tabs">
+
+                    <button
+                        type="button"
+                        class="tab active"
+                        data-class="Senior"
+                    >
+
+                        Senior
+
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="tab"
+                        data-class="Junior"
+                    >
+
+                        Junior
+
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="tab"
+                        data-class="Elementary"
+                    >
+
+                        Elementary
+
+                    </button>
+
+                </section>
+
+
+                <!-- =========================================
+                     MAIN LESSON CARD
+                ========================================== -->
+
+                <section class="lesson-card">
+
+
+                    <!-- LESSON HEADER -->
+
+                    <div class="lesson-header">
+
+                        <div class="lesson-header-top">
+
+                            <span class="lesson-badge">
+
+                                Topic Of The Lesson
+
+                            </span>
+
+
+                            <span
+                                id="meta"
+                                class="lesson-meta"
+                            >
+
+                                Loading...
+
+                            </span>
+
+                        </div>
+
+
+                        <h1
+                            id="topic"
+                            class="lesson-topic"
+                        >
+
+                            Loading lesson...
+
+                        </h1>
+
+                    </div>
+
+
+                    <!-- =====================================
+                         BIBLE TEXT + MEMORY VERSE
+                    ====================================== -->
+
+                    <div class="lesson-grid">
+
+
+                        <!-- BIBLE TEXT -->
+
+                        <div class="info-card">
+
+                            <h3>
+
+                                Bible Text
+
+                            </h3>
+
+
+                            <div
+                                class="lesson-text"
+                                id="bibleText"
+                            ></div>
+
+                        </div>
+
+
+                        <!-- MEMORY VERSE -->
+
+                        <div class="info-card">
+
+                            <h3>
+
+                                Memory Verse
+
+                            </h3>
+
+
+                            <div
+                                class="lesson-text"
+                                id="memoryVerse"
+                            ></div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- =====================================
+                         YORUBA AUDIO
+                    ====================================== -->
+
+                    <div
+                        id="yorubaAudioContainer"
+                        class="audio-card"
+                    >
+
+                        <div class="section-title">
+
+                            Memory Verse In Yoruba
+
+                        </div>
+
+
+                        <audio
+                            controls
+                            preload="none"
+                            id="yorubaAudioPlayer"
+                        >
+
+                            <source
+                                id="yorubaAudioSource"
+                                src=""
+                                type="audio/mpeg"
+                            >
+
+                            Your browser does not support
+                            audio playback.
+
+                        </audio>
+
+                    </div>
+
+
+                    <!-- =====================================
+                         COMBINED LESSON NOTE
+                    ====================================== -->
+
+                    <section class="lesson-section">
+
+                        <h2 class="section-title">
+
+                            Combined Lesson Note
+
+                        </h2>
+
+
+                        <div
+                            class="lesson-text"
+                            id="summary"
+                        ></div>
+
+                    </section>
+
+
+                    <!-- =====================================
+                         DISCUSSION
+                    ====================================== -->
+
+                    <section class="lesson-section">
+
+                        <h2 class="section-title">
+
+                            Discussion
+
+                        </h2>
+
+
+                        <div
+                            class="lesson-text"
+                            id="discussion"
+                        ></div>
+
+                    </section>
+
+
+                    <!-- =====================================
+                         LESSON ACTION AREA
+                         PHASE 4B
+                    ====================================== -->
+
+                    <section
+                        class="lesson-action-card"
+                        id="lessonActionCard"
+                    >
+
+                        <div class="lesson-action-icon">
+
+                            <i class="fas fa-circle-check"></i>
+
+                        </div>
+
+
+                        <div class="lesson-action-content">
+
+                            <h3>
+                                Finished Reading?
+                            </h3>
+
+
+                            <p>
+                                Confirm that you have read this lesson
+                                to continue to the reflection and quiz.
+                            </p>
+
+                        </div>
+
+
+                        <button
+                            type="button"
+                            id="readLessonButton"
+                            class="lesson-action-button"
+                        >
+
+                            I've Read This Lesson
+
+                        </button>
+
+                    </section>
+
+
+                </section>
+
+
+                <!-- =========================================
+                     LESSON ARCHIVE
+                ========================================== -->
+
+                <section class="archive-card">
+
+
+                    <div class="archive-icon">
+
+                        <i class="fas fa-book"></i>
+
+                    </div>
+
+
+                    <div class="archive-content">
+
+                        <h3>
+
+                            Combined Lesson Archive
+
+                        </h3>
+
+
+                        <p>
+
+                            Browse all combined lesson notes
+                            and Yoruba audio memory verses.
+
+                        </p>
+
+                    </div>
+
+
+                    <a
+                        href="lesson-archive"
+                        class="archive-btn"
+                    >
+
+                        Open Archive
+
+                    </a>
+
+                </section>
+
+
+            </div>
+
+        </main>
+
+
+    </div>
+
+
+    <!-- =====================================================
+         MOBILE BOTTOM NAVIGATION
+    ====================================================== -->
+
+    <nav class="bottom-nav">
+
+
+        <!-- HOME -->
+
+        <a href="../index">
+
+            <i class="fas fa-house"></i>
+
+            <span>
+                Home
             </span>
-
-            <span id="meta" class="lesson-meta">
-
-                Loading...
-
-            </span>
-
-        </div>
-
-        <h1 id="topic" class="lesson-topic">
-
-            Loading lesson...
-
-        </h1>
-
-    </div>
-
-    <!-- BIBLE TEXT + MEMORY VERSE -->
-
-    <div class="lesson-grid">
-
-        <div class="info-card">
-
-            <h3>
-
-                Bible Text
-
-            </h3>
-
-            <div class="lesson-text" id="bibleText"></div>
-
-        </div>
-
-        <div class="info-card">
-
-            <h3>
-
-                Memory Verse
-
-            </h3>
-
-            <div class="lesson-text" id="memoryVerse"></div>
-
-        </div>
-
-    </div>
-
-    <!-- YORUBA AUDIO -->
-
-    <div id="yorubaAudioContainer" class="audio-card">
-
-        <div class="section-title">
-
-            Memory Verse In Yoruba
-
-        </div>
-
-        <audio controls preload="none" id="yorubaAudioPlayer">
-
-            <source
-                id="yorubaAudioSource"
-                src=""
-                type="audio/mpeg">
-
-        </audio>
-
-    </div>
-
-    <!-- COMBINED LESSON NOTE -->
-
-    <section class="lesson-section">
-
-        <h2 class="section-title">
-
-            Combined Lesson Note
-
-        </h2>
-
-        <div class="lesson-text" id="summary"></div>
-
-    </section>
-
-    <!-- DISCUSSION -->
-
-    <section class="lesson-section">
-
-        <h2 class="section-title">
-
-            Discussion
-
-        </h2>
-
-        <div class="lesson-text" id="discussion"></div>
-
-    </section>
-
-</section>
-
-    <!-- ARCHIVE -->
-
-    <section class="archive-card">
-
-        <div class="archive-icon">
-
-            <i class="fas fa-book"></i>
-
-        </div>
-
-        <div class="archive-content">
-
-            <h3>
-
-                Combined Lesson Archive
-
-            </h3>
-
-            <p>
-
-                Browse all combined lesson notes and Yoruba audio memory verses.
-
-            </p>
-
-        </div>
-
-        <a
-            href="lesson-archive"
-            class="archive-btn"
-        >
-
-            Open Archive
 
         </a>
 
-    </section>
 
-</main>
-    
-    <script src="../js/lessons.js"></script>
+        <!-- PROFILE -->
+
+        <a href="profile">
+
+            <i class="fas fa-user"></i>
+
+            <span>
+                Profile
+            </span>
+
+        </a>
+
+
+        <!-- CENTER ACTION -->
+
+        <a
+            href="lessons"
+            class="bottom-nav-center active"
+            aria-label="Lessons"
+        >
+
+            <i class="fas fa-book-open"></i>
+
+        </a>
+
+
+        <!-- GALLERY -->
+
+        <a href="gallery">
+
+            <i class="fas fa-images"></i>
+
+            <span>
+                Gallery
+            </span>
+
+        </a>
+
+
+        <!-- QUIZ -->
+
+        <a
+            href="quiz"
+            data-online-only
+            data-feature="Quiz"
+        >
+
+            <i class="fas fa-circle-question"></i>
+
+            <span>
+                Quiz
+            </span>
+
+        </a>
+
+    </nav>
+
+
+</div>
+
+
+<!-- =========================================================
+     GLOBAL MAIN JS
+========================================================== -->
+
+<script src="../js/main.js"></script>
+
+
+<!-- =========================================================
+     LESSON PAGE JS
+========================================================== -->
+
+<script src="../js/lessons.js"></script>
+
 
 </body>
 
