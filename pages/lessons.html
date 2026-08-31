@@ -3,84 +3,121 @@
 
 <head>
 
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
 
-    <title>Weekly Lessons | AFC Isiwu Youth</title>
+<title>Weekly Lessons — AFC Isiu Youth Portal</title>
 
-    <meta
-        name="theme-color"
-        content="#ea580c"
-    >
+<!-- PWA -->
 
-    <link
-        rel="manifest"
-        href="../manifest.json"
-    >
+<link rel="manifest" href="/manifest.json">
 
-    <!-- =====================================================
-         FONTS
-    ====================================================== -->
+<meta
+    name="theme-color"
+    content="#ea580c"
+>
 
-    <link
-        rel="preconnect"
-        href="https://fonts.googleapis.com"
-    >
+<meta
+    name="mobile-web-app-capable"
+    content="yes"
+>
 
-    <link
-        rel="preconnect"
-        href="https://fonts.gstatic.com"
-        crossorigin
-    >
+<meta
+    name="apple-mobile-web-app-capable"
+    content="yes"
+>
 
-    <link
-        href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;700&display=swap"
-        rel="stylesheet"
-    >
+<meta
+    name="apple-mobile-web-app-status-bar-style"
+    content="default"
+>
 
-    <!-- =====================================================
-         FONT AWESOME
-    ====================================================== -->
+<meta
+    name="apple-mobile-web-app-title"
+    content="AFC Isiwu"
+>
 
-    <link
-        rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
-    >
 
-    <!-- =====================================================
-         GLOBAL SHELL
-    ====================================================== -->
+<!-- ICONS -->
 
-    <link
-        rel="stylesheet"
-        href="../css/layout.css"
-    >
+<link
+    rel="icon"
+    type="image/png"
+    href="../images/logo.png"
+>
 
-    <link
-        rel="stylesheet"
-        href="../css/shell.css"
-    >
+<link
+    rel="apple-touch-icon"
+    href="../images/logo.png"
+>
 
-    <!-- =====================================================
-         LESSON PAGE
-    ====================================================== -->
 
-    <link
-        rel="stylesheet"
-        href="../css/lessons.css"
-    >
+<!-- FONTS -->
 
-    <!-- =====================================================
-         PAPAPARSE
-    ====================================================== -->
+<link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+>
 
-    <script
-        src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"
-    ></script>
+<link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+>
+
+<link
+    href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap"
+    rel="stylesheet"
+>
+
+
+<!-- FONT AWESOME -->
+
+<link
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    rel="stylesheet"
+>
+
+
+<!-- REMIX ICONS -->
+
+<link
+    href="https://cdn.jsdelivr.net/npm/remixicon@4.6.0/fonts/remixicon.css"
+    rel="stylesheet"
+>
+
+
+<!-- AOS -->
+
+<link
+    rel="stylesheet"
+    href="https://unpkg.com/aos@2.3.4/dist/aos.css"
+>
+
+
+<!-- GLOBAL CSS -->
+
+<link
+    rel="stylesheet"
+    href="../css/main.css"
+>
+
+<link
+    rel="stylesheet"
+    href="../css/layout.css"
+>
+
+
+<!-- LESSON CSS -->
+
+<link
+    rel="stylesheet"
+    href="../css/lessons.css"
+>
 
 </head>
 
@@ -88,532 +125,758 @@
 <body>
 
 
-    <!-- =====================================================
-         PAGE CONTENT
-
-         shell.js will automatically move everything inside
-         this container into the global portal shell.
-    ====================================================== -->
-
-    <div data-page-content>
+<div class="app-layout">
 
 
-        <!-- =================================================
-             LESSONS PAGE
-        ================================================== -->
+<!-- =========================================================
+     MOBILE SIDEBAR OVERLAY
+========================================================= -->
 
-        <div class="lessons-page">
-
-
-            <!-- =================================================
-                 HERO
-            ================================================== -->
-
-            <section class="hero-wrapper">
-
-                <div class="hero-section">
+<div
+    class="sidebar-overlay"
+    id="sidebarOverlay"
+></div>
 
 
-                    <div class="hero-top">
+<!-- =========================================================
+     SIDEBAR
+========================================================= -->
 
-                        <div class="hero-badge">
-
-                            <i class="fas fa-bookmark"></i>
-
-                            <span>
-                                Sunday School For This Week
-                            </span>
-
-                        </div>
+<aside
+    class="sidebar"
+    id="sidebar"
+>
 
 
-                        <div class="hero-icon">
-
-                            <i class="fas fa-users"></i>
-
-                        </div>
-
-                    </div>
+    <div class="sidebar-top">
 
 
-                    <div class="hero-text-block">
+        <!-- LOGO -->
 
-                        <h1 class="hero-heading">
+        <div class="sidebar-logo">
 
-                            Combined Lesson Note
+            <i class="fa-solid fa-shield-heart"></i>
 
-                        </h1>
+            <div>
 
+                <h2>AFC Isiu</h2>
 
-                        <p class="hero-description">
+                <span>Youth Portal</span>
 
-                            Study Sunday School lessons, memory verses,
-                            Bible texts and discussion points for Senior,
-                            Junior and Elementary classes.
+            </div>
 
-                        </p>
-
-                    </div>
+        </div>
 
 
-                </div>
+        <!-- MAIN MENU -->
 
-            </section>
+        <nav class="sidebar-menu">
 
 
-            <!-- =================================================
-                 CLASS TABS
-            ================================================== -->
+            <div class="menu-title">
+                Ministry
+            </div>
 
-            <section
-                class="tabs"
-                aria-label="Lesson classes"
+
+            <a href="../index.html">
+
+                <i class="fa-solid fa-house"></i>
+
+                <span>Dashboard</span>
+
+            </a>
+
+
+            <a
+                href="lessons.html"
+                class="active"
             >
 
-                <button
-                    type="button"
-                    class="tab active"
-                    data-class="Senior"
-                >
+                <i class="fa-solid fa-book-open"></i>
 
-                    Senior
+                <span>Weekly Lessons</span>
 
-                </button>
+            </a>
 
 
-                <button
-                    type="button"
-                    class="tab"
-                    data-class="Junior"
-                >
+            <a
+                href="slcquiz.html"
+                data-online-only
+                data-feature="Weekly SLC Quiz"
+            >
 
-                    Junior
+                <i class="fa-solid fa-clipboard-question"></i>
 
-                </button>
+                <span>Weekly SLC Quiz</span>
 
+            </a>
 
-                <button
-                    type="button"
-                    class="tab"
-                    data-class="Elementary"
-                >
 
-                    Elementary
+            <a
+                href="growthtracker.html"
+                data-online-only
+                data-feature="Growth Tracker"
+            >
 
-                </button>
+                <i class="fa-solid fa-chart-line"></i>
 
-            </section>
+                <span>Growth Tracker</span>
 
+            </a>
 
-            <!-- =================================================
-                 MAIN LESSON CARD
-            ================================================== -->
 
-            <section class="lesson-card">
+            <div class="menu-title">
+                Community
+            </div>
 
 
-                <!-- =============================================
-                     LESSON HEADER
-                ============================================== -->
+            <a
+                href="gallery.html"
+                data-online-only
+                data-feature="Gallery"
+            >
 
-                <div class="lesson-header">
+                <i class="fa-solid fa-images"></i>
 
-                    <div class="lesson-header-top">
+                <span>Gallery</span>
 
-                        <span class="lesson-badge">
+            </a>
 
-                            Topic Of The Lesson
 
-                        </span>
+            <a
+                href="events.html"
+                data-online-only
+                data-feature="Youth Events"
+            >
 
+                <i class="fa-solid fa-calendar-days"></i>
 
-                        <span
-                            id="meta"
-                            class="lesson-meta"
-                        >
+                <span>Youth Events</span>
 
-                            Loading...
+            </a>
 
-                        </span>
 
-                    </div>
+            <a
+                href="welfare.html"
+                data-online-only
+                data-feature="Welfare"
+            >
 
+                <i class="fa-solid fa-hand-holding-heart"></i>
 
-                    <h1
-                        id="topic"
-                        class="lesson-topic"
-                    >
+                <span>Welfare</span>
 
-                        Loading lesson...
+            </a>
 
-                    </h1>
 
-                </div>
+            <a
+                href="prayer.html"
+                data-online-only
+                data-feature="Prayer Requests"
+            >
 
+                <i class="fa-solid fa-hands-praying"></i>
 
-                <!-- =============================================
-                     BIBLE TEXT + MEMORY VERSE
-                ============================================== -->
+                <span>Prayer Requests</span>
 
-                <div class="lesson-grid">
+            </a>
 
 
-                    <div class="info-card">
+            <a
+                href="program-report.html"
+                data-online-only
+                data-feature="Secretariat Reports"
+            >
 
-                        <h3>
+                <i class="fa-solid fa-file-lines"></i>
 
-                            Bible Text
+                <span>Secretariat Reports</span>
 
-                        </h3>
+            </a>
 
+        </nav>
 
-                        <div
-                            id="bibleText"
-                            class="lesson-text"
-                        ></div>
+    </div>
 
-                    </div>
 
+    <!-- ACCOUNT -->
 
-                    <div class="info-card">
+    <div class="sidebar-bottom">
 
-                        <h3>
 
-                            Memory Verse
+        <div class="menu-title">
+            Account
+        </div>
 
-                        </h3>
 
+        <a
+            href="profile.html"
+            data-online-only
+            data-feature="Profile"
+        >
 
-                        <div
-                            id="memoryVerse"
-                            class="lesson-text"
-                        ></div>
+            <i class="fa-solid fa-user"></i>
 
-                    </div>
+            <span>Profile</span>
 
+        </a>
 
-                </div>
 
+        <a
+            href="settings.html"
+            data-online-only
+            data-feature="Settings"
+        >
 
-                <!-- =============================================
-                     YORUBA AUDIO
-                ============================================== -->
+            <i class="fa-solid fa-gear"></i>
 
-                <div
-                    id="yorubaAudioContainer"
-                    class="audio-card"
-                    style="display:none;"
-                >
+            <span>Settings</span>
 
-                    <div class="section-title">
+        </a>
 
-                        <i class="fas fa-volume-high"></i>
+    </div>
 
-                        Memory Verse In Yoruba
+</aside>
 
-                    </div>
 
+<!-- =========================================================
+     MAIN AREA
+========================================================= -->
 
-                    <audio
-                        id="yorubaAudioPlayer"
-                        controls
-                        preload="none"
-                    >
+<div class="main-area">
 
-                        <source
-                            id="yorubaAudioSource"
-                            src=""
-                            type="audio/mpeg"
-                        >
 
-                        Your browser does not support
-                        audio playback.
+    <!-- =====================================================
+         TOPBAR
+    ====================================================== -->
 
-                    </audio>
+    <header class="topbar">
 
-                </div>
 
+        <div class="topbar-left">
 
-                <!-- =============================================
-                     COMBINED LESSON NOTE
-                ============================================== -->
 
-                <section class="lesson-section">
+            <button
+                class="mobile-menu-btn"
+                id="mobileMenuBtn"
+                type="button"
+                aria-label="Open navigation menu"
+                aria-expanded="false"
+            >
 
-                    <h2 class="section-title">
+                <i class="fa-solid fa-bars"></i>
 
-                        <i class="fas fa-book-open"></i>
+            </button>
 
-                        Combined Lesson Note
 
-                    </h2>
+            <div class="portal-brand">
 
 
-                    <div
-                        id="summary"
-                        class="lesson-text"
-                    ></div>
-
-                </section>
-
-
-                <!-- =============================================
-                     DISCUSSION
-                ============================================== -->
-
-                <section class="lesson-section">
-
-                    <h2 class="section-title">
-
-                        <i class="fas fa-comments"></i>
-
-                        Discussion
-
-                    </h2>
-
-
-                    <div
-                        id="discussion"
-                        class="lesson-text"
-                    ></div>
-
-                </section>
-
-
-                <!-- =============================================
-                     READING COMPLETION
-                ============================================== -->
-
-                <section
-                    class="reading-completion"
-                    id="readingCompletion"
+                <img
+                    src="../images/logo.png"
+                    alt="AFC Logo"
+                    class="portal-logo"
                 >
 
 
-                    <div class="reading-completion-header">
+                <div>
 
-
-                        <div class="reading-completion-icon">
-
-                            <i class="fas fa-circle-check"></i>
-
-                        </div>
-
-
-                        <div class="reading-completion-title">
-
-                            <h2>
-
-                                Finish Reading
-
-                            </h2>
-
-
-                            <p>
-
-                                Take a moment to confirm that you have
-                                completed this lesson.
-
-                            </p>
-
-                        </div>
-
-
-                    </div>
-
-
-                    <!-- =========================================
-                         READING TIME
-                    ========================================== -->
-
-                    <div class="reading-time-row">
-
-
-                        <div class="reading-time-label">
-
-                            <i class="fas fa-clock"></i>
-
-                            <span>
-
-                                Estimated reading time
-
-                            </span>
-
-                        </div>
-
-
-                        <span
-                            id="readingTime"
-                            class="reading-time-value"
-                        >
-
-                            -- min
-
-                        </span>
-
-                    </div>
-
-
-                    <!-- =========================================
-                         CONFIRM READING
-                    ========================================== -->
-
-                    <label
-                        class="reading-confirm"
-                        for="lessonReadCheckbox"
-                    >
-
-                        <input
-                            type="checkbox"
-                            id="lessonReadCheckbox"
-                        >
-
-
-                        <span class="custom-check">
-
-                            <i class="fas fa-check"></i>
-
-                        </span>
-
-
-                        <span class="reading-confirm-text">
-
-                            I've read this lesson
-
-                        </span>
-
-                    </label>
-
-
-                    <!-- =========================================
-                         COMPLETE BUTTON
-                    ========================================== -->
-
-                    <button
-                        type="button"
-                        id="finishReadingButton"
-                        class="finish-reading-btn"
-                        disabled
-                    >
-
-                        <span class="finish-reading-icon">
-
-                            <i class="fas fa-check"></i>
-
-                        </span>
-
-
-                        <span>
-
-                            Finish Reading
-
-                        </span>
-
-                    </button>
-
-
-                    <!-- =========================================
-                         LOGIN MESSAGE
-
-                         JS can show this when a visitor is
-                         not authenticated.
-                    ========================================== -->
-
-                    <div
-                        id="readingLoginMessage"
-                        class="reading-login-message"
-                        style="display:none;"
-                    >
-
-                        <i class="fas fa-lock"></i>
-
-
-                        <span>
-
-                            Please log in to confirm that you
-                            have read this lesson.
-
-                        </span>
-
-                    </div>
-
-
-                    <!-- =========================================
-                         SUCCESS MESSAGE
-                    ========================================== -->
-
-                    <div
-                        id="readingSuccessMessage"
-                        class="reading-success-message"
-                        style="display:none;"
-                    >
-
-                        <i class="fas fa-circle-check"></i>
-
-
-                        <span>
-
-                            Lesson completed successfully.
-
-                        </span>
-
-                    </div>
-
-
-                </section>
-
-
-            </section>
-
-
-            <!-- =================================================
-                 LESSON ARCHIVE
-            ================================================== -->
-
-            <section class="archive-card">
-
-
-                <div class="archive-icon">
-
-                    <i class="fas fa-book"></i>
-
-                </div>
-
-
-                <div class="archive-content">
-
-                    <h3>
-
-                        Combined Lesson Archive
-
-                    </h3>
-
+                    <h2>AFC Isiu Youth</h2>
 
                     <p>
+                        Building young people for Christ
+                    </p>
 
-                        Browse all combined lesson notes and
-                        Yoruba audio memory verses.
+                </div>
 
+            </div>
+
+        </div>
+
+
+        <div class="topbar-right">
+
+
+            <button
+                class="header-icon"
+                id="notificationBtn"
+                type="button"
+                aria-label="Notifications"
+            >
+
+                <i class="fa-regular fa-bell"></i>
+
+                <span class="notify-dot"></span>
+
+            </button>
+
+
+            <button
+                class="header-icon"
+                id="themeBtn"
+                type="button"
+                aria-label="Change theme"
+            >
+
+                <i class="fa-solid fa-moon"></i>
+
+            </button>
+
+        </div>
+
+    </header>
+
+
+    <!-- =====================================================
+         LESSON PAGE
+    ====================================================== -->
+
+    <main class="dashboard-content">
+
+
+        <div class="lessons-container">
+
+
+            <!-- PAGE HEADER -->
+
+            <section
+                class="lessons-page-header"
+                data-aos="fade-up"
+            >
+
+                <div>
+
+                    <span class="section-badge">
+                        WEEKLY BIBLE STUDY
+                    </span>
+
+                    <h1>
+                        Weekly Lessons
+                    </h1>
+
+                    <p>
+                        Study the weekly lesson, reflect on God's
+                        Word, and test what you have learned.
                     </p>
 
                 </div>
 
 
-                <a
-                    href="lesson-archive"
-                    class="archive-btn"
-                >
+                <div class="lesson-week-badge">
 
-                    <span>
+                    <i class="fa-solid fa-calendar-week"></i>
 
-                        Open Archive
-
+                    <span id="lessonWeek">
+                        This Week
                     </span>
 
+                </div>
 
-                    <i class="fas fa-arrow-right"></i>
+            </section>
 
-                </a>
+
+            <!-- LOADING -->
+
+            <section
+                class="lesson-loading"
+                id="lessonLoading"
+            >
+
+                <div class="lesson-loader">
+
+                    <i class="fa-solid fa-spinner fa-spin"></i>
+
+                    <p>
+                        Loading this week's lesson...
+                    </p>
+
+                </div>
+
+            </section>
+
+
+            <!-- ERROR -->
+
+            <section
+                class="lesson-error"
+                id="lessonError"
+                hidden
+            >
+
+                <div class="lesson-error-icon">
+
+                    <i class="fa-solid fa-circle-exclamation"></i>
+
+                </div>
+
+                <h2>
+                    Unable to load lesson
+                </h2>
+
+                <p id="lessonErrorMessage">
+                    Something went wrong while loading the lesson.
+                </p>
+
+                <button
+                    type="button"
+                    class="lesson-retry-btn"
+                    id="lessonRetryBtn"
+                >
+
+                    <i class="fa-solid fa-rotate-right"></i>
+
+                    Try Again
+
+                </button>
+
+            </section>
+
+
+            <!-- LESSON -->
+
+            <section
+                class="lesson-reader"
+                id="lessonReader"
+                hidden
+            >
+
+
+                <!-- LESSON HERO -->
+
+                <article class="lesson-hero-card">
+
+
+                    <div class="lesson-hero-top">
+
+
+                        <div class="lesson-class-badge">
+
+                            <i class="fa-solid fa-book-bible"></i>
+
+                            <span id="lessonClass">
+                                Weekly Lesson
+                            </span>
+
+                        </div>
+
+
+                        <div
+                            class="lesson-status-badge"
+                            id="lessonStatus"
+                        >
+
+                            <i class="fa-solid fa-circle-check"></i>
+
+                            Current Lesson
+
+                        </div>
+
+                    </div>
+
+
+                    <h1 id="lessonTitle">
+                        Loading...
+                    </h1>
+
+
+                    <p
+                        class="lesson-introduction"
+                        id="lessonIntroduction"
+                    >
+                        Loading lesson introduction...
+                    </p>
+
+
+                    <div class="lesson-meta">
+
+
+                        <div class="lesson-meta-item">
+
+                            <i class="fa-regular fa-clock"></i>
+
+                            <div>
+
+                                <span>
+                                    Reading time
+                                </span>
+
+                                <strong id="readingTime">
+                                    10 min
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="lesson-meta-item">
+
+                            <i class="fa-solid fa-book-open"></i>
+
+                            <div>
+
+                                <span>
+                                    Lesson
+                                </span>
+
+                                <strong id="lessonNumber">
+                                    This Week
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+                </article>
+
+
+                <!-- MEMORY VERSE -->
+
+                <article
+                    class="lesson-memory-card"
+                    id="memoryVerseCard"
+                >
+
+                    <div class="lesson-section-icon">
+
+                        <i class="fa-solid fa-bookmark"></i>
+
+                    </div>
+
+
+                    <div class="lesson-section-content">
+
+                        <span class="lesson-section-label">
+                            MEMORY VERSE
+                        </span>
+
+                        <p id="memoryVerse">
+                            Loading...
+                        </p>
+
+                        <span
+                            class="memory-verse-reference"
+                            id="memoryVerseReference"
+                        ></span>
+
+                    </div>
+
+                </article>
+
+
+                <!-- BIBLE TEXT -->
+
+                <article class="lesson-info-card">
+
+
+                    <div class="lesson-info-header">
+
+                        <div class="lesson-info-icon">
+
+                            <i class="fa-solid fa-book-bible"></i>
+
+                        </div>
+
+                        <div>
+
+                            <span>
+                                BIBLE TEXT
+                            </span>
+
+                            <h2>
+                                Scripture Reading
+                            </h2>
+
+                        </div>
+
+                    </div>
+
+
+                    <p
+                        class="bible-text"
+                        id="bibleText"
+                    >
+                        Loading...
+                    </p>
+
+                </article>
+
+
+                <!-- LESSON SECTIONS -->
+
+                <article class="lesson-content-card">
+
+
+                    <div class="lesson-content-header">
+
+                        <span class="lesson-section-label">
+                            LESSON NOTE
+                        </span>
+
+                        <h2 id="lessonContentHeading">
+                            Study the Word
+                        </h2>
+
+                    </div>
+
+
+                    <div
+                        class="lesson-body"
+                        id="lessonBody"
+                    >
+                        Loading lesson content...
+                    </div>
+
+                </article>
+
+
+                <!-- KEY LESSONS -->
+
+                <article
+                    class="lesson-key-points-card"
+                    id="keyPointsCard"
+                    hidden
+                >
+
+                    <div class="lesson-content-header">
+
+                        <span class="lesson-section-label">
+                            KEY TAKEAWAYS
+                        </span>
+
+                        <h2>
+                            What to Remember
+                        </h2>
+
+                    </div>
+
+
+                    <div
+                        class="lesson-key-points"
+                        id="keyPoints"
+                    ></div>
+
+                </article>
+
+
+                <!-- FINISH READING -->
+
+                <article class="finish-reading-card">
+
+
+                    <div class="finish-reading-header">
+
+
+                        <div class="finish-reading-icon">
+
+                            <i class="fa-solid fa-check"></i>
+
+                        </div>
+
+
+                        <div>
+
+                            <span class="lesson-section-label">
+                                FINISH READING
+                            </span>
+
+                            <h2>
+                                Have you finished this lesson?
+                            </h2>
+
+                            <p>
+                                Confirm that you have read the lesson
+                                before continuing to your reflection.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="finish-reading-details">
+
+
+                        <div class="reading-time-box">
+
+                            <i class="fa-regular fa-clock"></i>
+
+                            <div>
+
+                                <span>
+                                    Reading time
+                                </span>
+
+                                <strong id="finishReadingTime">
+                                    10 minutes
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <label
+                            class="read-confirmation"
+                            for="lessonReadCheckbox"
+                        >
+
+                            <input
+                                type="checkbox"
+                                id="lessonReadCheckbox"
+                            >
+
+                            <span class="custom-check">
+
+                                <i class="fa-solid fa-check"></i>
+
+                            </span>
+
+
+                            <span class="confirmation-text">
+
+                                I've read this lesson
+
+                            </span>
+
+                        </label>
+
+                    </div>
+
+
+                    <button
+                        type="button"
+                        class="continue-lesson-btn"
+                        id="continueLessonBtn"
+                        disabled
+                    >
+
+                        <span>
+                            Continue to Reflection
+                        </span>
+
+                        <i class="fa-solid fa-arrow-right"></i>
+
+                    </button>
+
+
+                    <p
+                        class="login-required-message"
+                        id="loginRequiredMessage"
+                        hidden
+                    >
+
+                        <i class="fa-solid fa-lock"></i>
+
+                        Please log in to confirm your reading
+                        and continue to the reflection.
+
+                    </p>
+
+                </article>
 
 
             </section>
@@ -621,24 +884,91 @@
 
         </div>
 
+    </main>
 
-    </div>
-
-
-    <!-- =====================================================
-         GLOBAL SHELL
-    ====================================================== -->
-
-    <script src="../js/shell.js"></script>
+</div>
 
 
-    <!-- =====================================================
-         LESSON CONTROLLER
-    ====================================================== -->
+<!-- =========================================================
+     MOBILE BOTTOM NAVIGATION
+========================================================= -->
 
-    <script src="../js/lessons.js"></script>
+<nav
+    class="bottom-nav"
+    aria-label="Mobile navigation"
+>
+
+
+    <a href="../index.html">
+
+        <i class="fa-solid fa-house"></i>
+
+        <span>Home</span>
+
+    </a>
+
+
+    <a
+        href="lessons.html"
+        class="active"
+    >
+
+        <i class="fa-solid fa-book-open"></i>
+
+        <span>Lessons</span>
+
+    </a>
+
+
+    <button
+        class="hub-button"
+        id="hubButton"
+        type="button"
+        aria-label="Open main navigation"
+        aria-expanded="false"
+    >
+
+        <i class="ri-apps-2-line"></i>
+
+    </button>
+
+
+    <a
+        href="gallery.html"
+        data-online-only
+        data-feature="Gallery"
+    >
+
+        <i class="fa-solid fa-images"></i>
+
+        <span>Gallery</span>
+
+    </a>
+
+
+    <a href="profile.html">
+
+        <i class="fa-solid fa-user"></i>
+
+        <span>Profile</span>
+
+    </a>
+
+</nav>
+
+
+<!-- =========================================================
+     SCRIPTS
+========================================================= -->
+
+<script
+    src="https://unpkg.com/aos@2.3.4/dist/aos.js"
+></script>
+
+<script src="../js/main.js"></script>
+
+<script src="../js/lessons.js"></script>
 
 
 </body>
-
 </html>
