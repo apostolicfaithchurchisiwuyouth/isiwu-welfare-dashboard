@@ -1257,30 +1257,49 @@ if (header) {
 
 function updateReadingTime() {
 
-    const lessonContent =
-        document.getElementById("lessonContent");
-
     const readingTime =
-        document.getElementById("readingTime");
+        document.getElementById(
+            "readingTime"
+        );
 
-
-    if (
-        !lessonContent ||
-        !readingTime
-    ) {
+    if (!readingTime) {
 
         return;
 
     }
 
 
+    const contentElements = [
+
+        topicEl,
+
+        bibleTextEl,
+
+        memoryVerseEl,
+
+        summaryEl,
+
+        discussionEl
+
+    ];
+
+
     const text =
-        lessonContent.innerText.trim();
+        contentElements
+            .map(
+                element =>
+                    element
+                        ? element.innerText || ""
+                        : ""
+            )
+            .join(" ")
+            .trim();
 
 
     if (!text) {
 
-        readingTime.textContent = "—";
+        readingTime.textContent =
+            "1 min";
 
         return;
 
@@ -1288,7 +1307,10 @@ function updateReadingTime() {
 
 
     const words =
-        text.split(/\s+/).filter(Boolean).length;
+        text
+            .split(/\s+/)
+            .filter(Boolean)
+            .length;
 
 
     const minutes =
@@ -1309,92 +1331,58 @@ function updateReadingTime() {
 
 function setupReadingConfirmation() {
 
-    const checkbox =
-        document.getElementById(
-            "readConfirmation"
-        );
-
     const button =
         document.getElementById(
-            "confirmReadingBtn"
+            "confirmReadingButton"
         );
 
-    const message =
+    const status =
         document.getElementById(
-            "readingMessage"
+            "readingStatus"
         );
 
 
-    if (
-        !checkbox ||
-        !button
-    ) {
+    if (!button) {
 
         return;
 
     }
 
 
-    checkbox.addEventListener(
-        "change",
-        () => {
-
-            button.disabled =
-                !checkbox.checked;
-
-
-            if (message) {
-
-                message.textContent = "";
-
-                message.className =
-                    "reading-message";
-
-            }
-
-        }
-    );
-
-
     button.addEventListener(
         "click",
         () => {
 
-            if (!checkbox.checked) {
-
-                return;
-
-            }
-
-
-            /*
-             * PHASE 4B:
-             * This currently confirms locally.
-             *
-             * Later we will connect this
-             * to the authenticated user
-             * and Google Apps Script.
-             */
-
-
-            if (message) {
-
-                message.textContent =
-                    "Lesson reading confirmed.";
-
-                message.className =
-                    "reading-message success";
-
-            }
-
+            button.classList.add(
+                "completed"
+            );
 
             button.disabled = true;
 
-            checkbox.disabled = true;
+
+            button.innerHTML = `
+
+                <i class="fas fa-check-circle"></i>
+
+                <span>Lesson Completed</span>
+
+            `;
+
+
+            if (status) {
+
+                status.textContent =
+                    "Great! You have confirmed that you read this lesson.";
+
+                status.classList.add(
+                    "success"
+                );
+
+            }
 
 
             localStorage.setItem(
-                "afc_lesson_reading_confirmed",
+                "lessonReadConfirmed",
                 "true"
             );
 
@@ -1405,6 +1393,44 @@ function setupReadingConfirmation() {
 
         }
     );
+
+
+    const confirmed =
+        localStorage.getItem(
+            "lessonReadConfirmed"
+        );
+
+
+    if (confirmed === "true") {
+
+        button.classList.add(
+            "completed"
+        );
+
+        button.disabled = true;
+
+
+        button.innerHTML = `
+
+            <i class="fas fa-check-circle"></i>
+
+            <span>Lesson Completed</span>
+
+        `;
+
+
+        if (status) {
+
+            status.textContent =
+                "You have already confirmed this lesson.";
+
+            status.classList.add(
+                "success"
+            );
+
+        }
+
+    }
 
 }
 
@@ -1417,26 +1443,27 @@ if (
     "loading"
 ) {
 
-    document.addEventListener(
-        "DOMContentLoaded",
-        () => {
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
 
-            setupReadingConfirmation();
+        loadLessons();
 
-            loadLessons();
+        setupReadingConfirmation();
 
-        }
-    );
-
+    }
+);
+   
 }
 
 else {
 
-    setupReadingConfirmation();
-
     loadLessons();
 
+    setupReadingConfirmation();
+
 }
+
 
 /* =========================================================
    DEBUG
