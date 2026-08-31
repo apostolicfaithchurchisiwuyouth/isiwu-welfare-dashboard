@@ -1,9 +1,9 @@
 /* ============================================================
    AFC ISIU YOUTH PORTAL V2
    FILE: lessons.css
-   PURPOSE: WEEKLY LESSON PAGE ONLY
+   PURPOSE: WEEKLY LESSON PAGE STYLES
    PHASE 4B
-============================================================ */
+   ============================================================ */
 
 
 /* ============================================================
@@ -12,32 +12,15 @@
 
 .lessons-page{
 
-    width:90%;
-
+    width:100%;
     max-width:1100px;
 
     margin:0 auto;
 
     padding:
         24px
-        0
+        clamp(16px,4vw,35px)
         40px;
-
-}
-
-
-/* ============================================================
-   HERO WRAPPER
-============================================================ */
-
-.hero-wrapper{
-
-    width:100%;
-
-    margin:
-        0
-        auto
-        30px;
 
 }
 
@@ -45,6 +28,17 @@
 /* ============================================================
    HERO
 ============================================================ */
+
+.hero-wrapper{
+
+    width:100%;
+
+    margin:
+        0 auto
+        28px;
+
+}
+
 
 .hero-section{
 
@@ -67,19 +61,17 @@
     color:#fff;
 
     border:
-        1px solid rgba(255,255,255,.08);
+        1px solid
+        rgba(255,255,255,.08);
 
     box-shadow:
-        0 25px 60px rgba(8,145,178,.14);
+        0 25px 60px
+        rgba(8,145,178,.14);
 
     isolation:isolate;
 
 }
 
-
-/* ============================================================
-   HERO GLOW
-============================================================ */
 
 .hero-section::before{
 
@@ -90,31 +82,23 @@
     inset:0;
 
     background:
+
         radial-gradient(
             circle at top right,
             rgba(255,255,255,.12),
             transparent 30%
         ),
+
         radial-gradient(
             circle at bottom left,
             rgba(255,255,255,.06),
             transparent 35%
-        ),
-        linear-gradient(
-            120deg,
-            transparent 0%,
-            rgba(255,255,255,.03) 50%,
-            transparent 100%
         );
 
     z-index:-1;
 
 }
 
-
-/* ============================================================
-   HERO GRID TEXTURE
-============================================================ */
 
 .hero-section::after{
 
@@ -125,10 +109,12 @@
     inset:0;
 
     background-image:
+
         linear-gradient(
             rgba(255,255,255,.04) 1px,
             transparent 1px
         ),
+
         linear-gradient(
             90deg,
             rgba(255,255,255,.04) 1px,
@@ -151,10 +137,6 @@
 }
 
 
-/* ============================================================
-   HERO TOP
-============================================================ */
-
 .hero-top{
 
     display:flex;
@@ -169,10 +151,6 @@
 
 }
 
-
-/* ============================================================
-   HERO BADGE
-============================================================ */
 
 .hero-badge{
 
@@ -193,58 +171,37 @@
         blur(18px);
 
     border:
-        1px solid rgba(255,255,255,.08);
+        1px solid
+        rgba(255,255,255,.08);
 
     font-size:.68rem;
 
-    font-family:
-        "DM Sans",
-        sans-serif;
-
 }
 
-
-/* ============================================================
-   HERO ICON
-============================================================ */
 
 .hero-icon{
 
     width:45px;
-
     height:45px;
 
     flex-shrink:0;
 
-    border-radius:18px;
-
     display:flex;
 
     align-items:center;
-
     justify-content:center;
 
+    border-radius:18px;
+
     background:
-        linear-gradient(
-            135deg,
-            rgba(255,255,255,.14),
-            rgba(255,255,255,.06)
-        );
+        rgba(255,255,255,.10);
 
     border:
-        1px solid rgba(255,255,255,.08);
-
-    backdrop-filter:
-        blur(20px);
-
-    font-size:1.15rem;
+        1px solid
+        rgba(255,255,255,.08);
 
 }
 
-
-/* ============================================================
-   HERO TEXT
-============================================================ */
 
 .hero-text-block{
 
@@ -259,7 +216,7 @@
 
 .hero-heading{
 
-    margin:0 0 12px;
+    margin-bottom:12px;
 
     font-family:
         "Bricolage Grotesque",
@@ -278,8 +235,6 @@
 
 .hero-description{
 
-    margin:0;
-
     max-width:470px;
 
     font-family:
@@ -288,7 +243,7 @@
 
     font-size:.72rem;
 
-    line-height:1.55;
+    line-height:1.6;
 
     color:
         rgba(255,255,255,.85);
@@ -308,10 +263,7 @@
 
     gap:10px;
 
-    margin:
-        0
-        0
-        24px;
+    margin-bottom:24px;
 
 }
 
@@ -322,24 +274,28 @@
         9px
         15px;
 
+    border:none;
+
     border-radius:999px;
 
     background:#f1f5f9;
 
     color:#0f172a;
 
-    font-size:.72rem;
-
-    font-weight:500;
-
     font-family:
         "DM Sans",
         sans-serif;
 
+    font-size:.72rem;
+
+    font-weight:500;
+
+    cursor:pointer;
+
     transition:
-        transform .2s ease,
-        background .2s ease,
-        color .2s ease;
+        transform .25s ease,
+        background .25s ease,
+        color .25s ease;
 
 }
 
@@ -364,7 +320,8 @@
         );
 
     box-shadow:
-        0 10px 25px rgba(234,88,12,.25);
+        0 10px 25px
+        rgba(234,88,12,.25);
 
 }
 
@@ -375,20 +332,22 @@
 
 .lesson-card{
 
+    width:100%;
+
     background:#fff;
+
+    border:
+        1px solid
+        #ececec;
 
     border-radius:28px;
 
     padding:
         clamp(18px,4vw,30px);
 
-    border:
-        1px solid #ececec;
-
     box-shadow:
-        0 15px 45px rgba(0,0,0,.05);
-
-    margin-bottom:24px;
+        0 15px 45px
+        rgba(0,0,0,.05);
 
 }
 
@@ -404,7 +363,8 @@
     padding-bottom:22px;
 
     border-bottom:
-        1px solid #edf2f7;
+        1px solid
+        #edf2f7;
 
 }
 
@@ -445,16 +405,20 @@
 
     color:#ea580c;
 
-    font-size:.68rem;
-
     font-family:
         "DM Sans",
         sans-serif;
+
+    font-size:.68rem;
 
 }
 
 
 .lesson-meta{
+
+    font-family:
+        "DM Sans",
+        sans-serif;
 
     font-size:.68rem;
 
@@ -466,8 +430,6 @@
 
 
 .lesson-topic{
-
-    margin:0;
 
     font-family:
         "Bricolage Grotesque",
@@ -483,7 +445,7 @@
 
 
 /* ============================================================
-   LESSON GRID
+   BIBLE / MEMORY GRID
 ============================================================ */
 
 .lesson-grid{
@@ -505,7 +467,8 @@
     background:#fafafa;
 
     border:
-        1px solid #eef2f7;
+        1px solid
+        #eef2f7;
 
     border-radius:20px;
 
@@ -516,19 +479,15 @@
 
 .info-card h3{
 
-    margin:0 0 10px;
+    margin-bottom:10px;
 
     font-family:
         "Bricolage Grotesque",
         sans-serif;
 
-    color:#ea580c;
-
     font-size:.6rem;
 
-    text-transform:uppercase;
-
-    letter-spacing:.04em;
+    color:#ea580c;
 
 }
 
@@ -555,41 +514,6 @@
 
 
 /* ============================================================
-   SECTION
-============================================================ */
-
-.lesson-section{
-
-    margin-top:20px;
-
-    padding:24px;
-
-    background:#fcfcfc;
-
-    border:
-        1px solid #eef2f7;
-
-    border-radius:20px;
-
-}
-
-
-.section-title{
-
-    margin:0 0 14px;
-
-    font-family:
-        "Bricolage Grotesque",
-        sans-serif;
-
-    font-size:.84rem;
-
-    color:#0f172a;
-
-}
-
-
-/* ============================================================
    AUDIO
 ============================================================ */
 
@@ -607,7 +531,8 @@
     background:#fafafa;
 
     border:
-        1px solid #eef2f7;
+        1px solid
+        #eef2f7;
 
 }
 
@@ -622,10 +547,70 @@
 
 
 /* ============================================================
-   READING STATUS
+   LESSON SECTIONS
 ============================================================ */
 
-.reading-status-card{
+.lesson-section{
+
+    margin-top:20px;
+
+    padding:24px;
+
+    background:#fcfcfc;
+
+    border:
+        1px solid
+        #eef2f7;
+
+    border-radius:20px;
+
+}
+
+
+.section-title{
+
+    margin-bottom:14px;
+
+    font-family:
+        "Bricolage Grotesque",
+        sans-serif;
+
+    font-size:.84rem;
+
+    font-weight:700;
+
+    color:#0f172a;
+
+}
+
+
+/* ============================================================
+   READING COMPLETION
+============================================================ */
+
+.reading-completion{
+
+    margin-top:24px;
+
+    padding:24px;
+
+    border-radius:22px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #f8fafc,
+            #f1f5f9
+        );
+
+    border:
+        1px solid
+        #e2e8f0;
+
+}
+
+
+.reading-completion-header{
 
     display:flex;
 
@@ -633,30 +618,16 @@
 
     gap:14px;
 
-    margin-top:20px;
-
-    padding:18px;
-
-    border-radius:20px;
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(234,88,12,.06),
-            rgba(251,146,60,.04)
-        );
-
-    border:
-        1px solid rgba(234,88,12,.12);
+    margin-bottom:20px;
 
 }
 
 
-.reading-status-icon{
+.reading-completion-icon{
 
-    width:44px;
+    width:46px;
 
-    height:44px;
+    height:46px;
 
     flex-shrink:0;
 
@@ -666,7 +637,7 @@
 
     justify-content:center;
 
-    border-radius:14px;
+    border-radius:15px;
 
     background:
         linear-gradient(
@@ -677,33 +648,37 @@
 
     color:#fff;
 
+    box-shadow:
+        0 8px 20px
+        rgba(234,88,12,.20);
+
 }
 
 
-.reading-status-content h3{
-
-    margin:0 0 3px;
+.reading-completion-title{
 
     font-family:
         "Bricolage Grotesque",
         sans-serif;
 
-    font-size:.78rem;
+    font-size:.95rem;
+
+    font-weight:700;
 
     color:#0f172a;
 
 }
 
 
-.reading-status-content p{
+.reading-completion-subtitle{
 
-    margin:0;
+    margin-top:3px;
 
     font-family:
         "DM Sans",
         sans-serif;
 
-    font-size:.65rem;
+    font-size:.68rem;
 
     color:#64748b;
 
@@ -711,128 +686,60 @@
 
 
 /* ============================================================
-   READING CONFIRMATION
+   READING TIME
 ============================================================ */
 
-.reading-confirmation{
+.reading-time{
 
-    margin-top:16px;
-
-    padding:20px;
-
-    border:
-        1px solid #eef2f7;
-
-    border-radius:20px;
-
-    background:#fff;
-
-}
-
-
-.reading-checkbox{
-
-    display:flex;
+    display:inline-flex;
 
     align-items:center;
 
-    gap:10px;
+    gap:7px;
 
-    cursor:pointer;
+    margin-bottom:16px;
 
-    user-select:none;
+    padding:
+        8px
+        12px;
 
-}
-
-
-.reading-checkbox input{
-
-    position:absolute;
-
-    opacity:0;
-
-    pointer-events:none;
-
-}
-
-
-.custom-check{
-
-    width:22px;
-
-    height:22px;
-
-    flex-shrink:0;
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    border:
-        2px solid #cbd5e1;
-
-    border-radius:7px;
+    border-radius:999px;
 
     background:#fff;
 
-    transition:
-        .2s ease;
+    border:
+        1px solid
+        #e2e8f0;
 
-}
-
-
-.reading-checkbox input:checked + .custom-check{
-
-    background:#ea580c;
-
-    border-color:#ea580c;
-
-}
-
-
-.reading-checkbox input:checked + .custom-check::after{
-
-    content:"✓";
-
-    color:#fff;
-
-    font-size:.72rem;
-
-    font-weight:700;
-
-}
-
-
-.reading-checkbox-text{
+    color:#475569;
 
     font-family:
         "DM Sans",
         sans-serif;
 
-    font-size:.72rem;
+    font-size:.68rem;
 
     font-weight:600;
 
-    color:#334155;
+}
+
+
+.reading-time i{
+
+    color:#ea580c;
 
 }
 
 
 /* ============================================================
-   CONFIRM BUTTON
+   CONFIRM READING BUTTON
 ============================================================ */
 
-.confirm-reading-btn{
+.reading-confirm{
 
     width:100%;
 
-    margin-top:15px;
-
-    padding:
-        12px
-        18px;
+    min-height:48px;
 
     display:flex;
 
@@ -840,62 +747,101 @@
 
     justify-content:center;
 
-    gap:8px;
+    gap:9px;
 
-    border-radius:999px;
+    padding:
+        13px
+        18px;
+
+    border:none;
+
+    border-radius:14px;
 
     background:
         linear-gradient(
             135deg,
-            #ea580c,
-            #fb923c
+            #0f172a,
+            #0891b2
         );
 
     color:#fff;
 
     font-family:
-        "DM Sans",
+        "Bricolage Grotesque",
         sans-serif;
 
-    font-size:.7rem;
+    font-size:.76rem;
 
     font-weight:700;
 
     cursor:pointer;
 
+    box-shadow:
+        0 10px 25px
+        rgba(8,145,178,.18);
+
     transition:
-        opacity .2s ease,
-        transform .2s ease,
-        box-shadow .2s ease;
+        transform .25s ease,
+        box-shadow .25s ease,
+        opacity .25s ease;
 
 }
 
 
-.confirm-reading-btn:hover:not(:disabled){
+.reading-confirm:hover{
 
     transform:
-        translateY(-1px);
+        translateY(-2px);
 
     box-shadow:
-        0 10px 25px rgba(234,88,12,.2);
+        0 15px 32px
+        rgba(8,145,178,.24);
 
 }
 
 
-.confirm-reading-btn:disabled{
+.reading-confirm:active{
 
-    opacity:.45;
-
-    cursor:not-allowed;
-
-    box-shadow:none;
+    transform:
+        translateY(0);
 
 }
 
 
-.reading-message{
+.reading-confirm.completed{
 
-    margin:10px 0 0;
+    background:
+        linear-gradient(
+            135deg,
+            #15803d,
+            #16a34a
+        );
+
+    box-shadow:
+        0 10px 25px
+        rgba(22,163,74,.18);
+
+}
+
+
+.reading-confirm:disabled{
+
+    cursor:default;
+
+}
+
+
+/* ============================================================
+   READING STATUS
+============================================================ */
+
+.reading-status{
+
+    margin-top:12px;
+
+    min-height:18px;
+
+    text-align:center;
 
     font-family:
         "DM Sans",
@@ -903,23 +849,16 @@
 
     font-size:.65rem;
 
-    line-height:1.5;
-
     color:#64748b;
 
 }
 
 
-.reading-message.success{
+.reading-status.success{
 
     color:#15803d;
 
-}
-
-
-.reading-message.warning{
-
-    color:#b45309;
+    font-weight:600;
 
 }
 
@@ -936,17 +875,21 @@
 
     gap:18px;
 
+    margin-top:24px;
+
     padding:24px;
 
     background:#fff;
 
     border:
-        1px solid #ececec;
+        1px solid
+        #ececec;
 
     border-radius:24px;
 
     box-shadow:
-        0 10px 35px rgba(0,0,0,.05);
+        0 10px 35px
+        rgba(0,0,0,.05);
 
 }
 
@@ -988,7 +931,7 @@
 
 .archive-content h3{
 
-    margin:0 0 6px;
+    margin-bottom:6px;
 
     font-family:
         "Bricolage Grotesque",
@@ -1000,8 +943,6 @@
 
 
 .archive-content p{
-
-    margin:0;
 
     font-family:
         "DM Sans",
@@ -1026,6 +967,13 @@
 
     color:#fff;
 
+    background:
+        linear-gradient(
+            135deg,
+            #0f172a,
+            #0891b2
+        );
+
     font-family:
         "DM Sans",
         sans-serif;
@@ -1034,17 +982,10 @@
 
     font-weight:700;
 
-    background:
-        linear-gradient(
-            135deg,
-            #0f172a,
-            #0891b2
-        );
-
     white-space:nowrap;
 
     transition:
-        transform .2s ease;
+        transform .25s ease;
 
 }
 
@@ -1076,26 +1017,14 @@
    MOBILE
 ============================================================ */
 
-@media(max-width:768px){
+@media(max-width:700px){
 
     .lessons-page{
 
-        width:
-            calc(
-                100% - 28px
-            );
-
         padding:
             18px
-            0
-            25px;
-
-    }
-
-
-    .hero-wrapper{
-
-        margin-bottom:22px;
+            16px
+            30px;
 
     }
 
@@ -1105,37 +1034,6 @@
         padding:24px;
 
         border-radius:25px;
-
-    }
-
-
-    .hero-top{
-
-        margin-bottom:20px;
-
-    }
-
-
-    .hero-badge{
-
-        padding:
-            7px
-            12px;
-
-        font-size:.6rem;
-
-    }
-
-
-    .hero-icon{
-
-        width:45px;
-
-        height:45px;
-
-        min-width:45px;
-
-        font-size:.9rem;
 
     }
 
@@ -1154,9 +1052,23 @@
     }
 
 
-    .tabs{
+    .hero-badge{
 
-        margin-bottom:18px;
+        padding:
+            7px
+            12px;
+
+        font-size:.6rem;
+
+    }
+
+
+    .hero-icon{
+
+        width:43px;
+        height:43px;
+
+        font-size:.9rem;
 
     }
 
@@ -1202,16 +1114,20 @@
     }
 
 
-    .reading-status-card{
+    .reading-completion{
 
-        padding:16px;
+        padding:18px;
+
+        border-radius:18px;
 
     }
 
 
-    .reading-confirmation{
+    .reading-confirm{
 
-        padding:17px;
+        min-height:46px;
+
+        font-size:.72rem;
 
     }
 
@@ -1242,23 +1158,6 @@
 
 @media(max-width:380px){
 
-    .lessons-page{
-
-        width:
-            calc(
-                100% - 20px
-            );
-
-    }
-
-
-    .hero-section{
-
-        padding:20px;
-
-    }
-
-
     .hero-heading{
 
         font-size:.9rem;
@@ -1273,9 +1172,9 @@
     }
 
 
-    .reading-status-content h3{
+    .reading-completion-title{
 
-        font-size:.74rem;
+        font-size:.88rem;
 
     }
 
