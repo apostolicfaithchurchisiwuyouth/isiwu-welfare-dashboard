@@ -10,31 +10,20 @@
         content="width=device-width, initial-scale=1.0"
     >
 
+    <title>Weekly Lessons | AFC Isiwu Youth</title>
+
     <meta
         name="theme-color"
         content="#ea580c"
     >
-
-    <meta
-        name="description"
-        content="Weekly Bible lessons for AFC Isiwu Youth."
-    >
-
-    <title>Weekly Lessons | AFC Isiu Youth</title>
-
-
-    <!-- =====================================================
-         PWA
-    ====================================================== -->
 
     <link
         rel="manifest"
         href="../manifest.json"
     >
 
-
     <!-- =====================================================
-         GOOGLE FONTS
+         FONTS
     ====================================================== -->
 
     <link
@@ -53,7 +42,6 @@
         rel="stylesheet"
     >
 
-
     <!-- =====================================================
          FONT AWESOME
     ====================================================== -->
@@ -63,9 +51,8 @@
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
     >
 
-
     <!-- =====================================================
-         GLOBAL PORTAL SHELL
+         GLOBAL SHELL
     ====================================================== -->
 
     <link
@@ -78,7 +65,6 @@
         href="../css/shell.css"
     >
 
-
     <!-- =====================================================
          LESSON PAGE
     ====================================================== -->
@@ -87,7 +73,6 @@
         rel="stylesheet"
         href="../css/lessons.css"
     >
-
 
     <!-- =====================================================
          PAPAPARSE
@@ -106,24 +91,23 @@
     <!-- =====================================================
          PAGE CONTENT
 
-         IMPORTANT:
-         shell.js searches for [data-page-content]
-         and moves everything inside it into #pageContent.
+         shell.js will automatically move everything inside
+         this container into the global portal shell.
     ====================================================== -->
 
     <div data-page-content>
 
 
         <!-- =================================================
-             LESSON PAGE
+             LESSONS PAGE
         ================================================== -->
 
         <div class="lessons-page">
 
 
-            <!-- =============================================
+            <!-- =================================================
                  HERO
-            ============================================== -->
+            ================================================== -->
 
             <section class="hero-wrapper">
 
@@ -163,23 +147,23 @@
 
                         <p class="hero-description">
 
-                            Study Sunday School lessons,
-                            memory verses, Bible texts and
-                            discussion points for Senior,
+                            Study Sunday School lessons, memory verses,
+                            Bible texts and discussion points for Senior,
                             Junior and Elementary classes.
 
                         </p>
 
                     </div>
 
+
                 </div>
 
             </section>
 
 
-            <!-- =============================================
+            <!-- =================================================
                  CLASS TABS
-            ============================================== -->
+            ================================================== -->
 
             <section
                 class="tabs"
@@ -191,7 +175,9 @@
                     class="tab active"
                     data-class="Senior"
                 >
+
                     Senior
+
                 </button>
 
 
@@ -200,7 +186,9 @@
                     class="tab"
                     data-class="Junior"
                 >
+
                     Junior
+
                 </button>
 
 
@@ -209,25 +197,26 @@
                     class="tab"
                     data-class="Elementary"
                 >
+
                     Elementary
+
                 </button>
 
             </section>
 
 
-            <!-- =============================================
-                 LESSON CARD
-            ============================================== -->
+            <!-- =================================================
+                 MAIN LESSON CARD
+            ================================================== -->
 
             <section class="lesson-card">
 
 
-                <!-- =========================================
+                <!-- =============================================
                      LESSON HEADER
-                ========================================== -->
+                ============================================== -->
 
                 <div class="lesson-header">
-
 
                     <div class="lesson-header-top">
 
@@ -262,203 +251,232 @@
                 </div>
 
 
-                <!-- =========================================
-                     LESSON CONTENT WRAPPER
+                <!-- =============================================
+                     BIBLE TEXT + MEMORY VERSE
+                ============================================== -->
 
-                     Used by lessons.js to calculate
-                     reading time.
-                ========================================== -->
-
-                <div id="lessonContent">
+                <div class="lesson-grid">
 
 
-                    <!-- =====================================
-                         BIBLE TEXT + MEMORY VERSE
-                    ====================================== -->
+                    <div class="info-card">
 
-                    <div class="lesson-grid">
+                        <h3>
 
+                            Bible Text
 
-                        <div class="info-card">
-
-                            <h3>
-
-                                Bible Text
-
-                            </h3>
+                        </h3>
 
 
-                            <div
-                                class="lesson-text"
-                                id="bibleText"
-                            ></div>
-
-                        </div>
-
-
-                        <div class="info-card">
-
-                            <h3>
-
-                                Memory Verse
-
-                            </h3>
-
-
-                            <div
-                                class="lesson-text"
-                                id="memoryVerse"
-                            ></div>
-
-                        </div>
+                        <div
+                            id="bibleText"
+                            class="lesson-text"
+                        ></div>
 
                     </div>
 
 
-                    <!-- =====================================
-                         YORUBA AUDIO
-                    ====================================== -->
+                    <div class="info-card">
 
-                    <div
-                        id="yorubaAudioContainer"
-                        class="audio-card"
-                        style="display:none;"
-                    >
+                        <h3>
 
-                        <div class="section-title">
+                            Memory Verse
 
-                            Memory Verse In Yoruba
-
-                        </div>
+                        </h3>
 
 
-                        <audio
-                            controls
-                            preload="none"
-                            id="yorubaAudioPlayer"
-                        >
-
-                            <source
-                                id="yorubaAudioSource"
-                                src=""
-                                type="audio/mpeg"
-                            >
-
-                            Your browser does not support
-                            audio playback.
-
-                        </audio>
+                        <div
+                            id="memoryVerse"
+                            class="lesson-text"
+                        ></div>
 
                     </div>
-
-
-                    <!-- =====================================
-                         COMBINED LESSON NOTE
-                    ====================================== -->
-
-                    <section class="lesson-section">
-
-                        <h2 class="section-title">
-
-                            Combined Lesson Note
-
-                        </h2>
-
-
-                        <div
-                            class="lesson-text"
-                            id="summary"
-                        ></div>
-
-                    </section>
-
-
-                    <!-- =====================================
-                         DISCUSSION
-                    ====================================== -->
-
-                    <section class="lesson-section">
-
-                        <h2 class="section-title">
-
-                            Discussion
-
-                        </h2>
-
-
-                        <div
-                            class="lesson-text"
-                            id="discussion"
-                        ></div>
-
-                    </section>
 
 
                 </div>
 
 
-                <!-- =========================================
-                     READING PROGRESS
-                ========================================== -->
+                <!-- =============================================
+                     YORUBA AUDIO
+                ============================================== -->
 
-                <section class="reading-status-card">
+                <div
+                    id="yorubaAudioContainer"
+                    class="audio-card"
+                    style="display:none;"
+                >
 
+                    <div class="section-title">
 
-                    <div class="reading-status-icon">
+                        <i class="fas fa-volume-high"></i>
 
-                        <i class="fas fa-book-reader"></i>
-
-                    </div>
-
-
-                    <div class="reading-status-content">
-
-                        <h3>
-
-                            Finish Reading
-
-                        </h3>
-
-
-                        <p>
-
-                            Reading time:
-
-                            <strong
-                                id="readingTime"
-                            >
-                                —
-                            </strong>
-
-                        </p>
+                        Memory Verse In Yoruba
 
                     </div>
+
+
+                    <audio
+                        id="yorubaAudioPlayer"
+                        controls
+                        preload="none"
+                    >
+
+                        <source
+                            id="yorubaAudioSource"
+                            src=""
+                            type="audio/mpeg"
+                        >
+
+                        Your browser does not support
+                        audio playback.
+
+                    </audio>
+
+                </div>
+
+
+                <!-- =============================================
+                     COMBINED LESSON NOTE
+                ============================================== -->
+
+                <section class="lesson-section">
+
+                    <h2 class="section-title">
+
+                        <i class="fas fa-book-open"></i>
+
+                        Combined Lesson Note
+
+                    </h2>
+
+
+                    <div
+                        id="summary"
+                        class="lesson-text"
+                    ></div>
 
                 </section>
 
 
-                <!-- =========================================
-                     CONFIRM READING
+                <!-- =============================================
+                     DISCUSSION
+                ============================================== -->
 
-                     Logged-in users will be able to use
-                     this in the next authentication flow.
-                ========================================== -->
+                <section class="lesson-section">
 
-                <section class="reading-confirmation">
+                    <h2 class="section-title">
+
+                        <i class="fas fa-comments"></i>
+
+                        Discussion
+
+                    </h2>
 
 
-                    <label class="reading-checkbox">
+                    <div
+                        id="discussion"
+                        class="lesson-text"
+                    ></div>
+
+                </section>
+
+
+                <!-- =============================================
+                     READING COMPLETION
+                ============================================== -->
+
+                <section
+                    class="reading-completion"
+                    id="readingCompletion"
+                >
+
+
+                    <div class="reading-completion-header">
+
+
+                        <div class="reading-completion-icon">
+
+                            <i class="fas fa-circle-check"></i>
+
+                        </div>
+
+
+                        <div class="reading-completion-title">
+
+                            <h2>
+
+                                Finish Reading
+
+                            </h2>
+
+
+                            <p>
+
+                                Take a moment to confirm that you have
+                                completed this lesson.
+
+                            </p>
+
+                        </div>
+
+
+                    </div>
+
+
+                    <!-- =========================================
+                         READING TIME
+                    ========================================== -->
+
+                    <div class="reading-time-row">
+
+
+                        <div class="reading-time-label">
+
+                            <i class="fas fa-clock"></i>
+
+                            <span>
+
+                                Estimated reading time
+
+                            </span>
+
+                        </div>
+
+
+                        <span
+                            id="readingTime"
+                            class="reading-time-value"
+                        >
+
+                            -- min
+
+                        </span>
+
+                    </div>
+
+
+                    <!-- =========================================
+                         CONFIRM READING
+                    ========================================== -->
+
+                    <label
+                        class="reading-confirm"
+                        for="lessonReadCheckbox"
+                    >
 
                         <input
                             type="checkbox"
-                            id="readConfirmation"
+                            id="lessonReadCheckbox"
                         >
 
 
-                        <span class="custom-check"></span>
+                        <span class="custom-check">
+
+                            <i class="fas fa-check"></i>
+
+                        </span>
 
 
-                        <span class="reading-checkbox-text">
+                        <span class="reading-confirm-text">
 
                             I've read this lesson
 
@@ -467,25 +485,80 @@
                     </label>
 
 
+                    <!-- =========================================
+                         COMPLETE BUTTON
+                    ========================================== -->
+
                     <button
                         type="button"
-                        id="confirmReadingBtn"
-                        class="confirm-reading-btn"
+                        id="finishReadingButton"
+                        class="finish-reading-btn"
                         disabled
                     >
 
-                        <i class="fas fa-check"></i>
+                        <span class="finish-reading-icon">
 
-                        Confirm I've Read This Lesson
+                            <i class="fas fa-check"></i>
+
+                        </span>
+
+
+                        <span>
+
+                            Finish Reading
+
+                        </span>
 
                     </button>
 
 
-                    <p
-                        id="readingMessage"
-                        class="reading-message"
-                        aria-live="polite"
-                    ></p>
+                    <!-- =========================================
+                         LOGIN MESSAGE
+
+                         JS can show this when a visitor is
+                         not authenticated.
+                    ========================================== -->
+
+                    <div
+                        id="readingLoginMessage"
+                        class="reading-login-message"
+                        style="display:none;"
+                    >
+
+                        <i class="fas fa-lock"></i>
+
+
+                        <span>
+
+                            Please log in to confirm that you
+                            have read this lesson.
+
+                        </span>
+
+                    </div>
+
+
+                    <!-- =========================================
+                         SUCCESS MESSAGE
+                    ========================================== -->
+
+                    <div
+                        id="readingSuccessMessage"
+                        class="reading-success-message"
+                        style="display:none;"
+                    >
+
+                        <i class="fas fa-circle-check"></i>
+
+
+                        <span>
+
+                            Lesson completed successfully.
+
+                        </span>
+
+                    </div>
+
 
                 </section>
 
@@ -493,9 +566,9 @@
             </section>
 
 
-            <!-- =============================================
-                 ARCHIVE
-            ============================================== -->
+            <!-- =================================================
+                 LESSON ARCHIVE
+            ================================================== -->
 
             <section class="archive-card">
 
@@ -518,8 +591,8 @@
 
                     <p>
 
-                        Browse all combined lesson notes
-                        and Yoruba audio memory verses.
+                        Browse all combined lesson notes and
+                        Yoruba audio memory verses.
 
                     </p>
 
@@ -531,9 +604,17 @@
                     class="archive-btn"
                 >
 
-                    Open Archive
+                    <span>
+
+                        Open Archive
+
+                    </span>
+
+
+                    <i class="fas fa-arrow-right"></i>
 
                 </a>
+
 
             </section>
 
@@ -561,4 +642,3 @@
 </body>
 
 </html>
-
