@@ -14,19 +14,16 @@
    Discussion
    YorubaAudio
 
+   YORUBA AUDIO EXAMPLE:
+
+   /audio/Junior-83.mp3
+
    IMPORTANT:
-
-   - Summary = full lesson content.
-   - Discussion = discussion questions.
-   - Topic = displayed in the Lesson Topic Card.
-   - Lesson = displayed in the Lesson information card.
-   - YorubaAudio may contain:
-
-       /audio/Junior-83.mp3
-
-   - Relative audio paths are supported.
-   - No duplicate lesson content.
-   - No permanent loading spinner.
+   - Summary contains HTML and is rendered as HTML.
+   - Discussion contains discussion questions.
+   - Topic appears only in the Lesson Topic Card.
+   - Lesson number appears only in the information card.
+   - YorubaAudio supports local paths and full URLs.
    ========================================================= */
 
 "use strict";
@@ -37,7 +34,7 @@
 ========================================================= */
 
 const LESSONS_CSV_URL =
-    "https://docs.google.com/spreadsheets/d/e/2PACX-1vQHlE5IpmFYaQyW5u-rentH2fGC5VZJ2w9Ql1WI-X8bE76qlN5_ttDIitwlXX1CM4sqdEW8RroDUNSU/pub?gid=201183837&single=true&output=csv";
+    "https://docs.google.com/spreadsheets/d/e/2PACX-1vQHlE5IpmFYaQyW5u-rentH2fGC5VJZ2w9Ql1WI-X8bE76qlN5_ttDIitwlXX1CM4sqdEW8RroDUNSU/pub?gid=201183837&single=true&output=csv";
 
 
 /* =========================================================
@@ -67,7 +64,7 @@ function getElement(id) {
 
 
 /* =========================================================
-   TEXT HELPERS
+   TEXT HELPER
 ========================================================= */
 
 function cleanText(value) {
@@ -81,7 +78,6 @@ function cleanText(value) {
 
     }
 
-
     return String(value)
         .replace(/\u00A0/g, " ")
         .trim();
@@ -90,7 +86,7 @@ function cleanText(value) {
 
 
 /* =========================================================
-   ESCAPE HTML
+   HTML ESCAPE
 ========================================================= */
 
 function escapeHTML(value) {
@@ -106,7 +102,7 @@ function escapeHTML(value) {
 
 
 /* =========================================================
-   NORMALIZE HEADER
+   NORMALIZE SHEET HEADER
 ========================================================= */
 
 function normalizeHeader(value) {
@@ -132,7 +128,6 @@ function getSheetValue(
         return "";
 
     }
-
 
     const keys =
         Object.keys(row);
@@ -185,19 +180,25 @@ function normalizeLessonRow(row) {
         lesson:
             getSheetValue(
                 row,
-                ["Lesson"]
+                [
+                    "Lesson"
+                ]
             ),
 
         className:
             getSheetValue(
                 row,
-                ["Class"]
+                [
+                    "Class"
+                ]
             ),
 
         topic:
             getSheetValue(
                 row,
-                ["Topic"]
+                [
+                    "Topic"
+                ]
             ),
 
         bibleText:
@@ -205,7 +206,8 @@ function normalizeLessonRow(row) {
                 row,
                 [
                     "BibleText",
-                    "Bible Text"
+                    "Bible Text",
+                    "Bible_Text"
                 ]
             ),
 
@@ -214,7 +216,8 @@ function normalizeLessonRow(row) {
                 row,
                 [
                     "MemoryVerse",
-                    "Memory Verse"
+                    "Memory Verse",
+                    "Memory_Verse"
                 ]
             ),
 
@@ -239,7 +242,8 @@ function normalizeLessonRow(row) {
                 row,
                 [
                     "YorubaAudio",
-                    "Yoruba Audio"
+                    "Yoruba Audio",
+                    "Yoruba_Audio"
                 ]
             )
 
@@ -249,39 +253,65 @@ function normalizeLessonRow(row) {
 
 
 /* =========================================================
-   FORMAT LESSON CONTENT
-   Supports HTML stored directly in the Google Sheet Summary
+   RENDER SUMMARY HTML
+=========================================================
+
+   The Summary column contains actual HTML.
+
+   Example:
+
+   <h3>Introduction</h3>
+
+   <p>
+       Jesus taught His disciples...
+   </p>
+
+   <h3>Lesson Objective</h3>
+
+   <p>
+       We should trust God...
+   </p>
+
+   This function intentionally DOES NOT escape the HTML.
 ========================================================= */
 
 function formatLessonContent(html) {
 
-    const value = cleanText(html);
+    const value =
+        cleanText(html);
+
 
     if (!value) {
 
         return `
+
             <div class="lesson-empty-state">
+
                 <i class="fa-regular fa-file-lines"></i>
-                <p>Lesson content is not available yet.</p>
+
+                <p>
+                    Lesson content is not available yet.
+                </p>
+
             </div>
+
         `;
 
     }
 
-    /*
-     * Summary is trusted HTML coming from your
-     * WeeklyLesson Google Sheet.
-     *
-     * Render it as HTML so headings, paragraphs,
-     * lists, bold text, etc. work properly.
-     */
+
     return `
+
         <div class="lesson-rich-content">
+
             ${value}
+
         </div>
+
     `;
 
 }
+
 
 /* =========================================================
    FORMAT DISCUSSION
@@ -296,6 +326,7 @@ function formatDiscussion(text) {
     if (!value) {
 
         return `
+
             <div class="discussion-empty">
 
                 <i class="fa-regular fa-comments"></i>
@@ -305,6 +336,7 @@ function formatDiscussion(text) {
                 </p>
 
             </div>
+
         `;
 
     }
@@ -321,6 +353,10 @@ function formatDiscussion(text) {
             .filter(Boolean);
 
 
+    /*
+       Also support one question per line.
+    */
+
     if (items.length <= 1) {
 
         items =
@@ -332,20 +368,28 @@ function formatDiscussion(text) {
     }
 
 
-    if (items.length === 1) {
+    /*
+       Remove empty items.
+    */
+
+    items =
+        items.filter(Boolean);
+
+
+    if (!items.length) {
 
         return `
-            <div class="discussion-question">
 
-                <span class="discussion-number">
-                    1
-                </span>
+            <div class="discussion-empty">
+
+                <i class="fa-regular fa-comments"></i>
 
                 <p>
-                    ${items[0]}
+                    No discussion questions have been added yet.
                 </p>
 
             </div>
+
         `;
 
     }
@@ -355,6 +399,7 @@ function formatDiscussion(text) {
         .map((item, index) => {
 
             return `
+
                 <div class="discussion-question">
 
                     <span class="discussion-number">
@@ -373,6 +418,7 @@ function formatDiscussion(text) {
                     </p>
 
                 </div>
+
             `;
 
         })
@@ -388,6 +434,11 @@ function formatDiscussion(text) {
 async function fetchWeeklyLessons() {
 
     try {
+
+        console.log(
+            "AFC Isiu — Fetching lessons..."
+        );
+
 
         const response =
             await fetch(
@@ -442,6 +493,19 @@ async function fetchWeeklyLessons() {
             );
 
 
+        if (
+            result.errors &&
+            result.errors.length
+        ) {
+
+            console.warn(
+                "Lesson CSV parsing warnings:",
+                result.errors
+            );
+
+        }
+
+
         lessonsData =
             result.data
                 .map(normalizeLessonRow)
@@ -457,7 +521,7 @@ async function fetchWeeklyLessons() {
 
 
         console.log(
-            "Parsed Lessons:",
+            "AFC Isiu — Parsed Lessons:",
             lessonsData
         );
 
@@ -478,13 +542,14 @@ async function fetchWeeklyLessons() {
     catch (error) {
 
         console.error(
-            "Weekly Lessons Error:",
+            "AFC Isiu — Weekly Lessons Error:",
             error
         );
 
 
         renderFetchError(
-            error.message
+            error.message ||
+            "Unable to load lessons."
         );
 
     }
@@ -493,7 +558,7 @@ async function fetchWeeklyLessons() {
 
 
 /* =========================================================
-   FIND LESSON
+   FIND LESSON FOR CLASS
 ========================================================= */
 
 function findLessonForClass(className) {
@@ -503,28 +568,32 @@ function findLessonForClass(className) {
             .toLowerCase();
 
 
-    return lessonsData.find(lesson => {
+    return lessonsData.find(
+        lesson => {
 
-        return (
-            cleanText(
-                lesson.className
-            ).toLowerCase() ===
-            wanted
-        );
+            return (
+                cleanText(
+                    lesson.className
+                ).toLowerCase() ===
+                wanted
+            );
 
-    });
+        }
+    );
 
 }
 
 
 /* =========================================================
-   UPDATE TABS
+   UPDATE CLASS TABS
 ========================================================= */
 
 function updateClassTabs(className) {
 
     document
-        .querySelectorAll(".class-tab")
+        .querySelectorAll(
+            ".class-tab"
+        )
         .forEach(tab => {
 
             const tabClass =
@@ -535,7 +604,9 @@ function updateClassTabs(className) {
 
             const active =
                 tabClass.toLowerCase() ===
-                cleanText(className).toLowerCase();
+                cleanText(
+                    className
+                ).toLowerCase();
 
 
             tab.classList.toggle(
@@ -546,7 +617,9 @@ function updateClassTabs(className) {
 
             tab.setAttribute(
                 "aria-selected",
-                active ? "true" : "false"
+                active
+                    ? "true"
+                    : "false"
             );
 
         });
@@ -566,6 +639,10 @@ function renderSelectedClass() {
         );
 
 
+    /*
+       Fallback to Senior.
+    */
+
     if (!lesson) {
 
         lesson =
@@ -575,6 +652,10 @@ function renderSelectedClass() {
 
     }
 
+
+    /*
+       Final fallback to first lesson.
+    */
 
     if (
         !lesson &&
@@ -589,6 +670,10 @@ function renderSelectedClass() {
 
     if (!lesson) {
 
+        renderFetchError(
+            "No lesson is available for this class yet."
+        );
+
         return;
 
     }
@@ -599,7 +684,9 @@ function renderSelectedClass() {
 
 
     selectedLessonClass =
-        lesson.className;
+        cleanText(
+            lesson.className
+        );
 
 
     localStorage.setItem(
@@ -634,16 +721,25 @@ function renderLesson(lesson) {
 
         lessonView.hidden = false;
 
+        lessonView.style.display =
+            "";
+
     }
 
 
-    /* ---------------------------------------------
+    /* =====================================================
        TOPIC CARD
-       ONLY CLASS + TOPIC
-    --------------------------------------------- */
+       
+       ONLY:
+       - Class
+       - Topic
+       
+       NO LESSON NUMBER.
+    ===================================================== */
 
     const classBadge =
         getElement("lessonClassBadge");
+
 
     const lessonTitle =
         getElement("lessonTitle");
@@ -668,18 +764,21 @@ function renderLesson(lesson) {
     }
 
 
-    /* ---------------------------------------------
+    /* =====================================================
        LESSON INFORMATION
-    --------------------------------------------- */
+    ===================================================== */
 
     const bibleText =
         getElement("lessonBibleText");
 
+
     const lessonNumber =
         getElement("lessonNumber");
 
+
     const lessonDate =
         getElement("lessonDate");
+
 
     const memoryVerse =
         getElement("lessonMemoryVerse");
@@ -693,6 +792,10 @@ function renderLesson(lesson) {
 
     }
 
+
+    /*
+       Lesson number stays here only.
+    */
 
     if (lessonNumber) {
 
@@ -731,10 +834,14 @@ function renderLesson(lesson) {
     }
 
 
-    /* ---------------------------------------------
-       LESSON CONTENT
-       SUMMARY ONLY
-    --------------------------------------------- */
+    /* =====================================================
+       SUMMARY
+       
+       IMPORTANT:
+       Summary is HTML from Google Sheets.
+       
+       DO NOT escape it.
+    ===================================================== */
 
     const lessonContent =
         getElement("lessonContent");
@@ -750,12 +857,14 @@ function renderLesson(lesson) {
     }
 
 
-    /* ---------------------------------------------
+    /* =====================================================
        DISCUSSION
-    --------------------------------------------- */
+    ===================================================== */
 
     const discussion =
-        getElement("lessonDiscussion");
+        getElement(
+            "lessonDiscussion"
+        );
 
 
     if (discussion) {
@@ -768,27 +877,27 @@ function renderLesson(lesson) {
     }
 
 
-    /* ---------------------------------------------
+    /* =====================================================
        YORUBA AUDIO
-    --------------------------------------------- */
+    ===================================================== */
 
     renderYorubaAudio(
         lesson.yorubaAudio
     );
 
 
-    /* ---------------------------------------------
-       METADATA
-    --------------------------------------------- */
+    /* =====================================================
+       META
+    ===================================================== */
 
     updateLessonMeta(
         lesson
     );
 
 
-    /* ---------------------------------------------
+    /* =====================================================
        PROGRESS
-    --------------------------------------------- */
+    ===================================================== */
 
     resetLessonProgress();
 
@@ -803,110 +912,89 @@ function renderLesson(lesson) {
 
 
 /* =========================================================
-   FORMAT YORUBA AUDIO
+   BUILD AUDIO URL
+=========================================================
+
+   Handles all of these:
+
+   /audio/Junior-83.mp3
+   audio/Junior-83.mp3
+   ../audio/Junior-83.mp3
+   https://example.com/audio/Junior-83.mp3
 ========================================================= */
 
-function formatAudio(audioValue) {
+function buildAudioURL(audioPath) {
 
-    const audioPath = cleanText(audioValue);
+    const value =
+        cleanText(audioPath);
 
-    if (!audioPath) {
+
+    if (!value) {
+
         return "";
+
     }
 
-    /*
-     * Convert paths such as:
-     *
-     * /audio/Junior-83.mp3
-     *
-     * into:
-     *
-     * https://yourwebsite.com/audio/Junior-83.mp3
-     */
 
-    let audioURL = audioPath;
+    /*
+       Full URL.
+    */
+
+    if (
+        /^https?:\/\//i.test(value)
+    ) {
+
+        return value;
+
+    }
+
 
     try {
 
+        /*
+         * Root-relative path.
+         *
+         * /audio/Junior-83.mp3
+         */
+
         if (
-            audioPath.startsWith("/")
+            value.startsWith("/")
         ) {
 
-            audioURL =
-                window.location.origin +
-                audioPath;
+            return new URL(
+                value,
+                window.location.origin
+            ).href;
 
         }
 
-        else if (
-            !/^https?:\/\//i.test(audioPath)
-        ) {
 
-            audioURL =
-                new URL(
-                    audioPath,
-                    window.location.href
-                ).href;
+        /*
+         * Relative path.
+         *
+         * audio/Junior-83.mp3
+         *
+         * ../audio/Junior-83.mp3
+         */
 
-        }
+        return new URL(
+            value,
+            window.location.href
+        ).href;
 
     }
 
     catch (error) {
 
         console.error(
-            "Invalid Yoruba audio path:",
-            audioPath,
+            "AFC Isiu — Invalid audio path:",
+            value,
             error
         );
 
         return "";
 
     }
-
-
-    return `
-
-        <div class="yoruba-audio-player">
-
-            <div class="yoruba-audio-player-top">
-
-                <div class="yoruba-audio-player-icon">
-
-                    <i class="fa-solid fa-volume-high"></i>
-
-                </div>
-
-                <div>
-
-                    <strong>
-                        Listen in Yoruba
-                    </strong>
-
-                    <span>
-                        Memory Verse Audio
-                    </span>
-
-                </div>
-
-            </div>
-
-
-            <audio
-                controls
-                preload="metadata"
-                class="lesson-audio-player"
-                src="${escapeHTML(audioURL)}"
-            >
-
-                Your browser does not support
-                audio playback.
-
-            </audio>
-
-        </div>
-
-    `;
 
 }
 
@@ -915,86 +1003,35 @@ function formatAudio(audioValue) {
    RENDER YORUBA AUDIO
 ========================================================= */
 
-function renderAudio(audioValue) {
-
-    const audioPath =
-        cleanText(audioValue);
-
+function renderYorubaAudio(audioValue) {
 
     const audioCard =
-        getElement("yorubaAudioCard");
+        getElement(
+            "yorubaAudioCard"
+        );
 
 
     const audioElement =
-        getElement("yorubaAudio");
+        getElement(
+            "yorubaAudio"
+        );
+
+
+    const audioPath =
+        cleanText(
+            audioValue
+        );
 
 
     /*
-     * No audio supplied.
-     */
+       If the HTML does not contain
+       the audio card, stop safely.
+    */
 
-    if (!audioPath) {
+    if (!audioCard) {
 
-        if (audioCard) {
-            audioCard.hidden = true;
-        }
-
-        return;
-
-    }
-
-
-    let audioURL =
-        audioPath;
-
-
-    try {
-
-        /*
-         * Google Sheet:
-         *
-         * /audio/Junior-83.mp3
-         *
-         * becomes:
-         *
-         * https://yourdomain.com/audio/Junior-83.mp3
-         */
-
-        if (
-            audioPath.startsWith("/")
-        ) {
-
-            audioURL =
-                window.location.origin +
-                audioPath;
-
-        }
-
-        /*
-         * Handles:
-         *
-         * audio/Junior-83.mp3
-         */
-
-        else if (
-            !/^https?:\/\//i.test(audioPath)
-        ) {
-
-            audioURL =
-                new URL(
-                    audioPath,
-                    window.location.href
-                ).href;
-
-        }
-
-    }
-
-    catch (error) {
-
-        console.error(
-            "Could not create Yoruba audio URL:",
-            error
+        console.warn(
+            "AFC Isiu — #yorubaAudioCard not found."
         );
 
         return;
@@ -1002,47 +1039,219 @@ function renderAudio(audioValue) {
     }
 
 
+    /*
+       If no audio was supplied.
+    */
+
+    if (!audioPath) {
+
+        audioCard.hidden = true;
+
+
+        if (audioElement) {
+
+            audioElement.pause();
+
+            audioElement.removeAttribute(
+                "src"
+            );
+
+            audioElement.load();
+
+        }
+
+
+        return;
+
+    }
+
+
+    const audioURL =
+        buildAudioURL(
+            audioPath
+        );
+
+
+    if (!audioURL) {
+
+        audioCard.hidden = true;
+
+        return;
+
+    }
+
+
     console.log(
-        "AFC Isiu — Yoruba Audio:",
+        "AFC Isiu — Yoruba Audio Path:",
+        audioPath
+    );
+
+
+    console.log(
+        "AFC Isiu — Yoruba Audio URL:",
         audioURL
     );
 
 
     /*
-     * If your HTML contains a dedicated
-     * <audio id="yorubaAudio">
-     * use it directly.
-     */
+       Update dedicated audio element.
+    */
 
     if (audioElement) {
 
+        /*
+           Stop previous lesson audio.
+        */
+
         audioElement.pause();
 
-        audioElement.removeAttribute("src");
+
+        /*
+           Clear previous source.
+        */
+
+        audioElement.removeAttribute(
+            "src"
+        );
+
+
+        /*
+           Set new source.
+        */
 
         audioElement.src =
             audioURL;
 
+
+        /*
+           Important:
+           Force browser to recognize
+           the new audio source.
+        */
+
         audioElement.load();
 
-        audioElement.hidden = false;
+
+        /*
+           Show player.
+        */
+
+        audioElement.hidden =
+            false;
+
+
+        /*
+           Helpful browser events.
+        */
+
+        audioElement.onloadedmetadata =
+            function () {
+
+                console.log(
+                    "AFC Isiu — Yoruba audio loaded successfully:",
+                    audioURL
+                );
+
+            };
+
+
+        audioElement.onerror =
+            function () {
+
+                console.error(
+                    "AFC Isiu — Yoruba audio FAILED:",
+                    audioURL
+                );
+
+
+                showAudioError(
+                    audioElement,
+                    audioURL
+                );
+
+            };
 
     }
 
 
     /*
-     * Show the card.
-     */
+       Show card.
+    */
 
-    if (audioCard) {
+    audioCard.hidden =
+        false;
 
-        audioCard.hidden = false;
 
-        audioCard.style.display = "";
+    audioCard.style.display =
+        "";
+
+}
+
+
+/* =========================================================
+   AUDIO ERROR
+========================================================= */
+
+function showAudioError(
+    audioElement,
+    audioURL
+) {
+
+    if (!audioElement) {
+
+        return;
 
     }
 
+
+    /*
+       Do not destroy the player.
+       Instead, place a small message
+       below it.
+    */
+
+    let errorMessage =
+        audioElement.parentElement
+            ?.querySelector(
+                ".yoruba-audio-error"
+            );
+
+
+    if (!errorMessage) {
+
+        errorMessage =
+            document.createElement(
+                "p"
+            );
+
+
+        errorMessage.className =
+            "yoruba-audio-error";
+
+
+        audioElement.parentElement
+            ?.appendChild(
+                errorMessage
+            );
+
+    }
+
+
+    errorMessage.innerHTML = `
+
+        <i class="fa-solid fa-circle-exclamation"></i>
+
+        Audio could not be loaded.
+        Please check that the file exists at:
+
+        <code>
+            ${escapeHTML(audioURL)}
+        </code>
+
+    `;
+
 }
+
 
 /* =========================================================
    LESSON META
@@ -1056,16 +1265,50 @@ function updateLessonMeta(lesson) {
         );
 
 
+    /*
+       Count HTML headings when possible.
+    */
+
     let sections = 0;
 
 
     if (summary) {
 
-        sections =
-            summary
-                .split(/\r?\n\s*\r?\n/)
-                .filter(Boolean)
-                .length;
+        const headingMatches =
+            summary.match(
+                /<h[1-6][^>]*>/gi
+            );
+
+
+        if (headingMatches) {
+
+            sections =
+                headingMatches.length;
+
+        }
+
+
+        /*
+           If no headings exist,
+           count paragraphs.
+        */
+
+        if (sections === 0) {
+
+            const paragraphMatches =
+                summary.match(
+                    /<p[^>]*>/gi
+                );
+
+
+            if (paragraphMatches) {
+
+                sections =
+                    paragraphMatches.length;
+
+            }
+
+        }
 
     }
 
@@ -1078,10 +1321,15 @@ function updateLessonMeta(lesson) {
 
 
     const sectionCount =
-        getElement("sectionCount");
+        getElement(
+            "sectionCount"
+        );
+
 
     const mobileSectionCount =
-        getElement("mobileSectionCount");
+        getElement(
+            "mobileSectionCount"
+        );
 
 
     if (sectionCount) {
@@ -1100,9 +1348,26 @@ function updateLessonMeta(lesson) {
     }
 
 
-    const words =
+    /*
+       Strip HTML before counting words.
+    */
+
+    const plainText =
         summary
-            ? summary
+            .replace(
+                /<[^>]*>/g,
+                " "
+            )
+            .replace(
+                /\s+/g,
+                " "
+            )
+            .trim();
+
+
+    const words =
+        plainText
+            ? plainText
                 .split(/\s+/)
                 .filter(Boolean)
                 .length
@@ -1123,10 +1388,15 @@ function updateLessonMeta(lesson) {
 
 
     const readingTime =
-        getElement("readingTime");
+        getElement(
+            "readingTime"
+        );
+
 
     const mobileReadingTime =
-        getElement("mobileReadingTime");
+        getElement(
+            "mobileReadingTime"
+        );
 
 
     if (readingTime) {
@@ -1153,13 +1423,15 @@ function updateLessonMeta(lesson) {
 
 function resetLessonProgress() {
 
-    updateProgressUI(0);
+    updateProgressUI(
+        0
+    );
 
 }
 
 
 /* =========================================================
-   UPDATE PROGRESS
+   UPDATE PROGRESS UI
 ========================================================= */
 
 function updateProgressUI(percent) {
@@ -1175,19 +1447,33 @@ function updateProgressUI(percent) {
 
 
     const progressPercent =
-        getElement("progressPercent");
+        getElement(
+            "progressPercent"
+        );
+
 
     const progressBar =
-        getElement("progressBar");
+        getElement(
+            "progressBar"
+        );
+
 
     const progressText =
-        getElement("progressText");
+        getElement(
+            "progressText"
+        );
+
 
     const mobileProgressPercent =
-        getElement("mobileProgressPercent");
+        getElement(
+            "mobileProgressPercent"
+        );
+
 
     const mobileProgressBar =
-        getElement("mobileProgressBar");
+        getElement(
+            "mobileProgressBar"
+        );
 
 
     if (progressPercent) {
@@ -1224,28 +1510,36 @@ function updateProgressUI(percent) {
 
     if (progressText) {
 
-        if (safePercent >= 100) {
+        if (
+            safePercent >= 100
+        ) {
 
             progressText.textContent =
                 "Lesson completed. Well done!";
 
         }
 
-        else if (safePercent >= 75) {
+        else if (
+            safePercent >= 75
+        ) {
 
             progressText.textContent =
                 "Almost there. Finish the lesson.";
 
         }
 
-        else if (safePercent >= 40) {
+        else if (
+            safePercent >= 40
+        ) {
 
             progressText.textContent =
                 "You're making good progress.";
 
         }
 
-        else if (safePercent > 0) {
+        else if (
+            safePercent > 0
+        ) {
 
             progressText.textContent =
                 "Keep reading the lesson.";
@@ -1284,10 +1578,29 @@ function setupReadingProgress() {
         function () {
 
             const content =
-                getElement("lessonContent");
+                getElement(
+                    "lessonContent"
+                );
 
 
             if (!content) {
+
+                return;
+
+            }
+
+
+            const contentHeight =
+                content.scrollHeight;
+
+
+            if (
+                contentHeight <= 0
+            ) {
+
+                updateProgressUI(
+                    0
+                );
 
                 return;
 
@@ -1301,10 +1614,6 @@ function setupReadingProgress() {
             const contentTop =
                 window.scrollY +
                 rect.top;
-
-
-            const contentHeight =
-                content.scrollHeight;
 
 
             const contentBottom =
@@ -1385,7 +1694,9 @@ function markLessonCompleted() {
     }
 
 
-    updateProgressUI(100);
+    updateProgressUI(
+        100
+    );
 
 
     const storageKey =
@@ -1413,6 +1724,7 @@ function markLessonCompleted() {
                 button.querySelector(
                     "strong"
                 );
+
 
             const small =
                 button.querySelector(
@@ -1495,6 +1807,41 @@ function initializeLessonTabs() {
 
                     renderSelectedClass();
 
+
+                    /*
+                       On mobile, bring the
+                       lesson into view.
+                    */
+
+                    if (
+                        window.innerWidth <=
+                        768
+                    ) {
+
+                        const lessonView =
+                            getElement(
+                                "lessonView"
+                            );
+
+
+                        if (lessonView) {
+
+                            setTimeout(
+                                () => {
+
+                                    lessonView.scrollIntoView({
+                                        behavior: "smooth",
+                                        block: "start"
+                                    });
+
+                                },
+                                50
+                            );
+
+                        }
+
+                    }
+
                 }
             );
 
@@ -1546,7 +1893,9 @@ function initializeFinishButtons() {
 function renderFetchError(message) {
 
     const lessonContent =
-        getElement("lessonContent");
+        getElement(
+            "lessonContent"
+        );
 
 
     if (lessonContent) {
@@ -1558,10 +1907,12 @@ function renderFetchError(message) {
                 <i class="fa-solid fa-triangle-exclamation"></i>
 
                 <p>
+
                     ${escapeHTML(
                         message ||
                         "Unable to load lessons."
                     )}
+
                 </p>
 
             </div>
@@ -1580,10 +1931,32 @@ function renderFetchError(message) {
 function initializeLessonsPage() {
 
     const lessonView =
-        getElement("lessonView");
+        getElement(
+            "lessonView"
+        );
 
 
-    if (!lessonView) {
+    const lessonContent =
+        getElement(
+            "lessonContent"
+        );
+
+
+    const tabs =
+        document.querySelectorAll(
+            ".class-tab"
+        );
+
+
+    /*
+       Do not run on unrelated pages.
+    */
+
+    if (
+        !lessonView &&
+        !lessonContent &&
+        !tabs.length
+    ) {
 
         return;
 
@@ -1645,7 +2018,9 @@ window.AFCLessons = {
     switchClass(className) {
 
         selectedLessonClass =
-            cleanText(className);
+            cleanText(
+                className
+            );
 
 
         localStorage.setItem(
