@@ -1,128 +1,148 @@
 <!DOCTYPE html>
+
 <html lang="en">
 
 <head>
 
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
 
-    <title>Weekly Lessons | AFC Isiu Youth Portal</title>
-
-    <!-- PWA -->
-
-    <link
-        rel="manifest"
-        href="/manifest.json"
-    >
-
-    <meta
-        name="theme-color"
-        content="#ea580c"
-    >
-
-    <meta
-        name="mobile-web-app-capable"
-        content="yes"
-    >
-
-    <meta
-        name="apple-mobile-web-app-capable"
-        content="yes"
-    >
-
-    <meta
-        name="apple-mobile-web-app-status-bar-style"
-        content="default"
-    >
-
-    <meta
-        name="apple-mobile-web-app-title"
-        content="AFC Isiwu"
-    >
+<title>Weekly Lessons | AFC Isiu Youth Portal</title>
 
 
-    <!-- ICON -->
+<!-- =====================================================
+     PWA
+====================================================== -->
 
-    <link
-        rel="icon"
-        type="image/png"
-        href="../images/logo.png"
-    >
+<link
+    rel="manifest"
+    href="/manifest.json"
+>
 
-    <link
-        rel="apple-touch-icon"
-        href="../images/logo.png"
-    >
+<meta
+    name="theme-color"
+    content="#ea580c"
+>
 
+<meta
+    name="mobile-web-app-capable"
+    content="yes"
+>
 
-    <!-- FONTS -->
+<meta
+    name="apple-mobile-web-app-capable"
+    content="yes"
+>
 
-    <link
-        rel="preconnect"
-        href="https://fonts.googleapis.com"
-    >
+<meta
+    name="apple-mobile-web-app-status-bar-style"
+    content="default"
+>
 
-    <link
-        rel="preconnect"
-        href="https://fonts.gstatic.com"
-        crossorigin
-    >
-
-    <link
-        href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap"
-        rel="stylesheet"
-    >
-
-
-    <!-- FONT AWESOME -->
-
-    <link
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
-        rel="stylesheet"
-    >
+<meta
+    name="apple-mobile-web-app-title"
+    content="AFC Isiu"
+>
 
 
-    <!-- REMIX ICONS -->
+<!-- =====================================================
+     ICONS
+====================================================== -->
 
-    <link
-        href="https://cdn.jsdelivr.net/npm/remixicon@4.6.0/fonts/remixicon.css"
-        rel="stylesheet"
-    >
+<link
+    rel="icon"
+    type="image/png"
+    href="../images/logo.png"
+>
+
+<link
+    rel="apple-touch-icon"
+    href="../images/logo.png"
+>
 
 
-    <!-- MAIN CSS -->
+<!-- =====================================================
+     GOOGLE FONTS
+====================================================== -->
 
-    <link
-        rel="stylesheet"
-        href="../css/main.css"
-    >
+<link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+>
 
-    <link
-        rel="stylesheet"
-        href="../css/layout.css"
-    >
+<link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+>
 
-    <link
-        rel="stylesheet"
-        href="../css/lessons.css"
-    >
+<link
+    href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap"
+    rel="stylesheet"
+>
+
+
+<!-- =====================================================
+     FONT AWESOME
+====================================================== -->
+
+<link
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    rel="stylesheet"
+>
+
+
+<!-- =====================================================
+     REMIX ICONS
+====================================================== -->
+
+<link
+    href="https://cdn.jsdelivr.net/npm/remixicon@4.6.0/fonts/remixicon.css"
+    rel="stylesheet"
+>
+
+
+<!-- =====================================================
+     GLOBAL PORTAL CSS
+     ORDER IS IMPORTANT:
+     main.css → layout.css → lessons.css
+====================================================== -->
+
+<link
+    rel="stylesheet"
+    href="../css/main.css"
+>
+
+<link
+    rel="stylesheet"
+    href="../css/layout.css"
+>
+
+<link
+    rel="stylesheet"
+    href="../css/lessons.css"
+>
+```
 
 </head>
 
+<body class="lessons-body">
 
-<body>
-
+```
+<!-- =====================================================
+     APP LAYOUT
+====================================================== -->
 
 <div class="app-layout">
 
 
-    <!-- =====================================================
+    <!-- =================================================
          SIDEBAR OVERLAY
-    ====================================================== -->
+    ================================================== -->
 
     <div
         class="sidebar-overlay"
@@ -130,16 +150,24 @@
     ></div>
 
 
-    <!-- =====================================================
-         SIDEBAR
-    ====================================================== -->
+    <!-- =================================================
+         DESKTOP SIDEBAR
+    ================================================== -->
 
     <aside
         class="sidebar"
         id="sidebar"
     >
 
+
+        <!-- =============================================
+             SIDEBAR TOP
+        ============================================== -->
+
         <div class="sidebar-top">
+
+
+            <!-- LOGO -->
 
             <div class="sidebar-logo">
 
@@ -156,7 +184,13 @@
             </div>
 
 
-            <nav class="sidebar-menu">
+            <!-- NAVIGATION -->
+
+            <nav
+                class="sidebar-menu"
+                aria-label="Main navigation"
+            >
+
 
                 <div class="menu-title">
                     Ministry
@@ -175,6 +209,7 @@
                 <a
                     href="lessons.html"
                     class="active"
+                    aria-current="page"
                 >
 
                     <i class="fa-solid fa-book-open"></i>
@@ -279,12 +314,18 @@
 
                 </a>
 
+
             </nav>
 
         </div>
 
 
+        <!-- =============================================
+             SIDEBAR BOTTOM
+        ============================================== -->
+
         <div class="sidebar-bottom">
+
 
             <div class="menu-title">
                 Account
@@ -316,25 +357,30 @@
 
             </a>
 
+
         </div>
 
     </aside>
 
 
-    <!-- =====================================================
+    <!-- =================================================
          MAIN AREA
-    ====================================================== -->
+    ================================================== -->
 
     <div class="main-area">
 
 
-        <!-- =================================================
+        <!-- =============================================
              TOPBAR
-        ================================================== -->
+        ============================================== -->
 
         <header class="topbar">
 
+
             <div class="topbar-left">
+
+
+                <!-- MOBILE MENU -->
 
                 <button
                     class="mobile-menu-btn"
@@ -349,13 +395,16 @@
                 </button>
 
 
+                <!-- BRAND -->
+
                 <div class="portal-brand">
 
                     <img
                         src="../images/logo.png"
-                        alt="AFC Logo"
+                        alt="AFC Isiu Youth Logo"
                         class="portal-logo"
                     >
+
 
                     <div>
 
@@ -369,10 +418,14 @@
 
                 </div>
 
+
             </div>
 
 
+            <!-- TOPBAR RIGHT -->
+
             <div class="topbar-right">
+
 
                 <button
                     class="header-icon"
@@ -399,39 +452,55 @@
 
                 </button>
 
+
             </div>
+
 
         </header>
 
 
-        <!-- =================================================
-             LESSON CONTENT
-        ================================================== -->
+        <!-- =============================================
+             LESSON PAGE CONTENT
+        ============================================== -->
 
-        <main class="dashboard-content lessons-page">
+        <main
+            class="dashboard-content lessons-page"
+            id="lessonsPage"
+        >
 
 
-            <div class="dashboard-container">
+            <div class="dashboard-container lessons-container">
 
 
-                <!-- PAGE HEADER -->
+                <!-- =========================================
+                     PAGE INTRODUCTION
+                ========================================== -->
 
                 <section class="lessons-heading">
 
-                    <div>
+
+                    <div class="lessons-heading-content">
+
 
                         <span class="section-badge">
+
+                            <i class="fa-solid fa-book-bible"></i>
+
                             SUNDAY SCHOOL
+
                         </span>
+
 
                         <h1>
                             Weekly Lessons
                         </h1>
 
+
                         <p>
-                            Study this week's lessons across
-                            Senior, Junior and Elementary classes.
+                            Study this week's Sunday School lesson
+                            and grow in your understanding of God's Word.
                         </p>
+
 
                     </div>
 
@@ -449,14 +518,19 @@
 
                     </div>
 
+
                 </section>
 
 
-                <!-- =================================================
-                     CLASS TABS
-                ================================================== -->
+                <!-- =========================================
+                     CLASS SELECTOR
+                ========================================== -->
 
-                <section class="lesson-selector">
+                <section
+                    class="lesson-selector"
+                    aria-label="Select lesson class"
+                >
+
 
                     <button
                         type="button"
@@ -496,30 +570,35 @@
 
                     </button>
 
+
                 </section>
 
 
-                <!-- =================================================
-                     LOADING
-                ================================================== -->
+                <!-- =========================================
+                     LOADING STATE
+                ========================================== -->
 
                 <section
                     class="lessons-loading"
                     id="lessonsLoading"
+                    aria-live="polite"
                 >
+
 
                     <div class="loading-spinner"></div>
 
+
                     <p>
-                        Loading lessons...
+                        Loading this week's lessons...
                     </p>
+
 
                 </section>
 
 
-                <!-- =================================================
-                     ERROR
-                ================================================== -->
+                <!-- =========================================
+                     ERROR STATE
+                ========================================== -->
 
                 <section
                     class="lessons-error"
@@ -527,20 +606,26 @@
                     hidden
                 >
 
+
                     <div class="error-icon">
 
                         <i class="fa-solid fa-circle-exclamation"></i>
 
                     </div>
 
+
                     <h3>
                         Unable to load lessons
                     </h3>
 
+
                     <p id="lessonsErrorMessage">
+
                         Please check your internet connection
                         and try again.
+
                     </p>
+
 
                     <button
                         type="button"
@@ -550,16 +635,19 @@
 
                         <i class="fa-solid fa-rotate-right"></i>
 
-                        Try Again
+                        <span>
+                            Try Again
+                        </span>
 
                     </button>
+
 
                 </section>
 
 
-                <!-- =================================================
-                     LESSON
-                ================================================== -->
+                <!-- =========================================
+                     LESSON VIEW
+                ========================================== -->
 
                 <article
                     class="lesson-view"
@@ -568,17 +656,23 @@
                 >
 
 
-                    <!-- LESSON HERO -->
+                    <!-- =====================================
+                         LESSON HERO
+                    ====================================== -->
 
                     <section class="lesson-hero">
 
+
                         <div class="lesson-hero-top">
+
 
                             <span
                                 class="lesson-class-badge"
                                 id="lessonClassBadge"
                             >
+
                                 SENIOR
+
                             </span>
 
 
@@ -586,34 +680,42 @@
                                 class="lesson-status-badge"
                                 id="lessonStatus"
                             >
+
                                 THIS WEEK
+
                             </span>
+
 
                         </div>
 
 
                         <h1 id="lessonTitle">
+
                             Loading lesson...
+
                         </h1>
 
 
                         <p
                             class="lesson-theme"
                             id="lessonTheme"
-                        >
-                        </p>
+                        ></p>
+
 
                     </section>
 
 
-                    <!-- =================================================
+                    <!-- =====================================
                          LESSON INFORMATION
-                    ================================================== -->
+                    ====================================== -->
 
                     <section class="lesson-info-grid">
 
 
+                        <!-- BIBLE TEXT -->
+
                         <div class="lesson-info-card">
+
 
                             <div class="info-icon">
 
@@ -621,11 +723,13 @@
 
                             </div>
 
+
                             <div>
 
                                 <span>
                                     Bible Text
                                 </span>
+
 
                                 <strong id="lessonBibleText">
                                     —
@@ -633,16 +737,21 @@
 
                             </div>
 
+
                         </div>
 
 
+                        <!-- LESSON NUMBER -->
+
                         <div class="lesson-info-card">
+
 
                             <div class="info-icon">
 
-                                <i class="fa-solid fa-clock"></i>
+                                <i class="fa-solid fa-list-ol"></i>
 
                             </div>
+
 
                             <div>
 
@@ -650,16 +759,21 @@
                                     Lesson
                                 </span>
 
+
                                 <strong id="lessonNumber">
                                     —
                                 </strong>
 
                             </div>
 
+
                         </div>
 
 
+                        <!-- DATE -->
+
                         <div class="lesson-info-card">
+
 
                             <div class="info-icon">
 
@@ -667,11 +781,13 @@
 
                             </div>
 
+
                             <div>
 
                                 <span>
                                     Week
                                 </span>
+
 
                                 <strong id="lessonDate">
                                     —
@@ -679,17 +795,19 @@
 
                             </div>
 
+
                         </div>
 
 
                     </section>
 
 
-                    <!-- =================================================
+                    <!-- =====================================
                          MEMORY VERSE
-                    ================================================== -->
+                    ====================================== -->
 
                     <section class="memory-verse-card">
+
 
                         <div class="memory-verse-icon">
 
@@ -700,55 +818,136 @@
 
                         <div class="memory-verse-content">
 
+
                             <span>
                                 MEMORY VERSE
                             </span>
+
 
                             <p id="lessonMemoryVerse">
                                 —
                             </p>
 
+
                         </div>
+
 
                     </section>
 
 
-                    <!-- =================================================
+                    <!-- =====================================
+                         YORUBA AUDIO
+                    ====================================== -->
+
+                    <section
+                        class="yoruba-audio-card"
+                        id="yorubaAudioContainer"
+                        hidden
+                    >
+
+
+                        <div class="audio-heading">
+
+
+                            <div class="audio-heading-icon">
+
+                                <i class="fa-solid fa-volume-high"></i>
+
+                            </div>
+
+
+                            <div>
+
+                                <span>
+                                    MEMORY VERSE AUDIO
+                                </span>
+
+
+                                <h3>
+                                    Yoruba Translation
+                                </h3>
+
+                            </div>
+
+
+                        </div>
+
+
+                        <audio
+                            id="yorubaAudioPlayer"
+                            controls
+                            preload="metadata"
+                        >
+
+                            <source
+                                id="yorubaAudioSource"
+                                src=""
+                                type="audio/mpeg"
+                            >
+
+                            Your browser does not support audio playback.
+
+                        </audio>
+
+
+                    </section>
+
+
+                    <!-- =====================================
                          LESSON BODY
-                    ================================================== -->
+                    ====================================== -->
 
                     <section class="lesson-body-layout">
 
 
+                        <!-- MAIN LESSON CONTENT -->
+
                         <div class="lesson-content-card">
+
 
                             <div
                                 class="lesson-content"
                                 id="lessonContent"
                             >
+
+                                <!-- =================================
+                                     JS WILL RENDER THE LESSON HERE
+                                ================================== -->
+
                             </div>
+
 
                         </div>
 
 
+                        <!-- DESKTOP SIDEBAR -->
+
                         <aside class="lesson-sidebar-card">
 
 
+                            <!-- PROGRESS -->
+
                             <div class="lesson-progress-box">
+
 
                                 <div class="progress-header">
 
+
                                     <div>
+
 
                                         <span>
                                             LESSON PROGRESS
                                         </span>
 
+
                                         <strong id="progressPercent">
                                             0%
                                         </strong>
 
+
                                     </div>
+
 
                                 </div>
 
@@ -764,45 +963,62 @@
 
 
                                 <p id="progressText">
+
                                     Start reading this lesson.
+
                                 </p>
+
 
                             </div>
 
 
+                            <!-- META -->
+
                             <div class="lesson-meta-box">
+
 
                                 <div>
 
+
                                     <i class="fa-regular fa-clock"></i>
+
 
                                     <span>
                                         Reading time
                                     </span>
 
+
                                     <strong id="readingTime">
                                         —
                                     </strong>
+
 
                                 </div>
 
 
                                 <div>
 
+
                                     <i class="fa-solid fa-layer-group"></i>
+
 
                                     <span>
                                         Sections
                                     </span>
 
+
                                     <strong id="sectionCount">
                                         —
                                     </strong>
 
+
                                 </div>
+
 
                             </div>
 
+
+                            <!-- FINISH -->
 
                             <button
                                 type="button"
@@ -810,99 +1026,127 @@
                                 id="finishReadingBtn"
                             >
 
+
                                 <span class="finish-icon">
 
                                     <i class="fa-solid fa-check"></i>
 
                                 </span>
 
+
                                 <span class="finish-text">
+
 
                                     <strong>
                                         I've read this lesson
                                     </strong>
 
+
                                     <small>
                                         Mark lesson as completed
                                     </small>
 
+
                                 </span>
+
 
                             </button>
 
 
                         </aside>
 
+
                     </section>
 
 
-                    <!-- =================================================
-                         MOBILE READING / FINISH AREA
-                    ================================================== -->
+                    <!-- =====================================
+                         MOBILE LESSON PROGRESS
+                    ====================================== -->
 
                     <section class="mobile-finish-card">
 
 
                         <div class="mobile-reading-info">
 
+
                             <div>
 
+
                                 <i class="fa-regular fa-clock"></i>
+
 
                                 <span>
                                     Reading time
                                 </span>
 
+
                                 <strong id="mobileReadingTime">
                                     —
                                 </strong>
+
 
                             </div>
 
 
                             <div>
 
+
                                 <i class="fa-solid fa-book-open"></i>
+
 
                                 <span>
                                     Sections
                                 </span>
 
+
                                 <strong id="mobileSectionCount">
                                     —
                                 </strong>
 
+
                             </div>
+
 
                         </div>
 
 
+                        <!-- MOBILE PROGRESS -->
+
                         <div class="mobile-progress">
 
+
                             <div class="mobile-progress-heading">
+
 
                                 <span>
                                     Reading progress
                                 </span>
 
+
                                 <strong id="mobileProgressPercent">
                                     0%
                                 </strong>
+
 
                             </div>
 
 
                             <div class="progress-track">
 
+
                                 <div
                                     class="progress-bar"
                                     id="mobileProgressBar"
                                 ></div>
 
+
                             </div>
+
 
                         </div>
 
+
+                        <!-- MOBILE FINISH -->
 
                         <button
                             type="button"
@@ -910,25 +1154,32 @@
                             id="mobileFinishReadingBtn"
                         >
 
+
                             <span class="finish-icon">
 
                                 <i class="fa-solid fa-check"></i>
 
                             </span>
 
+
                             <span class="finish-text">
+
 
                                 <strong>
                                     I've read this lesson
                                 </strong>
 
+
                                 <small>
                                     Mark lesson as completed
                                 </small>
 
+
                             </span>
 
+
                         </button>
+
 
                     </section>
 
@@ -938,19 +1189,22 @@
 
             </div>
 
+
         </main>
+
 
     </div>
 
 
-    <!-- =====================================================
+    <!-- =================================================
          MOBILE BOTTOM NAVIGATION
-    ====================================================== -->
+    ================================================== -->
 
     <nav
         class="bottom-nav"
         aria-label="Mobile navigation"
     >
+
 
         <a href="../index.html">
 
@@ -964,6 +1218,7 @@
         <a
             href="lessons.html"
             class="active"
+            aria-current="page"
         >
 
             <i class="fa-solid fa-book-open"></i>
@@ -999,7 +1254,11 @@
         </a>
 
 
-        <a href="profile.html">
+        <a
+            href="profile.html"
+            data-online-only
+            data-feature="Profile"
+        >
 
             <i class="fa-solid fa-user"></i>
 
@@ -1007,22 +1266,34 @@
 
         </a>
 
+
     </nav>
 
 
 </div>
 
 
-<!-- =========================================================
-     JAVASCRIPT
-========================================================= -->
+<!-- =====================================================
+     JAVASCRIPT LIBRARIES
+====================================================== -->
 
-<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+<script
+    src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"
+></script>
+
+
+<!-- =====================================================
+     PORTAL JAVASCRIPT
+====================================================== -->
 
 <script src="../js/main.js"></script>
 
-<script src="../js/lessons.js"></script>
 
+<!-- =====================================================
+     LESSONS JAVASCRIPT
+====================================================== -->
+
+<script src="../js/lessons.js"></script>
 
 </body>
 
