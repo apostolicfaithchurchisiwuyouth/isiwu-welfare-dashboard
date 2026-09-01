@@ -250,13 +250,13 @@ function normalizeLessonRow(row) {
 
 /* =========================================================
    FORMAT LESSON CONTENT
+   Supports HTML stored directly in the Google Sheet Summary
 ========================================================= */
 
 function formatLessonContent(text) {
 
     const value =
         cleanText(text);
-
 
     if (!value) {
 
@@ -275,42 +275,18 @@ function formatLessonContent(text) {
     }
 
 
-    const escaped =
-        escapeHTML(value);
+    /*
+       IMPORTANT:
 
+       The Summary column contains HTML.
 
-    const paragraphs =
-        escaped
-            .split(/\r?\n\s*\r?\n/)
-            .map(part => part.trim())
-            .filter(Boolean);
+       Therefore, we return the HTML directly instead of
+       escaping it with escapeHTML().
+    */
 
-
-    if (paragraphs.length > 1) {
-
-        return paragraphs
-            .map(paragraph => {
-
-                return `
-                    <p>
-                        ${paragraph.replace(/\r?\n/g, "<br>")}
-                    </p>
-                `;
-
-            })
-            .join("");
-
-    }
-
-
-    return `
-        <p>
-            ${escaped.replace(/\r?\n/g, "<br>")}
-        </p>
-    `;
+    return value;
 
 }
-
 
 /* =========================================================
    FORMAT DISCUSSION
