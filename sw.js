@@ -1,4 +1,17 @@
-const CACHE_VERSION = "afc-isiu-pwa-v5";
+/* =========================================================
+   AFC ISIU YOUTH PORTAL
+   SERVICE WORKER
+   PWA CACHE + OFFLINE SUPPORT
+========================================================= */
+
+"use strict";
+
+
+/* =========================================================
+   CACHE VERSION
+========================================================= */
+
+const CACHE_VERSION = "afc-isiu-pwa-v6";
 
 const STATIC_CACHE = `${CACHE_VERSION}-static`;
 
@@ -6,247 +19,329 @@ const PAGE_CACHE = `${CACHE_VERSION}-pages`;
 
 const OFFLINE_CACHE = `${CACHE_VERSION}-offline`;
 
+
 /* =========================================================
-FILES REQUIRED FOR THE BASIC APP
+   APP SHELL
 ========================================================= */
 
 const APP_SHELL = [
 
-```
-"/",
+    "/",
 
-"/index.html",
+    "/index.html",
 
-"/offline.html",
+    "/offline.html",
 
-"/manifest.json",
+    "/manifest.json",
 
-"/css/main.css",
+    /* Main CSS */
 
-"/css/layout.css",
+    "/css/main.css",
 
-"/js/main.js",
+    "/css/layout.css",
 
-"/images/logo.png"
+    /* Lessons CSS */
 
+    "/css/lessons.css",
+
+    /* Main JavaScript */
+
+    "/js/main.js",
+
+    /* Lessons JavaScript */
+
+    "/js/lessons.js",
+
+    /* PWA JavaScript */
+
+    "/js/pwa.js",
+
+    /* Logo */
+
+    "/images/logo.png"
 
 ];
 
+
 /* =========================================================
-OFFLINE PAGE
+   OFFLINE PAGE
 ========================================================= */
 
 const OFFLINE_PAGE = "/offline.html";
 
+
 /* =========================================================
-INSTALL
+   INSTALL
 ========================================================= */
 
-self.addEventListener("install", event => {
+self.addEventListener(
+    "install",
+    event => {
 
-```
-event.waitUntil(
+        console.log(
+            "AFC Isiu PWA: Installing service worker..."
+        );
 
-    Promise.all([
 
-        caches
-            .open(STATIC_CACHE)
-            .then(cache => {
+        event.waitUntil(
 
-                return cache.addAll(APP_SHELL);
+            Promise.all([
 
-            }),
+                caches
+                    .open(STATIC_CACHE)
+                    .then(cache => {
 
-        caches
-            .open(OFFLINE_CACHE)
-            .then(cache => {
+                        return cache.addAll(
+                            APP_SHELL
+                        );
 
-                return cache.add(OFFLINE_PAGE);
+                    }),
+
+                caches
+                    .open(OFFLINE_CACHE)
+                    .then(cache => {
+
+                        return cache.add(
+                            OFFLINE_PAGE
+                        );
+
+                    })
+
+            ])
+
+            .then(() => {
+
+                console.log(
+                    "AFC Isiu PWA: Static files cached."
+                );
+
+
+                /*
+                 * Activate the new service worker
+                 * immediately.
+                 */
+
+                return self.skipWaiting();
 
             })
 
-    ])
+            .catch(error => {
 
-    .then(() => {
+                console.error(
+                    "AFC Isiu PWA: Installation cache error:",
+                    error
+                );
 
-        console.log(
-            "AFC Isiu PWA: Service worker installed."
+                /*
+                 * Do not prevent the service worker
+                 * from installing if one optional
+                 * shell file fails.
+                 */
+
+                return self.skipWaiting();
+
+            })
+
         );
 
-        return self.skipWaiting();
-
-    })
-
+    }
 );
 
 
-});
-
 /* =========================================================
-ACTIVATE
+   ACTIVATE
 ========================================================= */
 
-self.addEventListener("activate", event => {
+self.addEventListener(
+    "activate",
+    event => {
 
-event.waitUntil(
+        console.log(
+            "AFC Isiu PWA: Activating service worker..."
+        );
 
-    caches.keys()
 
-        .then(cacheNames => {
+        event.waitUntil(
 
-            return Promise.all(
+            caches.keys()
 
-                cacheNames
-                    .filter(cacheName => {
+                .then(cacheNames => {
 
-                        return (
+                    return Promise.all(
 
-                            cacheName.startsWith(
-                                "afc-isiu-pwa-"
-                            )
+                        cacheNames
 
-                            &&
+                            .filter(cacheName => {
 
-                            cacheName !== STATIC_CACHE
+                                return (
 
-                            &&
+                                    cacheName.startsWith(
+                                        "afc-isiu-pwa-"
+                                    )
 
-                            cacheName !== PAGE_CACHE
+                                    &&
 
-                            &&
+                                    cacheName !==
+                                        STATIC_CACHE
 
-                            cacheName !== OFFLINE_CACHE
+                                    &&
 
-                        );
+                                    cacheName !==
+                                        PAGE_CACHE
 
-                    })
+                                    &&
 
-                    .map(cacheName => {
+                                    cacheName !==
+                                        OFFLINE_CACHE
 
-                        console.log(
-                            "AFC Isiu PWA: Removing old cache:",
-                            cacheName
-                        );
+                                );
 
-                        return caches.delete(
-                            cacheName
-                        );
+                            })
 
-                    })
+                            .map(cacheName => {
 
-            );
+                                console.log(
+                                    "AFC Isiu PWA: Deleting old cache:",
+                                    cacheName
+                                );
 
-        })
 
-        .then(() => {
+                                return caches.delete(
+                                    cacheName
+                                );
 
-            console.log(
-                "AFC Isiu PWA: Service worker activated."
-            );
+                            })
 
-            return self.clients.claim();
+                    );
 
-        })
+                })
 
+                .then(() => {
+
+                    console.log(
+                        "AFC Isiu PWA: Service worker activated."
+                    );
+
+
+                    /*
+                     * Take control of all open pages.
+                     */
+
+                    return self.clients.claim();
+
+                })
+
+        );
+
+    }
 );
 
 
-});
-
 /* =========================================================
-FETCH HANDLER
+   FETCH
 ========================================================= */
 
-self.addEventListener("fetch", event => {
+self.addEventListener(
+    "fetch",
+    event => {
+
+        const request =
+            event.request;
 
 
-const request = event.request;
+        /*
+         * Only handle GET requests.
+         */
+
+        if (
+            request.method !== "GET"
+        ) {
+
+            return;
+
+        }
 
 
-/* -----------------------------------------------------
-   Only GET requests
------------------------------------------------------ */
-
-if (
-    request.method !== "GET"
-) {
-
-    return;
-
-}
+        const url =
+            new URL(request.url);
 
 
-const url =
-    new URL(request.url);
+        /*
+         * VERY IMPORTANT:
+         *
+         * Never intercept requests to:
+         *
+         * - Google Sheets
+         * - Google Fonts
+         * - PapaParse CDN
+         * - Font Awesome
+         * - Remix Icons
+         * - Other external services
+         *
+         * The browser should communicate with
+         * those services directly.
+         */
+
+        if (
+            url.origin !==
+            self.location.origin
+        ) {
+
+            return;
+
+        }
 
 
-/* -----------------------------------------------------
-   Ignore external websites
-   Example: Google Sheets, Google Fonts, CDNs
------------------------------------------------------ */
+        /*
+         * PAGE NAVIGATION
+         */
 
-if (
-    url.origin !== self.location.origin
-) {
+        if (
+            request.mode === "navigate"
+        ) {
 
-    return;
+            event.respondWith(
+                handleNavigation(request)
+            );
 
-}
+            return;
 
-
-/* =====================================================
-   PAGE NAVIGATION
-===================================================== */
-
-if (
-    request.mode === "navigate"
-) {
-
-    event.respondWith(
-
-        handleNavigation(request)
-
-    );
-
-    return;
-
-}
+        }
 
 
-/* =====================================================
-   OTHER ASSETS
-===================================================== */
+        /*
+         * LOCAL ASSETS
+         */
 
-event.respondWith(
+        event.respondWith(
+            handleAsset(request)
+        );
 
-    handleAsset(request)
-
+    }
 );
 
 
-});
-
 /* =========================================================
-NAVIGATION HANDLER
+   NAVIGATION HANDLER
 ========================================================= */
 
 async function handleNavigation(request) {
 
-
-const pageCache =
-    await caches.open(PAGE_CACHE);
-
-
-/* -----------------------------------------------------
-   FIRST:
-   Check whether this exact page already exists.
------------------------------------------------------ */
-
-const cachedPage =
-    await pageCache.match(request);
+    const pageCache =
+        await caches.open(
+            PAGE_CACHE
+        );
 
 
-if (cachedPage) {
+    /*
+     * FIRST:
+     *
+     * Try the network.
+     *
+     * This is important because it means
+     * updated HTML is preferred whenever
+     * the user is online.
+     */
 
     try {
 
@@ -258,6 +353,10 @@ if (cachedPage) {
             networkResponse &&
             networkResponse.ok
         ) {
+
+            /*
+             * Save the latest page.
+             */
 
             await pageCache.put(
                 request,
@@ -273,56 +372,55 @@ if (cachedPage) {
     catch (error) {
 
         console.log(
-            "AFC Isiu PWA: Offline. Using cached page."
+            "AFC Isiu PWA: Network unavailable."
         );
 
     }
 
 
-    return cachedPage;
+    /*
+     * SECOND:
+     *
+     * Use cached page if available.
+     */
 
-}
-
-
-/* -----------------------------------------------------
-   SECOND:
-   Try the network.
------------------------------------------------------ */
-
-try {
-
-    const networkResponse =
-        await fetch(request);
-
-
-    if (
-        networkResponse &&
-        networkResponse.ok
-    ) {
-
-        await pageCache.put(
-            request,
-            networkResponse.clone()
+    const cachedPage =
+        await pageCache.match(
+            request
         );
+
+
+    if (cachedPage) {
+
+        return cachedPage;
 
     }
 
 
-    return networkResponse;
+    /*
+     * THIRD:
+     *
+     * Try static cache.
+     */
 
-}
-
-catch (error) {
-
-    console.log(
-        "AFC Isiu PWA: Page unavailable offline."
-    );
+    const staticPage =
+        await caches.match(
+            request
+        );
 
 
-    /* -------------------------------------------------
-       THIRD:
-       Return our custom offline page.
-    ------------------------------------------------- */
+    if (staticPage) {
+
+        return staticPage;
+
+    }
+
+
+    /*
+     * FOURTH:
+     *
+     * Show offline page.
+     */
 
     const offlineCache =
         await caches.open(
@@ -343,16 +441,16 @@ catch (error) {
     }
 
 
-    /* -------------------------------------------------
-       Last-resort response.
-    ------------------------------------------------- */
+    /*
+     * LAST RESORT
+     */
 
     return new Response(
 
         `
         <!DOCTYPE html>
 
-        <html>
+        <html lang="en">
 
         <head>
 
@@ -360,10 +458,10 @@ catch (error) {
 
             <meta
                 name="viewport"
-                content="width=device-width,initial-scale=1"
+                content="width=device-width, initial-scale=1.0"
             >
 
-            <title>Offline</title>
+            <title>Offline | AFC Isiu Youth Portal</title>
 
         </head>
 
@@ -388,7 +486,7 @@ catch (error) {
             headers: {
 
                 "Content-Type":
-                    "text/html"
+                    "text/html; charset=UTF-8"
 
             }
 
@@ -399,74 +497,130 @@ catch (error) {
 }
 
 
-}
-
 /* =========================================================
-ASSET HANDLER
+   ASSET HANDLER
 ========================================================= */
 
 async function handleAsset(request) {
 
+    /*
+     * FIRST:
+     *
+     * Look in cache.
+     */
 
-const cachedResponse =
-    await caches.match(request);
-
-
-if (cachedResponse) {
-
-    return cachedResponse;
-
-}
-
-
-try {
-
-    const networkResponse =
-        await fetch(request);
-
-
-    if (
-        networkResponse &&
-        networkResponse.ok
-    ) {
-
-        const cache =
-            await caches.open(
-                PAGE_CACHE
-            );
-
-
-        await cache.put(
-            request,
-            networkResponse.clone()
+    const cachedResponse =
+        await caches.match(
+            request
         );
+
+
+    if (cachedResponse) {
+
+        /*
+         * For important JS/CSS files we still
+         * prefer the network when online.
+         *
+         * However, the cached version gives us
+         * offline support.
+         */
+
+        try {
+
+            const networkResponse =
+                await fetch(request);
+
+
+            if (
+                networkResponse &&
+                networkResponse.ok
+            ) {
+
+                const cache =
+                    await caches.open(
+                        STATIC_CACHE
+                    );
+
+
+                await cache.put(
+                    request,
+                    networkResponse.clone()
+                );
+
+
+                return networkResponse;
+
+            }
+
+        }
+
+        catch (error) {
+
+            /*
+             * Network unavailable.
+             *
+             * Return cached asset.
+             */
+
+            return cachedResponse;
+
+        }
+
+
+        return cachedResponse;
 
     }
 
 
-    return networkResponse;
-
-}
-
-catch (error) {
-
-    console.log(
-        "AFC Isiu PWA: Asset unavailable offline:",
-        request.url
-    );
-
-
     /*
-    For CSS, JS, images and other assets,
-    simply allow the request to fail.
+     * SECOND:
+     *
+     * Try network.
+     */
 
-    The navigation handler above is what
-    supplies offline.html for page navigation.
-    */
+    try {
 
-    throw error;
+        const networkResponse =
+            await fetch(request);
 
-}
 
+        if (
+            networkResponse &&
+            networkResponse.ok
+        ) {
+
+            const cache =
+                await caches.open(
+                    STATIC_CACHE
+                );
+
+
+            await cache.put(
+                request,
+                networkResponse.clone()
+            );
+
+        }
+
+
+        return networkResponse;
+
+    }
+
+    catch (error) {
+
+        console.log(
+            "AFC Isiu PWA: Asset unavailable:",
+            request.url
+        );
+
+
+        /*
+         * Let the browser handle the failure.
+         */
+
+        throw error;
+
+    }
 
 }
