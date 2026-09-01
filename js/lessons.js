@@ -803,163 +803,246 @@ function renderLesson(lesson) {
 
 
 /* =========================================================
-   YORUBA AUDIO RENDERER
-=========================================================
-
-   Supports:
-
-   /audio/Junior-83.mp3
-
-   audio/Junior-83.mp3
-
-   https://example.com/audio.mp3
+   FORMAT YORUBA AUDIO
 ========================================================= */
 
-function renderYorubaAudio(audioPath) {
+function formatAudio(audioValue) {
+
+    const audioPath = cleanText(audioValue);
+
+    if (!audioPath) {
+        return "";
+    }
+
+    /*
+     * Convert paths such as:
+     *
+     * /audio/Junior-83.mp3
+     *
+     * into:
+     *
+     * https://yourwebsite.com/audio/Junior-83.mp3
+     */
+
+    let audioURL = audioPath;
+
+    try {
+
+        if (
+            audioPath.startsWith("/")
+        ) {
+
+            audioURL =
+                window.location.origin +
+                audioPath;
+
+        }
+
+        else if (
+            !/^https?:\/\//i.test(audioPath)
+        ) {
+
+            audioURL =
+                new URL(
+                    audioPath,
+                    window.location.href
+                ).href;
+
+        }
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Invalid Yoruba audio path:",
+            audioPath,
+            error
+        );
+
+        return "";
+
+    }
+
+
+    return `
+
+        <div class="yoruba-audio-player">
+
+            <div class="yoruba-audio-player-top">
+
+                <div class="yoruba-audio-player-icon">
+
+                    <i class="fa-solid fa-volume-high"></i>
+
+                </div>
+
+                <div>
+
+                    <strong>
+                        Listen in Yoruba
+                    </strong>
+
+                    <span>
+                        Memory Verse Audio
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <audio
+                controls
+                preload="metadata"
+                class="lesson-audio-player"
+                src="${escapeHTML(audioURL)}"
+            >
+
+                Your browser does not support
+                audio playback.
+
+            </audio>
+
+        </div>
+
+    `;
+
+}
+
+
+/* =========================================================
+   RENDER YORUBA AUDIO
+========================================================= */
+
+function renderAudio(audioValue) {
+
+    const audioPath =
+        cleanText(audioValue);
+
 
     const audioCard =
         getElement("yorubaAudioCard");
 
-    const audioPlayer =
+
+    const audioElement =
         getElement("yorubaAudio");
 
 
-    if (
-        !audioCard ||
-        !audioPlayer
-    ) {
+    /*
+     * No audio supplied.
+     */
 
-        console.warn(
-            "Yoruba audio elements were not found."
-        );
+    if (!audioPath) {
 
-        return;
-
-    }
-
-
-    const audio =
-        cleanText(audioPath);
-
-
-    /* ---------------------------------------------
-       NO AUDIO
-    --------------------------------------------- */
-
-    if (!audio) {
-
-        audioPlayer.pause();
-
-        audioPlayer.removeAttribute(
-            "src"
-        );
-
-        audioPlayer.load();
-
-        audioCard.hidden = true;
+        if (audioCard) {
+            audioCard.hidden = true;
+        }
 
         return;
 
     }
 
-
-    /* ---------------------------------------------
-       SHOW CARD
-    --------------------------------------------- */
-
-    audioCard.hidden = false;
-
-
-    /* ---------------------------------------------
-       CLEAN URL
-
-       If the Google Sheet contains:
-
-       /audio/Junior-83.mp3
-
-       It will remain exactly:
-
-       /audio/Junior-83.mp3
-
-       which means:
-
-       yourdomain.com/audio/Junior-83.mp3
-    --------------------------------------------- */
 
     let audioURL =
-        audio.trim();
+        audioPath;
 
 
-    /*
-       Replace accidental backslashes.
-    */
+    try {
 
-    audioURL =
-        audioURL.replace(
-            /\\/g,
-            "/"
-        );
+        /*
+         * Google Sheet:
+         *
+         * /audio/Junior-83.mp3
+         *
+         * becomes:
+         *
+         * https://yourdomain.com/audio/Junior-83.mp3
+         */
 
+        if (
+            audioPath.startsWith("/")
+        ) {
 
-    /*
-       If it does not begin with http or /,
-       convert it into a root-relative path.
-    */
+            audioURL =
+                window.location.origin +
+                audioPath;
 
-    if (
-        !/^https?:\/\//i.test(audioURL) &&
-        !audioURL.startsWith("/")
-    ) {
+        }
 
-        audioURL =
-            `/${audioURL}`;
+        /*
+         * Handles:
+         *
+         * audio/Junior-83.mp3
+         */
 
-    }
+        else if (
+            !/^https?:\/\//i.test(audioPath)
+        ) {
 
+            audioURL =
+                new URL(
+                    audioPath,
+                    window.location.href
+                ).href;
 
-    /* ---------------------------------------------
-       SET AUDIO SOURCE
-    --------------------------------------------- */
-
-    audioPlayer.pause();
-
-
-    /*
-       Only reload when the source changes.
-    */
-
-    if (
-        audioPlayer.getAttribute("src") !==
-        audioURL
-    ) {
-
-        audioPlayer.setAttribute(
-            "src",
-            audioURL
-        );
-
-        audioPlayer.load();
+        }
 
     }
 
+    catch (error) {
 
-    /*
-       Helpful accessibility label.
-    */
+        console.error(
+            "Could not create Yoruba audio URL:",
+            error
+        );
 
-    audioPlayer.setAttribute(
-        "aria-label",
-        "Yoruba memory verse audio"
-    );
+        return;
+
+    }
 
 
     console.log(
-        "Yoruba Audio Loaded:",
+        "AFC Isiu — Yoruba Audio:",
         audioURL
     );
 
-}
 
+    /*
+     * If your HTML contains a dedicated
+     * <audio id="yorubaAudio">
+     * use it directly.
+     */
+
+    if (audioElement) {
+
+        audioElement.pause();
+
+        audioElement.removeAttribute("src");
+
+        audioElement.src =
+            audioURL;
+
+        audioElement.load();
+
+        audioElement.hidden = false;
+
+    }
+
+
+    /*
+     * Show the card.
+     */
+
+    if (audioCard) {
+
+        audioCard.hidden = false;
+
+        audioCard.style.display = "";
+
+    }
+
+}
 
 /* =========================================================
    LESSON META
