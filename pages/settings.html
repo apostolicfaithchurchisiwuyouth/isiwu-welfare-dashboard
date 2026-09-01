@@ -7,55 +7,122 @@
 
     <meta
         name="viewport"
-        content="width=device-width, initial-scale=1.0">
-
-    <title>Install App | AFC Isiwu Youth Portal</title>
-
-    <!-- FONTS -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-    <link
-        href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap"
-        rel="stylesheet">
-
-    <!-- FONT AWESOME -->
-    <link
-        rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-
-    <!-- GLOBAL STYLES -->
-    <link rel="stylesheet" href="../css/layout.css">
-
-    <!-- PAGE STYLES -->
-    <link rel="stylesheet" href="../css/pwa.css">
-
-    <!-- PWA -->
-    <link rel="manifest" href="/manifest.json">
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <meta
         name="theme-color"
-        content="#ea580c">
+        content="#ea580c"
+    >
+
+    <title>Settings | AFC Isiu Youth Portal</title>
+
+
+    <!-- =====================================================
+         PWA
+    ====================================================== -->
+
+    <link
+        rel="manifest"
+        href="/manifest.json"
+    >
 
     <meta
         name="mobile-web-app-capable"
-        content="yes">
+        content="yes"
+    >
 
     <meta
         name="apple-mobile-web-app-capable"
-        content="yes">
+        content="yes"
+    >
 
     <meta
         name="apple-mobile-web-app-status-bar-style"
-        content="default">
+        content="default"
+    >
 
     <meta
         name="apple-mobile-web-app-title"
-        content="AFC Isiwu">
+        content="AFC Isiwu"
+    >
+
+
+    <!-- =====================================================
+         ICON
+    ====================================================== -->
+
+    <link
+        rel="icon"
+        type="image/png"
+        href="../images/logo.png"
+    >
 
     <link
         rel="apple-touch-icon"
-        href="/images/logo.png">
+        href="../images/logo.png"
+    >
+
+
+    <!-- =====================================================
+         FONTS
+    ====================================================== -->
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap"
+        rel="stylesheet"
+    >
+
+
+    <!-- =====================================================
+         ICONS
+    ====================================================== -->
+
+    <link
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+        rel="stylesheet"
+    >
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/remixicon@4.6.0/fonts/remixicon.css"
+        rel="stylesheet"
+    >
+
+
+    <!-- =====================================================
+         GLOBAL CSS
+    ====================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="../css/main.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="../css/layout.css"
+    >
+
+
+    <!-- =====================================================
+         SETTINGS / PWA CSS
+    ====================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="../css/pwa.css"
+    >
 
 </head>
 
@@ -63,28 +130,40 @@
 <body>
 
 
-<!-- ======================================================
-     APPLICATION LAYOUT
-====================================================== -->
-
 <div class="app-layout">
 
 
-    <!-- ==================================================
-         SIDEBAR
-    =================================================== -->
+    <!-- =====================================================
+         SIDEBAR OVERLAY
+    ====================================================== -->
 
-    <aside class="sidebar" id="sidebar">
+    <div
+        class="sidebar-overlay"
+        id="sidebarOverlay"
+    ></div>
+
+
+    <!-- =====================================================
+         SIDEBAR
+    ====================================================== -->
+
+    <aside
+        class="sidebar"
+        id="sidebar"
+    >
 
         <div class="sidebar-top">
 
+
+            <!-- LOGO -->
+
             <div class="sidebar-logo">
 
-                <i class="fa-solid fa-church"></i>
+                <i class="fa-solid fa-shield-heart"></i>
 
                 <div>
 
-                    <h2>AFC Isiwu Youth</h2>
+                    <h2>AFC Isiu</h2>
 
                     <span>Youth Portal</span>
 
@@ -93,45 +172,148 @@
             </div>
 
 
-            <div class="menu-title">
-                <span>Menu</span>
-            </div>
-
+            <!-- NAVIGATION -->
 
             <nav class="sidebar-menu">
 
-                <a href="/index.html">
+
+                <!-- MINISTRY -->
+
+                <div class="menu-title">
+                    Ministry
+                </div>
+
+
+                <a href="../">
 
                     <i class="fa-solid fa-house"></i>
 
-                    <span>Home</span>
+                    <span>
+                        Dashboard
+                    </span>
 
                 </a>
 
 
-                <a href="/pages/lessons.html">
+                <a href="lessons">
 
                     <i class="fa-solid fa-book-open"></i>
 
-                    <span>Lessons</span>
+                    <span>
+                        Sunday School Lesson
+                    </span>
 
                 </a>
 
 
-                <a href="/pages/gallery.html">
+                <a
+                    href="slcquiz"
+                    data-online-only
+                    data-feature="Weekly SLC Quiz"
+                >
+
+                    <i class="fa-solid fa-clipboard-question"></i>
+
+                    <span>
+                        Take SL Quiz
+                    </span>
+
+                </a>
+
+
+                <a
+                    href="result"
+                    data-online-only
+                    data-feature="Growth Tracker"
+                >
+
+                    <i class="fa-solid fa-chart-line"></i>
+
+                    <span>
+                        Check SL Quiz Result
+                    </span>
+
+                </a>
+
+
+                <!-- COMMUNITY -->
+
+                <div class="menu-title">
+                    Community
+                </div>
+
+
+                <a
+                    href="gallery"
+                    data-online-only
+                    data-feature="Gallery"
+                >
 
                     <i class="fa-solid fa-images"></i>
 
-                    <span>Gallery</span>
+                    <span>
+                        Gallery
+                    </span>
 
                 </a>
 
 
-                <a href="/pages/profile.html">
+                <a
+                    href="events"
+                    data-online-only
+                    data-feature="Youth Events"
+                >
 
-                    <i class="fa-solid fa-user"></i>
+                    <i class="fa-solid fa-calendar-days"></i>
 
-                    <span>Profile</span>
+                    <span>
+                        Youth Events
+                    </span>
+
+                </a>
+
+
+                <a
+                    href="welfare"
+                    data-online-only
+                    data-feature="Welfare"
+                >
+
+                    <i class="fa-solid fa-hand-holding-heart"></i>
+
+                    <span>
+                        Welfare
+                    </span>
+
+                </a>
+
+
+                <a
+                    href="prayer"
+                    data-online-only
+                    data-feature="Prayer Requests"
+                >
+
+                    <i class="fa-solid fa-hands-praying"></i>
+
+                    <span>
+                        Prayer Requests
+                    </span>
+
+                </a>
+
+
+                <a
+                    href="program-report"
+                    data-online-only
+                    data-feature="Secretariat Reports"
+                >
+
+                    <i class="fa-solid fa-file-lines"></i>
+
+                    <span>
+                        Secretariat Reports
+                    </span>
 
                 </a>
 
@@ -140,15 +322,39 @@
         </div>
 
 
+        <!-- =================================================
+             SIDEBAR BOTTOM
+        ================================================== -->
+
         <div class="sidebar-bottom">
 
+
+            <div class="menu-title">
+                Account
+            </div>
+
+
+            <a href="profile">
+
+                <i class="fa-solid fa-user"></i>
+
+                <span>
+                    Profile
+                </span>
+
+            </a>
+
+
             <a
-                href="/pages/settings.html"
-                class="active">
+                href="settings"
+                class="active"
+            >
 
                 <i class="fa-solid fa-gear"></i>
 
-                <span>Settings</span>
+                <span>
+                    Settings
+                </span>
 
             </a>
 
@@ -157,72 +363,75 @@
     </aside>
 
 
-    <!-- ==================================================
-         SIDEBAR OVERLAY
-    =================================================== -->
-
-    <div
-        class="sidebar-overlay"
-        id="sidebarOverlay">
-    </div>
-
-
-    <!-- ==================================================
+    <!-- =====================================================
          MAIN AREA
-    =================================================== -->
+    ====================================================== -->
 
-    <main class="main-area">
+    <div class="main-area">
 
 
-        <!-- ==============================================
+        <!-- =================================================
              TOPBAR
-        =============================================== -->
+        ================================================== -->
 
         <header class="topbar">
-
 
             <div class="topbar-left">
 
 
+                <!-- MOBILE MENU -->
+
                 <button
-                    type="button"
                     class="mobile-menu-btn"
                     id="mobileMenuBtn"
-                    aria-label="Open menu">
+                    type="button"
+                    aria-label="Open navigation menu"
+                    aria-expanded="false"
+                >
 
                     <i class="fa-solid fa-bars"></i>
 
                 </button>
 
 
+                <!-- PORTAL BRAND -->
+
                 <div class="portal-brand">
 
                     <img
-                        src="/images/logo.png"
-                        alt="AFC Isiwu Youth"
-                        class="portal-logo">
+                        src="../images/logo.png"
+                        alt="AFC Isiwu Youth Portal"
+                        class="portal-logo"
+                    >
 
                     <div>
 
-                        <h2>AFC Isiwu Youth Portal</h2>
+                        <h2>
+                            AFC Isiu Youth
+                        </h2>
 
-                        <p>Settings</p>
+                        <p>
+                            Building young people for Christ
+                        </p>
 
                     </div>
 
                 </div>
 
-
             </div>
 
+
+            <!-- TOPBAR ACTIONS -->
 
             <div class="topbar-right">
 
 
                 <button
-                    type="button"
                     class="header-icon"
-                    aria-label="Notifications">
+                    id="notificationBtn"
+                    type="button"
+                    aria-label="Notifications"
+                >
 
                     <i class="fa-regular fa-bell"></i>
 
@@ -231,315 +440,310 @@
                 </button>
 
 
-            </div>
+                <button
+                    class="header-icon"
+                    id="themeBtn"
+                    type="button"
+                    aria-label="Change theme"
+                >
 
+                    <i class="fa-solid fa-moon"></i>
+
+                </button>
+
+            </div>
 
         </header>
 
 
-        <!-- ==============================================
-             PAGE CONTENT
-        =============================================== -->
+        <!-- =================================================
+             SETTINGS PAGE
+        ================================================== -->
 
-        <section class="dashboard-content">
+        <main class="dashboard-content settings-page">
 
-
-            <div class="dashboard-container pwa-page">
-
-
-                <!-- PAGE HEADING -->
-
-                <div class="pwa-heading">
-
-                    <span class="pwa-badge">
-                        <i class="fa-solid fa-mobile-screen-button"></i>
-                        APP EXPERIENCE
-                    </span>
-
-                    <h1>
-                        Install the Youth Portal
-                    </h1>
-
-                    <p>
-                        Add AFC Isiwu Youth Portal to your
-                        device for quick access and a
-                        smoother app-like experience.
-                    </p>
-
-                </div>
+            <div class="dashboard-container settings-container">
 
 
-                <!-- INSTALL CARD -->
+                <!-- =================================================
+                     PAGE INTRO
+                ================================================== -->
 
-                <div class="settings-card pwa-install-card">
+                <section class="settings-heading">
 
+                    <div class="settings-heading-copy">
 
-                    <div class="settings-card-icon">
-
-                        <i class="fa-solid fa-mobile-screen-button"></i>
-
-                    </div>
-
-
-                    <div class="settings-card-content">
-
-                        <span class="pwa-card-label">
-                            AFC ISIU YOUTH PORTAL
+                        <span class="settings-eyebrow">
+                            <i class="fa-solid fa-sliders"></i>
+                            SETTINGS
                         </span>
 
-                        <h3>
-                            Install AFC Isiwu Youth Portal
-                        </h3>
+                        <h1>
+                            App Settings
+                        </h1>
 
                         <p>
-                            Add the portal to your home screen
-                            for faster access and an
-                            app-like experience.
+                            Manage your AFC Isiu Youth Portal
+                            experience and app preferences.
                         </p>
 
                     </div>
 
-
-                    <button
-                        id="installAppBtn"
-                        class="settings-action-btn"
-                        type="button">
-
-                        <i class="fa-solid fa-download"></i>
-
-                        <span>Install App</span>
-
-                    </button>
+                </section>
 
 
-                </div>
+                <!-- =================================================
+                     APP SETTINGS SECTION
+                ================================================== -->
+
+                <section class="settings-section">
 
 
-                <!-- INSTALL INFORMATION -->
-
-                <div class="pwa-info-grid">
-
-
-                    <div class="pwa-info-card">
-
-                        <div class="pwa-info-icon">
-
-                            <i class="fa-solid fa-bolt"></i>
-
-                        </div>
+                    <div class="settings-section-heading">
 
                         <div>
 
-                            <h4>
-                                Quick Access
-                            </h4>
+                            <span>
+                                APPLICATION
+                            </span>
 
-                            <p>
-                                Open the portal directly
-                                from your device's home screen.
-                            </p>
+                            <h2>
+                                App Experience
+                            </h2>
 
                         </div>
 
                     </div>
 
 
-                    <div class="pwa-info-card">
+                    <!-- =================================================
+                         PWA INSTALL CARD
+                    ================================================== -->
 
-                        <div class="pwa-info-icon">
+                    <article class="settings-card pwa-install-card">
 
-                            <i class="fa-solid fa-layer-group"></i>
+
+                        <!-- ICON -->
+
+                        <div class="settings-card-icon">
+
+                            <i class="fa-solid fa-mobile-screen-button"></i>
 
                         </div>
 
-                        <div>
 
-                            <h4>
-                                App-Like Experience
-                            </h4>
+                        <!-- CONTENT -->
+
+                        <div class="settings-card-content">
+
+                            <span class="settings-card-label">
+                                PWA
+                            </span>
+
+                            <h3>
+                                Install AFC Isiu Youth Portal
+                            </h3>
 
                             <p>
-                                Enjoy a cleaner experience
-                                designed for mobile devices.
+                                Add the portal to your home screen
+                                for a faster, more convenient
+                                app-like experience.
+                            </p>
+
+
+                            <!-- INSTALL STATUS -->
+
+                            <div
+                                class="pwa-status"
+                                id="pwaStatus"
+                            >
+
+                                <span class="pwa-status-dot"></span>
+
+                                <span id="pwaStatusText">
+                                    Available for installation
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- ACTION -->
+
+                        <div class="settings-card-action">
+
+                            <button
+                                id="installAppBtn"
+                                class="settings-action-btn"
+                                type="button"
+                            >
+
+                                <i class="fa-solid fa-download"></i>
+
+                                <span>
+                                    Install App
+                                </span>
+
+                            </button>
+
+                        </div>
+
+                    </article>
+
+
+                    <!-- =================================================
+                         APP INFORMATION
+                    ================================================== -->
+
+                    <article class="settings-card app-info-card">
+
+
+                        <div class="settings-card-icon settings-info-icon">
+
+                            <i class="fa-solid fa-circle-info"></i>
+
+                        </div>
+
+
+                        <div class="settings-card-content">
+
+                            <span class="settings-card-label">
+                                ABOUT
+                            </span>
+
+                            <h3>
+                                AFC Isiu Youth Portal
+                            </h3>
+
+                            <p>
+                                Your digital space for lessons,
+                                youth activities, resources,
+                                community updates and spiritual growth.
                             </p>
 
                         </div>
 
-                    </div>
 
+                        <div class="app-version">
 
-                    <div class="pwa-info-card">
+                            <span>
+                                VERSION
+                            </span>
 
-                        <div class="pwa-info-icon">
-
-                            <i class="fa-solid fa-bell"></i>
-
-                        </div>
-
-                        <div>
-
-                            <h4>
-                                Stay Updated
-                            </h4>
-
-                            <p>
-                                Keep the portal close so you
-                                can easily check new updates.
-                            </p>
+                            <strong>
+                                2.0
+                            </strong>
 
                         </div>
 
-                    </div>
+                    </article>
 
 
-                </div>
+                </section>
 
 
             </div>
 
-        </section>
+        </main>
+
+    </div>
 
 
-    </main>
+    <!-- =====================================================
+         MOBILE BOTTOM NAVIGATION
+    ====================================================== -->
+
+    <nav
+        class="bottom-nav"
+        aria-label="Mobile navigation"
+    >
+
+
+        <!-- HOME -->
+
+        <a href="../">
+
+            <i class="fa-solid fa-house"></i>
+
+            <span>
+                Home
+            </span>
+
+        </a>
+
+
+        <!-- LESSONS -->
+
+        <a href="lessons">
+
+            <i class="fa-solid fa-book-open"></i>
+
+            <span>
+                Lessons
+            </span>
+
+        </a>
+
+
+        <!-- HUB -->
+
+        <button
+            class="hub-button"
+            id="hubButton"
+            type="button"
+            aria-label="Open main navigation"
+            aria-expanded="false"
+        >
+
+            <i class="ri-apps-2-line"></i>
+
+        </button>
+
+
+        <!-- GALLERY -->
+
+        <a
+            href="gallery"
+            data-online-only
+            data-feature="Gallery"
+        >
+
+            <i class="fa-solid fa-images"></i>
+
+            <span>
+                Gallery
+            </span>
+
+        </a>
+
+
+        <!-- PROFILE -->
+
+        <a href="profile">
+
+            <i class="fa-solid fa-user"></i>
+
+            <span>
+                Profile
+            </span>
+
+        </a>
+
+    </nav>
 
 
 </div>
 
 
-<!-- ======================================================
-     MOBILE BOTTOM NAVIGATION
-====================================================== -->
+<!-- =========================================================
+     JAVASCRIPT
+========================================================= -->
 
-<nav class="bottom-nav">
-
-
-    <a href="/index.html">
-
-        <i class="fa-solid fa-house"></i>
-
-        <span>Home</span>
-
-    </a>
-
-
-    <a href="/pages/profile.html">
-
-        <i class="fa-solid fa-user"></i>
-
-        <span>Profile</span>
-
-    </a>
-
-
-    <a
-        href="/index.html"
-        class="hub-button"
-        aria-label="Portal Home">
-
-        <i class="fa-solid fa-house"></i>
-
-    </a>
-
-
-    <a href="/pages/gallery.html">
-
-        <i class="fa-solid fa-images"></i>
-
-        <span>Gallery</span>
-
-    </a>
-
-
-    <a
-        href="/pages/lessons.html">
-
-        <i class="fa-solid fa-book-open"></i>
-
-        <span>Lessons</span>
-
-    </a>
-
-
-</nav>
-
-
-<!-- ======================================================
-     SCRIPTS
-====================================================== -->
+<script src="../js/main.js"></script>
 
 <script src="../js/pwa.js"></script>
 
-<script>
-
-document.addEventListener("DOMContentLoaded", function () {
-
-    const menuBtn =
-        document.getElementById("mobileMenuBtn");
-
-    const sidebar =
-        document.getElementById("sidebar");
-
-    const overlay =
-        document.getElementById("sidebarOverlay");
-
-
-    if (!menuBtn || !sidebar || !overlay) {
-        return;
-    }
-
-
-    function openSidebar() {
-
-        sidebar.classList.add("show");
-
-        overlay.classList.add("show");
-
-        document.body.style.overflow = "hidden";
-
-    }
-
-
-    function closeSidebar() {
-
-        sidebar.classList.remove("show");
-
-        overlay.classList.remove("show");
-
-        document.body.style.overflow = "";
-
-    }
-
-
-    menuBtn.addEventListener(
-        "click",
-        openSidebar
-    );
-
-
-    overlay.addEventListener(
-        "click",
-        closeSidebar
-    );
-
-
-    document.addEventListener(
-        "keydown",
-        function (event) {
-
-            if (event.key === "Escape") {
-
-                closeSidebar();
-
-            }
-
-        }
-    );
-
-});
-
-</script>
-
 
 </body>
-
 </html>
