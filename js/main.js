@@ -1,12 +1,12 @@
 /* =========================================================
    AFC ISIU YOUTH PORTAL
    MAIN JAVASCRIPT
-   VERSION 2.0
+   VERSION 2.1
    PURPOSE:
    - Shared portal functionality
    - Sidebar / mobile navigation
    - Bottom hub button
-   - Offline status
+   - Reliable offline status
    - Online-only navigation
    - Theme toggle
    - Dashboard greeting
@@ -43,9 +43,7 @@ const AFC_MAIN_CONFIG = {
 
 function onDOMReady(callback) {
 
-    if (
-        document.readyState === "loading"
-    ) {
+    if (document.readyState === "loading") {
 
         document.addEventListener(
             "DOMContentLoaded",
@@ -93,8 +91,24 @@ onDOMReady(() => {
 
 
 /* =========================================================
-   OFFLINE STATUS BANNER
+   OFFLINE STATUS
 ========================================================= */
+
+/*
+ * IMPORTANT:
+ *
+ * We intentionally DO NOT use navigator.onLine during
+ * initial page load to display the banner.
+ *
+ * Some browsers and installed PWAs can temporarily report
+ * navigator.onLine incorrectly while the page/service worker
+ * is starting.
+ *
+ * The banner is therefore shown only after the browser
+ * actually fires an "offline" event.
+ *
+ * When an "online" event fires, the banner disappears.
+ */
 
 onDOMReady(() => {
 
@@ -104,19 +118,29 @@ onDOMReady(() => {
         );
 
 
-    /*
-     * Prevent duplicate banners.
-     */
+    /* -----------------------------------------------------
+       CREATE BANNER ONLY IF NEEDED
+    ----------------------------------------------------- */
 
-    if (!offlineBanner) {
+    function createOfflineBanner() {
+
+        if (offlineBanner) {
+
+            return offlineBanner;
+
+        }
+
 
         offlineBanner =
             document.createElement("div");
 
+
         offlineBanner.id =
             AFC_MAIN_CONFIG.OFFLINE_BANNER_ID;
 
+
         offlineBanner.innerHTML = `
+
             <div class="offline-banner-content">
 
                 <i class="fa-solid fa-wifi"></i>
@@ -135,53 +159,103 @@ onDOMReady(() => {
                 </div>
 
             </div>
+
         `;
+
 
         document.body.prepend(
             offlineBanner
+        );
+
+
+        return offlineBanner;
+
+    }
+
+
+    /* -----------------------------------------------------
+       SHOW OFFLINE BANNER
+    ----------------------------------------------------- */
+
+    function showOfflineBanner() {
+
+        const banner =
+            createOfflineBanner();
+
+
+        banner.classList.add(
+            "show"
         );
 
     }
 
 
     /* -----------------------------------------------------
-       UPDATE STATUS
+       HIDE OFFLINE BANNER
     ----------------------------------------------------- */
 
-    function updateOnlineStatus() {
+    function hideOfflineBanner() {
 
-        if (
-            navigator.onLine
-        ) {
+        if (!offlineBanner) {
 
-            offlineBanner.classList.remove(
-                "show"
-            );
-
-        } else {
-
-            offlineBanner.classList.add(
-                "show"
-            );
+            return;
 
         }
+
+
+        offlineBanner.classList.remove(
+            "show"
+        );
 
     }
 
 
-    window.addEventListener(
-        "online",
-        updateOnlineStatus
-    );
-
+    /* -----------------------------------------------------
+       REAL OFFLINE EVENT
+    ----------------------------------------------------- */
 
     window.addEventListener(
         "offline",
-        updateOnlineStatus
+        () => {
+
+            console.warn(
+                "AFC Isiu: Browser reported offline."
+            );
+
+
+            showOfflineBanner();
+
+        }
     );
 
 
-    updateOnlineStatus();
+    /* -----------------------------------------------------
+       REAL ONLINE EVENT
+    ----------------------------------------------------- */
+
+    window.addEventListener(
+        "online",
+        () => {
+
+            console.log(
+                "AFC Isiu: Browser reported online."
+            );
+
+
+            hideOfflineBanner();
+
+        }
+    );
+
+
+    /*
+     * IMPORTANT:
+     *
+     * Do NOT call showOfflineBanner() here.
+     *
+     * We intentionally leave the banner hidden during
+     * initial page load.
+     */
 
 });
 
@@ -198,9 +272,7 @@ onDOMReady(() => {
         );
 
 
-    if (
-        !onlineOnlyLinks.length
-    ) {
+    if (!onlineOnlyLinks.length) {
 
         return;
 
@@ -215,12 +287,11 @@ onDOMReady(() => {
                 event => {
 
                     /*
-                     * Allow navigation when online.
+                     * Allow navigation when browser
+                     * reports that it is online.
                      */
 
-                    if (
-                        navigator.onLine
-                    ) {
+                    if (navigator.onLine) {
 
                         return;
 
@@ -361,6 +432,34 @@ function showOfflineMessage(
         }
     );
 
+
+    /*
+     * If connection comes back while the
+     * message is open, close it automatically.
+     */
+
+    const closeWhenOnline = () => {
+
+        if (message) {
+
+            message.remove();
+
+        }
+
+
+        window.removeEventListener(
+            "online",
+            closeWhenOnline
+        );
+
+    };
+
+
+    window.addEventListener(
+        "online",
+        closeWhenOnline
+    );
+
 }
 
 
@@ -463,11 +562,6 @@ onDOMReady(() => {
         );
 
 
-        /*
-         * Keep the existing body overflow
-         * behavior compatible with layout.css.
-         */
-
         document.body.style.overflow =
             "hidden";
 
@@ -555,8 +649,11 @@ onDOMReady(() => {
 
                 event.stopPropagation();
 
+
                 if (
-                    sidebar.classList.contains("show")
+                    sidebar.classList.contains(
+                        "show"
+                    )
                 ) {
 
                     closeSidebar();
@@ -587,8 +684,11 @@ onDOMReady(() => {
 
                 event.stopPropagation();
 
+
                 if (
-                    sidebar.classList.contains("show")
+                    sidebar.classList.contains(
+                        "show"
+                    )
                 ) {
 
                     closeSidebar();
@@ -664,7 +764,9 @@ onDOMReady(() => {
 
             if (
                 event.key === "Escape" &&
-                sidebar.classList.contains("show")
+                sidebar.classList.contains(
+                    "show"
+                )
             ) {
 
                 closeSidebar();
@@ -683,11 +785,6 @@ onDOMReady(() => {
         "resize",
         () => {
 
-            /*
-             * If the viewport becomes desktop-sized,
-             * remove the mobile sidebar state.
-             */
-
             if (
                 window.innerWidth >
                 AFC_MAIN_CONFIG.MOBILE_BREAKPOINT
@@ -701,9 +798,9 @@ onDOMReady(() => {
     );
 
 
-    /*
-     * Make sure initial ARIA state is correct.
-     */
+    /* -----------------------------------------------------
+       INITIAL ARIA STATE
+    ----------------------------------------------------- */
 
     if (menuButton) {
 
@@ -778,9 +875,7 @@ onDOMReady(() => {
 
             }
 
-        }
-
-        else {
+        } else {
 
             document.documentElement.setAttribute(
                 "data-theme",
@@ -805,9 +900,9 @@ onDOMReady(() => {
     }
 
 
-    /*
-     * Load saved theme.
-     */
+    /* -----------------------------------------------------
+       LOAD SAVED THEME
+    ----------------------------------------------------- */
 
     const savedTheme =
         localStorage.getItem(
@@ -824,13 +919,7 @@ onDOMReady(() => {
             savedTheme
         );
 
-    }
-
-    else {
-
-        /*
-         * Respect system preference.
-         */
+    } else {
 
         const prefersDark =
             window.matchMedia &&
@@ -904,11 +993,6 @@ onDOMReady(() => {
             "currentDate"
         );
 
-
-    /*
-     * These elements only exist on pages
-     * that use the dashboard greeting.
-     */
 
     if (
         !greetingText &&
@@ -1012,8 +1096,8 @@ onDOMReady(() => {
 onDOMReady(() => {
 
     /*
-     * Prevent accidental button submission
-     * inside forms for shared header buttons.
+     * Prevent accidental form submission
+     * from shared header buttons.
      */
 
     const headerButtons =
@@ -1050,8 +1134,7 @@ onDOMReady(() => {
 
     /*
      * Register the PWA service worker only if
-     * the browser supports it and the page is
-     * running under a supported origin.
+     * supported by the browser.
      */
 
     if (
@@ -1105,7 +1188,8 @@ window.addEventListener(
 
         console.error(
             "AFC Isiu Portal Error:",
-            event.error || event.message
+            event.error ||
+            event.message
         );
 
     }
@@ -1136,3 +1220,4 @@ window.addEventListener(
 console.log(
     "AFC Isiu Youth Portal: main.js loaded successfully."
 );
+ 
