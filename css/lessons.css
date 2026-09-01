@@ -1,2150 +1,1245 @@
 /* =========================================================
-AFC ISIU YOUTH PORTAL
-LESSONS PAGE
-COMPLETE PAGE-SPECIFIC STYLES
+   AFC ISIU YOUTH PORTAL
+   LESSONS PAGE
+   COMPLETE PAGE-SPECIFIC STYLES
 ========================================================= */
 
+
 /* =========================================================
-LESSON PAGE ROOT
+   LESSON PAGE ROOT
 ========================================================= */
 
 .lessons-page {
 
- 
-width: 100%;
+    width: 100%;
 
-min-height: 100%;
+    min-height: 100%;
 
-font-family:
-    "DM Sans",
-    sans-serif;
- 
+    font-family:
+        "DM Sans",
+        sans-serif;
 
 }
+
 
 .lessons-page *,
 .lessons-page *::before,
 .lessons-page *::after {
 
- 
-box-sizing: border-box;
- 
+    box-sizing: border-box;
 
 }
 
+
 /* =========================================================
-CONTAINER
+   CONTAINER
 ========================================================= */
 
 .lessons-container {
 
- 
-width: min(
-    100%,
-    1500px
-);
+    width: min(
+        100%,
+        1500px
+    );
 
-margin: 0 auto;
+    margin: 0 auto;
 
-padding-left: 30px;
+    padding-left: 30px;
 
-padding-right: 30px;
- 
+    padding-right: 30px;
 
 }
 
+
 /* =========================================================
-PAGE HEADER
+   PAGE HEADER
 ========================================================= */
 
 .lessons-heading {
 
- 
-width: 100%;
+    width: 100%;
 
-display: flex;
+    display: flex;
 
-align-items: flex-end;
+    align-items: flex-end;
 
-justify-content: space-between;
+    justify-content: space-between;
 
-gap: 30px;
+    gap: 30px;
 
-margin-bottom: 28px;
- 
+    margin-bottom: 28px;
 
 }
+
 
 .lessons-heading > div:first-child {
 
- 
-min-width: 0;
- 
+    min-width: 0;
 
 }
+
 
 .lessons-heading .section-badge {
 
- 
-display: inline-flex;
+    display: inline-flex;
 
-align-items: center;
+    align-items: center;
 
-justify-content: center;
+    justify-content: center;
 
-padding: 7px 12px;
+    padding: 7px 12px;
 
-border-radius: 999px;
+    border-radius: 999px;
 
-background:
-    rgba(234, 88, 12, 0.10);
+    background:
+        rgba(234, 88, 12, 0.10);
 
-color:
-    #ea580c;
+    color:
+        #ea580c;
 
-font-size: 0.68rem;
+    font-size: 0.68rem;
 
-font-weight: 800;
+    font-weight: 800;
 
-letter-spacing: 0.12em;
- 
-
-}
-
-.lessons-heading h1 {
-
- 
-margin: 10px 0 6px;
-
-font-family:
-    "Bricolage Grotesque",
-    sans-serif;
-
-font-size: clamp(
-    1.8rem,
-    3vw,
-    2.55rem
-);
-
-line-height: 1.05;
-
-font-weight: 750;
-
-color:
-    var(--heading-color, #171717);
- 
-
-}
-
-.lessons-heading p {
-
- 
-max-width: 650px;
-
-margin: 0;
-
-color:
-    var(--text-muted, #6b7280);
-
-font-size: 0.92rem;
-
-line-height: 1.55;
- 
-
-}
-
-/* =========================================================
-WEEK INDICATOR
-========================================================= */
-
-.lesson-week {
-
- 
-flex-shrink: 0;
-
-display: inline-flex;
-
-align-items: center;
-
-gap: 9px;
-
-padding: 11px 15px;
-
-border: 1px solid
-    rgba(0, 0, 0, 0.07);
-
-border-radius: 12px;
-
-background:
-    #ffffff;
-
-color:
-    #4b5563;
-
-font-size: 0.78rem;
-
-font-weight: 700;
-
-box-shadow:
-    0 4px 16px
-    rgba(0, 0, 0, 0.04);
- 
-
-}
-
-.lesson-week i {
-
- 
-color:
-    #ea580c;
- 
-
-}
-
-/* =========================================================
-CLASS TABS
-========================================================= */
-
-.lesson-selector {
-
- 
-width: 100%;
-
-display: grid;
-
-grid-template-columns:
-    repeat(3, minmax(0, 1fr));
-
-gap: 12px;
-
-padding: 6px;
-
-border-radius: 16px;
-
-background:
-    #f1f3f5;
-
-border: 1px solid
-    rgba(0, 0, 0, 0.05);
- 
-
-}
-
-.class-tab {
-
- 
-min-height: 52px;
-
-border: 0;
-
-border-radius: 11px;
-
-background:
-    transparent;
-
-color:
-    #6b7280;
-
-display: flex;
-
-align-items: center;
-
-justify-content: center;
-
-gap: 9px;
-
-font-family:
-    "DM Sans",
-    sans-serif;
-
-font-size: 0.84rem;
-
-font-weight: 750;
-
-cursor: pointer;
-
-transition:
-    background 0.2s ease,
-    color 0.2s ease,
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
- 
-
-}
-
-.class-tab i {
-
- 
-font-size: 0.9rem;
- 
-
-}
-
-.class-tab:hover {
-
- 
-color:
-    #ea580c;
- 
-
-}
-
-.class-tab.active {
-
- 
-background:
-    #ffffff;
-
-color:
-    #ea580c;
-
-box-shadow:
-    0 4px 14px
-    rgba(0, 0, 0, 0.08);
- 
-
-}
-
-.class-tab:focus-visible {
-
- 
-outline:
-    3px solid
-    rgba(234, 88, 12, 0.20);
-
-outline-offset:
-    2px;
- 
-
-}
-
-/* =========================================================
-SPACE BETWEEN TABS AND TOPIC CARD
-========================================================= */
-
-.lesson-tabs-spacer {
-
- 
-height: 10px;
- 
-
-}
-
-/* =========================================================
-LESSON VIEW
-========================================================= */
-
-.lesson-view {
-
- 
-width: 100%;
-
-display: block;
- 
-
-}
-
-/* =========================================================
-LESSON TOPIC CARD
-========================================================= */
-
-.lesson-topic-card {
-
- 
-width: 100%;
-
-margin: 0;
-
-padding: 28px 32px;
-
-border-radius: 20px;
-
-background:
-    linear-gradient(
-        135deg,
-        #16001f 0%,
-        #24002f 55%,
-        #0d0013 100%
-    );
-
-color: #ffffff;
-
-border:
-    1px solid
-    rgba(255, 255, 255, 0.08);
-
-box-shadow:
-    0 12px 30px
-    rgba(10, 0, 22, 0.18);
-
-position: relative;
-
-overflow: hidden;
- 
-
-}
-
-.lesson-topic-label {
-
- 
-position: relative;
-
-z-index: 2;
-
-display: inline-flex;
-
-align-items: center;
-
-gap: 8px;
-
-margin-bottom: 14px;
-
-padding: 6px 10px;
-
-border-radius: 999px;
-
-background:
-    rgba(255, 255, 255, 0.15);
-
-border:
-    1px solid
-    rgba(255, 255, 255, 0.16);
-
-font-size: 0.67rem;
-
-font-weight: 800;
-
-letter-spacing: 0.08em;
- 
-
-}
-
-.lesson-topic-label i {
-
- 
-font-size: 0.72rem;
- 
-
-}
-
-.lesson-topic-card h2 {
-
- 
-position: relative;
-
-z-index: 2;
-
-margin: 0;
-
-max-width: 1000px;
-
-font-family:
-    "Bricolage Grotesque",
-    sans-serif;
-
-font-size: clamp(
-    1.45rem,
-    3vw,
-    2.2rem
-);
-
-line-height: 1.15;
-
-font-weight: 750;
- 
-
-}
-
-.lesson-topic {
-
- 
-position: relative;
-
-z-index: 2;
-
-margin: 10px 0 0;
-
-max-width: 900px;
-
-font-size: clamp(
-    0.9rem,
-    1.5vw,
-    1.05rem
-);
-
-line-height: 1.5;
-
-color:
-    rgba(255, 255, 255, 0.92);
- 
-
-}
-
-/* =========================================================
-LESSON INFORMATION
-========================================================= */
-
-.lesson-info-grid {
-
- 
-width: 100%;
-
-display: grid;
-
-grid-template-columns:
-    repeat(3, minmax(0, 1fr));
-
-gap: 15px;
-
-margin-top: 18px;
- 
-
-}
-
-.lesson-info-card {
-
- 
-min-width: 0;
-
-display: flex;
-
-align-items: center;
-
-gap: 14px;
-
-padding: 18px;
-
-border:
-    1px solid
-    rgba(0, 0, 0, 0.06);
-
-border-radius: 16px;
-
-background:
-    #ffffff;
-
-box-shadow:
-    0 6px 20px
-    rgba(0, 0, 0, 0.035);
- 
-
-}
-
-.info-icon {
-
- 
-width: 42px;
-
-height: 42px;
-
-flex-shrink: 0;
-
-display: flex;
-
-align-items: center;
-
-justify-content: center;
-
-border-radius: 12px;
-
-background:
-    rgba(234, 88, 12, 0.09);
-
-color:
-    #ea580c;
- 
-
-}
-
-.lesson-info-card > div:last-child {
-
- 
-min-width: 0;
- 
-
-}
-
-.lesson-info-card span {
-
- 
-display: block;
-
-margin-bottom: 4px;
-
-color:
-    #8a8f98;
-
-font-size: 0.68rem;
-
-font-weight: 700;
-
-text-transform: uppercase;
-
-letter-spacing: 0.06em;
- 
-
-}
-
-.lesson-info-card strong {
-
- 
-display: block;
-
-overflow-wrap: anywhere;
-
-color:
-    #252525;
-
-font-size: 0.86rem;
-
-line-height: 1.35;
- 
-
-}
-
-/* =========================================================
-MEMORY VERSE
-========================================================= */
-
-.memory-verse-card {
-
- 
-width: 100%;
-
-display: flex;
-
-align-items: flex-start;
-
-gap: 16px;
-
-margin-top: 18px;
-
-padding: 22px 24px;
-
-border-radius: 17px;
-
-background:
-    #fff7ed;
-
-border:
-    1px solid
-    rgba(234, 88, 12, 0.10);
- 
-
-}
-
-.memory-verse-icon {
-
- 
-width: 40px;
-
-height: 40px;
-
-flex-shrink: 0;
-
-display: flex;
-
-align-items: center;
-
-justify-content: center;
-
-border-radius: 12px;
-
-background:
-    #ea580c;
-
-color:
-    #ffffff;
- 
-
-}
-
-.memory-verse-content {
-
- 
-min-width: 0;
- 
-
-}
-
-.memory-verse-content > span {
-
- 
-display: block;
-
-margin-bottom: 6px;
-
-color:
-    #c2410c;
-
-font-size: 0.64rem;
-
-font-weight: 850;
-
-letter-spacing: 0.1em;
- 
-
-}
-
-.memory-verse-content p {
-
- 
-margin: 0;
-
-color:
-    #78350f;
-
-font-family:
-    "DM Sans",
-    sans-serif;
-
-font-size: 0.86rem;
-
-font-weight: 550;
-
-line-height: 1.55;
- 
-
-}
-
-/* =========================================================
-MAIN BODY LAYOUT
-========================================================= */
-
-.lesson-body-layout {
-
- 
-width: 100%;
-
-display: grid;
-
-grid-template-columns:
-    minmax(0, 1fr)
-    300px;
-
-align-items: start;
-
-gap: 22px;
-
-margin-top: 22px;
- 
-
-}
-
-.lesson-main-column {
-
- 
-min-width: 0;
-
-display: flex;
-
-flex-direction: column;
-
-gap: 20px;
- 
-
-}
-
-/* =========================================================
-STUDY LESSON CARD
-========================================================= */
-
-.lesson-content-card {
-
- 
-width: 100%;
-
-min-width: 0;
-
-padding: 28px 32px;
-
-border:
-    1px solid
-    rgba(0, 0, 0, 0.06);
-
-border-radius: 20px;
-
-background:
-    #ffffff;
-
-box-shadow:
-    0 8px 28px
-    rgba(0, 0, 0, 0.045);
- 
-
-}
-
-.content-card-header {
-
- 
-display: flex;
-
-align-items: center;
-
-gap: 13px;
-
-padding-bottom: 18px;
-
-margin-bottom: 22px;
-
-border-bottom:
-    1px solid
-    rgba(0, 0, 0, 0.06);
- 
-
-}
-
-.content-card-icon {
-
- 
-width: 43px;
-
-height: 43px;
-
-flex-shrink: 0;
-
-display: flex;
-
-align-items: center;
-
-justify-content: center;
-
-border-radius: 12px;
-
-background:
-    rgba(8, 145, 178, 0.09);
-
-color:
-    #0891b2;
- 
-
-}
-
-.content-card-header span {
-
- 
-display: block;
-
-margin-bottom: 3px;
-
-color:
-    #0891b2;
-
-font-size: 0.63rem;
-
-font-weight: 850;
-
-letter-spacing: 0.1em;
- 
-
-}
-
-.content-card-header h3 {
-
- 
-margin: 0;
-
-font-family:
-    "Bricolage Grotesque",
-    sans-serif;
-
-color:
-    #202020;
-
-font-size: 1.18rem;
-
-line-height: 1.2;
- 
-
-}
-
-/* =========================================================
-ACTUAL LESSON CONTENT
-========================================================= */
-
-.lesson-content {
-
- 
-width: 100%;
-
-color:
-    #343434;
-
-font-size: 0.9rem;
-
-line-height: 1.7;
- 
-
-}
-
-.lesson-content h1,
-.lesson-content h2,
-.lesson-content h3,
-.lesson-content h4 {
-
- 
-margin-top: 25px;
-
-margin-bottom: 9px;
-
-color:
-    #202020;
-
-font-family:
-    "Bricolage Grotesque",
-    sans-serif;
-
-line-height: 1.25;
- 
-
-}
-
-.lesson-content h1 {
-
- 
-font-size: 1.35rem;
- 
-
-}
-
-.lesson-content h2 {
-
- 
-font-size: 1.2rem;
- 
-
-}
-
-.lesson-content h3 {
-
- 
-font-size: 1.05rem;
- 
-
-}
-
-.lesson-content h4 {
-
- 
-font-size: 0.95rem;
- 
-
-}
-
-.lesson-content h1:first-child,
-.lesson-content h2:first-child,
-.lesson-content h3:first-child,
-.lesson-content h4:first-child {
-
- 
-margin-top: 0;
- 
-
-}
-
-.lesson-content p {
-
- 
-font-size: 0.88rem;
-
-margin:
-    0 0 14px;
- 
-
-}
-
-.lesson-content ul,
-.lesson-content ol {
-
- 
-margin:
-    10px 0 18px;
-
-padding-left: 24px;
- 
-
-}
-
-.lesson-content li {
-
- 
-margin-bottom: 8px;
- 
-
-}
-
-.lesson-content strong {
-
- 
-color:
-    #202020;
- 
-
-}
-
-.lesson-content blockquote {
-
- 
-margin:
-    18px 0;
-
-padding:
-    14px 18px;
-
-border-left:
-    4px solid
-    #0891b2;
-
-border-radius:
-    0 10px 10px 0;
-
-background:
-    #f0f9ff;
- 
-
-}
-
-/* =========================================================
-DISCUSSION CARD
-========================================================= */
-
-.discussion-card {
-
- 
-width: 100%;
-
-padding: 26px 30px;
-
-border:
-    1px solid
-    rgba(234, 88, 12, 0.10);
-
-border-radius: 20px;
-
-background:
-    #ffffff;
-
-box-shadow:
-    0 8px 28px
-    rgba(0, 0, 0, 0.04);
- 
-
-}
-
-.discussion-header {
-
- 
-display: flex;
-
-align-items: center;
-
-gap: 13px;
-
-padding-bottom: 17px;
-
-margin-bottom: 20px;
-
-border-bottom:
-    1px solid
-    rgba(0, 0, 0, 0.06);
- 
-
-}
-
-.discussion-icon {
-
- 
-width: 43px;
-
-height: 43px;
-
-flex-shrink: 0;
-
-display: flex;
-
-align-items: center;
-
-justify-content: center;
-
-border-radius: 12px;
-
-background:
-    rgba(234, 88, 12, 0.09);
-
-color:
-    #ea580c;
- 
-
-}
-
-.discussion-header span {
-
- 
-display: block;
-
-margin-bottom: 3px;
-
-color:
-    #ea580c;
-
-font-size: 0.63rem;
-
-font-weight: 850;
-
-letter-spacing: 0.1em;
- 
-
-}
-
-.discussion-header h3 {
-
- 
-margin: 0;
-
-color:
-    #202020;
-
-font-family:
-    "Bricolage Grotesque",
-    sans-serif;
-
-font-size: 1.18rem;
- 
-
-}
-
-.discussion-content {
-
- 
-width: 100%;
- 
-
-}
-
-.discussion-question {
-
- 
-display: flex;
-
-align-items: flex-start;
-
-gap: 12px;
-
-padding: 14px 0;
-
-border-bottom:
-    1px solid
-    rgba(0, 0, 0, 0.055);
- 
-
-}
-
-.discussion-question:last-child {
-
- 
-border-bottom: 0;
-
-padding-bottom: 0;
- 
-
-}
-
-.discussion-number {
-
- 
-width: 27px;
-
-height: 27px;
-
-flex-shrink: 0;
-
-display: flex;
-
-align-items: center;
-
-justify-content: center;
-
-border-radius: 50%;
-
-background:
-    rgba(234, 88, 12, 0.10);
-
-color:
-    #ea580c;
-
-font-size: 0.72rem;
-
-font-weight: 800;
- 
-
-}
-
-.discussion-question p {
-
- 
-margin: 2px 0 0;
-
-color:
-    #363636;
-
-font-size: 0.88rem;
-
-line-height: 1.6;
- 
-
-}
-
-.discussion-empty {
-
- 
-margin: 0;
-
-color:
-    #858585;
-
-font-size: 0.84rem;
- 
-
-}
-
-/* =========================================================
-DESKTOP LESSON SIDEBAR
-========================================================= */
-
-.lesson-sidebar-card {
-
- 
-width: 100%;
-
-position: sticky;
-
-top: 90px;
-
-display: flex;
-
-flex-direction: column;
-
-gap: 15px;
- 
-
-}
-
-.lesson-progress-box {
-
- 
-padding: 21px;
-
-border-radius: 17px;
-
-background:
-    #ffffff;
-
-border:
-    1px solid
-    rgba(0, 0, 0, 0.06);
-
-box-shadow:
-    0 8px 25px
-    rgba(0, 0, 0, 0.045);
- 
-
-}
-
-.progress-header {
-
- 
-display: flex;
-
-justify-content: space-between;
-
-margin-bottom: 13px;
- 
-
-}
-
-.progress-header > div {
-
- 
-width: 100%;
-
-display: flex;
-
-align-items: center;
-
-justify-content: space-between;
-
-gap: 10px;
- 
-
-}
-
-.progress-header span {
-
- 
-color:
-    #70757d;
-
-font-size: 0.64rem;
-
-font-weight: 850;
-
-letter-spacing: 0.08em;
- 
-
-}
-
-.progress-header strong {
-
- 
-color:
-    #ea580c;
-
-font-size: 0.82rem;
- 
-
-}
-
-.progress-track {
-
- 
-width: 100%;
-
-height: 8px;
-
-overflow: hidden;
-
-border-radius: 999px;
-
-background:
-    #edf0f2;
- 
-
-}
-
-.progress-bar {
-
- 
-width: 0%;
-
-height: 100%;
-
-border-radius: inherit;
-
-background:
-    linear-gradient(
-        90deg,
-        #ea580c,
-        #f97316
-    );
-
-transition:
-    width 0.3s ease;
- 
-
-}
-
-.lesson-progress-box > p {
-
- 
-margin:
-    10px 0 0;
-
-color:
-    #777;
-
-font-size: 0.74rem;
-
-line-height: 1.45;
- 
-
-}
-
-/* =========================================================
-META BOX
-========================================================= */
-
-.lesson-meta-box {
-
- 
-display: grid;
-
-grid-template-columns:
-    1fr 1fr;
-
-gap: 10px;
- 
-
-}
-
-.lesson-meta-box > div {
-
- 
-min-width: 0;
-
-padding: 15px;
-
-border-radius: 15px;
-
-background:
-    #ffffff;
-
-border:
-    1px solid
-    rgba(0, 0, 0, 0.06);
-
-box-shadow:
-    0 6px 18px
-    rgba(0, 0, 0, 0.035);
- 
-
-}
-
-.lesson-meta-box i {
-
- 
-display: block;
-
-margin-bottom: 7px;
-
-color:
-    #0891b2;
- 
-
-}
-
-.lesson-meta-box span {
-
- 
-display: block;
-
-color:
-    #858585;
-
-font-size: 0.64rem;
- 
-
-}
-
-.lesson-meta-box strong {
-
- 
-display: block;
-
-margin-top: 3px;
-
-color:
-    #252525;
-
-font-size: 0.78rem;
- 
-
-}
-
-/* =========================================================
-FINISH READING BUTTON
-========================================================= */
-
-.finish-reading-btn {
-
- 
-width: 100%;
-
-border: 0;
-
-border-radius: 17px;
-
-padding: 16px;
-
-display: flex;
-
-align-items: center;
-
-gap: 12px;
-
-text-align: left;
-
-background:
-    #111827;
-
-color:
-    #ffffff;
-
-cursor: pointer;
-
-transition:
-    transform 0.2s ease,
-    background 0.2s ease,
-    box-shadow 0.2s ease;
- 
-
-}
-
-.finish-reading-btn:hover {
-
- 
-transform:
-    translateY(-2px);
-
-background:
-    #1f2937;
-
-box-shadow:
-    0 9px 22px
-    rgba(17, 24, 39, 0.16);
- 
-
-}
-
-.finish-reading-btn:disabled {
-
- 
-cursor: default;
-
-opacity: 0.65;
-
-transform: none;
- 
-
-}
-
-.finish-icon {
-
- 
-width: 38px;
-
-height: 38px;
-
-flex-shrink: 0;
-
-display: flex;
-
-align-items: center;
-
-justify-content: center;
-
-border-radius: 11px;
-
-background:
-    rgba(255, 255, 255, 0.12);
- 
-
-}
-
-.finish-text {
-
- 
-min-width: 0;
- 
-
-}
-
-.finish-text strong {
-
- 
-display: block;
-
-font-size: 0.8rem;
-
-line-height: 1.3;
- 
-
-}
-
-.finish-text small {
-
- 
-display: block;
-
-margin-top: 3px;
-
-color:
-    rgba(255, 255, 255, 0.62);
-
-font-size: 0.65rem;
-
-line-height: 1.3;
- 
-
-}
-
-/* =========================================================
-MOBILE FINISH CARD
-========================================================= */
-
-.mobile-finish-card {
-
- 
-display: none;
- 
-
-}
-
-/* =========================================================
-LESSON COMPLETED STATE
-========================================================= */
-
-.lesson-completed .finish-reading-btn {
-
- 
-background:
-    #0f766e;
- 
-
-}
-
-.lesson-completed .progress-bar {
-
- 
-background:
-    #0f766e;
- 
-
-}
-
-/* =========================================================
-ERROR STATE
-========================================================= */
-
-.lesson-error-message {
-
- 
-width: 100%;
-
-padding: 25px;
-
-border-radius: 18px;
-
-background:
-    #fff7ed;
-
-border:
-    1px solid
-    rgba(234, 88, 12, 0.12);
-
-text-align: center;
- 
-
-}
-
-.lesson-error-message i {
-
- 
-display: block;
-
-margin-bottom: 10px;
-
-color:
-    #ea580c;
-
-font-size: 1.5rem;
- 
-
-}
-
-.lesson-error-message strong {
-
- 
-display: block;
-
-margin-bottom: 5px;
-
-color:
-    #292929;
-
-font-size: 0.95rem;
- 
-
-}
-
-.lesson-error-message p {
-
- 
-margin: 0;
-
-color:
-    #737373;
-
-font-size: 0.78rem;
-
-line-height: 1.5;
- 
-
-}
-
-/* =========================================================
-TABLET
-========================================================= */
-
-@media (max-width: 1050px) {
-
- 
-.lesson-body-layout {
-
-    grid-template-columns:
-        minmax(0, 1fr)
-        270px;
-
-    gap: 18px;
-
-}
-
-
-.lessons-container {
-
-    padding-left: 24px;
-
-    padding-right: 24px;
-
-}
-
-
-.lesson-topic-card {
-
-    padding: 27px 28px;
-
-}
-
-
-.lesson-content-card {
-
-    padding: 25px 27px;
-
-}
- 
-
-}
-
-/* =========================================================
-MOBILE
-========================================================= */
-
-@media (max-width: 768px) {
-
- 
-.lessons-container {
-
-    width: 100%;
-
-    padding-left: 15px;
-
-    padding-right: 15px;
-
-    padding-bottom: 105px;
-
-}
-
-
-.lessons-heading {
-
-    display: block;
-
-    margin-bottom: 20px;
+    letter-spacing: 0.12em;
 
 }
 
 
 .lessons-heading h1 {
 
-    font-size: 1.65rem;
+    margin: 10px 0 6px;
+
+    font-family:
+        "Bricolage Grotesque",
+        sans-serif;
+
+    font-size: clamp(
+        1.8rem,
+        3vw,
+        2.55rem
+    );
+
+    line-height: 1.05;
+
+    font-weight: 750;
+
+    color:
+        var(--heading-color, #171717);
 
 }
 
 
 .lessons-heading p {
 
-    font-size: 0.82rem;
+    max-width: 650px;
 
-    line-height: 1.5;
+    margin: 0;
 
-}
+    color:
+        var(--text-muted, #6b7280);
 
-
-.lesson-week {
-
-    margin-top: 13px;
-
-    padding: 9px 12px;
-
-    font-size: 0.7rem;
-
-}
-
-
-.lesson-selector {
-
-    gap: 6px;
-
-    padding: 5px;
-
-    border-radius: 13px;
-
-}
-
-
-.class-tab {
-
-    min-height: 46px;
-
-    gap: 5px;
-
-    font-size: 0.72rem;
-
-}
-
-
-.class-tab i {
-
-    font-size: 0.75rem;
-
-}
-
-
-/* Space between tabs and topic */
-
-.lesson-tabs-spacer {
-
-    height: 8px;
-
-}
-
-
-/* Topic */
-
-.lesson-topic-card {
-
-    padding: 22px 20px;
-
-    border-radius: 18px;
-
-}
-
-
-.lesson-topic-label {
-
-    margin-bottom: 11px;
-
-    padding: 5px 8px;
-
-    font-size: 0.58rem;
-
-}
-
-
-.lesson-topic-card h2 {
-
-    font-size: 1.3rem;
-
-    line-height: 1.18;
-
-}
-
-
-.lesson-topic {
-
-    font-size: 0.8rem;
-
-    margin-top: 8px;
-
-}
-
-
-/* Information */
-
-.lesson-info-grid {
-
-    grid-template-columns:
-        1fr;
-
-    gap: 9px;
-
-    margin-top: 12px;
-
-}
-
-
-.lesson-info-card {
-
-    padding: 14px;
-
-    border-radius: 14px;
-
-}
-
-
-.info-icon {
-
-    width: 37px;
-
-    height: 37px;
-
-    border-radius: 10px;
-
-}
-
-
-.lesson-info-card span {
-
-    font-size: 0.6rem;
-
-}
-
-
-.lesson-info-card strong {
-
-    font-size: 0.78rem;
-
-}
-
-
-/* Memory verse */
-
-.memory-verse-card {
-
-    margin-top: 12px;
-
-    padding: 17px;
-
-    gap: 11px;
-
-    border-radius: 15px;
-
-}
-
-
-.memory-verse-icon {
-
-    width: 34px;
-
-    height: 34px;
-
-    border-radius: 9px;
-
-    font-size: 0.72rem;
-
-}
-
-
-.memory-verse-content > span {
-
-    font-size: 0.57rem;
-
-}
-
-
-.memory-verse-content p {
-
-    font-size: 0.76rem;
-
-    line-height: 1.5;
-
-}
-
-
-/* Main body */
-
-.lesson-body-layout {
-
-    display: block;
-
-    margin-top: 15px;
-
-}
-
-
-.lesson-main-column {
-
-    gap: 14px;
-
-}
-
-
-/* =====================================================
-   STUDY LESSON CARD
-   Improved comfortable inner padding
-===================================================== */
-
-.lesson-content-card {
-
-    width: 100%;
-
-    padding: 22px;
-
-    border-radius: 16px;
-
-}
-
-
-.content-card-header {
-
-    gap: 11px;
-
-    padding-bottom: 16px;
-
-    margin-bottom: 19px;
-
-}
-
-
-.content-card-icon {
-
-    width: 37px;
-
-    height: 37px;
-
-    border-radius: 10px;
-
-}
-
-
-.content-card-header span {
-
-    font-size: 0.57rem;
-
-}
-
-
-.content-card-header h3 {
-
-    font-size: 1rem;
-
-}
-
-
-.lesson-content {
-
-    font-size: 0.82rem;
-
-    line-height: 1.65;
-
-}
-
-
-.lesson-content h1 {
-
-    font-size: 1.15rem;
-
-}
-
-
-.lesson-content h2 {
-
-    font-size: 1.05rem;
-
-}
-
-
-.lesson-content h3 {
-
-    font-size: 0.96rem;
-
-}
-
-
-.lesson-content p {
-
-    margin-bottom: 12px;
-
-}
-
-
-/* Discussion */
-
-.discussion-card {
-
-    padding: 20px 20px;
-
-    border-radius: 16px;
-
-}
-
-
-.discussion-header {
-
-    gap: 10px;
-
-    padding-bottom: 14px;
-
-    margin-bottom: 14px;
-
-}
-
-
-.discussion-icon {
-
-    width: 37px;
-
-    height: 37px;
-
-    border-radius: 10px;
-
-}
-
-
-.discussion-header span {
-
-    font-size: 0.57rem;
-
-}
-
-
-.discussion-header h3 {
-
-    font-size: 1rem;
-
-}
-
-
-.discussion-question {
-
-    gap: 9px;
-
-    padding: 12px 0;
-
-}
-
-
-.discussion-number {
-
-    width: 25px;
-
-    height: 25px;
-
-    font-size: 0.65rem;
-
-}
-
-
-.discussion-question p {
-
-    font-size: 0.78rem;
+    font-size: 0.92rem;
 
     line-height: 1.55;
 
 }
 
 
-/* Hide desktop sidebar */
+/* =========================================================
+   WEEK INDICATOR
+========================================================= */
 
-.lesson-sidebar-card {
+.lesson-week {
 
-    display: none;
+    flex-shrink: 0;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    padding: 11px 15px;
+
+    border: 1px solid
+        rgba(0, 0, 0, 0.07);
+
+    border-radius: 12px;
+
+    background:
+        #ffffff;
+
+    color:
+        #4b5563;
+
+    font-size: 0.78rem;
+
+    font-weight: 700;
+
+    box-shadow:
+        0 4px 16px
+        rgba(0, 0, 0, 0.04);
 
 }
 
 
-/* Mobile progress */
+.lesson-week i {
 
-.mobile-finish-card {
+    color:
+        #ea580c;
 
-    display: block;
+}
+
+
+/* =========================================================
+   CLASS TABS
+========================================================= */
+
+.lesson-selector {
 
     width: 100%;
 
-    margin-top: 14px;
+    display: grid;
 
-    padding: 17px;
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+
+    gap: 12px;
+
+    padding: 6px;
 
     border-radius: 16px;
+
+    background:
+        #f1f3f5;
+
+    border: 1px solid
+        rgba(0, 0, 0, 0.05);
+
+}
+
+
+.class-tab {
+
+    min-height: 52px;
+
+    border: 0;
+
+    border-radius: 11px;
+
+    background:
+        transparent;
+
+    color:
+        #6b7280;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 9px;
+
+    font-family:
+        "DM Sans",
+        sans-serif;
+
+    font-size: 0.84rem;
+
+    font-weight: 750;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+
+}
+
+
+.class-tab i {
+
+    font-size: 0.9rem;
+
+}
+
+
+.class-tab:hover {
+
+    color:
+        #ea580c;
+
+}
+
+
+.class-tab.active {
+
+    background:
+        #ffffff;
+
+    color:
+        #ea580c;
+
+    box-shadow:
+        0 4px 14px
+        rgba(0, 0, 0, 0.08);
+
+}
+
+
+.class-tab:focus-visible {
+
+    outline:
+        3px solid
+        rgba(234, 88, 12, 0.20);
+
+    outline-offset:
+        2px;
+
+}
+
+
+/* =========================================================
+   SPACE BETWEEN TABS AND TOPIC CARD
+========================================================= */
+
+.lesson-tabs-spacer {
+
+    height: 10px;
+
+}
+
+
+/* =========================================================
+   LESSON VIEW
+========================================================= */
+
+.lesson-view {
+
+    width: 100%;
+
+    display: block;
+
+}
+
+
+/* =========================================================
+   LESSON TOPIC CARD
+========================================================= */
+
+.lesson-topic-card {
+
+    width: 100%;
+
+    margin: 0;
+
+    padding: 24px 28px;
+
+    border-radius: 20px;
+
+    background:
+        #ffffff;
+
+    border:
+        1px solid
+        rgba(234, 88, 12, 0.16);
+
+    border-left:
+        5px solid
+        #ea580c;
+
+    box-shadow:
+        0 10px 28px
+        rgba(0, 0, 0, 0.045);
+
+    position: relative;
+
+}
+
+
+/* =========================================================
+   TOPIC LABEL
+========================================================= */
+
+.lesson-topic-label {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    margin-bottom: 10px;
+
+    padding: 6px 10px;
+
+    border-radius: 999px;
+
+    background:
+        rgba(234, 88, 12, 0.10);
+
+    color:
+        #ea580c;
+
+    font-size: 0.62rem;
+
+    font-weight: 800;
+
+    letter-spacing: 0.08em;
+
+    text-transform: uppercase;
+
+}
+
+
+.lesson-topic-label i {
+
+    font-size: 0.7rem;
+
+}
+
+
+/* =========================================================
+   LESSON TOPIC HEADING
+   COMPACT H4-STYLE APPEARANCE
+========================================================= */
+
+.lesson-topic-card h2,
+.lesson-topic-card h4 {
+
+    margin: 0;
+
+    max-width: 1000px;
+
+    font-family:
+        "Bricolage Grotesque",
+        sans-serif;
+
+    font-size: 1rem;
+
+    line-height: 1.4;
+
+    font-weight: 750;
+
+    color:
+        #31213a;
+
+}
+
+
+/* =========================================================
+   TOPIC DESCRIPTION
+========================================================= */
+
+.lesson-topic {
+
+    margin: 8px 0 0;
+
+    max-width: 950px;
+
+    color:
+        #6b7280;
+
+    font-size: 0.82rem;
+
+    line-height: 1.55;
+
+}
+
+
+/* =========================================================
+   LESSON INFORMATION
+========================================================= */
+
+.lesson-info-grid {
+
+    width: 100%;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+
+    gap: 15px;
+
+    margin-top: 18px;
+
+}
+
+
+.lesson-info-card {
+
+    min-width: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+
+    padding: 18px;
+
+    border:
+        1px solid
+        rgba(0, 0, 0, 0.06);
+
+    border-radius: 16px;
+
+    background:
+        #ffffff;
+
+    box-shadow:
+        0 6px 20px
+        rgba(0, 0, 0, 0.035);
+
+}
+
+
+.info-icon {
+
+    width: 42px;
+
+    height: 42px;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 12px;
+
+    background:
+        rgba(234, 88, 12, 0.09);
+
+    color:
+        #ea580c;
+
+}
+
+
+.lesson-info-card > div:last-child {
+
+    min-width: 0;
+
+}
+
+
+.lesson-info-card span {
+
+    display: block;
+
+    margin-bottom: 4px;
+
+    color:
+        #8a8f98;
+
+    font-size: 0.68rem;
+
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.06em;
+
+}
+
+
+.lesson-info-card strong {
+
+    display: block;
+
+    overflow-wrap: anywhere;
+
+    color:
+        #4b5563;
+
+    font-size: 0.86rem;
+
+    line-height: 1.35;
+
+}
+
+
+/* =========================================================
+   MEMORY VERSE
+========================================================= */
+
+.memory-verse-card {
+
+    width: 100%;
+
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 16px;
+
+    margin-top: 18px;
+
+    padding: 22px 24px;
+
+    border-radius: 17px;
+
+    background:
+        #fff7ed;
+
+    border:
+        1px solid
+        rgba(234, 88, 12, 0.10);
+
+}
+
+
+.memory-verse-icon {
+
+    width: 40px;
+
+    height: 40px;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 12px;
+
+    background:
+        #ea580c;
+
+    color:
+        #ffffff;
+
+}
+
+
+.memory-verse-content {
+
+    min-width: 0;
+
+}
+
+
+.memory-verse-content > span {
+
+    display: block;
+
+    margin-bottom: 6px;
+
+    color:
+        #c2410c;
+
+    font-size: 0.64rem;
+
+    font-weight: 850;
+
+    letter-spacing: 0.1em;
+
+}
+
+
+.memory-verse-content p {
+
+    margin: 0;
+
+    color:
+        #78350f;
+
+    font-family:
+        "DM Sans",
+        sans-serif;
+
+    font-size: 0.86rem;
+
+    font-weight: 550;
+
+    line-height: 1.55;
+
+}
+
+
+/* =========================================================
+   MAIN BODY LAYOUT
+========================================================= */
+
+.lesson-body-layout {
+
+    width: 100%;
+
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1fr)
+        300px;
+
+    align-items: start;
+
+    gap: 22px;
+
+    margin-top: 22px;
+
+}
+
+
+.lesson-main-column {
+
+    min-width: 0;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 20px;
+
+}
+
+
+/* =========================================================
+   STUDY LESSON CARD
+========================================================= */
+
+.lesson-content-card {
+
+    width: 100%;
+
+    min-width: 0;
+
+    padding: 28px 32px;
+
+    border:
+        1px solid
+        rgba(0, 0, 0, 0.06);
+
+    border-radius: 20px;
+
+    background:
+        #ffffff;
+
+    box-shadow:
+        0 8px 28px
+        rgba(0, 0, 0, 0.045);
+
+}
+
+
+/* =========================================================
+   STUDY CARD HEADER
+========================================================= */
+
+.content-card-header {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 13px;
+
+    padding-bottom: 18px;
+
+    margin-bottom: 22px;
+
+    border-bottom:
+        1px solid
+        rgba(0, 0, 0, 0.06);
+
+}
+
+
+.content-card-icon {
+
+    width: 43px;
+
+    height: 43px;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 12px;
+
+    background:
+        rgba(8, 145, 178, 0.09);
+
+    color:
+        #0891b2;
+
+}
+
+
+.content-card-header span {
+
+    display: block;
+
+    margin-bottom: 3px;
+
+    color:
+        #0891b2;
+
+    font-size: 0.63rem;
+
+    font-weight: 850;
+
+    letter-spacing: 0.1em;
+
+}
+
+
+.content-card-header h3 {
+
+    margin: 0;
+
+    font-family:
+        "Bricolage Grotesque",
+        sans-serif;
+
+    color:
+        #374151;
+
+    font-size: 1.18rem;
+
+    line-height: 1.2;
+
+}
+
+
+/* =========================================================
+   ACTUAL LESSON CONTENT
+========================================================= */
+
+.lesson-content {
+
+    width: 100%;
+
+    color:
+        #4b5563;
+
+    font-size: 0.9rem;
+
+    line-height: 1.7;
+
+}
+
+
+/* Headings */
+
+.lesson-content h1,
+.lesson-content h2,
+.lesson-content h3,
+.lesson-content h4 {
+
+    margin-top: 25px;
+
+    margin-bottom: 9px;
+
+    color:
+        #374151;
+
+    font-family:
+        "Bricolage Grotesque",
+        sans-serif;
+
+    line-height: 1.25;
+
+    font-weight: 700;
+
+}
+
+
+.lesson-content h1 {
+
+    font-size: 1.35rem;
+
+}
+
+
+.lesson-content h2 {
+
+    font-size: 1.2rem;
+
+}
+
+
+.lesson-content h3 {
+
+    font-size: 1.05rem;
+
+}
+
+
+.lesson-content h4 {
+
+    font-size: 0.95rem;
+
+}
+
+
+.lesson-content h1:first-child,
+.lesson-content h2:first-child,
+.lesson-content h3:first-child,
+.lesson-content h4:first-child {
+
+    margin-top: 0;
+
+}
+
+
+/* Paragraphs */
+
+.lesson-content p {
+
+    font-size:
+        0.88rem;
+
+    margin:
+        0 0 14px;
+
+}
+
+
+/* Lists */
+
+.lesson-content ul,
+.lesson-content ol {
+
+    margin:
+        10px 0 18px;
+
+    padding-left:
+        24px;
+
+}
+
+
+.lesson-content li {
+
+    margin-bottom:
+        8px;
+
+}
+
+
+/* PROFESSIONAL SOFT STRONG TEXT */
+
+.lesson-content strong,
+.lesson-rich-content strong,
+.lesson-rich-content b {
+
+    color:
+        #4b5563;
+
+    font-weight:
+        700;
+
+}
+
+
+/* Blockquotes */
+
+.lesson-content blockquote {
+
+    margin:
+        18px 0;
+
+    padding:
+        14px 18px;
+
+    border-left:
+        4px solid
+        #0891b2;
+
+    border-radius:
+        0 10px 10px 0;
+
+    background:
+        #f0f9ff;
+
+    color:
+        #475569;
+
+}
+
+
+/* =========================================================
+   DISCUSSION CARD
+========================================================= */
+
+.discussion-card {
+
+    width: 100%;
+
+    padding:
+        26px 30px;
+
+    border:
+        1px solid
+        rgba(234, 88, 12, 0.10);
+
+    border-radius:
+        20px;
+
+    background:
+        #ffffff;
+
+    box-shadow:
+        0 8px 28px
+        rgba(0, 0, 0, 0.04);
+
+}
+
+
+.discussion-header {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        13px;
+
+    padding-bottom:
+        17px;
+
+    margin-bottom:
+        20px;
+
+    border-bottom:
+        1px solid
+        rgba(0, 0, 0, 0.06);
+
+}
+
+
+.discussion-icon {
+
+    width:
+        43px;
+
+    height:
+        43px;
+
+    flex-shrink:
+        0;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    border-radius:
+        12px;
+
+    background:
+        rgba(234, 88, 12, 0.09);
+
+    color:
+        #ea580c;
+
+}
+
+
+.discussion-header span {
+
+    display:
+        block;
+
+    margin-bottom:
+        3px;
+
+    color:
+        #ea580c;
+
+    font-size:
+        0.63rem;
+
+    font-weight:
+        850;
+
+    letter-spacing:
+        0.1em;
+
+}
+
+
+.discussion-header h3 {
+
+    margin:
+        0;
+
+    color:
+        #374151;
+
+    font-family:
+        "Bricolage Grotesque",
+        sans-serif;
+
+    font-size:
+        1.18rem;
+
+}
+
+
+.discussion-content {
+
+    width:
+        100%;
+
+}
+
+
+.discussion-question {
+
+    display:
+        flex;
+
+    align-items:
+        flex-start;
+
+    gap:
+        12px;
+
+    padding:
+        14px 0;
+
+    border-bottom:
+        1px solid
+        rgba(0, 0, 0, 0.055);
+
+}
+
+
+.discussion-question:last-child {
+
+    border-bottom:
+        0;
+
+    padding-bottom:
+        0;
+
+}
+
+
+.discussion-number {
+
+    width:
+        27px;
+
+    height:
+        27px;
+
+    flex-shrink:
+        0;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    border-radius:
+        50%;
+
+    background:
+        rgba(234, 88, 12, 0.10);
+
+    color:
+        #ea580c;
+
+    font-size:
+        0.72rem;
+
+    font-weight:
+        800;
+
+}
+
+
+.discussion-question p {
+
+    margin:
+        2px 0 0;
+
+    color:
+        #4b5563;
+
+    font-size:
+        0.88rem;
+
+    line-height:
+        1.6;
+
+}
+
+
+.discussion-empty {
+
+    margin:
+        0;
+
+    color:
+        #858585;
+
+    font-size:
+        0.84rem;
+
+}
+
+
+/* =========================================================
+   DESKTOP LESSON SIDEBAR
+========================================================= */
+
+.lesson-sidebar-card {
+
+    width:
+        100%;
+
+    position:
+        sticky;
+
+    top:
+        90px;
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    gap:
+        15px;
+
+}
+
+
+.lesson-progress-box {
+
+    padding:
+        21px;
+
+    border-radius:
+        17px;
 
     background:
         #ffffff;
@@ -2154,890 +1249,2078 @@ MOBILE
         rgba(0, 0, 0, 0.06);
 
     box-shadow:
-        0 7px 22px
+        0 8px 25px
         rgba(0, 0, 0, 0.045);
 
 }
 
 
-.mobile-reading-info {
+.progress-header {
 
-    display: grid;
+    display:
+        flex;
 
-    grid-template-columns:
-        1fr 1fr;
+    justify-content:
+        space-between;
 
-    gap: 10px;
-
-    margin-bottom: 17px;
+    margin-bottom:
+        13px;
 
 }
 
 
-.mobile-reading-info > div {
+.progress-header > div {
 
-    padding: 12px;
+    width:
+        100%;
 
-    border-radius: 12px;
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        space-between;
+
+    gap:
+        10px;
+
+}
+
+
+.progress-header span {
+
+    color:
+        #70757d;
+
+    font-size:
+        0.64rem;
+
+    font-weight:
+        850;
+
+    letter-spacing:
+        0.08em;
+
+}
+
+
+.progress-header strong {
+
+    color:
+        #c2410c;
+
+    font-size:
+        0.82rem;
+
+}
+
+
+.progress-track {
+
+    width:
+        100%;
+
+    height:
+        8px;
+
+    overflow:
+        hidden;
+
+    border-radius:
+        999px;
 
     background:
-        #f8fafb;
+        #edf0f2;
 
 }
 
 
-.mobile-reading-info i {
+.progress-bar {
 
-    display: block;
+    width:
+        0%;
 
-    margin-bottom: 5px;
+    height:
+        100%;
 
-    color:
-        #0891b2;
+    border-radius:
+        inherit;
 
-    font-size: 0.75rem;
+    background:
+        linear-gradient(
+            90deg,
+            #ea580c,
+            #f97316
+        );
 
-}
-
-
-.mobile-reading-info span {
-
-    display: block;
-
-    color:
-        #858585;
-
-    font-size: 0.6rem;
+    transition:
+        width 0.3s ease;
 
 }
 
 
-.mobile-reading-info strong {
+.lesson-progress-box > p {
 
-    display: block;
-
-    margin-top: 2px;
-
-    color:
-        #252525;
-
-    font-size: 0.75rem;
-
-}
-
-
-.mobile-progress {
-
-    margin-bottom: 15px;
-
-}
-
-
-.mobile-progress-heading {
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: space-between;
-
-    margin-bottom: 7px;
-
-}
-
-
-.mobile-progress-heading span {
+    margin:
+        10px 0 0;
 
     color:
         #777;
 
-    font-size: 0.68rem;
+    font-size:
+        0.74rem;
+
+    line-height:
+        1.45;
 
 }
 
 
-.mobile-progress-heading strong {
+/* =========================================================
+   META BOX
+========================================================= */
+
+.lesson-meta-box {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap:
+        10px;
+
+}
+
+
+.lesson-meta-box > div {
+
+    min-width:
+        0;
+
+    padding:
+        15px;
+
+    border-radius:
+        15px;
+
+    background:
+        #ffffff;
+
+    border:
+        1px solid
+        rgba(0, 0, 0, 0.06);
+
+    box-shadow:
+        0 6px 18px
+        rgba(0, 0, 0, 0.035);
+
+}
+
+
+.lesson-meta-box i {
+
+    display:
+        block;
+
+    margin-bottom:
+        7px;
+
+    color:
+        #0891b2;
+
+}
+
+
+.lesson-meta-box span {
+
+    display:
+        block;
+
+    color:
+        #858585;
+
+    font-size:
+        0.64rem;
+
+}
+
+
+.lesson-meta-box strong {
+
+    display:
+        block;
+
+    margin-top:
+        3px;
+
+    color:
+        #4b5563;
+
+    font-size:
+        0.78rem;
+
+}
+
+
+/* =========================================================
+   FINISH READING BUTTON
+========================================================= */
+
+.finish-reading-btn {
+
+    width:
+        100%;
+
+    border:
+        0;
+
+    border-radius:
+        17px;
+
+    padding:
+        16px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        12px;
+
+    text-align:
+        left;
+
+    background:
+        #111827;
+
+    color:
+        #ffffff;
+
+    cursor:
+        pointer;
+
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease,
+        box-shadow 0.2s ease;
+
+}
+
+
+.finish-reading-btn:hover {
+
+    transform:
+        translateY(-2px);
+
+    background:
+        #1f2937;
+
+    box-shadow:
+        0 9px 22px
+        rgba(17, 24, 39, 0.16);
+
+}
+
+
+.finish-reading-btn:disabled {
+
+    cursor:
+        default;
+
+    opacity:
+        0.65;
+
+    transform:
+        none;
+
+}
+
+
+.finish-icon {
+
+    width:
+        38px;
+
+    height:
+        38px;
+
+    flex-shrink:
+        0;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    border-radius:
+        11px;
+
+    background:
+        rgba(255, 255, 255, 0.12);
+
+}
+
+
+.finish-text {
+
+    min-width:
+        0;
+
+}
+
+
+.finish-text strong {
+
+    display:
+        block;
+
+    color:
+        rgba(255, 255, 255, 0.92);
+
+    font-size:
+        0.8rem;
+
+    line-height:
+        1.3;
+
+}
+
+
+.finish-text small {
+
+    display:
+        block;
+
+    margin-top:
+        3px;
+
+    color:
+        rgba(255, 255, 255, 0.62);
+
+    font-size:
+        0.65rem;
+
+    line-height:
+        1.3;
+
+}
+
+
+/* =========================================================
+   MOBILE FINISH CARD
+========================================================= */
+
+.mobile-finish-card {
+
+    display:
+        none;
+
+}
+
+
+/* =========================================================
+   LESSON COMPLETED STATE
+========================================================= */
+
+.lesson-completed .finish-reading-btn {
+
+    background:
+        #0f766e;
+
+}
+
+
+.lesson-completed .progress-bar {
+
+    background:
+        #0f766e;
+
+}
+
+
+/* =========================================================
+   ERROR STATE
+========================================================= */
+
+.lesson-error-message {
+
+    width:
+        100%;
+
+    padding:
+        25px;
+
+    border-radius:
+        18px;
+
+    background:
+        #fff7ed;
+
+    border:
+        1px solid
+        rgba(234, 88, 12, 0.12);
+
+    text-align:
+        center;
+
+}
+
+
+.lesson-error-message i {
+
+    display:
+        block;
+
+    margin-bottom:
+        10px;
 
     color:
         #ea580c;
 
-    font-size: 0.72rem;
+    font-size:
+        1.5rem;
 
 }
 
 
-.mobile-finish-card
-.finish-reading-btn {
+.lesson-error-message strong {
 
-    padding: 14px;
+    display:
+        block;
+
+    margin-bottom:
+        5px;
+
+    color:
+        #374151;
+
+    font-size:
+        0.95rem;
 
 }
- 
+
+
+.lesson-error-message p {
+
+    margin:
+        0;
+
+    color:
+        #737373;
+
+    font-size:
+        0.78rem;
+
+    line-height:
+        1.5;
 
 }
+
 
 /* =========================================================
-VERY SMALL PHONES
+   TABLET
+========================================================= */
+
+@media (max-width: 1050px) {
+
+    .lesson-body-layout {
+
+        grid-template-columns:
+            minmax(0, 1fr)
+            270px;
+
+        gap:
+            18px;
+
+    }
+
+
+    .lessons-container {
+
+        padding-left:
+            24px;
+
+        padding-right:
+            24px;
+
+    }
+
+
+    .lesson-topic-card {
+
+        padding:
+            23px 24px;
+
+    }
+
+
+    .lesson-content-card {
+
+        padding:
+            26px 28px;
+
+    }
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 768px) {
+
+    .lessons-container {
+
+        width:
+            100%;
+
+        padding-left:
+            15px;
+
+        padding-right:
+            15px;
+
+        padding-bottom:
+            105px;
+
+    }
+
+
+    .lessons-heading {
+
+        display:
+            block;
+
+        margin-bottom:
+            20px;
+
+    }
+
+
+    .lessons-heading h1 {
+
+        font-size:
+            1.65rem;
+
+    }
+
+
+    .lessons-heading p {
+
+        font-size:
+            0.82rem;
+
+        line-height:
+            1.5;
+
+    }
+
+
+    .lesson-week {
+
+        margin-top:
+            13px;
+
+        padding:
+            9px 12px;
+
+        font-size:
+            0.7rem;
+
+    }
+
+
+    .lesson-selector {
+
+        gap:
+            6px;
+
+        padding:
+            5px;
+
+        border-radius:
+            13px;
+
+    }
+
+
+    .class-tab {
+
+        min-height:
+            46px;
+
+        gap:
+            5px;
+
+        font-size:
+            0.72rem;
+
+    }
+
+
+    .class-tab i {
+
+        font-size:
+            0.75rem;
+
+    }
+
+
+    .lesson-tabs-spacer {
+
+        height:
+            8px;
+
+    }
+
+
+    /* Topic card */
+
+    .lesson-topic-card {
+
+        padding:
+            20px 18px;
+
+        border-radius:
+            17px;
+
+        border-left-width:
+            4px;
+
+    }
+
+
+    .lesson-topic-label {
+
+        margin-bottom:
+            8px;
+
+        padding:
+            5px 8px;
+
+        font-size:
+            0.56rem;
+
+    }
+
+
+    .lesson-topic-card h2,
+    .lesson-topic-card h4 {
+
+        font-size:
+            0.88rem;
+
+        line-height:
+            1.45;
+
+    }
+
+
+    .lesson-topic {
+
+        margin-top:
+            7px;
+
+        font-size:
+            0.76rem;
+
+        line-height:
+            1.5;
+
+    }
+
+
+    /* Information */
+
+    .lesson-info-grid {
+
+        grid-template-columns:
+            1fr;
+
+        gap:
+            9px;
+
+        margin-top:
+            12px;
+
+    }
+
+
+    .lesson-info-card {
+
+        padding:
+            14px;
+
+        border-radius:
+            14px;
+
+    }
+
+
+    .info-icon {
+
+        width:
+            37px;
+
+        height:
+            37px;
+
+        border-radius:
+            10px;
+
+    }
+
+
+    .lesson-info-card span {
+
+        font-size:
+            0.6rem;
+
+    }
+
+
+    .lesson-info-card strong {
+
+        font-size:
+            0.78rem;
+
+    }
+
+
+    /* Memory verse */
+
+    .memory-verse-card {
+
+        margin-top:
+            12px;
+
+        padding:
+            17px;
+
+        gap:
+            11px;
+
+        border-radius:
+            15px;
+
+    }
+
+
+    .memory-verse-icon {
+
+        width:
+            34px;
+
+        height:
+            34px;
+
+        border-radius:
+            9px;
+
+        font-size:
+            0.72rem;
+
+    }
+
+
+    .memory-verse-content > span {
+
+        font-size:
+            0.57rem;
+
+    }
+
+
+    .memory-verse-content p {
+
+        font-size:
+            0.76rem;
+
+        line-height:
+            1.5;
+
+    }
+
+
+    /* Main body */
+
+    .lesson-body-layout {
+
+        display:
+            block;
+
+        margin-top:
+            15px;
+
+    }
+
+
+    .lesson-main-column {
+
+        gap:
+            14px;
+
+    }
+
+
+    /* Study lesson card */
+
+    .lesson-content-card {
+
+        padding:
+            22px 20px;
+
+        border-radius:
+            16px;
+
+    }
+
+
+    .content-card-header {
+
+        gap:
+            10px;
+
+        padding-bottom:
+            14px;
+
+        margin-bottom:
+            17px;
+
+    }
+
+
+    .content-card-icon {
+
+        width:
+            37px;
+
+        height:
+            37px;
+
+        border-radius:
+            10px;
+
+    }
+
+
+    .content-card-header span {
+
+        font-size:
+            0.57rem;
+
+    }
+
+
+    .content-card-header h3 {
+
+        font-size:
+            1rem;
+
+    }
+
+
+    .lesson-content {
+
+        font-size:
+            0.82rem;
+
+        line-height:
+            1.65;
+
+    }
+
+
+    .lesson-content h1 {
+
+        font-size:
+            1.15rem;
+
+    }
+
+
+    .lesson-content h2 {
+
+        font-size:
+            1.05rem;
+
+    }
+
+
+    .lesson-content h3 {
+
+        font-size:
+            0.96rem;
+
+    }
+
+
+    .lesson-content p {
+
+        margin-bottom:
+            12px;
+
+    }
+
+
+    /* Discussion */
+
+    .discussion-card {
+
+        padding:
+            20px;
+
+        border-radius:
+            16px;
+
+    }
+
+
+    .discussion-header {
+
+        gap:
+            10px;
+
+        padding-bottom:
+            14px;
+
+        margin-bottom:
+            14px;
+
+    }
+
+
+    .discussion-icon {
+
+        width:
+            37px;
+
+        height:
+            37px;
+
+        border-radius:
+            10px;
+
+    }
+
+
+    .discussion-header span {
+
+        font-size:
+            0.57rem;
+
+    }
+
+
+    .discussion-header h3 {
+
+        font-size:
+            1rem;
+
+    }
+
+
+    .discussion-question {
+
+        gap:
+            9px;
+
+        padding:
+            12px 0;
+
+    }
+
+
+    .discussion-number {
+
+        width:
+            25px;
+
+        height:
+            25px;
+
+        font-size:
+            0.65rem;
+
+    }
+
+
+    .discussion-question p {
+
+        font-size:
+            0.78rem;
+
+        line-height:
+            1.55;
+
+    }
+
+
+    /* Hide desktop sidebar */
+
+    .lesson-sidebar-card {
+
+        display:
+            none;
+
+    }
+
+
+    /* Mobile finish card */
+
+    .mobile-finish-card {
+
+        display:
+            block;
+
+        width:
+            100%;
+
+        margin-top:
+            14px;
+
+        padding:
+            17px;
+
+        border-radius:
+            16px;
+
+        background:
+            #ffffff;
+
+        border:
+            1px solid
+            rgba(0, 0, 0, 0.06);
+
+        box-shadow:
+            0 7px 22px
+            rgba(0, 0, 0, 0.045);
+
+    }
+
+
+    .mobile-reading-info {
+
+        display:
+            grid;
+
+        grid-template-columns:
+            1fr 1fr;
+
+        gap:
+            10px;
+
+        margin-bottom:
+            17px;
+
+    }
+
+
+    .mobile-reading-info > div {
+
+        padding:
+            12px;
+
+        border-radius:
+            12px;
+
+        background:
+            #f8fafb;
+
+    }
+
+
+    .mobile-reading-info i {
+
+        display:
+            block;
+
+        margin-bottom:
+            5px;
+
+        color:
+            #0891b2;
+
+        font-size:
+            0.75rem;
+
+    }
+
+
+    .mobile-reading-info span {
+
+        display:
+            block;
+
+        color:
+            #858585;
+
+        font-size:
+            0.6rem;
+
+    }
+
+
+    .mobile-reading-info strong {
+
+        display:
+            block;
+
+        margin-top:
+            2px;
+
+        color:
+            #4b5563;
+
+        font-size:
+            0.75rem;
+
+    }
+
+
+    .mobile-progress {
+
+        margin-bottom:
+            15px;
+
+    }
+
+
+    .mobile-progress-heading {
+
+        display:
+            flex;
+
+        align-items:
+            center;
+
+        justify-content:
+            space-between;
+
+        margin-bottom:
+            7px;
+
+    }
+
+
+    .mobile-progress-heading span {
+
+        color:
+            #777;
+
+        font-size:
+            0.68rem;
+
+    }
+
+
+    .mobile-progress-heading strong {
+
+        color:
+            #c2410c;
+
+        font-size:
+            0.72rem;
+
+    }
+
+
+    .mobile-finish-card
+    .finish-reading-btn {
+
+        padding:
+            14px;
+
+    }
+
+}
+
+
+/* =========================================================
+   VERY SMALL PHONES
 ========================================================= */
 
 @media (max-width: 380px) {
 
- 
-.lessons-container {
+    .lessons-container {
 
-    padding-left: 11px;
+        padding-left:
+            11px;
 
-    padding-right: 11px;
+        padding-right:
+            11px;
+
+    }
+
+
+    .class-tab span {
+
+        font-size:
+            0.66rem;
+
+    }
+
+
+    .lesson-topic-card {
+
+        padding:
+            18px 15px;
+
+    }
+
+
+    .lesson-topic-card h2,
+    .lesson-topic-card h4 {
+
+        font-size:
+            0.82rem;
+
+    }
+
+
+    .lesson-content-card,
+    .discussion-card {
+
+        padding-left:
+            16px;
+
+        padding-right:
+            16px;
+
+    }
 
 }
 
-
-.class-tab span {
-
-    font-size: 0.66rem;
-
-}
-
-
-.lesson-topic-card {
-
-    padding: 20px 16px;
-
-}
-
-
-.lesson-topic-card h2 {
-
-    font-size: 1.17rem;
-
-}
-
-
-.lesson-content-card,
-.discussion-card {
-
-    padding-left: 18px;
-
-    padding-right: 18px;
-
-}
- 
-
-}
 
 /* =========================================================
-DARK MODE SUPPORT
+   DARK MODE SUPPORT
 ========================================================= */
 
 @media (prefers-color-scheme: dark) {
 
- 
-.lessons-page {
+    .lessons-page {
 
-    color:
-        #e5e7eb;
+        color:
+            #e5e7eb;
+
+    }
+
+
+    .lessons-heading h1 {
+
+        color:
+            #f3f4f6;
+
+    }
+
+
+    .lessons-heading p {
+
+        color:
+            #9ca3af;
+
+    }
+
+
+    .lesson-week {
+
+        background:
+            #18181b;
+
+        border-color:
+            rgba(255,255,255,0.08);
+
+        color:
+            #d4d4d8;
+
+    }
+
+
+    .lesson-selector {
+
+        background:
+            #18181b;
+
+        border-color:
+            rgba(255,255,255,0.06);
+
+    }
+
+
+    .class-tab {
+
+        color:
+            #a1a1aa;
+
+    }
+
+
+    .class-tab.active {
+
+        background:
+            #27272a;
+
+        color:
+            #fb923c;
+
+    }
+
+
+    .lesson-topic-card {
+
+        background:
+            #18181b;
+
+        border-color:
+            rgba(234, 88, 12, 0.25);
+
+    }
+
+
+    .lesson-topic-card h2,
+    .lesson-topic-card h4 {
+
+        color:
+            #e5e7eb;
+
+    }
+
+
+    .lesson-topic {
+
+        color:
+            #a1a1aa;
+
+    }
+
+
+    .lesson-info-card,
+    .lesson-content-card,
+    .discussion-card,
+    .lesson-progress-box,
+    .lesson-meta-box > div,
+    .mobile-finish-card {
+
+        background:
+            #18181b;
+
+        border-color:
+            rgba(255,255,255,0.07);
+
+    }
+
+
+    .lesson-info-card strong,
+    .content-card-header h3,
+    .discussion-header h3,
+    .lesson-meta-box strong {
+
+        color:
+            #d1d5db;
+
+    }
+
+
+    .lesson-content {
+
+        color:
+            #d4d4d8;
+
+    }
+
+
+    .lesson-content strong,
+    .lesson-rich-content strong,
+    .lesson-rich-content b {
+
+        color:
+            #e5e7eb;
+
+    }
+
+
+    .lesson-content h1,
+    .lesson-content h2,
+    .lesson-content h3,
+    .lesson-content h4 {
+
+        color:
+            #f4f4f5;
+
+    }
+
+
+    .discussion-question p {
+
+        color:
+            #d4d4d8;
+
+    }
+
+
+    .lesson-progress-box > p,
+    .discussion-empty {
+
+        color:
+            #a1a1aa;
+
+    }
+
+
+    .mobile-reading-info > div {
+
+        background:
+            #27272a;
+
+    }
+
+
+    .memory-verse-card {
+
+        background:
+            #2a1d14;
+
+        border-color:
+            rgba(234, 88, 12, 0.18);
+
+    }
+
+
+    .memory-verse-content p {
+
+        color:
+            #fed7aa;
+
+    }
 
 }
 
-
-.lessons-heading h1 {
-
-    color:
-        #f3f4f6;
-
-}
-
-
-.lessons-heading p {
-
-    color:
-        #9ca3af;
-
-}
-
-
-.lesson-week {
-
-    background:
-        #18181b;
-
-    border-color:
-        rgba(255,255,255,0.08);
-
-    color:
-        #d4d4d8;
-
-}
-
-
-.lesson-selector {
-
-    background:
-        #18181b;
-
-    border-color:
-        rgba(255,255,255,0.06);
-
-}
-
-
-.class-tab {
-
-    color:
-        #a1a1aa;
-
-}
-
-
-.class-tab.active {
-
-    background:
-        #27272a;
-
-    color:
-        #fb923c;
-
-}
-
-
-.lesson-info-card,
-.lesson-content-card,
-.discussion-card,
-.lesson-progress-box,
-.lesson-meta-box > div,
-.mobile-finish-card {
-
-    background:
-        #18181b;
-
-    border-color:
-        rgba(255,255,255,0.07);
-
-}
-
-
-.lesson-info-card strong,
-.content-card-header h3,
-.discussion-header h3,
-.lesson-meta-box strong {
-
-    color:
-        #f4f4f5;
-
-}
-
-
-.lesson-content {
-
-    color:
-        #d4d4d8;
-
-}
-
-
-.lesson-content strong,
-.lesson-content h1,
-.lesson-content h2,
-.lesson-content h3,
-.lesson-content h4 {
-
-    color:
-        #f4f4f5;
-
-}
-
-
-.discussion-question p {
-
-    color:
-        #d4d4d8;
-
-}
-
-
-.lesson-progress-box > p,
-.discussion-empty {
-
-    color:
-        #a1a1aa;
-
-}
-
-
-.mobile-reading-info > div {
-
-    background:
-        #27272a;
-
-}
- 
-
-}
 
 /* =========================================================
-LESSON PAGE — FULL WIDTH OVERRIDE
-Prevent global layout.css from shrinking lesson content
+   LESSON PAGE — FULL WIDTH OVERRIDE
+   PREVENT GLOBAL LAYOUT FROM SHRINKING LESSON CONTENT
 ========================================================= */
 
 .lessons-page {
 
- 
-width: 100%;
+    width:
+        100%;
 
-max-width: none;
+    max-width:
+        none;
 
-padding-left: 0;
+    padding-left:
+        0;
 
-padding-right: 0;
- 
+    padding-right:
+        0;
 
 }
+
 
 .lessons-page .dashboard-container {
 
- 
-width:
-    min(100% - 32px, 1500px);
+    width:
+        min(100% - 32px, 1500px);
 
-max-width: 1500px;
+    max-width:
+        1500px;
 
-margin-left: auto;
+    margin-left:
+        auto;
 
-margin-right: auto;
+    margin-right:
+        auto;
 
-padding-left: 0;
+    padding-left:
+        0;
 
-padding-right: 0;
- 
+    padding-right:
+        0;
 
 }
+
 
 /* Main lesson view */
 
 .lessons-page .lesson-view {
 
- 
-width: 100%;
+    width:
+        100%;
 
-max-width: none;
- 
+    max-width:
+        none;
 
 }
+
 
 /* Topic card */
 
 .lessons-page .lesson-hero {
 
- 
-width: 100%;
+    width:
+        100%;
 
-max-width: none;
- 
+    max-width:
+        none;
 
 }
+
 
 /* Information cards */
 
 .lessons-page .lesson-info-grid {
 
- 
-width: 100%;
- 
+    width:
+        100%;
 
 }
+
 
 /* Main lesson + sidebar */
 
 .lessons-page .lesson-body-layout {
 
- 
-width: 100%;
+    width:
+        100%;
 
-max-width: none;
- 
+    max-width:
+        none;
 
 }
+
 
 /* Study lesson card */
 
 .lessons-page .lesson-content-card {
 
- 
-width: 100%;
+    width:
+        100%;
 
-max-width: none;
- 
+    max-width:
+        none;
 
 }
+
 
 /* Discussion card */
 
 .lessons-page .discussion-card {
 
- 
-width: 100%;
+    width:
+        100%;
 
-max-width: none;
- 
+    max-width:
+        none;
 
 }
+
 
 /* Memory verse */
 
 .lessons-page .memory-verse-card {
 
- 
-width: 100%;
+    width:
+        100%;
 
-max-width: none;
- 
+    max-width:
+        none;
 
 }
 
+
 /* =========================================================
-DESKTOP — EVEN WIDER
+   DESKTOP — EVEN WIDER
 ========================================================= */
 
 @media (min-width: 1100px) {
 
- 
-.lessons-page .dashboard-container {
+    .lessons-page .dashboard-container {
 
-    width:
-        calc(100% - 48px);
+        width:
+            calc(100% - 48px);
 
-    max-width:
-        1550px;
+        max-width:
+            1550px;
 
-}
- 
+    }
 
 }
+
 
 /* =========================================================
-LARGE DESKTOP
+   LARGE DESKTOP
 ========================================================= */
 
 @media (min-width: 1500px) {
 
- 
-.lessons-page .dashboard-container {
+    .lessons-page .dashboard-container {
 
-    width:
-        calc(100% - 64px);
+        width:
+            calc(100% - 64px);
 
-    max-width:
-        1650px;
+        max-width:
+            1650px;
 
-}
- 
+    }
 
 }
+
 
 /* =========================================================
-TABLET
+   TABLET WIDTH
 ========================================================= */
 
 @media (max-width: 900px) {
 
- 
-.lessons-page .dashboard-container {
+    .lessons-page .dashboard-container {
 
-    width:
-        calc(100% - 28px);
+        width:
+            calc(100% - 28px);
 
-    max-width:
-        none;
+        max-width:
+            none;
 
-}
- 
+    }
 
 }
+
 
 /* =========================================================
-MOBILE
+   MOBILE WIDTH
 ========================================================= */
 
 @media (max-width: 600px) {
 
- 
-.lessons-page .dashboard-container {
+    .lessons-page .dashboard-container {
 
-    width:
-        calc(100% - 20px);
+        width:
+            calc(100% - 20px);
 
-    max-width:
-        none;
+        max-width:
+            none;
+
+    }
+
+
+    .lessons-page {
+
+        padding-left:
+            0;
+
+        padding-right:
+            0;
+
+    }
 
 }
 
-
-.lessons-page {
-
-    padding-left: 0;
-
-    padding-right: 0;
-
-}
- 
-
-}
 
 /* =========================================================
-YORUBA AUDIO CARD
+   YORUBA AUDIO CARD
 ========================================================= */
 
 .yoruba-audio-card {
 
- 
-position: relative;
+    position:
+        relative;
 
-display: grid;
+    display:
+        grid;
 
-grid-template-columns:
-    auto 1fr;
+    grid-template-columns:
+        auto 1fr;
 
-gap: 1rem;
+    gap:
+        1rem;
 
-align-items: center;
+    align-items:
+        center;
 
-width: 100%;
+    width:
+        100%;
 
-margin: 1.25rem 0 2rem;
+    margin:
+        1.25rem 0 2rem;
 
-padding: 1.25rem;
+    padding:
+        1.25rem;
 
-background:
-    linear-gradient(
-        135deg,
-        rgba(234, 88, 12, 0.08),
-        rgba(255, 255, 255, 0.96)
-    );
+    background:
+        linear-gradient(
+            135deg,
+            rgba(234, 88, 12, 0.08),
+            rgba(255, 255, 255, 0.96)
+        );
 
-border:
-    1px solid
-    rgba(234, 88, 12, 0.16);
+    border:
+        1px solid
+        rgba(234, 88, 12, 0.16);
 
-border-radius: 20px;
+    border-radius:
+        20px;
 
-box-shadow:
-    0 10px 30px
-    rgba(15, 23, 42, 0.05);
+    box-shadow:
+        0 10px 30px
+        rgba(15, 23, 42, 0.05);
 
-overflow: hidden;
- 
+    overflow:
+        hidden;
 
 }
+
 
 /* Decorative background */
 
 .yoruba-audio-card::before {
 
- 
-content: "";
+    content:
+        "";
 
-position: absolute;
+    position:
+        absolute;
 
-width: 180px;
+    width:
+        180px;
 
-height: 180px;
+    height:
+        180px;
 
-top: -100px;
+    top:
+        -100px;
 
-right: -70px;
+    right:
+        -70px;
 
-border-radius: 50%;
+    border-radius:
+        50%;
 
-background:
-    rgba(234, 88, 12, 0.06);
+    background:
+        rgba(234, 88, 12, 0.06);
 
-pointer-events: none;
- 
+    pointer-events:
+        none;
 
 }
 
+
 /* =========================================================
-AUDIO ICON
+   AUDIO ICON
 ========================================================= */
 
 .yoruba-audio-icon {
 
- 
-position: relative;
+    position:
+        relative;
 
-z-index: 1;
- 
+    z-index:
+        1;
 
 }
+
 
 .audio-icon-ring {
 
- 
-display: flex;
+    display:
+        flex;
 
-align-items: center;
+    align-items:
+        center;
 
-justify-content: center;
+    justify-content:
+        center;
 
-width: 54px;
+    width:
+        54px;
 
-height: 54px;
+    height:
+        54px;
 
-border-radius: 16px;
+    border-radius:
+        16px;
 
-background:
-    linear-gradient(
-        135deg,
-        #ea580c,
-        #f97316
-    );
+    background:
+        linear-gradient(
+            135deg,
+            #ea580c,
+            #f97316
+        );
 
-color:
-    #ffffff;
+    color:
+        #ffffff;
 
-font-size:
-    1.2rem;
+    font-size:
+        1.2rem;
 
-box-shadow:
-    0 10px 24px
-    rgba(234, 88, 12, 0.25);
- 
+    box-shadow:
+        0 10px 24px
+        rgba(234, 88, 12, 0.25);
 
 }
 
+
 /* =========================================================
-AUDIO CONTENT
+   AUDIO CONTENT
 ========================================================= */
 
 .yoruba-audio-content {
 
- 
-position: relative;
+    position:
+        relative;
 
-z-index: 1;
+    z-index:
+        1;
 
-min-width: 0;
- 
+    min-width:
+        0;
 
 }
+
 
 .yoruba-audio-eyebrow {
 
- 
-display: flex;
+    display:
+        flex;
 
-align-items: center;
+    align-items:
+        center;
 
-gap: 0.45rem;
+    gap:
+        0.45rem;
 
-margin-bottom: 0.35rem;
+    margin-bottom:
+        0.35rem;
 
-color:
-    #ea580c;
+    color:
+        #ea580c;
 
-font-family:
-    "DM Sans",
-    sans-serif;
+    font-family:
+        "DM Sans",
+        sans-serif;
 
-font-size:
-    0.68rem;
+    font-size:
+        0.68rem;
 
-font-weight:
-    800;
+    font-weight:
+        800;
 
-letter-spacing:
-    0.08em;
- 
+    letter-spacing:
+        0.08em;
 
 }
+
 
 .audio-live-dot {
 
- 
-width: 7px;
+    width:
+        7px;
 
-height: 7px;
+    height:
+        7px;
 
-border-radius: 50%;
+    border-radius:
+        50%;
 
-background:
-    #ea580c;
+    background:
+        #ea580c;
 
-box-shadow:
-    0 0 0 4px
-    rgba(234, 88, 12, 0.12);
- 
+    box-shadow:
+        0 0 0 4px
+        rgba(234, 88, 12, 0.12);
 
 }
+
 
 .yoruba-audio-content h3 {
 
- 
-margin:
-    0 0 0.25rem;
+    margin:
+        0 0 0.25rem;
 
-color:
-    var(--text-primary, #111827);
+    color:
+        var(--text-primary, #374151);
 
-font-family:
-    "Bricolage Grotesque",
-    sans-serif;
+    font-family:
+        "Bricolage Grotesque",
+        sans-serif;
 
-font-size:
-    1rem;
+    font-size:
+        1rem;
 
-font-weight:
-    700;
- 
+    font-weight:
+        700;
 
 }
+
 
 .yoruba-audio-content p {
 
- 
-margin: 0;
+    margin:
+        0;
 
-color:
-    var(--text-secondary, #6b7280);
+    color:
+        var(--text-secondary, #6b7280);
 
-font-family:
-    "DM Sans",
-    sans-serif;
+    font-family:
+        "DM Sans",
+        sans-serif;
 
-font-size:
-    0.82rem;
+    font-size:
+        0.82rem;
 
-line-height:
-    1.5;
- 
+    line-height:
+        1.5;
 
 }
 
+
 /* =========================================================
-AUDIO PLAYER
+   AUDIO PLAYER
 ========================================================= */
 
 .yoruba-audio-player {
 
- 
-grid-column:
-    1 / -1;
+    grid-column:
+        1 / -1;
 
-position: relative;
+    position:
+        relative;
 
-z-index: 1;
+    z-index:
+        1;
 
-margin-top:
-    0.25rem;
- 
+    margin-top:
+        0.25rem;
 
 }
+
 
 .yoruba-audio-player audio {
 
- 
-display: block;
+    display:
+        block;
 
-width: 100%;
+    width:
+        100%;
 
-height: 42px;
+    height:
+        42px;
 
-border-radius: 12px;
- 
+    border-radius:
+        12px;
 
 }
 
+
 /* =========================================================
-HIDDEN STATE
+   HIDDEN STATE
 ========================================================= */
 
 .yoruba-audio-card[hidden] {
 
- 
-display: none !important;
- 
+    display:
+        none !important;
 
 }
 
+
 /* =========================================================
-AUDIO CARD MOBILE
+   AUDIO CARD MOBILE
 ========================================================= */
 
 @media (max-width: 600px) {
 
- 
-.yoruba-audio-card {
+    .yoruba-audio-card {
 
-    gap: 0.85rem;
+        gap:
+            0.85rem;
 
-    padding: 1rem;
+        padding:
+            1rem;
 
-    border-radius: 18px;
+        border-radius:
+            18px;
+
+    }
+
+
+    .audio-icon-ring {
+
+        width:
+            46px;
+
+        height:
+            46px;
+
+        border-radius:
+            14px;
+
+        font-size:
+            1rem;
+
+    }
+
+
+    .yoruba-audio-content h3 {
+
+        font-size:
+            0.92rem;
+
+    }
+
+
+    .yoruba-audio-content p {
+
+        font-size:
+            0.76rem;
+
+    }
+
+
+    .yoruba-audio-player audio {
+
+        height:
+            38px;
+
+    }
 
 }
 
-
-.audio-icon-ring {
-
-    width: 46px;
-
-    height: 46px;
-
-    border-radius: 14px;
-
-    font-size: 1rem;
-
-}
-
-
-.yoruba-audio-content h3 {
-
-    font-size: 0.92rem;
-
-}
-
-
-.yoruba-audio-content p {
-
-    font-size: 0.76rem;
-
-}
-
-
-.yoruba-audio-player audio {
-
-    height: 38px;
-
-}
- 
-
-}
 
 /* =========================================================
-RICH LESSON CONTENT
+   RICH LESSON CONTENT
 ========================================================= */
 
 .lesson-rich-content {
 
- 
-font-family:
-    "DM Sans",
-    sans-serif;
+    font-family:
+        "DM Sans",
+        sans-serif;
 
-font-size:
-    .78rem;
+    font-size:
+        0.78rem;
 
-line-height:
-    1.75;
+    line-height:
+        1.75;
 
-color:
-    var(--text, #1f2937);
- 
+    color:
+        #4b5563;
 
 }
 
+
 /* =========================================================
-HEADINGS
+   RICH CONTENT HEADINGS
 ========================================================= */
 
 .lesson-rich-content h1,
@@ -3047,324 +3330,91 @@ HEADINGS
 .lesson-rich-content h5,
 .lesson-rich-content h6 {
 
- 
-font-family:
-    "Bricolage Grotesque",
-    sans-serif;
+    font-family:
+        "Bricolage Grotesque",
+        sans-serif;
 
-color:
-    var(--heading, #111827);
+    color:
+        #374151;
 
-line-height:
-    1.25;
+    line-height:
+        1.25;
 
-font-weight:
-    700;
- 
+    font-weight:
+        700;
 
 }
+
 
 /* Main section heading */
 
 .lesson-rich-content h1 {
 
- 
-font-size:
-    1.45rem;
+    font-size:
+        1.45rem;
 
-margin-top:
-    2rem;
+    margin-top:
+        2rem;
 
-margin-bottom:
-    0.75rem;
- 
+    margin-bottom:
+        0.75rem;
 
 }
+
 
 /* Section heading */
 
 .lesson-rich-content h2 {
 
- 
-font-size:
-    1rem;
+    font-size:
+        1rem;
 
-margin-top:
-    2rem;
+    margin-top:
+        2rem;
 
-margin-bottom:
-    0.65rem;
- 
+    margin-bottom:
+        0.65rem;
 
 }
+
 
 /* Smaller heading */
 
 .lesson-rich-content h3 {
 
- 
-font-size:
-    1.1rem;
+    font-size:
+        1.1rem;
 
-margin-top:
-    1.5rem;
+    margin-top:
+        1.5rem;
 
-margin-bottom:
-    0.5rem;
- 
+    margin-bottom:
+        0.5rem;
 
 }
+
 
 .lesson-rich-content h4,
 .lesson-rich-content h5,
 .lesson-rich-content h6 {
 
- 
-font-size:
-    1rem;
+    font-size:
+        1rem;
 
-margin-top:
-    1.25rem;
+    margin-top:
+        1.25rem;
 
-margin-bottom:
-    0.45rem;
- 
+    margin-bottom:
+        0.45rem;
 
 }
 
+
 /* =========================================================
-PARAGRAPHS
+   RICH CONTENT PARAGRAPHS
 ========================================================= */
 
 .lesson-rich-content p {
-
- 
-margin-top: 0;
-
-margin-bottom: 1rem;
- 
-
-}
-
-/* Paragraph immediately after heading */
-
-.lesson-rich-content h1 + p,
-.lesson-rich-content h2 + p,
-.lesson-rich-content h3 + p,
-.lesson-rich-content h4 + p,
-.lesson-rich-content h5 + p,
-.lesson-rich-content h6 + p {
-
- 
-margin-top:
-    0.35rem;
- 
-
-}
-
-/* =========================================================
-LISTS
-========================================================= */
-
-.lesson-rich-content ul,
-.lesson-rich-content ol {
-
- 
-margin-top:
-    0.5rem;
-
-margin-bottom:
-    1.25rem;
-
-padding-left:
-    1.5rem;
- 
-
-}
-
-.lesson-rich-content li {
-
- 
-margin-bottom:
-    0.5rem;
- 
-
-}
-
-/* =========================================================
-BOLD TEXT
-========================================================= */
-
-.lesson-rich-content strong,
-.lesson-rich-content b {
-
- 
-font-weight:
-    700;
- 
-
-}
-
-/* =========================================================
-LINKS
-========================================================= */
-
-.lesson-rich-content a {
-
- 
-color:
-    var(--brand, #ea580c);
-
-text-decoration:
-    underline;
- 
-
-}
-
-/* =========================================================
-BLOCKQUOTES
-========================================================= */
-
-.lesson-rich-content blockquote {
-
- 
-margin:
-    1.25rem 0;
-
-font-size:
-    .78rem;
-
-padding:
-    1rem 1.25rem;
-
-border-left:
-    4px solid
-    var(--brand, #ea580c);
-
-background:
-    rgba(234, 88, 12, 0.05);
-
-border-radius:
-    0.5rem;
- 
-
-}
-
-/* =========================================================
-IMAGES
-========================================================= */
-
-.lesson-rich-content img {
-
- 
-max-width:
-    100%;
-
-height:
-    auto;
-
-border-radius:
-    0.75rem;
-
-margin:
-    1rem 0;
- 
-
-}
-
-/* =========================================================
-TABLES
-========================================================= */
-
-.lesson-rich-content table {
-
- 
-width:
-    100%;
-
-border-collapse:
-    collapse;
-
-margin:
-    1.25rem 0;
- 
-
-}
-
-.lesson-rich-content th,
-.lesson-rich-content td {
-
- 
-padding:
-    0.7rem;
-
-border:
-    1px solid
-    #e5e7eb;
-
-text-align:
-    left;
- 
-
-}
-
-/* =========================================================
-RICH CONTENT MOBILE
-========================================================= */
-
-@media (max-width: 768px) {
-
- 
-.lesson-rich-content {
-
-    font-size:
-        0.82rem;
-
-    line-height:
-        1.7;
-
-}
-
-
-.lesson-rich-content h1 {
-
-    font-size:
-        1.3rem;
-
-    margin-top:
-        1.6rem;
-
-}
-
-
-.lesson-rich-content h2 {
-
-    font-size:
-        .9rem;
-
-    margin-top:
-        1.6rem;
-
-}
-
-
-.lesson-rich-content h3 {
-
-    font-size:
-        1.05rem;
-
-    margin-top:
-        1.3rem;
-
-}
-
-
-/* Consistent paragraph spacing */
-
-.lesson-rich-content p {
-
-    font-size:
-        .78rem;
 
     margin-top:
         0;
@@ -3373,6 +3423,248 @@ RICH CONTENT MOBILE
         1rem;
 
 }
- 
+
+
+.lesson-rich-content h1 + p,
+.lesson-rich-content h2 + p,
+.lesson-rich-content h3 + p,
+.lesson-rich-content h4 + p,
+.lesson-rich-content h5 + p,
+.lesson-rich-content h6 + p {
+
+    margin-top:
+        0.35rem;
+
+}
+
+
+/* =========================================================
+   RICH CONTENT LISTS
+========================================================= */
+
+.lesson-rich-content ul,
+.lesson-rich-content ol {
+
+    margin-top:
+        0.5rem;
+
+    margin-bottom:
+        1.25rem;
+
+    padding-left:
+        1.5rem;
+
+}
+
+
+.lesson-rich-content li {
+
+    margin-bottom:
+        0.5rem;
+
+}
+
+
+/* =========================================================
+   PROFESSIONAL SOFT BOLD TEXT
+========================================================= */
+
+.lesson-rich-content strong,
+.lesson-rich-content b {
+
+    color:
+        #4b5563;
+
+    font-weight:
+        700;
+
+}
+
+
+/* =========================================================
+   LINKS
+========================================================= */
+
+.lesson-rich-content a {
+
+    color:
+        var(--brand, #ea580c);
+
+    text-decoration:
+        underline;
+
+}
+
+
+/* =========================================================
+   RICH CONTENT BLOCKQUOTES
+========================================================= */
+
+.lesson-rich-content blockquote {
+
+    margin:
+        1.25rem 0;
+
+    font-size:
+        0.78rem;
+
+    padding:
+        1rem 1.25rem;
+
+    border-left:
+        4px solid
+        var(--brand, #ea580c);
+
+    background:
+        rgba(234, 88, 12, 0.05);
+
+    border-radius:
+        0.5rem;
+
+    color:
+        #4b5563;
+
+}
+
+
+/* =========================================================
+   IMAGES
+========================================================= */
+
+.lesson-rich-content img {
+
+    max-width:
+        100%;
+
+    height:
+        auto;
+
+    border-radius:
+        0.75rem;
+
+    margin:
+        1rem 0;
+
+}
+
+
+/* =========================================================
+   TABLES
+========================================================= */
+
+.lesson-rich-content table {
+
+    width:
+        100%;
+
+    border-collapse:
+        collapse;
+
+    margin:
+        1.25rem 0;
+
+}
+
+
+.lesson-rich-content th,
+.lesson-rich-content td {
+
+    padding:
+        0.7rem;
+
+    border:
+        1px solid
+        #e5e7eb;
+
+    text-align:
+        left;
+
+}
+
+
+.lesson-rich-content th {
+
+    color:
+        #374151;
+
+    font-weight:
+        700;
+
+}
+
+
+/* =========================================================
+   RICH CONTENT MOBILE
+========================================================= */
+
+@media (max-width: 768px) {
+
+    .lesson-rich-content {
+
+        font-size:
+            0.82rem;
+
+        line-height:
+            1.7;
+
+    }
+
+
+    .lesson-rich-content h1 {
+
+        font-size:
+            1.3rem;
+
+        margin-top:
+            1.6rem;
+
+    }
+
+
+    .lesson-rich-content h2 {
+
+        font-size:
+            0.95rem;
+
+        margin-top:
+            1.6rem;
+
+    }
+
+
+    .lesson-rich-content h3 {
+
+        font-size:
+            1rem;
+
+        margin-top:
+            1.3rem;
+
+    }
+
+
+    .lesson-rich-content p {
+
+        font-size:
+            0.78rem;
+
+        margin-top:
+            0;
+
+        margin-bottom:
+            0.9rem;
+
+    }
+
+
+    .lesson-rich-content blockquote {
+
+        font-size:
+            0.76rem;
+
+        padding:
+            0.9rem 1rem;
+
+    }
 
 }
