@@ -1,8 +1,7 @@
- javascript
 /* =========================================================
    AFC ISIU YOUTH PORTAL
-   FILE: lessons.js
-   PURPOSE: LESSONS PAGE CONTROLLER
+   LESSONS PAGE CONTROLLER
+   =========================================================
 
    GOOGLE SHEET COLUMNS:
 
@@ -15,27 +14,17 @@
    Discussion
    YorubaAudio
 
-   IMPORTANT
-   ---------------------------------------------------------
-   Summary:
-   - Contains the complete lesson.
-   - May contain HTML.
-   - HTML is rendered directly.
+   EXAMPLE YorubaAudio:
 
-   YorubaAudio:
-   - May contain:
-       /audio/Senior-77.mp3
-       /audio/Junior-83.mp3
-       /audio/Elementary-10.mp3
-   - Relative paths are converted to the live Vercel URL.
+   /audio/Senior-77.mp3
+   /audio/Junior-83.mp3
 
-   Topic Card:
-   - Shows ONLY the topic.
-   - Does NOT show the lesson number.
-
-   Lesson Information:
-   - Lesson number is shown separately.
-
+   IMPORTANT:
+   - Summary contains HTML and is rendered as HTML.
+   - Topic Card displays Topic only.
+   - Lesson number is NOT displayed in Topic Card.
+   - Yoruba audio is optional.
+   - Audio errors NEVER prevent the lesson from loading.
    ========================================================= */
 
 "use strict";
@@ -50,19 +39,19 @@ const LESSONS_CSV_URL =
 
 
 /*
- * Your production website.
+ * Your website root.
  *
- * Audio paths from the Google Sheet such as:
+ * This is used for audio paths such as:
  *
  * /audio/Senior-77.mp3
  *
- * will become:
+ * becoming:
  *
  * https://afcisiuyouth.vercel.app/audio/Senior-77.mp3
  */
 
 const SITE_ORIGIN =
-    "https://afcisiuyouth.vercel.app";
+    window.location.origin;
 
 
 /* =========================================================
@@ -92,7 +81,7 @@ function getElement(id) {
 
 
 /* =========================================================
-   TEXT HELPER
+   TEXT HELPERS
 ========================================================= */
 
 function cleanText(value) {
@@ -105,7 +94,6 @@ function cleanText(value) {
         return "";
 
     }
-
 
     return String(value)
         .replace(/\u00A0/g, " ")
@@ -144,7 +132,7 @@ function normalizeHeader(value) {
 
 
 /* =========================================================
-   GET SHEET VALUE
+   GET GOOGLE SHEET VALUE
 ========================================================= */
 
 function getSheetValue(
@@ -158,7 +146,6 @@ function getSheetValue(
 
     }
 
-
     const keys =
         Object.keys(row);
 
@@ -167,7 +154,7 @@ function getSheetValue(
         const name of possibleNames
     ) {
 
-        const target =
+        const wanted =
             normalizeHeader(name);
 
 
@@ -176,7 +163,7 @@ function getSheetValue(
 
                 return (
                     normalizeHeader(key) ===
-                    target
+                    wanted
                 );
 
             });
@@ -192,7 +179,7 @@ function getSheetValue(
                 );
 
 
-            if (value !== "") {
+            if (value) {
 
                 return value;
 
@@ -224,6 +211,7 @@ function normalizeLessonRow(row) {
                 ]
             ),
 
+
         className:
             getSheetValue(
                 row,
@@ -232,6 +220,7 @@ function normalizeLessonRow(row) {
                 ]
             ),
 
+
         topic:
             getSheetValue(
                 row,
@@ -239,6 +228,7 @@ function normalizeLessonRow(row) {
                     "Topic"
                 ]
             ),
+
 
         bibleText:
             getSheetValue(
@@ -250,6 +240,7 @@ function normalizeLessonRow(row) {
                 ]
             ),
 
+
         memoryVerse:
             getSheetValue(
                 row,
@@ -260,6 +251,7 @@ function normalizeLessonRow(row) {
                 ]
             ),
 
+
         summary:
             getSheetValue(
                 row,
@@ -268,6 +260,7 @@ function normalizeLessonRow(row) {
                 ]
             ),
 
+
         discussion:
             getSheetValue(
                 row,
@@ -275,6 +268,7 @@ function normalizeLessonRow(row) {
                     "Discussion"
                 ]
             ),
+
 
         yorubaAudio:
             getSheetValue(
@@ -292,20 +286,21 @@ function normalizeLessonRow(row) {
 
 
 /* =========================================================
-   FORMAT LESSON CONTENT
+   RENDER SUMMARY HTML
 =========================================================
 
-   SUMMARY CONTAINS HTML.
+   The Summary column contains HTML.
 
-   Example from Google Sheet:
+   Example:
 
    <h2>Introduction</h2>
-   <p>Jesus showed compassion...</p>
+   <p>This is the lesson...</p>
 
-   The HTML is intentionally rendered directly.
+   We intentionally DO NOT use escapeHTML()
+   here because we want the HTML to work.
 
-   DO NOT use escapeHTML() here because that would turn
-   the HTML into visible text instead of rendering it.
+   IMPORTANT:
+   Only use this with lesson content you control.
 ========================================================= */
 
 function formatLessonContent(html) {
@@ -387,8 +382,7 @@ function formatDiscussion(text) {
 
 
     /*
-     * If questions are separated by ordinary
-     * line breaks, split them.
+     * Also support one question per line.
      */
 
     if (items.length <= 1) {
@@ -440,14 +434,18 @@ function formatDiscussion(text) {
                     <div class="discussion-question">
 
                         <span class="discussion-number">
+
                             ${index + 1}
+
                         </span>
 
                         <p>
+
                             ${item.replace(
                                 /\r?\n/g,
                                 "<br>"
                             )}
+
                         </p>
 
                     </div>
@@ -462,45 +460,18 @@ function formatDiscussion(text) {
 
 
 /* =========================================================
-   AUDIO URL RESOLVER
-=========================================================
-
-   Handles:
-
-   1. /audio/Senior-77.mp3
-
-   2. audio/Senior-77.mp3
-
-   3. https://afcisiuyouth.vercel.app/audio/Senior-77.mp3
-
-   4. Any other absolute HTTP/HTTPS URL.
-
+   BUILD AUDIO URL
 ========================================================= */
 
-function resolveAudioURL(audioValue) {
+function buildAudioURL(audioPath) {
 
-    const audioPath =
-        cleanText(audioValue);
+    const value =
+        cleanText(audioPath);
 
 
-    if (!audioPath) {
+    if (!value) {
 
         return "";
-
-    }
-
-
-    /*
-     * Already an absolute URL.
-     */
-
-    if (
-        /^https?:\/\//i.test(
-            audioPath
-        )
-    ) {
-
-        return audioPath;
 
     }
 
@@ -508,31 +479,46 @@ function resolveAudioURL(audioValue) {
     try {
 
         /*
-         * Paths beginning with /
+         * Full URL:
+         *
+         * https://...
+         */
+
+        if (
+            /^https?:\/\//i.test(value)
+        ) {
+
+            return value;
+
+        }
+
+
+        /*
+         * Root-relative:
          *
          * /audio/Senior-77.mp3
          */
 
         if (
-            audioPath.startsWith("/")
+            value.startsWith("/")
         ) {
 
             return (
                 SITE_ORIGIN +
-                audioPath
+                value
             );
 
         }
 
 
         /*
-         * Paths without the first slash.
+         * Relative:
          *
          * audio/Senior-77.mp3
          */
 
         return new URL(
-            audioPath,
+            value,
             SITE_ORIGIN + "/"
         ).href;
 
@@ -542,7 +528,7 @@ function resolveAudioURL(audioValue) {
 
         console.error(
             "AFC Isiu — Invalid audio path:",
-            audioPath,
+            value,
             error
         );
 
@@ -554,86 +540,14 @@ function resolveAudioURL(audioValue) {
 
 
 /* =========================================================
-   FORMAT YORUBA AUDIO
-========================================================= */
-
-function formatYorubaAudio(
-    audioValue
-) {
-
-    const audioURL =
-        resolveAudioURL(
-            audioValue
-        );
-
-
-    if (!audioURL) {
-
-        return "";
-
-    }
-
-
-    return `
-
-        <div class="yoruba-audio-player">
-
-            <div class="yoruba-audio-header">
-
-                <div class="yoruba-audio-icon">
-
-                    <i class="fa-solid fa-volume-high"></i>
-
-                </div>
-
-                <div class="yoruba-audio-title">
-
-                    <strong>
-                        Listen in Yoruba
-                    </strong>
-
-                    <span>
-                        Memory Verse Audio
-                    </span>
-
-                </div>
-
-            </div>
-
-
-            <audio
-                class="lesson-audio-player"
-                controls
-                preload="metadata"
-                src="${escapeHTML(audioURL)}"
-            >
-                Your browser does not support
-                audio playback.
-            </audio>
-
-
-            <div class="yoruba-audio-status">
-
-                <span>
-                    Yoruba Memory Verse
-                </span>
-
-            </div>
-
-        </div>
-
-    `;
-
-}
-
-
-/* =========================================================
    RENDER YORUBA AUDIO
 ========================================================= */
 
-function renderYorubaAudio(
-    audioValue
-) {
+function renderYorubaAudio(audioValue) {
+
+    const audioPath =
+        cleanText(audioValue);
+
 
     const audioCard =
         getElement(
@@ -641,20 +555,15 @@ function renderYorubaAudio(
         );
 
 
-    const audioContainer =
+    const audioElement =
         getElement(
             "yorubaAudio"
         );
 
 
-    const audioPath =
-        cleanText(
-            audioValue
-        );
-
-
     /*
-     * No audio in Google Sheet.
+     * If there is no audio field,
+     * simply hide the card.
      */
 
     if (!audioPath) {
@@ -669,10 +578,15 @@ function renderYorubaAudio(
         }
 
 
-        if (audioContainer) {
+        if (audioElement) {
 
-            audioContainer.innerHTML =
-                "";
+            audioElement.pause();
+
+            audioElement.removeAttribute(
+                "src"
+            );
+
+            audioElement.load();
 
         }
 
@@ -683,21 +597,9 @@ function renderYorubaAudio(
 
 
     const audioURL =
-        resolveAudioURL(
+        buildAudioURL(
             audioPath
         );
-
-
-    console.log(
-        "AFC Isiu — Yoruba Audio Path:",
-        audioPath
-    );
-
-
-    console.log(
-        "AFC Isiu — Yoruba Audio URL:",
-        audioURL
-    );
 
 
     if (!audioURL) {
@@ -706,6 +608,9 @@ function renderYorubaAudio(
 
             audioCard.hidden = true;
 
+            audioCard.style.display =
+                "none";
+
         }
 
         return;
@@ -713,87 +618,78 @@ function renderYorubaAudio(
     }
 
 
+    console.log(
+        "AFC Isiu — Yoruba Audio URL:",
+        audioURL
+    );
+
+
     /*
-     * Preferred method:
-     *
-     * If lessons.html contains:
-     *
-     * <div id="yorubaAudio"></div>
-     *
-     * put the player inside it.
+     * Use existing <audio>
+     * if lessons.html contains it.
      */
 
-    if (audioContainer) {
+    if (audioElement) {
 
-        audioContainer.innerHTML =
-            formatYorubaAudio(
-                audioPath
-            );
+        audioElement.pause();
+
+        audioElement.removeAttribute(
+            "src"
+        );
+
+        audioElement.src =
+            audioURL;
+
+        audioElement.preload =
+            "metadata";
+
+        audioElement.load();
+
+
+        /*
+         * Helpful diagnostic.
+         */
+
+        audioElement.onloadedmetadata =
+            function () {
+
+                console.log(
+                    "AFC Isiu — Yoruba audio loaded:",
+                    audioURL
+                );
+
+            };
+
+
+        audioElement.onerror =
+            function () {
+
+                console.error(
+                    "AFC Isiu — Yoruba audio failed to load:",
+                    audioURL,
+                    audioElement.error
+                );
+
+            };
+
+
+        audioElement.hidden =
+            false;
 
     }
 
 
     /*
-     * Show the card.
+     * Show audio card.
      */
 
     if (audioCard) {
 
-        audioCard.hidden = false;
+        audioCard.hidden =
+            false;
 
         audioCard.style.display =
             "";
-
-    }
-
-
-    /*
-     * Verify that the browser can reach
-     * the actual audio file.
-     */
-
-    const audio =
-        audioContainer
-            ? audioContainer.querySelector(
-                "audio"
-            )
-            : null;
-
-
-    if (audio) {
-
-        audio.addEventListener(
-            "error",
-            () => {
-
-                console.error(
-                    "AFC Isiu — Yoruba audio could not be loaded:",
-                    audioURL
-                );
-
-                const status =
-                    audioContainer.querySelector(
-                        ".yoruba-audio-status"
-                    );
-
-
-                if (status) {
-
-                    status.innerHTML = `
-
-                        <span>
-                            Audio could not be loaded.
-                        </span>
-
-                    `;
-
-                }
-
-            },
-            {
-                once: true
-            }
-        );
 
     }
 
@@ -813,6 +709,21 @@ async function fetchWeeklyLessons() {
 
     try {
 
+        /*
+         * PapaParse must exist.
+         */
+
+        if (
+            typeof Papa === "undefined"
+        ) {
+
+            throw new Error(
+                "PapaParse is not loaded. Please make sure PapaParse is included in lessons.html."
+            );
+
+        }
+
+
         const response =
             await fetch(
                 LESSONS_CSV_URL,
@@ -821,6 +732,12 @@ async function fetchWeeklyLessons() {
                     cache: "no-store"
                 }
             );
+
+
+        console.log(
+            "AFC Isiu — Lessons CSV status:",
+            response.status
+        );
 
 
         if (!response.ok) {
@@ -840,18 +757,6 @@ async function fetchWeeklyLessons() {
 
             throw new Error(
                 "The lessons sheet returned no data."
-            );
-
-        }
-
-
-        if (
-            typeof Papa ===
-            "undefined"
-        ) {
-
-            throw new Error(
-                "PapaParse is not available on this page."
             );
 
         }
@@ -904,24 +809,23 @@ async function fetchWeeklyLessons() {
         );
 
 
-        console.log(
-            "AFC Isiu — Number of lessons:",
-            lessonsData.length
-        );
-
-
         if (
             !lessonsData.length
         ) {
 
             throw new Error(
-                "No lesson records were found in the WeeklyLesson sheet."
+                "No lesson records were found in the Google Sheet."
             );
 
         }
 
 
+        /*
+         * Now render.
+         */
+
         renderSelectedClass();
+
 
     }
 
@@ -993,7 +897,7 @@ function updateClassTabs(
                     );
 
 
-                const active =
+                const isActive =
                     tabClass.toLowerCase() ===
                     cleanText(
                         className
@@ -1002,13 +906,13 @@ function updateClassTabs(
 
                 tab.classList.toggle(
                     "active",
-                    active
+                    isActive
                 );
 
 
                 tab.setAttribute(
                     "aria-selected",
-                    active
+                    isActive
                         ? "true"
                         : "false"
                 );
@@ -1032,8 +936,8 @@ function renderSelectedClass() {
 
 
     /*
-     * If saved class no longer exists,
-     * use Senior.
+     * If saved class does not exist,
+     * try Senior.
      */
 
     if (!lesson) {
@@ -1047,8 +951,8 @@ function renderSelectedClass() {
 
 
     /*
-     * Final fallback:
-     * first available lesson.
+     * If Senior does not exist,
+     * use the first available lesson.
      */
 
     if (
@@ -1065,7 +969,7 @@ function renderSelectedClass() {
     if (!lesson) {
 
         renderFetchError(
-            "No lesson is available for this class yet."
+            "No lesson is available right now."
         );
 
         return;
@@ -1078,9 +982,7 @@ function renderSelectedClass() {
 
 
     selectedLessonClass =
-        cleanText(
-            lesson.className
-        );
+        lesson.className;
 
 
     localStorage.setItem(
@@ -1109,6 +1011,16 @@ function renderLesson(
     lesson
 ) {
 
+    console.log(
+        "AFC Isiu — Rendering lesson:",
+        lesson
+    );
+
+
+    /*
+     * Show lesson view.
+     */
+
     const lessonView =
         getElement(
             "lessonView"
@@ -1129,11 +1041,8 @@ function renderLesson(
     /* =====================================================
        LESSON TOPIC CARD
 
-       ONLY:
-       - Class
-       - Topic
-
-       NO LESSON NUMBER
+       IMPORTANT:
+       NO LESSON NUMBER HERE.
     ===================================================== */
 
     const classBadge =
@@ -1161,9 +1070,7 @@ function renderLesson(
     if (lessonTitle) {
 
         lessonTitle.textContent =
-            cleanText(
-                lesson.topic
-            ) ||
+            lesson.topic ||
             "Weekly Lesson";
 
     }
@@ -1200,20 +1107,21 @@ function renderLesson(
     if (bibleText) {
 
         bibleText.textContent =
-            cleanText(
-                lesson.bibleText
-            ) ||
+            lesson.bibleText ||
             "—";
 
     }
 
 
+    /*
+     * Lesson number belongs here,
+     * NOT in the Topic Card.
+     */
+
     if (lessonNumber) {
 
         lessonNumber.textContent =
-            cleanText(
-                lesson.lesson
-            ) ||
+            lesson.lesson ||
             "—";
 
     }
@@ -1229,14 +1137,9 @@ function renderLesson(
             today.toLocaleDateString(
                 "en-GB",
                 {
-                    day:
-                        "numeric",
-
-                    month:
-                        "short",
-
-                    year:
-                        "numeric"
+                    day: "numeric",
+                    month: "short",
+                    year: "numeric"
                 }
             );
 
@@ -1246,9 +1149,7 @@ function renderLesson(
     if (memoryVerse) {
 
         memoryVerse.textContent =
-            cleanText(
-                lesson.memoryVerse
-            ) ||
+            lesson.memoryVerse ||
             "—";
 
     }
@@ -1256,8 +1157,6 @@ function renderLesson(
 
     /* =====================================================
        SUMMARY
-       
-       HTML FROM GOOGLE SHEET IS RENDERED.
     ===================================================== */
 
     const lessonContent =
@@ -1298,11 +1197,28 @@ function renderLesson(
 
     /* =====================================================
        YORUBA AUDIO
+
+       IMPORTANT:
+       An audio failure must NOT stop
+       the rest of the lesson.
     ===================================================== */
 
-    renderYorubaAudio(
-        lesson.yorubaAudio
-    );
+    try {
+
+        renderYorubaAudio(
+            lesson.yorubaAudio
+        );
+
+    }
+
+    catch (audioError) {
+
+        console.error(
+            "AFC Isiu — Audio rendering error:",
+            audioError
+        );
+
+    }
 
 
     /* =====================================================
@@ -1337,7 +1253,7 @@ function renderLesson(
 
 
 /* =========================================================
-   LESSON METADATA
+   LESSON META
 ========================================================= */
 
 function updateLessonMeta(
@@ -1350,6 +1266,33 @@ function updateLessonMeta(
         );
 
 
+    /*
+     * Count paragraphs / major blocks.
+     */
+
+    let sections = 0;
+
+
+    if (summary) {
+
+        sections =
+            summary
+                .split(
+                    /\r?\n\s*\r?\n/
+                )
+                .filter(Boolean)
+                .length;
+
+    }
+
+
+    sections =
+        Math.max(
+            sections,
+            1
+        );
+
+
     const sectionCount =
         getElement(
             "sectionCount"
@@ -1359,53 +1302,6 @@ function updateLessonMeta(
     const mobileSectionCount =
         getElement(
             "mobileSectionCount"
-        );
-
-
-    /*
-     * Count actual headings in HTML when possible.
-     */
-
-    let sections = 0;
-
-
-    if (summary) {
-
-        const headingMatches =
-            summary.match(
-                /<h[1-6][^>]*>/gi
-            );
-
-
-        if (
-            headingMatches &&
-            headingMatches.length
-        ) {
-
-            sections =
-                headingMatches.length;
-
-        }
-
-        else {
-
-            sections =
-                summary
-                    .split(
-                        /\r?\n\s*\r?\n/
-                    )
-                    .filter(Boolean)
-                    .length;
-
-        }
-
-    }
-
-
-    sections =
-        Math.max(
-            sections,
-            1
         );
 
 
@@ -1427,26 +1323,15 @@ function updateLessonMeta(
 
     /*
      * Reading time.
-     *
-     * Remove HTML tags before counting words.
      */
 
-    const plainText =
-        summary
-            .replace(
-                /<[^>]*>/g,
-                " "
-            )
-            .replace(
-                /\s+/g,
-                " "
-            )
-            .trim();
-
-
     const words =
-        plainText
-            ? plainText
+        summary
+            ? summary
+                .replace(
+                    /<[^>]*>/g,
+                    " "
+                )
                 .split(/\s+/)
                 .filter(Boolean)
                 .length
@@ -1497,7 +1382,7 @@ function updateLessonMeta(
 
 
 /* =========================================================
-   PROGRESS
+   RESET PROGRESS
 ========================================================= */
 
 function resetLessonProgress() {
@@ -1522,7 +1407,9 @@ function updateProgressUI(
             100,
             Math.max(
                 0,
-                Math.round(percent)
+                Math.round(
+                    percent
+                )
             )
         );
 
@@ -1645,6 +1532,10 @@ function updateProgressUI(
 
 function setupReadingProgress() {
 
+    /*
+     * Remove old listener.
+     */
+
     if (
         progressScrollHandler
     ) {
@@ -1728,7 +1619,8 @@ function setupReadingProgress() {
                 contentTop
             ) {
 
-                percent = 0;
+                percent =
+                    0;
 
             }
 
@@ -1738,7 +1630,8 @@ function setupReadingProgress() {
                 contentBottom
             ) {
 
-                percent = 100;
+                percent =
+                    100;
 
             }
 
@@ -1866,10 +1759,7 @@ function initializeLessonTabs() {
 
                 tab.addEventListener(
                     "click",
-                    event => {
-
-                        event.preventDefault();
-
+                    function () {
 
                         const className =
                             cleanText(
@@ -1903,8 +1793,8 @@ function initializeLessonTabs() {
 
 
                         /*
-                         * On mobile, bring the lesson
-                         * into view.
+                         * On mobile, gently bring
+                         * the lesson into view.
                          */
 
                         if (
@@ -1918,9 +1808,7 @@ function initializeLessonTabs() {
                                 );
 
 
-                            if (
-                                lessonView
-                            ) {
+                            if (lessonView) {
 
                                 setTimeout(
                                     () => {
@@ -1929,14 +1817,13 @@ function initializeLessonTabs() {
                                             {
                                                 behavior:
                                                     "smooth",
-
                                                 block:
                                                     "start"
                                             }
                                         );
 
                                     },
-                                    50
+                                    80
                                 );
 
                             }
@@ -2025,7 +1912,7 @@ function initializeRetryButton() {
 
     retry.addEventListener(
         "click",
-        () => {
+        function () {
 
             fetchWeeklyLessons();
 
@@ -2043,15 +1930,27 @@ function renderFetchError(
     message
 ) {
 
-    const lessonView =
+    console.error(
+        "AFC Isiu — Lesson error:",
+        message
+    );
+
+
+    const errorBox =
         getElement(
-            "lessonView"
+            "lessonsError"
         );
 
 
-    const lessonContent =
+    const errorMessage =
         getElement(
-            "lessonContent"
+            "lessonsErrorMessage"
+        );
+
+
+    const lessonView =
+        getElement(
+            "lessonView"
         );
 
 
@@ -2061,6 +1960,40 @@ function renderFetchError(
             true;
 
     }
+
+
+    if (errorMessage) {
+
+        errorMessage.textContent =
+            message ||
+            "Unable to load the lessons.";
+
+    }
+
+
+    if (errorBox) {
+
+        errorBox.hidden =
+            false;
+
+        errorBox.style.display =
+            "";
+
+        return;
+
+    }
+
+
+    /*
+     * If the HTML does not have an
+     * error box, put the error inside
+     * lessonContent instead.
+     */
+
+    const lessonContent =
+        getElement(
+            "lessonContent"
+        );
 
 
     if (lessonContent) {
@@ -2078,33 +2011,9 @@ function renderFetchError(
                     )}
                 </p>
 
-                <button
-                    type="button"
-                    id="retryLessons"
-                    class="lesson-retry-button"
-                >
-                    Try Again
-                </button>
-
             </div>
 
         `;
-
-
-        const retry =
-            getElement(
-                "retryLessons"
-            );
-
-
-        if (retry) {
-
-            retry.addEventListener(
-                "click",
-                fetchWeeklyLessons
-            );
-
-        }
 
     }
 
@@ -2118,9 +2027,15 @@ function renderFetchError(
 function initializeLessonsPage() {
 
     console.log(
-        "AFC Isiu — Lessons page initialized."
+        "AFC Isiu — Initializing Lessons Page..."
     );
 
+
+    /*
+     * We need at least one of these
+     * elements to know that this is
+     * the lessons page.
+     */
 
     const lessonView =
         getElement(
@@ -2140,16 +2055,15 @@ function initializeLessonsPage() {
         );
 
 
-    /*
-     * Do not run on pages that are not
-     * the lessons page.
-     */
-
     if (
         !lessonView &&
         !lessonContent &&
         !tabs.length
     ) {
+
+        console.warn(
+            "AFC Isiu — Lessons interface not found. lessons.js stopped."
+        );
 
         return;
 
@@ -2214,13 +2128,13 @@ window.AFCLessons = {
         className
     ) {
 
-        const wanted =
+        const cleanClass =
             cleanText(
                 className
             );
 
 
-        if (!wanted) {
+        if (!cleanClass) {
 
             return;
 
@@ -2228,11 +2142,16 @@ window.AFCLessons = {
 
 
         selectedLessonClass =
-            wanted;
+            cleanClass;
 
 
         localStorage.setItem(
             "selectedLessonClass",
+            selectedLessonClass
+        );
+
+
+        updateClassTabs(
             selectedLessonClass
         );
 
@@ -2244,20 +2163,8 @@ window.AFCLessons = {
 
     reload() {
 
-        fetchWeeklyLessons();
-
-    },
-
-
-    resolveAudioURL(
-        audioPath
-    ) {
-
-        return resolveAudioURL(
-            audioPath
-        );
+        return fetchWeeklyLessons();
 
     }
 
 };
- 
