@@ -2536,347 +2536,242 @@
 
 
 /* =========================================================
-YORUBA AUDIO CARD
-Modern clean card — React / Next.js inspired
-========================================================= */
+   YORUBA AUDIO CARD
+   ========================================================= */
 
 .yoruba-audio-card {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 1rem;
+    align-items: center;
 
- 
-width: 100%;
+    width: 100%;
 
-margin-top: 18px;
-margin-bottom: 24px;
+    margin: 1.25rem 0 2rem;
+    padding: 1.25rem;
 
-padding: 20px 22px;
+    background:
+        linear-gradient(
+            135deg,
+            rgba(234, 88, 12, 0.08),
+            rgba(255, 255, 255, 0.96)
+        );
 
-border-radius: 18px;
+    border: 1px solid rgba(234, 88, 12, 0.16);
 
-background:
-    linear-gradient(
-        135deg,
-        #ffffff 0%,
-        #f8fafc 100%
-    );
+    border-radius: 20px;
 
-border: 1px solid rgba(15, 23, 42, 0.08);
+    box-shadow:
+        0 10px 30px rgba(15, 23, 42, 0.05);
 
-box-shadow:
-    0 8px 24px rgba(15, 23, 42, 0.06);
-
-display: flex;
-
-align-items: center;
-
-justify-content: space-between;
-
-gap: 24px;
-
-box-sizing: border-box;
- 
-
+    overflow: hidden;
 }
 
-/* =========================================================
-TOP CONTENT
-========================================================= */
 
-.yoruba-audio-top {
+/* Decorative background */
 
- 
-display: flex;
+.yoruba-audio-card::before {
+    content: "";
 
-align-items: center;
+    position: absolute;
 
-gap: 15px;
+    width: 180px;
+    height: 180px;
 
-min-width: 0;
+    top: -100px;
+    right: -70px;
 
-flex: 1;
- 
+    border-radius: 50%;
 
+    background:
+        rgba(234, 88, 12, 0.06);
+
+    pointer-events: none;
 }
 
+
 /* =========================================================
-ICON
+   AUDIO ICON
 ========================================================= */
 
 .yoruba-audio-icon {
-
- 
-width: 46px;
-height: 46px;
-
-min-width: 46px;
-
-border-radius: 14px;
-
-display: flex;
-
-align-items: center;
-
-justify-content: center;
-
-background: rgba(234, 88, 12, 0.10);
-
-color: #ea580c;
-
-font-size: 18px;
- 
-
+    position: relative;
+    z-index: 1;
 }
 
-/* =========================================================
-CONTENT
-========================================================= */
 
-.yoruba-audio-content {
+.audio-icon-ring {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
- 
-min-width: 0;
- 
-
-}
-
-.yoruba-audio-label {
-
- 
-display: block;
-
-margin-bottom: 4px;
-
-font-family:
-    "DM Sans",
-    sans-serif;
-
-font-size: 0.68rem;
-
-font-weight: 800;
-
-letter-spacing: 0.08em;
-
-color: #ea580c;
- 
-
-}
-
-.yoruba-audio-content h3 {
-
- 
-margin: 0;
-
-font-family:
-    "Bricolage Grotesque",
-    sans-serif;
-
-font-size: 1rem;
-
-font-weight: 700;
-
-line-height: 1.25;
-
-color: #0f172a;
- 
-
-}
-
-.yoruba-audio-content p {
-
- 
-margin: 4px 0 0;
-
-font-family:
-    "DM Sans",
-    sans-serif;
-
-font-size: 0.78rem;
-
-line-height: 1.45;
-
-color: #64748b;
- 
-
-}
-
-/* =========================================================
-AUDIO PLAYER
-========================================================= */
-
-.yoruba-audio-player {
-
- 
-width: 330px;
-
-max-width: 100%;
-
-flex-shrink: 0;
- 
-
-}
-
-.yoruba-audio-player audio {
-
- 
-display: block;
-
-width: 100%;
-
-height: 42px;
- 
-
-}
-
-/* =========================================================
-HOVER / FOCUS
-========================================================= */
-
-.yoruba-audio-card {
-
- 
-transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease,
-    border-color 0.2s ease;
- 
-
-}
-
-.yoruba-audio-card:hover {
-
- 
-transform: translateY(-1px);
-
-border-color:
-    rgba(234, 88, 12, 0.18);
-
-box-shadow:
-    0 12px 30px rgba(15, 23, 42, 0.08);
- 
-
-}
-
-/* =========================================================
-MOBILE
-========================================================= */
-
-@media (max-width: 768px) {
-
- 
-.yoruba-audio-card {
-
-    display: block;
-
-    padding: 18px;
-
-    margin-top: 16px;
-
-    margin-bottom: 20px;
+    width: 54px;
+    height: 54px;
 
     border-radius: 16px;
 
+    background:
+        linear-gradient(
+            135deg,
+            #ea580c,
+            #f97316
+        );
+
+    color: #ffffff;
+
+    font-size: 1.2rem;
+
+    box-shadow:
+        0 10px 24px
+        rgba(234, 88, 12, 0.25);
 }
 
 
-.yoruba-audio-top {
+/* =========================================================
+   CONTENT
+========================================================= */
 
-    gap: 13px;
+.yoruba-audio-content {
+    position: relative;
+    z-index: 1;
 
-    margin-bottom: 15px;
-
+    min-width: 0;
 }
 
 
-.yoruba-audio-icon {
+.yoruba-audio-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
 
-    width: 42px;
-    height: 42px;
+    margin-bottom: 0.35rem;
 
-    min-width: 42px;
+    color: #ea580c;
 
-    border-radius: 12px;
+    font-family:
+        "DM Sans",
+        sans-serif;
 
-    font-size: 16px;
+    font-size: 0.68rem;
+    font-weight: 800;
 
+    letter-spacing: 0.08em;
+}
+
+
+.audio-live-dot {
+    width: 7px;
+    height: 7px;
+
+    border-radius: 50%;
+
+    background: #ea580c;
+
+    box-shadow:
+        0 0 0 4px
+        rgba(234, 88, 12, 0.12);
 }
 
 
 .yoruba-audio-content h3 {
+    margin: 0 0 0.25rem;
 
-    font-size: 0.95rem;
+    color: var(--text-primary, #111827);
 
+    font-family:
+        "Bricolage Grotesque",
+        sans-serif;
+
+    font-size: 1rem;
+    font-weight: 700;
 }
 
 
 .yoruba-audio-content p {
+    margin: 0;
 
-    font-size: 0.74rem;
+    color: var(--text-secondary, #6b7280);
 
+    font-family:
+        "DM Sans",
+        sans-serif;
+
+    font-size: 0.82rem;
+    line-height: 1.5;
 }
 
 
+/* =========================================================
+   AUDIO PLAYER
+========================================================= */
+
 .yoruba-audio-player {
+    grid-column: 1 / -1;
 
-    width: 100%;
+    position: relative;
+    z-index: 1;
 
+    margin-top: 0.25rem;
 }
 
 
 .yoruba-audio-player audio {
+    display: block;
 
     width: 100%;
+    height: 42px;
 
-    height: 40px;
-
+    border-radius: 12px;
 }
- 
 
-}
 
 /* =========================================================
-SMALL PHONES
+   HIDDEN STATE
 ========================================================= */
 
-@media (max-width: 420px) {
-
- 
-.yoruba-audio-card {
-
-    padding: 16px;
-
-    border-radius: 14px;
-
+.yoruba-audio-card[hidden] {
+    display: none !important;
 }
 
 
-.yoruba-audio-top {
+/* =========================================================
+   MOBILE
+========================================================= */
 
-    align-items: flex-start;
+@media (max-width: 600px) {
 
-}
+    .yoruba-audio-card {
+        gap: 0.85rem;
 
+        padding: 1rem;
 
-.yoruba-audio-icon {
-
-    width: 40px;
-    height: 40px;
-
-    min-width: 40px;
-
-}
+        border-radius: 18px;
+    }
 
 
-.yoruba-audio-content h3 {
+    .audio-icon-ring {
+        width: 46px;
+        height: 46px;
 
-    font-size: 0.9rem;
+        border-radius: 14px;
 
-}
+        font-size: 1rem;
+    }
 
 
-.yoruba-audio-content p {
+    .yoruba-audio-content h3 {
+        font-size: 0.92rem;
+    }
 
-    font-size: 0.72rem;
 
-}
- 
+    .yoruba-audio-content p {
+        font-size: 0.76rem;
+    }
+
+
+    .yoruba-audio-player audio {
+        height: 38px;
+    }
 
 }
