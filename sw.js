@@ -2,7 +2,7 @@
    AFC ISIU YOUTH PORTAL
    SERVICE WORKER
    PWA CACHE + OFFLINE SUPPORT
-========================================================= */
+   ========================================================= */
 
 "use strict";
 
@@ -11,13 +11,19 @@
    CACHE VERSION
 ========================================================= */
 
-const CACHE_VERSION = "afc-isiu-pwa-v7";
+const CACHE_VERSION = "afc-isiu-pwa-v8";
 
-const STATIC_CACHE = `${CACHE_VERSION}-static`;
+const STATIC_CACHE =
+    `${CACHE_VERSION}-static`;
 
-const PAGE_CACHE = `${CACHE_VERSION}-pages`;
+const PAGE_CACHE =
+    `${CACHE_VERSION}-pages`;
 
-const OFFLINE_CACHE = `${CACHE_VERSION}-offline`;
+const AUDIO_CACHE =
+    `${CACHE_VERSION}-audio`;
+
+const OFFLINE_CACHE =
+    `${CACHE_VERSION}-offline`;
 
 
 /* =========================================================
@@ -34,29 +40,19 @@ const APP_SHELL = [
 
     "/manifest.json",
 
-    /* Main CSS */
+    /* CSS */
 
     "/css/main.css",
-
     "/css/layout.css",
-
-    /* Lessons CSS */
-
     "/css/lessons.css",
 
-    /* Main JavaScript */
+    /* JavaScript */
 
     "/js/main.js",
-
-    /* Lessons JavaScript */
-
     "/js/lessons.js",
-
-    /* PWA JavaScript */
-
     "/js/pwa.js",
 
-    /* Logo */
+    /* Images */
 
     "/images/logo.png"
 
@@ -67,7 +63,8 @@ const APP_SHELL = [
    OFFLINE PAGE
 ========================================================= */
 
-const OFFLINE_PAGE = "/offline.html";
+const OFFLINE_PAGE =
+    "/offline.html";
 
 
 /* =========================================================
@@ -79,7 +76,7 @@ self.addEventListener(
     event => {
 
         console.log(
-            "AFC Isiu PWA: Installing service worker..."
+            "AFC Isiu PWA: Installing v8..."
         );
 
 
@@ -91,19 +88,89 @@ self.addEventListener(
                     .open(STATIC_CACHE)
                     .then(cache => {
 
-                        return cache.addAll(
-                            APP_SHELL
+                        return Promise.all(
+
+                            APP_SHELL.map(
+                                async file => {
+
+                                    try {
+
+                                        const response =
+                                            await fetch(
+                                                file,
+                                                {
+                                                    cache:
+                                                        "no-cache"
+                                                }
+                                            );
+
+
+                                        if (
+                                            response.ok
+                                        ) {
+
+                                            await cache.put(
+                                                file,
+                                                response
+                                            );
+
+                                        }
+
+                                    }
+
+                                    catch (error) {
+
+                                        console.warn(
+                                            "Could not cache:",
+                                            file,
+                                            error
+                                        );
+
+                                    }
+
+                                }
+                            )
+
                         );
 
                     }),
 
+
                 caches
                     .open(OFFLINE_CACHE)
-                    .then(cache => {
+                    .then(async cache => {
 
-                        return cache.add(
-                            OFFLINE_PAGE
-                        );
+                        try {
+
+                            const response =
+                                await fetch(
+                                    OFFLINE_PAGE,
+                                    {
+                                        cache:
+                                            "no-cache"
+                                    }
+                                );
+
+
+                            if (response.ok) {
+
+                                await cache.put(
+                                    OFFLINE_PAGE,
+                                    response
+                                );
+
+                            }
+
+                        }
+
+                        catch (error) {
+
+                            console.warn(
+                                "Could not cache offline page:",
+                                error
+                            );
+
+                        }
 
                     })
 
@@ -112,31 +179,9 @@ self.addEventListener(
             .then(() => {
 
                 console.log(
-                    "AFC Isiu PWA: Static files cached."
+                    "AFC Isiu PWA: Installation complete."
                 );
 
-
-                /*
-                 * Activate the new service worker
-                 * immediately.
-                 */
-
-                return self.skipWaiting();
-
-            })
-
-            .catch(error => {
-
-                console.error(
-                    "AFC Isiu PWA: Installation cache error:",
-                    error
-                );
-
-                /*
-                 * Do not prevent the service worker
-                 * from installing if one optional
-                 * shell file fails.
-                 */
 
                 return self.skipWaiting();
 
@@ -157,7 +202,7 @@ self.addEventListener(
     event => {
 
         console.log(
-            "AFC Isiu PWA: Activating service worker..."
+            "AFC Isiu PWA: Activating v8..."
         );
 
 
@@ -170,7 +215,6 @@ self.addEventListener(
                     return Promise.all(
 
                         cacheNames
-
                             .filter(cacheName => {
 
                                 return (
@@ -192,6 +236,11 @@ self.addEventListener(
                                     &&
 
                                     cacheName !==
+                                        AUDIO_CACHE
+
+                                    &&
+
+                                    cacheName !==
                                         OFFLINE_CACHE
 
                                 );
@@ -201,7 +250,7 @@ self.addEventListener(
                             .map(cacheName => {
 
                                 console.log(
-                                    "AFC Isiu PWA: Deleting old cache:",
+                                    "Deleting old cache:",
                                     cacheName
                                 );
 
@@ -219,13 +268,9 @@ self.addEventListener(
                 .then(() => {
 
                     console.log(
-                        "AFC Isiu PWA: Service worker activated."
+                        "AFC Isiu PWA: v8 activated."
                     );
 
-
-                    /*
-                     * Take control of all open pages.
-                     */
 
                     return self.clients.claim();
 
@@ -250,7 +295,7 @@ self.addEventListener(
 
 
         /*
-         * Only handle GET requests.
+         * Only GET requests.
          */
 
         if (
@@ -263,23 +308,14 @@ self.addEventListener(
 
 
         const url =
-            new URL(request.url);
+            new URL(
+                request.url
+            );
 
 
         /*
-         * VERY IMPORTANT:
-         *
-         * Never intercept requests to:
-         *
-         * - Google Sheets
-         * - Google Fonts
-         * - PapaParse CDN
-         * - Font Awesome
-         * - Remix Icons
-         * - Other external services
-         *
-         * The browser should communicate with
-         * those services directly.
+         * Only handle files hosted
+         * on AFC Isiu's own domain.
          */
 
         if (
@@ -292,9 +328,26 @@ self.addEventListener(
         }
 
 
-        /*
-         * PAGE NAVIGATION
-         */
+        /* -----------------------------------------------
+           AUDIO
+        ------------------------------------------------ */
+
+        if (
+            isAudioRequest(url)
+        ) {
+
+            event.respondWith(
+                handleAudio(request)
+            );
+
+            return;
+
+        }
+
+
+        /* -----------------------------------------------
+           PAGE NAVIGATION
+        ------------------------------------------------ */
 
         if (
             request.mode === "navigate"
@@ -309,9 +362,9 @@ self.addEventListener(
         }
 
 
-        /*
-         * LOCAL ASSETS
-         */
+        /* -----------------------------------------------
+           NORMAL LOCAL ASSETS
+        ------------------------------------------------ */
 
         event.respondWith(
             handleAsset(request)
@@ -319,6 +372,114 @@ self.addEventListener(
 
     }
 );
+
+
+/* =========================================================
+   AUDIO DETECTION
+========================================================= */
+
+function isAudioRequest(url) {
+
+    return (
+        /\.(mp3|wav|ogg|m4a|aac)$/i
+            .test(url.pathname)
+    );
+
+}
+
+
+/* =========================================================
+   AUDIO HANDLER
+========================================================= */
+
+async function handleAudio(request) {
+
+    const audioCache =
+        await caches.open(
+            AUDIO_CACHE
+        );
+
+
+    /*
+     * Try network first.
+     *
+     * This means a newly uploaded/replaced
+     * audio file can update normally.
+     */
+
+    try {
+
+        const networkResponse =
+            await fetch(
+                request
+            );
+
+
+        if (
+            networkResponse &&
+            networkResponse.ok
+        ) {
+
+            await audioCache.put(
+                request,
+                networkResponse.clone()
+            );
+
+
+            console.log(
+                "AFC Isiu PWA: Audio cached:",
+                request.url
+            );
+
+
+            return networkResponse;
+
+        }
+
+    }
+
+    catch (error) {
+
+        console.log(
+            "AFC Isiu PWA: Audio network unavailable."
+        );
+
+    }
+
+
+    /*
+     * If offline, use cached audio.
+     */
+
+    const cachedResponse =
+        await audioCache.match(
+            request
+        );
+
+
+    if (cachedResponse) {
+
+        return cachedResponse;
+
+    }
+
+
+    /*
+     * Audio doesn't exist in cache.
+     */
+
+    return new Response(
+        "Audio unavailable.",
+        {
+            status: 404,
+            headers: {
+                "Content-Type":
+                    "text/plain"
+            }
+        }
+    );
+
+}
 
 
 /* =========================================================
@@ -334,19 +495,19 @@ async function handleNavigation(request) {
 
 
     /*
-     * FIRST:
-     *
-     * Try the network.
-     *
-     * This is important because it means
-     * updated HTML is preferred whenever
-     * the user is online.
+     * NETWORK FIRST
      */
 
     try {
 
         const networkResponse =
-            await fetch(request);
+            await fetch(
+                request,
+                {
+                    cache:
+                        "no-cache"
+                }
+            );
 
 
         if (
@@ -354,14 +515,11 @@ async function handleNavigation(request) {
             networkResponse.ok
         ) {
 
-            /*
-             * Save the latest page.
-             */
-
             await pageCache.put(
                 request,
                 networkResponse.clone()
             );
+
 
             return networkResponse;
 
@@ -372,16 +530,14 @@ async function handleNavigation(request) {
     catch (error) {
 
         console.log(
-            "AFC Isiu PWA: Network unavailable."
+            "AFC Isiu PWA: Navigation network unavailable."
         );
 
     }
 
 
     /*
-     * SECOND:
-     *
-     * Use cached page if available.
+     * CACHE SECOND
      */
 
     const cachedPage =
@@ -398,9 +554,7 @@ async function handleNavigation(request) {
 
 
     /*
-     * THIRD:
-     *
-     * Try static cache.
+     * APP SHELL CACHE
      */
 
     const staticPage =
@@ -417,9 +571,7 @@ async function handleNavigation(request) {
 
 
     /*
-     * FOURTH:
-     *
-     * Show offline page.
+     * OFFLINE PAGE
      */
 
     const offlineCache =
@@ -461,13 +613,17 @@ async function handleNavigation(request) {
                 content="width=device-width, initial-scale=1.0"
             >
 
-            <title>Offline | AFC Isiu Youth Portal</title>
+            <title>
+                Offline | AFC Isiu Youth Portal
+            </title>
 
         </head>
 
         <body>
 
-            <h1>You're offline</h1>
+            <h1>
+                You're offline
+            </h1>
 
             <p>
                 Please reconnect to the internet
@@ -503,85 +659,33 @@ async function handleNavigation(request) {
 
 async function handleAsset(request) {
 
-    /*
-     * FIRST:
-     *
-     * Look in cache.
-     */
-
-    const cachedResponse =
-        await caches.match(
-            request
+    const staticCache =
+        await caches.open(
+            STATIC_CACHE
         );
 
 
-    if (cachedResponse) {
-
-        /*
-         * For important JS/CSS files we still
-         * prefer the network when online.
-         *
-         * However, the cached version gives us
-         * offline support.
-         */
-
-        try {
-
-            const networkResponse =
-                await fetch(request);
-
-
-            if (
-                networkResponse &&
-                networkResponse.ok
-            ) {
-
-                const cache =
-                    await caches.open(
-                        STATIC_CACHE
-                    );
-
-
-                await cache.put(
-                    request,
-                    networkResponse.clone()
-                );
-
-
-                return networkResponse;
-
-            }
-
-        }
-
-        catch (error) {
-
-            /*
-             * Network unavailable.
-             *
-             * Return cached asset.
-             */
-
-            return cachedResponse;
-
-        }
-
-
-        return cachedResponse;
-
-    }
-
-
     /*
-     * SECOND:
+     * NETWORK FIRST
      *
-     * Try network.
+     * This is particularly important for:
+     *
+     * lessons.js
+     * main.js
+     * CSS
+     * HTML-related assets
      */
 
     try {
 
         const networkResponse =
-            await fetch(request);
+            await fetch(
+                request,
+                {
+                    cache:
+                        "no-cache"
+                }
+            );
 
 
         if (
@@ -589,38 +693,74 @@ async function handleAsset(request) {
             networkResponse.ok
         ) {
 
-            const cache =
-                await caches.open(
-                    STATIC_CACHE
-                );
-
-
-            await cache.put(
+            await staticCache.put(
                 request,
                 networkResponse.clone()
             );
 
+
+            return networkResponse;
+
         }
-
-
-        return networkResponse;
 
     }
 
     catch (error) {
 
         console.log(
-            "AFC Isiu PWA: Asset unavailable:",
-            request.url
+            "AFC Isiu PWA: Asset network unavailable."
+        );
+
+    }
+
+
+    /*
+     * FALL BACK TO CACHE
+     */
+
+    const cachedResponse =
+        await staticCache.match(
+            request
         );
 
 
-        /*
-         * Let the browser handle the failure.
-         */
+    if (cachedResponse) {
 
-        throw error;
+        return cachedResponse;
 
     }
+
+
+    /*
+     * Try all caches as a final fallback.
+     */
+
+    const anyCachedResponse =
+        await caches.match(
+            request
+        );
+
+
+    if (anyCachedResponse) {
+
+        return anyCachedResponse;
+
+    }
+
+
+    /*
+     * Nothing available.
+     */
+
+    return new Response(
+        "Asset unavailable.",
+        {
+            status: 404,
+            headers: {
+                "Content-Type":
+                    "text/plain"
+            }
+        }
+    );
 
 }
