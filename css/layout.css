@@ -1686,3 +1686,18 @@
     }
 
 }
+
+
+
+.dashboard-main {
+    width: 100%;
+    padding-top: 24px;
+}
+
+@media (max-width: 768px) {
+
+    .dashboard-main {
+        padding-top: 18px;
+    }
+
+}
