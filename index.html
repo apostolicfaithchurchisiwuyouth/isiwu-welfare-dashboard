@@ -12,13 +12,20 @@
 
     <title>AFC Isiu Youth Portal</title>
 
+
     <!-- =====================================================
          PWA
     ====================================================== -->
 
-    <link rel="manifest" href="/manifest.json">
+    <link
+        rel="manifest"
+        href="/manifest.json"
+    >
 
-    <meta name="theme-color" content="#ea580c">
+    <meta
+        name="theme-color"
+        content="#ea580c"
+    >
 
     <meta
         name="mobile-web-app-capable"
@@ -40,6 +47,7 @@
         content="AFC Isiwu"
     >
 
+
     <!-- =====================================================
          ICONS
     ====================================================== -->
@@ -54,6 +62,7 @@
         rel="apple-touch-icon"
         href="images/logo.png"
     >
+
 
     <!-- =====================================================
          FONTS
@@ -75,6 +84,7 @@
         rel="stylesheet"
     >
 
+
     <!-- =====================================================
          FONT AWESOME
     ====================================================== -->
@@ -83,6 +93,7 @@
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
         rel="stylesheet"
     >
+
 
     <!-- =====================================================
          REMIX ICONS
@@ -93,18 +104,24 @@
         rel="stylesheet"
     >
 
+
     <!-- =====================================================
          LIBRARIES
     ====================================================== -->
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script
+        src="https://cdn.jsdelivr.net/npm/chart.js"
+    ></script>
 
-    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+    <script
+        src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"
+    ></script>
 
     <link
         rel="stylesheet"
         href="https://unpkg.com/aos@2.3.4/dist/aos.css"
     >
+
 
     <!-- =====================================================
          CSS
@@ -124,6 +141,7 @@
 
 
 <body>
+
 
 <div class="app-layout">
 
@@ -148,6 +166,7 @@
     >
 
         <div class="sidebar-top">
+
 
             <!-- LOGO -->
 
@@ -350,6 +369,7 @@
 
             <div class="topbar-left">
 
+
                 <button
                     class="mobile-menu-btn"
                     id="mobileMenuBtn"
@@ -389,6 +409,7 @@
 
             <div class="topbar-right">
 
+
                 <button
                     class="header-icon"
                     id="notificationBtn"
@@ -420,27 +441,24 @@
 
 
         <!-- =================================================
-             MAIN CONTENT
+             DASHBOARD MAIN
         ================================================== -->
 
         <main class="dashboard-main">
 
-
-            <!-- =================================================
-                 DASHBOARD HUB
-            ================================================== -->
 
             <section
                 class="hub"
                 data-aos="fade-up"
             >
 
+
                 <div class="hub-grid">
 
 
-                    <!-- ================================
+                    <!-- =====================================
                          SUNDAY SCHOOL
-                    ================================= -->
+                    ====================================== -->
 
                     <a
                         href="pages/lessons"
@@ -476,20 +494,22 @@
 
 
                         <p>
-                            Study the current Sunday school
-                            lesson and grow spiritually.
+                            Study the current Sunday school lesson
+                            and grow spiritually.
                         </p>
 
                     </a>
 
 
-                    <!-- ================================
+                    <!-- =====================================
                          QUIZ
-                    ================================= -->
+                    ====================================== -->
 
                     <a
                         href="pages/slcquiz"
                         class="hub-item"
+                        data-online-only
+                        data-feature="Weekly SLC Quiz"
                     >
 
                         <div class="hub-header">
@@ -509,16 +529,16 @@
 
 
                         <p>
-                            Answer the questions from our
-                            weekly Sunday school lessons.
+                            Answer questions from our weekly
+                            Sunday school lessons.
                         </p>
 
                     </a>
 
 
-                    <!-- ================================
+                    <!-- =====================================
                          EVENTS
-                    ================================= -->
+                    ====================================== -->
 
                     <a
                         href="pages/events"
@@ -544,16 +564,15 @@
 
 
                         <p>
-                            Upcoming programmes and youth
-                            activities.
+                            Upcoming programmes and youth activities.
                         </p>
 
                     </a>
 
 
-                    <!-- ================================
+                    <!-- =====================================
                          WELFARE
-                    ================================= -->
+                    ====================================== -->
 
                     <a
                         href="pages/welfare"
@@ -579,16 +598,15 @@
 
 
                         <p>
-                            Request support and welfare
-                            assistance.
+                            Request support and welfare assistance.
                         </p>
 
                     </a>
 
 
-                    <!-- ================================
+                    <!-- =====================================
                          PRAYER
-                    ================================= -->
+                    ====================================== -->
 
                     <a
                         href="pages/prayer"
@@ -614,16 +632,15 @@
 
 
                         <p>
-                            Send prayer requests and
-                            testimonies.
+                            Send prayer requests and testimonies.
                         </p>
 
                     </a>
 
 
-                    <!-- ================================
+                    <!-- =====================================
                          GALLERY
-                    ================================= -->
+                    ====================================== -->
 
                     <a
                         href="pages/gallery"
@@ -654,12 +671,14 @@
 
                     </a>
 
+
                 </div>
 
             </section>
 
 
         </main>
+
 
     </div>
 
@@ -672,6 +691,7 @@
         class="bottom-nav"
         aria-label="Mobile navigation"
     >
+
 
         <a
             href="/"
@@ -734,9 +754,9 @@
 </div>
 
 
-<!-- =====================================================
+<!-- =========================================================
      SCRIPTS
-====================================================== -->
+========================================================= -->
 
 <script
     src="https://unpkg.com/aos@2.3.4/dist/aos.js"
@@ -744,7 +764,6 @@
 
 <script src="js/main.js"></script>
 
-</body>
 
+</body>
 </html>
- 
