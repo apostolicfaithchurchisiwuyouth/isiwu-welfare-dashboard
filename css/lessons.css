@@ -2785,7 +2785,7 @@
 
 .lesson-rich-content {
     font-family: "DM Sans", sans-serif;
-    font-size: 1rem;
+    font-size: .88rem;
     line-height: 1.75;
     color: var(--text, #1f2937);
 }
@@ -2802,6 +2802,7 @@
     font-family: "Bricolage Grotesque", sans-serif;
     color: var(--heading, #111827);
     line-height: 1.25;
+    font-size:1rem;
     font-weight: 700;
 }
 
