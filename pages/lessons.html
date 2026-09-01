@@ -12,6 +12,7 @@
 
     <title>Weekly Lessons | AFC Isiu Youth Portal</title>
 
+
     <!-- =====================================================
          PWA
     ====================================================== -->
@@ -115,7 +116,7 @@
 
 
     <!-- =====================================================
-         LESSON PAGE CSS
+         LESSONS CSS
     ====================================================== -->
 
     <link
@@ -417,16 +418,16 @@
 
 
         <!-- =================================================
-             PAGE CONTENT
+             LESSONS PAGE
         ================================================== -->
 
         <main class="dashboard-content lessons-page">
 
-            <div class="dashboard-container">
+            <div class="dashboard-container lessons-container">
 
 
                 <!-- =========================================
-                     PAGE HEADER
+                     PAGE INTRO
                 ========================================== -->
 
                 <section class="lessons-heading">
@@ -442,9 +443,8 @@
                         </h1>
 
                         <p>
-                            Study this week's Sunday School
-                            lesson and grow in your understanding
-                            of God's Word.
+                            Study this week's Sunday School lesson
+                            and grow in your understanding of God's Word.
                         </p>
 
                     </div>
@@ -457,7 +457,7 @@
 
                         <i class="fa-regular fa-calendar"></i>
 
-                        <span>
+                        <span id="lessonWeekText">
                             This Week
                         </span>
 
@@ -472,7 +472,7 @@
 
                 <section
                     class="lesson-selector"
-                    aria-label="Lesson classes"
+                    aria-label="Lesson class selection"
                 >
 
                     <button
@@ -483,9 +483,7 @@
 
                         <i class="fa-solid fa-user-group"></i>
 
-                        <span>
-                            Senior
-                        </span>
+                        <span>Senior</span>
 
                     </button>
 
@@ -498,9 +496,7 @@
 
                         <i class="fa-solid fa-child"></i>
 
-                        <span>
-                            Junior
-                        </span>
+                        <span>Junior</span>
 
                     </button>
 
@@ -513,9 +509,7 @@
 
                         <i class="fa-solid fa-star"></i>
 
-                        <span>
-                            Elementary
-                        </span>
+                        <span>Elementary</span>
 
                     </button>
 
@@ -523,9 +517,16 @@
 
 
                 <!-- =========================================
+                     IMPORTANT SPACER
+                     Creates clear separation between tabs
+                     and lesson topic card.
+                ========================================== -->
+
+                <div class="lesson-tabs-spacer"></div>
+
+
+                <!-- =========================================
                      LESSON AREA
-                     
-                     NO LOADING SPINNER
                 ========================================== -->
 
                 <article
@@ -535,41 +536,33 @@
 
 
                     <!-- =====================================
-                         LESSON TOPIC
+                         TOPIC CARD
+                         ONLY CLASS + TOPIC
                     ====================================== -->
 
-                    <section class="lesson-hero">
+                    <section class="lesson-topic-card">
 
-                        <div class="lesson-hero-top">
+                        <div class="lesson-topic-label">
 
-                            <span
-                                class="lesson-class-badge"
-                                id="lessonClassBadge"
-                            >
-                                SENIOR
-                            </span>
+                            <i class="fa-solid fa-book-open"></i>
 
-
-                            <span
-                                class="lesson-status-badge"
-                                id="lessonStatus"
-                            >
-                                THIS WEEK
+                            <span id="lessonClassBadge">
+                                SENIOR LESSON
                             </span>
 
                         </div>
 
 
-                        <h1 id="lessonTitle">
-                            Loading lesson...
-                        </h1>
+                        <h2 id="lessonTitle">
+                            —
+                        </h2>
 
 
                         <p
-                            class="lesson-theme"
+                            class="lesson-topic"
                             id="lessonTheme"
                         >
-                            Please wait...
+                            —
                         </p>
 
                     </section>
@@ -609,7 +602,7 @@
 
                             <div class="info-icon">
 
-                                <i class="fa-solid fa-book-open"></i>
+                                <i class="fa-solid fa-bookmark"></i>
 
                             </div>
 
@@ -683,47 +676,101 @@
 
 
                     <!-- =====================================
-                         MAIN LESSON BODY
+                         MAIN LESSON LAYOUT
                     ====================================== -->
 
                     <section class="lesson-body-layout">
 
 
                         <!-- =================================
-                             MAIN CONTENT CARD
+                             LEFT / MAIN CONTENT
                         ================================== -->
 
-                        <div class="lesson-content-card">
+                        <div class="lesson-main-column">
 
-                            <div class="lesson-content-heading">
 
-                                <div>
+                            <!-- =================================
+                                 STUDY LESSON CARD
+                            ================================== -->
 
-                                    <span>
-                                        LESSON
-                                    </span>
+                            <section class="lesson-content-card">
 
-                                    <h2>
-                                        Study the Word
-                                    </h2>
+                                <div class="content-card-header">
+
+                                    <div class="content-card-icon">
+
+                                        <i class="fa-solid fa-book-open-reader"></i>
+
+                                    </div>
+
+                                    <div>
+
+                                        <span>
+                                            STUDY LESSON
+                                        </span>
+
+                                        <h3>
+                                            Study the Word
+                                        </h3>
+
+                                    </div>
 
                                 </div>
 
-                                <i class="fa-solid fa-book-open-reader"></i>
 
-                            </div>
+                                <div
+                                    class="lesson-content"
+                                    id="lessonContent"
+                                ></div>
+
+                            </section>
 
 
-                            <div
-                                class="lesson-content"
-                                id="lessonContent"
+                            <!-- =================================
+                                 DISCUSSION CARD
+                            ================================== -->
+
+                            <section
+                                class="discussion-card"
+                                id="discussionCard"
                             >
 
-                                <p class="lesson-placeholder">
-                                    Loading lesson content...
-                                </p>
+                                <div class="discussion-header">
 
-                            </div>
+                                    <div class="discussion-icon">
+
+                                        <i class="fa-solid fa-comments"></i>
+
+                                    </div>
+
+                                    <div>
+
+                                        <span>
+                                            DISCUSSION
+                                        </span>
+
+                                        <h3>
+                                            Think About It
+                                        </h3>
+
+                                    </div>
+
+                                </div>
+
+
+                                <div
+                                    class="discussion-content"
+                                    id="lessonDiscussion"
+                                >
+
+                                    <p class="discussion-empty">
+                                        No discussion questions available.
+                                    </p>
+
+                                </div>
+
+                            </section>
+
 
                         </div>
 
@@ -844,53 +891,7 @@
 
 
                     <!-- =====================================
-                         DISCUSSION
-                    ====================================== -->
-
-                    <section
-                        class="discussion-card"
-                        id="discussionCard"
-                    >
-
-                        <div class="discussion-heading">
-
-                            <div class="discussion-icon">
-
-                                <i class="fa-solid fa-comments"></i>
-
-                            </div>
-
-                            <div>
-
-                                <span>
-                                    DISCUSSION
-                                </span>
-
-                                <h2>
-                                    Think About It
-                                </h2>
-
-                            </div>
-
-                        </div>
-
-
-                        <div
-                            class="discussion-content"
-                            id="discussionContent"
-                        >
-
-                            <p class="discussion-placeholder">
-                                Discussion questions will appear here.
-                            </p>
-
-                        </div>
-
-                    </section>
-
-
-                    <!-- =====================================
-                         MOBILE PROGRESS / FINISH
+                         MOBILE READING AREA
                     ====================================== -->
 
                     <section class="mobile-finish-card">
@@ -989,6 +990,7 @@
 
                 </article>
 
+
             </div>
 
         </main>
@@ -1005,14 +1007,11 @@
         aria-label="Mobile navigation"
     >
 
-
         <a href="../index.html">
 
             <i class="fa-solid fa-house"></i>
 
-            <span>
-                Home
-            </span>
+            <span>Home</span>
 
         </a>
 
@@ -1024,9 +1023,7 @@
 
             <i class="fa-solid fa-book-open"></i>
 
-            <span>
-                Lessons
-            </span>
+            <span>Lessons</span>
 
         </a>
 
@@ -1052,9 +1049,7 @@
 
             <i class="fa-solid fa-images"></i>
 
-            <span>
-                Gallery
-            </span>
+            <span>Gallery</span>
 
         </a>
 
@@ -1063,12 +1058,9 @@
 
             <i class="fa-solid fa-user"></i>
 
-            <span>
-                Profile
-            </span>
+            <span>Profile</span>
 
         </a>
-
 
     </nav>
 
@@ -1085,9 +1077,9 @@
 
 <script src="../js/main.js"></script>
 
-<script src="../js/pwa.js"></script>
-
 <script src="../js/lessons.js"></script>
+
+<script src="../js/pwa.js"></script>
 
 
 </body>
