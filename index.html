@@ -1,108 +1,125 @@
+ html
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
 
-<meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
->
+    <meta charset="UTF-8">
 
-<title>AFC Isiu Youth Portal</title>
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    >
 
-<!-- PWA -->
+    <title>AFC Isiu Youth Portal</title>
 
-<link rel="manifest" href="/manifest.json">
+    <!-- =====================================================
+         PWA
+    ====================================================== -->
 
-<meta name="theme-color" content="#ea580c">
+    <link rel="manifest" href="/manifest.json">
 
-<meta
-    name="mobile-web-app-capable"
-    content="yes"
->
+    <meta name="theme-color" content="#ea580c">
 
-<meta
-    name="apple-mobile-web-app-capable"
-    content="yes"
->
+    <meta
+        name="mobile-web-app-capable"
+        content="yes"
+    >
 
-<meta
-    name="apple-mobile-web-app-status-bar-style"
-    content="default"
->
+    <meta
+        name="apple-mobile-web-app-capable"
+        content="yes"
+    >
 
-<meta
-    name="apple-mobile-web-app-title"
-    content="AFC Isiwu"
->
+    <meta
+        name="apple-mobile-web-app-status-bar-style"
+        content="default"
+    >
 
-<!-- Icons -->
+    <meta
+        name="apple-mobile-web-app-title"
+        content="AFC Isiwu"
+    >
 
-<link
-    rel="icon"
-    type="image/png"
-    href="images/logo.png"
->
+    <!-- =====================================================
+         ICONS
+    ====================================================== -->
 
-<link
-    rel="apple-touch-icon"
-    href="images/logo.png"
->
+    <link
+        rel="icon"
+        type="image/png"
+        href="images/logo.png"
+    >
 
-<!-- Fonts -->
+    <link
+        rel="apple-touch-icon"
+        href="images/logo.png"
+    >
 
-<link
-    rel="preconnect"
-    href="https://fonts.googleapis.com"
->
+    <!-- =====================================================
+         FONTS
+    ====================================================== -->
 
-<link
-    rel="preconnect"
-    href="https://fonts.gstatic.com"
-    crossorigin
->
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
 
-<link
-    href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap"
-    rel="stylesheet"
->
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
 
-<!-- Font Awesome -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap"
+        rel="stylesheet"
+    >
 
-<link
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
-    rel="stylesheet"
->
+    <!-- =====================================================
+         FONT AWESOME
+    ====================================================== -->
 
-<!-- Remix Icons -->
+    <link
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+        rel="stylesheet"
+    >
 
-<link
-    href="https://cdn.jsdelivr.net/npm/remixicon@4.6.0/fonts/remixicon.css"
-    rel="stylesheet"
->
+    <!-- =====================================================
+         REMIX ICONS
+    ====================================================== -->
 
-<!-- Libraries -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/remixicon@4.6.0/fonts/remixicon.css"
+        rel="stylesheet"
+    >
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- =====================================================
+         LIBRARIES
+    ====================================================== -->
 
-<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<link
-    rel="stylesheet"
-    href="https://unpkg.com/aos@2.3.4/dist/aos.css"
->
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 
-<!-- CSS -->
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/aos@2.3.4/dist/aos.css"
+    >
 
-<link
-    rel="stylesheet"
-    href="css/main.css"
->
+    <!-- =====================================================
+         CSS
+    ====================================================== -->
 
-<link
-    rel="stylesheet"
-    href="css/layout.css"
->
+    <link
+        rel="stylesheet"
+        href="css/main.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="css/layout.css"
+    >
 
 </head>
 
@@ -112,193 +129,599 @@
 <div class="app-layout">
 
 
-<!-- =========================================
-     MOBILE SIDEBAR OVERLAY
-========================================= -->
+    <!-- =====================================================
+         MOBILE SIDEBAR OVERLAY
+    ====================================================== -->
 
-<div
-    class="sidebar-overlay"
-    id="sidebarOverlay"
-></div>
-
-
-<!-- =========================================
-     SIDEBAR
-========================================= -->
-
-<aside
-    class="sidebar"
-    id="sidebar"
->
+    <div
+        class="sidebar-overlay"
+        id="sidebarOverlay"
+    ></div>
 
 
-    <!-- LOGO -->
+    <!-- =====================================================
+         SIDEBAR
+    ====================================================== -->
 
-    <div class="sidebar-top">
+    <aside
+        class="sidebar"
+        id="sidebar"
+    >
 
-        <div class="sidebar-logo">
+        <div class="sidebar-top">
 
-            <i class="fa-solid fa-shield-heart"></i>
+            <!-- LOGO -->
 
-            <div>
+            <div class="sidebar-logo">
 
-                <h2>AFC Isiu</h2>
+                <i class="fa-solid fa-shield-heart"></i>
 
-                <span>Youth Portal</span>
+                <div>
+
+                    <h2>AFC Isiu</h2>
+
+                    <span>Youth Portal</span>
+
+                </div>
 
             </div>
+
+
+            <!-- MAIN MENU -->
+
+            <nav class="sidebar-menu">
+
+                <div class="menu-title">
+                    Ministry
+                </div>
+
+
+                <a
+                    href="/"
+                    class="active"
+                >
+
+                    <i class="fa-solid fa-house"></i>
+
+                    <span>Dashboard</span>
+
+                </a>
+
+
+                <a href="pages/lessons">
+
+                    <i class="fa-solid fa-book-open"></i>
+
+                    <span>Sunday School Lessons</span>
+
+                </a>
+
+
+                <a
+                    href="pages/slcquiz.html"
+                    data-online-only
+                    data-feature="Weekly SLC Quiz"
+                >
+
+                    <i class="fa-solid fa-clipboard-question"></i>
+
+                    <span>Weekly SLC Quiz</span>
+
+                </a>
+
+
+                <a
+                    href="pages/result"
+                    data-online-only
+                    data-feature="Growth Tracker"
+                >
+
+                    <i class="fa-solid fa-chart-line"></i>
+
+                    <span>Check Quiz Result</span>
+
+                </a>
+
+
+                <div class="menu-title">
+                    Community
+                </div>
+
+
+                <a
+                    href="pages/gallery"
+                    data-online-only
+                    data-feature="Gallery"
+                >
+
+                    <i class="fa-solid fa-images"></i>
+
+                    <span>Gallery</span>
+
+                </a>
+
+
+                <a
+                    href="pages/events"
+                    data-online-only
+                    data-feature="Youth Events"
+                >
+
+                    <i class="fa-solid fa-calendar-days"></i>
+
+                    <span>Youth Events</span>
+
+                </a>
+
+
+                <a
+                    href="pages/welfare"
+                    data-online-only
+                    data-feature="Welfare"
+                >
+
+                    <i class="fa-solid fa-hand-holding-heart"></i>
+
+                    <span>Welfare</span>
+
+                </a>
+
+
+                <a
+                    href="pages/prayer"
+                    data-online-only
+                    data-feature="Prayer Requests"
+                >
+
+                    <i class="fa-solid fa-hands-praying"></i>
+
+                    <span>Prayer Requests</span>
+
+                </a>
+
+
+                <a
+                    href="pages/program-report"
+                    data-online-only
+                    data-feature="Secretariat Reports"
+                >
+
+                    <i class="fa-solid fa-file-lines"></i>
+
+                    <span>Secretariat Reports</span>
+
+                </a>
+
+            </nav>
 
         </div>
 
 
-        <!-- MAIN MENU -->
+        <!-- ACCOUNT -->
 
-        <nav class="sidebar-menu">
-
+        <div class="sidebar-bottom">
 
             <div class="menu-title">
-                Ministry
+                Account
             </div>
 
 
             <a
-                href="/"
-                class="active"
-            >
-
-                <i class="fa-solid fa-house"></i>
-
-                <span>Dashboard</span>
-
-            </a>
-
-
-            <a
-                href="pages/lessons"
-            >
-
-                <i class="fa-solid fa-book-open"></i>
-
-                <span>Sunday School Lessons</span>
-
-            </a>
-
-
-            <a
-                href="pages/slcquiz.html"
+                href="pages/profile"
                 data-online-only
-                data-feature="Weekly SLC Quiz"
+                data-feature="Profile"
             >
 
-                <i class="fa-solid fa-clipboard-question"></i>
+                <i class="fa-solid fa-user"></i>
 
-                <span>Weekly SLC Quiz</span>
+                <span>Profile</span>
 
             </a>
 
 
             <a
-                href="pages/result"
+                href="pages/settings"
                 data-online-only
-                data-feature="Growth Tracker"
+                data-feature="Settings"
             >
 
-                <i class="fa-solid fa-chart-line"></i>
+                <i class="fa-solid fa-gear"></i>
 
-                <span>Check Quiz Result</span>
+                <span>Settings</span>
 
             </a>
 
+        </div>
 
-            <div class="menu-title">
-                Community
+    </aside>
+
+
+    <!-- =====================================================
+         MAIN AREA
+    ====================================================== -->
+
+    <div class="main-area">
+
+
+        <!-- =================================================
+             TOPBAR
+        ================================================== -->
+
+        <header class="topbar">
+
+            <div class="topbar-left">
+
+                <button
+                    class="mobile-menu-btn"
+                    id="mobileMenuBtn"
+                    type="button"
+                    aria-label="Open navigation menu"
+                    aria-expanded="false"
+                >
+
+                    <i class="fa-solid fa-bars"></i>
+
+                </button>
+
+
+                <div class="portal-brand">
+
+                    <img
+                        src="images/logo.png"
+                        alt="AFC Logo"
+                        class="portal-logo"
+                    >
+
+
+                    <div>
+
+                        <h2>AFC Isiu Youth</h2>
+
+                        <p>
+                            Building young people for Christ
+                        </p>
+
+                    </div>
+
+                </div>
+
             </div>
 
 
-            <a
-                href="pages/gallery"
-                data-online-only
-                data-feature="Gallery"
+            <div class="topbar-right">
+
+                <button
+                    class="header-icon"
+                    id="notificationBtn"
+                    type="button"
+                    aria-label="Notifications"
+                >
+
+                    <i class="fa-regular fa-bell"></i>
+
+                    <span class="notify-dot"></span>
+
+                </button>
+
+
+                <button
+                    class="header-icon"
+                    id="themeBtn"
+                    type="button"
+                    aria-label="Change theme"
+                >
+
+                    <i class="fa-solid fa-moon"></i>
+
+                </button>
+
+            </div>
+
+        </header>
+
+
+        <!-- =================================================
+             MAIN CONTENT
+        ================================================== -->
+
+        <main class="dashboard-main">
+
+
+            <!-- =================================================
+                 DASHBOARD HUB
+            ================================================== -->
+
+            <section
+                class="hub"
+                data-aos="fade-up"
             >
 
-                <i class="fa-solid fa-images"></i>
-
-                <span>Gallery</span>
-
-            </a>
+                <div class="hub-grid">
 
 
-            <a
-                href="pages/events"
-                data-online-only
-                data-feature="Youth Events"
-            >
+                    <!-- ================================
+                         SUNDAY SCHOOL
+                    ================================= -->
 
-                <i class="fa-solid fa-calendar-days"></i>
+                    <a
+                        href="pages/lessons"
+                        class="hub-item featured"
+                        data-online-only
+                        data-feature="Sunday School Lesson"
+                    >
 
-                <span>Youth Events</span>
-
-            </a>
-
-
-            <a
-                href="pages/welfare"
-                data-online-only
-                data-feature="Welfare"
-            >
-
-                <i class="fa-solid fa-hand-holding-heart"></i>
-
-                <span>Welfare</span>
-
-            </a>
+                        <div class="hub-badge">
+                            UPDATED
+                        </div>
 
 
-            <a
-                href="pages/prayer"
-                data-online-only
-                data-feature="Prayer Requests"
-            >
+                        <div class="hub-header">
 
-                <i class="fa-solid fa-hands-praying"></i>
+                            <div class="hub-icon lesson-icon">
 
-                <span>Prayer Requests</span>
+                                <i class="fa-solid fa-book"></i>
 
-            </a>
+                            </div>
 
 
-            <a
-                href="pages/program-report"
-                data-online-only
-                data-feature="Secretariat Reports"
-            >
+                            <span class="hub-count">
+                                Weekly
+                            </span>
 
-                <i class="fa-solid fa-file-lines"></i>
+                        </div>
 
-                <span>Secretariat Reports</span>
 
-            </a>
+                        <h4>
+                            Sunday School Lesson
+                        </h4>
 
-        </nav>
+
+                        <p>
+                            Study the current Sunday school
+                            lesson and grow spiritually.
+                        </p>
+
+                    </a>
+
+
+                    <!-- ================================
+                         QUIZ
+                    ================================= -->
+
+                    <a
+                        href="pages/slcquiz"
+                        class="hub-item"
+                    >
+
+                        <div class="hub-header">
+
+                            <div class="hub-icon quiz-icon">
+
+                                <i class="fa-solid fa-clipboard-question"></i>
+
+                            </div>
+
+                        </div>
+
+
+                        <h4>
+                            Weekly SLC Quiz
+                        </h4>
+
+
+                        <p>
+                            Answer the questions from our
+                            weekly Sunday school lessons.
+                        </p>
+
+                    </a>
+
+
+                    <!-- ================================
+                         EVENTS
+                    ================================= -->
+
+                    <a
+                        href="pages/events"
+                        class="hub-item"
+                        data-online-only
+                        data-feature="Youth Events"
+                    >
+
+                        <div class="hub-header">
+
+                            <div class="hub-icon event-icon">
+
+                                <i class="fa-solid fa-calendar-days"></i>
+
+                            </div>
+
+                        </div>
+
+
+                        <h4>
+                            Youth Events
+                        </h4>
+
+
+                        <p>
+                            Upcoming programmes and youth
+                            activities.
+                        </p>
+
+                    </a>
+
+
+                    <!-- ================================
+                         WELFARE
+                    ================================= -->
+
+                    <a
+                        href="pages/welfare"
+                        class="hub-item"
+                        data-online-only
+                        data-feature="Welfare"
+                    >
+
+                        <div class="hub-header">
+
+                            <div class="hub-icon welfare-icon">
+
+                                <i class="fa-solid fa-hand-holding-heart"></i>
+
+                            </div>
+
+                        </div>
+
+
+                        <h4>
+                            Welfare
+                        </h4>
+
+
+                        <p>
+                            Request support and welfare
+                            assistance.
+                        </p>
+
+                    </a>
+
+
+                    <!-- ================================
+                         PRAYER
+                    ================================= -->
+
+                    <a
+                        href="pages/prayer"
+                        class="hub-item"
+                        data-online-only
+                        data-feature="Prayer Requests"
+                    >
+
+                        <div class="hub-header">
+
+                            <div class="hub-icon prayer-icon">
+
+                                <i class="fa-solid fa-hands-praying"></i>
+
+                            </div>
+
+                        </div>
+
+
+                        <h4>
+                            Prayer Request
+                        </h4>
+
+
+                        <p>
+                            Send prayer requests and
+                            testimonies.
+                        </p>
+
+                    </a>
+
+
+                    <!-- ================================
+                         GALLERY
+                    ================================= -->
+
+                    <a
+                        href="pages/gallery"
+                        class="hub-item"
+                        data-online-only
+                        data-feature="Gallery"
+                    >
+
+                        <div class="hub-header">
+
+                            <div class="hub-icon gallery-icon">
+
+                                <i class="fa-solid fa-images"></i>
+
+                            </div>
+
+                        </div>
+
+
+                        <h4>
+                            Gallery
+                        </h4>
+
+
+                        <p>
+                            Moments from previous programmes.
+                        </p>
+
+                    </a>
+
+                </div>
+
+            </section>
+
+
+        </main>
 
     </div>
 
 
-    <!-- ACCOUNT -->
+    <!-- =====================================================
+         MOBILE BOTTOM NAVIGATION
+    ====================================================== -->
 
-    <div class="sidebar-bottom">
+    <nav
+        class="bottom-nav"
+        aria-label="Mobile navigation"
+    >
+
+        <a
+            href="/"
+            class="active"
+        >
+
+            <i class="fa-solid fa-house"></i>
+
+            <span>Home</span>
+
+        </a>
 
 
-        <div class="menu-title">
-            Account
-        </div>
+        <a href="pages/lessons">
+
+            <i class="fa-solid fa-book-open"></i>
+
+            <span>Lessons</span>
+
+        </a>
+
+
+        <button
+            class="hub-button"
+            id="hubButton"
+            type="button"
+            aria-label="Open main navigation"
+            aria-expanded="false"
+        >
+
+            <i class="ri-apps-2-line"></i>
+
+        </button>
 
 
         <a
-            href="pages/profile"
+            href="pages/gallery"
             data-online-only
-            data-feature="Profile"
+            data-feature="Gallery"
         >
+
+            <i class="fa-solid fa-images"></i>
+
+            <span>Gallery</span>
+
+        </a>
+
+
+        <a href="pages/profile">
 
             <i class="fa-solid fa-user"></i>
 
@@ -306,409 +729,23 @@
 
         </a>
 
+    </nav>
 
-        <a
-            href="pages/settings"
-            data-online-only
-            data-feature="Settings"
-        >
-
-            <i class="fa-solid fa-gear"></i>
-
-            <span>Settings</span>
-
-        </a>
-
-    </div>
-
-</aside>
-
-
-<!-- =========================================
-     MAIN AREA
-========================================= -->
-
-<div class="main-area">
-
-
-    <!-- =====================================
-         TOPBAR
-    ====================================== -->
-
-    <header class="topbar">
-
-
-        <div class="topbar-left">
-
-
-            <button
-                class="mobile-menu-btn"
-                id="mobileMenuBtn"
-                type="button"
-                aria-label="Open navigation menu"
-                aria-expanded="false"
-            >
-
-                <i class="fa-solid fa-bars"></i>
-
-            </button>
-
-
-            <div class="portal-brand">
-
-
-                <img
-                    src="images/logo.png"
-                    alt="AFC Logo"
-                    class="portal-logo"
-                >
-
-
-                <div>
-
-                    <h2>AFC Isiu Youth</h2>
-
-                    <p>
-                        Building young people for Christ
-                    </p>
-
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <div class="topbar-right">
-
-
-            <button
-                class="header-icon"
-                id="notificationBtn"
-                type="button"
-                aria-label="Notifications"
-            >
-
-                <i class="fa-regular fa-bell"></i>
-
-                <span class="notify-dot"></span>
-
-            </button>
-
-
-            <button
-                class="header-icon"
-                id="themeBtn"
-                type="button"
-                aria-label="Change theme"
-            >
-
-                <i class="fa-solid fa-moon"></i>
-
-            </button>
-
-        </div>
-
-    </header>
-
-
-    <!-- =====================================
-         DASHBOARD CONTENT
-    ====================================== -->
-
-        <section
-            class="hub"
-            data-aos="fade-up"
-        >
-
-            <div class="hub-grid">
-
-
-                <!-- SUNDAY SCHOOL -->
-
-                <a
-                    href="pages/lessons"
-                    class="hub-item featured"
-                    data-online-only
-                    data-feature="Sunday School Lesson"
-                >
-
-                    <div class="hub-badge">
-                        UPDATED
-                    </div>
-
-
-                    <div class="hub-header">
-
-                        <div class="hub-icon lesson-icon">
-
-                            <i class="fa-solid fa-book"></i>
-
-                        </div>
-
-
-                        <span class="hub-count">
-                            Weekly
-                        </span>
-
-                    </div>
-
-
-                    <h4>
-                        Sunday School Lesson
-                    </h4>
-
-
-                    <p>
-                   Study the current Sunday school lesson and grow spiritually.
-                    </p>
-
-                </a>
-
-
-                <!-- QUIZ -->
-
-                <a
-                    href="pages/slcquiz"
-                    class="hub-item"
-                >
-
-                    <div class="hub-header">
-
-                        <div class="hub-icon quiz-icon">
-
-                            <i class="fa-solid fa-clipboard-question"></i>
-
-                        </div>
-
-                    </div>
-
-
-                    <h4>
-                        Weekly SLC Quiz
-                    </h4>
-
-
-                    <p>
-             Answer the questions from our weekly sunday school lessons
-                    </p>
-
-                </a>
-
-
-                <!-- EVENTS -->
-
-                <a
-                    href="pages/events"
-                    class="hub-item"
-                    data-online-only
-                    data-feature="Youth Events"
-                >
-
-                    <div class="hub-header">
-
-                        <div class="hub-icon event-icon">
-
-                            <i class="fa-solid fa-calendar-days"></i>
-
-                        </div>
-
-                    </div>
-
-
-                    <h4>
-                        Youth Events
-                    </h4>
-
-
-                    <p>
-                        Upcoming programmes and youth activities.
-                    </p>
-
-                </a>
-
-
-                <!-- WELFARE -->
-
-                <a
-                    href="pages/welfare"
-                    class="hub-item"
-                    data-online-only
-                    data-feature="Welfare"
-                >
-
-                    <div class="hub-header">
-
-                        <div class="hub-icon welfare-icon">
-
-                            <i class="fa-solid fa-hand-holding-heart"></i>
-
-                        </div>
-
-                    </div>
-
-
-                    <h4>
-                        Welfare
-                    </h4>
-
-
-                    <p>
-                        Request support and welfare assistance.
-                    </p>
-
-                </a>
-
-
-                <!-- PRAYER -->
-
-                <a
-                    href="pages/prayer"
-                    class="hub-item"
-                    data-online-only
-                    data-feature="Prayer Requests"
-                >
-
-                    <div class="hub-header">
-
-                        <div class="hub-icon prayer-icon">
-
-                            <i class="fa-solid fa-hands-praying"></i>
-
-                        </div>
-
-                    </div>
-
-
-                    <h4>
-                        Prayer Request
-                    </h4>
-
-
-                    <p>
-                        Send prayer requests and testimonies.
-                    </p>
-
-                </a>
-
-
-                <!-- GALLERY -->
-
-                <a
-                    href="pages/gallery"
-                    class="hub-item"
-                    data-online-only
-                    data-feature="Gallery"
-                >
-
-                    <div class="hub-header">
-
-                        <div class="hub-icon gallery-icon">
-
-                            <i class="fa-solid fa-images"></i>
-
-                        </div>
-
-                    </div>
-
-
-                    <h4>
-                        Gallery
-                    </h4>
-
-
-                    <p>
-                        Moments from previous programmes.
-                    </p>
-
-                </a>
-
-            </div>
-
-        </section>
-
-    </main>
 
 </div>
 
 
-<!-- =========================================
-     MOBILE BOTTOM NAVIGATION
-========================================= -->
+<!-- =====================================================
+     SCRIPTS
+====================================================== -->
 
-<nav
-    class="bottom-nav"
-    aria-label="Mobile navigation"
->
-
-
-    <a
-        href="/"
-        class="active"
-    >
-
-        <i class="fa-solid fa-house"></i>
-
-        <span>Home</span>
-
-    </a>
-
-
-    <a
-        href="pages/lessons"
-    >
-
-        <i class="fa-solid fa-book-open"></i>
-
-        <span>Lessons</span>
-
-    </a>
-
-
-    <button
-        class="hub-button"
-        id="hubButton"
-        type="button"
-        aria-label="Open main navigation"
-        aria-expanded="false"
-    >
-
-        <i class="ri-apps-2-line"></i>
-
-    </button>
-
-
-    <a
-        href="pages/gallery"
-        data-online-only
-        data-feature="Gallery"
-    >
-
-        <i class="fa-solid fa-images"></i>
-
-        <span>Gallery</span>
-
-    </a>
-
-
-    <a
-        href="pages/profile"
-    >
-
-        <i class="fa-solid fa-user"></i>
-
-        <span>Profile</span>
-
-    </a>
-
-</nav>
-
-
-<!-- SCRIPTS -->
-
-<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+<script
+    src="https://unpkg.com/aos@2.3.4/dist/aos.js"
+></script>
 
 <script src="js/main.js"></script>
 
 </body>
+
 </html>
+ 
