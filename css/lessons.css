@@ -2410,3 +2410,126 @@
     }
 
 }
+
+/* =========================================================
+   LESSON PAGE — FULL WIDTH OVERRIDE
+   Prevent global layout.css from shrinking lesson content
+========================================================= */
+
+.lessons-page {
+    width: 100%;
+    max-width: none;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.lessons-page .dashboard-container {
+    width: min(100% - 32px, 1500px);
+    max-width: 1500px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+/* Main lesson view should use the available width */
+.lessons-page .lesson-view {
+    width: 100%;
+    max-width: none;
+}
+
+/* Topic card */
+.lessons-page .lesson-hero {
+    width: 100%;
+    max-width: none;
+}
+
+/* Information cards */
+.lessons-page .lesson-info-grid {
+    width: 100%;
+}
+
+/* Main lesson + sidebar */
+.lessons-page .lesson-body-layout {
+    width: 100%;
+    max-width: none;
+}
+
+/* Study lesson card */
+.lessons-page .lesson-content-card {
+    width: 100%;
+    max-width: none;
+}
+
+/* Discussion card */
+.lessons-page .discussion-card {
+    width: 100%;
+    max-width: none;
+}
+
+/* Memory verse */
+.lessons-page .memory-verse-card {
+    width: 100%;
+    max-width: none;
+}
+
+
+/* =========================================================
+   DESKTOP — EVEN WIDER
+========================================================= */
+
+@media (min-width: 1100px) {
+
+    .lessons-page .dashboard-container {
+        width: calc(100% - 48px);
+        max-width: 1550px;
+    }
+
+}
+
+
+/* =========================================================
+   LARGE DESKTOP
+========================================================= */
+
+@media (min-width: 1500px) {
+
+    .lessons-page .dashboard-container {
+        width: calc(100% - 64px);
+        max-width: 1650px;
+    }
+
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 900px) {
+
+    .lessons-page .dashboard-container {
+        width: calc(100% - 28px);
+        max-width: none;
+    }
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 600px) {
+
+    .lessons-page .dashboard-container {
+        width: calc(100% - 20px);
+        max-width: none;
+    }
+
+    .lessons-page {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+}
