@@ -1,88 +1,87 @@
 /* =========================================================
-   AFC ISIU PWA INSTALL UI
+   AFC ISIU YOUTH PORTAL
+   PWA INSTALL PAGE
 ========================================================= */
 
-.pwa-install-card {
-    display: flex;
-    align-items: center;
-    gap: 18px;
+
+/* =========================================================
+   PAGE
+========================================================= */
+
+.pwa-page {
 
     width: 100%;
-    padding: 20px;
 
-    background: #ffffff;
-
-    border: 1px solid rgba(15, 23, 42, 0.08);
-
-    border-radius: 18px;
-
-    box-shadow:
-        0 8px 24px rgba(15, 23, 42, 0.06);
-
-    transition:
-        transform 0.2s ease,
-        box-shadow 0.2s ease;
-}
-
-.pwa-install-card:hover {
-    transform: translateY(-2px);
-
-    box-shadow:
-        0 12px 30px rgba(15, 23, 42, 0.09);
 }
 
 
-/* ICON */
+/* =========================================================
+   PAGE HEADING
+========================================================= */
 
-.pwa-install-card .settings-card-icon {
+.pwa-heading {
 
-    width: 50px;
-    height: 50px;
+    width: 100%;
 
-    min-width: 50px;
+    max-width: 760px;
 
-    display: flex;
+    margin-bottom: 24px;
+
+}
+
+
+.pwa-badge {
+
+    display: inline-flex;
+
     align-items: center;
-    justify-content: center;
 
-    border-radius: 15px;
+    gap: 7px;
+
+    padding: 6px 11px;
+
+    border-radius: 999px;
 
     background:
-        linear-gradient(
-            135deg,
-            #ea580c,
-            #fb923c
-        );
+        rgba(234, 88, 12, .09);
 
-    color: #ffffff;
+    color:
+        #ea580c;
 
-    font-size: 20px;
+    font-size: .62rem;
+
+    font-weight: 800;
+
+    letter-spacing: .09em;
+
 }
 
 
-/* CONTENT */
+.pwa-heading h1 {
 
-.pwa-install-card .settings-card-content {
-    flex: 1;
-    min-width: 0;
-}
-
-.pwa-install-card .settings-card-content h3 {
-
-    margin: 0 0 5px;
+    margin: 11px 0 7px;
 
     font-family:
         "Bricolage Grotesque",
         sans-serif;
 
-    font-size: 1rem;
+    font-size: clamp(
+        1.7rem,
+        3vw,
+        2.3rem
+    );
 
-    font-weight: 700;
+    line-height: 1.1;
 
-    color: #172033;
+    color:
+        #171717;
+
 }
 
-.pwa-install-card .settings-card-content p {
+
+.pwa-heading p {
+
+    max-width: 650px;
 
     margin: 0;
 
@@ -90,461 +89,368 @@
         "DM Sans",
         sans-serif;
 
-    font-size: 0.84rem;
+    color:
+        #6b7280;
 
-    line-height: 1.5;
+    font-size: .86rem;
 
-    color: #64748b;
-}
-
-
-/* INSTALL BUTTON */
-
-.pwa-install-card .settings-action-btn {
-
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
-    gap: 8px;
-
-    flex-shrink: 0;
-
-    padding: 11px 17px;
-
-    border: none;
-
-    border-radius: 12px;
-
-    background:
-        linear-gradient(
-            135deg,
-            #ea580c,
-            #fb923c
-        );
-
-    color: #ffffff;
-
-    font-family:
-        "DM Sans",
-        sans-serif;
-
-    font-size: 0.84rem;
-
-    font-weight: 700;
-
-    cursor: pointer;
-
-    transition:
-        transform 0.2s ease,
-        box-shadow 0.2s ease,
-        opacity 0.2s ease;
-}
-
-.pwa-install-card .settings-action-btn:hover {
-
-    transform: translateY(-1px);
-
-    box-shadow:
-        0 8px 20px rgba(234, 88, 12, 0.25);
-}
-
-.pwa-install-card .settings-action-btn:active {
-
-    transform: scale(0.97);
-
-}
-
-.pwa-install-card .settings-action-btn:disabled {
-
-    cursor: default;
-
-    opacity: 0.75;
-
-}
-
-.pwa-install-card
-.settings-action-btn.installed {
-
-    background:
-        linear-gradient(
-            135deg,
-            #059669,
-            #10b981
-        );
+    line-height: 1.55;
 
 }
 
 
 /* =========================================================
-   INSTALL MODAL
+   INSTALL CARD
 ========================================================= */
 
-.pwa-install-modal {
+.pwa-install-card {
 
-    position: fixed;
+    width: 100%;
 
-    inset: 0;
+    display: grid;
 
-    z-index: 99999;
-
-    display: flex;
+    grid-template-columns:
+        auto minmax(0, 1fr) auto;
 
     align-items: center;
-    justify-content: center;
 
-    padding: 20px;
+    gap: 20px;
 
-    opacity: 0;
+    padding: 24px;
 
-    visibility: hidden;
+    border:
+        1px solid
+        rgba(0, 0, 0, .06);
 
-    transition:
-        opacity 0.25s ease,
-        visibility 0.25s ease;
-}
-
-.pwa-install-modal.show {
-
-    opacity: 1;
-
-    visibility: visible;
-
-}
-
-
-/* BACKDROP */
-
-.pwa-install-backdrop {
-
-    position: absolute;
-
-    inset: 0;
+    border-radius: 22px;
 
     background:
-        rgba(15, 23, 42, 0.55);
-
-    backdrop-filter:
-        blur(6px);
-}
-
-
-/* DIALOG */
-
-.pwa-install-dialog {
-
-    position: relative;
-
-    z-index: 2;
-
-    width: min(100%, 430px);
-
-    max-height: 90vh;
-
-    overflow-y: auto;
-
-    padding: 28px;
-
-    background: #ffffff;
-
-    border-radius: 24px;
+        #ffffff;
 
     box-shadow:
-        0 25px 70px rgba(15, 23, 42, 0.22);
-
-    transform:
-        translateY(20px)
-        scale(0.97);
-
-    transition:
-        transform 0.25s ease;
-}
-
-.pwa-install-modal.show
-.pwa-install-dialog {
-
-    transform:
-        translateY(0)
-        scale(1);
+        0 10px 30px
+        rgba(15, 23, 42, .05);
 
 }
 
 
-/* CLOSE */
+/* =========================================================
+   CARD ICON
+========================================================= */
 
-.pwa-install-close {
+.settings-card-icon {
 
-    position: absolute;
+    width: 52px;
 
-    top: 14px;
-    right: 14px;
+    height: 52px;
 
-    width: 36px;
-    height: 36px;
+    flex-shrink: 0;
 
     display: flex;
+
     align-items: center;
+
     justify-content: center;
 
-    border: none;
-
-    border-radius: 50%;
-
-    background: #f1f5f9;
-
-    color: #475569;
-
-    font-size: 16px;
-
-    cursor: pointer;
-}
-
-
-/* MODAL ICON */
-
-.pwa-install-modal-icon {
-
-    width: 60px;
-    height: 60px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    margin-bottom: 18px;
-
-    border-radius: 18px;
+    border-radius: 15px;
 
     background:
-        linear-gradient(
-            135deg,
-            #ea580c,
-            #fb923c
-        );
+        rgba(234, 88, 12, .09);
 
-    color: #ffffff;
+    color:
+        #ea580c;
 
-    font-size: 25px;
+    font-size: 1.15rem;
+
 }
 
-.pwa-install-dialog h2 {
 
-    margin: 0 0 10px;
+/* =========================================================
+   CARD CONTENT
+========================================================= */
+
+.settings-card-content {
+
+    min-width: 0;
+
+}
+
+
+.pwa-card-label {
+
+    display: block;
+
+    margin-bottom: 4px;
+
+    color:
+        #ea580c;
+
+    font-family:
+        "DM Sans",
+        sans-serif;
+
+    font-size: .58rem;
+
+    font-weight: 800;
+
+    letter-spacing: .09em;
+
+}
+
+
+.settings-card-content h3 {
+
+    margin: 0 0 5px;
 
     font-family:
         "Bricolage Grotesque",
         sans-serif;
 
-    font-size: 1.25rem;
+    font-size: 1.05rem;
 
-    color: #172033;
+    line-height: 1.25;
+
+    color:
+        #252525;
+
 }
 
-.pwa-install-modal-content > p {
 
-    margin: 0 0 20px;
+.settings-card-content p {
+
+    max-width: 650px;
+
+    margin: 0;
 
     font-family:
         "DM Sans",
         sans-serif;
 
-    font-size: 0.88rem;
+    color:
+        #6b7280;
 
-    line-height: 1.6;
+    font-size: .76rem;
 
-    color: #64748b;
+    line-height: 1.5;
+
 }
 
 
 /* =========================================================
-   INSTALL STEPS
+   INSTALL BUTTON
 ========================================================= */
 
-.pwa-install-steps {
+.settings-action-btn {
 
-    display: flex;
+    min-height: 44px;
 
-    flex-direction: column;
+    display: inline-flex;
 
-    gap: 14px;
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    padding: 0 18px;
+
+    border: 0;
+
+    border-radius: 13px;
+
+    background:
+        #ea580c;
+
+    color:
+        #ffffff;
+
+    font-family:
+        "DM Sans",
+        sans-serif;
+
+    font-size: .72rem;
+
+    font-weight: 700;
+
+    white-space: nowrap;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 8px 18px
+        rgba(234, 88, 12, .18);
+
+    transition:
+        transform .2s ease,
+        background .2s ease,
+        box-shadow .2s ease;
 
 }
 
-.pwa-step {
+
+.settings-action-btn:hover {
+
+    background:
+        #c2410c;
+
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 11px 22px
+        rgba(234, 88, 12, .22);
+
+}
+
+
+.settings-action-btn:active {
+
+    transform:
+        scale(.97);
+
+}
+
+
+/* =========================================================
+   INFORMATION CARDS
+========================================================= */
+
+.pwa-info-grid {
+
+    width: 100%;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+
+    gap: 15px;
+
+    margin-top: 18px;
+
+}
+
+
+.pwa-info-card {
+
+    min-width: 0;
 
     display: flex;
 
     align-items: flex-start;
 
-    gap: 12px;
+    gap: 13px;
 
-    padding: 13px;
+    padding: 18px;
 
-    background: #f8fafc;
+    border:
+        1px solid
+        rgba(0, 0, 0, .055);
 
-    border-radius: 14px;
+    border-radius: 17px;
+
+    background:
+        #ffffff;
+
+    box-shadow:
+        0 7px 22px
+        rgba(15, 23, 42, .035);
 
 }
 
-.pwa-step > span {
 
-    width: 30px;
-    height: 30px;
+.pwa-info-icon {
 
-    min-width: 30px;
+    width: 37px;
+
+    height: 37px;
+
+    flex-shrink: 0;
 
     display: flex;
 
     align-items: center;
+
     justify-content: center;
 
-    border-radius: 50%;
+    border-radius: 11px;
 
     background:
-        #ea580c;
+        rgba(8, 145, 178, .08);
 
-    color: #ffffff;
+    color:
+        #0891b2;
 
-    font-family:
-        "DM Sans",
-        sans-serif;
+    font-size: .8rem;
 
-    font-size: 0.78rem;
-
-    font-weight: 700;
-}
-
-.pwa-step strong {
-
-    display: block;
-
-    margin-bottom: 2px;
-
-    font-family:
-        "DM Sans",
-        sans-serif;
-
-    font-size: 0.85rem;
-
-    color: #172033;
-}
-
-.pwa-step small {
-
-    display: block;
-
-    font-family:
-        "DM Sans",
-        sans-serif;
-
-    font-size: 0.78rem;
-
-    line-height: 1.45;
-
-    color: #64748b;
 }
 
 
-/* DONE BUTTON */
+.pwa-info-card h4 {
 
-.pwa-install-done {
+    margin: 1px 0 5px;
 
-    width: 100%;
+    font-family:
+        "Bricolage Grotesque",
+        sans-serif;
 
-    margin-top: 22px;
+    font-size: .86rem;
 
-    padding: 12px 18px;
+    line-height: 1.25;
 
-    border: none;
+    color:
+        #292929;
 
-    border-radius: 12px;
+}
 
-    background:
-        linear-gradient(
-            135deg,
-            #ea580c,
-            #fb923c
-        );
 
-    color: #ffffff;
+.pwa-info-card p {
+
+    margin: 0;
 
     font-family:
         "DM Sans",
         sans-serif;
 
-    font-size: 0.85rem;
+    font-size: .7rem;
 
-    font-weight: 700;
+    line-height: 1.5;
 
-    cursor: pointer;
+    color:
+        #777;
+
 }
 
 
 /* =========================================================
-   TOAST
+   TABLET
 ========================================================= */
 
-.pwa-install-toast {
+@media (max-width: 900px) {
 
-    position: fixed;
+    .pwa-install-card {
 
-    left: 50%;
+        grid-template-columns:
+            auto minmax(0, 1fr);
 
-    bottom: 25px;
+    }
 
-    z-index: 100000;
 
-    display: flex;
+    .settings-action-btn {
 
-    align-items: center;
+        grid-column: 1 / -1;
 
-    gap: 10px;
+        width: 100%;
 
-    width: min(
-        calc(100% - 30px),
-        420px
-    );
+    }
 
-    padding: 14px 16px;
 
-    border-radius: 14px;
+    .pwa-info-grid {
 
-    background: #172033;
+        grid-template-columns:
+            1fr;
 
-    color: #ffffff;
-
-    font-family:
-        "DM Sans",
-        sans-serif;
-
-    font-size: 0.82rem;
-
-    box-shadow:
-        0 12px 35px rgba(15, 23, 42, 0.25);
-
-    transform:
-        translate(-50%, 20px);
-
-    opacity: 0;
-
-    transition:
-        transform 0.25s ease,
-        opacity 0.25s ease;
-}
-
-.pwa-install-toast.show {
-
-    transform:
-        translate(-50%, 0);
-
-    opacity: 1;
-
-}
-
-.pwa-install-toast.success {
-
-    background: #047857;
+    }
 
 }
 
@@ -553,41 +459,273 @@
    MOBILE
 ========================================================= */
 
-@media (max-width: 600px) {
+@media (max-width: 768px) {
 
-    .pwa-install-card {
-
-        align-items: flex-start;
-
-        flex-wrap: wrap;
-
-        padding: 17px;
-
-        border-radius: 16px;
-
-    }
-
-    .pwa-install-card
-    .settings-card-content {
-
-        padding-top: 2px;
-
-    }
-
-    .pwa-install-card
-    .settings-action-btn {
+    .pwa-page {
 
         width: 100%;
 
-        margin-top: 3px;
+    }
+
+
+    .pwa-heading {
+
+        margin-bottom: 18px;
 
     }
 
-    .pwa-install-dialog {
 
-        padding: 24px 20px;
+    .pwa-badge {
 
-        border-radius: 22px;
+        font-size: .57rem;
+
+        padding: 5px 9px;
+
+    }
+
+
+    .pwa-heading h1 {
+
+        margin-top: 9px;
+
+        font-size: 1.55rem;
+
+        line-height: 1.1;
+
+    }
+
+
+    .pwa-heading p {
+
+        font-size: .76rem;
+
+        line-height: 1.5;
+
+    }
+
+
+    /* INSTALL CARD */
+
+    .pwa-install-card {
+
+        display: grid;
+
+        grid-template-columns:
+            auto minmax(0, 1fr);
+
+        gap: 14px;
+
+        padding: 18px;
+
+        border-radius: 17px;
+
+    }
+
+
+    .settings-card-icon {
+
+        width: 43px;
+
+        height: 43px;
+
+        border-radius: 12px;
+
+        font-size: .95rem;
+
+    }
+
+
+    .settings-card-content h3 {
+
+        font-size: .92rem;
+
+    }
+
+
+    .settings-card-content p {
+
+        font-size: .7rem;
+
+        line-height: 1.5;
+
+    }
+
+
+    .pwa-card-label {
+
+        font-size: .52rem;
+
+    }
+
+
+    .settings-action-btn {
+
+        grid-column: 1 / -1;
+
+        width: 100%;
+
+        min-height: 44px;
+
+        border-radius: 12px;
+
+        font-size: .7rem;
+
+    }
+
+
+    /* INFO CARDS */
+
+    .pwa-info-grid {
+
+        grid-template-columns: 1fr;
+
+        gap: 10px;
+
+        margin-top: 14px;
+
+    }
+
+
+    .pwa-info-card {
+
+        padding: 15px;
+
+        border-radius: 15px;
+
+    }
+
+
+    .pwa-info-icon {
+
+        width: 35px;
+
+        height: 35px;
+
+        border-radius: 10px;
+
+    }
+
+
+    .pwa-info-card h4 {
+
+        font-size: .82rem;
+
+    }
+
+
+    .pwa-info-card p {
+
+        font-size: .68rem;
+
+    }
+
+}
+
+
+/* =========================================================
+   VERY SMALL PHONES
+========================================================= */
+
+@media (max-width: 380px) {
+
+    .pwa-heading h1 {
+
+        font-size: 1.4rem;
+
+    }
+
+
+    .pwa-install-card {
+
+        padding: 15px;
+
+        gap: 11px;
+
+    }
+
+
+    .settings-card-icon {
+
+        width: 39px;
+
+        height: 39px;
+
+        border-radius: 11px;
+
+    }
+
+
+    .settings-card-content h3 {
+
+        font-size: .86rem;
+
+    }
+
+
+    .settings-card-content p {
+
+        font-size: .67rem;
+
+    }
+
+
+    .pwa-info-card {
+
+        padding: 13px;
+
+    }
+
+}
+
+
+/* =========================================================
+   DARK MODE
+========================================================= */
+
+@media (prefers-color-scheme: dark) {
+
+    .pwa-heading h1 {
+
+        color:
+            #f3f4f6;
+
+    }
+
+
+    .pwa-heading p {
+
+        color:
+            #9ca3af;
+
+    }
+
+
+    .pwa-install-card,
+    .pwa-info-card {
+
+        background:
+            #18181b;
+
+        border-color:
+            rgba(255,255,255,.07);
+
+    }
+
+
+    .settings-card-content h3,
+    .pwa-info-card h4 {
+
+        color:
+            #f4f4f5;
+
+    }
+
+
+    .settings-card-content p,
+    .pwa-info-card p {
+
+        color:
+            #a1a1aa;
 
     }
 
