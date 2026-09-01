@@ -7,16 +7,10 @@
 
     <meta
         name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
-    <meta
-        name="theme-color"
-        content="#ea580c"
+        content="width=device-width, initial-scale=1.0, viewport-fit=cover"
     >
 
     <title>Settings | AFC Isiu Youth Portal</title>
-
 
     <!-- =====================================================
          PWA
@@ -25,6 +19,11 @@
     <link
         rel="manifest"
         href="/manifest.json"
+    >
+
+    <meta
+        name="theme-color"
+        content="#ea580c"
     >
 
     <meta
@@ -49,7 +48,7 @@
 
 
     <!-- =====================================================
-         ICON
+         ICONS
     ====================================================== -->
 
     <link
@@ -60,7 +59,7 @@
 
     <link
         rel="apple-touch-icon"
-        href="../images/logo.png"
+        href="/images/pwa-icon-192.png"
     >
 
 
@@ -86,13 +85,18 @@
 
 
     <!-- =====================================================
-         ICONS
+         FONT AWESOME
     ====================================================== -->
 
     <link
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
         rel="stylesheet"
     >
+
+
+    <!-- =====================================================
+         REMIX ICONS
+    ====================================================== -->
 
     <link
         href="https://cdn.jsdelivr.net/npm/remixicon@4.6.0/fonts/remixicon.css"
@@ -116,7 +120,7 @@
 
 
     <!-- =====================================================
-         SETTINGS / PWA CSS
+         PAGE CSS
     ====================================================== -->
 
     <link
@@ -154,9 +158,6 @@
 
         <div class="sidebar-top">
 
-
-            <!-- LOGO -->
-
             <div class="sidebar-logo">
 
                 <i class="fa-solid fa-shield-heart"></i>
@@ -165,14 +166,14 @@
 
                     <h2>AFC Isiu</h2>
 
-                    <span>Youth Portal</span>
+                    <span>
+                        Youth Portal
+                    </span>
 
                 </div>
 
             </div>
 
-
-            <!-- NAVIGATION -->
 
             <nav class="sidebar-menu">
 
@@ -184,7 +185,7 @@
                 </div>
 
 
-                <a href="../">
+                <a href="../index.html">
 
                     <i class="fa-solid fa-house"></i>
 
@@ -195,19 +196,19 @@
                 </a>
 
 
-                <a href="lessons">
+                <a href="lessons.html">
 
                     <i class="fa-solid fa-book-open"></i>
 
                     <span>
-                        Sunday School Lesson
+                        Weekly Lessons
                     </span>
 
                 </a>
 
 
                 <a
-                    href="slcquiz"
+                    href="slcquiz.html"
                     data-online-only
                     data-feature="Weekly SLC Quiz"
                 >
@@ -215,14 +216,14 @@
                     <i class="fa-solid fa-clipboard-question"></i>
 
                     <span>
-                        Take SL Quiz
+                        Weekly SLC Quiz
                     </span>
 
                 </a>
 
 
                 <a
-                    href="result"
+                    href="growthtracker.html"
                     data-online-only
                     data-feature="Growth Tracker"
                 >
@@ -230,10 +231,11 @@
                     <i class="fa-solid fa-chart-line"></i>
 
                     <span>
-                        Check SL Quiz Result
+                        Growth Tracker
                     </span>
 
                 </a>
+
 
 
                 <!-- COMMUNITY -->
@@ -244,7 +246,7 @@
 
 
                 <a
-                    href="gallery"
+                    href="gallery.html"
                     data-online-only
                     data-feature="Gallery"
                 >
@@ -259,7 +261,7 @@
 
 
                 <a
-                    href="events"
+                    href="events.html"
                     data-online-only
                     data-feature="Youth Events"
                 >
@@ -274,7 +276,7 @@
 
 
                 <a
-                    href="welfare"
+                    href="welfare.html"
                     data-online-only
                     data-feature="Welfare"
                 >
@@ -289,7 +291,7 @@
 
 
                 <a
-                    href="prayer"
+                    href="prayer.html"
                     data-online-only
                     data-feature="Prayer Requests"
                 >
@@ -304,7 +306,7 @@
 
 
                 <a
-                    href="program-report"
+                    href="program-report.html"
                     data-online-only
                     data-feature="Secretariat Reports"
                 >
@@ -323,18 +325,17 @@
 
 
         <!-- =================================================
-             SIDEBAR BOTTOM
+             ACCOUNT
         ================================================== -->
 
         <div class="sidebar-bottom">
-
 
             <div class="menu-title">
                 Account
             </div>
 
 
-            <a href="profile">
+            <a href="profile.html">
 
                 <i class="fa-solid fa-user"></i>
 
@@ -346,7 +347,7 @@
 
 
             <a
-                href="settings"
+                href="settings.html"
                 class="active"
             >
 
@@ -363,6 +364,7 @@
     </aside>
 
 
+
     <!-- =====================================================
          MAIN AREA
     ====================================================== -->
@@ -376,16 +378,16 @@
 
         <header class="topbar">
 
+
             <div class="topbar-left">
 
-
-                <!-- MOBILE MENU -->
 
                 <button
                     class="mobile-menu-btn"
                     id="mobileMenuBtn"
                     type="button"
                     aria-label="Open navigation menu"
+                    aria-controls="sidebar"
                     aria-expanded="false"
                 >
 
@@ -394,15 +396,15 @@
                 </button>
 
 
-                <!-- PORTAL BRAND -->
 
                 <div class="portal-brand">
 
                     <img
                         src="../images/logo.png"
-                        alt="AFC Isiwu Youth Portal"
+                        alt="AFC Isiu"
                         class="portal-logo"
                     >
+
 
                     <div>
 
@@ -421,7 +423,6 @@
             </div>
 
 
-            <!-- TOPBAR ACTIONS -->
 
             <div class="topbar-right">
 
@@ -440,6 +441,7 @@
                 </button>
 
 
+
                 <button
                     class="header-icon"
                     id="themeBtn"
@@ -456,11 +458,13 @@
         </header>
 
 
+
         <!-- =================================================
-             SETTINGS PAGE
+             PAGE CONTENT
         ================================================== -->
 
         <main class="dashboard-content settings-page">
+
 
             <div class="dashboard-container settings-container">
 
@@ -469,31 +473,29 @@
                      PAGE INTRO
                 ================================================== -->
 
-                <section class="settings-heading">
+                <section class="settings-intro">
 
-                    <div class="settings-heading-copy">
+                    <span class="settings-eyebrow">
+                        SETTINGS
+                    </span>
 
-                        <span class="settings-eyebrow">
-                            <i class="fa-solid fa-sliders"></i>
-                            SETTINGS
-                        </span>
 
-                        <h1>
-                            App Settings
-                        </h1>
+                    <h1>
+                        App Settings
+                    </h1>
 
-                        <p>
-                            Manage your AFC Isiu Youth Portal
-                            experience and app preferences.
-                        </p>
 
-                    </div>
+                    <p>
+                        Manage your AFC Isiu Youth Portal experience
+                        and install the app on your device.
+                    </p>
 
                 </section>
 
 
+
                 <!-- =================================================
-                     APP SETTINGS SECTION
+                     APPLICATION SECTION
                 ================================================== -->
 
                 <section class="settings-section">
@@ -501,29 +503,27 @@
 
                     <div class="settings-section-heading">
 
-                        <div>
+                        <span class="settings-section-label">
+                            APPLICATION
+                        </span>
 
-                            <span>
-                                APPLICATION
-                            </span>
-
-                            <h2>
-                                App Experience
-                            </h2>
-
-                        </div>
+                        <h2>
+                            App Experience
+                        </h2>
 
                     </div>
+
 
 
                     <!-- =================================================
                          PWA INSTALL CARD
                     ================================================== -->
 
-                    <article class="settings-card pwa-install-card">
+                    <article
+                        class="settings-card pwa-install-card"
+                        id="pwaInstallCard"
+                    >
 
-
-                        <!-- ICON -->
 
                         <div class="settings-card-icon">
 
@@ -532,64 +532,86 @@
                         </div>
 
 
-                        <!-- CONTENT -->
 
                         <div class="settings-card-content">
 
                             <span class="settings-card-label">
-                                PWA
+                                PROGRESSIVE WEB APP
                             </span>
+
 
                             <h3>
                                 Install AFC Isiu Youth Portal
                             </h3>
 
+
                             <p>
-                                Add the portal to your home screen
-                                for a faster, more convenient
-                                app-like experience.
+                                Install the portal on your phone or
+                                computer for a faster, app-like
+                                experience and easier access.
                             </p>
 
 
-                            <!-- INSTALL STATUS -->
+
+                            <!-- PWA STATUS -->
 
                             <div
                                 class="pwa-status"
                                 id="pwaStatus"
                             >
 
-                                <span class="pwa-status-dot"></span>
+                                <span
+                                    class="pwa-status-dot"
+                                    id="pwaStatusDot"
+                                ></span>
+
 
                                 <span id="pwaStatusText">
-                                    Available for installation
+                                    Checking installation availability...
                                 </span>
+
+                            </div>
+
+
+                            <!-- ACTION -->
+
+                            <div class="pwa-actions">
+
+                                <button
+                                    type="button"
+                                    class="pwa-install-button"
+                                    id="installAppBtn"
+                                >
+
+                                    <i class="fa-solid fa-download"></i>
+
+                                    <span>
+                                        Install App
+                                    </span>
+
+                                </button>
+
+
+                                <button
+                                    type="button"
+                                    class="pwa-help-button"
+                                    id="pwaHelpBtn"
+                                >
+
+                                    <i class="fa-regular fa-circle-question"></i>
+
+                                    <span>
+                                        How to install
+                                    </span>
+
+                                </button>
 
                             </div>
 
                         </div>
 
-
-                        <!-- ACTION -->
-
-                        <div class="settings-card-action">
-
-                            <button
-                                id="installAppBtn"
-                                class="settings-action-btn"
-                                type="button"
-                            >
-
-                                <i class="fa-solid fa-download"></i>
-
-                                <span>
-                                    Install App
-                                </span>
-
-                            </button>
-
-                        </div>
-
                     </article>
+
 
 
                     <!-- =================================================
@@ -599,7 +621,7 @@
                     <article class="settings-card app-info-card">
 
 
-                        <div class="settings-card-icon settings-info-icon">
+                        <div class="settings-card-icon">
 
                             <i class="fa-solid fa-circle-info"></i>
 
@@ -609,36 +631,37 @@
                         <div class="settings-card-content">
 
                             <span class="settings-card-label">
-                                ABOUT
+                                APPLICATION
                             </span>
+
 
                             <h3>
                                 AFC Isiu Youth Portal
                             </h3>
 
+
                             <p>
-                                Your digital space for lessons,
-                                youth activities, resources,
-                                community updates and spiritual growth.
+                                Your digital space for Bible lessons,
+                                quizzes, youth activities, memories
+                                and staying connected with the church.
                             </p>
 
-                        </div>
 
+                            <div class="app-version">
 
-                        <div class="app-version">
+                                <span>
+                                    Version
+                                </span>
 
-                            <span>
-                                VERSION
-                            </span>
+                                <strong>
+                                    2.0.0
+                                </strong>
 
-                            <strong>
-                                2.0
-                            </strong>
+                            </div>
 
                         </div>
 
                     </article>
-
 
                 </section>
 
@@ -647,7 +670,9 @@
 
         </main>
 
+
     </div>
+
 
 
     <!-- =====================================================
@@ -660,11 +685,14 @@
     >
 
 
-        <!-- HOME -->
+        <a
+            href="../index.html"
+            class="bottom-nav-item"
+        >
 
-        <a href="../">
-
-            <i class="fa-solid fa-house"></i>
+            <span class="bottom-nav-icon">
+                <i class="fa-solid fa-house"></i>
+            </span>
 
             <span>
                 Home
@@ -673,11 +701,15 @@
         </a>
 
 
-        <!-- LESSONS -->
 
-        <a href="lessons">
+        <a
+            href="lessons.html"
+            class="bottom-nav-item"
+        >
 
-            <i class="fa-solid fa-book-open"></i>
+            <span class="bottom-nav-icon">
+                <i class="fa-solid fa-book-open"></i>
+            </span>
 
             <span>
                 Lessons
@@ -686,30 +718,36 @@
         </a>
 
 
-        <!-- HUB -->
 
         <button
-            class="hub-button"
-            id="hubButton"
             type="button"
-            aria-label="Open main navigation"
-            aria-expanded="false"
+            class="bottom-nav-main"
+            id="hubButton"
+            aria-label="Open main menu"
         >
 
-            <i class="ri-apps-2-line"></i>
+            <span class="hub-button">
+
+                <i class="fa-solid fa-plus"></i>
+
+            </span>
+
+            <span class="bottom-nav-center-label">
+                Menu
+            </span>
 
         </button>
 
 
-        <!-- GALLERY -->
 
         <a
-            href="gallery"
-            data-online-only
-            data-feature="Gallery"
+            href="gallery.html"
+            class="bottom-nav-item"
         >
 
-            <i class="fa-solid fa-images"></i>
+            <span class="bottom-nav-icon">
+                <i class="fa-solid fa-images"></i>
+            </span>
 
             <span>
                 Gallery
@@ -718,11 +756,15 @@
         </a>
 
 
-        <!-- PROFILE -->
 
-        <a href="profile">
+        <a
+            href="profile.html"
+            class="bottom-nav-item"
+        >
 
-            <i class="fa-solid fa-user"></i>
+            <span class="bottom-nav-icon">
+                <i class="fa-solid fa-user"></i>
+            </span>
 
             <span>
                 Profile
@@ -736,14 +778,453 @@
 </div>
 
 
+
 <!-- =========================================================
-     JAVASCRIPT
-========================================================= -->
+     PWA INSTALL INSTRUCTIONS MODAL
+========================================================== -->
+
+<div
+    class="pwa-modal-backdrop"
+    id="pwaInstallModal"
+    hidden
+>
+
+
+    <div
+        class="pwa-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="pwaModalTitle"
+    >
+
+
+        <!-- MODAL HEADER -->
+
+        <div class="pwa-modal-header">
+
+
+            <div class="pwa-modal-title-wrap">
+
+
+                <div class="pwa-modal-icon">
+
+                    <i class="fa-solid fa-mobile-screen-button"></i>
+
+                </div>
+
+
+                <div>
+
+                    <span class="pwa-modal-eyebrow">
+                        INSTALL APP
+                    </span>
+
+                    <h2 id="pwaModalTitle">
+                        Install AFC Isiu
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+
+            <button
+                type="button"
+                class="pwa-modal-close"
+                id="pwaModalClose"
+                aria-label="Close installation instructions"
+            >
+
+                <i class="fa-solid fa-xmark"></i>
+
+            </button>
+
+        </div>
+
+
+
+        <!-- MODAL BODY -->
+
+        <div class="pwa-modal-body">
+
+
+            <p class="pwa-modal-intro">
+                Chrome may not always show the automatic
+                installation prompt. You can still install
+                the AFC Isiu Youth Portal manually.
+            </p>
+
+
+
+            <!-- CHROME -->
+
+            <div class="pwa-install-method">
+
+
+                <div class="pwa-method-number">
+                    1
+                </div>
+
+
+                <div class="pwa-method-content">
+
+                    <h3>
+                        On Google Chrome
+                    </h3>
+
+
+                    <p>
+                        Open the Chrome menu using the
+                        <strong>⋮</strong> button in the
+                        top-right corner.
+                    </p>
+
+
+                    <div class="pwa-menu-hint">
+
+                        <span class="pwa-menu-dots">
+                            ⋮
+                        </span>
+
+                        <span>
+                            Look for
+                            <strong>
+                                Install app
+                            </strong>
+                            or
+                            <strong>
+                                Add to Home screen
+                            </strong>.
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- ANDROID -->
+
+            <div class="pwa-install-method">
+
+
+                <div class="pwa-method-number">
+                    2
+                </div>
+
+
+                <div class="pwa-method-content">
+
+                    <h3>
+                        On Android
+                    </h3>
+
+
+                    <p>
+                        Tap the Chrome menu and choose
+                        <strong>
+                            Install app
+                        </strong>
+                        or
+                        <strong>
+                            Add to Home screen
+                        </strong>.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- IOS -->
+
+            <div class="pwa-install-method">
+
+
+                <div class="pwa-method-number">
+                    3
+                </div>
+
+
+                <div class="pwa-method-content">
+
+                    <h3>
+                        On iPhone or iPad
+                    </h3>
+
+
+                    <p>
+                        Open the portal in Safari, tap the
+                        <strong>
+                            Share
+                        </strong>
+                        button, then choose
+                        <strong>
+                            Add to Home Screen
+                        </strong>.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- DESKTOP -->
+
+            <div class="pwa-install-method">
+
+
+                <div class="pwa-method-number">
+                    4
+                </div>
+
+
+                <div class="pwa-method-content">
+
+                    <h3>
+                        On a computer
+                    </h3>
+
+
+                    <p>
+                        In supported browsers, look for the
+                        <strong>
+                            Install
+                        </strong>
+                        icon in the address bar or open the
+                        browser menu and choose
+                        <strong>
+                            Install AFC Isiu Youth Portal
+                        </strong>.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- NOTE -->
+
+            <div class="pwa-modal-note">
+
+                <i class="fa-solid fa-circle-check"></i>
+
+                <p>
+                    Once installed, the portal will open like
+                    an app without requiring you to return to
+                    the browser each time.
+                </p>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- MODAL FOOTER -->
+
+        <div class="pwa-modal-footer">
+
+            <button
+                type="button"
+                class="pwa-modal-done"
+                id="pwaModalDone"
+            >
+
+                Got it
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =========================================================
+     GLOBAL JAVASCRIPT
+========================================================== -->
 
 <script src="../js/main.js"></script>
+
+
+<!-- =========================================================
+     PWA JAVASCRIPT
+========================================================== -->
 
 <script src="../js/pwa.js"></script>
 
 
+<!-- =========================================================
+     SETTINGS PAGE MODAL CONTROLLER
+========================================================== -->
+
+<script>
+
+(function () {
+
+    "use strict";
+
+
+    const modal =
+        document.getElementById(
+            "pwaInstallModal"
+        );
+
+
+    const openButton =
+        document.getElementById(
+            "pwaHelpBtn"
+        );
+
+
+    const closeButton =
+        document.getElementById(
+            "pwaModalClose"
+        );
+
+
+    const doneButton =
+        document.getElementById(
+            "pwaModalDone"
+        );
+
+
+
+    function openModal() {
+
+        if (!modal) {
+            return;
+        }
+
+
+        modal.hidden = false;
+
+
+        document.body.classList.add(
+            "pwa-modal-open"
+        );
+
+
+        if (closeButton) {
+
+            setTimeout(
+                function () {
+
+                    closeButton.focus();
+
+                },
+                50
+            );
+
+        }
+
+    }
+
+
+
+    function closeModal() {
+
+        if (!modal) {
+            return;
+        }
+
+
+        modal.hidden = true;
+
+
+        document.body.classList.remove(
+            "pwa-modal-open"
+        );
+
+    }
+
+
+
+    if (openButton) {
+
+        openButton.addEventListener(
+            "click",
+            openModal
+        );
+
+    }
+
+
+
+    if (closeButton) {
+
+        closeButton.addEventListener(
+            "click",
+            closeModal
+        );
+
+    }
+
+
+
+    if (doneButton) {
+
+        doneButton.addEventListener(
+            "click",
+            closeModal
+        );
+
+    }
+
+
+
+    if (modal) {
+
+        modal.addEventListener(
+            "click",
+            function (event) {
+
+                if (
+                    event.target === modal
+                ) {
+
+                    closeModal();
+
+                }
+
+            }
+        );
+
+    }
+
+
+
+    document.addEventListener(
+        "keydown",
+        function (event) {
+
+            if (
+                event.key === "Escape" &&
+                modal &&
+                !modal.hidden
+            ) {
+
+                closeModal();
+
+            }
+
+        }
+    );
+
+})();
+
+</script>
+
+
 </body>
+
 </html>
