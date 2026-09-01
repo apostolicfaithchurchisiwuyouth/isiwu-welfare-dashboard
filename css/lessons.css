@@ -328,86 +328,36 @@
 
 
 /* =========================================================
-   TOPIC CARD
-   ONLY CLASS + TOPIC
+   LESSON TOPIC CARD
 ========================================================= */
 
 .lesson-topic-card {
-
     width: 100%;
+    margin: 0;
 
-    padding: 30px 34px;
+    padding: 28px 32px;
 
     border-radius: 20px;
 
+    /* Deep purple / near-black */
     background:
         linear-gradient(
             135deg,
-            #0f766e 0%,
-            #0891b2 52%,
-            #2563eb 100%
+            #16001f 0%,
+            #24002f 55%,
+            #0d0013 100%
         );
 
     color: #ffffff;
 
-    position: relative;
-
-    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.08);
 
     box-shadow:
-        0 15px 35px
-        rgba(8, 145, 178, 0.16);
+        0 12px 30px rgba(10, 0, 22, 0.18);
 
+    position: relative;
+    overflow: hidden;
 }
-
-
-.lesson-topic-card::after {
-
-    content: "";
-
-    position: absolute;
-
-    width: 180px;
-
-    height: 180px;
-
-    border-radius: 50%;
-
-    right: -70px;
-
-    top: -80px;
-
-    background:
-        rgba(255, 255, 255, 0.10);
-
-    pointer-events: none;
-
-}
-
-
-.lesson-topic-card::before {
-
-    content: "";
-
-    position: absolute;
-
-    width: 120px;
-
-    height: 120px;
-
-    border-radius: 50%;
-
-    left: 35%;
-
-    bottom: -80px;
-
-    background:
-        rgba(255, 255, 255, 0.07);
-
-    pointer-events: none;
-
-}
-
 
 .lesson-topic-label {
 
@@ -1748,7 +1698,7 @@
 
     .lesson-tabs-spacer {
 
-        height: 24px;
+        height: 14px;
 
     }
 
