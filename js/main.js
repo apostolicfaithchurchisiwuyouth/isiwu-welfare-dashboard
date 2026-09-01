@@ -1,24 +1,90 @@
 /* =========================================================
    AFC ISIU YOUTH PORTAL
    MAIN JAVASCRIPT
+   VERSION 2.0
+   PURPOSE:
+   - Shared portal functionality
+   - Sidebar / mobile navigation
+   - Bottom hub button
+   - Offline status
+   - Online-only navigation
+   - Theme toggle
+   - Dashboard greeting
+   - Safe page initialization
+
+   IMPORTANT:
+   This file does NOT control the Lessons page.
+   lessons.js controls all lesson-specific functionality.
 ========================================================= */
 
 "use strict";
 
 
 /* =========================================================
+   GLOBAL CONFIG
+========================================================= */
+
+const AFC_MAIN_CONFIG = {
+
+    MOBILE_BREAKPOINT: 768,
+
+    OFFLINE_BANNER_ID: "offlineBanner",
+
+    OFFLINE_MESSAGE_ID: "offlineMessage",
+
+    THEME_STORAGE_KEY: "afcTheme"
+
+};
+
+
+/* =========================================================
+   DOM READY HELPER
+========================================================= */
+
+function onDOMReady(callback) {
+
+    if (
+        document.readyState === "loading"
+    ) {
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            callback,
+            {
+                once: true
+            }
+        );
+
+    } else {
+
+        callback();
+
+    }
+
+}
+
+
+/* =========================================================
    AOS
 ========================================================= */
 
-document.addEventListener("DOMContentLoaded", () => {
+onDOMReady(() => {
 
-    if (typeof AOS !== "undefined") {
+    if (
+        typeof AOS !== "undefined" &&
+        typeof AOS.init === "function"
+    ) {
 
         AOS.init({
+
             duration: 900,
+
             easing: "ease-out-cubic",
+
             once: true,
+
             offset: 120
+
         });
 
     }
@@ -30,45 +96,63 @@ document.addEventListener("DOMContentLoaded", () => {
    OFFLINE STATUS BANNER
 ========================================================= */
 
-document.addEventListener("DOMContentLoaded", () => {
+onDOMReady(() => {
 
-    const offlineBanner =
-        document.createElement("div");
+    let offlineBanner =
+        document.getElementById(
+            AFC_MAIN_CONFIG.OFFLINE_BANNER_ID
+        );
 
-    offlineBanner.id =
-        "offlineBanner";
 
+    /*
+     * Prevent duplicate banners.
+     */
 
-    offlineBanner.innerHTML = `
-        <div class="offline-banner-content">
+    if (!offlineBanner) {
 
-            <i class="fa-solid fa-wifi"></i>
+        offlineBanner =
+            document.createElement("div");
 
-            <div>
+        offlineBanner.id =
+            AFC_MAIN_CONFIG.OFFLINE_BANNER_ID;
 
-                <strong>
-                    You're offline
-                </strong>
+        offlineBanner.innerHTML = `
+            <div class="offline-banner-content">
 
-                <span>
-                    Some features are unavailable until
-                    you reconnect.
-                </span>
+                <i class="fa-solid fa-wifi"></i>
+
+                <div>
+
+                    <strong>
+                        You're offline
+                    </strong>
+
+                    <span>
+                        Some features are unavailable
+                        until you reconnect.
+                    </span>
+
+                </div>
 
             </div>
+        `;
 
-        </div>
-    `;
+        document.body.prepend(
+            offlineBanner
+        );
+
+    }
 
 
-    document.body.prepend(
-        offlineBanner
-    );
-
+    /* -----------------------------------------------------
+       UPDATE STATUS
+    ----------------------------------------------------- */
 
     function updateOnlineStatus() {
 
-        if (navigator.onLine) {
+        if (
+            navigator.onLine
+        ) {
 
             offlineBanner.classList.remove(
                 "show"
@@ -106,7 +190,7 @@ document.addEventListener("DOMContentLoaded", () => {
    ONLINE-ONLY FEATURES
 ========================================================= */
 
-document.addEventListener("DOMContentLoaded", () => {
+onDOMReady(() => {
 
     const onlineOnlyLinks =
         document.querySelectorAll(
@@ -114,31 +198,52 @@ document.addEventListener("DOMContentLoaded", () => {
         );
 
 
-    onlineOnlyLinks.forEach(link => {
+    if (
+        !onlineOnlyLinks.length
+    ) {
 
-        link.addEventListener(
-            "click",
-            event => {
+        return;
 
-                if (navigator.onLine) {
+    }
 
-                    return;
+
+    onlineOnlyLinks.forEach(
+        link => {
+
+            link.addEventListener(
+                "click",
+                event => {
+
+                    /*
+                     * Allow navigation when online.
+                     */
+
+                    if (
+                        navigator.onLine
+                    ) {
+
+                        return;
+
+                    }
+
+
+                    /*
+                     * Stop navigation while offline.
+                     */
+
+                    event.preventDefault();
+
+
+                    showOfflineMessage(
+                        link.dataset.feature ||
+                        "This feature"
+                    );
 
                 }
+            );
 
-
-                event.preventDefault();
-
-
-                showOfflineMessage(
-                    link.dataset.feature ||
-                    "This feature"
-                );
-
-            }
-        );
-
-    });
+        }
+    );
 
 });
 
@@ -147,11 +252,17 @@ document.addEventListener("DOMContentLoaded", () => {
    OFFLINE MESSAGE
 ========================================================= */
 
-function showOfflineMessage(featureName) {
+function showOfflineMessage(
+    featureName
+) {
+
+    /*
+     * Remove an existing message first.
+     */
 
     const existing =
         document.getElementById(
-            "offlineMessage"
+            AFC_MAIN_CONFIG.OFFLINE_MESSAGE_ID
         );
 
 
@@ -167,7 +278,7 @@ function showOfflineMessage(featureName) {
 
 
     message.id =
-        "offlineMessage";
+        AFC_MAIN_CONFIG.OFFLINE_MESSAGE_ID;
 
 
     message.innerHTML = `
@@ -187,9 +298,10 @@ function showOfflineMessage(featureName) {
 
 
             <p>
-                ${featureName} requires an internet
-                connection. Please turn on your data
-                or connect to Wi-Fi and try again.
+                ${escapeHTML(featureName)}
+                requires an internet connection.
+                Please turn on your data or connect
+                to Wi-Fi and try again.
             </p>
 
 
@@ -230,11 +342,17 @@ function showOfflineMessage(featureName) {
     }
 
 
+    /*
+     * Close when clicking outside the card.
+     */
+
     message.addEventListener(
         "click",
         event => {
 
-            if (event.target === message) {
+            if (
+                event.target === message
+            ) {
 
                 message.remove();
 
@@ -247,812 +365,118 @@ function showOfflineMessage(featureName) {
 
 
 /* =========================================================
-   HERO TYPING EFFECT
+   SIMPLE HTML ESCAPE
 ========================================================= */
 
-document.addEventListener("DOMContentLoaded", () => {
+function escapeHTML(
+    value
+) {
 
-    const texts = [
+    return String(value)
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
 
-        "Growing in Grace and the Knowledge of Christ",
-
-        "Helping Young Believers Stand Firm in the Faith",
-
-        "Studying God's Word, Living God's Truth",
-
-        "Preparing Youth for Service and Eternity",
-
-        "Walking Together on the Path of Holiness"
-
-    ];
+}
 
 
-    const heroTitle =
+/* =========================================================
+   SIDEBAR / MOBILE NAVIGATION
+========================================================= */
+
+onDOMReady(() => {
+
+    const sidebar =
         document.getElementById(
-            "heroTitle"
+            "sidebar"
         );
 
 
-    if (!heroTitle) {
-
-        return;
-
-    }
-
-
-    let textIndex = 0;
-
-    let charIndex = 0;
-
-    let deleting = false;
-
-
-    function typeEffect() {
-
-        const currentText =
-            texts[textIndex];
-
-
-        heroTitle.innerHTML =
-            currentText
-                .substring(
-                    0,
-                    charIndex
-                )
-                .replace(
-                    /\n/g,
-                    "<br>"
-                );
-
-
-        if (!deleting) {
-
-            charIndex++;
-
-
-            if (
-                charIndex >
-                currentText.length
-            ) {
-
-                deleting = true;
-
-
-                setTimeout(
-                    typeEffect,
-                    2000
-                );
-
-
-                return;
-
-            }
-
-        } else {
-
-            charIndex--;
-
-
-            if (charIndex < 0) {
-
-                deleting = false;
-
-                textIndex =
-                    (
-                        textIndex + 1
-                    )
-                    %
-                    texts.length;
-
-
-                charIndex = 0;
-
-            }
-
-        }
-
-
-        setTimeout(
-
-            typeEffect,
-
-            deleting
-                ? 35
-                : 70
-
+    const overlay =
+        document.getElementById(
+            "sidebarOverlay"
         );
 
-    }
+
+    const menuButton =
+        document.getElementById(
+            "mobileMenuBtn"
+        );
 
 
-    typeEffect();
-
-});
-
-
-/* =========================================================
-   CSV LINKS
-========================================================= */
-
-const weeklyLessonCSV =
-    "https://docs.google.com/spreadsheets/d/e/2PACX-1vQHlE5IpmFYaQyW5u-rentH2fGC5VZJ2w9Ql1WI-X8bE76qlN5_ttDIitwlXX1CM4sqdEW8RroDUNSU/pub?gid=201183837&single=true&output=csv";
+    const hubButton =
+        document.getElementById(
+            "hubButton"
+        );
 
 
-const secretariatCSV =
-    "https://docs.google.com/spreadsheets/d/e/2PACX-1vTE5Ds6_y0OYFL9_pYfRekpMx1Jq-kijbtdXsL-LCyg5KsC8LVootmeHOew2xiqV2sAXEVUKm_3vz17/pub?gid=1085033955&single=true&output=csv";
-
-
-/* =========================================================
-   CSV PARSER
-========================================================= */
-
-function parseCSV(text) {
-
-    const rows = [];
-
-    let row = [];
-
-    let value = "";
-
-    let insideQuotes = false;
-
-
-    for (
-        let i = 0;
-        i < text.length;
-        i++
-    ) {
-
-        const char =
-            text[i];
-
-
-        const next =
-            text[i + 1];
-
-
-        if (char === '"') {
-
-            if (
-                insideQuotes &&
-                next === '"'
-            ) {
-
-                value += '"';
-
-                i++;
-
-            } else {
-
-                insideQuotes =
-                    !insideQuotes;
-
-            }
-
-        }
-
-
-        else if (
-
-            char === "," &&
-            !insideQuotes
-
-        ) {
-
-            row.push(
-                value.trim()
-            );
-
-            value = "";
-
-        }
-
-
-        else if (
-
-            (
-                char === "\n" ||
-                char === "\r"
-            )
-            &&
-            !insideQuotes
-
-        ) {
-
-            if (
-                value ||
-                row.length
-            ) {
-
-                row.push(
-                    value.trim()
-                );
-
-                rows.push(
-                    row
-                );
-
-                row = [];
-
-                value = "";
-
-            }
-
-        }
-
-
-        else {
-
-            value += char;
-
-        }
-
-    }
-
+    /*
+     * If this page doesn't contain the
+     * shared navigation, stop safely.
+     */
 
     if (
-        value ||
-        row.length
+        !sidebar ||
+        !overlay
     ) {
 
-        row.push(
-            value.trim()
-        );
-
-        rows.push(
-            row
-        );
-
-    }
-
-
-    return rows.filter(
-        item =>
-            item.length > 1
-    );
-
-}
-
-
-/* =========================================================
-   SECRETARIAT REPORTS
-========================================================= */
-
-async function fetchSecretariatReports() {
-
-    const reportsFeed =
-        document.getElementById(
-            "reportsFeed"
-        );
-
-
-    /* Page does not use reports */
-
-    if (!reportsFeed) {
-
         return;
 
     }
 
 
-    try {
+    /* -----------------------------------------------------
+       OPEN SIDEBAR
+    ----------------------------------------------------- */
 
-        const response =
-            await fetch(
-                secretariatCSV
-            );
+    function openSidebar() {
 
-
-        const data =
-            await response.text();
-
-
-        const rows =
-            parseCSV(data);
-
-
-        if (!rows.length) {
-
-            return;
-
-        }
-
-
-        reportsFeed.innerHTML =
-            "";
-
-
-        const headers =
-            rows[0].map(
-                header =>
-                    header
-                        .toLowerCase()
-                        .trim()
-            );
-
-
-        const iDate =
-            headers.indexOf(
-                "date"
-            );
-
-
-        const iTitle =
-            headers.indexOf(
-                "program title"
-            );
-
-
-        const iType =
-            headers.indexOf(
-                "program type"
-            );
-
-
-        const iSummary =
-            headers.indexOf(
-                "what went well"
-            );
-
-
-        const iReporter =
-            headers.indexOf(
-                "reporter"
-            );
-
-
-        const reports =
-            rows
-                .slice(1)
-                .reverse()
-                .slice(0, 6);
-
-
-        reports.forEach(
-            report => {
-
-                const date =
-                    iDate >= 0
-                        ? report[iDate] || ""
-                        : "";
-
-
-                const title =
-                    iTitle >= 0
-                        ? report[iTitle] || ""
-                        : "";
-
-
-                const type =
-                    iType >= 0
-                        ? report[iType] || ""
-                        : "";
-
-
-                const summary =
-                    iSummary >= 0
-                        ? report[iSummary] || ""
-                        : "";
-
-
-                const reporter =
-                    iReporter >= 0
-                        ? report[iReporter] || ""
-                        : "";
-
-
-                if (
-                    title.trim() === ""
-                ) {
-
-                    return;
-
-                }
-
-
-                reportsFeed.insertAdjacentHTML(
-                    "beforeend",
-
-                    `
-                    <div class="report-card">
-
-                        <div class="report-badge">
-                            ${type}
-                        </div>
-
-                        <h3>
-                            ${title}
-                        </h3>
-
-                        <p class="report-summary">
-                            ${summary}
-                        </p>
-
-                        <div class="report-meta">
-
-                            <div class="reporter">
-                                ${reporter}
-                            </div>
-
-                            <div class="report-date">
-                                ${date}
-                            </div>
-
-                        </div>
-
-                    </div>
-                    `
-                );
-
-            }
+        sidebar.classList.add(
+            "show"
         );
 
 
-    } catch (error) {
-
-        console.log(
-            "Secretariat Error:",
-            error
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-   WEEKLY LESSONS
-========================================================= */
-
-let lessonsData = [];
-
-
-async function fetchWeeklyLesson() {
-
-    const lessonTopic =
-        document.getElementById(
-            "lessonTopic"
+        overlay.classList.add(
+            "show"
         );
 
 
-    /* Page does not use lessons */
-
-    if (!lessonTopic) {
-
-        return;
-
-    }
-
-
-    try {
-
-        const response =
-            await fetch(
-                weeklyLessonCSV
-            );
-
-
-        const csvText =
-            await response.text();
-
-
-        if (
-            typeof Papa ===
-            "undefined"
-        ) {
-
-            console.log(
-                "PapaParse is not available."
-            );
-
-            return;
-
-        }
-
-
-        const result =
-            Papa.parse(
-                csvText,
-                {
-                    header: true,
-                    skipEmptyLines: true
-                }
-            );
-
-
-        lessonsData =
-            result.data.map(
-                row => ({
-
-                    lesson:
-                        row.Lesson
-                            ?.trim() || "",
-
-                    className:
-                        row.Class
-                            ?.trim() || "",
-
-                    topic:
-                        row.Topic
-                            ?.trim() || "",
-
-                    bibleText:
-                        row.BibleText
-                            ?.trim() || "",
-
-                    memoryVerse:
-                        row.MemoryVerse
-                            ?.trim() || "",
-
-                    summary:
-                        row.Summary
-                            ?.trim() || "",
-
-                    discussion:
-                        row.Discussion
-                            ?.trim() || "",
-
-                    yorubaAudio:
-                        row.YorubaAudio
-                            ?.trim() || ""
-
-                })
-            );
-
-
-        console.log(
-            "Parsed Lessons:",
-            lessonsData
+        document.body.classList.add(
+            "sidebar-open"
         );
 
 
-        const savedClass =
-            localStorage.getItem(
-                "selectedLessonClass"
-            );
+        /*
+         * Keep the existing body overflow
+         * behavior compatible with layout.css.
+         */
 
+        document.body.style.overflow =
+            "hidden";
 
-        switchLesson(
-            savedClass ||
-            "Senior"
-        );
 
+        if (menuButton) {
 
-    } catch (error) {
-
-        console.log(
-            "Weekly lesson error:",
-            error
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-   SWITCH LESSON
-========================================================= */
-
-function switchLesson(className) {
-
-    const lesson =
-        lessonsData.find(
-            item =>
-                item.className ===
-                className
-        );
-
-
-    if (!lesson) {
-
-        return;
-
-    }
-
-
-    const lessonTopic =
-        document.getElementById(
-            "lessonTopic"
-        );
-
-
-    const lessonBibleText =
-        document.getElementById(
-            "lessonBibleText"
-        );
-
-
-    const lessonMemoryVerse =
-        document.getElementById(
-            "lessonMemoryVerse"
-        );
-
-
-    if (lessonTopic) {
-
-        lessonTopic.innerText =
-            lesson.topic;
-
-    }
-
-
-    if (lessonBibleText) {
-
-        lessonBibleText.innerText =
-            lesson.bibleText;
-
-    }
-
-
-    if (lessonMemoryVerse) {
-
-        lessonMemoryVerse.innerText =
-            lesson.memoryVerse;
-
-    }
-
-
-    document
-        .querySelectorAll(
-            ".lesson-tab"
-        )
-        .forEach(
-            tab => {
-
-                tab.classList.remove(
-                    "active"
-                );
-
-
-                if (
-                    tab.textContent
-                        .trim() ===
-                    className
-                ) {
-
-                    tab.classList.add(
-                        "active"
-                    );
-
-                }
-
-            }
-        );
-
-
-    localStorage.setItem(
-        "selectedLessonClass",
-        className
-    );
-
-}
-
-
-/* =========================================================
-   SIDEBAR NAVIGATION
-========================================================= */
-
-document.addEventListener(
-    "DOMContentLoaded",
-    () => {
-
-
-        const sidebar =
-            document.getElementById(
-                "sidebar"
-            );
-
-
-        const hubButton =
-            document.getElementById(
-                "hubButton"
-            );
-
-
-        const menuBtn =
-            document.getElementById(
-                "mobileMenuBtn"
-            );
-
-
-        const overlay =
-            document.getElementById(
-                "sidebarOverlay"
-            );
-
-
-        if (
-            !sidebar ||
-            !overlay
-        ) {
-
-            return;
-
-        }
-
-
-        function openSidebar() {
-
-            sidebar.classList.add(
-                "show"
-            );
-
-
-            overlay.classList.add(
-                "show"
-            );
-
-
-            document.body.style.overflow =
-                "hidden";
-
-
-            if (menuBtn) {
-
-                menuBtn.setAttribute(
-                    "aria-expanded",
-                    "true"
-                );
-
-            }
-
-
-            if (hubButton) {
-
-                hubButton.setAttribute(
-                    "aria-expanded",
-                    "true"
-                );
-
-            }
-
-        }
-
-
-        function closeSidebar() {
-
-            sidebar.classList.remove(
-                "show"
-            );
-
-
-            overlay.classList.remove(
-                "show"
-            );
-
-
-            document.body.style.overflow =
-                "";
-
-
-            if (menuBtn) {
-
-                menuBtn.setAttribute(
-                    "aria-expanded",
-                    "false"
-                );
-
-            }
-
-
-            if (hubButton) {
-
-                hubButton.setAttribute(
-                    "aria-expanded",
-                    "false"
-                );
-
-            }
-
-        }
-
-
-        if (menuBtn) {
-
-            menuBtn.addEventListener(
-                "click",
-                openSidebar
+            menuButton.setAttribute(
+                "aria-expanded",
+                "true"
             );
 
         }
@@ -1060,77 +484,86 @@ document.addEventListener(
 
         if (hubButton) {
 
-            hubButton.addEventListener(
-                "click",
-                openSidebar
+            hubButton.setAttribute(
+                "aria-expanded",
+                "true"
+            );
+
+        }
+
+    }
+
+
+    /* -----------------------------------------------------
+       CLOSE SIDEBAR
+    ----------------------------------------------------- */
+
+    function closeSidebar() {
+
+        sidebar.classList.remove(
+            "show"
+        );
+
+
+        overlay.classList.remove(
+            "show"
+        );
+
+
+        document.body.classList.remove(
+            "sidebar-open"
+        );
+
+
+        document.body.style.overflow =
+            "";
+
+
+        if (menuButton) {
+
+            menuButton.setAttribute(
+                "aria-expanded",
+                "false"
             );
 
         }
 
 
-        overlay.addEventListener(
-            "click",
-            closeSidebar
-        );
+        if (hubButton) {
 
-
-        /* CLOSE WHEN A SIDEBAR LINK IS CLICKED */
-
-        sidebar
-            .querySelectorAll("a")
-            .forEach(
-                link => {
-
-                    link.addEventListener(
-                        "click",
-                        () => {
-
-                            if (
-                                window.innerWidth <=
-                                768
-                            ) {
-
-                                closeSidebar();
-
-                            }
-
-                        }
-                    );
-
-                }
+            hubButton.setAttribute(
+                "aria-expanded",
+                "false"
             );
 
+        }
 
-        /* CLOSE WITH ESCAPE KEY */
+    }
 
-        document.addEventListener(
-            "keydown",
+
+    /* -----------------------------------------------------
+       MOBILE MENU BUTTON
+    ----------------------------------------------------- */
+
+    if (menuButton) {
+
+        menuButton.addEventListener(
+            "click",
             event => {
 
+                event.preventDefault();
+
+                event.stopPropagation();
+
                 if (
-                    event.key === "Escape"
+                    sidebar.classList.contains("show")
                 ) {
 
                     closeSidebar();
 
-                }
+                } else {
 
-            }
-        );
-
-
-        /* RESET AFTER RETURNING TO DESKTOP */
-
-        window.addEventListener(
-            "resize",
-            () => {
-
-                if (
-                    window.innerWidth >
-                    768
-                ) {
-
-                    closeSidebar();
+                    openSidebar();
 
                 }
 
@@ -1138,96 +571,414 @@ document.addEventListener(
         );
 
     }
-);
+
+
+    /* -----------------------------------------------------
+       CENTER HUB BUTTON
+    ----------------------------------------------------- */
+
+    if (hubButton) {
+
+        hubButton.addEventListener(
+            "click",
+            event => {
+
+                event.preventDefault();
+
+                event.stopPropagation();
+
+                if (
+                    sidebar.classList.contains("show")
+                ) {
+
+                    closeSidebar();
+
+                } else {
+
+                    openSidebar();
+
+                }
+
+            }
+        );
+
+    }
+
+
+    /* -----------------------------------------------------
+       OVERLAY
+    ----------------------------------------------------- */
+
+    overlay.addEventListener(
+        "click",
+        event => {
+
+            event.preventDefault();
+
+            closeSidebar();
+
+        }
+    );
+
+
+    /* -----------------------------------------------------
+       SIDEBAR LINKS
+    ----------------------------------------------------- */
+
+    const sidebarLinks =
+        sidebar.querySelectorAll(
+            "a"
+        );
+
+
+    sidebarLinks.forEach(
+        link => {
+
+            link.addEventListener(
+                "click",
+                () => {
+
+                    if (
+                        window.innerWidth <=
+                        AFC_MAIN_CONFIG.MOBILE_BREAKPOINT
+                    ) {
+
+                        closeSidebar();
+
+                    }
+
+                }
+            );
+
+        }
+    );
+
+
+    /* -----------------------------------------------------
+       ESCAPE KEY
+    ----------------------------------------------------- */
+
+    document.addEventListener(
+        "keydown",
+        event => {
+
+            if (
+                event.key === "Escape" &&
+                sidebar.classList.contains("show")
+            ) {
+
+                closeSidebar();
+
+            }
+
+        }
+    );
+
+
+    /* -----------------------------------------------------
+       RESIZE
+    ----------------------------------------------------- */
+
+    window.addEventListener(
+        "resize",
+        () => {
+
+            /*
+             * If the viewport becomes desktop-sized,
+             * remove the mobile sidebar state.
+             */
+
+            if (
+                window.innerWidth >
+                AFC_MAIN_CONFIG.MOBILE_BREAKPOINT
+            ) {
+
+                closeSidebar();
+
+            }
+
+        }
+    );
+
+
+    /*
+     * Make sure initial ARIA state is correct.
+     */
+
+    if (menuButton) {
+
+        menuButton.setAttribute(
+            "aria-expanded",
+            "false"
+        );
+
+    }
+
+
+    if (hubButton) {
+
+        hubButton.setAttribute(
+            "aria-expanded",
+            "false"
+        );
+
+    }
+
+});
+
+
+/* =========================================================
+   THEME TOGGLE
+========================================================= */
+
+onDOMReady(() => {
+
+    const themeButton =
+        document.getElementById(
+            "themeBtn"
+        );
+
+
+    if (!themeButton) {
+
+        return;
+
+    }
+
+
+    const icon =
+        themeButton.querySelector(
+            "i"
+        );
+
+
+    function applyTheme(
+        theme
+    ) {
+
+        if (
+            theme === "dark"
+        ) {
+
+            document.documentElement.setAttribute(
+                "data-theme",
+                "dark"
+            );
+
+
+            if (icon) {
+
+                icon.classList.remove(
+                    "fa-moon"
+                );
+
+                icon.classList.add(
+                    "fa-sun"
+                );
+
+            }
+
+        }
+
+        else {
+
+            document.documentElement.setAttribute(
+                "data-theme",
+                "light"
+            );
+
+
+            if (icon) {
+
+                icon.classList.remove(
+                    "fa-sun"
+                );
+
+                icon.classList.add(
+                    "fa-moon"
+                );
+
+            }
+
+        }
+
+    }
+
+
+    /*
+     * Load saved theme.
+     */
+
+    const savedTheme =
+        localStorage.getItem(
+            AFC_MAIN_CONFIG.THEME_STORAGE_KEY
+        );
+
+
+    if (
+        savedTheme === "dark" ||
+        savedTheme === "light"
+    ) {
+
+        applyTheme(
+            savedTheme
+        );
+
+    }
+
+    else {
+
+        /*
+         * Respect system preference.
+         */
+
+        const prefersDark =
+            window.matchMedia &&
+            window.matchMedia(
+                "(prefers-color-scheme: dark)"
+            ).matches;
+
+
+        applyTheme(
+            prefersDark
+                ? "dark"
+                : "light"
+        );
+
+    }
+
+
+    /* -----------------------------------------------------
+       TOGGLE
+    ----------------------------------------------------- */
+
+    themeButton.addEventListener(
+        "click",
+        event => {
+
+            event.preventDefault();
+
+
+            const currentTheme =
+                document.documentElement.getAttribute(
+                    "data-theme"
+                );
+
+
+            const nextTheme =
+                currentTheme === "dark"
+                    ? "light"
+                    : "dark";
+
+
+            applyTheme(
+                nextTheme
+            );
+
+
+            localStorage.setItem(
+                AFC_MAIN_CONFIG.THEME_STORAGE_KEY,
+                nextTheme
+            );
+
+        }
+    );
+
+});
 
 
 /* =========================================================
    DASHBOARD GREETING
 ========================================================= */
 
-document.addEventListener(
-    "DOMContentLoaded",
-    () => {
+onDOMReady(() => {
+
+    const greetingText =
+        document.getElementById(
+            "greetingText"
+        );
 
 
-        const greetingText =
-            document.getElementById(
-                "greetingText"
-            );
+    const currentDate =
+        document.getElementById(
+            "currentDate"
+        );
 
 
-        const currentDate =
-            document.getElementById(
-                "currentDate"
-            );
+    /*
+     * These elements only exist on pages
+     * that use the dashboard greeting.
+     */
+
+    if (
+        !greetingText &&
+        !currentDate
+    ) {
+
+        return;
+
+    }
 
 
-        if (
-            !greetingText ||
-            !currentDate
-        ) {
-
-            return;
-
-        }
+    const now =
+        new Date();
 
 
-        const now =
-            new Date();
+    const hour =
+        now.getHours();
 
 
-        const hour =
-            now.getHours();
+    let greeting =
+        "Good Evening, Dear User.";
 
 
-        let greeting =
+    if (
+        hour >= 5 &&
+        hour < 12
+    ) {
+
+        greeting =
+            "Good Morning, Dear User.";
+
+    }
+
+    else if (
+        hour >= 12 &&
+        hour < 17
+    ) {
+
+        greeting =
+            "Good Afternoon, Dear User.";
+
+    }
+
+    else if (
+        hour >= 17 &&
+        hour < 21
+    ) {
+
+        greeting =
             "Good Evening, Dear User.";
 
+    }
 
-        if (
-            hour >= 5 &&
-            hour < 12
-        ) {
+    else {
 
-            greeting =
-                "Good Morning, Dear User.";
+        greeting =
+            "Good Night, Dear User.";
 
-        }
+    }
 
 
-        else if (
-            hour >= 12 &&
-            hour < 17
-        ) {
-
-            greeting =
-                "Good Afternoon, Dear User.";
-
-        }
-
-
-        else if (
-            hour >= 17 &&
-            hour < 21
-        ) {
-
-            greeting =
-                "Good Evening, Dear User.";
-
-        }
-
-
-        else {
-
-            greeting =
-                "Good Night, Dear User.";
-
-        }
-
+    if (greetingText) {
 
         greetingText.textContent =
             greeting;
 
+    }
+
+
+    if (currentDate) {
 
         currentDate.textContent =
             now.toLocaleDateString(
@@ -1250,30 +1001,138 @@ document.addEventListener(
             );
 
     }
-);
+
+});
 
 
 /* =========================================================
-   PAGE INITIALIZATION
+   PORTAL BRAND / HEADER SAFETY
 ========================================================= */
 
-document.addEventListener(
-    "DOMContentLoaded",
-    () => {
+onDOMReady(() => {
 
-        fetchSecretariatReports();
+    /*
+     * Prevent accidental button submission
+     * inside forms for shared header buttons.
+     */
 
-        fetchWeeklyLesson();
+    const headerButtons =
+        document.querySelectorAll(
+            ".mobile-menu-btn, .header-icon, .hub-button"
+        );
+
+
+    headerButtons.forEach(
+        button => {
+
+            if (
+                !button.getAttribute("type")
+            ) {
+
+                button.setAttribute(
+                    "type",
+                    "button"
+                );
+
+            }
+
+        }
+    );
+
+});
+
+
+/* =========================================================
+   SERVICE WORKER
+========================================================= */
+
+onDOMReady(() => {
+
+    /*
+     * Register the PWA service worker only if
+     * the browser supports it and the page is
+     * running under a supported origin.
+     */
+
+    if (
+        "serviceWorker" in navigator
+    ) {
+
+        window.addEventListener(
+            "load",
+            () => {
+
+                navigator.serviceWorker
+                    .register(
+                        "/service-worker.js"
+                    )
+                    .then(
+                        registration => {
+
+                            console.log(
+                                "AFC Isiu: Service worker registered.",
+                                registration.scope
+                            );
+
+                        }
+                    )
+                    .catch(
+                        error => {
+
+                            console.warn(
+                                "AFC Isiu: Service worker registration failed.",
+                                error
+                            );
+
+                        }
+                    );
+
+            }
+        );
+
+    }
+
+});
+
+
+/* =========================================================
+   GLOBAL ERROR REPORTING
+========================================================= */
+
+window.addEventListener(
+    "error",
+    event => {
+
+        console.error(
+            "AFC Isiu Portal Error:",
+            event.error || event.message
+        );
 
     }
 );
 
 
 /* =========================================================
-   AUTO REFRESH REPORTS
+   GLOBAL PROMISE ERROR REPORTING
 ========================================================= */
 
-setInterval(
-    fetchSecretariatReports,
-    30000
+window.addEventListener(
+    "unhandledrejection",
+    event => {
+
+        console.error(
+            "AFC Isiu Portal Promise Error:",
+            event.reason
+        );
+
+    }
+);
+
+
+/* =========================================================
+   STARTUP MESSAGE
+========================================================= */
+
+console.log(
+    "AFC Isiu Youth Portal: main.js loaded successfully."
 );
