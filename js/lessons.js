@@ -253,38 +253,33 @@ function normalizeLessonRow(row) {
    Supports HTML stored directly in the Google Sheet Summary
 ========================================================= */
 
-function formatLessonContent(text) {
+function formatLessonContent(html) {
 
-    const value =
-        cleanText(text);
+    const value = cleanText(html);
 
     if (!value) {
 
         return `
             <div class="lesson-empty-state">
-
                 <i class="fa-regular fa-file-lines"></i>
-
-                <p>
-                    Lesson content is not available yet.
-                </p>
-
+                <p>Lesson content is not available yet.</p>
             </div>
         `;
 
     }
 
-
     /*
-       IMPORTANT:
-
-       The Summary column contains HTML.
-
-       Therefore, we return the HTML directly instead of
-       escaping it with escapeHTML().
-    */
-
-    return value;
+     * Summary is trusted HTML coming from your
+     * WeeklyLesson Google Sheet.
+     *
+     * Render it as HTML so headings, paragraphs,
+     * lists, bold text, etc. work properly.
+     */
+    return `
+        <div class="lesson-rich-content">
+            ${value}
+        </div>
+    `;
 
 }
 
