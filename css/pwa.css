@@ -1,17 +1,36 @@
 /* =========================================================
    AFC ISIU YOUTH PORTAL
-   PWA INSTALL PAGE
+   SETTINGS / PWA PAGE
+   FILE: pwa.css
+
+   IMPORTANT:
+   - This file controls ONLY the settings page content.
+   - layout.css controls the global shell.
+   - Do NOT add sidebar, topbar or bottom-nav styles here.
 ========================================================= */
 
 
 /* =========================================================
-   PAGE
+   SETTINGS PAGE
 ========================================================= */
 
-.pwa-page {
-
+.settings-page {
     width: 100%;
+    box-sizing: border-box;
+}
 
+
+.settings-container {
+    width: 100%;
+    max-width: 1180px;
+    margin: 0 auto;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 30px;
+
+    box-sizing: border-box;
 }
 
 
@@ -19,118 +38,159 @@
    PAGE HEADING
 ========================================================= */
 
-.pwa-heading {
-
+.settings-heading {
     width: 100%;
-
-    max-width: 760px;
-
-    margin-bottom: 24px;
-
+    padding: 8px 2px 0;
+    box-sizing: border-box;
 }
 
 
-.pwa-badge {
+.settings-heading-copy {
+    max-width: 700px;
+}
 
+
+.settings-eyebrow {
     display: inline-flex;
-
     align-items: center;
+    gap: 8px;
 
-    gap: 7px;
+    margin-bottom: 10px;
 
-    padding: 6px 11px;
-
-    border-radius: 999px;
-
-    background:
-        rgba(234, 88, 12, .09);
-
-    color:
-        #ea580c;
-
-    font-size: .62rem;
-
+    font-family: "DM Sans", sans-serif;
+    font-size: .68rem;
     font-weight: 800;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
 
-    letter-spacing: .09em;
-
+    color: #ea580c;
 }
 
 
-.pwa-heading h1 {
-
-    margin: 11px 0 7px;
-
-    font-family:
-        "Bricolage Grotesque",
-        sans-serif;
-
-    font-size: clamp(
-        1.7rem,
-        3vw,
-        2.3rem
-    );
-
-    line-height: 1.1;
-
-    color:
-        #171717;
-
+.settings-eyebrow i {
+    font-size: .7rem;
 }
 
 
-.pwa-heading p {
-
-    max-width: 650px;
-
+.settings-heading h1 {
     margin: 0;
 
-    font-family:
-        "DM Sans",
-        sans-serif;
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-size: clamp(1.65rem, 3vw, 2.35rem);
+    line-height: 1.1;
+    font-weight: 750;
 
-    color:
-        #6b7280;
+    color: #0f172a;
 
-    font-size: .86rem;
+    letter-spacing: -.035em;
+}
 
+
+.settings-heading p {
+    margin: 10px 0 0;
+
+    max-width: 620px;
+
+    font-family: "DM Sans", sans-serif;
+    font-size: .85rem;
     line-height: 1.55;
+    font-weight: 400;
 
+    color: #64748b;
 }
 
 
 /* =========================================================
-   INSTALL CARD
+   SETTINGS SECTION
 ========================================================= */
 
-.pwa-install-card {
-
+.settings-section {
     width: 100%;
 
-    display: grid;
+    display: flex;
+    flex-direction: column;
 
-    grid-template-columns:
-        auto minmax(0, 1fr) auto;
+    gap: 16px;
+}
 
+
+.settings-section-heading {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+
+    width: 100%;
+}
+
+
+.settings-section-heading > div {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+
+.settings-section-heading span {
+    font-family: "DM Sans", sans-serif;
+    font-size: .62rem;
+    font-weight: 800;
+    letter-spacing: 1.1px;
+    text-transform: uppercase;
+
+    color: #94a3b8;
+}
+
+
+.settings-section-heading h2 {
+    margin: 0;
+
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-size: 1.15rem;
+    line-height: 1.25;
+    font-weight: 700;
+
+    color: #1e293b;
+}
+
+
+/* =========================================================
+   SETTINGS CARD
+========================================================= */
+
+.settings-card {
+    width: 100%;
+
+    display: flex;
     align-items: center;
 
     gap: 20px;
 
-    padding: 24px;
+    padding: 24px 26px;
 
-    border:
-        1px solid
-        rgba(0, 0, 0, .06);
+    box-sizing: border-box;
 
+    background: #ffffff;
+
+    border: 1px solid #ececf2;
     border-radius: 22px;
 
-    background:
-        #ffffff;
+    box-shadow:
+        0 8px 28px rgba(15, 23, 42, .045);
+
+    transition:
+        transform .25s ease,
+        box-shadow .25s ease,
+        border-color .25s ease;
+}
+
+
+.settings-card:hover {
+    transform: translateY(-2px);
+
+    border-color: rgba(234, 88, 12, .16);
 
     box-shadow:
-        0 10px 30px
-        rgba(15, 23, 42, .05);
-
+        0 14px 35px rgba(15, 23, 42, .07);
 }
 
 
@@ -139,29 +199,28 @@
 ========================================================= */
 
 .settings-card-icon {
+    width: 54px;
+    height: 54px;
 
-    width: 52px;
-
-    height: 52px;
-
-    flex-shrink: 0;
+    min-width: 54px;
 
     display: flex;
-
     align-items: center;
-
     justify-content: center;
 
-    border-radius: 15px;
+    border-radius: 17px;
 
-    background:
-        rgba(234, 88, 12, .09);
+    background: rgba(234, 88, 12, .09);
 
-    color:
-        #ea580c;
+    color: #ea580c;
 
     font-size: 1.15rem;
+}
 
+
+.settings-info-icon {
+    background: rgba(74, 7, 84, .08);
+    color: #4a0754;
 }
 
 
@@ -170,255 +229,197 @@
 ========================================================= */
 
 .settings-card-content {
-
     min-width: 0;
 
+    flex: 1;
+
+    display: flex;
+    flex-direction: column;
 }
 
 
-.pwa-card-label {
+.settings-card-label {
+    margin-bottom: 5px;
 
-    display: block;
-
-    margin-bottom: 4px;
-
-    color:
-        #ea580c;
-
-    font-family:
-        "DM Sans",
-        sans-serif;
-
-    font-size: .58rem;
-
+    font-family: "DM Sans", sans-serif;
+    font-size: .61rem;
     font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
 
-    letter-spacing: .09em;
-
+    color: #94a3b8;
 }
 
 
 .settings-card-content h3 {
+    margin: 0;
 
-    margin: 0 0 5px;
-
-    font-family:
-        "Bricolage Grotesque",
-        sans-serif;
-
+    font-family: "Bricolage Grotesque", sans-serif;
     font-size: 1.05rem;
+    line-height: 1.3;
+    font-weight: 700;
 
-    line-height: 1.25;
-
-    color:
-        #252525;
-
+    color: #1e293b;
 }
 
 
 .settings-card-content p {
+    margin: 6px 0 0;
 
     max-width: 650px;
 
-    margin: 0;
+    font-family: "DM Sans", sans-serif;
+    font-size: .78rem;
+    line-height: 1.55;
+    font-weight: 400;
 
-    font-family:
-        "DM Sans",
-        sans-serif;
-
-    color:
-        #6b7280;
-
-    font-size: .76rem;
-
-    line-height: 1.5;
-
+    color: #64748b;
 }
 
 
 /* =========================================================
-   INSTALL BUTTON
+   CARD ACTION
 ========================================================= */
 
-.settings-action-btn {
+.settings-card-action {
+    flex-shrink: 0;
+}
 
-    min-height: 44px;
+
+.settings-action-btn {
+    min-height: 46px;
 
     display: inline-flex;
-
     align-items: center;
-
     justify-content: center;
 
-    gap: 8px;
+    gap: 9px;
 
-    padding: 0 18px;
+    padding: 0 20px;
 
     border: 0;
-
     border-radius: 13px;
 
-    background:
-        #ea580c;
+    background: #ea580c;
+    color: #ffffff;
 
-    color:
-        #ffffff;
-
-    font-family:
-        "DM Sans",
-        sans-serif;
-
-    font-size: .72rem;
-
+    font-family: "DM Sans", sans-serif;
+    font-size: .75rem;
     font-weight: 700;
-
-    white-space: nowrap;
 
     cursor: pointer;
 
     box-shadow:
-        0 8px 18px
-        rgba(234, 88, 12, .18);
+        0 8px 18px rgba(234, 88, 12, .18);
 
     transition:
         transform .2s ease,
         background .2s ease,
         box-shadow .2s ease;
-
 }
 
 
 .settings-action-btn:hover {
+    background: #c2410c;
 
-    background:
-        #c2410c;
-
-    transform:
-        translateY(-2px);
+    transform: translateY(-1px);
 
     box-shadow:
-        0 11px 22px
-        rgba(234, 88, 12, .22);
-
+        0 10px 22px rgba(234, 88, 12, .22);
 }
 
 
 .settings-action-btn:active {
+    transform: translateY(0);
+}
 
-    transform:
-        scale(.97);
 
+.settings-action-btn i {
+    font-size: .75rem;
 }
 
 
 /* =========================================================
-   INFORMATION CARDS
+   PWA STATUS
 ========================================================= */
 
-.pwa-info-grid {
-
-    width: 100%;
-
-    display: grid;
-
-    grid-template-columns:
-        repeat(3, minmax(0, 1fr));
-
-    gap: 15px;
-
-    margin-top: 18px;
-
-}
-
-
-.pwa-info-card {
-
-    min-width: 0;
-
-    display: flex;
-
-    align-items: flex-start;
-
-    gap: 13px;
-
-    padding: 18px;
-
-    border:
-        1px solid
-        rgba(0, 0, 0, .055);
-
-    border-radius: 17px;
-
-    background:
-        #ffffff;
-
-    box-shadow:
-        0 7px 22px
-        rgba(15, 23, 42, .035);
-
-}
-
-
-.pwa-info-icon {
-
-    width: 37px;
-
-    height: 37px;
-
-    flex-shrink: 0;
-
-    display: flex;
-
+.pwa-status {
+    display: inline-flex;
     align-items: center;
 
-    justify-content: center;
+    gap: 7px;
 
-    border-radius: 11px;
+    width: fit-content;
 
-    background:
-        rgba(8, 145, 178, .08);
+    margin-top: 10px;
 
-    color:
-        #0891b2;
+    font-family: "DM Sans", sans-serif;
+    font-size: .66rem;
+    font-weight: 600;
 
-    font-size: .8rem;
-
+    color: #64748b;
 }
 
 
-.pwa-info-card h4 {
+.pwa-status-dot {
+    width: 7px;
+    height: 7px;
 
-    margin: 1px 0 5px;
+    border-radius: 50%;
 
-    font-family:
-        "Bricolage Grotesque",
-        sans-serif;
+    background: #0ea472;
 
-    font-size: .86rem;
-
-    line-height: 1.25;
-
-    color:
-        #292929;
-
+    box-shadow:
+        0 0 0 4px rgba(14, 164, 114, .09);
 }
 
 
-.pwa-info-card p {
+/* =========================================================
+   APP INFORMATION
+========================================================= */
 
-    margin: 0;
+.app-info-card {
+    align-items: center;
+}
 
-    font-family:
-        "DM Sans",
-        sans-serif;
 
-    font-size: .7rem;
+.app-version {
+    min-width: 65px;
 
-    line-height: 1.5;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
 
-    color:
-        #777;
+    gap: 2px;
+}
 
+
+.app-version span {
+    font-family: "DM Sans", sans-serif;
+    font-size: .58rem;
+    font-weight: 800;
+    letter-spacing: .9px;
+
+    color: #94a3b8;
+}
+
+
+.app-version strong {
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-size: .82rem;
+    font-weight: 700;
+
+    color: #4a0754;
+}
+
+
+/* =========================================================
+   FOCUS ACCESSIBILITY
+========================================================= */
+
+.settings-action-btn:focus-visible {
+    outline: 3px solid rgba(234, 88, 12, .2);
+    outline-offset: 3px;
 }
 
 
@@ -428,28 +429,13 @@
 
 @media (max-width: 900px) {
 
-    .pwa-install-card {
-
-        grid-template-columns:
-            auto minmax(0, 1fr);
-
+    .settings-container {
+        max-width: 100%;
     }
 
 
-    .settings-action-btn {
-
-        grid-column: 1 / -1;
-
-        width: 100%;
-
-    }
-
-
-    .pwa-info-grid {
-
-        grid-template-columns:
-            1fr;
-
+    .settings-card {
+        padding: 22px;
     }
 
 }
@@ -459,164 +445,187 @@
    MOBILE
 ========================================================= */
 
-@media (max-width: 768px) {
+@media (max-width: 640px) {
 
-    .pwa-page {
+    .settings-page {
+        padding-left: 16px;
+        padding-right: 16px;
 
-        width: 100%;
+        /*
+         * Gives breathing room below the fixed topbar
+         * without using <br>.
+         */
+        padding-top: 18px;
 
+        padding-bottom: 100px;
     }
 
 
-    .pwa-heading {
-
-        margin-bottom: 18px;
-
+    .settings-container {
+        gap: 24px;
     }
 
 
-    .pwa-badge {
+    /* -----------------------------------------------------
+       HEADING
+    ----------------------------------------------------- */
 
-        font-size: .57rem;
-
-        padding: 5px 9px;
-
+    .settings-heading {
+        padding: 0;
     }
 
 
-    .pwa-heading h1 {
+    .settings-eyebrow {
+        margin-bottom: 8px;
 
-        margin-top: 9px;
+        font-size: .61rem;
+    }
 
+
+    .settings-heading h1 {
         font-size: 1.55rem;
-
-        line-height: 1.1;
-
+        line-height: 1.12;
     }
 
 
-    .pwa-heading p {
+    .settings-heading p {
+        margin-top: 8px;
 
         font-size: .76rem;
-
         line-height: 1.5;
-
     }
 
 
-    /* INSTALL CARD */
+    /* -----------------------------------------------------
+       SECTION
+    ----------------------------------------------------- */
 
-    .pwa-install-card {
+    .settings-section {
+        gap: 13px;
+    }
 
+
+    .settings-section-heading h2 {
+        font-size: 1rem;
+    }
+
+
+    .settings-section-heading span {
+        font-size: .58rem;
+    }
+
+
+    /* -----------------------------------------------------
+       CARD
+    ----------------------------------------------------- */
+
+    .settings-card {
         display: grid;
 
-        grid-template-columns:
-            auto minmax(0, 1fr);
+        grid-template-columns: auto minmax(0, 1fr);
 
-        gap: 14px;
+        align-items: start;
 
-        padding: 18px;
+        gap: 15px;
 
-        border-radius: 17px;
+        padding: 20px 18px;
 
+        border-radius: 20px;
+    }
+
+
+    .settings-card:hover {
+        transform: none;
     }
 
 
     .settings-card-icon {
+        width: 46px;
+        height: 46px;
 
-        width: 43px;
+        min-width: 46px;
 
-        height: 43px;
+        border-radius: 14px;
 
-        border-radius: 12px;
+        font-size: 1rem;
+    }
 
-        font-size: .95rem;
 
+    .settings-card-label {
+        margin-bottom: 4px;
+
+        font-size: .56rem;
     }
 
 
     .settings-card-content h3 {
-
-        font-size: .92rem;
-
+        font-size: .94rem;
+        line-height: 1.3;
     }
 
 
     .settings-card-content p {
+        margin-top: 6px;
 
-        font-size: .7rem;
-
+        font-size: .72rem;
         line-height: 1.5;
-
     }
 
 
-    .pwa-card-label {
+    /* -----------------------------------------------------
+       STATUS
+    ----------------------------------------------------- */
 
-        font-size: .52rem;
+    .pwa-status {
+        margin-top: 9px;
 
+        font-size: .61rem;
     }
 
 
-    .settings-action-btn {
+    /* -----------------------------------------------------
+       BUTTON
+    ----------------------------------------------------- */
 
+    .settings-card-action {
         grid-column: 1 / -1;
 
         width: 100%;
 
-        min-height: 44px;
-
-        border-radius: 12px;
-
-        font-size: .7rem;
-
+        margin-top: 2px;
     }
 
 
-    /* INFO CARDS */
+    .settings-action-btn {
+        width: 100%;
 
-    .pwa-info-grid {
+        min-height: 47px;
 
-        grid-template-columns: 1fr;
+        border-radius: 13px;
 
-        gap: 10px;
-
-        margin-top: 14px;
-
+        font-size: .73rem;
     }
 
 
-    .pwa-info-card {
+    /* -----------------------------------------------------
+       APP INFO
+    ----------------------------------------------------- */
 
-        padding: 15px;
-
-        border-radius: 15px;
-
+    .app-info-card {
+        grid-template-columns: auto minmax(0, 1fr);
     }
 
 
-    .pwa-info-icon {
+    .app-version {
+        grid-column: 1 / -1;
 
-        width: 35px;
+        align-items: flex-start;
 
-        height: 35px;
+        width: 100%;
 
-        border-radius: 10px;
+        padding-top: 12px;
 
-    }
-
-
-    .pwa-info-card h4 {
-
-        font-size: .82rem;
-
-    }
-
-
-    .pwa-info-card p {
-
-        font-size: .68rem;
-
+        border-top: 1px solid #f0f0f4;
     }
 
 }
@@ -628,105 +637,43 @@
 
 @media (max-width: 380px) {
 
-    .pwa-heading h1 {
-
-        font-size: 1.4rem;
-
+    .settings-page {
+        padding-left: 12px;
+        padding-right: 12px;
     }
 
 
-    .pwa-install-card {
-
-        padding: 15px;
-
-        gap: 11px;
-
-    }
-
-
-    .settings-card-icon {
-
-        width: 39px;
-
-        height: 39px;
-
-        border-radius: 11px;
-
+    .settings-card {
+        padding: 18px 15px;
     }
 
 
     .settings-card-content h3 {
-
-        font-size: .86rem;
-
+        font-size: .9rem;
     }
 
 
     .settings-card-content p {
-
-        font-size: .67rem;
-
+        font-size: .69rem;
     }
 
 
-    .pwa-info-card {
-
-        padding: 13px;
-
+    .settings-action-btn {
+        min-height: 45px;
     }
 
 }
 
 
 /* =========================================================
-   DARK MODE
+   REDUCED MOTION
 ========================================================= */
 
-@media (prefers-color-scheme: dark) {
+@media (prefers-reduced-motion: reduce) {
 
-    .pwa-heading h1 {
-
-        color:
-            #f3f4f6;
-
-    }
-
-
-    .pwa-heading p {
-
-        color:
-            #9ca3af;
-
-    }
-
-
-    .pwa-install-card,
-    .pwa-info-card {
-
-        background:
-            #18181b;
-
-        border-color:
-            rgba(255,255,255,.07);
-
-    }
-
-
-    .settings-card-content h3,
-    .pwa-info-card h4 {
-
-        color:
-            #f4f4f5;
-
-    }
-
-
-    .settings-card-content p,
-    .pwa-info-card p {
-
-        color:
-            #a1a1aa;
-
+    .settings-card,
+    .settings-action-btn {
+        transition: none;
     }
 
 }
