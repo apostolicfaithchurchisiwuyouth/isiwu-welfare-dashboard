@@ -1136,104 +1136,90 @@ function renderDiscussion(discussion) {
 
 
 /* =========================================================
-   AUDIO RENDERER
+   RENDER YORUBA AUDIO
 ========================================================= */
 
 function renderAudio(audioValue) {
 
-    const audio =
+    const audioUrl =
         cleanText(audioValue);
 
+    const audioCard =
+        getElement("yorubaAudioCard");
 
-    const possibleIds = [
-
-        "lessonAudio",
-        "yorubaAudio",
-        "audioContent",
-        "lessonAudioContent"
-
-    ];
+    const audioPlayer =
+        getElement("yorubaAudio");
 
 
-    let container = null;
+    /*
+       If the Yoruba audio card is not present,
+       safely stop without breaking the lesson.
+    */
 
+    if (!audioCard || !audioPlayer) {
 
-    for (const id of possibleIds) {
+        console.warn(
+            "Yoruba audio elements were not found in lessons.html."
+        );
 
-        const element =
-            getElement(id);
-
-
-        if (element) {
-
-            container =
-                element;
-
-            break;
-
-        }
-
-    }
-
-
-    if (!container) {
-
-        container =
-            document.querySelector(
-                ".lesson-audio"
-            );
+        return;
 
     }
 
 
     /*
-       If the HTML does not currently contain an
-       audio container, simply do nothing.
+       Always reset the player first.
     */
 
-    if (!container) {
+    audioPlayer.pause();
+
+    audioPlayer.removeAttribute("src");
+
+    audioPlayer.load();
+
+
+    /*
+       No audio supplied in Google Sheet.
+       Hide the entire card.
+    */
+
+    if (!audioUrl) {
+
+        audioCard.hidden = true;
+
+        audioCard.style.display = "none";
 
         return;
 
     }
 
 
-    if (!audio) {
+    /*
+       Audio URL exists.
+       Show the card.
+    */
 
-        container.innerHTML = "";
+    audioCard.hidden = false;
 
-        container.hidden = true;
-
-        return;
-
-    }
-
-
-    container.hidden = false;
+    audioCard.style.display = "";
 
 
-    container.innerHTML = `
+    /*
+       Set the audio source directly.
+    */
 
-        <div class="lesson-audio-inner">
+    audioPlayer.src = audioUrl;
 
-            <div class="lesson-audio-heading">
+    audioPlayer.preload = "none";
 
-                <i class="fa-solid fa-volume-high"></i>
 
-                <span>
-                    Yoruba Memory Verse
-                </span>
+    /*
+       Load the new audio source.
+    */
 
-            </div>
-
-            ${formatAudio(audio)}
-
-        </div>
-
-    `;
+    audioPlayer.load();
 
 }
-
 
 /* =========================================================
    LESSON META
