@@ -1,4 +1,4 @@
-const CACHE_VERSION = "afc-isiu-pwa-v4";
+const CACHE_VERSION = "afc-isiu-pwa-v5";
 
 const STATIC_CACHE = `${CACHE_VERSION}-static`;
 
@@ -28,7 +28,7 @@ const APP_SHELL = [
 "/js/main.js",
 
 "/images/logo.png"
-```
+
 
 ];
 
@@ -78,7 +78,7 @@ event.waitUntil(
     })
 
 );
-```
+
 
 });
 
@@ -88,7 +88,6 @@ ACTIVATE
 
 self.addEventListener("activate", event => {
 
-```
 event.waitUntil(
 
     caches.keys()
@@ -150,7 +149,7 @@ event.waitUntil(
         })
 
 );
-```
+
 
 });
 
@@ -160,7 +159,7 @@ FETCH HANDLER
 
 self.addEventListener("fetch", event => {
 
-```
+
 const request = event.request;
 
 
@@ -223,7 +222,7 @@ event.respondWith(
     handleAsset(request)
 
 );
-```
+
 
 });
 
@@ -233,7 +232,7 @@ NAVIGATION HANDLER
 
 async function handleNavigation(request) {
 
-```
+
 const pageCache =
     await caches.open(PAGE_CACHE);
 
@@ -398,7 +397,7 @@ catch (error) {
     );
 
 }
-```
+
 
 }
 
@@ -408,7 +407,7 @@ ASSET HANDLER
 
 async function handleAsset(request) {
 
-```
+
 const cachedResponse =
     await caches.match(request);
 
@@ -468,6 +467,6 @@ catch (error) {
     throw error;
 
 }
-```
+
 
 }
