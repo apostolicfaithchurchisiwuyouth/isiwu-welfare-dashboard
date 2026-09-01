@@ -1,775 +1,808 @@
 /* =========================================================
    AFC ISIU YOUTH PORTAL
-   MAIN.CSS — CORRECTED RESPONSIVE HUB
+   FINAL HEADER / STICKY FIX
 ========================================================= */
 
+/*
+   IMPORTANT:
+   The actual HTML uses:
 
-/* =========================
-   RESET
-========================= */
+   <header class="top-header">
 
-* {
-    box-sizing: border-box;
-    -webkit-tap-highlight-color: transparent;
-}
+   Therefore the sticky behavior must target
+   .top-header, NOT only .topbar.
+*/
 
-html,
-body {
-    margin: 0;
-    padding: 0;
-    min-height: 100%;
-}
-
-html {
-    overflow-x: hidden;
-}
-
-body {
-    font-family: "DM Sans", sans-serif;
-    color: var(--text);
-    background: var(--background);
-    overflow-x: hidden;
-
-    /*
-       Extra bottom space ensures the last card
-       can scroll completely above the fixed
-       mobile bottom navigation.
-    */
-    padding-bottom: 130px;
-}
-
-
-/* =========================
-   VARIABLES
-========================= */
-
-:root {
-
-    --brand: #ea580c;
-    --brand-dark: #fb923c;
-    --brand-light: #ff4e5314;
-
-    --ink: #0891b2;
-    --ink-soft: #06b6d4;
-    --ink-mute: #f0f8fa;
-
-    --bg: #f7faf8;
-    --surface: #ffffff;
-
-    --green: #0EA472;
-
-    --primary: #4a0754;
-    --primary-dark: #0A0016;
-    --secondary: #4a0754;
-
-    --light: #ffffff;
-    --background: #f7f7fb;
-
-    --text: #0F172A;
-    --text-light: #6b7280;
-
-    --border: #ececf2;
-
-    --radius: 25px;
-    --transition: .35s ease;
-}
-
-
-/* =========================
-   TYPOGRAPHY
-========================= */
-
-h1,
-h2,
-h3,
-h4,
-.logo {
-    font-family: "Bricolage Grotesque", sans-serif;
-}
-
-p {
-    font-family: "DM Sans", sans-serif;
-    font-size: .78rem;
-}
-
-
-/* =========================
-   LINKS / BUTTONS
-========================= */
-
-button,
-a {
-    outline: none;
-    border: none;
-    text-decoration: none;
+/* Remove generic positioning conflicts */
+header{
+    width:100%;
+    min-height:0;
+    height:auto;
+    overflow:visible;
 }
 
 
 /* =========================================================
-   MAIN HUB
+   MAIN CONTENT AREA
 ========================================================= */
 
-.hub {
-    width: 100%;
-    margin: 0;
-    padding: 0;
+.main-area{
+    flex:1;
+    width:100%;
+    min-width:0;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
 }
 
 
 /* =========================================================
-   HUB GRID
+   STICKY TOP HEADER
 ========================================================= */
 
-.hub-grid {
+.top-header{
 
-    display: grid;
+    position:sticky !important;
 
-    /*
-       TWO CARDS SIDE-BY-SIDE
-       ON MOBILE AND DESKTOP.
-    */
-    grid-template-columns:
-        repeat(2, minmax(0, 1fr));
+    top:0 !important;
 
-    /*
-       Increased spacing between cards.
-    */
-    column-gap: 1.2rem;
-    row-gap: 1.2rem;
+    z-index:1000 !important;
 
-    width: 100%;
+    width:100%;
 
-    /*
-       Gives the grid breathing room from
-       the surrounding content.
-    */
-    padding: 0 0.8rem 2rem;
-}
+    height:82px;
 
+    min-height:82px;
 
-/* =========================================================
-   HUB CARD
-========================================================= */
+    flex-shrink:0;
 
-.hub-item {
+    display:flex;
 
-    position: relative;
+    align-items:center;
 
-    overflow: hidden;
+    justify-content:space-between;
 
-    /*
-       Slightly taller cards make the larger
-       typography comfortable.
-    */
-    min-height: 10.5rem;
+    padding:0 30px;
 
-    padding: 1.15rem;
+    background:rgba(255,255,255,.96);
 
-    border-radius: 1.45rem;
+    backdrop-filter:blur(18px);
 
-    background:
-        linear-gradient(
-            180deg,
-            rgba(255,255,255,.97),
-            rgba(248,248,252,.94)
-        );
+    -webkit-backdrop-filter:blur(18px);
 
-    border:
-        1px solid rgba(255,255,255,.85);
+    border-bottom:1px solid rgba(0,0,0,.06);
 
     box-shadow:
-        0 .5rem 1.4rem rgba(0,0,0,.06),
-        inset 0 1px 0 rgba(255,255,255,.8);
+        0 4px 18px rgba(0,0,0,.06);
 
-    transition:
-        transform .35s ease,
-        box-shadow .35s ease;
-
-    /*
-       Prevents text/content from forcing
-       one card wider than the other.
-    */
-    min-width: 0;
+    isolation:isolate;
 }
 
 
 /* =========================================================
-   CARD DECORATIVE GLOW
+   HEADER LEFT
 ========================================================= */
 
-.hub-item::before {
+.header-left{
 
-    content: "";
+    display:flex;
 
-    position: absolute;
+    align-items:center;
 
-    width: 8rem;
-    height: 8rem;
+    gap:14px;
 
-    border-radius: 50%;
+    min-width:0;
 
-    background:
-        radial-gradient(
-            circle,
-            rgba(131,80,255,.14),
-            transparent 70%
-        );
-
-    top: -4rem;
-    right: -4rem;
-
-    pointer-events: none;
 }
 
 
 /* =========================================================
-   CARD HOVER
+   MOBILE MENU BUTTON
 ========================================================= */
 
-.hub-item:hover {
+.mobile-menu-button{
 
-    transform:
-        translateY(-.25rem);
+    display:none;
 
-    box-shadow:
-        0 1.2rem 2.2rem
-        rgba(80,50,180,.12);
+    width:42px;
+
+    height:42px;
+
+    flex-shrink:0;
+
+    align-items:center;
+
+    justify-content:center;
+
+    border:0;
+
+    border-radius:12px;
+
+    background:rgba(74,7,84,.06);
+
+    color:var(--primary);
+
+    cursor:pointer;
+
+    padding:0;
+
+    outline:none;
+
+    -webkit-tap-highlight-color:transparent;
+
+}
+
+
+.mobile-menu-button:hover{
+
+    background:rgba(74,7,84,.10);
+
+}
+
+
+.mobile-menu-button:focus,
+.mobile-menu-button:active{
+
+    outline:none;
+
+    box-shadow:none;
+
 }
 
 
 /* =========================================================
-   FEATURED CARD
+   MOBILE BRAND
 ========================================================= */
 
-.featured {
+.mobile-brand{
 
-    /*
-       Featured lesson remains full width.
-       The remaining cards stay two-by-two.
-    */
-    grid-column: span 2;
+    display:flex;
 
-    min-height: 10.5rem;
+    align-items:center;
+
+    gap:10px;
+
+    color:var(--text);
+
+    text-decoration:none;
+
+    min-width:0;
+
+}
+
+
+.mobile-brand-icon{
+
+    width:38px;
+
+    height:38px;
+
+    flex-shrink:0;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    border-radius:12px;
 
     background:
         linear-gradient(
             135deg,
-            #ffffff,
-            rgba(246,242,255,.95)
+            var(--brand),
+            var(--brand-dark)
         );
+
+    color:#fff;
+
 }
 
 
-/* =========================================================
-   CARD HEADER
-========================================================= */
+.mobile-brand-icon svg{
 
-.hub-header {
+    width:19px;
 
-    display: flex;
+    height:19px;
 
-    align-items: center;
-
-    justify-content: space-between;
-
-    gap: .5rem;
 }
 
 
-/* =========================================================
-   CARD ICON
-========================================================= */
+.mobile-brand-text{
 
-.hub-icon {
+    display:flex;
 
-    width: 2.65rem;
-    height: 2.65rem;
+    flex-direction:column;
 
-    flex-shrink: 0;
+    min-width:0;
 
-    border-radius: .95rem;
-
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
-    box-shadow:
-        0 .75rem 1.5rem
-        rgba(108,43,217,.22);
-}
-
-.hub-icon i {
-
-    color: white;
-
-    font-size: 1rem;
 }
 
 
-/* =========================================================
-   CARD COUNT
-========================================================= */
-
-.hub-count {
-
-    margin-right: 3px;
-
-    margin-top: 1.9rem;
-
-    font-size: .72rem;
-
-    font-weight: 700;
-
-    color: var(--text-light);
-}
-
-
-/* =========================================================
-   CARD TITLE
-========================================================= */
-
-.hub-item h4 {
-
-    margin:
-        1rem 0 0;
+.mobile-brand-text strong{
 
     font-family:
         "Bricolage Grotesque",
         sans-serif;
 
-    /*
-       Increased from .9rem.
-    */
-    font-size: .9rem;
+    font-size:.88rem;
 
-    font-weight: 700;
+    font-weight:800;
 
-    line-height: 1.3;
+    line-height:1.1;
 
-    color: var(--text);
+    color:var(--text);
 
-    /*
-       Prevents awkward overflow.
-    */
-    overflow-wrap: break-word;
 }
 
 
-/* =========================================================
-   CARD DESCRIPTION
-========================================================= */
+.mobile-brand-text small{
 
-.hub-item p {
-
-    margin:
-        .65rem 0 0;
+    margin-top:2px;
 
     font-family:
         "DM Sans",
         sans-serif;
 
-    /*
-       Increased from .7rem.
-    */
-    font-size: .78rem;
+    font-size:.62rem;
 
-    line-height: 1.25;
+    line-height:1.1;
 
-    color: var(--text-light);
+    color:var(--text-light);
 
-    overflow-wrap: break-word;
 }
 
 
 /* =========================================================
-   CARD COLORS
+   HEADER TITLE
 ========================================================= */
 
-.quiz-icon {
+.header-title{
 
-    background:
-        linear-gradient(
-            135deg,
-            #7c3aed,
-            #a855f7
-        );
+    flex:1;
+
+    min-width:0;
+
+    margin-left:20px;
+
 }
 
-.lesson-icon {
 
-    background:
-        linear-gradient(
-            135deg,
-            #2563eb,
-            #3b82f6
-        );
+.header-eyebrow{
+
+    display:block;
+
+    margin-bottom:2px;
+
+    font-family:
+        "DM Sans",
+        sans-serif;
+
+    font-size:.58rem;
+
+    font-weight:600;
+
+    color:var(--text-light);
+
 }
 
-.event-icon {
 
-    background:
-        linear-gradient(
-            135deg,
-            #ea580c,
-            #fb923c
-        );
-}
+.header-title h1{
 
-.welfare-icon {
+    margin:0;
 
-    background:
-        linear-gradient(
-            135deg,
-            #16a34a,
-            #22c55e
-        );
-}
+    font-family:
+        "Bricolage Grotesque",
+        sans-serif;
 
-.prayer-icon {
+    font-size:1rem;
 
-    background:
-        linear-gradient(
-            135deg,
-            #dc2626,
-            #f43f5e
-        );
-}
+    line-height:1.2;
 
-.gallery-icon {
+    font-weight:800;
 
-    background:
-        linear-gradient(
-            135deg,
-            #0891b2,
-            #06b6d4
-        );
+    color:var(--text);
+
 }
 
 
 /* =========================================================
-   BADGE
+   HEADER ACTIONS
 ========================================================= */
 
-.hub-badge {
+.header-actions{
 
-    position: absolute;
+    display:flex;
 
-    top: 1rem;
-    right: 1rem;
+    align-items:center;
 
-    padding:
-        .3rem .65rem;
+    gap:10px;
 
-    border-radius: 999px;
+    flex-shrink:0;
 
-    font-size: .62rem;
-
-    font-weight: 700;
-
-    letter-spacing: .08rem;
-
-    background:
-        rgba(108,43,217,.10);
-
-    color:
-        var(--primary);
 }
 
 
 /* =========================================================
-   MOBILE
+   HEADER ICON BUTTON
 ========================================================= */
 
-@media (max-width: 767px) {
+.header-icon-button{
 
-    .hub {
+    width:42px;
 
-        width: 100%;
+    height:42px;
 
-        /*
-           Gives the hub breathing space from
-           the phone edges.
-        */
-        padding:
-            0 .35rem;
-    }
+    display:flex;
 
+    align-items:center;
 
-    .hub-grid {
+    justify-content:center;
 
-        /*
-           ALWAYS TWO COLUMNS.
-        */
-        grid-template-columns:
-            repeat(2, minmax(0, 1fr));
+    position:relative;
 
-        /*
-           CLEAR SPACE BETWEEN CARDS.
-        */
-        column-gap: 1rem;
-        row-gap: 1rem;
+    border-radius:13px;
 
-        padding:
-            0 .45rem 2.5rem;
-    }
+    color:var(--text);
 
+    background:rgba(74,7,84,.05);
 
-    .hub-item {
-
-        min-height:
-            10.5rem;
-
-        padding:
-            1rem;
-
-        border-radius:
-            1.35rem;
-    }
-
-
-    .featured {
-
-        grid-column:
-            span 2;
-
-        min-height:
-            10.5rem;
-    }
-
-
-    .hub-icon {
-
-        width:
-            2.55rem;
-
-        height:
-            2.55rem;
-
-        border-radius:
-            .9rem;
-    }
-
-
-    .hub-icon i {
-
-        font-size:
-            .95rem;
-    }
-
-
-    .hub-item h4 {
-
-        font-size:
-            .9rem;
-
-        line-height:
-            1.3;
-    }
-
-
-    .hub-item p {
-
-        font-size:
-            .78rem;
-
-        line-height:
-            1.25;
-    }
-
-
-    .hub-count {
-
-        font-size:
-            .7rem;
-    }
-}
-
-
-/* =========================================================
-   SMALL PHONES
-========================================================= */
-
-@media (max-width: 380px) {
-
-    .hub-grid {
-
-        column-gap:
-            .8rem;
-
-        row-gap:
-            .8rem;
-
-        padding-left:
-            .3rem;
-
-        padding-right:
-            .3rem;
-    }
-
-
-    .hub-item {
-
-        padding:
-            .9rem;
-
-        min-height:
-            10rem;
-    }
-
-
-    .hub-item h4 {
-
-        font-size:
-            .88rem;
-    }
-
-
-    .hub-item p {
-
-        font-size:
-            .76rem;
-
-        line-height:
-            1.25;
-    }
-}
-
-
-/* =========================================================
-   TABLET / DESKTOP
-========================================================= */
-
-@media (min-width: 768px) {
-
-    .hub-grid {
-
-        /*
-           Still two cards side-by-side,
-           exactly as requested.
-        */
-        grid-template-columns:
-            repeat(2, minmax(0, 1fr));
-
-        column-gap:
-            1.4rem;
-
-        row-gap:
-            1.4rem;
-
-        padding:
-            0 1rem 3rem;
-    }
-
-
-    .hub-item {
-
-        min-height:
-            11rem;
-
-        padding:
-            1.25rem;
-    }
-
-
-    .featured {
-
-        grid-column:
-            span 2;
-    }
-
-
-    .hub-item h4 {
-
-        font-size:
-            1rem;
-    }
-
-
-    .hub-item p {
-
-        font-size:
-            .78rem;
-    }
-}
-
-
-/* =========================================================
-   COLORS
-========================================================= */
-
-.primary-btn,
-.secondary-btn,
-.icon-btn,
-.feature-card,
-.hub-item,
-.bottom-nav a,
-.hub-button {
+    text-decoration:none;
 
     transition:
-        transform .25s ease,
-        box-shadow .25s ease,
-        background .25s ease;
+        background .25s ease,
+        transform .25s ease;
+
+}
+
+
+.header-icon-button:hover{
+
+    background:rgba(74,7,84,.09);
+
+    transform:translateY(-1px);
+
+}
+
+
+.header-icon-button svg{
+
+    width:19px;
+
+    height:19px;
+
 }
 
 
 /* =========================================================
-   GLASS EFFECT
+   HEADER AVATAR
 ========================================================= */
 
-.feature-card,
-.hub-item {
+.header-avatar{
+
+    width:42px;
+
+    height:42px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    border-radius:50%;
 
     background:
-        rgba(255,255,255,.85);
+        linear-gradient(
+            135deg,
+            var(--primary),
+            var(--primary-dark)
+        );
 
-    backdrop-filter:
-        blur(18px);
+    color:#fff;
 
-    -webkit-backdrop-filter:
-        blur(18px);
+    text-decoration:none;
 
-    border:
-        1px solid
-        rgba(255,255,255,.6);
+    overflow:hidden;
+
+}
+
+
+.header-avatar-content{
+
+    width:100%;
+
+    height:100%;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    font-family:
+        "Bricolage Grotesque",
+        sans-serif;
+
+    font-size:.85rem;
+
+    font-weight:800;
+
+}
+
+
+.header-avatar-content svg{
+
+    width:18px;
+
+    height:18px;
+
 }
 
 
 /* =========================================================
-   FOOTER / BOTTOM NAV SAFETY
+   NOTIFICATION DOT
 ========================================================= */
 
-body {
+.header-notification-dot{
 
-    /*
-       This is important.
+    position:absolute;
 
-       Your bottom navigation is fixed.
-       Without enough bottom padding,
-       the last Gallery card can disappear
-       underneath the navigation.
-    */
-    padding-bottom:
-        140px;
+    top:9px;
+
+    right:9px;
+
+    width:7px;
+
+    height:7px;
+
+    border-radius:50%;
+
+    background:#ef4444;
+
+    border:2px solid #fff;
+
 }
 
 
 /* =========================================================
-   DARK MODE
+   GUEST HEADER ACTIONS
 ========================================================= */
 
-@media (prefers-color-scheme: dark) {
+.header-auth-actions{
 
-    :root {
+    display:flex;
 
-        --background:
-            #101114;
+    align-items:center;
 
-        --text:
-            #ffffff;
+    gap:8px;
 
-        --text-light:
-            #c5c5c5;
+}
+
+
+.header-login-button,
+.header-register-button{
+
+    min-height:40px;
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    padding:0 16px;
+
+    border-radius:12px;
+
+    font-family:
+        "DM Sans",
+        sans-serif;
+
+    font-size:.68rem;
+
+    font-weight:700;
+
+    text-decoration:none;
+
+    transition:.25s ease;
+
+}
+
+
+.header-login-button{
+
+    color:var(--primary);
+
+    background:rgba(74,7,84,.06);
+
+}
+
+
+.header-register-button{
+
+    color:#fff;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--primary),
+            var(--primary-dark)
+        );
+
+}
+
+
+.header-login-button:hover,
+.header-register-button:hover{
+
+    transform:translateY(-2px);
+
+}
+
+
+/* =========================================================
+   MEMBER HEADER ACTIONS
+========================================================= */
+
+.member-header-actions{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+}
+
+
+/* =========================================================
+   MOBILE HEADER
+========================================================= */
+
+@media (max-width:768px){
+
+    .top-header{
+
+        position:sticky !important;
+
+        top:0 !important;
+
+        z-index:1000 !important;
+
+        height:64px;
+
+        min-height:64px;
+
+        padding:
+            0 16px;
+
+        background:
+            rgba(255,255,255,.97);
+
+        backdrop-filter:
+            blur(18px);
+
+        -webkit-backdrop-filter:
+            blur(18px);
+
     }
+
+
+    .mobile-menu-button{
+
+        display:flex;
+
+    }
+
+
+    .mobile-brand{
+
+        gap:8px;
+
+    }
+
+
+    .mobile-brand-icon{
+
+        width:34px;
+
+        height:34px;
+
+        border-radius:10px;
+
+    }
+
+
+    .mobile-brand-text strong{
+
+        font-size:.82rem;
+
+    }
+
+
+    .mobile-brand-text small{
+
+        font-size:.58rem;
+
+    }
+
+
+    .header-title{
+
+        display:none;
+
+    }
+
+
+    .header-actions{
+
+        gap:7px;
+
+    }
+
+
+    .header-icon-button{
+
+        width:38px;
+
+        height:38px;
+
+        border-radius:11px;
+
+    }
+
+
+    .header-avatar{
+
+        width:38px;
+
+        height:38px;
+
+    }
+
+
+    .header-auth-actions{
+
+        gap:6px;
+
+    }
+
+
+    .header-login-button{
+
+        min-height:36px;
+
+        padding:0 11px;
+
+        font-size:.62rem;
+
+    }
+
+
+    .header-register-button{
+
+        display:none;
+
+    }
+
+
+    .member-header-actions{
+
+        gap:7px;
+
+    }
+
 }
- 
+
+
+/* =========================================================
+   VERY SMALL PHONES
+========================================================= */
+
+@media (max-width:380px){
+
+    .top-header{
+
+        padding:
+            0 12px;
+
+    }
+
+
+    .mobile-brand-text strong{
+
+        font-size:.76rem;
+
+    }
+
+
+    .mobile-brand-text small{
+
+        font-size:.54rem;
+
+    }
+
+
+    .mobile-menu-button{
+
+        width:36px;
+
+        height:36px;
+
+    }
+
+
+    .header-avatar{
+
+        width:36px;
+
+        height:36px;
+
+    }
+
+
+    .header-icon-button{
+
+        width:36px;
+
+        height:36px;
+
+    }
+
+}
+
+
+/* =========================================================
+   IMPORTANT STICKY-PARENT FIX
+========================================================= */
+
+/*
+   Sticky positioning can fail if one of its ancestors
+   creates an unwanted scrolling container.
+
+   Keep the main page structure clean.
+*/
+
+.app-layout{
+
+    width:100%;
+
+    min-height:100vh;
+
+}
+
+
+.main-area{
+
+    overflow:visible;
+
+}
+
+
+/*
+   Do NOT put overflow:auto/hidden on the main-area
+   when relying on a sticky child.
+*/
+
+.main-area,
+.page-content{
+
+    min-width:0;
+
+}
+
+
+/* =========================================================
+   SAFETY OVERRIDE
+========================================================= */
+
+.top-header{
+
+    position:-webkit-sticky !important;
+
+    position:sticky !important;
+
+    top:0 !important;
+
+}
