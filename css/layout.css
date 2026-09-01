@@ -1691,13 +1691,13 @@
 
 .dashboard-main {
     width: 100%;
-    padding-top: 24px;
+    padding-top: 25px;
 }
 
 @media (max-width: 768px) {
 
     .dashboard-main {
-        padding-top: 18px;
+        padding-top: 25px;
     }
 
 }
