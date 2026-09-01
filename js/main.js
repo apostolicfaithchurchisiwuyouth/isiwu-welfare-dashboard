@@ -1,7 +1,8 @@
 /* =========================================================
    AFC ISIU YOUTH PORTAL
    MAIN JAVASCRIPT
-   VERSION 2.1
+   VERSION 2.2
+
    PURPOSE:
    - Shared portal functionality
    - Sidebar / mobile navigation
@@ -13,8 +14,9 @@
    - Safe page initialization
 
    IMPORTANT:
-   This file does NOT control the Lessons page.
-   lessons.js controls all lesson-specific functionality.
+   - Header positioning is controlled by layout.css.
+   - This file does NOT control the header position.
+   - lessons.js controls lesson-specific functionality.
 ========================================================= */
 
 "use strict";
@@ -28,11 +30,14 @@ const AFC_MAIN_CONFIG = {
 
     MOBILE_BREAKPOINT: 768,
 
-    OFFLINE_BANNER_ID: "offlineBanner",
+    OFFLINE_BANNER_ID:
+        "offlineBanner",
 
-    OFFLINE_MESSAGE_ID: "offlineMessage",
+    OFFLINE_MESSAGE_ID:
+        "offlineMessage",
 
-    THEME_STORAGE_KEY: "afcTheme"
+    THEME_STORAGE_KEY:
+        "afcTheme"
 
 };
 
@@ -43,7 +48,10 @@ const AFC_MAIN_CONFIG = {
 
 function onDOMReady(callback) {
 
-    if (document.readyState === "loading") {
+    if (
+        document.readyState ===
+        "loading"
+    ) {
 
         document.addEventListener(
             "DOMContentLoaded",
@@ -75,13 +83,17 @@ onDOMReady(() => {
 
         AOS.init({
 
-            duration: 900,
+            duration:
+                900,
 
-            easing: "ease-out-cubic",
+            easing:
+                "ease-out-cubic",
 
-            once: true,
+            once:
+                true,
 
-            offset: 120
+            offset:
+                120
 
         });
 
@@ -94,22 +106,6 @@ onDOMReady(() => {
    OFFLINE STATUS
 ========================================================= */
 
-/*
- * IMPORTANT:
- *
- * We intentionally DO NOT use navigator.onLine during
- * initial page load to display the banner.
- *
- * Some browsers and installed PWAs can temporarily report
- * navigator.onLine incorrectly while the page/service worker
- * is starting.
- *
- * The banner is therefore shown only after the browser
- * actually fires an "offline" event.
- *
- * When an "online" event fires, the banner disappears.
- */
-
 onDOMReady(() => {
 
     let offlineBanner =
@@ -117,10 +113,6 @@ onDOMReady(() => {
             AFC_MAIN_CONFIG.OFFLINE_BANNER_ID
         );
 
-
-    /* -----------------------------------------------------
-       CREATE BANNER ONLY IF NEEDED
-    ----------------------------------------------------- */
 
     function createOfflineBanner() {
 
@@ -132,7 +124,9 @@ onDOMReady(() => {
 
 
         offlineBanner =
-            document.createElement("div");
+            document.createElement(
+                "div"
+            );
 
 
         offlineBanner.id =
@@ -173,10 +167,6 @@ onDOMReady(() => {
     }
 
 
-    /* -----------------------------------------------------
-       SHOW OFFLINE BANNER
-    ----------------------------------------------------- */
-
     function showOfflineBanner() {
 
         const banner =
@@ -189,10 +179,6 @@ onDOMReady(() => {
 
     }
 
-
-    /* -----------------------------------------------------
-       HIDE OFFLINE BANNER
-    ----------------------------------------------------- */
 
     function hideOfflineBanner() {
 
@@ -210,10 +196,6 @@ onDOMReady(() => {
     }
 
 
-    /* -----------------------------------------------------
-       REAL OFFLINE EVENT
-    ----------------------------------------------------- */
-
     window.addEventListener(
         "offline",
         () => {
@@ -229,10 +211,6 @@ onDOMReady(() => {
     );
 
 
-    /* -----------------------------------------------------
-       REAL ONLINE EVENT
-    ----------------------------------------------------- */
-
     window.addEventListener(
         "online",
         () => {
@@ -246,16 +224,6 @@ onDOMReady(() => {
 
         }
     );
-
-
-    /*
-     * IMPORTANT:
-     *
-     * Do NOT call showOfflineBanner() here.
-     *
-     * We intentionally leave the banner hidden during
-     * initial page load.
-     */
 
 });
 
@@ -286,21 +254,14 @@ onDOMReady(() => {
                 "click",
                 event => {
 
-                    /*
-                     * Allow navigation when browser
-                     * reports that it is online.
-                     */
-
-                    if (navigator.onLine) {
+                    if (
+                        navigator.onLine
+                    ) {
 
                         return;
 
                     }
 
-
-                    /*
-                     * Stop navigation while offline.
-                     */
 
                     event.preventDefault();
 
@@ -327,10 +288,6 @@ function showOfflineMessage(
     featureName
 ) {
 
-    /*
-     * Remove an existing message first.
-     */
-
     const existing =
         document.getElementById(
             AFC_MAIN_CONFIG.OFFLINE_MESSAGE_ID
@@ -345,7 +302,9 @@ function showOfflineMessage(
 
 
     const message =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
 
 
     message.id =
@@ -413,10 +372,6 @@ function showOfflineMessage(
     }
 
 
-    /*
-     * Close when clicking outside the card.
-     */
-
     message.addEventListener(
         "click",
         event => {
@@ -433,14 +388,12 @@ function showOfflineMessage(
     );
 
 
-    /*
-     * If connection comes back while the
-     * message is open, close it automatically.
-     */
-
     const closeWhenOnline = () => {
 
-        if (message) {
+        if (
+            message &&
+            message.parentNode
+        ) {
 
             message.remove();
 
@@ -472,22 +425,27 @@ function escapeHTML(
 ) {
 
     return String(value)
+
         .replace(
             /&/g,
             "&amp;"
         )
+
         .replace(
             /</g,
             "&lt;"
         )
+
         .replace(
             />/g,
             "&gt;"
         )
+
         .replace(
             /"/g,
             "&quot;"
         )
+
         .replace(
             /'/g,
             "&#039;"
@@ -526,11 +484,6 @@ onDOMReady(() => {
         );
 
 
-    /*
-     * If this page doesn't contain the
-     * shared navigation, stop safely.
-     */
-
     if (
         !sidebar ||
         !overlay
@@ -561,6 +514,12 @@ onDOMReady(() => {
             "sidebar-open"
         );
 
+
+        /*
+         * Prevent background page scrolling.
+         * The fixed header remains visible above
+         * the sidebar because of its z-index hierarchy.
+         */
 
         document.body.style.overflow =
             "hidden";
@@ -608,6 +567,10 @@ onDOMReady(() => {
             "sidebar-open"
         );
 
+
+        /*
+         * Restore normal page scrolling.
+         */
 
         document.body.style.overflow =
             "";
@@ -900,10 +863,6 @@ onDOMReady(() => {
     }
 
 
-    /* -----------------------------------------------------
-       LOAD SAVED THEME
-    ----------------------------------------------------- */
-
     const savedTheme =
         localStorage.getItem(
             AFC_MAIN_CONFIG.THEME_STORAGE_KEY
@@ -937,10 +896,6 @@ onDOMReady(() => {
     }
 
 
-    /* -----------------------------------------------------
-       TOGGLE
-    ----------------------------------------------------- */
-
     themeButton.addEventListener(
         "click",
         event => {
@@ -949,9 +904,10 @@ onDOMReady(() => {
 
 
             const currentTheme =
-                document.documentElement.getAttribute(
-                    "data-theme"
-                );
+                document.documentElement
+                    .getAttribute(
+                        "data-theme"
+                    );
 
 
             const nextTheme =
@@ -1095,11 +1051,6 @@ onDOMReady(() => {
 
 onDOMReady(() => {
 
-    /*
-     * Prevent accidental form submission
-     * from shared header buttons.
-     */
-
     const headerButtons =
         document.querySelectorAll(
             ".mobile-menu-btn, .header-icon, .hub-button"
@@ -1110,7 +1061,9 @@ onDOMReady(() => {
         button => {
 
             if (
-                !button.getAttribute("type")
+                !button.getAttribute(
+                    "type"
+                )
             ) {
 
                 button.setAttribute(
@@ -1131,11 +1084,6 @@ onDOMReady(() => {
 ========================================================= */
 
 onDOMReady(() => {
-
-    /*
-     * Register the PWA service worker only if
-     * supported by the browser.
-     */
 
     if (
         "serviceWorker" in navigator
@@ -1220,4 +1168,3 @@ window.addEventListener(
 console.log(
     "AFC Isiu Youth Portal: main.js loaded successfully."
 );
- 
