@@ -1003,190 +1003,76 @@ function buildAudioURL(audioPath) {
    RENDER YORUBA AUDIO
 ========================================================= */
 
-function renderYorubaAudio(audioValue) {
+function renderYorubaAudio(audioPath) {
 
-    const audioCard =
-        getElement(
-            "yorubaAudioCard"
-        );
+    const card =
+        document.getElementById("yorubaAudioCard");
 
+    const audio =
+        document.getElementById("yorubaAudio");
 
-    const audioElement =
-        getElement(
-            "yorubaAudio"
-        );
-
-
-    const audioPath =
-        cleanText(
-            audioValue
-        );
-
-
-    /*
-       If the HTML does not contain
-       the audio card, stop safely.
-    */
-
-    if (!audioCard) {
-
-        console.warn(
-            "AFC Isiu — #yorubaAudioCard not found."
-        );
-
+    if (!card || !audio) {
+        console.warn("Yoruba audio elements not found.");
         return;
-
     }
 
+    const value =
+        cleanText(audioPath);
 
-    /*
-       If no audio was supplied.
-    */
+    if (!value) {
 
-    if (!audioPath) {
+        card.hidden = true;
 
-        audioCard.hidden = true;
-
-
-        if (audioElement) {
-
-            audioElement.pause();
-
-            audioElement.removeAttribute(
-                "src"
-            );
-
-            audioElement.load();
-
-        }
-
+        audio.pause();
+        audio.removeAttribute("src");
+        audio.load();
 
         return;
-
     }
-
 
     const audioURL =
-        buildAudioURL(
-            audioPath
-        );
-
-
-    if (!audioURL) {
-
-        audioCard.hidden = true;
-
-        return;
-
-    }
-
+        resolveAudioURL(value);
 
     console.log(
         "AFC Isiu — Yoruba Audio Path:",
-        audioPath
+        value
     );
 
-
     console.log(
-        "AFC Isiu — Yoruba Audio URL:",
+        "AFC Isiu — Resolved Audio URL:",
         audioURL
     );
 
+    audio.pause();
 
-    /*
-       Update dedicated audio element.
-    */
+    audio.src = audioURL;
 
-    if (audioElement) {
+    audio.load();
 
-        /*
-           Stop previous lesson audio.
-        */
+    card.hidden = false;
 
-        audioElement.pause();
+    audio.onerror = function () {
 
-
-        /*
-           Clear previous source.
-        */
-
-        audioElement.removeAttribute(
-            "src"
+        console.error(
+            "AFC Isiu — Audio failed to load:",
+            audioURL
         );
 
+        console.error(
+            "Check that the file exists at this exact URL and that Vercel deployed it."
+        );
 
-        /*
-           Set new source.
-        */
+    };
 
-        audioElement.src =
-            audioURL;
+    audio.onloadedmetadata = function () {
 
+        console.log(
+            "AFC Isiu — Yoruba audio loaded successfully:",
+            audioURL
+        );
 
-        /*
-           Important:
-           Force browser to recognize
-           the new audio source.
-        */
-
-        audioElement.load();
-
-
-        /*
-           Show player.
-        */
-
-        audioElement.hidden =
-            false;
-
-
-        /*
-           Helpful browser events.
-        */
-
-        audioElement.onloadedmetadata =
-            function () {
-
-                console.log(
-                    "AFC Isiu — Yoruba audio loaded successfully:",
-                    audioURL
-                );
-
-            };
-
-
-        audioElement.onerror =
-            function () {
-
-                console.error(
-                    "AFC Isiu — Yoruba audio FAILED:",
-                    audioURL
-                );
-
-
-                showAudioError(
-                    audioElement,
-                    audioURL
-                );
-
-            };
-
-    }
-
-
-    /*
-       Show card.
-    */
-
-    audioCard.hidden =
-        false;
-
-
-    audioCard.style.display =
-        "";
-
+    };
 }
-
 
 /* =========================================================
    AUDIO ERROR
