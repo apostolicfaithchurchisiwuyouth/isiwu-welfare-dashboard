@@ -2785,7 +2785,7 @@
 
 .lesson-rich-content {
     font-family: "DM Sans", sans-serif;
-    font-size: .8rem;
+    font-size: .78rem;
     line-height: 1.75;
     color: var(--text, #1f2937);
 }
@@ -2901,7 +2901,7 @@
 
 .lesson-rich-content blockquote {
     margin: 1.25rem 0;
-    font-size:.88rem;
+    font-size:.78rem;
     padding: 1rem 1.25rem;
     border-left: 4px solid var(--brand, #ea580c);
     background: rgba(234, 88, 12, 0.05);
@@ -2961,7 +2961,7 @@
     }
 
        .lesson-rich-content p {
-        font-size: .88rem;
+        font-size: .78rem;
         margin-top: 1.3rem;
     }
 }
