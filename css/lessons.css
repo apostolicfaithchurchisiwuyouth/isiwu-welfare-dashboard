@@ -339,7 +339,10 @@
 
     padding: 24px 28px;
 
-    border-radius: 20px;
+    border-bottom-left-radius:0;
+   border-top-left-radius:0;
+   border-bottom-right-radius:18px;
+   border-top-right-radius:18px;
 
     background:
         #ffffff;
@@ -444,7 +447,7 @@
     color:
         #6b7280;
 
-    font-size: 0.82rem;
+    font-size: 0.9rem;
 
     line-height: 1.55;
 
