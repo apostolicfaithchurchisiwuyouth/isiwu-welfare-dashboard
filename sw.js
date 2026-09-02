@@ -9,10 +9,9 @@
 
 /* =========================================================
    CACHE VERSION
-   CHANGE THIS EVERY TIME YOU MAKE A MAJOR PWA UPDATE
-========================================================= */
+   ========================================================= */
 
-const CACHE_VERSION = "afc-isiu-pwa-v8";
+const CACHE_VERSION = "afc-isiu-pwa-v9";
 
 const STATIC_CACHE =
     `${CACHE_VERSION}-static`;
@@ -22,6 +21,14 @@ const PAGE_CACHE =
 
 const OFFLINE_CACHE =
     `${CACHE_VERSION}-offline`;
+
+
+/* =========================================================
+   OFFLINE PAGE
+   ========================================================= */
+
+const OFFLINE_PAGE =
+    "/offline.html";
 
 
 /* =========================================================
@@ -38,7 +45,9 @@ const APP_SHELL = [
 
     "/manifest.json",
 
-    /* CSS */
+    /* =====================================================
+       CSS
+    ===================================================== */
 
     "/css/main.css",
 
@@ -46,7 +55,12 @@ const APP_SHELL = [
 
     "/css/lessons.css",
 
-    /* JavaScript */
+    "/css/pwa.css",
+
+
+    /* =====================================================
+       JAVASCRIPT
+    ===================================================== */
 
     "/js/main.js",
 
@@ -54,19 +68,14 @@ const APP_SHELL = [
 
     "/js/pwa.js",
 
-    /* Images */
+
+    /* =====================================================
+       BRAND
+    ===================================================== */
 
     "/images/logo.png"
 
 ];
-
-
-/* =========================================================
-   OFFLINE PAGE
-========================================================= */
-
-const OFFLINE_PAGE =
-    "/offline.html";
 
 
 /* =========================================================
@@ -78,7 +87,7 @@ self.addEventListener(
     event => {
 
         console.log(
-            "AFC Isiu PWA: Installing service worker:",
+            "AFC Isiu PWA: Installing:",
             CACHE_VERSION
         );
 
@@ -89,10 +98,6 @@ self.addEventListener(
 
                 try {
 
-                    /*
-                     * Open static cache.
-                     */
-
                     const staticCache =
                         await caches.open(
                             STATIC_CACHE
@@ -100,11 +105,13 @@ self.addEventListener(
 
 
                     /*
-                     * Cache files individually.
+                     * Cache app-shell files individually.
                      *
-                     * This is safer than cache.addAll()
-                     * because one missing file will not
-                     * destroy the whole installation.
+                     * This is intentional.
+                     *
+                     * If one file is unavailable,
+                     * the remaining files can still
+                     * be cached.
                      */
 
                     for (
@@ -123,6 +130,7 @@ self.addEventListener(
 
 
                             if (
+                                response &&
                                 response.ok
                             ) {
 
@@ -130,6 +138,7 @@ self.addEventListener(
                                     file,
                                     response.clone()
                                 );
+
 
                                 console.log(
                                     "AFC Isiu PWA: Cached:",
@@ -143,7 +152,9 @@ self.addEventListener(
                                 console.warn(
                                     "AFC Isiu PWA: Could not cache:",
                                     file,
-                                    response.status
+                                    response
+                                        ? response.status
+                                        : "No response"
                                 );
 
                             }
@@ -164,50 +175,6 @@ self.addEventListener(
 
 
                     /*
-                     * Offline page.
-                     */
-
-                    const offlineCache =
-                        await caches.open(
-                            OFFLINE_CACHE
-                        );
-
-
-                    try {
-
-                        const offlineResponse =
-                            await fetch(
-                                OFFLINE_PAGE,
-                                {
-                                    cache: "no-store"
-                                }
-                            );
-
-
-                        if (
-                            offlineResponse.ok
-                        ) {
-
-                            await offlineCache.put(
-                                OFFLINE_PAGE,
-                                offlineResponse.clone()
-                            );
-
-                        }
-
-                    }
-
-                    catch (error) {
-
-                        console.warn(
-                            "AFC Isiu PWA: Offline page cache failed.",
-                            error
-                        );
-
-                    }
-
-
-                    /*
                      * Activate immediately.
                      */
 
@@ -223,7 +190,7 @@ self.addEventListener(
                 catch (error) {
 
                     console.error(
-                        "AFC Isiu PWA: Installation failed:",
+                        "AFC Isiu PWA: Installation error:",
                         error
                     );
 
@@ -255,66 +222,80 @@ self.addEventListener(
 
             (async () => {
 
-                const cacheNames =
-                    await caches.keys();
+                try {
+
+                    const cacheNames =
+                        await caches.keys();
 
 
-                await Promise.all(
+                    await Promise.all(
 
-                    cacheNames.map(
-                        cacheName => {
+                        cacheNames.map(
+                            cacheName => {
 
-                            /*
-                             * Delete every old AFC cache.
-                             */
+                                /*
+                                 * Remove previous AFC
+                                 * PWA cache versions.
+                                 */
 
-                            if (
-                                cacheName.startsWith(
-                                    "afc-isiu-pwa-"
-                                )
-                                &&
-                                cacheName !==
-                                    STATIC_CACHE
-                                &&
-                                cacheName !==
-                                    PAGE_CACHE
-                                &&
-                                cacheName !==
-                                    OFFLINE_CACHE
-                            ) {
+                                if (
+                                    cacheName.startsWith(
+                                        "afc-isiu-pwa-"
+                                    )
+                                    &&
+                                    cacheName !==
+                                        STATIC_CACHE
+                                    &&
+                                    cacheName !==
+                                        PAGE_CACHE
+                                    &&
+                                    cacheName !==
+                                        OFFLINE_CACHE
+                                ) {
 
-                                console.log(
-                                    "AFC Isiu PWA: Deleting old cache:",
-                                    cacheName
-                                );
+                                    console.log(
+                                        "AFC Isiu PWA: Removing old cache:",
+                                        cacheName
+                                    );
 
 
-                                return caches.delete(
-                                    cacheName
-                                );
+                                    return caches.delete(
+                                        cacheName
+                                    );
+
+                                }
+
+
+                                return Promise.resolve();
 
                             }
+                        )
+
+                    );
 
 
-                            return Promise.resolve();
+                    /*
+                     * Take control immediately.
+                     */
 
-                        }
-                    )
-
-                );
-
-
-                /*
-                 * Take control immediately.
-                 */
-
-                await self.clients.claim();
+                    await self.clients.claim();
 
 
-                console.log(
-                    "AFC Isiu PWA: Service worker activated:",
-                    CACHE_VERSION
-                );
+                    console.log(
+                        "AFC Isiu PWA: Activated:",
+                        CACHE_VERSION
+                    );
+
+                }
+
+                catch (error) {
+
+                    console.error(
+                        "AFC Isiu PWA: Activation error:",
+                        error
+                    );
+
+                }
 
             })()
 
@@ -326,8 +307,6 @@ self.addEventListener(
 
 /* =========================================================
    MESSAGE HANDLER
-   Allows the website to tell the service worker
-   to activate immediately.
 ========================================================= */
 
 self.addEventListener(
@@ -335,10 +314,23 @@ self.addEventListener(
     event => {
 
         if (
-            event.data &&
+            !event.data
+        ) {
+
+            return;
+
+        }
+
+
+        if (
             event.data.type ===
                 "SKIP_WAITING"
         ) {
+
+            console.log(
+                "AFC Isiu PWA: SKIP_WAITING received."
+            );
+
 
             self.skipWaiting();
 
@@ -349,7 +341,7 @@ self.addEventListener(
 
 
 /* =========================================================
-   FETCH
+   FETCH HANDLER
 ========================================================= */
 
 self.addEventListener(
@@ -365,7 +357,8 @@ self.addEventListener(
          */
 
         if (
-            request.method !== "GET"
+            request.method !==
+                "GET"
         ) {
 
             return;
@@ -384,20 +377,21 @@ self.addEventListener(
          * EXTERNAL REQUESTS
          * =================================================
          *
-         * Do NOT intercept:
+         * Do not intercept:
          *
+         * - Google Apps Script
          * - Google Sheets
          * - Google APIs
          * - Google Fonts
-         * - CDN resources
-         * - PapaParse
+         * - CDNs
          * - Font Awesome
-         * - other external services
+         * - PapaParse
+         * - other external resources
          */
 
         if (
             url.origin !==
-            self.location.origin
+                self.location.origin
         ) {
 
             return;
@@ -410,13 +404,7 @@ self.addEventListener(
          * AUDIO
          * =================================================
          *
-         * Do not cache lesson audio automatically.
-         *
-         * This means:
-         *
-         * /audio/Senior-77.mp3
-         *
-         * is fetched directly from Vercel.
+         * Audio files are intentionally NOT cached.
          */
 
         if (
@@ -426,7 +414,11 @@ self.addEventListener(
         ) {
 
             event.respondWith(
-                fetch(request)
+
+                fetch(
+                    request
+                )
+
             );
 
             return;
@@ -441,13 +433,16 @@ self.addEventListener(
          */
 
         if (
-            request.mode === "navigate"
+            request.mode ===
+                "navigate"
         ) {
 
             event.respondWith(
+
                 handleNavigation(
                     request
                 )
+
             );
 
             return;
@@ -462,9 +457,11 @@ self.addEventListener(
          */
 
         event.respondWith(
+
             handleAsset(
                 request
             )
+
         );
 
     }
@@ -486,10 +483,11 @@ async function handleNavigation(
 
 
     /*
+     * =====================================================
      * NETWORK FIRST
+     * =====================================================
      *
-     * Always try to obtain the latest
-     * version of the page.
+     * Always attempt to load the newest page first.
      */
 
     try {
@@ -509,7 +507,7 @@ async function handleNavigation(
         ) {
 
             /*
-             * Save latest page.
+             * Save the newest page.
              */
 
             await pageCache.put(
@@ -534,7 +532,9 @@ async function handleNavigation(
 
 
     /*
-     * CACHE FALLBACK
+     * =====================================================
+     * PAGE CACHE FALLBACK
+     * =====================================================
      */
 
     const cachedPage =
@@ -553,26 +553,51 @@ async function handleNavigation(
 
 
     /*
+     * =====================================================
      * APP SHELL FALLBACK
+     * =====================================================
      */
 
-    const staticPage =
+    const shellPage =
         await caches.match(
             request
         );
 
 
     if (
-        staticPage
+        shellPage
     ) {
 
-        return staticPage;
+        return shellPage;
 
     }
 
 
     /*
+     * =====================================================
+     * ROOT FALLBACK
+     * =====================================================
+     */
+
+    const rootPage =
+        await caches.match(
+            "/"
+        );
+
+
+    if (
+        rootPage
+    ) {
+
+        return rootPage;
+
+    }
+
+
+    /*
+     * =====================================================
      * OFFLINE PAGE
+     * =====================================================
      */
 
     const offlineCache =
@@ -597,118 +622,12 @@ async function handleNavigation(
 
 
     /*
+     * =====================================================
      * FINAL FALLBACK
+     * =====================================================
      */
 
-    return new Response(
-
-        `
-        <!DOCTYPE html>
-
-        <html lang="en">
-
-        <head>
-
-            <meta charset="UTF-8">
-
-            <meta
-                name="viewport"
-                content="width=device-width, initial-scale=1.0"
-            >
-
-            <title>
-                Offline | AFC Isiu Youth Portal
-            </title>
-
-            <style>
-
-                body {
-
-                    margin: 0;
-
-                    min-height: 100vh;
-
-                    display: flex;
-
-                    align-items: center;
-
-                    justify-content: center;
-
-                    padding: 24px;
-
-                    box-sizing: border-box;
-
-                    font-family:
-                        Arial,
-                        sans-serif;
-
-                    text-align: center;
-
-                    background:
-                        #0a0016;
-
-                    color: white;
-
-                }
-
-                .offline-box {
-
-                    max-width: 420px;
-
-                }
-
-                h1 {
-
-                    margin-bottom: 12px;
-
-                }
-
-                p {
-
-                    opacity: 0.8;
-
-                    line-height: 1.6;
-
-                }
-
-            </style>
-
-        </head>
-
-        <body>
-
-            <div class="offline-box">
-
-                <h1>
-                    You're offline
-                </h1>
-
-                <p>
-                    Please reconnect to the internet
-                    and try again.
-                </p>
-
-            </div>
-
-        </body>
-
-        </html>
-        `,
-
-        {
-
-            status: 503,
-
-            headers: {
-
-                "Content-Type":
-                    "text/html; charset=UTF-8"
-
-            }
-
-        }
-
-    );
+    return createOfflineResponse();
 
 }
 
@@ -722,13 +641,20 @@ async function handleAsset(
 ) {
 
     /*
-     * IMPORTANT:
+     * =====================================================
+     * NETWORK FIRST
+     * =====================================================
      *
-     * NETWORK FIRST.
+     * This is important for development.
      *
-     * This makes updated lessons.js,
-     * CSS and other assets available
-     * without waiting for an old cache.
+     * Updated:
+     *
+     * - CSS
+     * - JS
+     * - images
+     * - manifest
+     *
+     * are obtained from the network whenever possible.
      */
 
     try {
@@ -776,9 +702,9 @@ async function handleAsset(
 
 
     /*
-     * NETWORK FAILED.
-     *
-     * Use cached version.
+     * =====================================================
+     * CACHE FALLBACK
+     * =====================================================
      */
 
     const cachedResponse =
@@ -797,7 +723,9 @@ async function handleAsset(
 
 
     /*
-     * Nothing available.
+     * =====================================================
+     * NO CACHE
+     * =====================================================
      */
 
     return new Response(
@@ -807,6 +735,200 @@ async function handleAsset(
             statusText:
                 "Gateway Timeout"
         }
+    );
+
+}
+
+
+/* =========================================================
+   OFFLINE RESPONSE
+========================================================= */
+
+function createOfflineResponse() {
+
+    return new Response(
+
+        `
+        <!DOCTYPE html>
+
+        <html lang="en">
+
+        <head>
+
+            <meta charset="UTF-8">
+
+            <meta
+                name="viewport"
+                content="width=device-width, initial-scale=1.0"
+            >
+
+            <meta
+                name="theme-color"
+                content="#ea580c"
+            >
+
+            <title>
+                Offline | AFC Isiu Youth Portal
+            </title>
+
+            <style>
+
+                * {
+                    box-sizing: border-box;
+                }
+
+                body {
+
+                    margin: 0;
+
+                    min-height: 100vh;
+
+                    display: flex;
+
+                    align-items: center;
+
+                    justify-content: center;
+
+                    padding: 24px;
+
+                    font-family:
+                        Arial,
+                        sans-serif;
+
+                    text-align: center;
+
+                    background:
+                        #0a0016;
+
+                    color:
+                        #ffffff;
+
+                }
+
+                .offline-box {
+
+                    width: 100%;
+
+                    max-width: 420px;
+
+                }
+
+                .offline-icon {
+
+                    width: 72px;
+
+                    height: 72px;
+
+                    margin:
+                        0 auto 24px;
+
+                    border-radius: 20px;
+
+                    display: flex;
+
+                    align-items: center;
+
+                    justify-content: center;
+
+                    background:
+                        #ea580c;
+
+                    font-size: 32px;
+
+                }
+
+                h1 {
+
+                    margin:
+                        0 0 12px;
+
+                    font-size: 28px;
+
+                }
+
+                p {
+
+                    margin: 0;
+
+                    opacity: 0.8;
+
+                    line-height: 1.6;
+
+                    font-size: 15px;
+
+                }
+
+                button {
+
+                    margin-top: 24px;
+
+                    padding:
+                        12px 20px;
+
+                    border: 0;
+
+                    border-radius: 10px;
+
+                    background:
+                        #ea580c;
+
+                    color:
+                        #ffffff;
+
+                    font-weight: 600;
+
+                    cursor: pointer;
+
+                }
+
+            </style>
+
+        </head>
+
+        <body>
+
+            <main class="offline-box">
+
+                <div
+                    class="offline-icon"
+                    aria-hidden="true"
+                >
+                    ↻
+                </div>
+
+                <h1>
+                    You're offline
+                </h1>
+
+                <p>
+                    Please reconnect to the internet
+                    and try again.
+                </p>
+
+                <button
+                    type="button"
+                    onclick="location.reload()"
+                >
+                    Try Again
+                </button>
+
+            </main>
+
+        </body>
+
+        </html>
+        `,
+
+        {
+            status: 503,
+
+            headers: {
+                "Content-Type":
+                    "text/html; charset=UTF-8"
+            }
+
+        }
+
     );
 
 }
