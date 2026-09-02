@@ -9,9 +9,9 @@
     "use strict";
 
 
-    /* ============================================================
+    /* ========================================================
        STATE
-       ============================================================ */
+       ======================================================== */
 
     let deferredInstallPrompt = null;
 
@@ -20,9 +20,9 @@
     let installInProgress = false;
 
 
-    /* ============================================================
+    /* ========================================================
        DOM HELPER
-       ============================================================ */
+       ======================================================== */
 
     function $(id) {
 
@@ -31,9 +31,9 @@
     }
 
 
-    /* ============================================================
+    /* ========================================================
        ELEMENTS
-       ============================================================ */
+       ======================================================== */
 
     let installButton = null;
 
@@ -42,8 +42,6 @@
     let hubButton = null;
 
     let status = null;
-
-    let statusDot = null;
 
     let statusText = null;
 
@@ -54,9 +52,9 @@
     let modalDone = null;
 
 
-    /* ============================================================
+    /* ========================================================
        CACHE DOM
-       ============================================================ */
+       ======================================================== */
 
     function cacheElements() {
 
@@ -71,9 +69,6 @@
 
         status =
             $("pwaStatus");
-
-        statusDot =
-            $("pwaStatusDot");
 
         statusText =
             $("pwaStatusText");
@@ -90,27 +85,23 @@
     }
 
 
-    /* ============================================================
+    /* ========================================================
        STATUS
-       ============================================================ */
+       ======================================================== */
 
-    function setStatus(
-        type,
-        message
-    ) {
+    function setStatus(type, message) {
 
         if (status) {
 
             status.classList.remove(
                 "available",
-                "installed"
+                "installed",
+                "checking"
             );
 
             if (type) {
 
-                status.classList.add(
-                    type
-                );
+                status.classList.add(type);
 
             }
 
@@ -127,9 +118,9 @@
     }
 
 
-    /* ============================================================
-       INSTALLED CHECK
-       ============================================================ */
+    /* ========================================================
+       CHECK IF INSTALLED
+       ======================================================== */
 
     function isAppInstalled() {
 
@@ -171,24 +162,18 @@
     }
 
 
-    /* ============================================================
-       IOS CHECK
-       ============================================================ */
+    /* ========================================================
+       PLATFORM CHECKS
+       ======================================================== */
 
     function isIOS() {
 
-        return (
-            /iphone|ipad|ipod/i.test(
-                navigator.userAgent
-            )
+        return /iphone|ipad|ipod/i.test(
+            navigator.userAgent
         );
 
     }
 
-
-    /* ============================================================
-       ANDROID CHECK
-       ============================================================ */
 
     function isAndroid() {
 
@@ -199,21 +184,9 @@
     }
 
 
-    /* ============================================================
-       DESKTOP CHECK
-       ============================================================ */
-
-    function isDesktop() {
-
-        return !isAndroid() &&
-            !isIOS();
-
-    }
-
-
-    /* ============================================================
-       INSTALL BUTTON
-       ============================================================ */
+    /* ========================================================
+       INSTALL BUTTON VISIBILITY
+       ======================================================== */
 
     function showInstallButton() {
 
@@ -224,14 +197,12 @@
         }
 
 
-        installButton.hidden =
-            false;
+        installButton.hidden = false;
+
+        installButton.disabled = false;
 
         installButton.style.display =
             "inline-flex";
-
-        installButton.disabled =
-            false;
 
     }
 
@@ -245,8 +216,7 @@
         }
 
 
-        installButton.hidden =
-            true;
+        installButton.hidden = true;
 
         installButton.style.display =
             "none";
@@ -254,9 +224,9 @@
     }
 
 
-    /* ============================================================
+    /* ========================================================
        MODAL
-       ============================================================ */
+       ======================================================== */
 
     function openInstallModal() {
 
@@ -308,15 +278,13 @@
     }
 
 
-    /* ============================================================
-       NATIVE INSTALL PROMPT
-       ============================================================ */
+    /* ========================================================
+       NATIVE INSTALL
+       ======================================================== */
 
     async function triggerNativeInstall() {
 
-        if (
-            !deferredInstallPrompt
-        ) {
+        if (!deferredInstallPrompt) {
 
             return false;
 
@@ -330,8 +298,14 @@
         }
 
 
-        installInProgress =
-            true;
+        installInProgress = true;
+
+
+        if (installButton) {
+
+            installButton.disabled = true;
+
+        }
 
 
         try {
@@ -342,11 +316,10 @@
 
 
             /*
-             * This is the REAL browser-controlled
-             * PWA installation prompt.
+             * Open the real browser installation prompt.
              */
 
-            await deferredInstallPrompt.prompt();
+            deferredInstallPrompt.prompt();
 
 
             const choice =
@@ -354,14 +327,13 @@
 
 
             console.log(
-                "[PWA] User installation choice:",
+                "[PWA] User choice:",
                 choice.outcome
             );
 
 
             if (
-                choice.outcome ===
-                "accepted"
+                choice.outcome === "accepted"
             ) {
 
                 setStatus(
@@ -374,19 +346,17 @@
 
                 setStatus(
                     "available",
-                    "Installation cancelled. You can install the app anytime."
+                    "Installation was cancelled. You can try again."
                 );
 
             }
 
 
             /*
-             * Chrome requires the prompt object
-             * to be discarded after it is used.
+             * The event can only be used once.
              */
 
-            deferredInstallPrompt =
-                null;
+            deferredInstallPrompt = null;
 
 
             return true;
@@ -395,14 +365,14 @@
         catch (error) {
 
             console.error(
-                "[PWA] Native installation failed:",
+                "[PWA] Installation error:",
                 error
             );
 
 
             setStatus(
                 "",
-                "The browser could not open the installation prompt."
+                "The installation prompt could not be opened."
             );
 
 
@@ -411,28 +381,36 @@
         }
         finally {
 
-            installInProgress =
-                false;
+            installInProgress = false;
+
+
+            if (
+                installButton &&
+                !isAppInstalled()
+            ) {
+
+                installButton.disabled = false;
+
+            }
 
         }
 
     }
 
 
-    /* ============================================================
-       INSTALL ACTION
-       ============================================================ */
+    /* ========================================================
+       INSTALL APP
+       ======================================================== */
 
     async function installApp() {
 
         console.log(
-            "[PWA] Install action requested."
+            "[PWA] Install requested."
         );
 
 
         /*
-         * If already installed, there is nothing
-         * to install.
+         * Already installed.
          */
 
         if (isAppInstalled()) {
@@ -450,13 +428,10 @@
 
 
         /*
-         * Native Chrome / Android / supported
-         * Chromium installation.
+         * Real native install prompt available.
          */
 
-        if (
-            deferredInstallPrompt
-        ) {
+        if (deferredInstallPrompt) {
 
             await triggerNativeInstall();
 
@@ -466,34 +441,52 @@
 
 
         /*
-         * iPhone / iPad does not expose the same
-         * beforeinstallprompt API.
+         * iOS does not support beforeinstallprompt.
          */
+
+        if (isIOS()) {
+
+            openInstallModal();
+
+            return;
+
+        }
+
+
+        /*
+         * Android / desktop fallback.
+         *
+         * The browser may not yet consider the app installable.
+         * Do not pretend installation happened.
+         */
+
+        setStatus(
+            "",
+            "Install prompt is not available yet."
+        );
+
 
         openInstallModal();
 
     }
 
 
-    /* ============================================================
+    /* ========================================================
        BEFORE INSTALL PROMPT
-       ============================================================ */
+       ======================================================== */
 
     window.addEventListener(
         "beforeinstallprompt",
         function (event) {
 
             console.log(
-                "[PWA] Native installation prompt available."
+                "[PWA] Native install prompt is available."
             );
 
 
             /*
-             * Stop Chrome from showing the prompt
-             * automatically.
-             *
-             * We want OUR Install App / Hub button
-             * to trigger it.
+             * Prevent automatic browser prompt.
+             * We will show it when the user clicks Install App.
              */
 
             event.preventDefault();
@@ -508,14 +501,9 @@
 
             setStatus(
                 "available",
-                "This app is ready to be installed."
+                "Ready to install on this device."
             );
 
-
-            /*
-             * Tell the global page that PWA
-             * installation is available.
-             */
 
             document.documentElement.dataset.pwaInstallable =
                 "true";
@@ -524,25 +512,22 @@
     );
 
 
-    /* ============================================================
+    /* ========================================================
        APP INSTALLED
-       ============================================================ */
+       ======================================================== */
 
     window.addEventListener(
         "appinstalled",
         function () {
 
             console.log(
-                "[PWA] AFC Isiu Youth Portal installed."
+                "[PWA] App installed successfully."
             );
 
 
-            deferredInstallPrompt =
-                null;
+            deferredInstallPrompt = null;
 
-
-            installInProgress =
-                false;
+            installInProgress = false;
 
 
             document.documentElement.dataset.pwaInstalled =
@@ -551,21 +536,24 @@
 
             setStatus(
                 "installed",
-                "AFC Isiu Youth Portal is now installed."
+                "AFC Isiu Youth Portal is installed."
             );
 
 
             hideInstallButton();
 
+
+            closeInstallModal();
+
         }
     );
 
 
-    /* ============================================================
+    /* ========================================================
        HUB BUTTON
-       ============================================================ */
+       ======================================================== */
 
-    function setupHubInstall() {
+    function setupHubButton() {
 
         if (!hubButton) {
 
@@ -577,66 +565,21 @@
         /*
          * IMPORTANT:
          *
-         * We DO NOT permanently replace the Hub button.
+         * The Hub button is NOT forced to become
+         * an installation button.
          *
-         * If the native PWA prompt exists,
-         * the first click launches installation.
+         * This prevents conflicts with your main.js
+         * Hub navigation functionality.
          *
-         * If it does not exist, the existing Hub
-         * navigation continues normally.
+         * Installation is handled by Install App.
          */
-
-        hubButton.addEventListener(
-            "click",
-            async function (event) {
-
-                /*
-                 * Already installed?
-                 *
-                 * Let the normal Hub button
-                 * behavior continue.
-                 */
-
-                if (isAppInstalled()) {
-
-                    return;
-
-                }
-
-
-                /*
-                 * Native installation available?
-                 *
-                 * Intercept the Hub button and
-                 * launch the real PWA prompt.
-                 */
-
-                if (
-                    deferredInstallPrompt
-                ) {
-
-                    event.preventDefault();
-
-                    event.stopImmediatePropagation();
-
-
-                    await triggerNativeInstall();
-
-
-                    return;
-
-                }
-
-            },
-            true
-        );
 
     }
 
 
-    /* ============================================================
-       INSTALL BUTTON
-       ============================================================ */
+    /* ========================================================
+       INSTALL BUTTON EVENTS
+       ======================================================== */
 
     function setupInstallButton() {
 
@@ -649,9 +592,9 @@
 
         installButton.addEventListener(
             "click",
-            function () {
+            async function () {
 
-                installApp();
+                await installApp();
 
             }
         );
@@ -659,9 +602,9 @@
     }
 
 
-    /* ============================================================
+    /* ========================================================
        HELP BUTTON
-       ============================================================ */
+       ======================================================== */
 
     function setupHelpButton() {
 
@@ -684,9 +627,9 @@
     }
 
 
-    /* ============================================================
+    /* ========================================================
        MODAL EVENTS
-       ============================================================ */
+       ======================================================== */
 
     function setupModal() {
 
@@ -694,11 +637,7 @@
 
             modalClose.addEventListener(
                 "click",
-                function () {
-
-                    closeInstallModal();
-
-                }
+                closeInstallModal
             );
 
         }
@@ -708,11 +647,7 @@
 
             modalDone.addEventListener(
                 "click",
-                function () {
-
-                    closeInstallModal();
-
-                }
+                closeInstallModal
             );
 
         }
@@ -744,8 +679,7 @@
             function (event) {
 
                 if (
-                    event.key ===
-                    "Escape"
+                    event.key === "Escape"
                 ) {
 
                     closeInstallModal();
@@ -758,9 +692,9 @@
     }
 
 
-    /* ============================================================
+    /* ========================================================
        SERVICE WORKER
-       ============================================================ */
+       ======================================================== */
 
     async function registerServiceWorker() {
 
@@ -779,21 +713,6 @@
 
         try {
 
-            /*
-             * IMPORTANT:
-             *
-             * sw.js is at the ROOT of the
-             * Vercel website.
-             *
-             * Therefore:
-             *
-             * /sw.js
-             *
-             * NOT:
-             *
-             * ../sw.js
-             */
-
             serviceWorkerRegistration =
                 await navigator.serviceWorker.register(
                     "/sw.js",
@@ -810,19 +729,34 @@
 
 
             /*
-             * Check for an update.
+             * Check for updates.
              */
 
-            try {
+            serviceWorkerRegistration.update()
+                .catch(
+                    function (error) {
 
-                await serviceWorkerRegistration.update();
+                        console.warn(
+                            "[PWA] Update check failed:",
+                            error
+                        );
 
-            }
-            catch (updateError) {
+                    }
+                );
 
-                console.warn(
-                    "[PWA] Service worker update check failed:",
-                    updateError
+
+            /*
+             * Listen for a new waiting service worker.
+             */
+
+            if (
+                serviceWorkerRegistration.waiting
+            ) {
+
+                serviceWorkerRegistration.waiting.postMessage(
+                    {
+                        type: "SKIP_WAITING"
+                    }
                 );
 
             }
@@ -838,7 +772,7 @@
 
             setStatus(
                 "",
-                "PWA service is not ready yet."
+                "PWA service could not start."
             );
 
         }
@@ -846,9 +780,9 @@
     }
 
 
-    /* ============================================================
+    /* ========================================================
        MANIFEST CHECK
-       ============================================================ */
+       ======================================================== */
 
     async function checkManifest() {
 
@@ -858,8 +792,7 @@
                 await fetch(
                     "/manifest.json",
                     {
-                        cache:
-                            "no-store"
+                        cache: "no-store"
                     }
                 );
 
@@ -867,7 +800,7 @@
             if (!response.ok) {
 
                 throw new Error(
-                    "Manifest returned HTTP " +
+                    "Manifest HTTP " +
                     response.status
                 );
 
@@ -883,19 +816,6 @@
                 manifest
             );
 
-
-            if (
-                !manifest.name ||
-                !manifest.start_url ||
-                !manifest.display
-            ) {
-
-                console.warn(
-                    "[PWA] Manifest is missing important installation properties."
-                );
-
-            }
-
         }
         catch (error) {
 
@@ -909,15 +829,13 @@
     }
 
 
-    /* ============================================================
-       STANDALONE DISPLAY CHANGE
-       ============================================================ */
+    /* ========================================================
+       MONITOR DISPLAY MODE
+       ======================================================== */
 
     function monitorStandaloneMode() {
 
-        if (
-            !window.matchMedia
-        ) {
+        if (!window.matchMedia) {
 
             return;
 
@@ -930,11 +848,9 @@
             );
 
 
-        function update() {
+        function updateDisplayMode() {
 
-            if (
-                query.matches
-            ) {
+            if (isAppInstalled()) {
 
                 setStatus(
                     "installed",
@@ -953,7 +869,7 @@
         }
 
 
-        update();
+        updateDisplayMode();
 
 
         if (
@@ -963,18 +879,17 @@
 
             query.addEventListener(
                 "change",
-                update
+                updateDisplayMode
             );
 
         }
-
         else if (
             typeof query.addListener ===
             "function"
         ) {
 
             query.addListener(
-                update
+                updateDisplayMode
             );
 
         }
@@ -982,52 +897,13 @@
     }
 
 
-    /* ============================================================
+    /* ========================================================
        INITIALISE
-       ============================================================ */
+       ======================================================== */
 
     async function initialise() {
 
         cacheElements();
-
-
-        /*
-         * If the app is already installed,
-         * do not show installation UI.
-         */
-
-        if (
-            isAppInstalled()
-        ) {
-
-            setStatus(
-                "installed",
-                "AFC Isiu Youth Portal is already installed."
-            );
-
-
-            hideInstallButton();
-
-        }
-
-        else {
-
-            /*
-             * Show the install button.
-             *
-             * It will use the native prompt if
-             * Chrome supplies beforeinstallprompt.
-             */
-
-            showInstallButton();
-
-
-            setStatus(
-                "",
-                "Checking installation availability..."
-            );
-
-        }
 
 
         setupInstallButton();
@@ -1036,14 +912,33 @@
 
         setupModal();
 
-        setupHubInstall();
+        setupHubButton();
+
+
+        if (isAppInstalled()) {
+
+            setStatus(
+                "installed",
+                "AFC Isiu Youth Portal is already installed."
+            );
+
+            hideInstallButton();
+
+        }
+        else {
+
+            showInstallButton();
+
+            setStatus(
+                "checking",
+                "Checking if this device can install the app..."
+            );
+
+        }
+
 
         monitorStandaloneMode();
 
-
-        /*
-         * Register PWA infrastructure.
-         */
 
         await registerServiceWorker();
 
@@ -1051,20 +946,53 @@
         await checkManifest();
 
 
+        /*
+         * If beforeinstallprompt has not fired yet,
+         * do not automatically show instructions.
+         *
+         * Chrome may fire the event later.
+         */
+
+        if (
+            !isAppInstalled() &&
+            !deferredInstallPrompt
+        ) {
+
+            setTimeout(
+                function () {
+
+                    if (
+                        !isAppInstalled() &&
+                        !deferredInstallPrompt
+                    ) {
+
+                        setStatus(
+                            "",
+                            "Waiting for browser installation availability."
+                        );
+
+                    }
+
+                },
+                2000
+            );
+
+        }
+
+
         console.log(
-            "[PWA] AFC Isiu Youth Portal PWA controller ready."
+            "[PWA] Controller ready."
         );
 
     }
 
 
-    /* ============================================================
+    /* ========================================================
        START
-       ============================================================ */
+       ======================================================== */
 
     if (
-        document.readyState ===
-        "loading"
+        document.readyState === "loading"
     ) {
 
         document.addEventListener(
@@ -1080,30 +1008,25 @@
     }
 
 
-    /* ============================================================
+    /* ========================================================
        PUBLIC API
-       ============================================================ */
+       ======================================================== */
 
     window.AFC_PWA = {
 
-        install:
-            installApp,
+        install: installApp,
 
-        isInstalled:
-            isAppInstalled,
+        isInstalled: isAppInstalled,
 
-        openInstallHelp:
-            openInstallModal,
+        openInstallHelp: openInstallModal,
 
-        closeInstallHelp:
-            closeInstallModal,
+        closeInstallHelp: closeInstallModal,
 
-        getInstallPrompt:
-            function () {
+        getInstallPrompt: function () {
 
-                return deferredInstallPrompt;
+            return deferredInstallPrompt;
 
-            }
+        }
 
     };
 
