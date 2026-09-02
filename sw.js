@@ -11,7 +11,7 @@
    CACHE VERSION
    ========================================================= */
 
-const CACHE_VERSION = "afc-isiu-pwa-v9";
+const CACHE_VERSION = "afc-isiu-pwa-v10";
 
 const STATIC_CACHE =
     `${CACHE_VERSION}-static`;
