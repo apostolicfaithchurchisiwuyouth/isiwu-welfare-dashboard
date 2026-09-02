@@ -1,28 +1,65 @@
-/* ============================================================
+/* =========================================================
    AFC ISIU YOUTH PORTAL V2
    FILE: pwa.js
-   PURPOSE: PWA INSTALLATION CONTROLLER
-   ============================================================ */
+   VERSION: 3.0
+
+   PURPOSE:
+   - PWA service worker registration
+   - Native PWA installation
+   - Install prompt handling
+   - Installed-state detection
+   - Manifest verification
+   - PWA diagnostics
+
+   IMPORTANT:
+   - This is the ONLY file that registers the service worker.
+   - Service worker: /sw.js
+   - Native installation uses beforeinstallprompt.
+   - Manual installation instructions are NEVER shown
+     automatically by the Install App button when the
+     native installation prompt is available.
+========================================================= */
 
 (function () {
 
     "use strict";
 
 
-    /* =========================================================
+    /* =====================================================
+       CONFIG
+    ===================================================== */
+
+    const PWA_CONFIG = {
+
+        SERVICE_WORKER:
+            "/sw.js",
+
+        MANIFEST:
+            "/manifest.json",
+
+        INSTALL_DISPLAY_MODE:
+            "(display-mode: standalone)",
+
+        INSTALL_DISPLAY_MODE_FULLSCREEN:
+            "(display-mode: fullscreen)"
+
+    };
+
+
+    /* =====================================================
        STATE
-    ========================================================= */
+    ===================================================== */
 
-    let deferredInstallPrompt = null;
+    let deferredInstallPrompt =
+        null;
 
-    let serviceWorkerRegistration = null;
+    let serviceWorkerRegistration =
+        null;
 
-    let installInProgress = false;
 
-
-    /* =========================================================
-       DOM HELPER
-    ========================================================= */
+    /* =====================================================
+       DOM HELPERS
+    ===================================================== */
 
     function $(id) {
 
@@ -31,26 +68,31 @@
     }
 
 
-    /* =========================================================
-       ELEMENTS
-    ========================================================= */
+    /* =====================================================
+       DOM ELEMENTS
+    ===================================================== */
 
-    let installButton = null;
-    let helpButton = null;
+    let installButton =
+        null;
 
-    let status = null;
-    let statusText = null;
+    let helpButton =
+        null;
 
-    let installModal = null;
-    let modalClose = null;
-    let modalDone = null;
+    let status =
+        null;
+
+    let statusDot =
+        null;
+
+    let statusText =
+        null;
 
 
-    /* =========================================================
-       CACHE DOM
-    ========================================================= */
+    /* =====================================================
+       INITIALISE DOM REFERENCES
+    ===================================================== */
 
-    function cacheElements() {
+    function cacheDOM() {
 
         installButton =
             $("installAppBtn");
@@ -61,39 +103,60 @@
         status =
             $("pwaStatus");
 
+        statusDot =
+            $("pwaStatusDot");
+
         statusText =
             $("pwaStatusText");
-
-        installModal =
-            $("pwaInstallModal");
-
-        modalClose =
-            $("pwaModalClose");
-
-        modalDone =
-            $("pwaModalDone");
 
     }
 
 
-    /* =========================================================
+    /* =====================================================
        STATUS
-    ========================================================= */
+    ===================================================== */
 
-    function setStatus(type, message) {
+    function setStatus(
+        type,
+        message
+    ) {
 
         if (status) {
 
             status.classList.remove(
                 "available",
                 "installed",
-                "installing",
+                "checking",
                 "unavailable"
             );
 
+
             if (type) {
 
-                status.classList.add(type);
+                status.classList.add(
+                    type
+                );
+
+            }
+
+        }
+
+
+        if (statusDot) {
+
+            statusDot.classList.remove(
+                "available",
+                "installed",
+                "checking",
+                "unavailable"
+            );
+
+
+            if (type) {
+
+                statusDot.classList.add(
+                    type
+                );
 
             }
 
@@ -110,53 +173,42 @@
     }
 
 
-    /* =========================================================
-       INSTALLED CHECK
-    ========================================================= */
+    /* =====================================================
+       INSTALLED DETECTION
+    ===================================================== */
 
     function isAppInstalled() {
 
-        if (
+        const standalone =
             window.matchMedia &&
             window.matchMedia(
-                "(display-mode: standalone)"
-            ).matches
-        ) {
-
-            return true;
-
-        }
+                PWA_CONFIG.INSTALL_DISPLAY_MODE
+            ).matches;
 
 
-        if (
+        const fullscreen =
             window.matchMedia &&
             window.matchMedia(
-                "(display-mode: fullscreen)"
-            ).matches
-        ) {
-
-            return true;
-
-        }
+                PWA_CONFIG.INSTALL_DISPLAY_MODE_FULLSCREEN
+            ).matches;
 
 
-        if (
-            window.navigator.standalone === true
-        ) {
-
-            return true;
-
-        }
+        const iosStandalone =
+            window.navigator.standalone === true;
 
 
-        return false;
+        return (
+            standalone ||
+            fullscreen ||
+            iosStandalone
+        );
 
     }
 
 
-    /* =========================================================
-       SHOW / HIDE INSTALL BUTTON
-    ========================================================= */
+    /* =====================================================
+       SHOW INSTALL BUTTON
+    ===================================================== */
 
     function showInstallButton() {
 
@@ -167,15 +219,28 @@
         }
 
 
-        installButton.hidden = false;
+        installButton.hidden =
+            false;
 
-        installButton.disabled = false;
 
         installButton.style.display =
             "inline-flex";
 
+
+        installButton.disabled =
+            false;
+
+
+        installButton.removeAttribute(
+            "aria-hidden"
+        );
+
     }
 
+
+    /* =====================================================
+       HIDE INSTALL BUTTON
+    ===================================================== */
 
     function hideInstallButton() {
 
@@ -186,15 +251,87 @@
         }
 
 
-        installButton.hidden = true;
+        installButton.hidden =
+            true;
+
 
         installButton.style.display =
             "none";
 
+
+        installButton.setAttribute(
+            "aria-hidden",
+            "true"
+        );
+
     }
 
 
-    function setInstallButtonLoading(isLoading) {
+    /* =====================================================
+       SET INSTALL BUTTON READY
+    ===================================================== */
+
+    function setInstallButtonReady() {
+
+        if (!installButton) {
+
+            return;
+
+        }
+
+
+        showInstallButton();
+
+
+        installButton.disabled =
+            false;
+
+
+        installButton.classList.add(
+            "pwa-install-ready"
+        );
+
+
+        installButton.setAttribute(
+            "aria-label",
+            "Install AFC Isiu Youth Portal"
+        );
+
+    }
+
+
+    /* =====================================================
+       SET INSTALL BUTTON WAITING
+    ===================================================== */
+
+    function setInstallButtonWaiting() {
+
+        if (!installButton) {
+
+            return;
+
+        }
+
+
+        showInstallButton();
+
+
+        installButton.disabled =
+            false;
+
+
+        installButton.classList.remove(
+            "pwa-install-ready"
+        );
+
+    }
+
+
+    /* =====================================================
+       INSTALL BUTTON LOADING STATE
+    ===================================================== */
+
+    function setInstallingState() {
 
         if (!installButton) {
 
@@ -204,60 +341,171 @@
 
 
         installButton.disabled =
-            isLoading;
+            true;
 
 
-        if (isLoading) {
+        installButton.classList.add(
+            "is-installing"
+        );
 
-            installButton.dataset.originalText =
-                installButton.innerHTML;
+
+        const icon =
+            installButton.querySelector(
+                "i"
+            );
 
 
-            installButton.innerHTML =
-                `
-                <i class="fa-solid fa-spinner fa-spin"></i>
+        if (icon) {
 
-                <span>
-                    Installing...
-                </span>
-                `;
+            icon.classList.remove(
+                "fa-download",
+                "fa-mobile-screen-button",
+                "fa-plus"
+            );
+
+
+            icon.classList.add(
+                "fa-spinner",
+                "fa-spin"
+            );
 
         }
 
-        else if (
-            installButton.dataset.originalText
-        ) {
 
-            installButton.innerHTML =
-                installButton.dataset.originalText;
+        const text =
+            installButton.querySelector(
+                ".install-button-text"
+            );
+
+
+        if (text) {
+
+            text.textContent =
+                "Installing...";
+
+        }
+        else {
+
+            /*
+             * Fallback for buttons without
+             * the optional text span.
+             */
+
+            const textNodes =
+                Array.from(
+                    installButton.childNodes
+                ).filter(
+                    node =>
+                        node.nodeType ===
+                        Node.TEXT_NODE
+                );
+
+
+            if (textNodes.length) {
+
+                textNodes[
+                    textNodes.length - 1
+                ].textContent =
+                    " Installing...";
+
+            }
 
         }
 
     }
 
 
-    /* =========================================================
-       INSTALL MODAL
-       ONLY FOR "HOW TO INSTALL"
-    ========================================================= */
+    /* =====================================================
+       RESET INSTALL BUTTON
+    ===================================================== */
 
-    function openInstallModal() {
+    function resetInstallButton() {
 
-        if (!installModal) {
+        if (!installButton) {
 
             return;
 
         }
 
 
-        installModal.classList.add(
-            "is-open"
+        installButton.disabled =
+            false;
+
+
+        installButton.classList.remove(
+            "is-installing"
         );
 
-        installModal.setAttribute(
+
+        const icon =
+            installButton.querySelector(
+                "i"
+            );
+
+
+        if (icon) {
+
+            icon.classList.remove(
+                "fa-spinner",
+                "fa-spin"
+            );
+
+
+            icon.classList.add(
+                "fa-download"
+            );
+
+        }
+
+
+        const text =
+            installButton.querySelector(
+                ".install-button-text"
+            );
+
+
+        if (text) {
+
+            text.textContent =
+                "Install App";
+
+        }
+
+    }
+
+
+    /* =====================================================
+       OPEN MANUAL INSTALL HELP
+    ===================================================== */
+
+    function openInstallHelp() {
+
+        const modal =
+            $("pwaInstallModal");
+
+
+        if (!modal) {
+
+            console.warn(
+                "[PWA] Install help modal not found."
+            );
+
+
+            return;
+
+        }
+
+
+        modal.classList.add(
+            "show"
+        );
+
+
+        modal.setAttribute(
             "aria-hidden",
             "false"
         );
+
 
         document.body.classList.add(
             "pwa-modal-open"
@@ -266,23 +514,33 @@
     }
 
 
-    function closeInstallModal() {
+    /* =====================================================
+       CLOSE MANUAL INSTALL HELP
+    ===================================================== */
 
-        if (!installModal) {
+    function closeInstallHelp() {
+
+        const modal =
+            $("pwaInstallModal");
+
+
+        if (!modal) {
 
             return;
 
         }
 
 
-        installModal.classList.remove(
-            "is-open"
+        modal.classList.remove(
+            "show"
         );
 
-        installModal.setAttribute(
+
+        modal.setAttribute(
             "aria-hidden",
             "true"
         );
+
 
         document.body.classList.remove(
             "pwa-modal-open"
@@ -291,44 +549,54 @@
     }
 
 
-    /* =========================================================
+    /* =====================================================
        NATIVE INSTALL
-    ========================================================= */
+    ===================================================== */
 
     async function triggerNativeInstall() {
 
+        /*
+         * This is the critical part.
+
+         * The browser supplies this event through
+         * beforeinstallprompt.
+
+         * We MUST use the stored event.
+         *
+         * There is no other JavaScript API that can
+         * force Chrome to install a PWA.
+         */
+
         if (!deferredInstallPrompt) {
 
+            console.warn(
+                "[PWA] Native installation prompt is not available."
+            );
+
+
             return false;
 
         }
-
-
-        if (installInProgress) {
-
-            return false;
-
-        }
-
-
-        installInProgress = true;
-
-        setInstallButtonLoading(true);
-
-        setStatus(
-            "installing",
-            "Opening installation..."
-        );
 
 
         try {
 
+            console.log(
+                "[PWA] Starting native PWA installation."
+            );
+
+
+            setInstallingState();
+
+
             /*
-             * This opens the REAL browser-controlled
-             * Progressive Web App installation prompt.
+             * IMPORTANT:
+             *
+             * prompt() MUST be called from the
+             * user's button interaction.
              */
 
-            await deferredInstallPrompt.prompt();
+            deferredInstallPrompt.prompt();
 
 
             const choice =
@@ -341,246 +609,90 @@
             );
 
 
-            /*
-             * The prompt can only be used once.
-             */
-
-            deferredInstallPrompt =
-                null;
-
-
             if (
                 choice.outcome ===
                 "accepted"
             ) {
 
                 setStatus(
-                    "installing",
+                    "installed",
                     "Installing AFC Isiu Youth Portal..."
                 );
 
-            }
 
-            else {
+                /*
+                 * Chrome fires appinstalled after
+                 * successful installation.
+                 */
 
-                setStatus(
-                    "available",
-                    "Installation cancelled."
-                );
-
-                setInstallButtonLoading(false);
+                return true;
 
             }
 
 
-            return true;
+            /*
+             * User dismissed installation.
+             */
+
+            setStatus(
+                "available",
+                "Installation was cancelled. Tap Install App to try again."
+            );
+
+
+            resetInstallButton();
+
+
+            return false;
 
         }
-
         catch (error) {
 
             console.error(
-                "[PWA] Installation error:",
+                "[PWA] Native installation failed:",
                 error
             );
 
 
             setStatus(
                 "unavailable",
-                "Installation could not be started. Please try again."
+                "The browser could not start the installation."
             );
 
-            setInstallButtonLoading(false);
+
+            resetInstallButton();
 
 
             return false;
 
         }
-
         finally {
 
-            installInProgress =
-                false;
-
-        }
-
-    }
-
-
-    /* =========================================================
-       INSTALL APP ACTION
-    ========================================================= */
-
-    async function installApp() {
-
-        console.log(
-            "[PWA] Install button clicked."
-        );
-
-
-        /*
-         * Already installed.
-         */
-
-        if (isAppInstalled()) {
-
-            setStatus(
-                "installed",
-                "AFC Isiu Youth Portal is already installed."
-            );
-
-            hideInstallButton();
-
-            return;
-
-        }
-
-
-        /*
-         * Native installation prompt available.
-         */
-
-        if (deferredInstallPrompt) {
-
-            await triggerNativeInstall();
-
-            return;
-
-        }
-
-
-        /*
-         * IMPORTANT:
-         *
-         * DO NOT OPEN THE INSTRUCTIONS MODAL HERE.
-         *
-         * The Install button must remain dedicated
-         * to native installation.
-         */
-
-        setStatus(
-            "unavailable",
-            "Installation is not ready yet. Please wait a moment and try again."
-        );
-
-
-        /*
-         * Try checking for a service worker update.
-         */
-
-        if (serviceWorkerRegistration) {
-
-            try {
-
-                await serviceWorkerRegistration.update();
-
-            }
-
-            catch (error) {
-
-                console.warn(
-                    "[PWA] Update check failed:",
-                    error
-                );
-
-            }
-
-        }
-
-    }
-
-
-    /* =========================================================
-       BEFORE INSTALL PROMPT
-    ========================================================= */
-
-    window.addEventListener(
-        "beforeinstallprompt",
-        function (event) {
-
-            console.log(
-                "[PWA] Native install prompt received."
-            );
-
-
             /*
-             * Prevent the browser from automatically
-             * showing its own install prompt.
+             * A BeforeInstallPromptEvent should not
+             * be reused after prompt().
              */
-
-            event.preventDefault();
-
-
-            /*
-             * Save the event.
-             *
-             * Our Install App button will trigger it.
-             */
-
-            deferredInstallPrompt =
-                event;
-
-
-            showInstallButton();
-
-
-            setStatus(
-                "available",
-                "Ready to install on this device."
-            );
-
-
-            document.documentElement.dataset.pwaInstallable =
-                "true";
-
-        }
-    );
-
-
-    /* =========================================================
-       APP INSTALLED
-    ========================================================= */
-
-    window.addEventListener(
-        "appinstalled",
-        function () {
-
-            console.log(
-                "[PWA] Application installed successfully."
-            );
-
 
             deferredInstallPrompt =
                 null;
 
-
-            installInProgress =
-                false;
-
-
-            document.documentElement.dataset.pwaInstalled =
-                "true";
-
-
-            setStatus(
-                "installed",
-                "AFC Isiu Youth Portal is installed."
-            );
-
-
-            hideInstallButton();
-
         }
-    );
+
+    }
 
 
-    /* =========================================================
-       INSTALL BUTTON EVENT
-    ========================================================= */
+    /* =====================================================
+       INSTALL BUTTON
+    ===================================================== */
 
-    function setupInstallButton() {
+    function bindInstallButton() {
 
         if (!installButton) {
+
+            console.warn(
+                "[PWA] #installAppBtn not found."
+            );
+
 
             return;
 
@@ -589,9 +701,51 @@
 
         installButton.addEventListener(
             "click",
-            async function () {
+            async event => {
 
-                await installApp();
+                event.preventDefault();
+
+
+                console.log(
+                    "[PWA] Install App clicked."
+                );
+
+
+                /*
+                 * NEVER open the manual help modal
+                 * from this button.
+                 *
+                 * The user specifically wants the
+                 * Install App button to be the native
+                 * installation action.
+                 */
+
+                if (
+                    !deferredInstallPrompt
+                ) {
+
+                    console.warn(
+                        "[PWA] Chrome has not supplied a native install prompt yet."
+                    );
+
+
+                    setStatus(
+                        "unavailable",
+                        "Native installation is not currently available in this browser session."
+                    );
+
+
+                    /*
+                     * Do NOT open the manual
+                     * installation instructions.
+                     */
+
+                    return;
+
+                }
+
+
+                await triggerNativeInstall();
 
             }
         );
@@ -599,11 +753,11 @@
     }
 
 
-    /* =========================================================
-       HELP BUTTON EVENT
-    ========================================================= */
+    /* =====================================================
+       MANUAL HELP BUTTON
+    ===================================================== */
 
-    function setupHelpButton() {
+    function bindHelpButton() {
 
         if (!helpButton) {
 
@@ -614,9 +768,11 @@
 
         helpButton.addEventListener(
             "click",
-            function () {
+            event => {
 
-                openInstallModal();
+                event.preventDefault();
+
+                openInstallHelp();
 
             }
         );
@@ -624,44 +780,68 @@
     }
 
 
-    /* =========================================================
-       MODAL EVENTS
-    ========================================================= */
+    /* =====================================================
+       MODAL CONTROLS
+    ===================================================== */
 
-    function setupModal() {
+    function bindModalControls() {
 
-        if (modalClose) {
+        const modal =
+            $("pwaInstallModal");
 
-            modalClose.addEventListener(
+
+        const closeButton =
+            $("pwaModalClose");
+
+
+        const doneButton =
+            $("pwaModalDone");
+
+
+        if (closeButton) {
+
+            closeButton.addEventListener(
                 "click",
-                closeInstallModal
+                event => {
+
+                    event.preventDefault();
+
+                    closeInstallHelp();
+
+                }
             );
 
         }
 
 
-        if (modalDone) {
+        if (doneButton) {
 
-            modalDone.addEventListener(
+            doneButton.addEventListener(
                 "click",
-                closeInstallModal
+                event => {
+
+                    event.preventDefault();
+
+                    closeInstallHelp();
+
+                }
             );
 
         }
 
 
-        if (installModal) {
+        if (modal) {
 
-            installModal.addEventListener(
+            modal.addEventListener(
                 "click",
-                function (event) {
+                event => {
 
                     if (
                         event.target ===
-                        installModal
+                        modal
                     ) {
 
-                        closeInstallModal();
+                        closeInstallHelp();
 
                     }
 
@@ -673,13 +853,14 @@
 
         document.addEventListener(
             "keydown",
-            function (event) {
+            event => {
 
                 if (
-                    event.key === "Escape"
+                    event.key ===
+                    "Escape"
                 ) {
 
-                    closeInstallModal();
+                    closeInstallHelp();
 
                 }
 
@@ -689,9 +870,163 @@
     }
 
 
-    /* =========================================================
-       SERVICE WORKER
-    ========================================================= */
+    /* =====================================================
+       BEFORE INSTALL PROMPT
+    ===================================================== */
+
+    window.addEventListener(
+        "beforeinstallprompt",
+        event => {
+
+            console.log(
+                "[PWA] beforeinstallprompt received."
+            );
+
+
+            /*
+             * Stop Chrome from showing its own
+             * automatic mini-infobar/prompt.
+             *
+             * We will launch it from the user's
+             * Install App button.
+             */
+
+            event.preventDefault();
+
+
+            deferredInstallPrompt =
+                event;
+
+
+            setInstallButtonReady();
+
+
+            setStatus(
+                "available",
+                "AFC Isiu Youth Portal is ready to install."
+            );
+
+
+            console.log(
+                "[PWA] Native installation is ready."
+            );
+
+        }
+    );
+
+
+    /* =====================================================
+       APP INSTALLED
+    ===================================================== */
+
+    window.addEventListener(
+        "appinstalled",
+        () => {
+
+            console.log(
+                "[PWA] AFC Isiu Youth Portal installed successfully."
+            );
+
+
+            deferredInstallPrompt =
+                null;
+
+
+            setStatus(
+                "installed",
+                "AFC Isiu Youth Portal is now installed."
+            );
+
+
+            hideInstallButton();
+
+
+            resetInstallButton();
+
+        }
+    );
+
+
+    /* =====================================================
+       DISPLAY MODE CHANGE
+    ===================================================== */
+
+    function monitorDisplayMode() {
+
+        if (!window.matchMedia) {
+
+            return;
+
+        }
+
+
+        const standaloneQuery =
+            window.matchMedia(
+                PWA_CONFIG.INSTALL_DISPLAY_MODE
+            );
+
+
+        const fullscreenQuery =
+            window.matchMedia(
+                PWA_CONFIG.INSTALL_DISPLAY_MODE_FULLSCREEN
+            );
+
+
+        function checkMode() {
+
+            if (
+                standaloneQuery.matches ||
+                fullscreenQuery.matches ||
+                window.navigator.standalone === true
+            ) {
+
+                setStatus(
+                    "installed",
+                    "AFC Isiu Youth Portal is installed and running as an app."
+                );
+
+
+                hideInstallButton();
+
+            }
+
+        }
+
+
+        if (
+            typeof standaloneQuery.addEventListener ===
+            "function"
+        ) {
+
+            standaloneQuery.addEventListener(
+                "change",
+                checkMode
+            );
+
+        }
+
+
+        if (
+            typeof fullscreenQuery.addEventListener ===
+            "function"
+        ) {
+
+            fullscreenQuery.addEventListener(
+                "change",
+                checkMode
+            );
+
+        }
+
+
+        checkMode();
+
+    }
+
+
+    /* =====================================================
+       SERVICE WORKER REGISTRATION
+    ===================================================== */
 
     async function registerServiceWorker() {
 
@@ -704,21 +1039,22 @@
             );
 
 
-            setStatus(
-                "unavailable",
-                "This browser does not support PWA installation."
-            );
-
-            return;
+            return null;
 
         }
 
 
         try {
 
+            console.log(
+                "[PWA] Registering:",
+                PWA_CONFIG.SERVICE_WORKER
+            );
+
+
             serviceWorkerRegistration =
                 await navigator.serviceWorker.register(
-                    "/sw.js",
+                    PWA_CONFIG.SERVICE_WORKER,
                     {
                         scope: "/"
                     }
@@ -739,27 +1075,9 @@
             );
 
 
-            /*
-             * Check for updates.
-             */
-
-            try {
-
-                await serviceWorkerRegistration.update();
-
-            }
-
-            catch (error) {
-
-                console.warn(
-                    "[PWA] Service worker update check failed:",
-                    error
-                );
-
-            }
+            return serviceWorkerRegistration;
 
         }
-
         catch (error) {
 
             console.error(
@@ -770,17 +1088,20 @@
 
             setStatus(
                 "unavailable",
-                "PWA service could not start."
+                "PWA service is temporarily unavailable."
             );
+
+
+            return null;
 
         }
 
     }
 
 
-    /* =========================================================
+    /* =====================================================
        MANIFEST CHECK
-    ========================================================= */
+    ===================================================== */
 
     async function checkManifest() {
 
@@ -788,10 +1109,9 @@
 
             const response =
                 await fetch(
-                    "/manifest.json",
+                    PWA_CONFIG.MANIFEST,
                     {
-                        cache:
-                            "no-store"
+                        cache: "no-store"
                     }
                 );
 
@@ -799,8 +1119,7 @@
             if (!response.ok) {
 
                 throw new Error(
-                    "Manifest HTTP " +
-                    response.status
+                    `Manifest returned HTTP ${response.status}`
                 );
 
             }
@@ -817,21 +1136,20 @@
 
 
             if (
-                !manifest.name ||
-                !manifest.start_url ||
-                !manifest.display ||
                 !manifest.icons ||
-                manifest.icons.length === 0
+                !manifest.icons.length
             ) {
 
                 console.warn(
-                    "[PWA] Manifest is missing required PWA information."
+                    "[PWA] Manifest has no icons."
                 );
 
             }
 
-        }
 
+            return manifest;
+
+        }
         catch (error) {
 
             console.error(
@@ -839,136 +1157,150 @@
                 error
             );
 
+
+            return null;
+
         }
 
     }
 
 
-    /* =========================================================
-       MONITOR DISPLAY MODE
-    ========================================================= */
+    /* =====================================================
+       INITIAL STATE
+    ===================================================== */
 
-    function monitorStandaloneMode() {
+    function initialiseState() {
 
-        if (!window.matchMedia) {
+        if (
+            isAppInstalled()
+        ) {
+
+            console.log(
+                "[PWA] App is already running in standalone mode."
+            );
+
+
+            setStatus(
+                "installed",
+                "AFC Isiu Youth Portal is installed and running as an app."
+            );
+
+
+            hideInstallButton();
+
 
             return;
 
         }
 
 
-        const standaloneQuery =
-            window.matchMedia(
-                "(display-mode: standalone)"
-            );
+        /*
+         * Keep Install App visible.
+         *
+         * The button itself will only work when
+         * Chrome supplies beforeinstallprompt.
+         */
+
+        setInstallButtonWaiting();
 
 
-        function updateDisplayMode() {
-
-            if (
-                standaloneQuery.matches
-            ) {
-
-                setStatus(
-                    "installed",
-                    "AFC Isiu Youth Portal is already installed."
-                );
-
-
-                hideInstallButton();
-
-
-                document.documentElement.dataset.pwaInstalled =
-                    "true";
-
-            }
-
-        }
-
-
-        updateDisplayMode();
-
-
-        if (
-            typeof standaloneQuery.addEventListener ===
-            "function"
-        ) {
-
-            standaloneQuery.addEventListener(
-                "change",
-                updateDisplayMode
-            );
-
-        }
-
-        else if (
-            typeof standaloneQuery.addListener ===
-            "function"
-        ) {
-
-            standaloneQuery.addListener(
-                updateDisplayMode
-            );
-
-        }
+        setStatus(
+            "checking",
+            "Checking PWA installation availability..."
+        );
 
     }
 
 
-    /* =========================================================
-       INITIALISE
-    ========================================================= */
+    /* =====================================================
+       PUBLIC API
+    ===================================================== */
+
+    window.AFC_PWA = {
+
+        install:
+            triggerNativeInstall,
+
+        isInstalled:
+            isAppInstalled,
+
+        openInstallHelp:
+            openInstallHelp,
+
+        closeInstallHelp:
+            closeInstallHelp,
+
+        getInstallPrompt:
+            function () {
+
+                return deferredInstallPrompt;
+
+            },
+
+        getServiceWorkerRegistration:
+            function () {
+
+                return serviceWorkerRegistration;
+
+            }
+
+    };
+
+
+    /* =====================================================
+       STARTUP
+    ===================================================== */
 
     async function initialise() {
 
-        cacheElements();
+        cacheDOM();
 
 
-        setupInstallButton();
+        initialiseState();
 
-        setupHelpButton();
 
-        setupModal();
+        bindInstallButton();
 
-        monitorStandaloneMode();
+
+        bindHelpButton();
+
+
+        bindModalControls();
+
+
+        monitorDisplayMode();
 
 
         /*
-         * Already installed?
+         * Register SW and check manifest.
+         *
+         * These are intentionally independent
+         * of the button click.
          */
 
-        if (isAppInstalled()) {
+        await registerServiceWorker();
+
+
+        await checkManifest();
+
+
+        /*
+         * Re-check standalone state after SW setup.
+         */
+
+        if (
+            isAppInstalled()
+        ) {
 
             setStatus(
                 "installed",
-                "AFC Isiu Youth Portal is already installed."
+                "AFC Isiu Youth Portal is installed and running as an app."
             );
 
 
             hideInstallButton();
 
         }
-
-        else {
-
-            showInstallButton();
-
-
-            setStatus(
-                "",
-                "Checking installation availability..."
-            );
-
-        }
-
-
-        /*
-         * Start PWA infrastructure.
-         */
-
-        await registerServiceWorker();
-
-        await checkManifest();
 
 
         console.log(
@@ -978,9 +1310,9 @@
     }
 
 
-    /* =========================================================
-       START
-    ========================================================= */
+    /* =====================================================
+       RUN AFTER DOM
+    ===================================================== */
 
     if (
         document.readyState ===
@@ -989,44 +1321,18 @@
 
         document.addEventListener(
             "DOMContentLoaded",
-            initialise
+            initialise,
+            {
+                once: true
+            }
         );
 
-    }
-
-    else {
+    } else {
 
         initialise();
 
     }
 
 
-    /* =========================================================
-       PUBLIC API
-    ========================================================= */
-
-    window.AFC_PWA = {
-
-        install:
-            installApp,
-
-        isInstalled:
-            isAppInstalled,
-
-        openInstallHelp:
-            openInstallModal,
-
-        closeInstallHelp:
-            closeInstallModal,
-
-        getInstallPrompt:
-            function () {
-
-                return deferredInstallPrompt;
-
-            }
-
-    };
-
-
 })();
+ 
