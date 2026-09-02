@@ -1,7 +1,7 @@
 /* =========================================================
    AFC ISIU YOUTH PORTAL
-   MAIN JAVASCRIPT
-   VERSION 2.2
+   FILE: main.js
+   VERSION: 2.3
 
    PURPOSE:
    - Shared portal functionality
@@ -14,9 +14,11 @@
    - Safe page initialization
 
    IMPORTANT:
-   - Header positioning is controlled by layout.css.
-   - This file does NOT control the header position.
+   - layout.css controls header positioning.
+   - This file does NOT control header positioning.
    - lessons.js controls lesson-specific functionality.
+   - pwa.js is the ONLY file responsible for the
+     Progressive Web App service worker and installation.
 ========================================================= */
 
 "use strict";
@@ -49,8 +51,7 @@ const AFC_MAIN_CONFIG = {
 function onDOMReady(callback) {
 
     if (
-        document.readyState ===
-        "loading"
+        document.readyState === "loading"
     ) {
 
         document.addEventListener(
@@ -83,17 +84,13 @@ onDOMReady(() => {
 
         AOS.init({
 
-            duration:
-                900,
+            duration: 900,
 
-            easing:
-                "ease-out-cubic",
+            easing: "ease-out-cubic",
 
-            once:
-                true,
+            once: true,
 
-            offset:
-                120
+            offset: 120
 
         });
 
@@ -124,9 +121,7 @@ onDOMReady(() => {
 
 
         offlineBanner =
-            document.createElement(
-                "div"
-            );
+            document.createElement("div");
 
 
         offlineBanner.id =
@@ -173,9 +168,7 @@ onDOMReady(() => {
             createOfflineBanner();
 
 
-        banner.classList.add(
-            "show"
-        );
+        banner.classList.add("show");
 
     }
 
@@ -189,9 +182,7 @@ onDOMReady(() => {
         }
 
 
-        offlineBanner.classList.remove(
-            "show"
-        );
+        offlineBanner.classList.remove("show");
 
     }
 
@@ -224,6 +215,13 @@ onDOMReady(() => {
 
         }
     );
+
+
+    if (!navigator.onLine) {
+
+        showOfflineBanner();
+
+    }
 
 });
 
@@ -302,9 +300,7 @@ function showOfflineMessage(
 
 
     const message =
-        document.createElement(
-            "div"
-        );
+        document.createElement("div");
 
 
     message.id =
@@ -515,12 +511,6 @@ onDOMReady(() => {
         );
 
 
-        /*
-         * Prevent background page scrolling.
-         * The fixed header remains visible above
-         * the sidebar because of its z-index hierarchy.
-         */
-
         document.body.style.overflow =
             "hidden";
 
@@ -567,10 +557,6 @@ onDOMReady(() => {
             "sidebar-open"
         );
 
-
-        /*
-         * Restore normal page scrolling.
-         */
 
         document.body.style.overflow =
             "";
@@ -689,9 +675,7 @@ onDOMReady(() => {
     ----------------------------------------------------- */
 
     const sidebarLinks =
-        sidebar.querySelectorAll(
-            "a"
-        );
+        sidebar.querySelectorAll("a");
 
 
     sidebarLinks.forEach(
@@ -807,14 +791,10 @@ onDOMReady(() => {
 
 
     const icon =
-        themeButton.querySelector(
-            "i"
-        );
+        themeButton.querySelector("i");
 
 
-    function applyTheme(
-        theme
-    ) {
+    function applyTheme(theme) {
 
         if (
             theme === "dark"
@@ -874,9 +854,7 @@ onDOMReady(() => {
         savedTheme === "light"
     ) {
 
-        applyTheme(
-            savedTheme
-        );
+        applyTheme(savedTheme);
 
     } else {
 
@@ -916,9 +894,7 @@ onDOMReady(() => {
                     : "dark";
 
 
-            applyTheme(
-                nextTheme
-            );
+            applyTheme(nextTheme);
 
 
             localStorage.setItem(
@@ -1025,17 +1001,13 @@ onDOMReady(() => {
                 "en-GB",
                 {
 
-                    weekday:
-                        "long",
+                    weekday: "long",
 
-                    day:
-                        "numeric",
+                    day: "numeric",
 
-                    month:
-                        "long",
+                    month: "long",
 
-                    year:
-                        "numeric"
+                    year: "numeric"
 
                 }
             );
@@ -1061,9 +1033,7 @@ onDOMReady(() => {
         button => {
 
             if (
-                !button.getAttribute(
-                    "type"
-                )
+                !button.getAttribute("type")
             ) {
 
                 button.setAttribute(
@@ -1081,49 +1051,20 @@ onDOMReady(() => {
 
 /* =========================================================
    SERVICE WORKER
+=========================================================
+
+   IMPORTANT:
+
+   Service worker registration has been intentionally
+   REMOVED from main.js.
+
+   pwa.js is the single owner of:
+
+       /sw.js
+
+   This prevents duplicate registrations and eliminates
+   the old /service-worker.js 404 error.
 ========================================================= */
-
-onDOMReady(() => {
-
-    if (
-        "serviceWorker" in navigator
-    ) {
-
-        window.addEventListener(
-            "load",
-            () => {
-
-                navigator.serviceWorker
-                    .register(
-                        "/sw.js"
-                    )
-                    .then(
-                        registration => {
-
-                            console.log(
-                                "AFC Isiu: Service worker registered.",
-                                registration.scope
-                            );
-
-                        }
-                    )
-                    .catch(
-                        error => {
-
-                            console.warn(
-                                "AFC Isiu: Service worker registration failed.",
-                                error
-                            );
-
-                        }
-                    );
-
-            }
-        );
-
-    }
-
-});
 
 
 /* =========================================================
@@ -1168,3 +1109,4 @@ window.addEventListener(
 console.log(
     "AFC Isiu Youth Portal: main.js loaded successfully."
 );
+ 
