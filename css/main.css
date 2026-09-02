@@ -1,111 +1,26 @@
 /* =========================================================
    AFC ISIU YOUTH PORTAL
-   MAIN.CSS
-   VERSION 2.1
+   FILE: main.css
+   VERSION: 2.2
+
    PURPOSE:
-   - Responsive portal layout
-   - Sticky header
-   - Two-column hub cards
-   - Mobile and desktop spacing
-   - Typography
-   - Bottom navigation safety
+   - Global typography
+   - Page/content styling
+   - Hub cards
+   - Responsive card layout
    - Dark mode
+
+   IMPORTANT:
+   layout.css owns:
+   - application shell
+   - sidebar
+   - topbar
+   - mobile navigation
+   - bottom navigation
+   - page-transition loader
+
+   main.css MUST NOT redefine those systems.
 ========================================================= */
-
-
-/* =========================================================
-   RESET
-========================================================= */
-
-* {
-    box-sizing: border-box;
-    -webkit-tap-highlight-color: transparent;
-}
-
-html {
-    margin: 0;
-    padding: 0;
-    min-height: 100%;
-    overflow-x: hidden;
-    scroll-behavior: smooth;
-}
-
-body {
-    margin: 0;
-    padding: 0;
-
-    min-height: 100%;
-
-    font-family: "DM Sans", sans-serif;
-
-    color: var(--text);
-    background: var(--background);
-
-    overflow-x: hidden;
-
-    /*
-       Space for the fixed mobile bottom navigation.
-    */
-    padding-bottom: 140px;
-}
-
-
-/* =========================================================
-   ROOT VARIABLES
-========================================================= */
-
-:root {
-
-    --brand: #ea580c;
-    --brand-dark: #fb923c;
-    --brand-light: #ff4e5314;
-
-    --ink: #0891b2;
-    --ink-soft: #06b6d4;
-    --ink-mute: #f0f8fa;
-
-    --bg: #f7faf8;
-    --surface: #ffffff;
-
-    --green: #0EA472;
-
-    --primary: #4a0754;
-    --primary-dark: #0A0016;
-    --secondary: #4a0754;
-
-    --light: #ffffff;
-
-    --background: #f7f7fb;
-
-    --text: #0F172A;
-    --text-light: #6b7280;
-
-    --border: #ececf2;
-
-    --radius: 25px;
-
-    --transition: .35s ease;
-
-    /*
-       Header layer.
-       This keeps the header above:
-       - cards
-       - sidebar
-       - page content
-       - decorative elements
-    */
-    --header-z-index: 1000;
-
-    /*
-       Bottom navigation layer.
-    */
-    --bottom-nav-z-index: 1100;
-
-    /*
-       Sidebar layer.
-    */
-    --sidebar-z-index: 1200;
-}
 
 
 /* =========================================================
@@ -119,12 +34,18 @@ h4,
 h5,
 h6,
 .logo {
+
     font-family:
         "Bricolage Grotesque",
         sans-serif;
+
 }
 
+
 p {
+
+    margin-top: 0;
+
     font-family:
         "DM Sans",
         sans-serif;
@@ -132,6 +53,7 @@ p {
     font-size: .78rem;
 
     line-height: 1.5;
+
 }
 
 
@@ -141,25 +63,24 @@ p {
 
 button,
 a {
+
     outline: none;
-    border: none;
+
     text-decoration: none;
+
 }
 
 
-/*
-   Remove the ugly default focus outline while
-   retaining keyboard accessibility.
-*/
-
 button:focus-visible,
 a:focus-visible {
+
     outline:
         2px solid
         var(--primary);
 
     outline-offset:
         3px;
+
 }
 
 
@@ -167,136 +88,17 @@ a:focus-visible {
    PAGE SAFETY
 ========================================================= */
 
-/*
-   Do NOT put overflow:hidden on the main page wrapper.
-
-   Sticky elements can stop working when one of their
-   ancestors creates an unwanted scrolling container.
-*/
-
-body,
 main,
 .page,
 .page-content,
 .content,
 .app,
 .app-content {
-    overflow-x: hidden;
-}
 
+    min-width: 0;
 
-/* =========================================================
-   STICKY HEADER
-========================================================= */
+    max-width: 100%;
 
-/*
-   IMPORTANT:
-
-   The header must be sticky relative to the page.
-
-   This rule intentionally targets several common
-   header class/id names so the shared header remains
-   sticky even if the HTML uses one of them.
-*/
-
-header,
-.site-header,
-.main-header,
-.app-header,
-.portal-header,
-#header,
-#siteHeader,
-#mainHeader {
-
-    position: sticky;
-
-    top: 0;
-
-    z-index:
-        var(--header-z-index);
-
-    width: 100%;
-
-    /*
-       Prevent content from visually showing through
-       the header.
-    */
-    isolation: isolate;
-}
-
-
-/*
-   If your header has a wrapper inside it, keep that
-   wrapper visually above page content.
-*/
-
-header::before,
-.site-header::before,
-.main-header::before,
-.app-header::before,
-.portal-header::before {
-
-    content: "";
-
-    position: absolute;
-
-    inset: 0;
-
-    z-index: -1;
-
-    pointer-events: none;
-}
-
-
-/* =========================================================
-   HEADER BACKGROUND / GLASS
-========================================================= */
-
-.site-header,
-.main-header,
-.app-header,
-.portal-header,
-#header,
-#siteHeader,
-#mainHeader {
-
-    background:
-        rgba(255, 255, 255, .92);
-
-    border-bottom:
-        1px solid
-        rgba(0, 0, 0, .06);
-
-    backdrop-filter:
-        blur(18px);
-
-    -webkit-backdrop-filter:
-        blur(18px);
-
-    box-shadow:
-        0 4px 20px
-        rgba(0, 0, 0, .04);
-}
-
-
-/*
-   Make sure a generic header also gets the same
-   background if no special class is present.
-*/
-
-header {
-    background:
-        rgba(255, 255, 255, .92);
-
-    border-bottom:
-        1px solid
-        rgba(0, 0, 0, .06);
-
-    backdrop-filter:
-        blur(18px);
-
-    -webkit-backdrop-filter:
-        blur(18px);
 }
 
 
@@ -308,14 +110,14 @@ header {
 
     width: 100%;
 
+    min-width: 0;
+
+    max-width: 100%;
+
     margin: 0;
 
     padding: 0;
 
-    /*
-       Prevent horizontal overflow.
-    */
-    max-width: 100%;
 }
 
 
@@ -327,15 +129,9 @@ header {
 
     display: grid;
 
-    /*
-       ALWAYS TWO COLUMNS.
-    */
     grid-template-columns:
         repeat(2, minmax(0, 1fr));
 
-    /*
-       Clear visible space between cards.
-    */
     column-gap:
         1.2rem;
 
@@ -344,16 +140,11 @@ header {
 
     width: 100%;
 
-    /*
-       Side breathing room.
-    */
+    min-width: 0;
+
     padding:
         0 .8rem 2rem;
 
-    /*
-       Prevent grid children from overflowing.
-    */
-    min-width: 0;
 }
 
 
@@ -367,10 +158,10 @@ header {
 
     min-width: 0;
 
-    overflow: hidden;
-
     min-height:
         10.5rem;
+
+    overflow: hidden;
 
     padding:
         1.15rem;
@@ -401,6 +192,7 @@ header {
     transition:
         transform .35s ease,
         box-shadow .35s ease;
+
 }
 
 
@@ -414,7 +206,12 @@ header {
 
     position: absolute;
 
+    top: -4rem;
+
+    right: -4rem;
+
     width: 8rem;
+
     height: 8rem;
 
     border-radius: 50%;
@@ -426,10 +223,8 @@ header {
             transparent 70%
         );
 
-    top: -4rem;
-    right: -4rem;
-
     pointer-events: none;
+
 }
 
 
@@ -445,13 +240,9 @@ header {
     box-shadow:
         0 1.2rem 2.2rem
         rgba(80, 50, 180, .12);
+
 }
 
-
-/*
-   Prevent hover movement from causing problems
-   on touch devices.
-*/
 
 @media (hover: none) {
 
@@ -459,7 +250,9 @@ header {
 
         transform:
             none;
+
     }
+
 }
 
 
@@ -481,6 +274,7 @@ header {
             #ffffff,
             rgba(246, 242, 255, .95)
         );
+
 }
 
 
@@ -499,6 +293,7 @@ header {
     gap: .5rem;
 
     min-width: 0;
+
 }
 
 
@@ -516,27 +311,30 @@ header {
 
     flex-shrink: 0;
 
-    border-radius:
-        .95rem;
-
     display: flex;
 
     align-items: center;
 
     justify-content: center;
 
+    border-radius:
+        .95rem;
+
     box-shadow:
         0 .75rem 1.5rem
         rgba(108, 43, 217, .22);
+
 }
+
 
 .hub-icon i {
 
     color:
-        white;
+        #ffffff;
 
     font-size:
         1rem;
+
 }
 
 
@@ -546,11 +344,14 @@ header {
 
 .hub-count {
 
+    margin-top:
+        1.9rem;
+
     margin-right:
         3px;
 
-    margin-top:
-        1.9rem;
+    color:
+        var(--text-light);
 
     font-size:
         .65rem;
@@ -558,8 +359,6 @@ header {
     font-weight:
         700;
 
-    color:
-        var(--text-light);
 }
 
 
@@ -572,13 +371,13 @@ header {
     margin:
         1rem 0 0;
 
+    color:
+        var(--text);
+
     font-family:
         "Bricolage Grotesque",
         sans-serif;
 
-    /*
-       Larger and more readable.
-    */
     font-size:
         .9rem;
 
@@ -588,14 +387,12 @@ header {
     line-height:
         1.3;
 
-    color:
-        var(--text);
-
     overflow-wrap:
         break-word;
 
     word-break:
         normal;
+
 }
 
 
@@ -608,24 +405,22 @@ header {
     margin:
         .65rem 0 0;
 
+    color:
+        var(--text-light);
+
     font-family:
         "DM Sans",
         sans-serif;
 
-    /*
-       Requested readable size.
-    */
     font-size:
         .7rem;
 
     line-height:
         1.5;
 
-    color:
-        var(--text-light);
-
     overflow-wrap:
         break-word;
+
 }
 
 
@@ -641,7 +436,9 @@ header {
             #7c3aed,
             #a855f7
         );
+
 }
+
 
 .lesson-icon {
 
@@ -651,7 +448,9 @@ header {
             #2563eb,
             #3b82f6
         );
+
 }
+
 
 .event-icon {
 
@@ -661,7 +460,9 @@ header {
             #ea580c,
             #fb923c
         );
+
 }
+
 
 .welfare-icon {
 
@@ -671,7 +472,9 @@ header {
             #16a34a,
             #22c55e
         );
+
 }
+
 
 .prayer-icon {
 
@@ -681,7 +484,9 @@ header {
             #dc2626,
             #f43f5e
         );
+
 }
+
 
 .gallery-icon {
 
@@ -691,6 +496,7 @@ header {
             #0891b2,
             #06b6d4
         );
+
 }
 
 
@@ -714,6 +520,12 @@ header {
     border-radius:
         999px;
 
+    background:
+        rgba(108, 43, 217, .10);
+
+    color:
+        var(--primary);
+
     font-size:
         .62rem;
 
@@ -723,39 +535,31 @@ header {
     letter-spacing:
         .08rem;
 
-    background:
-        rgba(108, 43, 217, .10);
-
-    color:
-        var(--primary);
 }
 
 
 /* =========================================================
-   SHARED TRANSITIONS
+   SHARED CONTENT TRANSITIONS
 ========================================================= */
 
 .primary-btn,
 .secondary-btn,
 .icon-btn,
-.feature-card,
-.hub-item,
-.bottom-nav a,
-.hub-button {
+.feature-card {
 
     transition:
         transform .25s ease,
         box-shadow .25s ease,
         background .25s ease;
+
 }
 
 
 /* =========================================================
-   GLASS EFFECT
+   GLASS CONTENT
 ========================================================= */
 
-.feature-card,
-.hub-item {
+.feature-card {
 
     background:
         rgba(255, 255, 255, .85);
@@ -769,39 +573,7 @@ header {
     border:
         1px solid
         rgba(255, 255, 255, .6);
-}
 
-
-/* =========================================================
-   BOTTOM NAVIGATION SAFETY
-========================================================= */
-
-.bottom-nav {
-
-    position: fixed;
-
-    left: 0;
-
-    right: 0;
-
-    bottom: 0;
-
-    z-index:
-        var(--bottom-nav-z-index);
-}
-
-
-/*
-   Extra page space makes sure the final card
-   can always be scrolled above the navigation.
-*/
-
-main,
-.hub,
-.hub-grid {
-
-    scroll-margin-bottom:
-        150px;
 }
 
 
@@ -811,34 +583,21 @@ main,
 
 @media (max-width: 767px) {
 
-    body {
-
-        padding-bottom:
-            140px;
-    }
-
-
     .hub {
 
-        width:
-            100%;
+        width: 100%;
 
         padding:
             0 .35rem;
+
     }
 
 
     .hub-grid {
 
-        /*
-           TWO CARDS SIDE-BY-SIDE.
-        */
         grid-template-columns:
             repeat(2, minmax(0, 1fr));
 
-        /*
-           Clearly visible space.
-        */
         column-gap:
             1rem;
 
@@ -847,6 +606,7 @@ main,
 
         padding:
             0 .45rem 2.5rem;
+
     }
 
 
@@ -860,6 +620,7 @@ main,
 
         border-radius:
             1.35rem;
+
     }
 
 
@@ -870,6 +631,7 @@ main,
 
         min-height:
             10.5rem;
+
     }
 
 
@@ -883,6 +645,7 @@ main,
 
         border-radius:
             .9rem;
+
     }
 
 
@@ -890,6 +653,7 @@ main,
 
         font-size:
             .95rem;
+
     }
 
 
@@ -900,6 +664,7 @@ main,
 
         line-height:
             1.3;
+
     }
 
 
@@ -910,6 +675,7 @@ main,
 
         line-height:
             1.25;
+
     }
 
 
@@ -917,7 +683,9 @@ main,
 
         font-size:
             .62rem;
+
     }
+
 }
 
 
@@ -940,16 +708,18 @@ main,
 
         padding-right:
             .3rem;
+
     }
 
 
     .hub-item {
 
+        min-height:
+            10rem;
+
         padding:
             .9rem;
 
-        min-height:
-            10rem;
     }
 
 
@@ -957,6 +727,7 @@ main,
 
         font-size:
             .9rem;
+
     }
 
 
@@ -967,7 +738,9 @@ main,
 
         line-height:
             1.45;
+
     }
+
 }
 
 
@@ -977,18 +750,8 @@ main,
 
 @media (min-width: 768px) {
 
-    body {
-
-        padding-bottom:
-            40px;
-    }
-
-
     .hub-grid {
 
-        /*
-           STILL TWO COLUMNS.
-        */
         grid-template-columns:
             repeat(2, minmax(0, 1fr));
 
@@ -1000,6 +763,7 @@ main,
 
         padding:
             0 1rem 3rem;
+
     }
 
 
@@ -1010,6 +774,7 @@ main,
 
         padding:
             1.25rem;
+
     }
 
 
@@ -1017,6 +782,7 @@ main,
 
         grid-column:
             span 2;
+
     }
 
 
@@ -1024,6 +790,7 @@ main,
 
         font-size:
             1rem;
+
     }
 
 
@@ -1031,7 +798,9 @@ main,
 
         font-size:
             .78rem;
+
     }
+
 }
 
 
@@ -1057,6 +826,7 @@ main,
 
         --border:
             #292b31;
+
     }
 
 
@@ -1067,28 +837,7 @@ main,
 
         color:
             var(--text);
-    }
 
-
-    header,
-    .site-header,
-    .main-header,
-    .app-header,
-    .portal-header,
-    #header,
-    #siteHeader,
-    #mainHeader {
-
-        background:
-            rgba(16, 17, 20, .92);
-
-        border-bottom:
-            1px solid
-            rgba(255, 255, 255, .08);
-
-        box-shadow:
-            0 4px 20px
-            rgba(0, 0, 0, .25);
     }
 
 
@@ -1104,6 +853,7 @@ main,
         box-shadow:
             0 .5rem 1.4rem
             rgba(0, 0, 0, .20);
+
     }
 
 
@@ -1115,37 +865,7 @@ main,
                 #18191d,
                 #211c29
             );
-    }
-}
 
-
-/* =========================================================
-   ACCESSIBILITY
-========================================================= */
-
-@media (prefers-reduced-motion: reduce) {
-
-    html {
-
-        scroll-behavior:
-            auto;
     }
 
-
-    *,
-    *::before,
-    *::after {
-
-        animation-duration:
-            .01ms !important;
-
-        animation-iteration-count:
-            1 !important;
-
-        transition-duration:
-            .01ms !important;
-
-        scroll-behavior:
-            auto !important;
-    }
 }
