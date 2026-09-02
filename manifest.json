@@ -3,26 +3,18 @@
   "short_name": "AFC Isiu",
   "id": "/",
   "description": "The official youth portal of Apostolic Faith Church Isiu.",
-
   "start_url": "/",
   "scope": "/",
-
   "display": "standalone",
   "orientation": "portrait-primary",
-
   "background_color": "#f7faf8",
   "theme_color": "#ea580c",
-
   "lang": "en-NG",
-
-  "prefer_related_applications": false,
-
   "categories": [
     "education",
     "lifestyle",
     "social"
   ],
-
   "icons": [
     {
       "src": "/images/pwa-icon-192.png",
@@ -35,12 +27,6 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
-    },
-    {
-      "src": "/images/pwa-icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "maskable"
     }
   ]
 }
