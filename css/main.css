@@ -1,32 +1,52 @@
-/* =========================================================
-   AFC ISIU YOUTH PORTAL
-   FILE: main.css
-   VERSION: 2.2
+/**
+ * ============================================================
+ * AFC ISIU YOUTH PORTAL V2
+ * FILE: main.css
+ * PURPOSE: GLOBAL TYPOGRAPHY + PAGE CONTENT
+ * VERSION: 2.3
+ * ============================================================
+ *
+ * RESPONSIBILITIES
+ * ------------------------------------------------------------
+ * - Typography
+ * - Page content
+ * - Hub cards
+ * - Feature cards
+ * - Generic content elements
+ * - Responsive page content
+ * - Explicit dark theme
+ *
+ * IMPORTANT
+ * ------------------------------------------------------------
+ * layout.css owns:
+ *
+ * - app-layout
+ * - sidebar
+ * - topbar
+ * - bottom-nav
+ * - mobile navigation
+ * - page loader
+ * - offline banner
+ *
+ * Do not redefine those systems here.
+ *
+ * ============================================================
+ */
 
 
-   PURPOSE:
-   - Global typography
-   - Page/content styling
-   - Hub cards
-   - Responsive card layout
-   - Dark mode
+/* ============================================================
+   1. TYPOGRAPHY
+============================================================ */
 
-   IMPORTANT:
-   layout.css owns:
-   - application shell
-   - sidebar
-   - topbar
-   - mobile navigation
-   - bottom navigation
-   - page-transition loader
+html,
+body {
 
-   main.css MUST NOT redefine those systems.
-========================================================= */
+    font-family:
+        "DM Sans",
+        sans-serif;
 
+}
 
-/* =========================================================
-   TYPOGRAPHY
-========================================================= */
 
 h1,
 h2,
@@ -34,7 +54,9 @@ h3,
 h4,
 h5,
 h6,
-.logo {
+.logo,
+.portal-brand h2,
+.sidebar-logo h2 {
 
     font-family:
         "Bricolage Grotesque",
@@ -43,31 +65,122 @@ h6,
 }
 
 
+body {
+
+    font-size:
+        .82rem;
+
+    line-height:
+        1.5;
+
+}
+
+
 p {
 
-    margin-top: 0;
+    margin:
+        0;
 
     font-family:
         "DM Sans",
         sans-serif;
 
-    font-size: .78rem;
+    font-size:
+        .78rem;
 
-    line-height: 1.5;
+    line-height:
+        1.5;
+
+    color:
+        var(--text-light);
 
 }
 
 
-/* =========================================================
-   LINKS / BUTTONS
-========================================================= */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
 
-button,
+    margin:
+        0;
+
+    color:
+        var(--text);
+
+    line-height:
+        1.25;
+
+}
+
+
+h1 {
+
+    font-size:
+        1.45rem;
+
+}
+
+
+h2 {
+
+    font-size:
+        1.15rem;
+
+}
+
+
+h3 {
+
+    font-size:
+        1rem;
+
+}
+
+
+h4 {
+
+    font-size:
+        .9rem;
+
+}
+
+
+h5 {
+
+    font-size:
+        .82rem;
+
+}
+
+
+h6 {
+
+    font-size:
+        .76rem;
+
+}
+
+
+/* ============================================================
+   2. GENERAL ELEMENTS
+============================================================ */
+
 a {
 
-    outline: none;
+    text-decoration:
+        none;
 
-    text-decoration: none;
+}
+
+
+button {
+
+    font-family:
+        "DM Sans",
+        sans-serif;
 
 }
 
@@ -77,7 +190,7 @@ a:focus-visible {
 
     outline:
         2px solid
-        var(--primary);
+        var(--brand);
 
     outline-offset:
         3px;
@@ -85,253 +198,389 @@ a:focus-visible {
 }
 
 
-/* =========================================================
-   PAGE SAFETY
-========================================================= */
+input,
+textarea,
+select {
+
+    font-family:
+        "DM Sans",
+        sans-serif;
+
+}
+
+
+::selection {
+
+    background:
+        rgba(234,88,12,.18);
+
+    color:
+        var(--text);
+
+}
+
+
+/* ============================================================
+   3. PAGE SAFETY
+============================================================ */
 
 main,
+.main,
 .page,
 .page-content,
 .content,
 .app,
-.app-content {
+.app-content,
+.dashboard-main {
 
-    min-width: 0;
+    min-width:
+        0;
 
-    max-width: 100%;
+    max-width:
+        100%;
 
 }
 
 
-/* =========================================================
-   MAIN HUB
-========================================================= */
+.page,
+.app,
+.content {
+
+    width:
+        100%;
+
+}
+
+
+/* ============================================================
+   4. HUB
+============================================================ */
 
 .hub {
 
-    width: 100%;
-
-    min-width: 0;
-
-    max-width: 100%;
-
-    margin: 0;
-
-    padding: 0;
+    width:
+        100%;
 
 }
 
-
-/* =========================================================
-   HUB GRID
-========================================================= */
 
 .hub-grid {
 
-    display: grid;
+    display:
+        grid;
 
     grid-template-columns:
-        repeat(2, minmax(0, 1fr));
+        repeat(
+            2,
+            minmax(0, 1fr)
+        );
 
-    column-gap:
-        1.2rem;
+    gap:
+        18px;
 
-    row-gap:
-        1.2rem;
-
-    width: 100%;
-
-    min-width: 0;
-
-    padding:
-        0 .8rem 2rem;
+    width:
+        100%;
 
 }
 
 
-/* =========================================================
-   HUB CARD
-========================================================= */
+/* ============================================================
+   5. HUB ITEM
+============================================================ */
 
 .hub-item {
 
-    position: relative;
+    position:
+        relative;
 
-    min-width: 0;
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    min-width:
+        0;
 
     min-height:
-        10.5rem;
-
-    overflow: hidden;
+        190px;
 
     padding:
-        1.15rem;
+        21px;
 
-    border-radius:
-        1.45rem;
-
-    background:
-        rgba(255, 255, 255, .85);
+    overflow:
+        hidden;
 
     border:
         1px solid
-        rgba(255, 255, 255, .6);
+        var(--border);
+
+    border-radius:
+        23px;
+
+    background:
+        var(--surface);
+
+    color:
+        var(--text);
+
+    text-decoration:
+        none;
 
     box-shadow:
-        0 .5rem 1.4rem
-        rgba(0, 0, 0, .06),
-
-        inset 0 1px 0
-        rgba(255, 255, 255, .8);
-
-    backdrop-filter:
-        blur(18px);
-
-    -webkit-backdrop-filter:
-        blur(18px);
+        0 8px 28px
+        rgba(15,23,42,.045);
 
     transition:
-        transform .35s ease,
-        box-shadow .35s ease;
+        transform .3s ease,
+        box-shadow .3s ease,
+        border-color .3s ease;
 
 }
 
 
-/* =========================================================
-   CARD DECORATIVE GLOW
-========================================================= */
-
 .hub-item::before {
 
-    content: "";
+    content:
+        "";
 
-    position: absolute;
+    position:
+        absolute;
 
-    top: -4rem;
+    top:
+        -60px;
 
-    right: -4rem;
+    right:
+        -60px;
 
-    width: 8rem;
+    width:
+        150px;
 
-    height: 8rem;
+    height:
+        150px;
 
-    border-radius: 50%;
+    border-radius:
+        50%;
 
     background:
         radial-gradient(
             circle,
-            rgba(131, 80, 255, .14),
+            rgba(234,88,12,.10),
             transparent 70%
         );
 
-    pointer-events: none;
+    pointer-events:
+        none;
 
 }
 
 
-/* =========================================================
-   CARD HOVER
-========================================================= */
+.hub-item::after {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    bottom:
+        -70px;
+
+    left:
+        -70px;
+
+    width:
+        170px;
+
+    height:
+        170px;
+
+    border-radius:
+        50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(74,7,84,.07),
+            transparent 70%
+        );
+
+    pointer-events:
+        none;
+
+}
+
 
 .hub-item:hover {
 
     transform:
-        translateY(-.25rem);
+        translateY(-5px);
+
+    border-color:
+        rgba(74,7,84,.15);
 
     box-shadow:
-        0 1.2rem 2.2rem
-        rgba(80, 50, 180, .12);
+        0 18px 42px
+        rgba(15,23,42,.09);
 
 }
 
 
-@media (hover: none) {
+.hub-item:active {
 
-    .hub-item:hover {
-
-        transform:
-            none;
-
-    }
+    transform:
+        translateY(-1px);
 
 }
 
 
-/* =========================================================
-   FEATURED CARD
-========================================================= */
+/* ============================================================
+   6. FEATURED HUB ITEM
+============================================================ */
 
-.featured {
-
-    grid-column:
-        span 2;
-
-    min-height:
-        10.5rem;
+.hub-item.featured {
 
     background:
         linear-gradient(
-            135deg,
-            #ffffff,
-            rgba(246, 242, 255, .95)
+            145deg,
+            #ffffff 0%,
+            #fffaf7 52%,
+            #faf4ff 100%
         );
+
+    border-color:
+        rgba(234,88,12,.15);
 
 }
 
 
-/* =========================================================
-   CARD HEADER
-========================================================= */
+html[data-theme="dark"]
+.hub-item.featured {
+
+    background:
+        linear-gradient(
+            145deg,
+            #1c1422,
+            #211525
+        );
+
+    border-color:
+        rgba(234,88,12,.20);
+
+}
+
+
+/* ============================================================
+   7. HUB BADGE
+============================================================ */
+
+.hub-badge {
+
+    position:
+        absolute;
+
+    top:
+        16px;
+
+    right:
+        16px;
+
+    z-index:
+        2;
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    min-height:
+        22px;
+
+    padding:
+        5px 9px;
+
+    border:
+        1px solid
+        rgba(234,88,12,.14);
+
+    border-radius:
+        999px;
+
+    background:
+        rgba(234,88,12,.08);
+
+    color:
+        var(--brand-dark);
+
+    font-family:
+        "DM Sans",
+        sans-serif;
+
+    font-size:
+        .53rem;
+
+    font-weight:
+        750;
+
+    letter-spacing:
+        .06em;
+
+}
+
+
+/* ============================================================
+   8. HUB HEADER
+============================================================ */
 
 .hub-header {
 
-    display: flex;
+    position:
+        relative;
 
-    align-items: center;
+    z-index:
+        2;
 
-    justify-content: space-between;
+    display:
+        flex;
 
-    gap: .5rem;
+    align-items:
+        center;
 
-    min-width: 0;
+    justify-content:
+        space-between;
+
+    gap:
+        12px;
+
+    margin-bottom:
+        22px;
 
 }
 
-
-/* =========================================================
-   CARD ICON
-========================================================= */
 
 .hub-icon {
 
+    display:
+        grid;
+
+    place-items:
+        center;
+
     width:
-        2rem;
+        45px;
 
     height:
-        2rem;
-
-    flex-shrink: 0;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
+        45px;
 
     border-radius:
-        .95rem;
+        15px;
 
-    box-shadow:
-        0 .75rem 1.5rem
-        rgba(108, 43, 217, .22);
-
-}
-
-
-.hub-icon i {
+    background:
+        rgba(74,7,84,.07);
 
     color:
-        #ffffff;
+        var(--primary);
 
     font-size:
         1rem;
@@ -339,116 +588,46 @@ main,
 }
 
 
-/* =========================================================
-   CARD COUNT
-========================================================= */
-
 .hub-count {
-
-    margin-top:
-        1.9rem;
-
-    margin-right:
-        3px;
-
-    color:
-        var(--text-light);
-
-    font-size:
-        .65rem;
-
-    font-weight:
-        700;
-
-}
-
-
-/* =========================================================
-   CARD TITLE
-========================================================= */
-
-.hub-item h4 {
-
-    margin:
-        1rem 0 0;
-
-    color:
-        var(--text);
-
-    font-family:
-        "Bricolage Grotesque",
-        sans-serif;
-
-    font-size:
-        .9rem;
-
-    font-weight:
-        700;
-
-    line-height:
-        1.3;
-
-    overflow-wrap:
-        break-word;
-
-    word-break:
-        normal;
-
-}
-
-
-/* =========================================================
-   CARD DESCRIPTION
-========================================================= */
-
-.hub-item p {
-
-    margin:
-        .65rem 0 0;
-
-    color:
-        var(--text-light);
 
     font-family:
         "DM Sans",
         sans-serif;
 
     font-size:
-        .7rem;
+        .58rem;
 
-    line-height:
-        1.5;
+    font-weight:
+        650;
 
-    overflow-wrap:
-        break-word;
-
-}
-
-
-/* =========================================================
-   CARD COLORS
-========================================================= */
-
-.quiz-icon {
-
-    background:
-        linear-gradient(
-            135deg,
-            #7c3aed,
-            #a855f7
-        );
+    color:
+        var(--text-muted);
 
 }
 
+
+/* ============================================================
+   9. HUB ICON VARIATIONS
+============================================================ */
 
 .lesson-icon {
 
     background:
-        linear-gradient(
-            135deg,
-            #2563eb,
-            #3b82f6
-        );
+        rgba(234,88,12,.10);
+
+    color:
+        var(--brand);
+
+}
+
+
+.quiz-icon {
+
+    background:
+        rgba(74,7,84,.09);
+
+    color:
+        var(--primary);
 
 }
 
@@ -456,11 +635,10 @@ main,
 .event-icon {
 
     background:
-        linear-gradient(
-            135deg,
-            #ea580c,
-            #fb923c
-        );
+        rgba(8,145,178,.09);
+
+    color:
+        var(--ink);
 
 }
 
@@ -468,11 +646,10 @@ main,
 .welfare-icon {
 
     background:
-        linear-gradient(
-            135deg,
-            #16a34a,
-            #22c55e
-        );
+        rgba(14,164,114,.10);
+
+    color:
+        var(--green);
 
 }
 
@@ -480,11 +657,10 @@ main,
 .prayer-icon {
 
     background:
-        linear-gradient(
-            135deg,
-            #dc2626,
-            #f43f5e
-        );
+        rgba(126,34,206,.09);
+
+    color:
+        #7e22ce;
 
 }
 
@@ -492,121 +668,213 @@ main,
 .gallery-icon {
 
     background:
-        linear-gradient(
-            135deg,
-            #0891b2,
-            #06b6d4
-        );
+        rgba(234,88,12,.08);
+
+    color:
+        var(--brand);
 
 }
 
 
-/* =========================================================
-   BADGE
-========================================================= */
+/* ============================================================
+   10. HUB CONTENT
+============================================================ */
 
-.hub-badge {
+.hub-item h4 {
 
-    position: absolute;
+    position:
+        relative;
 
-    top:
-        1rem;
+    z-index:
+        2;
 
-    right:
-        1rem;
+    margin:
+        0 0 8px;
+
+    font-size:
+        .9rem;
+
+    font-weight:
+        750;
+
+    line-height:
+        1.3;
+
+}
+
+
+.hub-item p {
+
+    position:
+        relative;
+
+    z-index:
+        2;
+
+    max-width:
+        34rem;
+
+    margin:
+        0;
+
+    font-size:
+        .68rem;
+
+    line-height:
+        1.55;
+
+    color:
+        var(--text-light);
+
+}
+
+
+/* ============================================================
+   11. FEATURE CARD
+============================================================ */
+
+.feature-card {
+
+    position:
+        relative;
+
+    overflow:
+        hidden;
 
     padding:
-        .3rem .65rem;
+        22px;
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius:
+        22px;
+
+    background:
+        var(--surface);
+
+    box-shadow:
+        0 8px 28px
+        rgba(15,23,42,.045);
+
+}
+
+
+.feature-card h3 {
+
+    margin-bottom:
+        8px;
+
+    font-size:
+        .95rem;
+
+}
+
+
+.feature-card p {
+
+    font-size:
+        .7rem;
+
+}
+
+
+/* ============================================================
+   12. GENERIC CONTENT TRANSITIONS
+============================================================ */
+
+.page-content,
+.dashboard-main,
+.hub,
+.feature-card {
+
+    animation:
+        pageContentIn
+        .45s
+        ease
+        both;
+
+}
+
+
+@keyframes pageContentIn {
+
+    from {
+
+        opacity:
+            0;
+
+        transform:
+            translateY(7px);
+
+    }
+
+    to {
+
+        opacity:
+            1;
+
+        transform:
+            translateY(0);
+
+    }
+
+}
+
+
+/* ============================================================
+   13. BADGES
+============================================================ */
+
+.badge {
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    min-height:
+        24px;
+
+    padding:
+        5px 9px;
 
     border-radius:
         999px;
 
     background:
-        rgba(108, 43, 217, .10);
+        rgba(74,7,84,.08);
 
     color:
         var(--primary);
 
+    font-family:
+        "DM Sans",
+        sans-serif;
+
     font-size:
-        .62rem;
+        .56rem;
 
     font-weight:
         700;
 
-    letter-spacing:
-        .08rem;
-
 }
 
 
-/* =========================================================
-   SHARED CONTENT TRANSITIONS
-========================================================= */
+/* ============================================================
+   14. RESPONSIVE HUB
+============================================================ */
 
-.primary-btn,
-.secondary-btn,
-.icon-btn,
-.feature-card {
-
-    transition:
-        transform .25s ease,
-        box-shadow .25s ease,
-        background .25s ease;
-
-}
-
-
-/* =========================================================
-   GLASS CONTENT
-========================================================= */
-
-.feature-card {
-
-    background:
-        rgba(255, 255, 255, .85);
-
-    backdrop-filter:
-        blur(18px);
-
-    -webkit-backdrop-filter:
-        blur(18px);
-
-    border:
-        1px solid
-        rgba(255, 255, 255, .6);
-
-}
-
-
-/* =========================================================
-   MOBILE
-========================================================= */
-
-@media (max-width: 767px) {
-
-    .hub {
-
-        width: 100%;
-
-        padding:
-            0 .35rem;
-
-    }
-
+@media (
+    max-width: 900px
+) {
 
     .hub-grid {
 
-        grid-template-columns:
-            repeat(2, minmax(0, 1fr));
-
-        column-gap:
-            1rem;
-
-        row-gap:
-            1rem;
-
-        padding:
-            0 .45rem 2.5rem;
+        gap:
+            15px;
 
     }
 
@@ -614,24 +882,49 @@ main,
     .hub-item {
 
         min-height:
-            10.5rem;
+            175px;
 
         padding:
-            1rem;
+            18px;
 
-        border-radius:
-            1.35rem;
+    }
+
+}
+
+
+@media (
+    max-width: 768px
+) {
+
+    .hub-grid {
+
+        grid-template-columns:
+            1fr;
+
+        gap:
+            13px;
 
     }
 
 
-    .featured {
-
-        grid-column:
-            span 2;
+    .hub-item {
 
         min-height:
-            10.5rem;
+            160px;
+
+        padding:
+            18px;
+
+        border-radius:
+            20px;
+
+    }
+
+
+    .hub-header {
+
+        margin-bottom:
+            18px;
 
     }
 
@@ -639,21 +932,13 @@ main,
     .hub-icon {
 
         width:
-            2rem;
+            42px;
 
         height:
-            2rem;
+            42px;
 
         border-radius:
-            .9rem;
-
-    }
-
-
-    .hub-icon i {
-
-        font-size:
-            .95rem;
+            13px;
 
     }
 
@@ -661,10 +946,7 @@ main,
     .hub-item h4 {
 
         font-size:
-            .9rem;
-
-        line-height:
-            1.3;
+            .86rem;
 
     }
 
@@ -672,200 +954,196 @@ main,
     .hub-item p {
 
         font-size:
-            .72rem;
+            .66rem;
 
         line-height:
-            1.25;
+            1.5;
 
     }
 
 
-    .hub-count {
+    .hub-badge {
+
+        top:
+            13px;
+
+        right:
+            13px;
+
+        font-size:
+            .49rem;
+
+    }
+
+}
+
+
+@media (
+    max-width: 380px
+) {
+
+    .hub-grid {
+
+        gap:
+            11px;
+
+    }
+
+
+    .hub-item {
+
+        min-height:
+            150px;
+
+        padding:
+            16px;
+
+    }
+
+
+    .hub-item h4 {
+
+        font-size:
+            .82rem;
+
+    }
+
+
+    .hub-item p {
 
         font-size:
             .62rem;
 
     }
 
-}
 
+    .hub-icon {
 
-/* =========================================================
-   SMALL PHONES
-========================================================= */
+        width:
+            39px;
 
-@media (max-width: 380px) {
-
-    .hub-grid {
-
-        column-gap:
-            .8rem;
-
-        row-gap:
-            .8rem;
-
-        padding-left:
-            .3rem;
-
-        padding-right:
-            .3rem;
-
-    }
-
-
-    .hub-item {
-
-        min-height:
-            10rem;
-
-        padding:
-            .9rem;
-
-    }
-
-
-    .hub-item h4 {
+        height:
+            39px;
 
         font-size:
-            .9rem;
-
-    }
-
-
-    .hub-item p {
-
-        font-size:
-            .72rem;
-
-        line-height:
-            1.45;
+            .85rem;
 
     }
 
 }
 
 
-/* =========================================================
-   TABLET / DESKTOP
-========================================================= */
+/* ============================================================
+   15. EXPLICIT DARK THEME
+============================================================ */
 
-@media (min-width: 768px) {
+html[data-theme="dark"] body {
 
-    .hub-grid {
+    background:
+        var(--background);
 
-        grid-template-columns:
-            repeat(2, minmax(0, 1fr));
-
-        column-gap:
-            1.4rem;
-
-        row-gap:
-            1.4rem;
-
-        padding:
-            0 1rem 3rem;
-
-    }
-
-
-    .hub-item {
-
-        min-height:
-            11rem;
-
-        padding:
-            1.25rem;
-
-    }
-
-
-    .featured {
-
-        grid-column:
-            span 2;
-
-    }
-
-
-    .hub-item h4 {
-
-        font-size:
-            1rem;
-
-    }
-
-
-    .hub-item p {
-
-        font-size:
-            .78rem;
-
-    }
+    color:
+        var(--text);
 
 }
 
 
-/* =========================================================
-   DARK MODE
-========================================================= */
+html[data-theme="dark"]
+.hub-item {
 
-@media (prefers-color-scheme: dark) {
+    background:
+        rgba(24,17,30,.92);
 
-    :root {
+    border-color:
+        rgba(255,255,255,.07);
 
-        --background:
-            #101114;
+    box-shadow:
+        0 10px 35px
+        rgba(0,0,0,.22);
 
-        --surface:
-            #18191d;
-
-        --text:
-            #ffffff;
-
-        --text-light:
-            #c5c5c5;
-
-        --border:
-            #292b31;
-
-    }
+}
 
 
-    body {
+html[data-theme="dark"]
+.hub-item:hover {
 
-        background:
-            var(--background);
+    border-color:
+        rgba(234,88,12,.20);
 
-        color:
-            var(--text);
+    box-shadow:
+        0 18px 42px
+        rgba(0,0,0,.30);
+
+}
+
+
+html[data-theme="dark"]
+.feature-card {
+
+    background:
+        var(--surface);
+
+    border-color:
+        rgba(255,255,255,.07);
+
+}
+
+
+html[data-theme="dark"]
+.hub-item p,
+html[data-theme="dark"]
+.feature-card p {
+
+    color:
+        var(--text-light);
+
+}
+
+
+html[data-theme="dark"]
+.hub-icon {
+
+    background:
+        rgba(255,255,255,.06);
+
+}
+
+
+html[data-theme="dark"]
+.badge {
+
+    background:
+        rgba(255,255,255,.07);
+
+    color:
+        #d8a9df;
+
+}
+
+
+/* ============================================================
+   16. REDUCED MOTION
+============================================================ */
+
+@media (
+    prefers-reduced-motion: reduce
+) {
+
+    .page-content,
+    .dashboard-main,
+    .hub,
+    .feature-card {
+
+        animation:
+            none;
 
     }
 
 
     .hub-item {
 
-        background:
-            rgba(24, 25, 29, .88);
-
-        border:
-            1px solid
-            rgba(255, 255, 255, .08);
-
-        box-shadow:
-            0 .5rem 1.4rem
-            rgba(0, 0, 0, .20);
-
-    }
-
-
-    .featured {
-
-        background:
-            linear-gradient(
-                135deg,
-                #18191d,
-                #211c29
-            );
+        transition:
+            none;
 
     }
 
