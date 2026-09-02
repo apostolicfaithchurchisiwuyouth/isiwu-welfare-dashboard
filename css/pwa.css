@@ -1,8 +1,9 @@
 /* ============================================================
    AFC ISIU YOUTH PORTAL V2
    FILE: pwa.css
-   PURPOSE: PWA / SETTINGS PAGE STYLES
+   PURPOSE: SETTINGS + PWA INSTALLATION STYLES
    ============================================================ */
+
 
 /* ============================================================
    SETTINGS PAGE
@@ -11,9 +12,7 @@
 .settings-page {
     width: 100%;
     min-height: 100%;
-    font-family:
-        "DM Sans",
-        sans-serif;
+    font-family: "DM Sans", sans-serif;
 }
 
 .settings-page *,
@@ -23,16 +22,11 @@
 }
 
 .settings-container {
-    width: min(
-        100%,
-        1180px
-    );
-
+    width: min(100%, 1180px);
     margin: 0 auto;
-
-    padding:
-        0 30px 100px;
+    padding: 0 30px 100px;
 }
+
 
 /* ============================================================
    SETTINGS HEADER
@@ -47,219 +41,144 @@
     align-items: center;
     gap: 7px;
 
-    padding:
-        7px 11px;
+    padding: 7px 11px;
 
     border-radius: 999px;
 
-    background:
-        rgba(234, 88, 12, 0.09);
+    background: rgba(234, 88, 12, 0.09);
 
-    color:
-        #ea580c;
+    color: #ea580c;
 
-    font-size:
-        0.66rem;
+    font-size: 0.66rem;
+    font-weight: 800;
 
-    font-weight:
-        800;
-
-    letter-spacing:
-        0.10em;
-
-    text-transform:
-        uppercase;
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
 }
 
 .settings-header h1 {
-    margin:
-        10px 0 7px;
+    margin: 10px 0 7px;
 
-    font-family:
-        "Bricolage Grotesque",
-        sans-serif;
+    font-family: "Bricolage Grotesque", sans-serif;
 
-    font-size:
-        clamp(
-            1.7rem,
-            3vw,
-            2.35rem
-        );
+    font-size: clamp(1.7rem, 3vw, 2.35rem);
 
-    line-height:
-        1.08;
+    line-height: 1.08;
+    font-weight: 750;
 
-    font-weight:
-        750;
-
-    color:
-        var(
-            --heading-color,
-            #171717
-        );
+    color: var(--heading-color, #171717);
 }
 
 .settings-header p {
-    max-width:
-        650px;
+    max-width: 650px;
 
-    margin:
-        0;
+    margin: 0;
 
-    color:
-        #6b7280;
+    color: #6b7280;
 
-    font-size:
-        0.88rem;
-
-    line-height:
-        1.5;
+    font-size: 0.88rem;
+    line-height: 1.5;
 }
 
+
 /* ============================================================
-   SETTINGS SECTIONS
+   SETTINGS SECTION
    ============================================================ */
 
 .settings-section {
-    margin-bottom:
-        24px;
+    margin-bottom: 24px;
 }
 
 .settings-section-heading {
-    display:
-        flex;
+    display: flex;
+    align-items: center;
 
-    align-items:
-        center;
+    gap: 12px;
 
-    gap:
-        12px;
-
-    margin-bottom:
-        12px;
+    margin-bottom: 12px;
 }
 
 .settings-section-icon {
-    width:
-        38px;
+    width: 38px;
+    height: 38px;
 
-    height:
-        38px;
+    flex-shrink: 0;
 
-    flex-shrink:
-        0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-    display:
-        flex;
+    border-radius: 11px;
 
-    align-items:
-        center;
+    background: rgba(74, 7, 84, 0.08);
 
-    justify-content:
-        center;
+    color: #4a0754;
 
-    border-radius:
-        11px;
-
-    background:
-        rgba(74, 7, 84, 0.08);
-
-    color:
-        #4a0754;
-
-    font-size:
-        0.95rem;
+    font-size: 0.95rem;
 }
 
 .settings-section-heading h2 {
-    margin:
-        0;
+    margin: 0;
 
-    font-family:
-        "Bricolage Grotesque",
-        sans-serif;
+    font-family: "Bricolage Grotesque", sans-serif;
 
-    font-size:
-        1.05rem;
+    font-size: 1.05rem;
+    line-height: 1.2;
 
-    line-height:
-        1.2;
+    font-weight: 750;
 
-    font-weight:
-        750;
-
-    color:
-        #202020;
+    color: #202020;
 }
 
 .settings-section-heading p {
-    margin:
-        3px 0 0;
+    margin: 3px 0 0;
 
-    color:
-        #8a8f98;
+    color: #8a8f98;
 
-    font-size:
-        0.7rem;
-
-    line-height:
-        1.35;
+    font-size: 0.7rem;
+    line-height: 1.35;
 }
+
 
 /* ============================================================
    SETTINGS CARD
    ============================================================ */
 
 .settings-card {
-    width:
-        100%;
+    width: 100%;
 
-    padding:
-        22px;
+    padding: 22px;
 
-    background:
-        #ffffff;
+    background: #ffffff;
 
-    border:
-        1px solid
-        rgba(0, 0, 0, 0.06);
+    border: 1px solid rgba(0, 0, 0, 0.06);
 
-    border-radius:
-        18px;
+    border-radius: 18px;
 
     box-shadow:
         0 8px 28px
         rgba(0, 0, 0, 0.045);
 }
 
+
 /* ============================================================
    PWA INSTALL CARD
    ============================================================ */
 
 .pwa-install-card {
-    position:
-        relative;
+    position: relative;
 
-    overflow:
-        hidden;
+    overflow: hidden;
 
-    display:
-        flex;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 
-    align-items:
-        center;
+    gap: 24px;
 
-    justify-content:
-        space-between;
+    padding: 26px;
 
-    gap:
-        24px;
-
-    padding:
-        26px;
-
-    border-radius:
-        20px;
+    border-radius: 20px;
 
     background:
         linear-gradient(
@@ -269,8 +188,7 @@
             #0a0016 100%
         );
 
-    color:
-        #ffffff;
+    color: #ffffff;
 
     box-shadow:
         0 16px 38px
@@ -278,104 +196,66 @@
 }
 
 .pwa-install-card::before {
-    content:
-        "";
+    content: "";
 
-    position:
-        absolute;
+    position: absolute;
 
-    width:
-        180px;
+    width: 180px;
+    height: 180px;
 
-    height:
-        180px;
+    right: -70px;
+    top: -80px;
 
-    right:
-        -70px;
-
-    top:
-        -80px;
-
-    border-radius:
-        50%;
+    border-radius: 50%;
 
     background:
         rgba(234, 88, 12, 0.15);
 
-    pointer-events:
-        none;
+    pointer-events: none;
 }
 
 .pwa-install-card::after {
-    content:
-        "";
+    content: "";
 
-    position:
-        absolute;
+    position: absolute;
 
-    width:
-        130px;
+    width: 130px;
+    height: 130px;
 
-    height:
-        130px;
+    left: 38%;
+    bottom: -90px;
 
-    left:
-        38%;
-
-    bottom:
-        -90px;
-
-    border-radius:
-        50%;
+    border-radius: 50%;
 
     background:
         rgba(255, 255, 255, 0.04);
 
-    pointer-events:
-        none;
+    pointer-events: none;
 }
 
 .pwa-install-copy {
-    position:
-        relative;
+    position: relative;
+    z-index: 2;
 
-    z-index:
-        2;
+    min-width: 0;
 
-    min-width:
-        0;
+    display: flex;
+    align-items: flex-start;
 
-    display:
-        flex;
-
-    align-items:
-        flex-start;
-
-    gap:
-        15px;
+    gap: 15px;
 }
 
 .pwa-install-icon {
-    width:
-        48px;
+    width: 48px;
+    height: 48px;
 
-    height:
-        48px;
+    flex-shrink: 0;
 
-    flex-shrink:
-        0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    justify-content:
-        center;
-
-    border-radius:
-        14px;
+    border-radius: 14px;
 
     background:
         rgba(255, 255, 255, 0.12);
@@ -384,188 +264,157 @@
         1px solid
         rgba(255, 255, 255, 0.13);
 
-    color:
-        #ffffff;
+    color: #ffffff;
 
-    font-size:
-        1.1rem;
+    font-size: 1.1rem;
 }
 
 .pwa-install-copy h3 {
-    margin:
-        0 0 5px;
+    margin: 0 0 5px;
 
     font-family:
         "Bricolage Grotesque",
         sans-serif;
 
-    font-size:
-        1.08rem;
+    font-size: 1.08rem;
 
-    line-height:
-        1.2;
+    line-height: 1.2;
+    font-weight: 750;
 
-    font-weight:
-        750;
-
-    color:
-        #ffffff;
+    color: #ffffff;
 }
 
 .pwa-install-copy p {
-    max-width:
-        650px;
+    max-width: 650px;
 
-    margin:
-        0;
+    margin: 0;
 
     color:
         rgba(255, 255, 255, 0.76);
 
-    font-size:
-        0.76rem;
+    font-size: 0.76rem;
 
-    line-height:
-        1.5;
+    line-height: 1.5;
 }
+
 
 /* ============================================================
    PWA STATUS
    ============================================================ */
 
 .pwa-status {
-    display:
-        inline-flex;
+    display: inline-flex;
+    align-items: center;
 
-    align-items:
-        center;
+    gap: 7px;
 
-    gap:
-        7px;
-
-    margin-top:
-        10px;
+    margin-top: 10px;
 
     color:
         rgba(255, 255, 255, 0.72);
 
-    font-size:
-        0.68rem;
-
-    font-weight:
-        650;
+    font-size: 0.68rem;
+    font-weight: 650;
 }
 
 .pwa-status-dot {
-    width:
-        7px;
+    width: 7px;
+    height: 7px;
 
-    height:
-        7px;
+    flex-shrink: 0;
 
-    flex-shrink:
-        0;
+    border-radius: 50%;
 
-    border-radius:
-        50%;
-
-    background:
-        #9ca3af;
+    background: #9ca3af;
 }
 
-.pwa-status.available .pwa-status-dot {
-    background:
-        #22c55e;
+.pwa-status.checking .pwa-status-dot {
+    background: #facc15;
 
-    box-shadow:
-        0 0 0 4px
-        rgba(34, 197, 94, 0.12);
+    animation:
+        pwaPulse
+        1.4s
+        infinite;
 }
 
+.pwa-status.available .pwa-status-dot,
 .pwa-status.installed .pwa-status-dot {
-    background:
-        #22c55e;
+    background: #22c55e;
 
     box-shadow:
         0 0 0 4px
         rgba(34, 197, 94, 0.12);
 }
+
+@keyframes pwaPulse {
+
+    0% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.4;
+    }
+
+    100% {
+        opacity: 1;
+    }
+
+}
+
 
 /* ============================================================
    PWA ACTIONS
    ============================================================ */
 
 .pwa-actions {
-    position:
-        relative;
+    position: relative;
+    z-index: 3;
 
-    z-index:
-        3;
+    flex-shrink: 0;
 
-    flex-shrink:
-        0;
+    display: flex;
+    align-items: center;
 
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    gap:
-        9px;
+    gap: 9px;
 }
 
 .pwa-install-button,
 .pwa-help-button {
-    min-height:
-        42px;
+    min-height: 42px;
 
-    border:
-        0;
+    border: 0;
 
-    border-radius:
-        11px;
+    border-radius: 11px;
 
-    padding:
-        0 16px;
+    padding: 0 16px;
 
-    display:
-        inline-flex;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 
-    align-items:
-        center;
-
-    justify-content:
-        center;
-
-    gap:
-        8px;
+    gap: 8px;
 
     font-family:
         "DM Sans",
         sans-serif;
 
-    font-size:
-        0.74rem;
+    font-size: 0.74rem;
+    font-weight: 750;
 
-    font-weight:
-        750;
-
-    cursor:
-        pointer;
+    cursor: pointer;
 
     transition:
         transform 0.2s ease,
         box-shadow 0.2s ease,
-        opacity 0.2s ease;
+        opacity 0.2s ease,
+        background 0.2s ease;
 }
 
 .pwa-install-button {
-    background:
-        #ea580c;
+    background: #ea580c;
 
-    color:
-        #ffffff;
+    color: #ffffff;
 
     box-shadow:
         0 8px 20px
@@ -573,8 +422,7 @@
 }
 
 .pwa-install-button:hover {
-    transform:
-        translateY(-2px);
+    transform: translateY(-2px);
 
     box-shadow:
         0 12px 25px
@@ -582,27 +430,26 @@
 }
 
 .pwa-install-button:active {
-    transform:
-        scale(0.97);
+    transform: scale(0.97);
 }
 
 .pwa-install-button:disabled {
-    opacity:
-        0.55;
+    opacity: 0.55;
 
-    cursor:
-        wait;
+    cursor: wait;
 
-    transform:
-        none;
+    transform: none;
+}
+
+.pwa-install-button[hidden] {
+    display: none !important;
 }
 
 .pwa-help-button {
     background:
         rgba(255, 255, 255, 0.10);
 
-    color:
-        #ffffff;
+    color: #ffffff;
 
     border:
         1px solid
@@ -614,25 +461,19 @@
         rgba(255, 255, 255, 0.16);
 }
 
+
 /* ============================================================
    GENERAL SETTINGS ROW
    ============================================================ */
 
 .settings-row {
-    display:
-        flex;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 
-    align-items:
-        center;
+    gap: 20px;
 
-    justify-content:
-        space-between;
-
-    gap:
-        20px;
-
-    padding:
-        17px 0;
+    padding: 17px 0;
 
     border-bottom:
         1px solid
@@ -640,104 +481,75 @@
 }
 
 .settings-row:first-child {
-    padding-top:
-        0;
+    padding-top: 0;
 }
 
 .settings-row:last-child {
-    padding-bottom:
-        0;
-
-    border-bottom:
-        0;
+    padding-bottom: 0;
+    border-bottom: 0;
 }
 
 .settings-row-copy {
-    min-width:
-        0;
+    min-width: 0;
 }
 
 .settings-row-copy strong {
-    display:
-        block;
+    display: block;
 
-    margin-bottom:
-        3px;
+    margin-bottom: 3px;
 
-    color:
-        #272727;
+    color: #272727;
 
     font-family:
         "Bricolage Grotesque",
         sans-serif;
 
-    font-size:
-        0.82rem;
-
-    font-weight:
-        700;
+    font-size: 0.82rem;
+    font-weight: 700;
 }
 
 .settings-row-copy span {
-    display:
-        block;
+    display: block;
 
-    color:
-        #858b94;
+    color: #858b94;
 
-    font-size:
-        0.7rem;
-
-    line-height:
-        1.4;
+    font-size: 0.7rem;
+    line-height: 1.4;
 }
+
 
 /* ============================================================
    APP VERSION
    ============================================================ */
 
 .app-version {
-    margin-top:
-        26px;
+    margin-top: 26px;
 
-    text-align:
-        center;
+    text-align: center;
 
-    color:
-        #9ca3af;
+    color: #9ca3af;
 
-    font-size:
-        0.67rem;
-
-    line-height:
-        1.4;
+    font-size: 0.67rem;
+    line-height: 1.4;
 }
+
 
 /* ============================================================
    PWA INSTALL MODAL
    ============================================================ */
 
 .pwa-modal-backdrop {
-    position:
-        fixed;
+    position: fixed;
 
-    inset:
-        0;
+    inset: 0;
 
-    z-index:
-        99999;
+    z-index: 99999;
 
-    display:
-        flex;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-    align-items:
-        center;
-
-    justify-content:
-        center;
-
-    padding:
-        20px;
+    padding: 20px;
 
     background:
         rgba(10, 0, 22, 0.62);
@@ -748,14 +560,11 @@
     -webkit-backdrop-filter:
         blur(8px);
 
-    opacity:
-        0;
+    opacity: 0;
 
-    visibility:
-        hidden;
+    visibility: hidden;
 
-    pointer-events:
-        none;
+    pointer-events: none;
 
     transition:
         opacity 0.22s ease,
@@ -763,43 +572,27 @@
 }
 
 .pwa-modal-backdrop.is-open {
-    opacity:
-        1;
+    opacity: 1;
 
-    visibility:
-        visible;
+    visibility: visible;
 
-    pointer-events:
-        auto;
+    pointer-events: auto;
 }
 
 .pwa-modal {
-    width:
-        min(
-            100%,
-            520px
-        );
+    width: min(100%, 520px);
 
     max-height:
-        min(
-            88vh,
-            720px
-        );
+        min(88vh, 720px);
 
-    overflow:
-        hidden;
+    overflow: hidden;
 
-    display:
-        flex;
+    display: flex;
+    flex-direction: column;
 
-    flex-direction:
-        column;
+    background: #ffffff;
 
-    background:
-        #ffffff;
-
-    border-radius:
-        22px;
+    border-radius: 22px;
 
     box-shadow:
         0 30px 80px
@@ -819,22 +612,18 @@
         scale(1);
 }
 
+
 /* ============================================================
    MODAL HEADER
    ============================================================ */
 
 .pwa-modal-header {
-    display:
-        flex;
+    display: flex;
+    align-items: center;
 
-    align-items:
-        center;
+    gap: 12px;
 
-    gap:
-        12px;
-
-    padding:
-        19px 20px;
+    padding: 19px 20px;
 
     border-bottom:
         1px solid
@@ -842,107 +631,70 @@
 }
 
 .pwa-modal-icon {
-    width:
-        40px;
+    width: 40px;
+    height: 40px;
 
-    height:
-        40px;
+    flex-shrink: 0;
 
-    flex-shrink:
-        0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    justify-content:
-        center;
-
-    border-radius:
-        12px;
+    border-radius: 12px;
 
     background:
         rgba(234, 88, 12, 0.10);
 
-    color:
-        #ea580c;
+    color: #ea580c;
 }
 
 .pwa-modal-heading {
-    flex:
-        1;
-
-    min-width:
-        0;
+    flex: 1;
+    min-width: 0;
 }
 
 .pwa-modal-heading h2 {
-    margin:
-        0;
+    margin: 0;
 
     font-family:
         "Bricolage Grotesque",
         sans-serif;
 
-    font-size:
-        1rem;
+    font-size: 1rem;
 
-    line-height:
-        1.2;
+    line-height: 1.2;
+    font-weight: 750;
 
-    font-weight:
-        750;
-
-    color:
-        #202020;
+    color: #202020;
 }
 
 .pwa-modal-heading p {
-    margin:
-        3px 0 0;
+    margin: 3px 0 0;
 
-    color:
-        #858b94;
+    color: #858b94;
 
-    font-size:
-        0.68rem;
+    font-size: 0.68rem;
 }
 
 .pwa-modal-close {
-    width:
-        34px;
+    width: 34px;
+    height: 34px;
 
-    height:
-        34px;
+    flex-shrink: 0;
 
-    flex-shrink:
-        0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-    display:
-        flex;
+    border: 0;
 
-    align-items:
-        center;
+    border-radius: 10px;
 
-    justify-content:
-        center;
+    background: #f4f5f6;
 
-    border:
-        0;
+    color: #555;
 
-    border-radius:
-        10px;
-
-    background:
-        #f4f5f6;
-
-    color:
-        #555;
-
-    cursor:
-        pointer;
+    cursor: pointer;
 
     transition:
         background 0.2s ease,
@@ -950,37 +702,29 @@
 }
 
 .pwa-modal-close:hover {
-    background:
-        #eceef0;
+    background: #eceef0;
 
-    transform:
-        rotate(3deg);
+    transform: rotate(3deg);
 }
+
 
 /* ============================================================
    MODAL BODY
    ============================================================ */
 
 .pwa-modal-body {
-    overflow:
-        auto;
+    overflow: auto;
 
-    padding:
-        20px;
+    padding: 20px;
 }
 
 .pwa-install-method {
-    display:
-        flex;
+    display: flex;
+    align-items: flex-start;
 
-    align-items:
-        flex-start;
+    gap: 12px;
 
-    gap:
-        12px;
-
-    padding:
-        14px 0;
+    padding: 14px 0;
 
     border-bottom:
         1px solid
@@ -988,214 +732,152 @@
 }
 
 .pwa-install-method:first-child {
-    padding-top:
-        0;
+    padding-top: 0;
 }
 
 .pwa-install-method:last-child {
-    border-bottom:
-        0;
-
-    padding-bottom:
-        0;
+    border-bottom: 0;
+    padding-bottom: 0;
 }
 
 .pwa-method-number {
-    width:
-        28px;
+    width: 28px;
+    height: 28px;
 
-    height:
-        28px;
+    flex-shrink: 0;
 
-    flex-shrink:
-        0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    justify-content:
-        center;
-
-    border-radius:
-        9px;
+    border-radius: 9px;
 
     background:
         rgba(74, 7, 84, 0.09);
 
-    color:
-        #4a0754;
+    color: #4a0754;
 
-    font-size:
-        0.7rem;
-
-    font-weight:
-        800;
+    font-size: 0.7rem;
+    font-weight: 800;
 }
 
 .pwa-method-copy {
-    min-width:
-        0;
+    min-width: 0;
 }
 
 .pwa-method-copy h3 {
-    margin:
-        0 0 4px;
+    margin: 0 0 4px;
 
-    color:
-        #242424;
+    color: #242424;
 
     font-family:
         "Bricolage Grotesque",
         sans-serif;
 
-    font-size:
-        0.82rem;
+    font-size: 0.82rem;
 
-    line-height:
-        1.25;
-
-    font-weight:
-        750;
+    line-height: 1.25;
+    font-weight: 750;
 }
 
 .pwa-method-copy p {
-    margin:
-        0;
+    margin: 0;
 
-    color:
-        #69707a;
+    color: #69707a;
 
-    font-size:
-        0.72rem;
+    font-size: 0.72rem;
 
-    line-height:
-        1.5;
+    line-height: 1.5;
 }
 
 .pwa-menu-hint {
-    display:
-        inline-flex;
+    display: inline-flex;
+    align-items: center;
 
-    align-items:
-        center;
+    gap: 5px;
 
-    gap:
-        5px;
+    margin-top: 7px;
 
-    margin-top:
-        7px;
+    padding: 5px 8px;
 
-    padding:
-        5px 8px;
+    border-radius: 7px;
 
-    border-radius:
-        7px;
+    background: #f4f5f6;
 
-    background:
-        #f4f5f6;
+    color: #555;
 
-    color:
-        #555;
-
-    font-size:
-        0.64rem;
-
-    font-weight:
-        700;
+    font-size: 0.64rem;
+    font-weight: 700;
 }
 
 .pwa-modal-note {
-    margin-top:
-        17px;
+    margin-top: 17px;
 
-    padding:
-        12px 13px;
+    padding: 12px 13px;
 
-    border-radius:
-        11px;
+    border-radius: 11px;
 
-    background:
-        #fff7ed;
+    background: #fff7ed;
 
     border:
         1px solid
         rgba(234, 88, 12, 0.10);
 
-    color:
-        #7c3a0c;
+    color: #7c3a0c;
 
-    font-size:
-        0.68rem;
+    font-size: 0.68rem;
 
-    line-height:
-        1.5;
+    line-height: 1.5;
 }
+
 
 /* ============================================================
    MODAL FOOTER
    ============================================================ */
 
 .pwa-modal-footer {
-    display:
-        flex;
+    display: flex;
+    justify-content: flex-end;
 
-    justify-content:
-        flex-end;
-
-    padding:
-        13px 20px;
+    padding: 13px 20px;
 
     border-top:
         1px solid
         rgba(0, 0, 0, 0.06);
 
-    background:
-        #fafafa;
+    background: #fafafa;
 }
 
 .pwa-modal-done {
-    min-height:
-        39px;
+    min-height: 39px;
 
-    border:
-        0;
+    border: 0;
 
-    border-radius:
-        10px;
+    border-radius: 10px;
 
-    padding:
-        0 16px;
+    padding: 0 16px;
 
-    background:
-        #4a0754;
+    background: #4a0754;
 
-    color:
-        #ffffff;
+    color: #ffffff;
 
     font-family:
         "DM Sans",
         sans-serif;
 
-    font-size:
-        0.72rem;
+    font-size: 0.72rem;
+    font-weight: 750;
 
-    font-weight:
-        750;
-
-    cursor:
-        pointer;
+    cursor: pointer;
 }
 
 body.pwa-modal-open {
-    overflow:
-        hidden;
+    overflow: hidden;
 }
 
+
 /* ============================================================
-   FOCUS STATES
+   FOCUS
    ============================================================ */
 
 .pwa-install-button:focus-visible,
@@ -1204,11 +886,11 @@ body.pwa-modal-open {
 .pwa-modal-done:focus-visible {
     outline:
         3px solid
-        rgba(234, 88, 12, 0.25);
+        rgba(234, 88, 12, 0.30);
 
-    outline-offset:
-        2px;
+    outline-offset: 2px;
 }
+
 
 /* ============================================================
    TABLET
@@ -1217,25 +899,21 @@ body.pwa-modal-open {
 @media (max-width: 800px) {
 
     .pwa-install-card {
-        align-items:
-            flex-start;
-
-        flex-direction:
-            column;
+        align-items: flex-start;
+        flex-direction: column;
     }
 
     .pwa-actions {
-        width:
-            100%;
+        width: 100%;
     }
 
     .pwa-install-button,
     .pwa-help-button {
-        flex:
-            1;
+        flex: 1;
     }
 
 }
+
 
 /* ============================================================
    MOBILE
@@ -1244,101 +922,81 @@ body.pwa-modal-open {
 @media (max-width: 640px) {
 
     .settings-container {
-        padding:
-            0 16px 105px;
+        padding: 0 16px 105px;
     }
 
     .settings-header {
-        margin-bottom:
-            20px;
+        margin-bottom: 20px;
     }
 
     .settings-header h1 {
-        font-size:
-            1.65rem;
+        font-size: 1.65rem;
     }
 
     .settings-header p {
-        font-size:
-            0.76rem;
+        font-size: 0.76rem;
     }
 
     .settings-card {
-        padding:
-            17px;
+        padding: 17px;
     }
 
     .pwa-install-card {
-        padding:
-            19px;
+        padding: 19px;
 
-        border-radius:
-            18px;
+        border-radius: 18px;
 
-        gap:
-            18px;
+        gap: 18px;
     }
 
     .pwa-install-copy {
-        gap:
-            11px;
+        gap: 11px;
     }
 
     .pwa-install-icon {
-        width:
-            42px;
+        width: 42px;
+        height: 42px;
 
-        height:
-            42px;
+        border-radius: 12px;
 
-        border-radius:
-            12px;
-
-        font-size:
-            0.95rem;
+        font-size: 0.95rem;
     }
 
     .pwa-install-copy h3 {
-        font-size:
-            0.94rem;
+        font-size: 0.94rem;
     }
 
     .pwa-install-copy p {
-        font-size:
-            0.7rem;
+        font-size: 0.7rem;
     }
 
     .pwa-actions {
-        flex-direction:
-            column;
+        flex-direction: column;
     }
 
     .pwa-install-button,
     .pwa-help-button {
-        width:
-            100%;
+        width: 100%;
 
-        flex:
-            none;
+        flex: none;
     }
 
     .pwa-modal-backdrop {
-        align-items:
-            flex-end;
+        align-items: flex-end;
 
-        padding:
-            0;
+        padding: 0;
     }
 
     .pwa-modal {
-        width:
-            100%;
+        width: 100%;
 
-        max-height:
-            90vh;
+        max-height: 90vh;
 
         border-radius:
-            22px 22px 0 0;
+            22px
+            22px
+            0
+            0;
 
         transform:
             translateY(30px);
@@ -1350,26 +1008,23 @@ body.pwa-modal-open {
     }
 
     .pwa-modal-body {
-        padding:
-            18px;
+        padding: 18px;
     }
 
     .pwa-modal-header {
-        padding:
-            17px 18px;
+        padding: 17px 18px;
     }
 
     .pwa-modal-footer {
-        padding:
-            12px 18px;
+        padding: 12px 18px;
     }
 
     .pwa-modal-done {
-        width:
-            100%;
+        width: 100%;
     }
 
 }
+
 
 /* ============================================================
    SMALL PHONES
@@ -1378,24 +1033,20 @@ body.pwa-modal-open {
 @media (max-width: 380px) {
 
     .settings-container {
-        padding-left:
-            12px;
-
-        padding-right:
-            12px;
+        padding-left: 12px;
+        padding-right: 12px;
     }
 
     .pwa-install-card {
-        padding:
-            16px;
+        padding: 16px;
     }
 
     .pwa-install-copy p {
-        font-size:
-            0.67rem;
+        font-size: 0.67rem;
     }
 
 }
+
 
 /* ============================================================
    REDUCED MOTION
@@ -1408,8 +1059,11 @@ body.pwa-modal-open {
     .pwa-modal-backdrop,
     .pwa-modal,
     .pwa-modal-close {
-        transition:
-            none;
+        transition: none;
+    }
+
+    .pwa-status.checking .pwa-status-dot {
+        animation: none;
     }
 
 }
