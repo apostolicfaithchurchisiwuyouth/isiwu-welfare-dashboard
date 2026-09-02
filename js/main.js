@@ -1,7 +1,7 @@
 /* =========================================================
    AFC ISIU YOUTH PORTAL
    FILE: main.js
-   VERSION: 2.3
+   VERSION: 2.4
 
    PURPOSE:
    - Shared portal functionality
@@ -11,6 +11,7 @@
    - Online-only navigation
    - Theme toggle
    - Dashboard greeting
+   - Universal page-transition loader
    - Safe page initialization
 
    IMPORTANT:
@@ -25,21 +26,24 @@
 
 
 /* =========================================================
-   GLOBAL CONFIG
+   GLOBAL CONFIGURATION
 ========================================================= */
 
 const AFC_MAIN_CONFIG = {
 
     MOBILE_BREAKPOINT: 768,
 
-    OFFLINE_BANNER_ID:
-        "offlineBanner",
+    OFFLINE_BANNER_ID: "offlineBanner",
 
-    OFFLINE_MESSAGE_ID:
-        "offlineMessage",
+    OFFLINE_MESSAGE_ID: "offlineMessage",
 
-    THEME_STORAGE_KEY:
-        "afcTheme"
+    THEME_STORAGE_KEY: "afcTheme",
+
+    PAGE_LOADER_ID: "pageTransitionLoader",
+
+    PAGE_LOADER_MIN_TIME: 320,
+
+    PAGE_LOADER_MAX_TIME: 8000
 
 };
 
@@ -50,16 +54,12 @@ const AFC_MAIN_CONFIG = {
 
 function onDOMReady(callback) {
 
-    if (
-        document.readyState === "loading"
-    ) {
+    if (document.readyState === "loading") {
 
         document.addEventListener(
             "DOMContentLoaded",
             callback,
-            {
-                once: true
-            }
+            { once: true }
         );
 
     } else {
@@ -72,7 +72,494 @@ function onDOMReady(callback) {
 
 
 /* =========================================================
-   AOS
+   UNIVERSAL PAGE TRANSITION LOADER
+========================================================= */
+
+(function initPageTransitionLoader() {
+
+    let loader = null;
+
+    let hideTimer = null;
+
+    let safetyTimer = null;
+
+    let shownAt = 0;
+
+
+    /* -----------------------------------------------------
+       CREATE LOADER
+    ----------------------------------------------------- */
+
+    function createLoader() {
+
+        if (loader && document.body.contains(loader)) {
+            return loader;
+        }
+
+
+        if (!document.body) {
+            return null;
+        }
+
+
+        loader = document.getElementById(
+            AFC_MAIN_CONFIG.PAGE_LOADER_ID
+        );
+
+
+        if (loader) {
+            return loader;
+        }
+
+
+        loader = document.createElement("div");
+
+        loader.id = AFC_MAIN_CONFIG.PAGE_LOADER_ID;
+
+        loader.className = "page-transition-loader";
+
+        loader.setAttribute("aria-hidden", "true");
+
+        loader.innerHTML = `
+
+            <div class="page-transition-glow"></div>
+
+            <div class="page-transition-content">
+
+                <div class="page-transition-logo-wrap">
+
+                    <div class="page-transition-logo-ring"></div>
+
+                    <img
+                        src="/images/logo.png"
+                        alt="AFC Isiu Youth Portal"
+                        class="page-transition-logo"
+                    >
+
+                </div>
+
+
+                <div class="page-transition-brand">
+                    AFC ISIU
+                </div>
+
+
+                <div class="page-transition-subtitle">
+                    YOUTH PORTAL
+                </div>
+
+
+                <div
+                    class="page-transition-progress"
+                    aria-hidden="true"
+                >
+                    <span></span>
+                </div>
+
+
+                <div class="page-transition-status">
+                    Loading
+                </div>
+
+            </div>
+
+        `;
+
+
+        document.body.appendChild(loader);
+
+        return loader;
+
+    }
+
+
+    /* -----------------------------------------------------
+       SHOW LOADER
+    ----------------------------------------------------- */
+
+    function showPageLoader() {
+
+        const element = createLoader();
+
+        if (!element) return;
+
+
+        clearTimeout(hideTimer);
+
+        clearTimeout(safetyTimer);
+
+
+        shownAt = performance.now();
+
+
+        element.classList.remove("is-leaving");
+
+        element.classList.add("is-visible");
+
+        element.setAttribute("aria-hidden", "false");
+
+
+        safetyTimer = setTimeout(() => {
+
+            hidePageLoader(true);
+
+        }, AFC_MAIN_CONFIG.PAGE_LOADER_MAX_TIME);
+
+    }
+
+
+    /* -----------------------------------------------------
+       HIDE LOADER
+    ----------------------------------------------------- */
+
+    function hidePageLoader(force = false) {
+
+        const element = loader;
+
+        if (!element) return;
+
+
+        clearTimeout(hideTimer);
+
+        clearTimeout(safetyTimer);
+
+
+        const elapsed =
+            performance.now() - shownAt;
+
+
+        const remaining =
+            AFC_MAIN_CONFIG.PAGE_LOADER_MIN_TIME - elapsed;
+
+
+        if (!force && remaining > 0) {
+
+            hideTimer = setTimeout(
+                () => hidePageLoader(false),
+                remaining
+            );
+
+            return;
+
+        }
+
+
+        element.classList.add("is-leaving");
+
+
+        element.setAttribute("aria-hidden", "true");
+
+
+        hideTimer = setTimeout(() => {
+
+            if (!loader) return;
+
+            loader.classList.remove(
+                "is-visible",
+                "is-leaving"
+            );
+
+        }, 420);
+
+    }
+
+
+    /* -----------------------------------------------------
+       CHECK WHETHER LINK SHOULD USE LOADER
+    ----------------------------------------------------- */
+
+    function shouldUseLoader(link, event) {
+
+        if (!link) return false;
+
+
+        if (
+            event.button !== undefined &&
+            event.button !== 0
+        ) {
+            return false;
+        }
+
+
+        if (
+            event.ctrlKey ||
+            event.metaKey ||
+            event.shiftKey ||
+            event.altKey
+        ) {
+            return false;
+        }
+
+
+        if (link.hasAttribute("download")) {
+            return false;
+        }
+
+
+        if (link.hasAttribute("data-no-page-loader")) {
+            return false;
+        }
+
+
+        const target =
+            link.getAttribute("target");
+
+
+        if (
+            target &&
+            target !== "_self"
+        ) {
+            return false;
+        }
+
+
+        const rawHref =
+            link.getAttribute("href");
+
+
+        if (!rawHref) {
+            return false;
+        }
+
+
+        const href =
+            rawHref.trim();
+
+
+        if (!href) {
+            return false;
+        }
+
+
+        if (
+            href.startsWith("#") ||
+            href.startsWith("mailto:") ||
+            href.startsWith("tel:") ||
+            href.startsWith("javascript:")
+        ) {
+            return false;
+        }
+
+
+        let destination;
+
+        try {
+
+            destination =
+                new URL(
+                    href,
+                    window.location.href
+                );
+
+        } catch (error) {
+
+            return false;
+
+        }
+
+
+        if (
+            destination.origin !==
+            window.location.origin
+        ) {
+            return false;
+        }
+
+
+        const current =
+            new URL(window.location.href);
+
+
+        /*
+         * Same document navigation.
+         * Do not show the loader when only the
+         * hash/anchor changes.
+         */
+
+        if (
+            destination.pathname === current.pathname &&
+            destination.search === current.search &&
+            destination.hash !== current.hash
+        ) {
+            return false;
+        }
+
+
+        /*
+         * Online-only features should never display
+         * the loader when the click will immediately
+         * be blocked because the browser is offline.
+         */
+
+        if (
+            link.hasAttribute("data-online-only") &&
+            !navigator.onLine
+        ) {
+            return false;
+        }
+
+
+        return true;
+
+    }
+
+
+    /* -----------------------------------------------------
+       INITIAL PAGE LOAD
+    ----------------------------------------------------- */
+
+    function startInitialLoader() {
+
+        if (!document.body) return;
+
+
+        showPageLoader();
+
+
+        /*
+         * Hide as soon as the DOM is ready.
+         * window.load below provides an additional
+         * safety point for images and other assets.
+         */
+
+        onDOMReady(() => {
+
+            hidePageLoader();
+
+        });
+
+    }
+
+
+    /* -----------------------------------------------------
+       INTERNAL NAVIGATION
+    ----------------------------------------------------- */
+
+    function bindNavigationLoader() {
+
+        /*
+         * Capture phase lets the loader appear immediately
+         * before the browser starts leaving the current page.
+         */
+
+        document.addEventListener(
+            "click",
+            event => {
+
+                const link =
+                    event.target.closest &&
+                    event.target.closest("a[href]");
+
+
+                if (!link) return;
+
+
+                if (
+                    !shouldUseLoader(
+                        link,
+                        event
+                    )
+                ) {
+                    return;
+                }
+
+
+                showPageLoader();
+
+
+                /*
+                 * If another click handler cancels the
+                 * navigation, remove our loader again.
+                 */
+
+                setTimeout(() => {
+
+                    if (event.defaultPrevented) {
+
+                        hidePageLoader(true);
+
+                    }
+
+                }, 0);
+
+            },
+            true
+        );
+
+    }
+
+
+    /* -----------------------------------------------------
+       BROWSER BACK / FORWARD / BFCACHE
+    ----------------------------------------------------- */
+
+    function bindPageLifecycle() {
+
+        window.addEventListener(
+            "pageshow",
+            () => {
+
+                hidePageLoader(true);
+
+            }
+        );
+
+
+        window.addEventListener(
+            "load",
+            () => {
+
+                hidePageLoader();
+
+            }
+        );
+
+    }
+
+
+    /* -----------------------------------------------------
+       EXPOSE SAFE PUBLIC API
+    ----------------------------------------------------- */
+
+    window.AFCPageLoader = {
+
+        show: showPageLoader,
+
+        hide: hidePageLoader
+
+    };
+
+
+    /*
+     * The loader needs the body, so initialize immediately
+     * when possible and otherwise wait for DOM ready.
+     */
+
+    if (document.body) {
+
+        startInitialLoader();
+
+    } else {
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            startInitialLoader,
+            { once: true }
+        );
+
+    }
+
+
+    bindNavigationLoader();
+
+    bindPageLifecycle();
+
+
+})();
+
+
+/* =========================================================
+   AOS INITIALIZATION
 ========================================================= */
 
 onDOMReady(() => {
@@ -100,7 +587,7 @@ onDOMReady(() => {
 
 
 /* =========================================================
-   OFFLINE STATUS
+   OFFLINE STATUS BANNER
 ========================================================= */
 
 onDOMReady(() => {
@@ -114,9 +601,7 @@ onDOMReady(() => {
     function createOfflineBanner() {
 
         if (offlineBanner) {
-
             return offlineBanner;
-
         }
 
 
@@ -136,9 +621,7 @@ onDOMReady(() => {
 
                 <div>
 
-                    <strong>
-                        You're offline
-                    </strong>
+                    <strong>You're offline</strong>
 
                     <span>
                         Some features are unavailable
@@ -175,14 +658,12 @@ onDOMReady(() => {
 
     function hideOfflineBanner() {
 
-        if (!offlineBanner) {
-
-            return;
-
-        }
+        if (!offlineBanner) return;
 
 
-        offlineBanner.classList.remove("show");
+        offlineBanner.classList.remove(
+            "show"
+        );
 
     }
 
@@ -194,7 +675,6 @@ onDOMReady(() => {
             console.warn(
                 "AFC Isiu: Browser reported offline."
             );
-
 
             showOfflineBanner();
 
@@ -209,7 +689,6 @@ onDOMReady(() => {
             console.log(
                 "AFC Isiu: Browser reported online."
             );
-
 
             hideOfflineBanner();
 
@@ -239,41 +718,33 @@ onDOMReady(() => {
 
 
     if (!onlineOnlyLinks.length) {
-
         return;
-
     }
 
 
-    onlineOnlyLinks.forEach(
-        link => {
+    onlineOnlyLinks.forEach(link => {
 
-            link.addEventListener(
-                "click",
-                event => {
+        link.addEventListener(
+            "click",
+            event => {
 
-                    if (
-                        navigator.onLine
-                    ) {
-
-                        return;
-
-                    }
-
-
-                    event.preventDefault();
-
-
-                    showOfflineMessage(
-                        link.dataset.feature ||
-                        "This feature"
-                    );
-
+                if (navigator.onLine) {
+                    return;
                 }
-            );
 
-        }
-    );
+
+                event.preventDefault();
+
+
+                showOfflineMessage(
+                    link.dataset.feature ||
+                    "This feature"
+                );
+
+            }
+        );
+
+    });
 
 });
 
@@ -282,9 +753,7 @@ onDOMReady(() => {
    OFFLINE MESSAGE
 ========================================================= */
 
-function showOfflineMessage(
-    featureName
-) {
+function showOfflineMessage(featureName) {
 
     const existing =
         document.getElementById(
@@ -293,9 +762,7 @@ function showOfflineMessage(
 
 
     if (existing) {
-
         existing.remove();
-
     }
 
 
@@ -324,10 +791,12 @@ function showOfflineMessage(
 
 
             <p>
+
                 ${escapeHTML(featureName)}
                 requires an internet connection.
                 Please turn on your data or connect
                 to Wi-Fi and try again.
+
             </p>
 
 
@@ -358,11 +827,7 @@ function showOfflineMessage(
 
         closeButton.addEventListener(
             "click",
-            () => {
-
-                message.remove();
-
-            }
+            () => message.remove()
         );
 
     }
@@ -372,9 +837,7 @@ function showOfflineMessage(
         "click",
         event => {
 
-            if (
-                event.target === message
-            ) {
+            if (event.target === message) {
 
                 message.remove();
 
@@ -413,12 +876,10 @@ function showOfflineMessage(
 
 
 /* =========================================================
-   SIMPLE HTML ESCAPE
+   HTML ESCAPE HELPER
 ========================================================= */
 
-function escapeHTML(
-    value
-) {
+function escapeHTML(value) {
 
     return String(value)
 
@@ -480,19 +941,10 @@ onDOMReady(() => {
         );
 
 
-    if (
-        !sidebar ||
-        !overlay
-    ) {
-
+    if (!sidebar || !overlay) {
         return;
-
     }
 
-
-    /* -----------------------------------------------------
-       OPEN SIDEBAR
-    ----------------------------------------------------- */
 
     function openSidebar() {
 
@@ -537,10 +989,6 @@ onDOMReady(() => {
     }
 
 
-    /* -----------------------------------------------------
-       CLOSE SIDEBAR
-    ----------------------------------------------------- */
-
     function closeSidebar() {
 
         sidebar.classList.remove(
@@ -584,10 +1032,6 @@ onDOMReady(() => {
     }
 
 
-    /* -----------------------------------------------------
-       MOBILE MENU BUTTON
-    ----------------------------------------------------- */
-
     if (menuButton) {
 
         menuButton.addEventListener(
@@ -618,10 +1062,6 @@ onDOMReady(() => {
 
     }
 
-
-    /* -----------------------------------------------------
-       CENTER HUB BUTTON
-    ----------------------------------------------------- */
 
     if (hubButton) {
 
@@ -654,10 +1094,6 @@ onDOMReady(() => {
     }
 
 
-    /* -----------------------------------------------------
-       OVERLAY
-    ----------------------------------------------------- */
-
     overlay.addEventListener(
         "click",
         event => {
@@ -670,40 +1106,32 @@ onDOMReady(() => {
     );
 
 
-    /* -----------------------------------------------------
-       SIDEBAR LINKS
-    ----------------------------------------------------- */
-
     const sidebarLinks =
-        sidebar.querySelectorAll("a");
+        sidebar.querySelectorAll(
+            "a"
+        );
 
 
-    sidebarLinks.forEach(
-        link => {
+    sidebarLinks.forEach(link => {
 
-            link.addEventListener(
-                "click",
-                () => {
+        link.addEventListener(
+            "click",
+            () => {
 
-                    if (
-                        window.innerWidth <=
-                        AFC_MAIN_CONFIG.MOBILE_BREAKPOINT
-                    ) {
+                if (
+                    window.innerWidth <=
+                    AFC_MAIN_CONFIG.MOBILE_BREAKPOINT
+                ) {
 
-                        closeSidebar();
-
-                    }
+                    closeSidebar();
 
                 }
-            );
 
-        }
-    );
+            }
+        );
 
+    });
 
-    /* -----------------------------------------------------
-       ESCAPE KEY
-    ----------------------------------------------------- */
 
     document.addEventListener(
         "keydown",
@@ -724,10 +1152,6 @@ onDOMReady(() => {
     );
 
 
-    /* -----------------------------------------------------
-       RESIZE
-    ----------------------------------------------------- */
-
     window.addEventListener(
         "resize",
         () => {
@@ -744,10 +1168,6 @@ onDOMReady(() => {
         }
     );
 
-
-    /* -----------------------------------------------------
-       INITIAL ARIA STATE
-    ----------------------------------------------------- */
 
     if (menuButton) {
 
@@ -784,26 +1204,25 @@ onDOMReady(() => {
 
 
     if (!themeButton) {
-
         return;
-
     }
 
 
     const icon =
-        themeButton.querySelector("i");
+        themeButton.querySelector(
+            "i"
+        );
 
 
     function applyTheme(theme) {
 
-        if (
-            theme === "dark"
-        ) {
+        if (theme === "dark") {
 
-            document.documentElement.setAttribute(
-                "data-theme",
-                "dark"
-            );
+            document.documentElement
+                .setAttribute(
+                    "data-theme",
+                    "dark"
+                );
 
 
             if (icon) {
@@ -820,10 +1239,11 @@ onDOMReady(() => {
 
         } else {
 
-            document.documentElement.setAttribute(
-                "data-theme",
-                "light"
-            );
+            document.documentElement
+                .setAttribute(
+                    "data-theme",
+                    "light"
+                );
 
 
             if (icon) {
@@ -854,7 +1274,9 @@ onDOMReady(() => {
         savedTheme === "light"
     ) {
 
-        applyTheme(savedTheme);
+        applyTheme(
+            savedTheme
+        );
 
     } else {
 
@@ -894,7 +1316,9 @@ onDOMReady(() => {
                     : "dark";
 
 
-            applyTheme(nextTheme);
+            applyTheme(
+                nextTheme
+            );
 
 
             localStorage.setItem(
@@ -956,9 +1380,7 @@ onDOMReady(() => {
         greeting =
             "Good Morning, Dear User.";
 
-    }
-
-    else if (
+    } else if (
         hour >= 12 &&
         hour < 17
     ) {
@@ -966,9 +1388,7 @@ onDOMReady(() => {
         greeting =
             "Good Afternoon, Dear User.";
 
-    }
-
-    else if (
+    } else if (
         hour >= 17 &&
         hour < 21
     ) {
@@ -976,9 +1396,7 @@ onDOMReady(() => {
         greeting =
             "Good Evening, Dear User.";
 
-    }
-
-    else {
+    } else {
 
         greeting =
             "Good Night, Dear User.";
@@ -1000,15 +1418,10 @@ onDOMReady(() => {
             now.toLocaleDateString(
                 "en-GB",
                 {
-
                     weekday: "long",
-
                     day: "numeric",
-
                     month: "long",
-
                     year: "numeric"
-
                 }
             );
 
@@ -1018,7 +1431,7 @@ onDOMReady(() => {
 
 
 /* =========================================================
-   PORTAL BRAND / HEADER SAFETY
+   SAFE BUTTON TYPES
 ========================================================= */
 
 onDOMReady(() => {
@@ -1029,22 +1442,22 @@ onDOMReady(() => {
         );
 
 
-    headerButtons.forEach(
-        button => {
+    headerButtons.forEach(button => {
 
-            if (
-                !button.getAttribute("type")
-            ) {
+        if (
+            !button.getAttribute(
+                "type"
+            )
+        ) {
 
-                button.setAttribute(
-                    "type",
-                    "button"
-                );
-
-            }
+            button.setAttribute(
+                "type",
+                "button"
+            );
 
         }
-    );
+
+    });
 
 });
 
@@ -1053,22 +1466,16 @@ onDOMReady(() => {
    SERVICE WORKER
 =========================================================
 
-   IMPORTANT:
+   Service worker registration is intentionally REMOVED
+   from main.js.
 
-   Service worker registration has been intentionally
-   REMOVED from main.js.
-
-   pwa.js is the single owner of:
-
-       /sw.js
-
-   This prevents duplicate registrations and eliminates
-   the old /service-worker.js 404 error.
+   pwa.js is the single owner of /sw.js and the
+   browser's PWA installation flow.
 ========================================================= */
 
 
 /* =========================================================
-   GLOBAL ERROR REPORTING
+   GLOBAL ERROR HANDLING
 ========================================================= */
 
 window.addEventListener(
@@ -1085,10 +1492,6 @@ window.addEventListener(
 );
 
 
-/* =========================================================
-   GLOBAL PROMISE ERROR REPORTING
-========================================================= */
-
 window.addEventListener(
     "unhandledrejection",
     event => {
@@ -1102,11 +1505,6 @@ window.addEventListener(
 );
 
 
-/* =========================================================
-   STARTUP MESSAGE
-========================================================= */
-
 console.log(
     "AFC Isiu Youth Portal: main.js loaded successfully."
 );
- 
