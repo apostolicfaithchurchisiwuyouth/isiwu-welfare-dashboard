@@ -1095,7 +1095,7 @@ onDOMReady(() => {
 
                 navigator.serviceWorker
                     .register(
-                        "/service-worker.js"
+                        "/sw.js"
                     )
                     .then(
                         registration => {
