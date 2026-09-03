@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="theme-color"
+        content="#ea580c"
+    >
+
+    <meta
+        name="mobile-web-app-capable"
+        content="yes"
+    >
+
+    <meta
+        name="apple-mobile-web-app-capable"
+        content="yes"
+    >
+
+    <meta
+        name="apple-mobile-web-app-status-bar-style"
+        content="default"
+    >
+
+    <meta
+        name="apple-mobile-web-app-title"
+        content="AFC Isiu Youth"
+    >
+
+    <link
+        rel="manifest"
+        href="../manifest.json"
+    >
+
+    <link
+        rel="icon"
+        type="image/png"
+        href="../images/logo.png"
+    >
+
+    <link
+        rel="apple-touch-icon"
+        href="../images/logo.png"
+    >
+
+
+    <title>
+        My SLC Results | AFC Isiu Youth
+    </title>
+
+
+    <!-- =====================================================
+         FONTS
+    ====================================================== -->
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@10..48,400;10..48,500;10..48,600;10..48,700&family=DM+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+
+    <!-- =====================================================
+         ICONS
+    ====================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/remixicon@4.6.0/fonts/remixicon.css"
+    >
+
+
+    <!-- =====================================================
+         GLOBAL CSS
+    ====================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="../css/main.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="../css/layout.css"
+    >
+
+
+    <!-- =====================================================
+         PAGE CSS
+    ====================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="../css/results.css"
+    >
+
+</head>
+
+
+<body>
+
+<div class="app-layout">
+
+
+    <!-- =====================================================
+         SIDEBAR OVERLAY
+    ====================================================== -->
+
+    <div
+        class="sidebar-overlay"
+        id="sidebarOverlay"
+    ></div>
+
+
+    <!-- =====================================================
+         SIDEBAR
+    ====================================================== -->
+
+    <aside
+        class="sidebar"
+        id="sidebar"
+    >
+
+        <div class="sidebar-top">
+
+            <div class="sidebar-logo">
+
+                <i class="fa-solid fa-shield-heart"></i>
+
+                <div>
+
+                    <h2>
+                        AFC Isiu
+                    </h2>
+
+                    <span>
+                        Youth Portal
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <nav class="sidebar-menu">
+
+                <div class="menu-title">
+                    Ministry
+                </div>
+
+
+                <a href="../">
+
+                    <i class="fa-solid fa-house"></i>
+
+                    <span>
+                        Dashboard
+                    </span>
+
+                </a>
+
+
+                <a href="lessons">
+
+                    <i class="fa-solid fa-book-open"></i>
+
+                    <span>
+                        Sunday School Lesson
+                    </span>
+
+                </a>
+
+
+                <a
+                    href="slcquiz"
+                    data-online-only
+                    data-feature="Weekly SLC Quiz"
+                >
+
+                    <i class="fa-solid fa-clipboard-question"></i>
+
+                    <span>
+                        Take SL Quiz
+                    </span>
+
+                </a>
+
+
+                <a
+                    href="results"
+                    class="active"
+                    data-online-only
+                    data-feature="Growth Tracker"
+                >
+
+                    <i class="fa-solid fa-chart-line"></i>
+
+                    <span>
+                        Check SL Quiz Result
+                    </span>
+
+                </a>
+
+
+                <div class="menu-title">
+                    Community
+                </div>
+
+
+                <a
+                    href="gallery"
+                    data-online-only
+                    data-feature="Gallery"
+                >
+
+                    <i class="fa-solid fa-images"></i>
+
+                    <span>
+                        Gallery
+                    </span>
+
+                </a>
+
+
+                <a
+                    href="events"
+                    data-online-only
+                    data-feature="Youth Events"
+                >
+
+                    <i class="fa-solid fa-calendar-days"></i>
+
+                    <span>
+                        Youth Events
+                    </span>
+
+                </a>
+
+
+                <a
+                    href="welfare"
+                    data-online-only
+                    data-feature="Welfare"
+                >
+
+                    <i class="fa-solid fa-hand-holding-heart"></i>
+
+                    <span>
+                        Welfare
+                    </span>
+
+                </a>
+
+
+                <a
+                    href="prayer"
+                    data-online-only
+                    data-feature="Prayer Requests"
+                >
+
+                    <i class="fa-solid fa-hands-praying"></i>
+
+                    <span>
+                        Prayer Requests
+                    </span>
+
+                </a>
+
+
+                <a
+                    href="program-report"
+                    data-online-only
+                    data-feature="Secretariat Reports"
+                >
+
+                    <i class="fa-solid fa-file-lines"></i>
+
+                    <span>
+                        Secretariat Reports
+                    </span>
+
+                </a>
+
+            </nav>
+
+        </div>
+
+
+        <div class="sidebar-bottom">
+
+            <div class="menu-title">
+                Account
+            </div>
+
+
+            <a href="profile">
+
+                <i class="fa-solid fa-user"></i>
+
+                <span>
+                    Profile
+                </span>
+
+            </a>
+
+
+            <a href="settings">
+
+                <i class="fa-solid fa-gear"></i>
+
+                <span>
+                    Settings
+                </span>
+
+            </a>
+
+        </div>
+
+    </aside>
+
+
+    <!-- =====================================================
+         MAIN AREA
+    ====================================================== -->
+
+    <div class="main-area">
+
+
+        <!-- =================================================
+             TOPBAR
+        ================================================== -->
+
+        <header class="topbar">
+
+            <div class="topbar-left">
+
+                <button
+                    class="mobile-menu-btn"
+                    id="mobileMenuBtn"
+                    type="button"
+                    aria-label="Open navigation menu"
+                    aria-expanded="false"
+                >
+
+                    <i class="fa-solid fa-bars"></i>
+
+                </button>
+
+
+                <div class="portal-brand">
+
+                    <img
+                        src="../images/logo.png"
+                        alt="AFC Logo"
+                        class="portal-logo"
+                    >
+
+                    <div>
+
+                        <h2>
+                            AFC Isiu Youth
+                        </h2>
+
+                        <p>
+                            Building young people for Christ
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="topbar-right">
+
+                <button
+                    class="header-icon"
+                    id="notificationBtn"
+                    type="button"
+                    aria-label="Notifications"
+                >
+
+                    <i class="fa-regular fa-bell"></i>
+
+                    <span class="notify-dot"></span>
+
+                </button>
+
+
+                <button
+                    class="header-icon"
+                    id="themeBtn"
+                    type="button"
+                    aria-label="Change theme"
+                >
+
+                    <i class="fa-solid fa-moon"></i>
+
+                </button>
+
+            </div>
+
+        </header>
+
+
+        <!-- =================================================
+             CONTENT
+        ================================================== -->
+
+        <main
+            class="dashboard-content results-page"
+        >
+
+            <div
+                class="dashboard-container results-container"
+            >
+
+
+                <!-- =========================================
+                     HERO
+                ========================================== -->
+
+                <section
+                    class="results-hero"
+                >
+
+                    <div>
+
+                        <span class="eyebrow">
+                            GROWTH TRACKER
+                        </span>
+
+                        <h1>
+                            My SLC Results
+                        </h1>
+
+                        <p>
+                            See your quiz performance,
+                            points earned, and review your
+                            previous answers.
+                        </p>
+
+                    </div>
+
+
+                    <div
+                        class="results-member"
+                        id="resultsMember"
+                    >
+
+                        <i class="fa-solid fa-user"></i>
+
+                        <span>
+                            Loading participant...
+                        </span>
+
+                    </div>
+
+                </section>
+
+
+                <!-- =========================================
+                     STATUS
+                ========================================== -->
+
+                <div
+                    class="results-message"
+                    id="resultsMessage"
+                >
+                    Loading your results...
+                </div>
+
+
+                <!-- =========================================
+                     LATEST RESULT
+                ========================================== -->
+
+                <section
+                    class="result-highlight hidden"
+                    id="latestResult"
+                >
+
+                    <div class="result-highlight-label">
+
+                        <span class="eyebrow">
+                            LATEST RESULT
+                        </span>
+
+                        <span id="latestLesson">
+                            Lesson
+                        </span>
+
+                    </div>
+
+
+                    <div class="latest-score-row">
+
+                        <div class="score-circle">
+
+                            <strong id="latestScore">
+                                0
+                            </strong>
+
+                            <span>
+                                SCORE
+                            </span>
+
+                        </div>
+
+
+                        <div class="latest-details">
+
+                            <h2 id="latestTitle">
+                                Your latest SLC result
+                            </h2>
+
+
+                            <p id="latestDate">
+                                Completed
+                            </p>
+
+
+                            <div class="latest-stats">
+
+                                <div>
+
+                                    <span>
+                                        Points
+                                    </span>
+
+                                    <strong id="latestPoints">
+                                        0
+                                    </strong>
+
+                                </div>
+
+
+                                <div>
+
+                                    <span>
+                                        Total
+                                    </span>
+
+                                    <strong id="latestTotal">
+                                        0
+                                    </strong>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <button
+                        type="button"
+                        class="purple-btn"
+                        id="latestReviewBtn"
+                    >
+
+                        <span>
+                            Review Latest Answers
+                        </span>
+
+                        <i class="fa-solid fa-arrow-right"></i>
+
+                    </button>
+
+                </section>
+
+
+                <!-- =========================================
+                     HISTORY
+                ========================================== -->
+
+                <section
+                    class="results-card"
+                >
+
+                    <div class="results-card-header">
+
+                        <div>
+
+                            <span class="eyebrow">
+                                QUIZ HISTORY
+                            </span>
+
+                            <h2>
+                                Your SLC Journey
+                            </h2>
+
+                        </div>
+
+
+                        <span
+                            class="history-count"
+                            id="historyCount"
+                        >
+                            0 quizzes
+                        </span>
+
+                    </div>
+
+
+                    <div
+                        class="history-list"
+                        id="historyList"
+                    ></div>
+
+                </section>
+
+
+                <!-- =========================================
+                     REVIEW
+                ========================================== -->
+
+                <section
+                    class="review-card hidden"
+                    id="reviewSection"
+                >
+
+                    <div class="review-header">
+
+                        <div>
+
+                            <span class="eyebrow">
+                                ANSWER REVIEW
+                            </span>
+
+                            <h2 id="reviewTitle">
+                                Review Answers
+                            </h2>
+
+                            <p id="reviewSubtitle">
+                                See how you answered each question.
+                            </p>
+
+                        </div>
+
+
+                        <button
+                            type="button"
+                            class="close-review-btn"
+                            id="closeReviewBtn"
+                            aria-label="Close review"
+                        >
+
+                            <i class="fa-solid fa-xmark"></i>
+
+                        </button>
+
+                    </div>
+
+
+                    <div
+                        class="review-container"
+                        id="reviewContainer"
+                    ></div>
+
+                </section>
+
+
+                <!-- =========================================
+                     EMPTY STATE
+                ========================================== -->
+
+                <section
+                    class="results-card empty-results hidden"
+                    id="emptyResults"
+                >
+
+                    <div class="empty-results-icon">
+
+                        <i class="fa-solid fa-chart-line"></i>
+
+                    </div>
+
+
+                    <h2>
+                        No quiz results yet
+                    </h2>
+
+
+                    <p>
+                        Complete your first SLC quiz and
+                        your results will appear here.
+                    </p>
+
+
+                    <a
+                        href="slcquiz.html"
+                        class="purple-btn"
+                    >
+
+                        <span>
+                            Take This Week's Quiz
+                        </span>
+
+                        <i class="fa-solid fa-arrow-right"></i>
+
+                    </a>
+
+                </section>
+
+            </div>
+
+        </main>
+
+    </div>
+
+
+    <!-- =====================================================
+         MOBILE BOTTOM NAV
+    ====================================================== -->
+
+    <nav
+        class="bottom-nav"
+        aria-label="Mobile navigation"
+    >
+
+        <a href="../">
+
+            <i class="fa-solid fa-house"></i>
+
+            <span>
+                Home
+            </span>
+
+        </a>
+
+
+        <a href="lessons">
+
+            <i class="fa-solid fa-book-open"></i>
+
+            <span>
+                Lessons
+            </span>
+
+        </a>
+
+
+        <button
+            class="hub-button"
+            id="hubButton"
+            type="button"
+            aria-label="Open main navigation"
+            aria-expanded="false"
+        >
+
+            <i class="ri-apps-2-line"></i>
+
+        </button>
+
+
+        <a
+            href="gallery"
+            data-online-only
+            data-feature="Gallery"
+        >
+
+            <i class="fa-solid fa-images"></i>
+
+            <span>
+                Gallery
+            </span>
+
+        </a>
+
+
+        <a href="profile">
+
+            <i class="fa-solid fa-user"></i>
+
+            <span>
+                Profile
+            </span>
+
+        </a>
+
+    </nav>
+
+</div>
+
+
+<script src="../js/main.js"></script>
+
+<script src="../js/results.js"></script>
+
+<script src="../js/pwa.js"></script>
+
+</body>
+
+</html>
