@@ -2,7 +2,7 @@
    AFC ISIU YOUTH PORTAL V2
    FILE: sw.js
    PURPOSE: PWA SERVICE WORKER
-   VERSION: 13
+   VERSION: 14
    ============================================================ */
 
 "use strict";
@@ -13,7 +13,7 @@
    ============================================================ */
 
 const CACHE_VERSION =
-    "afc-isiu-pwa-v13";
+    "afc-isiu-pwa-v14";
 
 const STATIC_CACHE =
     `${CACHE_VERSION}-static`;
@@ -21,10 +21,13 @@ const STATIC_CACHE =
 const PAGE_CACHE =
     `${CACHE_VERSION}-pages`;
 
+const AUDIO_CACHE =
+    `${CACHE_VERSION}-audio`;
+
 
 /* ============================================================
    APPLICATION SHELL
-   ============================================================ */
+============================================================ */
 
 const APP_SHELL = [
 
@@ -57,7 +60,7 @@ const APP_SHELL = [
 
 /* ============================================================
    INSTALL
-   ============================================================ */
+============================================================ */
 
 self.addEventListener(
     "install",
@@ -82,10 +85,11 @@ self.addEventListener(
 
 
                     /*
-                     * Cache each file individually.
+                     * Cache application shell
+                     * one file at a time.
                      *
-                     * One missing file should not prevent the
-                     * service worker from installing.
+                     * One missing file must NOT
+                     * stop installation.
                      */
 
                     for (
@@ -105,6 +109,7 @@ self.addEventListener(
 
 
                             if (
+                                response &&
                                 response.ok
                             ) {
 
@@ -137,7 +142,7 @@ self.addEventListener(
 
 
                     /*
-                     * Activate the new worker immediately.
+                     * Activate immediately.
                      */
 
                     await self.skipWaiting();
@@ -169,7 +174,7 @@ self.addEventListener(
 
 /* ============================================================
    ACTIVATE
-   ============================================================ */
+============================================================ */
 
 self.addEventListener(
     "activate",
@@ -195,7 +200,7 @@ self.addEventListener(
                         cacheName => {
 
                             /*
-                             * Delete old AFC caches.
+                             * Remove old AFC caches.
                              */
 
                             if (
@@ -205,7 +210,9 @@ self.addEventListener(
                                 cacheName !==
                                     STATIC_CACHE &&
                                 cacheName !==
-                                    PAGE_CACHE
+                                    PAGE_CACHE &&
+                                cacheName !==
+                                    AUDIO_CACHE
                             ) {
 
                                 console.log(
@@ -251,19 +258,64 @@ self.addEventListener(
 
 /* ============================================================
    MESSAGE HANDLER
-   ============================================================ */
+============================================================ */
 
 self.addEventListener(
     "message",
     event => {
 
         if (
-            event.data &&
+            !event.data
+        ) {
+
+            return;
+
+        }
+
+
+        /*
+         * Existing update mechanism.
+         */
+
+        if (
             event.data.type ===
-                "SKIP_WAITING"
+            "SKIP_WAITING"
         ) {
 
             self.skipWaiting();
+
+            return;
+
+        }
+
+
+        /*
+         * LESSON AUDIO CACHE REQUEST
+         *
+         * lessons.js sends every audio URL
+         * found in the Google Sheet here.
+         */
+
+        if (
+            event.data.type ===
+            "CACHE_LESSON_AUDIO"
+        ) {
+
+            const audioUrls =
+                Array.isArray(
+                    event.data.urls
+                )
+                    ? event.data.urls
+                    : [];
+
+
+            event.waitUntil(
+
+                cacheLessonAudio(
+                    audioUrls
+                )
+
+            );
 
         }
 
@@ -274,7 +326,7 @@ self.addEventListener(
 
 /* ============================================================
    FETCH
-   ============================================================ */
+============================================================ */
 
 self.addEventListener(
     "fetch",
@@ -303,15 +355,18 @@ self.addEventListener(
             );
 
 
+        /* ====================================================
+           EXTERNAL ORIGINS
+        ==================================================== */
+
         /*
-         * Never intercept external websites.
+         * Google Sheets, Google Fonts,
+         * Font Awesome, jsDelivr, etc.
          *
-         * This includes:
-         * - Google Sheets
-         * - Google Fonts
-         * - Font Awesome
-         * - jsDelivr
-         * - other CDNs
+         * These are intentionally not intercepted.
+         *
+         * lessons.js stores the Google Sheet data
+         * locally instead.
          */
 
         if (
@@ -324,8 +379,15 @@ self.addEventListener(
         }
 
 
+        /* ====================================================
+           AUDIO
+        ==================================================== */
+
         /*
-         * Audio remains network-only for now.
+         * Audio is now CACHEABLE.
+         *
+         * Network first when online.
+         * Cached audio when offline.
          */
 
         if (
@@ -335,7 +397,11 @@ self.addEventListener(
         ) {
 
             event.respondWith(
-                fetch(request)
+
+                handleAudio(
+                    request
+                )
+
             );
 
             return;
@@ -343,9 +409,9 @@ self.addEventListener(
         }
 
 
-        /*
-         * Navigation requests.
-         */
+        /* ====================================================
+           NAVIGATION
+        ==================================================== */
 
         if (
             request.mode ===
@@ -353,9 +419,11 @@ self.addEventListener(
         ) {
 
             event.respondWith(
+
                 handleNavigation(
                     request
                 )
+
             );
 
             return;
@@ -363,14 +431,16 @@ self.addEventListener(
         }
 
 
-        /*
-         * CSS / JS / images / other assets.
-         */
+        /* ====================================================
+           OTHER ASSETS
+        ==================================================== */
 
         event.respondWith(
+
             handleAsset(
                 request
             )
+
         );
 
     }
@@ -379,8 +449,282 @@ self.addEventListener(
 
 
 /* ============================================================
+   CACHE ALL LESSON AUDIO
+============================================================ */
+
+async function cacheLessonAudio(
+    audioUrls
+) {
+
+    if (
+        !audioUrls.length
+    ) {
+
+        console.log(
+            "AFC Isiu PWA: No lesson audio to cache."
+        );
+
+        return;
+
+    }
+
+
+    const cache =
+        await caches.open(
+            AUDIO_CACHE
+        );
+
+
+    /*
+     * Remove duplicates.
+     */
+
+    const uniqueUrls =
+        [
+            ...new Set(
+                audioUrls
+                    .filter(Boolean)
+                    .map(
+                        value =>
+                            String(value)
+                    )
+            )
+        ];
+
+
+    console.log(
+        "AFC Isiu PWA: Preparing to cache lesson audio:",
+        uniqueUrls.length
+    );
+
+
+    for (
+        const audioUrl of uniqueUrls
+    ) {
+
+        try {
+
+            const url =
+                new URL(
+                    audioUrl,
+                    self.location.origin
+                );
+
+
+            /*
+             * Only cache audio belonging
+             * to this website.
+             */
+
+            if (
+                url.origin !==
+                self.location.origin
+            ) {
+
+                console.warn(
+                    "AFC Isiu PWA: Skipping external audio:",
+                    audioUrl
+                );
+
+                continue;
+
+            }
+
+
+            /*
+             * Fetch the audio from the network.
+             */
+
+            const response =
+                await fetch(
+                    url.href,
+                    {
+                        cache:
+                            "no-store"
+                    }
+                );
+
+
+            if (
+                response &&
+                response.ok
+            ) {
+
+                await cache.put(
+                    url.href,
+                    response.clone()
+                );
+
+
+                console.log(
+                    "AFC Isiu PWA: Audio cached:",
+                    url.href
+                );
+
+            }
+
+            else {
+
+                console.warn(
+                    "AFC Isiu PWA: Audio could not be cached:",
+                    url.href,
+                    response
+                        ? response.status
+                        : "No response"
+                );
+
+            }
+
+        }
+
+        catch (error) {
+
+            /*
+             * One bad audio file must NEVER
+             * stop the remaining audio files.
+             */
+
+            console.warn(
+                "AFC Isiu PWA: Audio cache error:",
+                audioUrl,
+                error
+            );
+
+        }
+
+    }
+
+
+    console.log(
+        "AFC Isiu PWA: Lesson audio caching finished."
+    );
+
+}
+
+
+/* ============================================================
+   AUDIO HANDLER
+============================================================ */
+
+async function handleAudio(
+    request
+) {
+
+    const cache =
+        await caches.open(
+            AUDIO_CACHE
+        );
+
+
+    /*
+     * NETWORK FIRST
+     *
+     * If internet is available, obtain the
+     * newest audio file and update the cache.
+     */
+
+    try {
+
+        const networkResponse =
+            await fetch(
+                request,
+                {
+                    cache:
+                        "no-store"
+                }
+            );
+
+
+        if (
+            networkResponse &&
+            networkResponse.ok
+        ) {
+
+            await cache.put(
+                request,
+                networkResponse.clone()
+            );
+
+
+            return networkResponse;
+
+        }
+
+    }
+
+    catch (error) {
+
+        console.log(
+            "AFC Isiu PWA: Audio network unavailable:",
+            request.url
+        );
+
+    }
+
+
+    /*
+     * OFFLINE AUDIO FALLBACK.
+     */
+
+    const cachedAudio =
+        await cache.match(
+            request
+        );
+
+
+    if (
+        cachedAudio
+    ) {
+
+        console.log(
+            "AFC Isiu PWA: Serving cached audio:",
+            request.url
+        );
+
+
+        return cachedAudio;
+
+    }
+
+
+    /*
+     * Also search every cache in case the
+     * audio was cached by another handler.
+     */
+
+    const anyCachedAudio =
+        await caches.match(
+            request
+        );
+
+
+    if (
+        anyCachedAudio
+    ) {
+
+        return anyCachedAudio;
+
+    }
+
+
+    /*
+     * Audio unavailable.
+     */
+
+    return new Response(
+        "",
+        {
+            status: 503,
+            statusText: "Offline"
+        }
+    );
+
+}
+
+
+/* ============================================================
    NAVIGATION HANDLER
-   ============================================================ */
+============================================================ */
 
 async function handleNavigation(
     request
@@ -394,8 +738,6 @@ async function handleNavigation(
 
     /*
      * NETWORK FIRST
-     *
-     * Always attempt to get the newest page.
      */
 
     try {
@@ -411,10 +753,8 @@ async function handleNavigation(
 
 
         /*
-         * IMPORTANT:
-         *
-         * Never replace a genuine 404 with
-         * the offline page.
+         * Never replace a genuine 404
+         * with the offline page.
          */
 
         if (
@@ -459,7 +799,7 @@ async function handleNavigation(
 
 
     /*
-     * Try exact page from page cache.
+     * Try exact page cache.
      */
 
     const cachedPage =
@@ -478,7 +818,7 @@ async function handleNavigation(
 
 
     /*
-     * Try exact page from static cache.
+     * Try static cache.
      */
 
     const staticPage =
@@ -497,7 +837,7 @@ async function handleNavigation(
 
 
     /*
-     * Try matching pathname from static cache.
+     * Try pathname.
      */
 
     const url =
@@ -532,7 +872,7 @@ async function handleNavigation(
 
 /* ============================================================
    ASSET HANDLER
-   ============================================================ */
+============================================================ */
 
 async function handleAsset(
     request
@@ -541,9 +881,7 @@ async function handleAsset(
     /*
      * NETWORK FIRST.
      *
-     * This is intentional so updated lessons.js,
-     * lessons.css and other assets become available
-     * immediately after deployment.
+     * This keeps deployed files fresh.
      */
 
     try {
@@ -611,7 +949,7 @@ async function handleAsset(
 
 
     /*
-     * Return a normal 503 for assets.
+     * Normal 503.
      */
 
     return new Response(
@@ -627,7 +965,7 @@ async function handleAsset(
 
 /* ============================================================
    BUILT-IN OFFLINE PAGE
-   ============================================================ */
+============================================================ */
 
 function createOfflineResponse() {
 
