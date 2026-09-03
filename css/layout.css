@@ -1701,3 +1701,455 @@
     }
 
 }
+
+
+
+/* ============================================================
+   OFFLINE / INTERNET CONNECTION REQUIRED UI
+   GLOBAL OVERLAY — OWNED BY layout.css
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   OFFLINE TOP BANNER
+   ------------------------------------------------------------ */
+
+#offlineBanner {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 15000;
+
+    display: flex;
+    justify-content: center;
+
+    padding: 12px 16px;
+
+    background: rgba(10, 0, 22, 0.94);
+    border-bottom: 1px solid rgba(234, 88, 12, 0.35);
+
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+
+    box-shadow:
+        0 10px 30px rgba(10, 0, 22, 0.22),
+        0 1px 0 rgba(255, 255, 255, 0.04);
+
+    transform: translateY(-120%);
+    opacity: 0;
+    pointer-events: none;
+
+    transition:
+        transform 0.35s ease,
+        opacity 0.35s ease;
+}
+
+#offlineBanner.show {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.offline-banner-content {
+    width: min(100%, 720px);
+
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    color: #ffffff;
+}
+
+.offline-banner-content > i {
+    width: 38px;
+    height: 38px;
+
+    flex: 0 0 38px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 12px;
+
+    background: rgba(234, 88, 12, 0.14);
+    color: #fb923c;
+
+    font-size: 15px;
+}
+
+.offline-banner-content div {
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.offline-banner-content strong {
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-size: 0.86rem;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.offline-banner-content span {
+    font-family: "DM Sans", sans-serif;
+    font-size: 0.72rem;
+    line-height: 1.4;
+    color: rgba(255, 255, 255, 0.68);
+}
+
+
+/* ------------------------------------------------------------
+   INTERNET CONNECTION REQUIRED MODAL
+   ------------------------------------------------------------ */
+
+#offlineMessage {
+    position: fixed;
+    inset: 0;
+
+    z-index: 20000;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    height: 100%;
+
+    padding:
+        24px
+        20px
+        calc(24px + env(safe-area-inset-bottom));
+
+    background: rgba(10, 0, 22, 0.72);
+
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+
+    transition:
+        opacity 0.25s ease,
+        visibility 0.25s ease;
+}
+
+#offlineMessage.show {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+
+/* ------------------------------------------------------------
+   MODAL CARD
+   ------------------------------------------------------------ */
+
+.offline-message-card {
+    position: relative;
+
+    width: min(100%, 400px);
+
+    padding: 30px 26px 24px;
+
+    border-radius: 28px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255, 255, 255, 0.98),
+            rgba(248, 247, 251, 0.98)
+        );
+
+    border: 1px solid rgba(74, 7, 84, 0.10);
+
+    box-shadow:
+        0 30px 80px rgba(10, 0, 22, 0.30),
+        0 10px 30px rgba(10, 0, 22, 0.12);
+
+    text-align: center;
+
+    transform: translateY(18px) scale(0.97);
+
+    transition:
+        transform 0.3s cubic-bezier(.2,.8,.2,1);
+}
+
+#offlineMessage.show .offline-message-card {
+    transform: translateY(0) scale(1);
+}
+
+
+/* ------------------------------------------------------------
+   ICON
+   ------------------------------------------------------------ */
+
+.offline-message-icon {
+    width: 68px;
+    height: 68px;
+
+    margin: 0 auto 20px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 22px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(74, 7, 84, 0.10),
+            rgba(234, 88, 12, 0.12)
+        );
+
+    color: #4a0754;
+
+    font-size: 28px;
+
+    box-shadow:
+        inset 0 0 0 1px rgba(74, 7, 84, 0.08);
+}
+
+.offline-message-icon i {
+    font-size: 27px;
+}
+
+
+/* ------------------------------------------------------------
+   HEADING
+   ------------------------------------------------------------ */
+
+.offline-message-card h3 {
+    margin: 0 0 10px;
+
+    font-family: "Bricolage Grotesque", sans-serif;
+
+    font-size: 1.25rem;
+    font-weight: 700;
+
+    line-height: 1.2;
+
+    letter-spacing: -0.02em;
+
+    color: #0f172a;
+}
+
+
+/* ------------------------------------------------------------
+   DESCRIPTION
+   ------------------------------------------------------------ */
+
+.offline-message-card p {
+    margin: 0 auto 22px;
+
+    max-width: 330px;
+
+    font-family: "DM Sans", sans-serif;
+
+    font-size: 0.78rem;
+    line-height: 1.55;
+
+    color: #64748b;
+}
+
+
+/* ------------------------------------------------------------
+   OK BUTTON
+   ------------------------------------------------------------ */
+
+#closeOfflineMessage {
+    width: 100%;
+    min-height: 48px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 0;
+    border-radius: 15px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #4a0754,
+            #5f126b
+        );
+
+    color: #ffffff;
+
+    font-family: "DM Sans", sans-serif;
+
+    font-size: 0.82rem;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 10px 24px rgba(74, 7, 84, 0.22);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        opacity 0.2s ease;
+}
+
+#closeOfflineMessage:hover {
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 14px 28px rgba(74, 7, 84, 0.28);
+}
+
+#closeOfflineMessage:active {
+    transform: scale(0.98);
+}
+
+#closeOfflineMessage:focus-visible {
+    outline: 3px solid rgba(234, 88, 12, 0.30);
+    outline-offset: 3px;
+}
+
+
+/* ------------------------------------------------------------
+   PREVENT PAGE SCROLL WHILE MODAL IS OPEN
+   ------------------------------------------------------------ */
+
+body.offline-modal-open {
+    overflow: hidden !important;
+}
+
+
+/* ------------------------------------------------------------
+   MOBILE
+   ------------------------------------------------------------ */
+
+@media (max-width: 768px) {
+
+    #offlineBanner {
+        padding:
+            calc(10px + env(safe-area-inset-top))
+            14px
+            10px;
+    }
+
+    .offline-banner-content {
+        gap: 10px;
+    }
+
+    .offline-banner-content > i {
+        width: 34px;
+        height: 34px;
+        flex-basis: 34px;
+
+        border-radius: 10px;
+    }
+
+    .offline-banner-content strong {
+        font-size: 0.78rem;
+    }
+
+    .offline-banner-content span {
+        font-size: 0.67rem;
+    }
+
+    #offlineMessage {
+        align-items: center;
+
+        padding:
+            20px
+            16px
+            calc(20px + env(safe-area-inset-bottom));
+    }
+
+    .offline-message-card {
+        width: 100%;
+        max-width: 360px;
+
+        padding: 26px 21px 21px;
+
+        border-radius: 25px;
+    }
+
+    .offline-message-icon {
+        width: 60px;
+        height: 60px;
+
+        margin-bottom: 17px;
+
+        border-radius: 19px;
+    }
+
+    .offline-message-card h3 {
+        font-size: 1.12rem;
+    }
+
+    .offline-message-card p {
+        font-size: 0.75rem;
+        line-height: 1.5;
+
+        margin-bottom: 20px;
+    }
+
+    #closeOfflineMessage {
+        min-height: 46px;
+        border-radius: 14px;
+    }
+}
+
+
+/* ------------------------------------------------------------
+   DARK MODE
+   ------------------------------------------------------------ */
+
+[data-theme="dark"] .offline-message-card {
+    background:
+        linear-gradient(
+            145deg,
+            #18151d,
+            #121016
+        );
+
+    border-color: rgba(255, 255, 255, 0.08);
+
+    box-shadow:
+        0 30px 80px rgba(0, 0, 0, 0.55),
+        0 10px 30px rgba(0, 0, 0, 0.35);
+}
+
+[data-theme="dark"] .offline-message-card h3 {
+    color: #ffffff;
+}
+
+[data-theme="dark"] .offline-message-card p {
+    color: #a9a4b0;
+}
+
+[data-theme="dark"] .offline-message-icon {
+    background:
+        linear-gradient(
+            145deg,
+            rgba(139, 92, 246, 0.13),
+            rgba(234, 88, 12, 0.13)
+        );
+
+    color: #c084fc;
+}
+
+
+/* ------------------------------------------------------------
+   REDUCED MOTION
+   ------------------------------------------------------------ */
+
+@media (prefers-reduced-motion: reduce) {
+
+    #offlineBanner,
+    #offlineMessage,
+    .offline-message-card,
+    #closeOfflineMessage {
+        transition: none !important;
+    }
+}
