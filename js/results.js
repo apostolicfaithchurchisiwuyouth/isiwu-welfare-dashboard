@@ -9,7 +9,7 @@
 
 /* ============================================================
    API
-============================================================ */
+   ============================================================ */
 
 const RESULTS_API =
     "https://script.google.com/macros/s/AKfycbw1mVwpgAcIOSNbpgzy52TFyozEGMtWWwVWUDFaofGNzpsguBIaKR4q1dXVtgVHO2xZ1w/exec";
@@ -17,7 +17,7 @@ const RESULTS_API =
 
 /* ============================================================
    SESSION KEYS
-============================================================ */
+   ============================================================ */
 
 const RESULTS_MEMBER_KEY =
     "afc_isiu_slc_member_v1";
@@ -28,7 +28,7 @@ const RESULTS_SLC_SESSION_KEY =
 
 /* ============================================================
    STATE
-============================================================ */
+   ============================================================ */
 
 let memberId = "";
 
@@ -38,10 +38,12 @@ let historyData = [];
 
 let currentReview = null;
 
+let requestedLessonNo = "";
+
 
 /* ============================================================
    DOM READY
-============================================================ */
+   ============================================================ */
 
 document.addEventListener(
     "DOMContentLoaded",
@@ -57,7 +59,7 @@ document.addEventListener(
 
 /* ============================================================
    DOM HELPERS
-============================================================ */
+   ============================================================ */
 
 function resultElement(id) {
 
@@ -70,7 +72,6 @@ function showResultElement(id) {
 
     const element =
         resultElement(id);
-
 
     if (element) {
 
@@ -88,7 +89,6 @@ function hideResultElement(id) {
     const element =
         resultElement(id);
 
-
     if (element) {
 
         element.classList.add(
@@ -102,7 +102,7 @@ function hideResultElement(id) {
 
 /* ============================================================
    ESCAPE HTML
-============================================================ */
+   ============================================================ */
 
 function escapeResultHTML(value) {
 
@@ -118,63 +118,97 @@ function escapeResultHTML(value) {
 
 /* ============================================================
    IDENTIFY MEMBER
-============================================================ */
+   ============================================================ */
 
 async function identifyMember() {
 
     /*
-    First try the active SLC session.
+    IMPORTANT:
+
+    The URL is checked FIRST.
+
+    This ensures that after quiz submission,
+    the member ID supplied by slcquiz.js is used
+    immediately.
     */
 
-    try {
-
-        const raw =
-            sessionStorage.getItem(
-                RESULTS_SLC_SESSION_KEY
-            );
-
-
-        if (raw) {
-
-            const session =
-                JSON.parse(raw);
-
-
-            if (
-                session &&
-                session.memberId
-            ) {
-
-                memberId =
-                    String(
-                        session.memberId
-                    ).trim();
-
-
-                memberName =
-                    String(
-                        session.memberName ||
-                        ""
-                    ).trim();
-
-            }
-
-        }
-
-    }
-    catch (error) {
-
-        console.warn(
-            "Unable to read SLC session.",
-            error
+    const params =
+        new URLSearchParams(
+            window.location.search
         );
+
+    const queryMember =
+        String(
+            params.get("memberId") || ""
+        ).trim();
+
+    requestedLessonNo =
+        String(
+            params.get("lessonNo") || ""
+        ).trim();
+
+
+    if (queryMember) {
+
+        memberId =
+            queryMember;
 
     }
 
 
     /*
-    Next try the dedicated results
-    member storage.
+    Next try the active SLC session.
+    */
+
+    if (!memberId) {
+
+        try {
+
+            const raw =
+                sessionStorage.getItem(
+                    RESULTS_SLC_SESSION_KEY
+                );
+
+            if (raw) {
+
+                const session =
+                    JSON.parse(raw);
+
+                if (
+                    session &&
+                    session.memberId
+                ) {
+
+                    memberId =
+                        String(
+                            session.memberId
+                        ).trim();
+
+                    memberName =
+                        String(
+                            session.memberName ||
+                            ""
+                        ).trim();
+
+                }
+
+            }
+
+        }
+        catch (error) {
+
+            console.warn(
+                "Unable to read SLC session.",
+                error
+            );
+
+        }
+
+    }
+
+
+    /*
+    Next try the dedicated results storage.
     */
 
     if (!memberId) {
@@ -186,12 +220,10 @@ async function identifyMember() {
                     RESULTS_MEMBER_KEY
                 );
 
-
             if (saved) {
 
                 const parsed =
                     JSON.parse(saved);
-
 
                 if (
                     parsed &&
@@ -202,7 +234,6 @@ async function identifyMember() {
                         String(
                             parsed.memberId
                         ).trim();
-
 
                     memberName =
                         String(
@@ -227,67 +258,23 @@ async function identifyMember() {
     }
 
 
-    /*
-    Finally check the query string.
-
-    This is useful when the user has just
-    submitted a quiz.
-    */
-
-    if (!memberId) {
-
-        const params =
-            new URLSearchParams(
-                window.location.search
-            );
-
-
-        const queryMember =
-            params.get(
-                "memberId"
-            );
-
-
-        if (queryMember) {
-
-            memberId =
-                queryMember.trim();
-
-        }
-
-    }
-
-
-    /*
-    The current SLC session is normally
-    cleared after submission.
-
-    Therefore, if there is no member ID,
-    show a helpful state rather than pretending
-    results exist.
-    */
-
     if (!memberId) {
 
         showResultsMessage(
             "Please complete an SLC quiz or select your participant first."
         );
 
-
         hideResultElement(
             "latestResult"
         );
-
 
         hideResultElement(
             "reviewSection"
         );
 
-
         showResultElement(
             "emptyResults"
         );
-
 
         return;
 
@@ -296,7 +283,6 @@ async function identifyMember() {
 
     updateMemberDisplay();
 
-
     await loadQuizHistory();
 
 }
@@ -304,7 +290,7 @@ async function identifyMember() {
 
 /* ============================================================
    MEMBER DISPLAY
-============================================================ */
+   ============================================================ */
 
 function updateMemberDisplay() {
 
@@ -313,16 +299,13 @@ function updateMemberDisplay() {
             "resultsMember"
         );
 
-
     if (!element) {
 
         return;
 
     }
 
-
     element.innerHTML = `
-
         <i class="fa-solid fa-user"></i>
 
         <span>
@@ -331,7 +314,6 @@ function updateMemberDisplay() {
                 "My Results"
             )}
         </span>
-
     `;
 
 }
@@ -339,7 +321,7 @@ function updateMemberDisplay() {
 
 /* ============================================================
    LOAD HISTORY
-============================================================ */
+   ============================================================ */
 
 async function loadQuizHistory() {
 
@@ -355,7 +337,6 @@ async function loadQuizHistory() {
                 `${RESULTS_API}?action=getMemberQuizHistory&memberId=${encodeURIComponent(memberId)}`
             );
 
-
         if (!response.ok) {
 
             throw new Error(
@@ -364,10 +345,8 @@ async function loadQuizHistory() {
 
         }
 
-
         const data =
             await response.json();
-
 
         console.log(
             "Quiz history:",
@@ -384,7 +363,6 @@ async function loadQuizHistory() {
                 "Unable to load your results."
             );
 
-
             return;
 
         }
@@ -395,11 +373,11 @@ async function loadQuizHistory() {
         ) {
 
             memberName =
-                data.memberName;
-
+                String(
+                    data.memberName
+                ).trim();
 
             updateMemberDisplay();
-
 
             saveResultsMember();
 
@@ -414,14 +392,80 @@ async function loadQuizHistory() {
                 : [];
 
 
-        hideResultsMessage();
+        /*
+        Sort newest first if timestamps are available.
+        */
 
+        historyData.sort(
+            function (a, b) {
+
+                const dateA =
+                    new Date(
+                        a.timestamp || 0
+                    ).getTime();
+
+                const dateB =
+                    new Date(
+                        b.timestamp || 0
+                    ).getTime();
+
+                return (
+                    dateB -
+                    dateA
+                );
+
+            }
+        );
+
+
+        hideResultsMessage();
 
         renderHistory();
 
-
         renderLatestResult();
 
+
+        /*
+        If the user has just submitted a quiz,
+        automatically load the review for that lesson
+        only after history has loaded.
+        */
+
+        if (
+            requestedLessonNo
+        ) {
+
+            const matchingLesson =
+                historyData.find(
+                    function (item) {
+
+                        return (
+                            String(
+                                item.lessonNo
+                            ).trim()
+                            ===
+                            requestedLessonNo
+                        );
+
+                    }
+                );
+
+            if (matchingLesson) {
+
+                /*
+                We do not automatically open the
+                review section because the user may
+                simply want to see the result card.
+                */
+
+                console.log(
+                    "Latest submitted lesson found:",
+                    matchingLesson
+                );
+
+            }
+
+        }
 
     }
     catch (error) {
@@ -430,7 +474,6 @@ async function loadQuizHistory() {
             "loadQuizHistory error:",
             error
         );
-
 
         showResultsMessage(
             "Unable to load your results. Please check your connection and try again."
@@ -443,7 +486,7 @@ async function loadQuizHistory() {
 
 /* ============================================================
    SAVE RESULTS MEMBER
-============================================================ */
+   ============================================================ */
 
 function saveResultsMember() {
 
@@ -452,7 +495,6 @@ function saveResultsMember() {
         return;
 
     }
-
 
     try {
 
@@ -484,7 +526,7 @@ function saveResultsMember() {
 
 /* ============================================================
    RENDER HISTORY
-============================================================ */
+   ============================================================ */
 
 function renderHistory() {
 
@@ -493,12 +535,10 @@ function renderHistory() {
             "historyList"
         );
 
-
     const count =
         resultElement(
             "historyCount"
         );
-
 
     if (!list) {
 
@@ -524,11 +564,9 @@ function renderHistory() {
         list.innerHTML =
             "";
 
-
         showResultElement(
             "emptyResults"
         );
-
 
         return;
 
@@ -549,25 +587,18 @@ function renderHistory() {
                 ) {
 
                     const score =
-                        item.score ??
-                        0;
-
+                        item.score ?? 0;
 
                     const points =
-                        item.pointsEarned ??
-                        0;
-
+                        item.pointsEarned ?? 0;
 
                     const total =
-                        item.totalPoints ??
-                        0;
-
+                        item.totalPoints ?? 0;
 
                     const date =
                         formatDate(
                             item.timestamp
                         );
-
 
                     const percentage =
                         total > 0
@@ -575,22 +606,18 @@ function renderHistory() {
                                 (
                                     Number(points) /
                                     Number(total)
-                                ) *
-                                100
+                                ) * 100
                             )
                             : 0;
 
 
                     return `
-
                         <article
                             class="history-item"
                         >
 
                             <div class="history-number">
-
                                 ${index + 1}
-
                             </div>
 
 
@@ -668,7 +695,6 @@ function renderHistory() {
                                 data-lesson="${escapeResultHTML(
                                     item.lessonNo
                                 )}"
-                                data-index="${index}"
                             >
 
                                 <span>
@@ -680,7 +706,6 @@ function renderHistory() {
                             </button>
 
                         </article>
-
                     `;
 
                 }
@@ -700,8 +725,9 @@ function renderHistory() {
                     function () {
 
                         const lessonNo =
-                            button.dataset.lesson;
-
+                            String(
+                                button.dataset.lesson || ""
+                            ).trim();
 
                         openReview(
                             lessonNo
@@ -718,22 +744,56 @@ function renderHistory() {
 
 /* ============================================================
    LATEST RESULT
-============================================================ */
+   ============================================================ */
 
 function renderLatestResult() {
 
-    const latest =
-        historyData[0];
-
-
-    if (!latest) {
+    if (!historyData.length) {
 
         hideResultElement(
             "latestResult"
         );
 
-
         return;
+
+    }
+
+
+    /*
+    If results.html was opened immediately
+    after completing a specific lesson, prefer
+    that lesson as the latest displayed result.
+    */
+
+    let latest =
+        historyData[0];
+
+
+    if (
+        requestedLessonNo
+    ) {
+
+        const requestedResult =
+            historyData.find(
+                function (item) {
+
+                    return (
+                        String(
+                            item.lessonNo
+                        ).trim()
+                        ===
+                        requestedLessonNo
+                    );
+
+                }
+            );
+
+        if (requestedResult) {
+
+            latest =
+                requestedResult;
+
+        }
 
     }
 
@@ -748,30 +808,25 @@ function renderLatestResult() {
             "latestLesson"
         );
 
-
     const score =
         resultElement(
             "latestScore"
         );
-
 
     const title =
         resultElement(
             "latestTitle"
         );
 
-
     const date =
         resultElement(
             "latestDate"
         );
 
-
     const points =
         resultElement(
             "latestPoints"
         );
-
 
     const total =
         resultElement(
@@ -834,7 +889,6 @@ function renderLatestResult() {
             "latestReviewBtn"
         );
 
-
     if (latestReviewBtn) {
 
         latestReviewBtn.onclick =
@@ -853,11 +907,20 @@ function renderLatestResult() {
 
 /* ============================================================
    OPEN REVIEW
-============================================================ */
+   ============================================================ */
 
 async function openReview(lessonNo) {
 
-    if (!memberId || !lessonNo) {
+    lessonNo =
+        String(
+            lessonNo || ""
+        ).trim();
+
+
+    if (
+        !memberId ||
+        !lessonNo
+    ) {
 
         return;
 
@@ -869,18 +932,15 @@ async function openReview(lessonNo) {
             "reviewSection"
         );
 
-
     const reviewContainer =
         resultElement(
             "reviewContainer"
         );
 
-
     const reviewTitle =
         resultElement(
             "reviewTitle"
         );
-
 
     const reviewSubtitle =
         resultElement(
@@ -904,7 +964,6 @@ async function openReview(lessonNo) {
 
 
     reviewContainer.innerHTML = `
-
         <div class="review-loading">
 
             <i class="fa-solid fa-spinner fa-spin"></i>
@@ -914,7 +973,6 @@ async function openReview(lessonNo) {
             </span>
 
         </div>
-
     `;
 
 
@@ -951,7 +1009,6 @@ async function openReview(lessonNo) {
                 `${RESULTS_API}?action=getQuizReview&memberId=${encodeURIComponent(memberId)}&lessonNo=${encodeURIComponent(lessonNo)}`
             );
 
-
         if (!response.ok) {
 
             throw new Error(
@@ -964,33 +1021,136 @@ async function openReview(lessonNo) {
         const data =
             await response.json();
 
-
         console.log(
             "Review response:",
             data
         );
 
 
+        if (
+            data &&
+            data.success === false
+        ) {
+
+            throw new Error(
+                data.message ||
+                "Review is not available."
+            );
+
+        }
+
+
         /*
-        Different versions of the backend may
-        return the review object directly or
-        inside a data/review property.
+        SUPPORT MULTIPLE BACKEND RESPONSE SHAPES
         */
 
-        const review =
+
+        let review =
+            [];
+
+
+        let questions =
+            [];
+
+
+        /*
+        Review array.
+        */
+
+        if (
             Array.isArray(data)
-                ? data
-                : Array.isArray(data.review)
-                    ? data.review
-                    : [];
+        ) {
+
+            review =
+                data;
+
+        }
+        else if (
+            Array.isArray(data.review)
+        ) {
+
+            review =
+                data.review;
+
+        }
+        else if (
+            Array.isArray(data.data?.review)
+        ) {
+
+            review =
+                data.data.review;
+
+        }
+        else if (
+            Array.isArray(data.results)
+        ) {
+
+            review =
+                data.results;
+
+        }
 
 
-        const questions =
+        /*
+        Questions array.
+        */
+
+        if (
             Array.isArray(data.questions)
-                ? data.questions
-                : Array.isArray(data.data?.questions)
-                    ? data.data.questions
-                    : [];
+        ) {
+
+            questions =
+                data.questions;
+
+        }
+        else if (
+            Array.isArray(
+                data.data?.questions
+            )
+        ) {
+
+            questions =
+                data.data.questions;
+
+        }
+        else if (
+            Array.isArray(
+                data.quizQuestions
+            )
+        ) {
+
+            questions =
+                data.quizQuestions;
+
+        }
+
+
+        /*
+        Some backends return one combined
+        items array containing both question
+        and answer information.
+        */
+
+        if (
+            !questions.length &&
+            Array.isArray(data.items)
+        ) {
+
+            questions =
+                data.items;
+
+        }
+
+
+        if (
+            !review.length &&
+            Array.isArray(data.items)
+        ) {
+
+            review =
+                data.items;
+
+        }
 
 
         currentReview = {
@@ -1013,7 +1173,6 @@ async function openReview(lessonNo) {
         ) {
 
             reviewContainer.innerHTML = `
-
                 <div class="review-empty">
 
                     <i class="fa-solid fa-circle-info"></i>
@@ -1029,9 +1188,7 @@ async function openReview(lessonNo) {
                     </p>
 
                 </div>
-
             `;
-
 
             return;
 
@@ -1041,7 +1198,10 @@ async function openReview(lessonNo) {
         if (reviewSubtitle) {
 
             reviewSubtitle.textContent =
-                `${review.length} questions reviewed`;
+                `${Math.min(
+                    review.length,
+                    questions.length
+                )} questions reviewed`;
 
         }
 
@@ -1061,7 +1221,6 @@ async function openReview(lessonNo) {
 
 
         reviewContainer.innerHTML = `
-
             <div class="review-empty">
 
                 <i class="fa-solid fa-triangle-exclamation"></i>
@@ -1071,12 +1230,15 @@ async function openReview(lessonNo) {
                 </h3>
 
                 <p>
-                    Please check your connection and
-                    try again.
+                    ${
+                        escapeResultHTML(
+                            error.message
+                        ) ||
+                        "Please check your connection and try again."
+                    }
                 </p>
 
             </div>
-
         `;
 
     }
@@ -1086,7 +1248,7 @@ async function openReview(lessonNo) {
 
 /* ============================================================
    RENDER REVIEW
-============================================================ */
+   ============================================================ */
 
 function renderReview(
     reviewData,
@@ -1097,7 +1259,6 @@ function renderReview(
         resultElement(
             "reviewContainer"
         );
-
 
     if (!container) {
 
@@ -1110,201 +1271,261 @@ function renderReview(
         "";
 
 
-    reviewData.forEach(
-        function (
-            item,
-            index
-        ) {
-
-            const question =
-                reviewQuestions[index];
+    const length =
+        Math.min(
+            reviewData.length,
+            reviewQuestions.length
+        );
 
 
-            if (!question) {
+    for (
+        let index = 0;
+        index < length;
+        index++
+    ) {
 
-                return;
+        const item =
+            reviewData[index] || {};
 
-            }
-
-
-            const correctAnswer =
-                String(
-                    item.correctAnswer || ""
-                )
-                    .trim()
-                    .toUpperCase();
+        const question =
+            reviewQuestions[index] || {};
 
 
-            const userAnswer =
-                String(
-                    item.userAnswer || ""
-                )
-                    .trim()
-                    .toUpperCase();
+        const correctAnswer =
+            String(
+                item.correctAnswer ??
+                item.correct ??
+                question.correctAnswer ??
+                ""
+            )
+                .trim()
+                .toUpperCase();
 
 
-            const wasCorrect =
-                item.correct === true ||
-                (
-                    correctAnswer &&
-                    userAnswer &&
-                    correctAnswer === userAnswer
-                );
+        const userAnswer =
+            String(
+                item.userAnswer ??
+                item.answer ??
+                item.selectedAnswer ??
+                ""
+            )
+                .trim()
+                .toUpperCase();
 
 
-            html += `
+        /*
+        IMPORTANT:
 
-                <article
-                    class="review-question"
-                >
+        Do not treat item.correct === true as
+        an answer letter.
 
-                    <div class="review-question-top">
+        It is only used when it is a boolean.
+        */
 
-                        <span>
-                            QUESTION ${index + 1}
-                        </span>
-
-
-                        <strong class="${
-                            wasCorrect
-                                ? "review-correct"
-                                : "review-wrong"
-                        }">
-
-                            ${
-                                wasCorrect
-                                    ? "✓ Correct"
-                                    : "✕ Incorrect"
-                            }
-
-                        </strong>
-
-                    </div>
-
-
-                    <h3>
-                        ${escapeResultHTML(
-                            question.question
-                        )}
-                    </h3>
-
-
-                    <div class="review-options">
-
-            `;
-
-
-            [
-                "A",
-                "B",
-                "C",
-                "D"
-
-            ].forEach(
-                function (letter) {
-
-                    const text =
-                        question[
-                            `option${letter}`
-                        ];
-
-
-                    if (!text) {
-
-                        return;
-
-                    }
-
-
-                    let classes =
-                        "review-option";
-
-
-                    if (
-                        letter ===
-                        correctAnswer
-                    ) {
-
-                        classes +=
-                            " correct";
-
-                    }
-
-
-                    if (
-                        letter ===
-                        userAnswer &&
-                        !wasCorrect
-                    ) {
-
-                        classes +=
-                            " wrong";
-
-                    }
-
-
-                    html += `
-
-                        <div
-                            class="${classes}"
-                        >
-
-                            <span class="review-option-letter">
-
-                                ${letter}
-
-                            </span>
-
-
-                            <span class="review-option-text">
-
-                                ${escapeResultHTML(
-                                    text
-                                )}
-
-                            </span>
-
-
-                            ${
-                                letter === correctAnswer
-                                    ? `
-                                        <span class="review-badge correct-badge">
-                                            Correct answer
-                                        </span>
-                                    `
-                                    : ""
-                            }
-
-
-                            ${
-                                letter === userAnswer &&
-                                !wasCorrect
-                                    ? `
-                                        <span class="review-badge wrong-badge">
-                                            Your answer
-                                        </span>
-                                    `
-                                    : ""
-                            }
-
-                        </div>
-
-                    `;
-
-                }
+        const wasCorrect =
+            item.correct === true ||
+            (
+                correctAnswer &&
+                userAnswer &&
+                correctAnswer === userAnswer
             );
 
 
-            html += `
+        html += `
+            <article
+                class="review-question"
+            >
+
+                <div class="review-question-top">
+
+                    <span>
+                        QUESTION ${index + 1}
+                    </span>
+
+                    <strong class="${
+                        wasCorrect
+                            ? "review-correct"
+                            : "review-wrong"
+                    }">
+
+                        ${
+                            wasCorrect
+                                ? "✓ Correct"
+                                : "✕ Incorrect"
+                        }
+
+                    </strong>
+
+                </div>
+
+
+                <h3>
+                    ${escapeResultHTML(
+                        question.question ||
+                        item.question ||
+                        ""
+                    )}
+                </h3>
+
+
+                <div class="review-options">
+        `;
+
+
+        [
+            "A",
+            "B",
+            "C",
+            "D"
+
+        ].forEach(
+            function (letter) {
+
+                const text =
+                    question[
+                        `option${letter}`
+                    ] ??
+                    item[
+                        `option${letter}`
+                    ];
+
+
+                if (
+                    text === undefined ||
+                    text === null ||
+                    String(text).trim() === ""
+                ) {
+
+                    return;
+
+                }
+
+
+                let classes =
+                    "review-option";
+
+
+                if (
+                    letter ===
+                    correctAnswer
+                ) {
+
+                    classes +=
+                        " correct";
+
+                }
+
+
+                if (
+                    letter ===
+                    userAnswer &&
+                    !wasCorrect
+                ) {
+
+                    classes +=
+                        " wrong";
+
+                }
+
+
+                if (
+                    letter ===
+                    userAnswer &&
+                    wasCorrect
+                ) {
+
+                    classes +=
+                        " selected-correct";
+
+                }
+
+
+                html += `
+                    <div
+                        class="${classes}"
+                    >
+
+                        <span class="review-option-letter">
+                            ${letter}
+                        </span>
+
+
+                        <span class="review-option-text">
+                            ${escapeResultHTML(
+                                text
+                            )}
+                        </span>
+
+
+                        ${
+                            letter === correctAnswer
+                                ? `
+                                    <span class="review-badge correct-badge">
+                                        Correct answer
+                                    </span>
+                                `
+                                : ""
+                        }
+
+
+                        ${
+                            letter === userAnswer &&
+                            !wasCorrect
+                                ? `
+                                    <span class="review-badge wrong-badge">
+                                        Your answer
+                                    </span>
+                                `
+                                : ""
+                        }
+
+
+                        ${
+                            letter === userAnswer &&
+                            wasCorrect
+                                ? `
+                                    <span class="review-badge correct-badge">
+                                        Your answer
+                                    </span>
+                                `
+                                : ""
+                        }
 
                     </div>
+                `;
 
-                </article>
+            }
+        );
 
-            `;
 
-        }
-    );
+        html += `
+                </div>
+
+            </article>
+        `;
+
+    }
+
+
+    if (!html) {
+
+        html = `
+            <div class="review-empty">
+
+                <i class="fa-solid fa-circle-info"></i>
+
+                <h3>
+                    Review not available
+                </h3>
+
+                <p>
+                    No review questions could be displayed.
+                </p>
+
+            </div>
+        `;
+
+    }
 
 
     container.innerHTML =
@@ -1315,7 +1536,7 @@ function renderReview(
 
 /* ============================================================
    CLOSE REVIEW
-============================================================ */
+   ============================================================ */
 
 function closeReview() {
 
@@ -1323,10 +1544,8 @@ function closeReview() {
         "reviewSection"
     );
 
-
     currentReview =
         null;
-
 
     window.scrollTo({
         top: 0,
@@ -1338,7 +1557,7 @@ function closeReview() {
 
 /* ============================================================
    LISTENERS
-============================================================ */
+   ============================================================ */
 
 function setupResultsListeners() {
 
@@ -1346,7 +1565,6 @@ function setupResultsListeners() {
         resultElement(
             "closeReviewBtn"
         );
-
 
     if (closeButton) {
 
@@ -1362,7 +1580,7 @@ function setupResultsListeners() {
 
 /* ============================================================
    RESULTS MESSAGE
-============================================================ */
+   ============================================================ */
 
 function showResultsMessage(message) {
 
@@ -1371,17 +1589,14 @@ function showResultsMessage(message) {
             "resultsMessage"
         );
 
-
     if (!element) {
 
         return;
 
     }
 
-
     element.textContent =
         message;
-
 
     element.classList.add(
         "show"
@@ -1397,7 +1612,6 @@ function hideResultsMessage() {
             "resultsMessage"
         );
 
-
     if (element) {
 
         element.classList.remove(
@@ -1411,7 +1625,7 @@ function hideResultsMessage() {
 
 /* ============================================================
    DATE FORMAT
-============================================================ */
+   ============================================================ */
 
 function formatDate(value) {
 
@@ -1421,10 +1635,8 @@ function formatDate(value) {
 
     }
 
-
     const date =
         new Date(value);
-
 
     if (
         Number.isNaN(
@@ -1435,7 +1647,6 @@ function formatDate(value) {
         return String(value);
 
     }
-
 
     return date.toLocaleDateString(
         "en-NG",
