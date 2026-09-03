@@ -10,20 +10,6 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>
-        Weekly SLC Quiz | AFC Isiu Youth Portal
-    </title>
-
-
-    <!-- =====================================================
-         PWA
-    ====================================================== -->
-
-    <link
-        rel="manifest"
-        href="/manifest.json"
-    >
-
     <meta
         name="theme-color"
         content="#ea580c"
@@ -46,13 +32,13 @@
 
     <meta
         name="apple-mobile-web-app-title"
-        content="AFC Isiwu"
+        content="AFC Isiu Youth"
     >
 
-
-    <!-- =====================================================
-         ICON
-    ====================================================== -->
+    <link
+        rel="manifest"
+        href="../manifest.json"
+    >
 
     <link
         rel="icon"
@@ -64,6 +50,11 @@
         rel="apple-touch-icon"
         href="../images/logo.png"
     >
+
+
+    <title>
+        My SLC Results | AFC Isiu Youth
+    </title>
 
 
     <!-- =====================================================
@@ -82,7 +73,7 @@
     >
 
     <link
-        href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@10..48,400;10..48,500;10..48,600;10..48,700&family=DM+Sans:wght@400;500;600;700&display=swap"
         rel="stylesheet"
     >
 
@@ -92,23 +83,13 @@
     ====================================================== -->
 
     <link
+        rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
-        rel="stylesheet"
     >
 
     <link
+        rel="stylesheet"
         href="https://cdn.jsdelivr.net/npm/remixicon@4.6.0/fonts/remixicon.css"
-        rel="stylesheet"
-    >
-
-
-    <!-- =====================================================
-         AOS
-    ====================================================== -->
-
-    <link
-        rel="stylesheet"
-        href="https://unpkg.com/aos@2.3.4/dist/aos.css"
     >
 
 
@@ -128,19 +109,18 @@
 
 
     <!-- =====================================================
-         SLC QUIZ CSS
+         PAGE CSS
     ====================================================== -->
 
     <link
         rel="stylesheet"
-        href="../css/slcquiz.css"
+        href="../css/results.css"
     >
 
 </head>
 
 
 <body>
-
 
 <div class="app-layout">
 
@@ -172,9 +152,13 @@
 
                 <div>
 
-                    <h2>AFC Isiu</h2>
+                    <h2>
+                        AFC Isiu
+                    </h2>
 
-                    <span>Youth Portal</span>
+                    <span>
+                        Youth Portal
+                    </span>
 
                 </div>
 
@@ -199,7 +183,7 @@
                 </a>
 
 
-                <a href="pages/lessons">
+                <a href="lessons">
 
                     <i class="fa-solid fa-book-open"></i>
 
@@ -211,8 +195,7 @@
 
 
                 <a
-                    href="pages/slcquiz"
-                    class="active"
+                    href="slcquiz"
                     data-online-only
                     data-feature="Weekly SLC Quiz"
                 >
@@ -227,7 +210,8 @@
 
 
                 <a
-                    href="pages/result"
+                    href="results"
+                    class="active"
                     data-online-only
                     data-feature="Growth Tracker"
                 >
@@ -247,7 +231,7 @@
 
 
                 <a
-                    href="pages/gallery"
+                    href="gallery"
                     data-online-only
                     data-feature="Gallery"
                 >
@@ -262,7 +246,7 @@
 
 
                 <a
-                    href="pages/events"
+                    href="events"
                     data-online-only
                     data-feature="Youth Events"
                 >
@@ -277,7 +261,7 @@
 
 
                 <a
-                    href="pages/welfare"
+                    href="welfare"
                     data-online-only
                     data-feature="Welfare"
                 >
@@ -292,7 +276,7 @@
 
 
                 <a
-                    href="pages/prayer"
+                    href="prayer"
                     data-online-only
                     data-feature="Prayer Requests"
                 >
@@ -307,7 +291,7 @@
 
 
                 <a
-                    href="pages/program-report"
+                    href="program-report"
                     data-online-only
                     data-feature="Secretariat Reports"
                 >
@@ -332,7 +316,7 @@
             </div>
 
 
-            <a href="pages/profile">
+            <a href="profile">
 
                 <i class="fa-solid fa-user"></i>
 
@@ -343,7 +327,7 @@
             </a>
 
 
-            <a href="pages/settings">
+            <a href="settings">
 
                 <i class="fa-solid fa-gear"></i>
 
@@ -366,7 +350,7 @@
 
 
         <!-- =================================================
-             PERMANENT TOPBAR
+             TOPBAR
         ================================================== -->
 
         <header class="topbar">
@@ -444,148 +428,55 @@
 
 
         <!-- =================================================
-             SLC QUIZ CONTENT
+             CONTENT
         ================================================== -->
 
-        <main class="dashboard-content slcquiz-page">
+        <main
+            class="dashboard-content results-page"
+        >
 
-            <div class="dashboard-container slcquiz-container">
-
-
-                <!-- =========================================
-                     QUIZ HERO
-                ========================================== -->
-
-                <section
-                    class="quiz-hero"
-                    data-aos="fade-down"
-                >
-
-                    <div class="quiz-hero-content">
-
-                        <div>
-
-                            <div class="quiz-hero-badge">
-
-                                <i class="fa-solid fa-clipboard-question"></i>
-
-                                WEEKLY SLC QUIZ
-
-                            </div>
-
-
-                            <h1>
-                                Test Your Knowledge
-                            </h1>
-
-
-                            <p>
-                                Read the lesson, reflect on what you
-                                learned, and put your knowledge to the test.
-                            </p>
-
-                        </div>
-
-
-                        <div class="quiz-hero-icon">
-
-                            <i class="fa-solid fa-brain"></i>
-
-                        </div>
-
-                    </div>
-
-
-                    <div
-                        id="quizStatus"
-                        class="quiz-status"
-                    >
-                        Loading quiz...
-                    </div>
-
-
-                    <div
-                        id="quizCountdown"
-                        class="countdown-card"
-                    >
-                        Loading countdown...
-                    </div>
-
-                </section>
+            <div
+                class="dashboard-container results-container"
+            >
 
 
                 <!-- =========================================
-                     SAVED ACTIVITY
+                     HERO
                 ========================================== -->
 
                 <section
-                    id="savedSection"
-                    class="saved-section hidden"
+                    class="results-hero"
                 >
 
-                    <div
-                        class="saved-card"
-                        data-aos="fade-up"
-                    >
+                    <div>
 
-                        <div class="saved-card-header">
+                        <span class="eyebrow">
+                            GROWTH TRACKER
+                        </span>
 
-                            <div class="saved-icon">
+                        <h1>
+                            My SLC Results
+                        </h1>
 
-                                <i class="fa-solid fa-clock-rotate-left"></i>
-
-                            </div>
-
-                            <div>
-
-                                <span>
-                                    YOUR LAST ACTIVITY
-                                </span>
-
-                                <h2>
-                                    Continue where you stopped
-                                </h2>
-
-                            </div>
-
-                        </div>
-
-
-                        <p class="saved-note">
-                            Your previous quiz result and review are
-                            available on this device.
+                        <p>
+                            See your quiz performance,
+                            points earned, and review your
+                            previous answers.
                         </p>
 
-
-                        <div class="saved-actions">
-
-                            <button
-                                id="viewScoreBtn"
-                                type="button"
-                                onclick="openSavedScore()"
-                            >
-
-                                <i class="fa-solid fa-chart-line"></i>
-
-                                View My Score
-
-                            </button>
+                    </div>
 
 
-                            <button
-                                id="viewReviewBtn"
-                                type="button"
-                                class="purple-btn"
-                                onclick="openSavedReview()"
-                            >
+                    <div
+                        class="results-member"
+                        id="resultsMember"
+                    >
 
-                                <i class="fa-solid fa-eye"></i>
+                        <i class="fa-solid fa-user"></i>
 
-                                Review My Answers
-
-                            </button>
-
-                        </div>
+                        <span>
+                            Loading participant...
+                        </span>
 
                     </div>
 
@@ -593,610 +484,181 @@
 
 
                 <!-- =========================================
-                     PARTICIPANT SECTION
+                     STATUS
                 ========================================== -->
 
-                <section
-                    id="participantSection"
-                    class="quiz-step-section"
-                    data-aos="fade-up"
+                <div
+                    class="results-message"
+                    id="resultsMessage"
                 >
-
-                    <div class="quiz-card participant-card">
-
-
-                        <div class="section-heading">
-
-                            <div class="section-heading-icon">
-
-                                <i class="fa-solid fa-user"></i>
-
-                            </div>
-
-                            <div>
-
-                                <span>
-                                    STEP 1
-                                </span>
-
-                                <h2>
-                                    Who is taking the quiz?
-                                </h2>
-
-                                <p>
-                                    Select your name to begin.
-                                </p>
-
-                            </div>
-
-                        </div>
-
-
-                        <div class="member-box">
-
-
-                            <label
-                                for="memberSelect"
-                                class="field-label"
-                            >
-                                Select your name
-                            </label>
-
-
-                            <select
-                                id="memberSelect"
-                            >
-
-                                <option value="">
-                                    Select your name here
-                                </option>
-
-                            </select>
-
-
-                            <div class="add-member">
-
-
-                                <input
-                                    type="text"
-                                    id="newName"
-                                    placeholder="If your name is not listed, add it here"
-                                    maxlength="100"
-                                    autocomplete="name"
-                                >
-
-
-                                <button
-                                    id="addNameBtn"
-                                    type="button"
-                                    class="green-btn"
-                                    onclick="addNewMember()"
-                                >
-
-                                    <i class="fa-solid fa-user-plus"></i>
-
-                                    Add My Name
-
-                                </button>
-
-                            </div>
-
-
-                            <button
-                                id="continueToReflectionBtn"
-                                type="button"
-                                class="continue-btn"
-                                disabled
-                            >
-
-                                Continue to Reflection
-
-                                <i class="fa-solid fa-arrow-right"></i>
-
-                            </button>
-
-                        </div>
-
-                    </div>
-
-                </section>
+                    Loading your results...
+                </div>
 
 
                 <!-- =========================================
-                     LOCKED PARTICIPANT
+                     LATEST RESULT
                 ========================================== -->
 
                 <section
-                    id="lockedParticipantSection"
-                    class="locked-participant-section hidden"
+                    class="result-highlight hidden"
+                    id="latestResult"
                 >
 
-                    <div class="locked-participant-card">
+                    <div class="result-highlight-label">
 
-                        <div class="locked-participant-icon">
+                        <span class="eyebrow">
+                            LATEST RESULT
+                        </span>
 
-                            <i class="fa-solid fa-circle-check"></i>
+                        <span id="latestLesson">
+                            Lesson
+                        </span>
 
-                        </div>
+                    </div>
 
 
-                        <div class="locked-participant-info">
+                    <div class="latest-score-row">
 
-                            <span>
-                                PARTICIPANT
-                            </span>
+                        <div class="score-circle">
 
-                            <strong id="lockedMemberName">
-                                —
+                            <strong id="latestScore">
+                                0
                             </strong>
 
-                            <small>
-                                Your name is locked for this quiz.
-                            </small>
+                            <span>
+                                SCORE
+                            </span>
 
                         </div>
 
 
-                        <div class="locked-badge">
+                        <div class="latest-details">
 
-                            <i class="fa-solid fa-lock"></i>
-
-                            Locked
-
-                        </div>
-
-                    </div>
-
-                </section>
+                            <h2 id="latestTitle">
+                                Your latest SLC result
+                            </h2>
 
 
-                <!-- =========================================
-                     REFLECTION SECTION
-                ========================================== -->
-
-                <section
-                    id="reflectionSection"
-                    class="quiz-step-section hidden"
-                    data-aos="fade-up"
-                >
-
-                    <div class="reflection-card">
-
-
-                        <div class="reflection-header">
-
-                            <div class="reflection-number">
-                                02
-                            </div>
-
-
-                            <div>
-
-                                <span>
-                                    STEP 2 · REFLECTION
-                                </span>
-
-                                <h2>
-                                    Pause and reflect
-                                </h2>
-
-                                <p>
-                                    Before taking the quiz, tell us what
-                                    this week's lesson meant to you.
-                                </p>
-
-                            </div>
-
-                        </div>
-
-
-                        <div class="reflection-intro">
-
-                            <i class="fa-solid fa-lightbulb"></i>
-
-                            <p>
-                                There are no perfect answers here.
-                                We simply want to hear what you learned,
-                                what challenged you, and what you want
-                                to carry with you.
+                            <p id="latestDate">
+                                Completed
                             </p>
 
-                        </div>
 
+                            <div class="latest-stats">
 
-                        <!-- QUESTION 1 -->
-
-                        <div class="reflection-question">
-
-                            <label
-                                for="reflection1"
-                            >
-
-                                <span class="reflection-question-number">
-                                    01
-                                </span>
-
-                                <span>
-                                    What is one thing you learned from
-                                    this week's lesson that really stood
-                                    out to you?
-                                </span>
-
-                            </label>
-
-
-                            <textarea
-                                id="reflection1"
-                                rows="5"
-                                maxlength="5000"
-                                placeholder="Share what stood out to you..."
-                            ></textarea>
-
-                        </div>
-
-
-                        <!-- QUESTION 2 -->
-
-                        <div class="reflection-question">
-
-                            <label
-                                for="reflection2"
-                            >
-
-                                <span class="reflection-question-number">
-                                    02
-                                </span>
-
-                                <span>
-                                    What part of the lesson challenged,
-                                    encouraged, or helped you personally?
-                                </span>
-
-                            </label>
-
-
-                            <textarea
-                                id="reflection2"
-                                rows="5"
-                                maxlength="5000"
-                                placeholder="Tell us how the lesson connected with you..."
-                            ></textarea>
-
-                        </div>
-
-
-                        <!-- QUESTION 3 -->
-
-                        <div class="reflection-question">
-
-                            <label
-                                for="reflection3"
-                            >
-
-                                <span class="reflection-question-number">
-                                    03
-                                </span>
-
-                                <span>
-                                    What is one thing you want to remember
-                                    or practise from this lesson?
-                                </span>
-
-                            </label>
-
-
-                            <textarea
-                                id="reflection3"
-                                rows="5"
-                                maxlength="5000"
-                                placeholder="What will you carry forward?"
-                            ></textarea>
-
-                        </div>
-
-
-                        <!-- REFLECTION FOOTER -->
-
-                        <div class="reflection-footer">
-
-
-                            <div class="reflection-progress">
-
-                                <div class="reflection-progress-top">
+                                <div>
 
                                     <span>
-                                        Reflection progress
+                                        Points
                                     </span>
 
-                                    <strong id="reflectionCharacterCount">
-                                        0 / 100 characters
+                                    <strong id="latestPoints">
+                                        0
                                     </strong>
 
                                 </div>
 
 
-                                <div class="reflection-progress-track">
+                                <div>
 
-                                    <div
-                                        id="reflectionProgressBar"
-                                        class="reflection-progress-bar"
-                                    ></div>
+                                    <span>
+                                        Total
+                                    </span>
+
+                                    <strong id="latestTotal">
+                                        0
+                                    </strong>
 
                                 </div>
 
-
-                                <p id="reflectionRequirementText">
-                                    Answer all three questions and write at
-                                    least 100 meaningful characters altogether.
-                                </p>
-
                             </div>
-
-
-                            <button
-                                id="submitReflectionBtn"
-                                type="button"
-                                class="reflection-submit-btn"
-                                disabled
-                            >
-
-                                <span>
-                                    Submit Reflection
-                                </span>
-
-                                <i class="fa-solid fa-arrow-right"></i>
-
-                            </button>
 
                         </div>
 
-
-                        <div
-                            id="reflectionMessage"
-                            class="reflection-message"
-                        ></div>
-
                     </div>
+
+
+                    <button
+                        type="button"
+                        class="purple-btn"
+                        id="latestReviewBtn"
+                    >
+
+                        <span>
+                            Review Latest Answers
+                        </span>
+
+                        <i class="fa-solid fa-arrow-right"></i>
+
+                    </button>
 
                 </section>
 
 
                 <!-- =========================================
-                     QUIZ SECTION
+                     HISTORY
                 ========================================== -->
 
                 <section
-                    id="quizSection"
-                    class="quiz-step-section hidden"
-                    data-aos="fade-up"
+                    class="results-card"
                 >
 
-                    <div class="quiz-ready-card">
-
-
-                        <div class="quiz-ready-icon">
-
-                            <i class="fa-solid fa-unlock"></i>
-
-                        </div>
-
+                    <div class="results-card-header">
 
                         <div>
 
-                            <span>
-                                STEP 3 · QUIZ UNLOCKED
+                            <span class="eyebrow">
+                                QUIZ HISTORY
                             </span>
 
                             <h2>
-                                You're ready!
+                                Your SLC Journey
                             </h2>
 
-                            <p>
-                                Your reflection has been submitted.
-                                Take your time and answer every question.
-                            </p>
-
                         </div>
+
+
+                        <span
+                            class="history-count"
+                            id="historyCount"
+                        >
+                            0 quizzes
+                        </span>
 
                     </div>
 
 
                     <div
-                        id="questionsCard"
-                        class="questions-card"
-                    >
-
-                        <div class="questions-header">
-
-                            <div>
-
-                                <span>
-                                    WEEKLY SLC QUIZ
-                                </span>
-
-                                <h2>
-                                    Answer the questions below
-                                </h2>
-
-                            </div>
-
-
-                            <div
-                                id="questionCountBadge"
-                                class="question-count-badge"
-                            >
-                                —
-                            </div>
-
-                        </div>
-
-
-                        <div
-                            id="questions"
-                        ></div>
-
-
-                        <div class="quiz-submit-area">
-
-                            <p>
-                                Make sure you have answered every question
-                                before submitting.
-                            </p>
-
-
-                            <button
-                                id="submitBtn"
-                                type="button"
-                                class="green-btn submit-quiz-btn"
-                                onclick="submitQuiz()"
-                            >
-
-                                <i class="fa-solid fa-paper-plane"></i>
-
-                                Submit Quiz
-
-                            </button>
-
-                        </div>
-
-                    </div>
+                        class="history-list"
+                        id="historyList"
+                    ></div>
 
                 </section>
 
 
                 <!-- =========================================
-                     RESULT SECTION
+                     REVIEW
                 ========================================== -->
 
                 <section
-                    id="resultSection"
-                    class="result-section hidden"
-                    data-aos="fade-up"
-                >
-
-                    <div class="result-card">
-
-
-                        <div class="result-success-icon">
-
-                            <i class="fa-solid fa-trophy"></i>
-
-                        </div>
-
-
-                        <span class="result-eyebrow">
-                            QUIZ COMPLETED
-                        </span>
-
-
-                        <h2>
-                            Well done! 🎉
-                        </h2>
-
-
-                        <p class="result-intro">
-                            Here is your individual result for this week's
-                            SLC Quiz.
-                        </p>
-
-
-                        <div
-                            id="scoreText"
-                            class="score-number"
-                        >
-                            0/0
-                        </div>
-
-
-                        <div class="result-stats">
-
-                            <div class="result-stat">
-
-                                <span>
-                                    Points earned
-                                </span>
-
-                                <strong id="pointsText">
-                                    0
-                                </strong>
-
-                            </div>
-
-
-                            <div class="result-stat">
-
-                                <span>
-                                    Total points
-                                </span>
-
-                                <strong id="totalPointsText">
-                                    0
-                                </strong>
-
-                            </div>
-
-                        </div>
-
-
-                        <div class="result-buttons">
-
-
-                            <button
-                                type="button"
-                                onclick="showReview()"
-                            >
-
-                                <i class="fa-solid fa-eye"></i>
-
-                                Review Answers
-
-                            </button>
-
-
-                            <button
-                                type="button"
-                                class="purple-btn"
-                                onclick="backToQuiz()"
-                            >
-
-                                <i class="fa-solid fa-arrow-left"></i>
-
-                                Back
-
-                            </button>
-
-                        </div>
-
-                    </div>
-
-                </section>
-
-
-                <!-- =========================================
-                     REVIEW SECTION
-                ========================================== -->
-
-                <section
+                    class="review-card hidden"
                     id="reviewSection"
-                    class="review-section hidden"
-                    data-aos="fade-up"
                 >
 
-                    <div class="review-header-card">
+                    <div class="review-header">
 
                         <div>
 
-                            <span>
-                                STEP 4 · REVIEW
+                            <span class="eyebrow">
+                                ANSWER REVIEW
                             </span>
 
-                            <h2>
-                                Review Your Answers
+                            <h2 id="reviewTitle">
+                                Review Answers
                             </h2>
 
-                            <p>
-                                See which answers were correct and learn
-                                from the questions you missed.
+                            <p id="reviewSubtitle">
+                                See how you answered each question.
                             </p>
 
                         </div>
@@ -1204,13 +666,12 @@
 
                         <button
                             type="button"
-                            class="purple-btn"
-                            onclick="hideReview()"
+                            class="close-review-btn"
+                            id="closeReviewBtn"
+                            aria-label="Close review"
                         >
 
-                            <i class="fa-solid fa-arrow-left"></i>
-
-                            Back to Result
+                            <i class="fa-solid fa-xmark"></i>
 
                         </button>
 
@@ -1218,11 +679,54 @@
 
 
                     <div
+                        class="review-container"
                         id="reviewContainer"
                     ></div>
 
                 </section>
 
+
+                <!-- =========================================
+                     EMPTY STATE
+                ========================================== -->
+
+                <section
+                    class="results-card empty-results hidden"
+                    id="emptyResults"
+                >
+
+                    <div class="empty-results-icon">
+
+                        <i class="fa-solid fa-chart-line"></i>
+
+                    </div>
+
+
+                    <h2>
+                        No quiz results yet
+                    </h2>
+
+
+                    <p>
+                        Complete your first SLC quiz and
+                        your results will appear here.
+                    </p>
+
+
+                    <a
+                        href="slcquiz.html"
+                        class="purple-btn"
+                    >
+
+                        <span>
+                            Take This Week's Quiz
+                        </span>
+
+                        <i class="fa-solid fa-arrow-right"></i>
+
+                    </a>
+
+                </section>
 
             </div>
 
@@ -1232,7 +736,7 @@
 
 
     <!-- =====================================================
-         MOBILE BOTTOM NAVIGATION
+         MOBILE BOTTOM NAV
     ====================================================== -->
 
     <nav
@@ -1251,7 +755,7 @@
         </a>
 
 
-        <a href="pages/lessons">
+        <a href="lessons">
 
             <i class="fa-solid fa-book-open"></i>
 
@@ -1276,7 +780,7 @@
 
 
         <a
-            href="pages/gallery"
+            href="gallery"
             data-online-only
             data-feature="Gallery"
         >
@@ -1290,7 +794,7 @@
         </a>
 
 
-        <a href="pages/profile">
+        <a href="profile">
 
             <i class="fa-solid fa-user"></i>
 
@@ -1302,24 +806,14 @@
 
     </nav>
 
-
 </div>
 
 
-<!-- =========================================================
-     JAVASCRIPT
-========================================================= -->
-
-<script
-    src="https://unpkg.com/aos@2.3.4/dist/aos.js"
-></script>
-
 <script src="../js/main.js"></script>
 
-<script src="../js/slcquiz.js"></script>
+<script src="../js/results.js"></script>
 
 <script src="../js/pwa.js"></script>
-
 
 </body>
 
