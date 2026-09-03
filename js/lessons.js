@@ -2170,4 +2170,3 @@ window.AFCLessons = {
     }
 
 };
-</html>
