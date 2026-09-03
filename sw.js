@@ -1424,6 +1424,18 @@ function createOfflineResponse() {
 
         }
 
+      button,
+a {
+    -webkit-tap-highlight-color: transparent;
+}
+
+button:focus,
+button:focus-visible,
+a:focus,
+a:focus-visible {
+    outline: none !important;
+    box-shadow: none !important;
+}
 
         button.secondary {
 
