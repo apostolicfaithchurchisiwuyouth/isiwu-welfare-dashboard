@@ -2,7 +2,7 @@
    AFC ISIU YOUTH PORTAL V2
    FILE: sw.js
    PURPOSE: PWA SERVICE WORKER
-   VERSION: 14
+   VERSION: 15
    ============================================================ */
 
 "use strict";
@@ -13,7 +13,7 @@
    ============================================================ */
 
 const CACHE_VERSION =
-    "afc-isiu-pwa-v14";
+    "afc-isiu-pwa-v15";
 
 const STATIC_CACHE =
     `${CACHE_VERSION}-static`;
@@ -56,6 +56,35 @@ const APP_SHELL = [
     "/pages/lessons.html"
 
 ];
+
+
+/* ============================================================
+   OFFLINE PAGE ROUTES
+============================================================ */
+
+/*
+ * These are clean URLs used by the application.
+ *
+ * Vercel normally resolves:
+ *
+ *      /pages/lessons
+ *
+ * to:
+ *
+ *      /pages/lessons.html
+ *
+ * while online.
+ *
+ * The service worker must perform the same mapping
+ * while offline.
+ */
+
+const CLEAN_PAGE_MAP = {
+
+    "/pages/lessons":
+        "/pages/lessons.html"
+
+};
 
 
 /* ============================================================
@@ -137,6 +166,54 @@ self.addEventListener(
                             );
 
                         }
+
+                    }
+
+
+                    /*
+                     * ------------------------------------------------
+                     * CACHE CLEAN LESSON URL
+                     * ------------------------------------------------
+                     *
+                     * Store /pages/lessons using the same response
+                     * as /pages/lessons.html.
+                     *
+                     * This makes the clean URL available offline.
+                     */
+
+                    try {
+
+                        const lessonPage =
+                            await cache.match(
+                                "/pages/lessons.html"
+                            );
+
+
+                        if (
+                            lessonPage
+                        ) {
+
+                            await cache.put(
+                                "/pages/lessons",
+                                lessonPage.clone()
+                            );
+
+
+                            console.log(
+                                "AFC Isiu PWA: Cached clean lesson URL:",
+                                "/pages/lessons"
+                            );
+
+                        }
+
+                    }
+
+                    catch (error) {
+
+                        console.warn(
+                            "AFC Isiu PWA: Could not cache clean lesson URL:",
+                            error
+                        );
 
                     }
 
@@ -384,7 +461,7 @@ self.addEventListener(
         ==================================================== */
 
         /*
-         * Audio is now CACHEABLE.
+         * Audio is CACHEABLE.
          *
          * Network first when online.
          * Cached audio when offline.
@@ -736,9 +813,15 @@ async function handleNavigation(
         );
 
 
-    /*
-     * NETWORK FIRST
-     */
+    const requestUrl =
+        new URL(
+            request.url
+        );
+
+
+    /* ========================================================
+       NETWORK FIRST
+    ======================================================== */
 
     try {
 
@@ -782,6 +865,40 @@ async function handleNavigation(
                 networkResponse.clone()
             );
 
+
+            /*
+             * If this is the clean lesson URL,
+             * also store it explicitly in the page cache.
+             */
+
+            if (
+                requestUrl.pathname ===
+                "/pages/lessons"
+            ) {
+
+                await pageCache.put(
+                    "/pages/lessons",
+                    networkResponse.clone()
+                );
+
+
+                /*
+                 * Also keep the actual .html URL
+                 * available.
+                 */
+
+                await pageCache.put(
+                    "/pages/lessons.html",
+                    networkResponse.clone()
+                );
+
+
+                console.log(
+                    "AFC Isiu PWA: Lesson page cached under both URLs."
+                );
+
+            }
+
         }
 
 
@@ -792,15 +909,16 @@ async function handleNavigation(
     catch (error) {
 
         console.log(
-            "AFC Isiu PWA: Navigation network unavailable."
+            "AFC Isiu PWA: Navigation network unavailable:",
+            requestUrl.pathname
         );
 
     }
 
 
-    /*
-     * Try exact page cache.
-     */
+    /* ========================================================
+       EXACT PAGE CACHE
+    ======================================================== */
 
     const cachedPage =
         await pageCache.match(
@@ -812,14 +930,86 @@ async function handleNavigation(
         cachedPage
     ) {
 
+        console.log(
+            "AFC Isiu PWA: Serving exact cached page:",
+            requestUrl.pathname
+        );
+
+
         return cachedPage;
 
     }
 
 
-    /*
-     * Try static cache.
-     */
+    /* ========================================================
+       CLEAN URL → REAL HTML PAGE
+    ======================================================== */
+
+    const mappedPage =
+        CLEAN_PAGE_MAP[
+            requestUrl.pathname
+        ];
+
+
+    if (
+        mappedPage
+    ) {
+
+        /*
+         * First search the page cache.
+         */
+
+        const mappedFromPageCache =
+            await pageCache.match(
+                mappedPage
+            );
+
+
+        if (
+            mappedFromPageCache
+        ) {
+
+            console.log(
+                "AFC Isiu PWA: Serving mapped lesson page from page cache:",
+                mappedPage
+            );
+
+
+            return mappedFromPageCache;
+
+        }
+
+
+        /*
+         * Then search all caches.
+         */
+
+        const mappedFromAnyCache =
+            await caches.match(
+                mappedPage
+            );
+
+
+        if (
+            mappedFromAnyCache
+        ) {
+
+            console.log(
+                "AFC Isiu PWA: Serving mapped lesson page:",
+                mappedPage
+            );
+
+
+            return mappedFromAnyCache;
+
+        }
+
+    }
+
+
+    /* ========================================================
+       STATIC CACHE
+    ======================================================== */
 
     const staticPage =
         await caches.match(
@@ -836,19 +1026,13 @@ async function handleNavigation(
     }
 
 
-    /*
-     * Try pathname.
-     */
-
-    const url =
-        new URL(
-            request.url
-        );
-
+    /* ========================================================
+       PATHNAME CACHE
+    ======================================================== */
 
     const shellPage =
         await caches.match(
-            url.pathname
+            requestUrl.pathname
         );
 
 
@@ -861,9 +1045,9 @@ async function handleNavigation(
     }
 
 
-    /*
-     * Built-in offline page.
-     */
+    /* ========================================================
+       FINAL BUILT-IN OFFLINE PAGE
+    ======================================================== */
 
     return createOfflineResponse();
 
