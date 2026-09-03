@@ -14,31 +14,37 @@
         ↓
    Lock Participant
         ↓
-   Check Completion
+   Check CURRENT LESSON Completion
         ↓
-   Reflection
-        ↓
-   Submit Reflection
-        ↓
-   Quiz Unlocks
-        ↓
-   Answer Questions
-        ↓
-   Submit Quiz
-        ↓
-   Completed
-        ↓
-   Results Page
+   ┌─────────────────────────────────────┐
+   │                                     │
+   │ Already completed CURRENT lesson    │
+   │        ↓                            │
+   │ Show completed state                │
+   │                                     │
+   │ Not completed CURRENT lesson        │
+   │        ↓                            │
+   │ Reflection                          │
+   │        ↓                            │
+   │ Quiz                                │
+   │        ↓                            │
+   │ Submit                              │
+   │        ↓                            │
+   │ Results                             │
+   └─────────────────────────────────────┘
 
    IMPORTANT:
 
+   - Quiz Settings lesson number identifies ONLY the
+     currently active lesson.
+   - Previous lessons do NOT block the current lesson.
    - Participant cannot be changed after selection.
    - Reflection requires all 3 questions.
    - Minimum 100 meaningful characters.
-   - Backend verifies reflection.
-   - Backend prevents duplicate quiz attempts.
+   - Backend remains the final authority.
+   - A participant is considered completed ONLY when
+     Quiz Attempts contains an attempt for THIS lesson.
    - Completed lessons cannot be repeated.
-   - Results and reviews live on results.html.
    ============================================================ */
 
 "use strict";
@@ -141,7 +147,8 @@ function getElement(id) {
 
 function showElement(id) {
 
-    const element = getElement(id);
+    const element =
+        getElement(id);
 
     if (element) {
 
@@ -154,7 +161,8 @@ function showElement(id) {
 
 function hideElement(id) {
 
-    const element = getElement(id);
+    const element =
+        getElement(id);
 
     if (element) {
 
@@ -252,25 +260,11 @@ async function loadQuiz() {
             }
 
 
-            hideElement(
-                "participantSection"
-            );
-
-            hideElement(
-                "lockedParticipantSection"
-            );
-
-            hideElement(
-                "reflectionSection"
-            );
-
-            hideElement(
-                "quizSection"
-            );
-
-            hideElement(
-                "completedSection"
-            );
+            hideElement("participantSection");
+            hideElement("lockedParticipantSection");
+            hideElement("reflectionSection");
+            hideElement("quizSection");
+            hideElement("completedSection");
 
 
             quizLoaded =
@@ -294,30 +288,14 @@ async function loadQuiz() {
                 "⏳ The weekly SLC quiz opens soon.";
 
 
-            hideElement(
-                "participantSection"
-            );
-
-            hideElement(
-                "lockedParticipantSection"
-            );
-
-            hideElement(
-                "reflectionSection"
-            );
-
-            hideElement(
-                "quizSection"
-            );
-
-            hideElement(
-                "completedSection"
-            );
+            hideElement("participantSection");
+            hideElement("lockedParticipantSection");
+            hideElement("reflectionSection");
+            hideElement("quizSection");
+            hideElement("completedSection");
 
 
-            if (
-                data.openTime
-            ) {
+            if (data.openTime) {
 
                 quizOpenTime =
                     new Date(
@@ -325,9 +303,7 @@ async function loadQuiz() {
                     );
 
 
-                startCountdown(
-                    "open"
-                );
+                startCountdown("open");
 
             }
 
@@ -373,9 +349,7 @@ async function loadQuiz() {
         ==================================================== */
 
         quizData =
-            Array.isArray(
-                data.questions
-            )
+            Array.isArray(data.questions)
                 ? data.questions
                 : [];
 
@@ -388,10 +362,24 @@ async function loadQuiz() {
 
         quizCloseTime =
             data.closeTime
-                ? new Date(
-                    data.closeTime
-                )
+                ? new Date(data.closeTime)
                 : null;
+
+
+        /*
+        Every time the active lesson is loaded,
+        reset frontend completion state.
+
+        Completion will ONLY be determined after
+        the selected participant is checked against
+        this specific lesson.
+        */
+
+        quizCompleted =
+            false;
+
+        reflectionSubmitted =
+            false;
 
 
         quizLoaded =
@@ -416,26 +404,39 @@ async function loadQuiz() {
         }
 
 
-        if (
-            quizCloseTime
-        ) {
+        if (quizCloseTime) {
 
-            startCountdown(
-                "close"
-            );
+            startCountdown("close");
 
         }
 
 
         /*
-        The quiz must never appear before
-        the participant flow is completed.
+        Always begin with participant selection.
+
+        Do NOT show results merely because a quiz
+        is active.
         */
 
         showElement(
             "participantSection"
         );
 
+        hideElement(
+            "lockedParticipantSection"
+        );
+
+        hideElement(
+            "reflectionSection"
+        );
+
+        hideElement(
+            "quizSection"
+        );
+
+        hideElement(
+            "completedSection"
+        );
 
     }
     catch (error) {
@@ -532,8 +533,7 @@ function startCountdown(mode) {
 
                 const days =
                     Math.floor(
-                        diff /
-                        86400000
+                        diff / 86400000
                     );
 
 
@@ -642,9 +642,7 @@ async function loadMembers() {
 
         if (
             !data.success ||
-            !Array.isArray(
-                data.members
-            )
+            !Array.isArray(data.members)
         ) {
 
             return;
@@ -677,7 +675,6 @@ async function loadMembers() {
 
             }
         );
-
 
     }
     catch (error) {
@@ -773,7 +770,10 @@ function setupParticipantListeners() {
 
 async function addNewMember() {
 
-    if (selectedMemberId || quizCompleted) {
+    if (
+        selectedMemberId ||
+        quizCompleted
+    ) {
 
         return;
 
@@ -868,19 +868,17 @@ async function addNewMember() {
             await fetch(
                 API,
                 {
-                    method:
-                        "POST",
+                    method: "POST",
 
-                    body:
-                        JSON.stringify({
+                    body: JSON.stringify({
 
-                            action:
-                                "addMember",
+                        action:
+                            "addMember",
 
-                            name:
-                                name
+                        name:
+                            name
 
-                        })
+                    })
 
                 }
             );
@@ -944,7 +942,6 @@ async function addNewMember() {
         alert(
             "Your name has been added successfully."
         );
-
 
     }
     catch (error) {
@@ -1045,6 +1042,11 @@ async function lockSelectedParticipant() {
     }
 
 
+    /*
+    Set the participant only after we have
+    confirmed that the selection is valid.
+    */
+
     selectedMemberId =
         memberId;
 
@@ -1054,7 +1056,7 @@ async function lockSelectedParticipant() {
 
 
     /* ========================================================
-       LOCK EVERYTHING
+       LOCK PARTICIPANT CONTROLS
     ======================================================== */
 
     select.disabled =
@@ -1103,10 +1105,6 @@ async function lockSelectedParticipant() {
     }
 
 
-    /* ========================================================
-       SHOW LOCKED PARTICIPANT
-    ======================================================== */
-
     const lockedName =
         getElement(
             "lockedMemberName"
@@ -1135,10 +1133,22 @@ async function lockSelectedParticipant() {
 
 
     /*
-    Never trust the browser's saved state.
+    IMPORTANT:
 
-    Ask the backend whether this participant
-    already completed this lesson.
+    The backend now checks THIS participant
+    against THIS lesson.
+
+    For example:
+
+    Active lesson = 87
+
+    Member completed 81
+        → NOT completed for 87
+        → continue to reflection
+
+    Member completed 87
+        → completed for 87
+        → show completed state
     */
 
     await checkCompletionStatus();
@@ -1183,9 +1193,7 @@ function saveQuizSession() {
 
         sessionStorage.setItem(
             SESSION_KEY,
-            JSON.stringify(
-                session
-            )
+            JSON.stringify(session)
         );
 
     }
@@ -1236,9 +1244,7 @@ async function restoreQuizSession() {
 
 
         saved =
-            JSON.parse(
-                raw
-            );
+            JSON.parse(raw);
 
     }
     catch (error) {
@@ -1260,18 +1266,17 @@ async function restoreQuizSession() {
 
 
     /*
-    Never restore an old lesson session.
+    CRITICAL:
+
+    Only restore a session belonging to
+    the CURRENT active lesson.
     */
 
     if (
         !saved ||
-        String(
-            saved.lessonNo
-        ).trim()
+        String(saved.lessonNo).trim()
         !==
-        String(
-            selectedLesson
-        ).trim()
+        String(selectedLesson).trim()
     ) {
 
         sessionStorage.removeItem(
@@ -1284,9 +1289,7 @@ async function restoreQuizSession() {
     }
 
 
-    if (
-        !saved.memberId
-    ) {
+    if (!saved.memberId) {
 
         return;
 
@@ -1313,12 +1316,8 @@ async function restoreQuizSession() {
             function (item) {
 
                 return (
-                    String(
-                        item.value
-                    ) ===
-                    String(
-                        saved.memberId
-                    )
+                    String(item.value) ===
+                    String(saved.memberId)
                 );
 
             }
@@ -1344,8 +1343,11 @@ async function restoreQuizSession() {
 
 
     selectedMemberName =
-        saved.memberName ||
-        option.textContent.trim();
+        String(
+            saved.memberName ||
+            option.textContent ||
+            ""
+        ).trim();
 
 
     const lockedName =
@@ -1419,7 +1421,10 @@ async function restoreQuizSession() {
 
 
     /*
-    Backend is the authority.
+    NEVER assume that the saved session means
+    the quiz was completed.
+
+    Ask the backend again.
     */
 
     await checkCompletionStatus();
@@ -1428,7 +1433,7 @@ async function restoreQuizSession() {
 
 
 /* ============================================================
-   CHECK COMPLETE STATUS
+   CHECK CURRENT LESSON COMPLETION
 ============================================================ */
 
 async function checkCompletionStatus() {
@@ -1483,8 +1488,17 @@ async function checkCompletionStatus() {
 
 
         console.log(
-            "SLC completion status:",
-            data
+            "SLC completion status for current lesson:",
+            {
+                memberId:
+                    selectedMemberId,
+
+                lessonNo:
+                    selectedLesson,
+
+                response:
+                    data
+            }
         );
 
 
@@ -1510,13 +1524,37 @@ async function checkCompletionStatus() {
         }
 
 
+        /*
+        ========================================================
+        CRITICAL RULE
+        ========================================================
+
+        ONLY this value decides whether the participant
+        has already completed the CURRENT lesson.
+
+        We intentionally DO NOT use:
+
+            data.completed
+
+        because a generic "completed" flag can represent
+        a broader completion state and must never cause an
+        older lesson to block the current lesson.
+        */
+
+        const currentLessonQuizCompleted =
+            data.quizCompleted === true;
+
+
+        const currentLessonReflectionCompleted =
+            data.reflectionCompleted === true;
+
+
         /* ====================================================
-           ALREADY COMPLETED
+           CURRENT LESSON ALREADY COMPLETED
         ==================================================== */
 
         if (
-            data.quizCompleted === true ||
-            data.completed === true
+            currentLessonQuizCompleted
         ) {
 
             quizCompleted =
@@ -1541,12 +1579,16 @@ async function checkCompletionStatus() {
 
 
         /* ====================================================
-           REFLECTION ALREADY COMPLETED
+           CURRENT LESSON REFLECTION ALREADY COMPLETED
         ==================================================== */
 
         if (
-            data.reflectionCompleted === true
+            currentLessonReflectionCompleted
         ) {
+
+            quizCompleted =
+                false;
+
 
             reflectionSubmitted =
                 true;
@@ -1564,8 +1606,12 @@ async function checkCompletionStatus() {
 
 
         /* ====================================================
-           NEW PARTICIPANT
+           CURRENT LESSON NOT STARTED
         ==================================================== */
+
+        quizCompleted =
+            false;
+
 
         reflectionSubmitted =
             false;
@@ -1661,11 +1707,6 @@ function showCompletedState(data) {
 
 
     if (!completedSection) {
-
-        /*
-        If the HTML does not contain the
-        completion card, create one safely.
-        */
 
         const container =
             document.querySelector(
@@ -1844,9 +1885,7 @@ function setupReflectionListeners() {
 
 function cleanReflectionText(text) {
 
-    return String(
-        text || ""
-    )
+    return String(text || "")
         .replace(/\s+/g, " ")
         .trim();
 
@@ -2208,31 +2247,29 @@ async function submitReflection() {
             await fetch(
                 API,
                 {
-                    method:
-                        "POST",
+                    method: "POST",
 
-                    body:
-                        JSON.stringify({
+                    body: JSON.stringify({
 
-                            action:
-                                "submitReflection",
+                        action:
+                            "submitReflection",
 
-                            memberId:
-                                selectedMemberId,
+                        memberId:
+                            selectedMemberId,
 
-                            lessonNo:
-                                selectedLesson,
+                        lessonNo:
+                            selectedLesson,
 
-                            question1:
-                                answer1,
+                        question1:
+                            answer1,
 
-                            question2:
-                                answer2,
+                        question2:
+                            answer2,
 
-                            question3:
-                                answer3
+                        question3:
+                            answer3
 
-                        })
+                    })
 
                 }
             );
@@ -2258,10 +2295,14 @@ async function submitReflection() {
 
 
         /*
-        A second tab/device may have completed
+        Another tab/device may have completed
         the reflection already.
 
-        Treat that as completed.
+        That does NOT mean the quiz was completed.
+
+        Therefore unlock the quiz and let the backend
+        decide whether the quiz itself has already
+        been attempted.
         */
 
         if (
@@ -2420,6 +2461,10 @@ function unlockQuiz() {
 
     reflectionSubmitted =
         true;
+
+
+    quizCompleted =
+        false;
 
 
     saveQuizSession();
@@ -2648,9 +2693,7 @@ async function submitQuiz() {
     }
 
 
-    if (
-        !selectedMemberId
-    ) {
+    if (!selectedMemberId) {
 
         alert(
             "Your participant has not been selected."
@@ -2662,9 +2705,7 @@ async function submitQuiz() {
     }
 
 
-    if (
-        !reflectionSubmitted
-    ) {
+    if (!reflectionSubmitted) {
 
         alert(
             "Please complete the reflection before taking the quiz."
@@ -2676,9 +2717,7 @@ async function submitQuiz() {
     }
 
 
-    if (
-        !selectedLesson
-    ) {
+    if (!selectedLesson) {
 
         alert(
             "The current quiz lesson could not be identified."
@@ -2775,26 +2814,23 @@ async function submitQuiz() {
             await fetch(
                 API,
                 {
+                    method: "POST",
 
-                    method:
-                        "POST",
+                    body: JSON.stringify({
 
-                    body:
-                        JSON.stringify({
+                        action:
+                            "scoreQuiz",
 
-                            action:
-                                "scoreQuiz",
+                        memberId:
+                            selectedMemberId,
 
-                            memberId:
-                                selectedMemberId,
+                        lessonNo:
+                            selectedLesson,
 
-                            lessonNo:
-                                selectedLesson,
+                        answers:
+                            answers
 
-                            answers:
-                                answers
-
-                        })
+                    })
 
                 }
             );
@@ -2842,8 +2878,7 @@ async function submitQuiz() {
 
 
             window.location.href =
-                "results.html";
-
+                `results.html?memberId=${encodeURIComponent(selectedMemberId)}`;
 
             return;
 
@@ -2928,13 +2963,12 @@ async function submitQuiz() {
 
 
         /*
-        Do not show the score here.
-
-        Results belong on results.html.
+        Results page handles the actual score,
+        history and answer review.
         */
 
         window.location.href =
-            `results.html?lessonNo=${encodeURIComponent(selectedLesson)}&completed=1`;
+            `results.html?memberId=${encodeURIComponent(selectedMemberId)}&lessonNo=${encodeURIComponent(selectedLesson)}&completed=1`;
 
     }
     catch (error) {
