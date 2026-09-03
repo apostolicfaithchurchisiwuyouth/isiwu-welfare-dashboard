@@ -1,14 +1,9 @@
-/* ============================================================
-   AFC ISIU YOUTH PORTAL V2
-   FILE: lessons.js
-   PURPOSE: WEEKLY LESSONS CONTROLLER
-   ============================================================
+/* =========================================================
+   AFC ISIU YOUTH PORTAL
+   LESSONS PAGE CONTROLLER
+   =========================================================
 
-   DATA SOURCE:
-
-   Google Sheets CSV
-
-   Columns supported:
+   GOOGLE SHEET COLUMNS:
 
    Lesson
    Class
@@ -19,269 +14,78 @@
    Discussion
    YorubaAudio
 
-   OFFLINE:
+   EXAMPLE YorubaAudio:
 
-   Google Sheets
-        ↓
-   lessons.js
-        ↓
-   IndexedDB
-        ↓
-   Offline Lessons
+   /audio/Senior-77.mp3
+   /audio/Junior-83.mp3
 
-   ============================================================ */
+   IMPORTANT:
+   - Summary contains HTML and is rendered as HTML.
+   - Topic Card displays Topic only.
+   - Lesson number is NOT displayed in Topic Card.
+   - Yoruba audio is optional.
+   - Audio errors NEVER prevent the lesson from loading.
+   ========================================================= */
+
 
 "use strict";
 
 
-/* ============================================================
-   GOOGLE SHEETS
-   ============================================================ */
+/* =========================================================
+   CONFIGURATION
+========================================================= */
 
-const WEEKLY_LESSON_CSV =
+const LESSONS_CSV_URL =
     "https://docs.google.com/spreadsheets/d/e/2PACX-1vQHlE5IpmFYaQyW5u-rentH2fGC5VZJ2w9Ql1WI-X8bE76qlN5_ttDIitwlXX1CM4sqdEW8RroDUNSU/pub?gid=201183837&single=true&output=csv";
 
 
-/* ============================================================
-   LOCAL STORAGE
-   ============================================================ */
+/*
+ * Your website root.
+ *
+ * This is used for audio paths such as:
+ *
+ * /audio/Senior-77.mp3
+ *
+ * becoming:
+ *
+ * https://afcisiuyouth.vercel.app/audio/Senior-77.mp3
+ */
 
-const LESSON_STORAGE_KEY =
-    "afc_isiu_weekly_lessons_v2";
-
-
-/* ============================================================
-   INDEXED DB
-   ============================================================ */
-
-const LESSON_DB_NAME =
-    "AFC_Isiu_Lessons_V2";
-
-const LESSON_DB_VERSION =
-    1;
-
-const LESSON_STORE =
-    "lessons";
+const SITE_ORIGIN =
+    window.location.origin;
 
 
-/* ============================================================
+/* =========================================================
    STATE
-   ============================================================ */
+========================================================= */
 
-let lessons = [];
+let lessonsData = [];
 
-let selectedClass =
-    localStorage.getItem(
-        "selectedLessonClass"
-    ) || "Senior";
+let selectedLessonClass =
+    localStorage.getItem("selectedLessonClass") ||
+    "Senior";
+
+let currentLesson = null;
+
+let progressScrollHandler = null;
 
 
-/* ============================================================
+/* =========================================================
    DOM HELPER
-   ============================================================ */
+========================================================= */
 
-function getElement(
-    ...ids
-) {
+function getElement(id) {
 
-    for (
-        const id of ids
-    ) {
-
-        const element =
-            document.getElementById(
-                id
-            );
-
-
-        if (element) {
-
-            return element;
-
-        }
-
-    }
-
-
-    return null;
+    return document.getElementById(id);
 
 }
 
 
-/* ============================================================
-   ELEMENTS
-   ============================================================ */
+/* =========================================================
+   TEXT HELPERS
+========================================================= */
 
-const topicEl =
-    getElement(
-        "lessonTitle",
-        "lessonTopic",
-        "topic"
-    );
-
-
-const themeEl =
-    getElement(
-        "lessonTheme"
-    );
-
-
-const bibleTextEl =
-    getElement(
-        "lessonBibleText",
-        "bibleText"
-    );
-
-
-const memoryVerseEl =
-    getElement(
-        "lessonMemoryVerse",
-        "memoryVerse"
-    );
-
-
-const summaryEl =
-    getElement(
-        "lessonContent",
-        "lessonSummary",
-        "summary"
-    );
-
-
-const discussionEl =
-    getElement(
-        "discussion",
-        "lessonDiscussion"
-    );
-
-
-const lessonWeekEl =
-    getElement(
-        "lessonWeek"
-    );
-
-
-const lessonNumberEl =
-    getElement(
-        "lessonNumber"
-    );
-
-
-const lessonDateEl =
-    getElement(
-        "lessonDate"
-    );
-
-
-const lessonClassBadgeEl =
-    getElement(
-        "lessonClassBadge"
-    );
-
-
-const lessonStatusEl =
-    getElement(
-        "lessonStatus"
-    );
-
-
-const lessonsLoadingEl =
-    getElement(
-        "lessonsLoading"
-    );
-
-
-const lessonsErrorEl =
-    getElement(
-        "lessonsError"
-    );
-
-
-const lessonsErrorMessageEl =
-    getElement(
-        "lessonsErrorMessage"
-    );
-
-
-const lessonViewEl =
-    getElement(
-        "lessonView"
-    );
-
-
-const readingTimeEl =
-    getElement(
-        "readingTime"
-    );
-
-
-const mobileReadingTimeEl =
-    getElement(
-        "mobileReadingTime"
-    );
-
-
-const sectionCountEl =
-    getElement(
-        "sectionCount"
-    );
-
-
-const mobileSectionCountEl =
-    getElement(
-        "mobileSectionCount"
-    );
-
-
-const progressBarEl =
-    getElement(
-        "progressBar"
-    );
-
-
-const mobileProgressBarEl =
-    getElement(
-        "mobileProgressBar"
-    );
-
-
-const progressPercentEl =
-    getElement(
-        "progressPercent"
-    );
-
-
-const mobileProgressPercentEl =
-    getElement(
-        "mobileProgressPercent"
-    );
-
-
-const progressTextEl =
-    getElement(
-        "progressText"
-    );
-
-
-const finishReadingBtn =
-    getElement(
-        "finishReadingBtn"
-    );
-
-
-const mobileFinishReadingBtn =
-    getElement(
-        "mobileFinishReadingBtn"
-    );
-
-
-/* ============================================================
-   TEXT CLEANER
-   ============================================================ */
-
-function cleanText(
-    value
-) {
+function cleanText(value) {
 
     if (
         value === null ||
@@ -292,296 +96,95 @@ function cleanText(
 
     }
 
-
     return String(value)
-        .replace(
-            /\uFEFF/g,
-            ""
-        )
+        .replace(/\u00A0/g, " ")
         .trim();
 
 }
 
 
-/* ============================================================
-   HTML ESCAPE
-   ============================================================ */
+/* =========================================================
+   ESCAPE HTML
+========================================================= */
 
-function escapeHtml(
-    value
-) {
+function escapeHTML(value) {
 
-    return String(
-        value ?? ""
-    )
-        .replace(
-            /&/g,
-            "&amp;"
-        )
-        .replace(
-            /</g,
-            "&lt;"
-        )
-        .replace(
-            />/g,
-            "&gt;"
-        )
-        .replace(
-            /"/g,
-            "&quot;"
-        )
-        .replace(
-            /'/g,
-            "&#039;"
-        );
+    return cleanText(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
 
 }
 
 
-/* ============================================================
-   CSV PARSER
-   ============================================================
-
-   This parser is included so the Lessons page can still
-   understand CSV even if PapaParse is unavailable.
-
-   ============================================================ */
-
-function parseCSV(
-    text
-) {
-
-    const rows = [];
-
-    let row = [];
-
-    let value = "";
-
-    let insideQuotes = false;
-
-
-    for (
-        let i = 0;
-        i < text.length;
-        i++
-    ) {
-
-        const char =
-            text[i];
-
-        const next =
-            text[i + 1];
-
-
-        if (
-            char === '"'
-        ) {
-
-            if (
-                insideQuotes &&
-                next === '"'
-            ) {
-
-                value += '"';
-
-                i++;
-
-            }
-
-            else {
-
-                insideQuotes =
-                    !insideQuotes;
-
-            }
-
-        }
-
-
-        else if (
-            char === "," &&
-            !insideQuotes
-        ) {
-
-            row.push(
-                value
-            );
-
-            value = "";
-
-        }
-
-
-        else if (
-            (
-                char === "\n" ||
-                char === "\r"
-            ) &&
-            !insideQuotes
-        ) {
-
-            if (
-                char === "\r" &&
-                next === "\n"
-            ) {
-
-                i++;
-
-            }
-
-
-            row.push(
-                value
-            );
-
-
-            rows.push(
-                row
-            );
-
-
-            row = [];
-
-            value = "";
-
-        }
-
-
-        else {
-
-            value += char;
-
-        }
-
-    }
-
-
-    if (
-        value !== "" ||
-        row.length > 0
-    ) {
-
-        row.push(
-            value
-        );
-
-        rows.push(
-            row
-        );
-
-    }
-
-
-    if (
-        !rows.length
-    ) {
-
-        return [];
-
-    }
-
-
-    const headers =
-        rows[0].map(
-            header =>
-                cleanText(
-                    header
-                )
-        );
-
-
-    return rows
-        .slice(1)
-        .filter(
-            row =>
-                row.some(
-                    cell =>
-                        cleanText(
-                            cell
-                        ) !== ""
-                )
-        )
-        .map(
-            row => {
-
-                const object =
-                    {};
-
-
-                headers.forEach(
-                    (
-                        header,
-                        index
-                    ) => {
-
-                        object[
-                            header
-                        ] =
-                            cleanText(
-                                row[index] ||
-                                ""
-                            );
-
-                    }
-                );
-
-
-                return object;
-
-            }
-        );
+/* =========================================================
+   NORMALIZE HEADER
+========================================================= */
+
+function normalizeHeader(value) {
+
+    return cleanText(value)
+        .toLowerCase()
+        .replace(/[\s_-]+/g, "");
 
 }
 
 
-/* ============================================================
-   HEADER LOOKUP
-   ============================================================ */
+/* =========================================================
+   GET GOOGLE SHEET VALUE
+========================================================= */
 
-function getColumn(
+function getSheetValue(
     row,
-    ...names
+    possibleNames
 ) {
 
-    if (
-        !row ||
-        typeof row !== "object"
-    ) {
+    if (!row) {
 
         return "";
 
     }
 
-
     const keys =
-        Object.keys(
-            row
-        );
+        Object.keys(row);
 
 
     for (
-        const wanted of names
+        const name of possibleNames
     ) {
 
-        const exact =
-            keys.find(
-                key =>
-                    cleanText(
-                        key
-                    ).toLowerCase() ===
-                    cleanText(
-                        wanted
-                    ).toLowerCase()
-            );
+        const wanted =
+            normalizeHeader(name);
+
+
+        const matchingKey =
+            keys.find(key => {
+
+                return (
+                    normalizeHeader(key) ===
+                    wanted
+                );
+
+            });
 
 
         if (
-            exact
+            matchingKey !== undefined
         ) {
 
-            return cleanText(
-                row[exact]
-            );
+            const value =
+                cleanText(
+                    row[matchingKey]
+                );
+
+
+            if (value) {
+
+                return value;
+
+            }
 
         }
 
@@ -593,91 +196,89 @@ function getColumn(
 }
 
 
-/* ============================================================
-   NORMALIZE LESSON
-   ============================================================ */
+/* =========================================================
+   NORMALIZE LESSON ROW
+========================================================= */
 
-function normalizeLesson(
-    row
-) {
+function normalizeLessonRow(row) {
 
     return {
 
-        Lesson:
-            getColumn(
+        lesson:
+            getSheetValue(
                 row,
-                "Lesson",
-                "Lesson Number",
-                "Lesson No",
-                "Week"
+                [
+                    "Lesson"
+                ]
             ),
 
-        Class:
-            getColumn(
+
+        className:
+            getSheetValue(
                 row,
-                "Class",
-                "Class Name",
-                "Category",
-                "Level"
+                [
+                    "Class"
+                ]
             ),
 
-        Topic:
-            getColumn(
+
+        topic:
+            getSheetValue(
                 row,
-                "Topic",
-                "Lesson Topic",
-                "Title"
+                [
+                    "Topic"
+                ]
             ),
 
-        BibleText:
-            getColumn(
+
+        bibleText:
+            getSheetValue(
                 row,
-                "BibleText",
-                "Bible Text",
-                "Bible Reference",
-                "Scripture"
+                [
+                    "BibleText",
+                    "Bible Text",
+                    "Bible_Text"
+                ]
             ),
 
-        MemoryVerse:
-            getColumn(
+
+        memoryVerse:
+            getSheetValue(
                 row,
-                "MemoryVerse",
-                "Memory Verse"
+                [
+                    "MemoryVerse",
+                    "Memory Verse",
+                    "Memory_Verse"
+                ]
             ),
 
-        Summary:
-            getColumn(
+
+        summary:
+            getSheetValue(
                 row,
-                "Summary",
-                "Lesson Summary",
-                "Combined Lesson Note",
-                "Lesson Notes",
-                "Content"
+                [
+                    "Summary"
+                ]
             ),
 
-        Discussion:
-            getColumn(
+
+        discussion:
+            getSheetValue(
                 row,
-                "Discussion",
-                "Discussion Questions",
-                "Questions"
+                [
+                    "Discussion"
+                ]
             ),
 
-        YorubaAudio:
-            getColumn(
-                row,
-                "YorubaAudio",
-                "Yoruba Audio",
-                "Audio",
-                "Audio URL"
-            ),
 
-        Date:
-            getColumn(
+        yorubaAudio:
+            getSheetValue(
                 row,
-                "Date",
-                "Lesson Date",
-                "Week Date"
+                [
+                    "YorubaAudio",
+                    "Yoruba Audio",
+                    "Yoruba_Audio"
+                ]
             )
 
     };
@@ -685,584 +286,171 @@ function normalizeLesson(
 }
 
 
-/* ============================================================
-   OPEN INDEXED DB
-   ============================================================ */
+/* =========================================================
+   RENDER SUMMARY HTML
+=========================================================
 
-function openLessonDB() {
+   The Summary column contains HTML.
 
-    return new Promise(
-        (
-            resolve,
-            reject
-        ) => {
+   Example:
 
-            if (
-                !window.indexedDB
-            ) {
+   <h2>Introduction</h2>
+   <p>This is the lesson...</p>
 
-                reject(
-                    new Error(
-                        "IndexedDB is not available."
-                    )
-                );
+   We intentionally DO NOT use escapeHTML()
+   here because we want the HTML to work.
 
-                return;
+   IMPORTANT:
+   Only use this with lesson content you control.
+========================================================= */
 
-            }
-
-
-            const request =
-                indexedDB.open(
-                    LESSON_DB_NAME,
-                    LESSON_DB_VERSION
-                );
-
-
-            request.onupgradeneeded =
-                event => {
-
-                    const db =
-                        event.target.result;
-
-
-                    if (
-                        !db.objectStoreNames.contains(
-                            LESSON_STORE
-                        )
-                    ) {
-
-                        db.createObjectStore(
-                            LESSON_STORE,
-                            {
-                                keyPath:
-                                    "id"
-                            }
-                        );
-
-                    }
-
-                };
-
-
-            request.onsuccess =
-                () => {
-
-                    resolve(
-                        request.result
-                    );
-
-                };
-
-
-            request.onerror =
-                () => {
-
-                    reject(
-                        request.error
-                    );
-
-                };
-
-        }
-    );
-
-}
-
-
-/* ============================================================
-   SAVE TO INDEXED DB
-   ============================================================ */
-
-async function saveLessonsOffline(
-    lessonData
-) {
-
-    if (
-        !Array.isArray(
-            lessonData
-        ) ||
-        !lessonData.length
-    ) {
-
-        return;
-
-    }
-
-
-    try {
-
-        const db =
-            await openLessonDB();
-
-
-        await new Promise(
-            (
-                resolve,
-                reject
-            ) => {
-
-                const transaction =
-                    db.transaction(
-                        LESSON_STORE,
-                        "readwrite"
-                    );
-
-
-                const store =
-                    transaction.objectStore(
-                        LESSON_STORE
-                    );
-
-
-                store.clear();
-
-
-                lessonData.forEach(
-                    (
-                        lesson,
-                        index
-                    ) => {
-
-                        store.put({
-
-                            id:
-                                String(
-                                    index + 1
-                                ),
-
-                            ...lesson
-
-                        });
-
-                    }
-                );
-
-
-                transaction.oncomplete =
-                    () => {
-
-                        resolve();
-
-                    };
-
-
-                transaction.onerror =
-                    () => {
-
-                        reject(
-                            transaction.error
-                        );
-
-                    };
-
-            }
-        );
-
-
-        db.close();
-
-
-        console.log(
-            "AFC Isiu: Lessons saved offline."
-        );
-
-    }
-
-    catch (error) {
-
-        console.warn(
-            "AFC Isiu: IndexedDB save failed.",
-            error
-        );
-
-    }
-
-}
-
-
-/* ============================================================
-   LOAD FROM INDEXED DB
-   ============================================================ */
-
-async function getOfflineLessons() {
-
-    try {
-
-        const db =
-            await openLessonDB();
-
-
-        const data =
-            await new Promise(
-                (
-                    resolve,
-                    reject
-                ) => {
-
-                    const transaction =
-                        db.transaction(
-                            LESSON_STORE,
-                            "readonly"
-                        );
-
-
-                    const store =
-                        transaction.objectStore(
-                            LESSON_STORE
-                        );
-
-
-                    const request =
-                        store.getAll();
-
-
-                    request.onsuccess =
-                        () => {
-
-                            resolve(
-                                request.result ||
-                                []
-                            );
-
-                        };
-
-
-                    request.onerror =
-                        () => {
-
-                            reject(
-                                request.error
-                            );
-
-                        };
-
-                }
-            );
-
-
-        db.close();
-
-
-        return data;
-
-    }
-
-    catch (error) {
-
-        console.warn(
-            "AFC Isiu: IndexedDB read failed.",
-            error
-        );
-
-
-        return [];
-
-    }
-
-}
-
-
-/* ============================================================
-   SAVE BACKUP TO LOCAL STORAGE
-   ============================================================ */
-
-function saveLessonsLocally(
-    data
-) {
-
-    try {
-
-        localStorage.setItem(
-
-            LESSON_STORAGE_KEY,
-
-            JSON.stringify({
-
-                savedAt:
-                    new Date()
-                        .toISOString(),
-
-                lessons:
-                    data
-
-            })
-
-        );
-
-    }
-
-    catch (error) {
-
-        console.warn(
-            "AFC Isiu: Local storage save failed.",
-            error
-        );
-
-    }
-
-}
-
-
-/* ============================================================
-   GET LOCAL STORAGE BACKUP
-   ============================================================ */
-
-function getSavedLessons() {
-
-    try {
-
-        const saved =
-            localStorage.getItem(
-                LESSON_STORAGE_KEY
-            );
-
-
-        if (
-            !saved
-        ) {
-
-            return [];
-
-        }
-
-
-        const parsed =
-            JSON.parse(
-                saved
-            );
-
-
-        if (
-            !parsed ||
-            !Array.isArray(
-                parsed.lessons
-            )
-        ) {
-
-            return [];
-
-        }
-
-
-        return parsed.lessons;
-
-    }
-
-    catch (error) {
-
-        console.warn(
-            "AFC Isiu: Local lesson backup could not be read.",
-            error
-        );
-
-
-        return [];
-
-    }
-
-}
-
-
-/* ============================================================
-   SHOW LOADING
-   ============================================================ */
-
-function showLoading() {
-
-    if (
-        lessonsLoadingEl
-    ) {
-
-        lessonsLoadingEl.hidden =
-            false;
-
-    }
-
-
-    if (
-        lessonsErrorEl
-    ) {
-
-        lessonsErrorEl.hidden =
-            true;
-
-    }
-
-
-    if (
-        lessonViewEl
-    ) {
-
-        lessonViewEl.hidden =
-            true;
-
-    }
-
-}
-
-
-/* ============================================================
-   HIDE LOADING
-   ============================================================ */
-
-function hideLoading() {
-
-    if (
-        lessonsLoadingEl
-    ) {
-
-        lessonsLoadingEl.hidden =
-            true;
-
-    }
-
-}
-
-
-/* ============================================================
-   SHOW ERROR
-   ============================================================ */
-
-function showError(
-    message
-) {
-
-    hideLoading();
-
-
-    if (
-        lessonViewEl
-    ) {
-
-        lessonViewEl.hidden =
-            true;
-
-    }
-
-
-    if (
-        lessonsErrorEl
-    ) {
-
-        lessonsErrorEl.hidden =
-            false;
-
-    }
-
-
-    if (
-        lessonsErrorMessageEl
-    ) {
-
-        lessonsErrorMessageEl.textContent =
-            message;
-
-    }
-
-}
-
-
-/* ============================================================
-   HIDE ERROR
-   ============================================================ */
-
-function hideError() {
-
-    if (
-        lessonsErrorEl
-    ) {
-
-        lessonsErrorEl.hidden =
-            true;
-
-    }
-
-}
-
-
-/* ============================================================
-   FORMAT LESSON CONTENT
-   ============================================================ */
-
-function formatLessonContent(
-    content
-) {
+function formatLessonContent(html) {
 
     const value =
-        String(
-            content || ""
-        ).trim();
+        cleanText(html);
 
 
-    if (
-        !value
-    ) {
+    if (!value) {
 
         return `
-            <div class="lesson-empty-content">
+
+            <div class="lesson-empty-state">
+
+                <i class="fa-regular fa-file-lines"></i>
 
                 <p>
                     Lesson content is not available yet.
                 </p>
 
             </div>
+
+        `;
+
+    }
+
+
+    return `
+
+        <div class="lesson-rich-content">
+
+            ${value}
+
+        </div>
+
+    `;
+
+}
+
+
+/* =========================================================
+   FORMAT DISCUSSION
+========================================================= */
+
+function formatDiscussion(text) {
+
+    const value =
+        cleanText(text);
+
+
+    if (!value) {
+
+        return `
+
+            <div class="discussion-empty">
+
+                <i class="fa-regular fa-comments"></i>
+
+                <p>
+                    No discussion questions have been added yet.
+                </p>
+
+            </div>
+
+        `;
+
+    }
+
+
+    const escaped =
+        escapeHTML(value);
+
+
+    let items =
+        escaped
+            .split(/\r?\n\s*\r?\n/)
+            .map(item => item.trim())
+            .filter(Boolean);
+
+
+    /*
+     * Also support one question per line.
+     */
+
+    if (items.length <= 1) {
+
+        items =
+            escaped
+                .split(/\r?\n/)
+                .map(item => item.trim())
+                .filter(Boolean);
+
+    }
+
+
+    /*
+     * One question.
+     */
+
+    if (items.length === 1) {
+
+        return `
+
+            <div class="discussion-question">
+
+                <span class="discussion-number">
+                    1
+                </span>
+
+                <p>
+                    ${items[0]}
+                </p>
+
+            </div>
+
         `;
 
     }
 
 
     /*
-     * Your combined lesson notes may already contain HTML.
-     *
-     * If HTML is present, preserve it.
+     * Multiple questions.
      */
 
-    if (
-        /<\s*(p|div|h1|h2|h3|h4|ul|ol|li|br|strong|em|blockquote)\b/i
-            .test(value)
-    ) {
-
-        return value;
-
-    }
-
-
-    /*
-     * Otherwise convert normal text into paragraphs.
-     */
-
-    return escapeHtml(
-        value
-    )
-        .split(
-            /\n\s*\n/
-        )
+    return items
         .map(
-            paragraph => {
-
-                const text =
-                    paragraph
-                        .trim()
-                        .replace(
-                            /\n/g,
-                            "<br>"
-                        );
-
-
-                if (
-                    !text
-                ) {
-
-                    return "";
-
-                }
-
+            (item, index) => {
 
                 return `
-                    <p>
-                        ${text}
-                    </p>
+
+                    <div class="discussion-question">
+
+                        <span class="discussion-number">
+
+                            ${index + 1}
+
+                        </span>
+
+                        <p>
+
+                            ${item.replace(
+                                /\r?\n/g,
+                                "<br>"
+                            )}
+
+                        </p>
+
+                    </div>
+
                 `;
 
             }
@@ -1272,614 +460,398 @@ function formatLessonContent(
 }
 
 
-/* ============================================================
-   FORMAT DISCUSSION
-   ============================================================ */
+/* =========================================================
+   BUILD AUDIO URL
+========================================================= */
 
-function formatDiscussion(
-    content
-) {
+function buildAudioURL(audioPath) {
 
     const value =
-        String(
-            content || ""
-        ).trim();
+        cleanText(audioPath);
 
 
-    if (
-        !value
-    ) {
+    if (!value) {
 
-        return `
-            <p>
-                No discussion questions are available
-                for this lesson.
-            </p>
-        `;
+        return "";
 
     }
 
 
-    /*
-     * Preserve HTML if discussion already contains it.
-     */
+    try {
 
-    if (
-        /<\s*(p|div|ol|ul|li|br|strong)\b/i
-            .test(value)
-    ) {
-
-        return value;
-
-    }
-
-
-    return escapeHtml(
-        value
-    )
-        .replace(
-            /\r?\n/g,
-            "<br>"
-        );
-
-}
-
-
-/* ============================================================
-   CALCULATE READING TIME
-   ============================================================ */
-
-function calculateReadingTime(
-    content
-) {
-
-    if (
-        !content
-    ) {
-
-        return "—";
-
-    }
-
-
-    const temporary =
-        document.createElement(
-            "div"
-        );
-
-
-    temporary.innerHTML =
-        content;
-
-
-    const text =
-        temporary
-            .innerText
-            .trim();
-
-
-    if (
-        !text
-    ) {
-
-        return "—";
-
-    }
-
-
-    const words =
-        text
-            .split(
-                /\s+/
-            )
-            .filter(Boolean)
-            .length;
-
-
-    const minutes =
-        Math.max(
-            1,
-            Math.ceil(
-                words / 200
-            )
-        );
-
-
-    return `${minutes} min`;
-
-}
-
-
-/* ============================================================
-   COUNT SECTIONS
-   ============================================================ */
-
-function countSections(
-    content
-) {
-
-    if (
-        !content
-    ) {
-
-        return 0;
-
-    }
-
-
-    const temporary =
-        document.createElement(
-            "div"
-        );
-
-
-    temporary.innerHTML =
-        content;
-
-
-    const headings =
-        temporary.querySelectorAll(
-            "h2, h3, h4"
-        );
-
-
-    if (
-        headings.length
-    ) {
-
-        return headings.length;
-
-    }
-
-
-    const paragraphs =
-        temporary.querySelectorAll(
-            "p"
-        );
-
-
-    return paragraphs.length
-        ? paragraphs.length
-        : 1;
-
-}
-
-
-/* ============================================================
-   UPDATE WEEK
-   ============================================================ */
-
-function updateWeekDisplay(
-    lesson
-) {
-
-    if (
-        !lesson
-    ) {
-
-        return;
-
-    }
-
-
-    const lessonNumber =
-        cleanText(
-            lesson.Lesson
-        );
-
-
-    const date =
-        cleanText(
-            lesson.Date
-        );
-
-
-    if (
-        lessonWeekEl
-    ) {
+        /*
+         * Full URL:
+         *
+         * https://...
+         */
 
         if (
-            date
+            /^https?:\/\//i.test(value)
         ) {
 
-            lessonWeekEl.innerHTML = `
-
-                <i
-                    class="fa-regular fa-calendar"
-                ></i>
-
-                <span>
-                    ${escapeHtml(date)}
-                </span>
-
-            `;
+            return value;
 
         }
 
-        else if (
-            lessonNumber
+
+        /*
+         * Root-relative:
+         *
+         * /audio/Senior-77.mp3
+         */
+
+        if (
+            value.startsWith("/")
         ) {
 
-            lessonWeekEl.innerHTML = `
-
-                <i
-                    class="fa-regular fa-calendar"
-                ></i>
-
-                <span>
-                    Lesson ${escapeHtml(
-                        lessonNumber
-                    )}
-                </span>
-
-            `;
+            return (
+                SITE_ORIGIN +
+                value
+            );
 
         }
 
-        else {
 
-            lessonWeekEl.innerHTML = `
+        /*
+         * Relative:
+         *
+         * audio/Senior-77.mp3
+         */
 
-                <i
-                    class="fa-regular fa-calendar"
-                ></i>
-
-                <span>
-                    This Week
-                </span>
-
-            `;
-
-        }
+        return new URL(
+            value,
+            SITE_ORIGIN + "/"
+        ).href;
 
     }
 
+    catch (error) {
 
-    if (
-        lessonNumberEl
-    ) {
+        console.error(
+            "AFC Isiu — Invalid audio path:",
+            value,
+            error
+        );
 
-        lessonNumberEl.textContent =
-            lessonNumber ||
-            "—";
-
-    }
-
-
-    if (
-        lessonDateEl
-    ) {
-
-        lessonDateEl.textContent =
-            date ||
-            "This Week";
+        return "";
 
     }
 
 }
 
 
-/* ============================================================
-   RENDER LESSON
-   ============================================================ */
+/* =========================================================
+   RENDER YORUBA AUDIO
+========================================================= */
 
-function renderLesson(
-    lesson,
-    className
-) {
+function renderYorubaAudio(audioValue) {
 
-    if (
-        !lesson
-    ) {
+    const audioPath =
+        cleanText(audioValue);
 
-        showError(
-            `No lesson is available for the ${className} class.`
+
+    const audioCard =
+        getElement(
+            "yorubaAudioCard"
         );
+
+
+    const audioElement =
+        getElement(
+            "yorubaAudio"
+        );
+
+
+    /*
+     * If there is no audio field,
+     * simply hide the card.
+     */
+
+    if (!audioPath) {
+
+        if (audioCard) {
+
+            audioCard.hidden = true;
+
+            audioCard.style.display =
+                "none";
+
+        }
+
+
+        if (audioElement) {
+
+            audioElement.pause();
+
+            audioElement.removeAttribute(
+                "src"
+            );
+
+            audioElement.load();
+
+        }
+
 
         return;
 
     }
 
 
-    const topic =
-        cleanText(
-            lesson.Topic
+    const audioURL =
+        buildAudioURL(
+            audioPath
         );
 
 
-    const bibleText =
-        cleanText(
-            lesson.BibleText
-        );
+    if (!audioURL) {
 
+        if (audioCard) {
 
-    const memoryVerse =
-        cleanText(
-            lesson.MemoryVerse
-        );
+            audioCard.hidden = true;
 
+            audioCard.style.display =
+                "none";
 
-    const summary =
-        lesson.Summary ||
-        "";
+        }
 
-
-    const discussion =
-        lesson.Discussion ||
-        "";
-
-
-    /*
-     * TOPIC
-     */
-
-    if (
-        topicEl
-    ) {
-
-        topicEl.textContent =
-            topic ||
-            "Weekly Lesson";
+        return;
 
     }
 
 
-    /*
-     * THEME
-     */
-
-    if (
-        themeEl
-    ) {
-
-        themeEl.textContent =
-            className
-                ? `${className} Class`
-                : "";
-
-    }
-
-
-    /*
-     * CLASS BADGE
-     */
-
-    if (
-        lessonClassBadgeEl
-    ) {
-
-        lessonClassBadgeEl.textContent =
-            (
-                className ||
-                "Senior"
-            ).toUpperCase();
-
-    }
-
-
-    /*
-     * STATUS
-     */
-
-    if (
-        lessonStatusEl
-    ) {
-
-        lessonStatusEl.textContent =
-            "THIS WEEK";
-
-    }
-
-
-    /*
-     * BIBLE TEXT
-     */
-
-    if (
-        bibleTextEl
-    ) {
-
-        bibleTextEl.textContent =
-            bibleText ||
-            "—";
-
-    }
-
-
-    /*
-     * MEMORY VERSE
-     */
-
-    if (
-        memoryVerseEl
-    ) {
-
-        memoryVerseEl.textContent =
-            memoryVerse ||
-            "—";
-
-    }
-
-
-    /*
-     * LESSON CONTENT
-     */
-
-    if (
-        summaryEl
-    ) {
-
-        summaryEl.innerHTML =
-            formatLessonContent(
-                summary
-            );
-
-    }
-
-
-    /*
-     * DISCUSSION
-     */
-
-    if (
-        discussionEl
-    ) {
-
-        discussionEl.innerHTML =
-            formatDiscussion(
-                discussion
-            );
-
-    }
-
-
-    /*
-     * WEEK / LESSON NUMBER
-     */
-
-    updateWeekDisplay(
-        lesson
+    console.log(
+        "AFC Isiu — Yoruba Audio URL:",
+        audioURL
     );
 
 
     /*
-     * READING TIME
+     * Use existing <audio>
+     * if lessons.html contains it.
      */
 
-    const readingTime =
-        calculateReadingTime(
-            summary
+    if (audioElement) {
+
+        audioElement.pause();
+
+        audioElement.removeAttribute(
+            "src"
         );
 
+        audioElement.src =
+            audioURL;
 
-    if (
-        readingTimeEl
-    ) {
+        audioElement.preload =
+            "metadata";
 
-        readingTimeEl.textContent =
-            readingTime;
-
-    }
+        audioElement.load();
 
 
-    if (
-        mobileReadingTimeEl
-    ) {
+        /*
+         * Helpful diagnostic.
+         */
 
-        mobileReadingTimeEl.textContent =
-            readingTime;
+        audioElement.onloadedmetadata =
+            function () {
 
-    }
+                console.log(
+                    "AFC Isiu — Yoruba audio loaded:",
+                    audioURL
+                );
 
-
-    /*
-     * SECTION COUNT
-     */
-
-    const sectionCount =
-        countSections(
-            summary
-        );
+            };
 
 
-    if (
-        sectionCountEl
-    ) {
+        audioElement.onerror =
+            function () {
 
-        sectionCountEl.textContent =
-            sectionCount;
+                console.error(
+                    "AFC Isiu — Yoruba audio failed to load:",
+                    audioURL,
+                    audioElement.error
+                );
 
-    }
-
-
-    if (
-        mobileSectionCountEl
-    ) {
-
-        mobileSectionCountEl.textContent =
-            sectionCount;
-
-    }
+            };
 
 
-    /*
-     * SHOW LESSON.
-     */
-
-    hideLoading();
-
-    hideError();
-
-
-    if (
-        lessonViewEl
-    ) {
-
-        lessonViewEl.hidden =
+        audioElement.hidden =
             false;
 
     }
 
 
     /*
-     * Restore reading progress.
+     * Show audio card.
      */
 
-    setupReadingProgress(
-        lesson
-    );
+    if (audioCard) {
 
+        audioCard.hidden =
+            false;
 
-    /*
-     * Restore completion status.
-     */
-
-    updateCompletionUI(
-        lesson
-    );
-
-
-    /*
-     * Refresh icons if the global icon system exists.
-     */
-
-    if (
-        window.lucide &&
-        typeof window.lucide.createIcons ===
-            "function"
-    ) {
-
-        try {
-
-            window.lucide.createIcons();
-
-        }
-
-        catch (error) {
-
-            console.warn(
-                "AFC Lessons: icon refresh failed.",
-                error
-            );
-
-        }
+        audioCard.style.display =
+            "";
 
     }
-
-
-    console.log(
-        "AFC Isiu: Rendered lesson:",
-        lesson
-    );
 
 }
 
 
-/* ============================================================
-   FIND LESSON
-   ============================================================ */
+/* =========================================================
+   FETCH LESSONS
+========================================================= */
 
-function findLesson(
+async function fetchWeeklyLessons() {
+
+    console.log(
+        "AFC Isiu — Fetching lessons..."
+    );
+
+
+    try {
+
+        /*
+         * PapaParse must exist.
+         */
+
+        if (
+            typeof Papa === "undefined"
+        ) {
+
+            throw new Error(
+                "PapaParse is not loaded. Please make sure PapaParse is included in lessons.html."
+            );
+
+        }
+
+
+        const response =
+            await fetch(
+                LESSONS_CSV_URL,
+                {
+                    method: "GET",
+                    cache: "no-store"
+                }
+            );
+
+
+        console.log(
+            "AFC Isiu — Lessons CSV status:",
+            response.status
+        );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                `Unable to access lessons sheet. HTTP ${response.status}`
+            );
+
+        }
+
+
+        const csvText =
+            await response.text();
+
+
+        if (!csvText.trim()) {
+
+            throw new Error(
+                "The lessons sheet returned no data."
+            );
+
+        }
+
+
+        const result =
+            Papa.parse(
+                csvText,
+                {
+                    header: true,
+                    skipEmptyLines: true
+                }
+            );
+
+
+        if (
+            result.errors &&
+            result.errors.length
+        ) {
+
+            console.warn(
+                "AFC Isiu — CSV parsing warnings:",
+                result.errors
+            );
+
+        }
+
+
+        lessonsData =
+            result.data
+                .map(
+                    normalizeLessonRow
+                )
+                .filter(
+                    lesson => {
+
+                        return (
+                            lesson.className ||
+                            lesson.topic ||
+                            lesson.summary
+                        );
+
+                    }
+                );
+
+
+        console.log(
+            "AFC Isiu — Parsed Lessons:",
+            lessonsData
+        );
+
+
+        if (
+            !lessonsData.length
+        ) {
+
+            throw new Error(
+                "No lesson records were found in the Google Sheet."
+            );
+
+        }
+
+
+        /*
+         * Now render.
+         */
+
+        renderSelectedClass();
+
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "AFC Isiu — Weekly Lessons Error:",
+            error
+        );
+
+
+        renderFetchError(
+            error.message
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   FIND LESSON FOR CLASS
+========================================================= */
+
+function findLessonForClass(
     className
 ) {
 
@@ -1889,580 +861,663 @@ function findLesson(
         ).toLowerCase();
 
 
-    return lessons.find(
-        lesson =>
-            cleanText(
-                lesson.Class
-            ).toLowerCase() ===
-            wanted
+    return lessonsData.find(
+        lesson => {
+
+            return (
+                cleanText(
+                    lesson.className
+                ).toLowerCase() ===
+                wanted
+            );
+
+        }
     );
 
 }
 
 
-/* ============================================================
-   SWITCH CLASS
-   ============================================================ */
+/* =========================================================
+   UPDATE CLASS TABS
+========================================================= */
 
-function switchClass(
+function updateClassTabs(
     className
 ) {
 
-    const cleanClass =
-        cleanText(
-            className
-        ) || "Senior";
-
-
-    selectedClass =
-        cleanClass;
-
-
-    try {
-
-        localStorage.setItem(
-            "selectedLessonClass",
-            selectedClass
-        );
-
-    }
-
-    catch (error) {
-
-        console.warn(
-            "AFC Lessons: Could not save selected class.",
-            error
-        );
-
-    }
-
-
-    /*
-     * Update tabs.
-     */
-
     document
         .querySelectorAll(
-            ".class-tab, .lesson-tab, [data-class], [data-lesson-class]"
+            ".class-tab"
         )
         .forEach(
             tab => {
 
                 const tabClass =
                     cleanText(
-                        tab.dataset.class ||
-                        tab.dataset.lessonClass ||
-                        tab.textContent
+                        tab.dataset.class
                     );
+
+
+                const isActive =
+                    tabClass.toLowerCase() ===
+                    cleanText(
+                        className
+                    ).toLowerCase();
 
 
                 tab.classList.toggle(
                     "active",
-                    tabClass.toLowerCase() ===
-                        cleanClass.toLowerCase()
+                    isActive
+                );
+
+
+                tab.setAttribute(
+                    "aria-selected",
+                    isActive
+                        ? "true"
+                        : "false"
                 );
 
             }
         );
 
+}
 
-    const lesson =
-        findLesson(
-            cleanClass
+
+/* =========================================================
+   RENDER SELECTED CLASS
+========================================================= */
+
+function renderSelectedClass() {
+
+    let lesson =
+        findLessonForClass(
+            selectedLessonClass
         );
 
 
+    /*
+     * If saved class does not exist,
+     * try Senior.
+     */
+
+    if (!lesson) {
+
+        lesson =
+            findLessonForClass(
+                "Senior"
+            );
+
+    }
+
+
+    /*
+     * If Senior does not exist,
+     * use the first available lesson.
+     */
+
     if (
-        !lesson
+        !lesson &&
+        lessonsData.length
     ) {
 
-        showError(
-            `No lesson is available for the ${cleanClass} class.`
+        lesson =
+            lessonsData[0];
+
+    }
+
+
+    if (!lesson) {
+
+        renderFetchError(
+            "No lesson is available right now."
         );
 
         return;
 
     }
+
+
+    currentLesson =
+        lesson;
+
+
+    selectedLessonClass =
+        lesson.className;
+
+
+    localStorage.setItem(
+        "selectedLessonClass",
+        selectedLessonClass
+    );
+
+
+    updateClassTabs(
+        selectedLessonClass
+    );
 
 
     renderLesson(
-        lesson,
-        cleanClass
+        lesson
     );
 
 }
 
 
-/* ============================================================
-   GLOBAL CLASS SWITCH
-   ============================================================ */
-
-window.switchClass =
-    switchClass;
-
-
-/*
- * Some older versions of the page used switchLesson().
- * Keep it working.
- */
-
-window.switchLesson =
-    switchClass;
-
-
-/* ============================================================
-   LOAD LESSONS
-   ============================================================ */
-
-async function loadLessons() {
-
-    showLoading();
-
-
-    /*
-     * ========================================================
-     * ONLINE
-     * ========================================================
-     */
-
-    if (
-        navigator.onLine
-    ) {
-
-        try {
-
-            console.log(
-                "AFC Isiu: Downloading latest lessons..."
-            );
-
-
-            const response =
-                await fetch(
-                    WEEKLY_LESSON_CSV,
-                    {
-                        method:
-                            "GET",
-
-                        cache:
-                            "no-store"
-                    }
-                );
-
-
-            if (
-                !response.ok
-            ) {
-
-                throw new Error(
-                    `Lesson request failed: ${response.status}`
-                );
-
-            }
-
-
-            const csv =
-                await response.text();
-
-
-            if (
-                !csv.trim()
-            ) {
-
-                throw new Error(
-                    "The lesson spreadsheet returned no data."
-                );
-
-            }
-
-
-            /*
-             * PapaParse if available.
-             */
-
-            let parsedRows;
-
-
-            if (
-                window.Papa &&
-                typeof Papa.parse ===
-                    "function"
-            ) {
-
-                const result =
-                    Papa.parse(
-                        csv,
-                        {
-                            header:
-                                true,
-
-                            skipEmptyLines:
-                                true
-                        }
-                    );
-
-
-                parsedRows =
-                    result.data;
-
-            }
-
-            else {
-
-                parsedRows =
-                    parseCSV(
-                        csv
-                    );
-
-            }
-
-
-            /*
-             * Normalize.
-             */
-
-            const normalized =
-                parsedRows
-                    .map(
-                        normalizeLesson
-                    )
-                    .filter(
-                        lesson =>
-                            lesson.Class ||
-                            lesson.Topic ||
-                            lesson.Summary
-                    );
-
-
-            if (
-                !normalized.length
-            ) {
-
-                throw new Error(
-                    "The spreadsheet was reached, but no valid lessons were found."
-                );
-
-            }
-
-
-            lessons =
-                normalized;
-
-
-            /*
-             * SAVE BOTH:
-             *
-             * IndexedDB
-             * LocalStorage backup
-             */
-
-            await saveLessonsOffline(
-                lessons
-            );
-
-
-            saveLessonsLocally(
-                lessons
-            );
-
-
-            console.log(
-                "AFC Isiu: Latest lessons loaded online.",
-                lessons
-            );
-
-
-            switchClass(
-                selectedClass
-            );
-
-
-            return;
-
-        }
-
-        catch (error) {
-
-            console.warn(
-                "AFC Isiu: Online lesson loading failed.",
-                error
-            );
-
-        }
-
-    }
-
-
-    /*
-     * ========================================================
-     * OFFLINE
-     * ========================================================
-     */
-
-    console.log(
-        "AFC Isiu: Trying offline lesson storage..."
-    );
-
-
-    /*
-     * First IndexedDB.
-     */
-
-    let offlineLessons =
-        await getOfflineLessons();
-
-
-    /*
-     * If IndexedDB has nothing, use LocalStorage backup.
-     */
-
-    if (
-        !offlineLessons.length
-    ) {
-
-        offlineLessons =
-            getSavedLessons();
-
-    }
-
-
-    if (
-        offlineLessons.length
-    ) {
-
-        lessons =
-            offlineLessons;
-
-
-        console.log(
-            "AFC Isiu: Offline lessons loaded.",
-            lessons
-        );
-
-
-        switchClass(
-            selectedClass
-        );
-
-
-        return;
-
-    }
-
-
-    /*
-     * Nothing has ever been downloaded.
-     */
-
-    showError(
-        "No saved lessons are available on this device yet. Connect to the internet once to download the lessons."
-    );
-
-}
-
-
-/* ============================================================
-   READING PROGRESS
-   ============================================================ */
-
-let progressHandler =
-    null;
-
-
-function setupReadingProgress(
+/* =========================================================
+   RENDER LESSON
+========================================================= */
+
+function renderLesson(
     lesson
 ) {
 
-    if (
-        progressHandler
-    ) {
+    console.log(
+        "AFC Isiu — Rendering lesson:",
+        lesson
+    );
 
-        window.removeEventListener(
-            "scroll",
-            progressHandler
+
+    /*
+     * Show lesson view.
+     */
+
+    const lessonView =
+        getElement(
+            "lessonView"
+        );
+
+
+    if (lessonView) {
+
+        lessonView.hidden =
+            false;
+
+        lessonView.style.display =
+            "";
+
+    }
+
+
+    /* =====================================================
+       LESSON TOPIC CARD
+
+       IMPORTANT:
+       NO LESSON NUMBER HERE.
+    ===================================================== */
+
+    const classBadge =
+        getElement(
+            "lessonClassBadge"
+        );
+
+
+    const lessonTitle =
+        getElement(
+            "lessonTitle"
+        );
+
+
+    if (classBadge) {
+
+        classBadge.textContent =
+            cleanText(
+                lesson.className
+            ).toUpperCase();
+
+    }
+
+
+    if (lessonTitle) {
+
+        lessonTitle.textContent =
+            lesson.topic ||
+            "Weekly Lesson";
+
+    }
+
+
+    /* =====================================================
+       LESSON INFORMATION
+    ===================================================== */
+
+    const bibleText =
+        getElement(
+            "lessonBibleText"
+        );
+
+
+    const lessonNumber =
+        getElement(
+            "lessonNumber"
+        );
+
+
+    const lessonDate =
+        getElement(
+            "lessonDate"
+        );
+
+
+    const memoryVerse =
+        getElement(
+            "lessonMemoryVerse"
+        );
+
+
+    if (bibleText) {
+
+        bibleText.textContent =
+            lesson.bibleText ||
+            "—";
+
+    }
+
+
+    /*
+     * Lesson number belongs here,
+     * NOT in the Topic Card.
+     */
+
+    if (lessonNumber) {
+
+        lessonNumber.textContent =
+            lesson.lesson ||
+            "—";
+
+    }
+
+
+    if (lessonDate) {
+
+        const today =
+            new Date();
+
+
+        lessonDate.textContent =
+            today.toLocaleDateString(
+                "en-GB",
+                {
+                    day: "numeric",
+                    month: "short",
+                    year: "numeric"
+                }
+            );
+
+    }
+
+
+    if (memoryVerse) {
+
+        memoryVerse.textContent =
+            lesson.memoryVerse ||
+            "—";
+
+    }
+
+
+    /* =====================================================
+       SUMMARY
+    ===================================================== */
+
+    const lessonContent =
+        getElement(
+            "lessonContent"
+        );
+
+
+    if (lessonContent) {
+
+        lessonContent.innerHTML =
+            formatLessonContent(
+                lesson.summary
+            );
+
+    }
+
+
+    /* =====================================================
+       DISCUSSION
+    ===================================================== */
+
+    const discussion =
+        getElement(
+            "lessonDiscussion"
+        );
+
+
+    if (discussion) {
+
+        discussion.innerHTML =
+            formatDiscussion(
+                lesson.discussion
+            );
+
+    }
+
+
+    /* =====================================================
+       YORUBA AUDIO
+
+       IMPORTANT:
+       An audio failure must NOT stop
+       the rest of the lesson.
+    ===================================================== */
+
+    try {
+
+        renderYorubaAudio(
+            lesson.yorubaAudio
+        );
+
+    }
+
+    catch (audioError) {
+
+        console.error(
+            "AFC Isiu — Audio rendering error:",
+            audioError
         );
 
     }
 
 
-    progressHandler =
-        () => {
+    /* =====================================================
+       METADATA
+    ===================================================== */
 
-            const completed =
-                isLessonCompleted(
-                    lesson
-                );
-
-
-            if (
-                completed
-            ) {
-
-                updateProgress(
-                    100
-                );
-
-                return;
-
-            }
-
-
-            const scrollTop =
-                window.scrollY ||
-                document.documentElement.scrollTop ||
-                0;
-
-
-            const scrollHeight =
-                document.documentElement
-                    .scrollHeight;
-
-
-            const viewportHeight =
-                window.innerHeight;
-
-
-            const total =
-                Math.max(
-                    scrollHeight -
-                        viewportHeight,
-                    1
-                );
-
-
-            const progress =
-                Math.round(
-                    (
-                        scrollTop /
-                        total
-                    ) * 100
-                );
-
-
-            updateProgress(
-                Math.max(
-                    0,
-                    Math.min(
-                        100,
-                        progress
-                    )
-                )
-            );
-
-        };
-
-
-    window.addEventListener(
-        "scroll",
-        progressHandler,
-        {
-            passive:
-                true
-        }
+    updateLessonMeta(
+        lesson
     );
 
 
-    setTimeout(
-        progressHandler,
-        100
+    /* =====================================================
+       PROGRESS
+    ===================================================== */
+
+    resetLessonProgress();
+
+
+    /*
+     * Recalculate after HTML has rendered.
+     */
+
+    requestAnimationFrame(
+        () => {
+
+            setupReadingProgress();
+
+        }
     );
 
 }
 
 
-/* ============================================================
-   UPDATE PROGRESS
-   ============================================================ */
+/* =========================================================
+   LESSON META
+========================================================= */
 
-function updateProgress(
-    percentage
+function updateLessonMeta(
+    lesson
 ) {
 
-    const value =
+    const summary =
+        cleanText(
+            lesson.summary
+        );
+
+
+    /*
+     * Count paragraphs / major blocks.
+     */
+
+    let sections = 0;
+
+
+    if (summary) {
+
+        sections =
+            summary
+                .split(
+                    /\r?\n\s*\r?\n/
+                )
+                .filter(Boolean)
+                .length;
+
+    }
+
+
+    sections =
         Math.max(
-            0,
-            Math.min(
-                100,
-                Number(
-                    percentage
-                ) || 0
+            sections,
+            1
+        );
+
+
+    const sectionCount =
+        getElement(
+            "sectionCount"
+        );
+
+
+    const mobileSectionCount =
+        getElement(
+            "mobileSectionCount"
+        );
+
+
+    if (sectionCount) {
+
+        sectionCount.textContent =
+            sections;
+
+    }
+
+
+    if (mobileSectionCount) {
+
+        mobileSectionCount.textContent =
+            sections;
+
+    }
+
+
+    /*
+     * Reading time.
+     */
+
+    const words =
+        summary
+            ? summary
+                .replace(
+                    /<[^>]*>/g,
+                    " "
+                )
+                .split(/\s+/)
+                .filter(Boolean)
+                .length
+            : 0;
+
+
+    const minutes =
+        Math.max(
+            1,
+            Math.ceil(
+                words / 180
             )
         );
 
 
-    if (
-        progressBarEl
-    ) {
-
-        progressBarEl.style.width =
-            `${value}%`;
-
-    }
+    const readingLabel =
+        `${minutes} min`;
 
 
-    if (
-        mobileProgressBarEl
-    ) {
-
-        mobileProgressBarEl.style.width =
-            `${value}%`;
-
-    }
+    const readingTime =
+        getElement(
+            "readingTime"
+        );
 
 
-    if (
-        progressPercentEl
-    ) {
+    const mobileReadingTime =
+        getElement(
+            "mobileReadingTime"
+        );
 
-        progressPercentEl.textContent =
-            `${value}%`;
+
+    if (readingTime) {
+
+        readingTime.textContent =
+            readingLabel;
 
     }
 
 
-    if (
-        mobileProgressPercentEl
-    ) {
+    if (mobileReadingTime) {
 
-        mobileProgressPercentEl.textContent =
-            `${value}%`;
+        mobileReadingTime.textContent =
+            readingLabel;
+
+    }
+
+}
+
+
+/* =========================================================
+   RESET PROGRESS
+========================================================= */
+
+function resetLessonProgress() {
+
+    updateProgressUI(
+        0
+    );
+
+}
+
+
+/* =========================================================
+   UPDATE PROGRESS UI
+========================================================= */
+
+function updateProgressUI(
+    percent
+) {
+
+    const safePercent =
+        Math.min(
+            100,
+            Math.max(
+                0,
+                Math.round(
+                    percent
+                )
+            )
+        );
+
+
+    const progressPercent =
+        getElement(
+            "progressPercent"
+        );
+
+
+    const progressBar =
+        getElement(
+            "progressBar"
+        );
+
+
+    const progressText =
+        getElement(
+            "progressText"
+        );
+
+
+    const mobileProgressPercent =
+        getElement(
+            "mobileProgressPercent"
+        );
+
+
+    const mobileProgressBar =
+        getElement(
+            "mobileProgressBar"
+        );
+
+
+    if (progressPercent) {
+
+        progressPercent.textContent =
+            `${safePercent}%`;
 
     }
 
 
-    if (
-        progressTextEl
-    ) {
+    if (progressBar) {
+
+        progressBar.style.width =
+            `${safePercent}%`;
+
+    }
+
+
+    if (mobileProgressPercent) {
+
+        mobileProgressPercent.textContent =
+            `${safePercent}%`;
+
+    }
+
+
+    if (mobileProgressBar) {
+
+        mobileProgressBar.style.width =
+            `${safePercent}%`;
+
+    }
+
+
+    if (progressText) {
 
         if (
-            value >= 100
+            safePercent >= 100
         ) {
 
-            progressTextEl.textContent =
-                "Lesson completed.";
+            progressText.textContent =
+                "Lesson completed. Well done!";
 
         }
 
         else if (
-            value >= 75
+            safePercent >= 75
         ) {
 
-            progressTextEl.textContent =
-                "Almost there. Keep reading.";
+            progressText.textContent =
+                "Almost there. Finish the lesson.";
 
         }
 
         else if (
-            value >= 40
+            safePercent >= 40
         ) {
 
-            progressTextEl.textContent =
+            progressText.textContent =
                 "You're making good progress.";
+
+        }
+
+        else if (
+            safePercent > 0
+        ) {
+
+            progressText.textContent =
+                "Keep reading the lesson.";
 
         }
 
         else {
 
-            progressTextEl.textContent =
+            progressText.textContent =
                 "Start reading this lesson.";
 
         }
@@ -2472,247 +1527,309 @@ function updateProgress(
 }
 
 
-/* ============================================================
-   COMPLETION STORAGE KEY
-   ============================================================ */
+/* =========================================================
+   READING PROGRESS
+========================================================= */
 
-function getCompletionKey(
-    lesson
-) {
+function setupReadingProgress() {
 
-    return (
-        "lessonCompleted_" +
-        cleanText(
-            lesson.Class
-        ) +
-        "_" +
-        cleanText(
-            lesson.Lesson ||
-            lesson.Topic
-        )
-    );
-
-}
-
-
-/* ============================================================
-   IS COMPLETED
-   ============================================================ */
-
-function isLessonCompleted(
-    lesson
-) {
+    /*
+     * Remove old listener.
+     */
 
     if (
-        !lesson
+        progressScrollHandler
     ) {
 
-        return false;
-
-    }
-
-
-    try {
-
-        return (
-            localStorage.getItem(
-                getCompletionKey(
-                    lesson
-                )
-            ) ===
-            "true"
+        window.removeEventListener(
+            "scroll",
+            progressScrollHandler
         );
 
     }
 
-    catch (error) {
 
-        return false;
+    progressScrollHandler =
+        function () {
 
-    }
-
-}
-
-
-/* ============================================================
-   UPDATE COMPLETION UI
-   ============================================================ */
-
-function updateCompletionUI(
-    lesson
-) {
-
-    const completed =
-        isLessonCompleted(
-            lesson
-        );
+            const content =
+                getElement(
+                    "lessonContent"
+                );
 
 
-    const buttons = [
-        finishReadingBtn,
-        mobileFinishReadingBtn
-    ].filter(
-        Boolean
-    );
+            if (!content) {
 
-
-    buttons.forEach(
-        button => {
-
-            button.classList.toggle(
-                "completed",
-                completed
-            );
-
-
-            if (
-                completed
-            ) {
-
-                const strong =
-                    button.querySelector(
-                        ".finish-text strong"
-                    );
-
-
-                const small =
-                    button.querySelector(
-                        ".finish-text small"
-                    );
-
-
-                if (
-                    strong
-                ) {
-
-                    strong.textContent =
-                        "Lesson Completed";
-
-                }
-
-
-                if (
-                    small
-                ) {
-
-                    small.textContent =
-                        "Saved on this device";
-
-                }
+                return;
 
             }
 
+
+            const contentHeight =
+                content.scrollHeight;
+
+
+            if (
+                contentHeight <= 0
+            ) {
+
+                updateProgressUI(
+                    0
+                );
+
+                return;
+
+            }
+
+
+            const rect =
+                content.getBoundingClientRect();
+
+
+            const contentTop =
+                window.scrollY +
+                rect.top;
+
+
+            const contentBottom =
+                contentTop +
+                contentHeight;
+
+
+            const currentPosition =
+                window.scrollY +
+                (
+                    window.innerHeight *
+                    0.65
+                );
+
+
+            let percent =
+                (
+                    (
+                        currentPosition -
+                        contentTop
+                    ) /
+                    contentHeight
+                ) *
+                100;
+
+
+            if (
+                currentPosition <
+                contentTop
+            ) {
+
+                percent =
+                    0;
+
+            }
+
+
+            if (
+                currentPosition >=
+                contentBottom
+            ) {
+
+                percent =
+                    100;
+
+            }
+
+
+            updateProgressUI(
+                percent
+            );
+
+        };
+
+
+    window.addEventListener(
+        "scroll",
+        progressScrollHandler,
+        {
+            passive: true
         }
     );
 
 
-    if (
-        completed
-    ) {
-
-        updateProgress(
-            100
-        );
-
-    }
+    progressScrollHandler();
 
 }
 
 
-/* ============================================================
+/* =========================================================
    MARK LESSON COMPLETED
-   ============================================================ */
+========================================================= */
 
 function markLessonCompleted() {
 
-    const lesson =
-        findLesson(
-            selectedClass
-        );
-
-
-    if (
-        !lesson
-    ) {
+    if (!currentLesson) {
 
         return;
 
     }
 
 
-    try {
-
-        localStorage.setItem(
-            getCompletionKey(
-                lesson
-            ),
-            "true"
-        );
-
-    }
-
-    catch (error) {
-
-        console.warn(
-            "AFC Lessons: Could not save completion.",
-            error
-        );
-
-    }
-
-
-    updateCompletionUI(
-        lesson
+    updateProgressUI(
+        100
     );
 
 
-    /*
-     * Notify the rest of the portal.
-     */
+    const storageKey =
+        `lessonCompleted_${currentLesson.className}_${currentLesson.lesson}`;
 
-    document.dispatchEvent(
-        new CustomEvent(
-            "afc:lesson-completed",
-            {
-                detail: {
-                    lesson:
-                        lesson
-                }
-            }
-        )
+
+    localStorage.setItem(
+        storageKey,
+        "true"
     );
 
 
-    console.log(
-        "AFC Isiu: Lesson marked completed."
-    );
-
-}
-
-
-/* ============================================================
-   FINISH BUTTONS
-   ============================================================ */
-
-function setupFinishButtons() {
-
-    [
-        finishReadingBtn,
-        mobileFinishReadingBtn
-    ]
-        .filter(
-            Boolean
+    document
+        .querySelectorAll(
+            "#finishReadingBtn, #mobileFinishReadingBtn"
         )
         .forEach(
             button => {
 
-                button.addEventListener(
+                button.classList.add(
+                    "completed"
+                );
+
+
+                const strong =
+                    button.querySelector(
+                        "strong"
+                    );
+
+
+                const small =
+                    button.querySelector(
+                        "small"
+                    );
+
+
+                if (strong) {
+
+                    strong.textContent =
+                        "Lesson completed";
+
+                }
+
+
+                if (small) {
+
+                    small.textContent =
+                        "Great job!";
+
+                }
+
+            }
+        );
+
+}
+
+
+/* =========================================================
+   TAB EVENTS
+========================================================= */
+
+function initializeLessonTabs() {
+
+    document
+        .querySelectorAll(
+            ".class-tab"
+        )
+        .forEach(
+            tab => {
+
+                if (
+                    tab.dataset.initialized ===
+                    "true"
+                ) {
+
+                    return;
+
+                }
+
+
+                tab.dataset.initialized =
+                    "true";
+
+
+                tab.addEventListener(
                     "click",
-                    event => {
+                    function () {
 
-                        event.preventDefault();
+                        const className =
+                            cleanText(
+                                tab.dataset.class
+                            );
 
-                        markLessonCompleted();
+
+                        if (!className) {
+
+                            return;
+
+                        }
+
+
+                        selectedLessonClass =
+                            className;
+
+
+                        localStorage.setItem(
+                            "selectedLessonClass",
+                            selectedLessonClass
+                        );
+
+
+                        updateClassTabs(
+                            selectedLessonClass
+                        );
+
+
+                        renderSelectedClass();
+
+
+                        /*
+                         * On mobile, gently bring
+                         * the lesson into view.
+                         */
+
+                        if (
+                            window.innerWidth <=
+                            768
+                        ) {
+
+                            const lessonView =
+                                getElement(
+                                    "lessonView"
+                                );
+
+
+                            if (lessonView) {
+
+                                setTimeout(
+                                    () => {
+
+                                        lessonView.scrollIntoView(
+                                            {
+                                                behavior:
+                                                    "smooth",
+                                                block:
+                                                    "start"
+                                            }
+                                        );
+
+                                    },
+                                    80
+                                );
+
+                            }
+
+                        }
 
                     }
                 );
@@ -2723,83 +1840,66 @@ function setupFinishButtons() {
 }
 
 
-/* ============================================================
-   CLASS TAB EVENTS
-   ============================================================ */
+/* =========================================================
+   FINISH BUTTONS
+========================================================= */
 
-function setupClassTabs() {
+function initializeFinishButtons() {
 
-    const tabs =
-        document.querySelectorAll(
-            ".class-tab, .lesson-tab, [data-class], [data-lesson-class]"
-        );
+    document
+        .querySelectorAll(
+            "#finishReadingBtn, #mobileFinishReadingBtn"
+        )
+        .forEach(
+            button => {
 
+                if (
+                    button.dataset.initialized ===
+                    "true"
+                ) {
 
-    tabs.forEach(
-        tab => {
-
-            if (
-                tab.dataset.lessonBound ===
-                "true"
-            ) {
-
-                return;
-
-            }
-
-
-            tab.dataset.lessonBound =
-                "true";
-
-
-            tab.addEventListener(
-                "click",
-                event => {
-
-                    event.preventDefault();
-
-
-                    const className =
-                        cleanText(
-                            tab.dataset.class ||
-                            tab.dataset.lessonClass ||
-                            tab.textContent
-                        );
-
-
-                    if (
-                        className
-                    ) {
-
-                        switchClass(
-                            className
-                        );
-
-                    }
+                    return;
 
                 }
-            );
 
-        }
-    );
+
+                button.dataset.initialized =
+                    "true";
+
+
+                button.addEventListener(
+                    "click",
+                    markLessonCompleted
+                );
+
+            }
+        );
 
 }
 
 
-/* ============================================================
+/* =========================================================
    RETRY BUTTON
-   ============================================================ */
+========================================================= */
 
-function setupRetryButton() {
+function initializeRetryButton() {
 
-    const button =
+    const retry =
         getElement(
             "retryLessons"
         );
 
 
+    if (!retry) {
+
+        return;
+
+    }
+
+
     if (
-        !button
+        retry.dataset.initialized ===
+        "true"
     ) {
 
         return;
@@ -2807,13 +1907,15 @@ function setupRetryButton() {
     }
 
 
-    button.addEventListener(
+    retry.dataset.initialized =
+        "true";
+
+
+    retry.addEventListener(
         "click",
-        event => {
+        function () {
 
-            event.preventDefault();
-
-            loadLessons();
+            fetchWeeklyLessons();
 
         }
     );
@@ -2821,67 +1923,168 @@ function setupRetryButton() {
 }
 
 
-/* ============================================================
-   CONNECTION EVENTS
-   ============================================================ */
+/* =========================================================
+   ERROR DISPLAY
+========================================================= */
 
-function setupConnectionEvents() {
+function renderFetchError(
+    message
+) {
 
-    window.addEventListener(
-        "online",
-        () => {
-
-            console.log(
-                "AFC Lessons: Connection restored."
-            );
-
-
-            /*
-             * Refresh lessons when the internet comes back.
-             */
-
-            loadLessons();
-
-        }
+    console.error(
+        "AFC Isiu — Lesson error:",
+        message
     );
 
 
-    window.addEventListener(
-        "offline",
-        () => {
+    const errorBox =
+        getElement(
+            "lessonsError"
+        );
 
-            console.log(
-                "AFC Lessons: Device is offline."
-            );
 
-        }
-    );
+    const errorMessage =
+        getElement(
+            "lessonsErrorMessage"
+        );
+
+
+    const lessonView =
+        getElement(
+            "lessonView"
+        );
+
+
+    if (lessonView) {
+
+        lessonView.hidden =
+            true;
+
+    }
+
+
+    if (errorMessage) {
+
+        errorMessage.textContent =
+            message ||
+            "Unable to load the lessons.";
+
+    }
+
+
+    if (errorBox) {
+
+        errorBox.hidden =
+            false;
+
+        errorBox.style.display =
+            "";
+
+        return;
+
+    }
+
+
+    /*
+     * If the HTML does not have an
+     * error box, put the error inside
+     * lessonContent instead.
+     */
+
+    const lessonContent =
+        getElement(
+            "lessonContent"
+        );
+
+
+    if (lessonContent) {
+
+        lessonContent.innerHTML = `
+
+            <div class="lesson-empty-state">
+
+                <i class="fa-solid fa-triangle-exclamation"></i>
+
+                <p>
+                    ${escapeHTML(
+                        message ||
+                        "Unable to load lessons."
+                    )}
+                </p>
+
+            </div>
+
+        `;
+
+    }
 
 }
 
 
-/* ============================================================
-   INITIALIZE
-   ============================================================ */
+/* =========================================================
+   INITIALIZATION
+========================================================= */
 
-function initializeLessons() {
+function initializeLessonsPage() {
 
-    setupClassTabs();
+    console.log(
+        "AFC Isiu — Initializing Lessons Page..."
+    );
 
-    setupFinishButtons();
 
-    setupRetryButton();
+    /*
+     * We need at least one of these
+     * elements to know that this is
+     * the lessons page.
+     */
 
-    setupConnectionEvents();
+    const lessonView =
+        getElement(
+            "lessonView"
+        );
 
-    loadLessons();
+
+    const lessonContent =
+        getElement(
+            "lessonContent"
+        );
+
+
+    const tabs =
+        document.querySelectorAll(
+            ".class-tab"
+        );
+
+
+    if (
+        !lessonView &&
+        !lessonContent &&
+        !tabs.length
+    ) {
+
+        console.warn(
+            "AFC Isiu — Lessons interface not found. lessons.js stopped."
+        );
+
+        return;
+
+    }
+
+
+    initializeLessonTabs();
+
+    initializeFinishButtons();
+
+    initializeRetryButton();
+
+    fetchWeeklyLessons();
 
 }
 
 
-/* ============================================================
+/* =========================================================
    DOM READY
-   ============================================================ */
+========================================================= */
 
 if (
     document.readyState ===
@@ -2890,80 +2093,80 @@ if (
 
     document.addEventListener(
         "DOMContentLoaded",
-        initializeLessons,
-        {
-            once:
-                true
-        }
+        initializeLessonsPage
     );
 
 }
 
 else {
 
-    initializeLessons();
+    initializeLessonsPage();
 
 }
 
 
-/* ============================================================
+/* =========================================================
    PUBLIC API
-   ============================================================ */
+========================================================= */
 
 window.AFCLessons = {
 
-    getLessons:
-        function () {
+    getLessons() {
 
-            return [
-                ...lessons
-            ];
+        return lessonsData;
 
-        },
+    },
 
 
-    getCurrentLesson:
-        function () {
+    getCurrentLesson() {
 
-            return findLesson(
-                selectedClass
+        return currentLesson;
+
+    },
+
+
+    switchClass(
+        className
+    ) {
+
+        const cleanClass =
+            cleanText(
+                className
             );
 
-        },
 
+        if (!cleanClass) {
 
-    getSelectedClass:
-        function () {
-
-            return selectedClass;
-
-        },
-
-
-    refresh:
-        function () {
-
-            return loadLessons();
-
-        },
-
-
-    markCompleted:
-        function () {
-
-            markLessonCompleted();
-
-        },
-
-
-    isOfflineAvailable:
-        function () {
-
-            return (
-                lessons.length >
-                0
-            );
+            return;
 
         }
 
+
+        selectedLessonClass =
+            cleanClass;
+
+
+        localStorage.setItem(
+            "selectedLessonClass",
+            selectedLessonClass
+        );
+
+
+        updateClassTabs(
+            selectedLessonClass
+        );
+
+
+        renderSelectedClass();
+
+    },
+
+
+    reload() {
+
+        return fetchWeeklyLessons();
+
+    }
+
 };
+</html>
