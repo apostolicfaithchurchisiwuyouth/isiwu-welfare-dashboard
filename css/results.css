@@ -1,0 +1,1448 @@
+/* ============================================================
+   AFC ISIU YOUTH PORTAL V2
+   FILE: results.css
+   PURPOSE: SLC RESULTS PAGE
+   ============================================================ */
+
+
+/* ============================================================
+   CONTAINER
+============================================================ */
+
+.results-container {
+
+    width: 100%;
+
+    max-width: 1160px;
+
+    margin: 0 auto;
+
+}
+
+
+/* ============================================================
+   HERO
+============================================================ */
+
+.results-hero {
+
+    display: flex;
+
+    align-items: flex-end;
+
+    justify-content: space-between;
+
+    gap: 24px;
+
+    margin-bottom: 24px;
+
+}
+
+
+.results-hero h1 {
+
+    margin: 6px 0 8px;
+
+    font-family:
+        "Bricolage Grotesque",
+        sans-serif;
+
+    font-size: clamp(
+        1.55rem,
+        3vw,
+        2.15rem
+    );
+
+    line-height: 1.1;
+
+}
+
+
+.results-hero p {
+
+    max-width: 600px;
+
+    margin: 0;
+
+    font-family:
+        "DM Sans",
+        sans-serif;
+
+    font-size: .78rem;
+
+    line-height: 1.55;
+
+    opacity: .7;
+
+}
+
+
+.eyebrow {
+
+    display: inline-block;
+
+    font-size: .61rem;
+
+    font-weight: 700;
+
+    letter-spacing: .12em;
+
+    text-transform: uppercase;
+
+    opacity: .58;
+
+}
+
+
+.results-member {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    padding: 10px 14px;
+
+    border-radius: 12px;
+
+    background: rgba(
+        74,
+        7,
+        84,
+        .07
+    );
+
+    font-size: .72rem;
+
+    font-weight: 700;
+
+    white-space: nowrap;
+
+}
+
+
+.results-member i {
+
+    font-size: .75rem;
+
+}
+
+
+/* ============================================================
+   MESSAGE
+============================================================ */
+
+.results-message {
+
+    display: none;
+
+    padding: 13px 16px;
+
+    margin-bottom: 20px;
+
+    border-radius: 12px;
+
+    background: rgba(
+        234,
+        88,
+        12,
+        .08
+    );
+
+    font-size: .72rem;
+
+}
+
+
+.results-message.show {
+
+    display: block;
+
+}
+
+
+/* ============================================================
+   LATEST RESULT
+============================================================ */
+
+.result-highlight {
+
+    padding: 24px;
+
+    margin-bottom: 22px;
+
+    border-radius: 18px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #4a0754,
+            #25022c
+        );
+
+    color: #ffffff;
+
+    box-shadow:
+        0 14px 35px rgba(
+            74,
+            7,
+            84,
+            .18
+        );
+
+}
+
+
+.result-highlight-label {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    margin-bottom: 22px;
+
+}
+
+
+.result-highlight-label .eyebrow {
+
+    color: #ffffff;
+
+    opacity: .65;
+
+}
+
+
+.result-highlight-label > span:last-child {
+
+    padding: 6px 10px;
+
+    border-radius: 999px;
+
+    background: rgba(
+        255,
+        255,
+        255,
+        .12
+    );
+
+    font-size: .66rem;
+
+    font-weight: 700;
+
+}
+
+
+.latest-score-row {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 24px;
+
+}
+
+
+.score-circle {
+
+    width: 108px;
+
+    height: 108px;
+
+    flex: 0 0 108px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: rgba(
+        255,
+        255,
+        255,
+        .1
+    );
+
+    border: 1px solid rgba(
+        255,
+        255,
+        255,
+        .16
+    );
+
+}
+
+
+.score-circle strong {
+
+    font-family:
+        "Bricolage Grotesque",
+        sans-serif;
+
+    font-size: 2rem;
+
+    line-height: 1;
+
+}
+
+
+.score-circle span {
+
+    margin-top: 5px;
+
+    font-size: .52rem;
+
+    font-weight: 700;
+
+    letter-spacing: .12em;
+
+    opacity: .6;
+
+}
+
+
+.latest-details {
+
+    flex: 1;
+
+}
+
+
+.latest-details h2 {
+
+    margin: 0 0 5px;
+
+    font-family:
+        "Bricolage Grotesque",
+        sans-serif;
+
+    font-size: 1.05rem;
+
+}
+
+
+.latest-details p {
+
+    margin: 0;
+
+    font-size: .68rem;
+
+    opacity: .6;
+
+}
+
+
+.latest-stats {
+
+    display: flex;
+
+    gap: 28px;
+
+    margin-top: 16px;
+
+}
+
+
+.latest-stats div {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 2px;
+
+}
+
+
+.latest-stats span {
+
+    font-size: .57rem;
+
+    opacity: .58;
+
+}
+
+
+.latest-stats strong {
+
+    font-size: .85rem;
+
+}
+
+
+.result-highlight .purple-btn {
+
+    margin-top: 22px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #ffffff,
+            #f4eef6
+        );
+
+    color: #4a0754;
+
+}
+
+
+/* ============================================================
+   GENERAL CARD
+============================================================ */
+
+.results-card {
+
+    padding: 22px;
+
+    margin-bottom: 22px;
+
+    border-radius: 17px;
+
+    background: #ffffff;
+
+    border: 1px solid #eeeeee;
+
+    box-shadow:
+        0 8px 25px rgba(
+            0,
+            0,
+            0,
+            .035
+        );
+
+}
+
+
+.results-card-header {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    margin-bottom: 20px;
+
+}
+
+
+.results-card-header h2 {
+
+    margin: 5px 0 0;
+
+    font-family:
+        "Bricolage Grotesque",
+        sans-serif;
+
+    font-size: 1.05rem;
+
+}
+
+
+.history-count {
+
+    padding: 6px 10px;
+
+    border-radius: 999px;
+
+    background: #f7f3f8;
+
+    color: #4a0754;
+
+    font-size: .62rem;
+
+    font-weight: 700;
+
+}
+
+
+/* ============================================================
+   HISTORY
+============================================================ */
+
+.history-list {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 10px;
+
+}
+
+
+.history-item {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 13px;
+
+    padding: 14px;
+
+    border-radius: 13px;
+
+    border: 1px solid #eeeeee;
+
+    background: #ffffff;
+
+    transition:
+        transform .2s ease,
+        box-shadow .2s ease;
+
+}
+
+
+.history-item:hover {
+
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 8px 20px rgba(
+            0,
+            0,
+            0,
+            .045
+        );
+
+}
+
+
+.history-number {
+
+    width: 31px;
+
+    height: 31px;
+
+    flex: 0 0 31px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 10px;
+
+    background: #f4edf5;
+
+    color: #4a0754;
+
+    font-size: .65rem;
+
+    font-weight: 700;
+
+}
+
+
+.history-main {
+
+    flex: 1;
+
+    min-width: 0;
+
+}
+
+
+.history-top {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    gap: 12px;
+
+    margin-bottom: 8px;
+
+}
+
+
+.history-top strong {
+
+    font-size: .76rem;
+
+}
+
+
+.history-top span {
+
+    font-size: .59rem;
+
+    opacity: .5;
+
+}
+
+
+.history-score {
+
+    display: flex;
+
+    gap: 24px;
+
+}
+
+
+.history-score div {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 5px;
+
+}
+
+
+.history-score span {
+
+    font-size: .57rem;
+
+    opacity: .55;
+
+}
+
+
+.history-score strong {
+
+    font-size: .65rem;
+
+}
+
+
+.review-history-btn {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    padding: 9px 12px;
+
+    border: 0;
+
+    border-radius: 9px;
+
+    background: #4a0754;
+
+    color: #ffffff;
+
+    font-family:
+        "DM Sans",
+        sans-serif;
+
+    font-size: .61rem;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+}
+
+
+.review-history-btn i {
+
+    font-size: .56rem;
+
+}
+
+
+/* ============================================================
+   REVIEW
+============================================================ */
+
+.review-card {
+
+    padding: 22px;
+
+    margin-bottom: 22px;
+
+    border-radius: 17px;
+
+    background: #ffffff;
+
+    border: 1px solid #eeeeee;
+
+}
+
+
+.review-header {
+
+    display: flex;
+
+    align-items: flex-start;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    margin-bottom: 20px;
+
+}
+
+
+.review-header h2 {
+
+    margin: 5px 0 5px;
+
+    font-family:
+        "Bricolage Grotesque",
+        sans-serif;
+
+    font-size: 1.1rem;
+
+}
+
+
+.review-header p {
+
+    margin: 0;
+
+    font-size: .67rem;
+
+    opacity: .6;
+
+}
+
+
+.close-review-btn {
+
+    width: 34px;
+
+    height: 34px;
+
+    border: 0;
+
+    border-radius: 10px;
+
+    background: #f5f5f5;
+
+    cursor: pointer;
+
+}
+
+
+.review-container {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 13px;
+
+}
+
+
+.review-question {
+
+    padding: 17px;
+
+    border-radius: 13px;
+
+    background: #fafafa;
+
+    border: 1px solid #eeeeee;
+
+}
+
+
+.review-question-top {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin-bottom: 10px;
+
+}
+
+
+.review-question-top > span {
+
+    font-size: .56rem;
+
+    font-weight: 700;
+
+    letter-spacing: .08em;
+
+    opacity: .5;
+
+}
+
+
+.review-correct {
+
+    color: #16a34a;
+
+    font-size: .6rem;
+
+}
+
+
+.review-wrong {
+
+    color: #dc2626;
+
+    font-size: .6rem;
+
+}
+
+
+.review-question h3 {
+
+    margin: 0 0 13px;
+
+    font-family:
+        "Bricolage Grotesque",
+        sans-serif;
+
+    font-size: .83rem;
+
+    line-height: 1.4;
+
+}
+
+
+.review-options {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 7px;
+
+}
+
+
+.review-option {
+
+    position: relative;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    padding: 10px;
+
+    border-radius: 9px;
+
+    border: 1px solid #e8e8e8;
+
+    background: #ffffff;
+
+}
+
+
+.review-option.correct {
+
+    border-color: #22c55e;
+
+    background: #ecfdf5;
+
+}
+
+
+.review-option.wrong {
+
+    border-color: #ef4444;
+
+    background: #fef2f2;
+
+}
+
+
+.review-option-letter {
+
+    width: 25px;
+
+    height: 25px;
+
+    flex: 0 0 25px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 7px;
+
+    background: #f2f2f2;
+
+    font-size: .6rem;
+
+    font-weight: 700;
+
+}
+
+
+.review-option-text {
+
+    flex: 1;
+
+    font-size: .67rem;
+
+    line-height: 1.4;
+
+}
+
+
+.review-badge {
+
+    font-size: .53rem;
+
+    font-weight: 700;
+
+}
+
+
+.correct-badge {
+
+    color: #16a34a;
+
+}
+
+
+.wrong-badge {
+
+    color: #dc2626;
+
+}
+
+
+.review-loading,
+.review-empty {
+
+    padding: 40px 20px;
+
+    text-align: center;
+
+}
+
+
+.review-loading {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 9px;
+
+    font-size: .7rem;
+
+}
+
+
+.review-empty i {
+
+    font-size: 1.5rem;
+
+    margin-bottom: 10px;
+
+    opacity: .4;
+
+}
+
+
+.review-empty h3 {
+
+    margin: 0 0 6px;
+
+    font-family:
+        "Bricolage Grotesque",
+        sans-serif;
+
+    font-size: .9rem;
+
+}
+
+
+.review-empty p {
+
+    margin: 0;
+
+    font-size: .67rem;
+
+    opacity: .6;
+
+}
+
+
+/* ============================================================
+   EMPTY
+============================================================ */
+
+.empty-results {
+
+    text-align: center;
+
+    padding: 45px 25px;
+
+}
+
+
+.empty-results-icon {
+
+    width: 54px;
+
+    height: 54px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    margin: 0 auto 15px;
+
+    border-radius: 16px;
+
+    background: #f4edf5;
+
+    color: #4a0754;
+
+}
+
+
+.empty-results h2 {
+
+    margin: 0 0 8px;
+
+    font-family:
+        "Bricolage Grotesque",
+        sans-serif;
+
+    font-size: 1rem;
+
+}
+
+
+.empty-results p {
+
+    max-width: 400px;
+
+    margin: 0 auto 20px;
+
+    font-size: .69rem;
+
+    line-height: 1.55;
+
+    opacity: .6;
+
+}
+
+
+/* ============================================================
+   BUTTON
+============================================================ */
+
+.purple-btn {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 9px;
+
+    min-height: 42px;
+
+    padding: 11px 17px;
+
+    border: 0;
+
+    border-radius: 11px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #4a0754,
+            #671070
+        );
+
+    color: #ffffff;
+
+    font-family:
+        "DM Sans",
+        sans-serif;
+
+    font-size: .7rem;
+
+    font-weight: 700;
+
+    text-decoration: none;
+
+    cursor: pointer;
+
+}
+
+
+.purple-btn i {
+
+    font-size: .6rem;
+
+}
+
+
+/* ============================================================
+   DARK MODE
+============================================================ */
+
+body.dark-mode .results-card,
+body.dark-mode .review-card {
+
+    background: #140b18;
+
+    border-color: rgba(
+        255,
+        255,
+        255,
+        .08
+    );
+
+}
+
+
+body.dark-mode .history-item {
+
+    background: #140b18;
+
+    border-color: rgba(
+        255,
+        255,
+        255,
+        .08
+    );
+
+}
+
+
+body.dark-mode .history-number {
+
+    background: rgba(
+        255,
+        255,
+        255,
+        .07
+    );
+
+}
+
+
+body.dark-mode .history-count {
+
+    background: rgba(
+        255,
+        255,
+        255,
+        .07
+    );
+
+    color: #ffffff;
+
+}
+
+
+body.dark-mode .review-question {
+
+    background: rgba(
+        255,
+        255,
+        255,
+        .025
+    );
+
+    border-color: rgba(
+        255,
+        255,
+        255,
+        .08
+    );
+
+}
+
+
+body.dark-mode .review-option {
+
+    background: #140b18;
+
+    border-color: rgba(
+        255,
+        255,
+        255,
+        .08
+    );
+
+}
+
+
+body.dark-mode .close-review-btn {
+
+    background: rgba(
+        255,
+        255,
+        255,
+        .08
+    );
+
+    color: #ffffff;
+
+}
+
+
+/* ============================================================
+   RESPONSIVE
+============================================================ */
+
+@media (
+    max-width: 768px
+) {
+
+    .results-container {
+
+        width: 100%;
+
+        padding-left: 0;
+
+        padding-right: 0;
+
+    }
+
+
+    .results-hero {
+
+        display: block;
+
+    }
+
+
+    .results-member {
+
+        display: inline-flex;
+
+        margin-top: 14px;
+
+    }
+
+
+    .result-highlight,
+    .results-card,
+    .review-card {
+
+        border-radius: 15px;
+
+        padding: 19px;
+
+    }
+
+
+    .latest-score-row {
+
+        align-items: flex-start;
+
+        gap: 17px;
+
+    }
+
+
+    .score-circle {
+
+        width: 88px;
+
+        height: 88px;
+
+        flex-basis: 88px;
+
+    }
+
+
+    .score-circle strong {
+
+        font-size: 1.6rem;
+
+    }
+
+
+    .latest-details h2 {
+
+        font-size: .92rem;
+
+    }
+
+
+    .latest-stats {
+
+        gap: 17px;
+
+    }
+
+
+    .history-item {
+
+        align-items: flex-start;
+
+        flex-wrap: wrap;
+
+    }
+
+
+    .history-main {
+
+        width: calc(
+            100% - 45px
+        );
+
+    }
+
+
+    .review-history-btn {
+
+        width: 100%;
+
+        justify-content: center;
+
+        margin-left: 44px;
+
+    }
+
+
+    .history-score {
+
+        gap: 13px;
+
+        flex-wrap: wrap;
+
+    }
+
+
+    .history-score div {
+
+        gap: 4px;
+
+    }
+
+
+    .review-question {
+
+        padding: 14px;
+
+    }
+
+
+    .review-option {
+
+        align-items: flex-start;
+
+    }
+
+
+    .review-badge {
+
+        margin-left: auto;
+
+        text-align: right;
+
+    }
+
+}
+
+
+@media (
+    max-width: 420px
+) {
+
+    .results-hero h1 {
+
+        font-size: 1.45rem;
+
+    }
+
+
+    .results-hero p {
+
+        font-size: .74rem;
+
+    }
+
+
+    .result-highlight {
+
+        padding: 17px;
+
+    }
+
+
+    .latest-score-row {
+
+        gap: 12px;
+
+    }
+
+
+    .score-circle {
+
+        width: 76px;
+
+        height: 76px;
+
+        flex-basis: 76px;
+
+    }
+
+
+    .score-circle strong {
+
+        font-size: 1.4rem;
+
+    }
+
+
+    .latest-stats {
+
+        gap: 12px;
+
+    }
+
+
+    .latest-stats span {
+
+        font-size: .52rem;
+
+    }
+
+
+    .latest-stats strong {
+
+        font-size: .78rem;
+
+    }
+
+
+    .history-item {
+
+        padding: 12px;
+
+    }
+
+}
