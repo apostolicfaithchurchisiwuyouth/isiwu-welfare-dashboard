@@ -15,7 +15,9 @@
 <title>Page Not Found | AFC Isiu Youth Portal</title>
 
 
-<!-- PWA -->
+<!-- =====================================================
+     PWA
+====================================================== -->
 
 <link
     rel="manifest"
@@ -24,11 +26,33 @@
 
 <meta
     name="theme-color"
-    content="#ea580c"
+    content="#0A0016"
+>
+
+<meta
+    name="mobile-web-app-capable"
+    content="yes"
+>
+
+<meta
+    name="apple-mobile-web-app-capable"
+    content="yes"
+>
+
+<meta
+    name="apple-mobile-web-app-status-bar-style"
+    content="default"
+>
+
+<meta
+    name="apple-mobile-web-app-title"
+    content="AFC Isiu"
 >
 
 
-<!-- ICONS -->
+<!-- =====================================================
+     ICON
+====================================================== -->
 
 <link
     rel="icon"
@@ -42,7 +66,9 @@
 >
 
 
-<!-- FONTS -->
+<!-- =====================================================
+     GOOGLE FONTS
+====================================================== -->
 
 <link
     rel="preconnect"
@@ -61,7 +87,9 @@
 >
 
 
-<!-- FONT AWESOME -->
+<!-- =====================================================
+     FONT AWESOME
+====================================================== -->
 
 <link
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
@@ -69,7 +97,9 @@
 >
 
 
-<!-- GLOBAL CSS -->
+<!-- =====================================================
+     GLOBAL CSS
+====================================================== -->
 
 <link
     rel="stylesheet"
@@ -82,37 +112,21 @@
 >
 
 
-<!-- 404 PAGE STYLE -->
+<!-- =====================================================
+     404 PAGE STYLES
+====================================================== -->
 
 <style>
 
-    body {
+    /* =================================================
+       404 PAGE
+    ================================================= */
 
-        min-height: 100vh;
+    .error-page {
 
-        margin: 0;
+        position: relative;
 
-        font-family:
-            "DM Sans",
-            sans-serif;
-
-        background:
-            radial-gradient(
-                circle at top right,
-                rgba(234, 88, 12, .12),
-                transparent 30%
-            ),
-            radial-gradient(
-                circle at bottom left,
-                rgba(74, 7, 84, .10),
-                transparent 35%
-            ),
-            var(--background);
-
-    }
-
-
-    .not-found-page {
+        width: 100%;
 
         min-height: 100vh;
 
@@ -123,85 +137,166 @@
         justify-content: center;
 
         padding:
-            24px 18px;
-
-    }
-
-
-    .not-found-card {
-
-        position: relative;
-
-        width: min(560px, 100%);
+            32px
+            20px;
 
         overflow: hidden;
 
-        padding:
-            52px 34px;
-
-        text-align: center;
-
         background:
-            rgba(255, 255, 255, .88);
 
-        border:
-            1px solid
-            rgba(255, 255, 255, .8);
+            radial-gradient(
+                circle at 20% 20%,
+                rgba(74, 7, 84, .12),
+                transparent 28%
+            ),
 
-        border-radius:
-            30px;
+            radial-gradient(
+                circle at 80% 80%,
+                rgba(234, 88, 12, .10),
+                transparent 30%
+            ),
 
-        box-shadow:
-            0 25px 70px
-            rgba(15, 23, 42, .12);
-
-        backdrop-filter:
-            blur(18px);
-
-        -webkit-backdrop-filter:
-            blur(18px);
+            linear-gradient(
+                145deg,
+                #f8f7fb,
+                #ffffff
+            );
 
     }
 
 
-    .not-found-card::before {
+    /* ================================================
+       BACKGROUND DECORATION
+    ================================================ */
+
+    .error-page::before {
 
         content: "";
 
         position: absolute;
 
-        width: 230px;
+        width: 420px;
 
-        height: 230px;
+        height: 420px;
 
-        top: -130px;
+        top: -220px;
 
-        right: -100px;
+        right: -160px;
 
         border-radius: 50%;
 
         background:
+
             radial-gradient(
                 circle,
-                rgba(234, 88, 12, .16),
-                transparent 70%
+                rgba(74, 7, 84, .12),
+                transparent 68%
             );
+
+        filter: blur(10px);
 
         pointer-events: none;
 
     }
 
 
-    .not-found-logo {
+    .error-page::after {
+
+        content: "";
+
+        position: absolute;
+
+        width: 360px;
+
+        height: 360px;
+
+        bottom: -180px;
+
+        left: -150px;
+
+        border-radius: 50%;
+
+        background:
+
+            radial-gradient(
+                circle,
+                rgba(234, 88, 12, .10),
+                transparent 70%
+            );
+
+        filter: blur(12px);
+
+        pointer-events: none;
+
+    }
+
+
+    /* ================================================
+       ERROR CARD
+    ================================================ */
+
+    .error-card {
 
         position: relative;
 
-        width: 78px;
+        z-index: 2;
 
-        height: 78px;
+        width: min(100%, 620px);
+
+        padding:
+            58px
+            45px
+            46px;
+
+        text-align: center;
+
+        border:
+
+            1px solid
+            rgba(255, 255, 255, .9);
+
+        border-radius: 32px;
+
+        background:
+            rgba(255, 255, 255, .78);
+
+        box-shadow:
+
+            0 25px 80px
+            rgba(15, 23, 42, .10),
+
+            inset
+            0 1px 0
+            rgba(255, 255, 255, .95);
+
+        backdrop-filter:
+            blur(22px);
+
+        -webkit-backdrop-filter:
+            blur(22px);
+
+        animation:
+            errorCardEnter
+            .65s
+            cubic-bezier(.2,.8,.2,1)
+            both;
+
+    }
+
+
+    /* ================================================
+       LOGO
+    ================================================ */
+
+    .error-logo {
+
+        width: 62px;
+
+        height: 62px;
 
         margin:
-            0 auto 26px;
+            0 auto
+            28px;
 
         display: flex;
 
@@ -209,32 +304,38 @@
 
         justify-content: center;
 
-        border-radius: 24px;
+        border-radius: 20px;
 
         background:
+
             linear-gradient(
                 135deg,
-                var(--primary),
-                #7a1688
+                #4a0754,
+                #6b0b78
             );
 
         box-shadow:
-            0 15px 35px
+
+            0 14px 35px
             rgba(74, 7, 84, .22);
 
     }
 
 
-    .not-found-logo img {
+    .error-logo img {
 
-        width: 56px;
+        width: 42px;
 
-        height: 56px;
+        height: 42px;
 
         object-fit: contain;
 
     }
 
+
+    /* ================================================
+       ERROR CODE
+    ================================================ */
 
     .error-code {
 
@@ -245,74 +346,142 @@
             sans-serif;
 
         font-size:
-            clamp(5rem, 18vw, 8rem);
+            clamp(
+                5.5rem,
+                18vw,
+                9rem
+            );
 
         font-weight: 800;
 
-        line-height: .9;
+        line-height: .82;
 
         letter-spacing:
-            -.06em;
+            -.07em;
+
+        color: #0A0016;
+
+        text-shadow:
+
+            0 12px 40px
+            rgba(10, 0, 22, .08);
+
+    }
+
+
+    /* ================================================
+       SMALL LABEL
+    ================================================ */
+
+    .error-label {
+
+        display: inline-flex;
+
+        align-items: center;
+
+        gap: 8px;
+
+        margin-top: 28px;
+
+        padding:
+            8px
+            14px;
+
+        border-radius: 999px;
 
         background:
-            linear-gradient(
-                135deg,
-                var(--primary),
-                #ea580c
+            rgba(234, 88, 12, .09);
+
+        color: #c2410c;
+
+        font-family:
+            "DM Sans",
+            sans-serif;
+
+        font-size: .7rem;
+
+        font-weight: 800;
+
+        letter-spacing: .08em;
+
+        text-transform: uppercase;
+
+    }
+
+
+    .error-label i {
+
+        font-size: .75rem;
+
+    }
+
+
+    /* ================================================
+       TITLE
+    ================================================ */
+
+    .error-title {
+
+        margin:
+            22px
+            0
+            0;
+
+        color: #0F172A;
+
+        font-family:
+            "Bricolage Grotesque",
+            sans-serif;
+
+        font-size:
+            clamp(
+                1.6rem,
+                4vw,
+                2.15rem
             );
 
-        -webkit-background-clip:
-            text;
+        font-weight: 800;
 
-        background-clip:
-            text;
-
-        -webkit-text-fill-color:
-            transparent;
+        line-height: 1.15;
 
     }
 
 
-    .not-found-card h1 {
+    /* ================================================
+       DESCRIPTION
+    ================================================ */
+
+    .error-description {
+
+        max-width: 440px;
 
         margin:
-            24px 0 10px;
+            14px
+            auto
+            0;
 
-        color:
-            var(--text);
+        color: #64748b;
 
-        font-size:
-            1.65rem;
+        font-family:
+            "DM Sans",
+            sans-serif;
 
-        font-weight:
-            800;
+        font-size: .88rem;
 
-    }
-
-
-    .not-found-card p {
-
-        max-width:
-            420px;
-
-        margin:
-            0 auto;
-
-        color:
-            var(--text-light);
-
-        font-size:
-            .9rem;
-
-        line-height:
-            1.65;
+        line-height: 1.7;
 
     }
 
 
-    .not-found-actions {
+    /* ================================================
+       BUTTONS
+    ================================================ */
+
+    .error-actions {
 
         display: flex;
+
+        align-items: center;
 
         justify-content: center;
 
@@ -320,12 +489,12 @@
 
         gap: 12px;
 
-        margin-top: 30px;
+        margin-top: 32px;
 
     }
 
 
-    .not-found-btn {
+    .error-btn {
 
         min-height: 48px;
 
@@ -338,92 +507,291 @@
         gap: 9px;
 
         padding:
-            0 20px;
+            0
+            20px;
 
-        border-radius:
-            14px;
+        border-radius: 15px;
 
         font-family:
             "DM Sans",
             sans-serif;
 
-        font-size:
-            .84rem;
+        font-size: .78rem;
 
-        font-weight:
-            700;
+        font-weight: 800;
 
-        text-decoration:
-            none;
+        text-decoration: none;
+
+        cursor: pointer;
 
         transition:
+
             transform .25s ease,
-            box-shadow .25s ease;
+
+            box-shadow .25s ease,
+
+            background .25s ease;
 
     }
 
 
-    .not-found-btn:hover {
+    .error-btn-primary {
+
+        border: 0;
+
+        background:
+
+            linear-gradient(
+                135deg,
+                #4a0754,
+                #6b0b78
+            );
+
+        color: #ffffff;
+
+        box-shadow:
+
+            0 12px 28px
+            rgba(74, 7, 84, .22);
+
+    }
+
+
+    .error-btn-primary:hover {
 
         transform:
             translateY(-2px);
 
+        box-shadow:
+
+            0 17px 34px
+            rgba(74, 7, 84, .30);
+
     }
 
 
-    .not-found-btn.primary {
+    .error-btn-secondary {
+
+        border:
+
+            1px solid
+            rgba(15, 23, 42, .09);
 
         background:
-            linear-gradient(
-                135deg,
-                #ea580c,
-                #fb923c
-            );
+            rgba(255, 255, 255, .75);
 
-        color:
+        color: #334155;
+
+    }
+
+
+    .error-btn-secondary:hover {
+
+        transform:
+            translateY(-2px);
+
+        background:
             #ffffff;
 
         box-shadow:
-            0 12px 28px
-            rgba(234, 88, 12, .25);
+
+            0 12px 25px
+            rgba(15, 23, 42, .08);
 
     }
 
 
-    .not-found-btn.secondary {
+    /* ================================================
+       PORTAL NAME
+    ================================================ */
+
+    .error-footer {
+
+        margin-top: 34px;
+
+        padding-top: 20px;
+
+        border-top:
+
+            1px solid
+            rgba(15, 23, 42, .06);
+
+        color: #94a3b8;
+
+        font-family:
+            "DM Sans",
+            sans-serif;
+
+        font-size: .68rem;
+
+        line-height: 1.5;
+
+    }
+
+
+    .error-footer strong {
+
+        color: #4a0754;
+
+        font-weight: 800;
+
+    }
+
+
+    /* ================================================
+       ANIMATION
+    ================================================ */
+
+    @keyframes errorCardEnter {
+
+        from {
+
+            opacity: 0;
+
+            transform:
+                translateY(18px)
+                scale(.97);
+
+        }
+
+
+        to {
+
+            opacity: 1;
+
+            transform:
+                translateY(0)
+                scale(1);
+
+        }
+
+    }
+
+
+    /* ================================================
+       DARK THEME
+    ================================================ */
+
+    html[data-theme="dark"]
+    .error-page {
 
         background:
-            rgba(74, 7, 84, .07);
 
-        color:
-            var(--primary);
+            radial-gradient(
+                circle at 20% 20%,
+                rgba(74, 7, 84, .25),
+                transparent 30%
+            ),
 
-    }
+            radial-gradient(
+                circle at 80% 80%,
+                rgba(234, 88, 12, .12),
+                transparent 30%
+            ),
 
-
-    .not-found-footer {
-
-        margin-top:
-            30px;
-
-        color:
-            var(--text-light);
-
-        font-size:
-            .68rem;
-
-        opacity:
-            .75;
+            linear-gradient(
+                145deg,
+                #0A0016,
+                #13001d
+            );
 
     }
 
 
-    @media (max-width: 520px) {
+    html[data-theme="dark"]
+    .error-card {
 
-        .not-found-card {
+        background:
+            rgba(24, 15, 31, .82);
+
+        border-color:
+            rgba(255, 255, 255, .08);
+
+        box-shadow:
+
+            0 25px 80px
+            rgba(0, 0, 0, .35);
+
+    }
+
+
+    html[data-theme="dark"]
+    .error-code {
+
+        color: #ffffff;
+
+    }
+
+
+    html[data-theme="dark"]
+    .error-title {
+
+        color: #ffffff;
+
+    }
+
+
+    html[data-theme="dark"]
+    .error-description {
+
+        color: #b6b0bd;
+
+    }
+
+
+    html[data-theme="dark"]
+    .error-btn-secondary {
+
+        color: #e2e8f0;
+
+        border-color:
+            rgba(255, 255, 255, .09);
+
+        background:
+            rgba(255, 255, 255, .05);
+
+    }
+
+
+    html[data-theme="dark"]
+    .error-btn-secondary:hover {
+
+        background:
+            rgba(255, 255, 255, .09);
+
+    }
+
+
+    html[data-theme="dark"]
+    .error-footer {
+
+        border-color:
+            rgba(255, 255, 255, .07);
+
+    }
+
+
+    /* ================================================
+       MOBILE
+    ================================================ */
+
+    @media (max-width: 600px) {
+
+        .error-page {
 
             padding:
-                42px 22px;
+                20px
+                15px;
+
+        }
+
+
+        .error-card {
+
+            padding:
+                44px
+                22px
+                32px;
 
             border-radius:
                 25px;
@@ -431,53 +799,100 @@
         }
 
 
-        .not-found-card h1 {
+        .error-logo {
 
-            font-size:
-                1.4rem;
+            width: 56px;
+
+            height: 56px;
+
+            margin-bottom:
+                24px;
+
+            border-radius:
+                18px;
 
         }
 
 
-        .not-found-actions {
+        .error-logo img {
+
+            width: 38px;
+
+            height: 38px;
+
+        }
+
+
+        .error-code {
+
+            font-size:
+                clamp(
+                    5rem,
+                    28vw,
+                    7rem
+                );
+
+        }
+
+
+        .error-title {
+
+            font-size:
+                1.55rem;
+
+        }
+
+
+        .error-description {
+
+            font-size:
+                .8rem;
+
+            line-height:
+                1.65;
+
+        }
+
+
+        .error-actions {
 
             flex-direction:
                 column;
 
+            width: 100%;
+
         }
 
 
-        .not-found-btn {
+        .error-btn {
 
-            width:
-                100%;
+            width: 100%;
 
         }
 
     }
 
 
-    [data-theme="dark"] body {
+    /* ================================================
+       REDUCED MOTION
+    ================================================ */
 
-        background:
-            radial-gradient(
-                circle at top right,
-                rgba(234, 88, 12, .12),
-                transparent 30%
-            ),
-            #101114;
+    @media (prefers-reduced-motion: reduce) {
 
-    }
+        .error-card {
+
+            animation:
+                none;
+
+        }
 
 
-    [data-theme="dark"]
-    .not-found-card {
+        .error-btn {
 
-        background:
-            rgba(24, 25, 29, .92);
+            transition:
+                none;
 
-        border-color:
-            rgba(255, 255, 255, .08);
+        }
 
     }
 
@@ -489,12 +904,24 @@
 <body>
 
  
-<main class="not-found-page">
+<!-- =====================================================
+     404 ERROR PAGE
+====================================================== -->
 
-    <section class="not-found-card">
+<main class="error-page">
 
 
-        <div class="not-found-logo">
+    <section
+        class="error-card"
+        aria-labelledby="errorTitle"
+    >
+
+
+        <!-- =================================================
+             PORTAL LOGO
+        ================================================== -->
+
+        <div class="error-logo">
 
             <img
                 src="/images/logo.png"
@@ -504,69 +931,233 @@
         </div>
 
 
+        <!-- =================================================
+             ERROR CODE
+        ================================================== -->
+
         <div
             class="error-code"
-            aria-label="Error 404"
+            aria-label="404"
         >
             404
         </div>
 
 
-        <h1>
+        <!-- =================================================
+             LABEL
+        ================================================== -->
+
+        <div class="error-label">
+
+            <i
+                class="fa-solid fa-compass"
+                aria-hidden="true"
+            ></i>
+
             Page Not Found
+
+        </div>
+
+
+        <!-- =================================================
+             MESSAGE
+        ================================================== -->
+
+        <h1
+            class="error-title"
+            id="errorTitle"
+        >
+            This page is not available yet.
         </h1>
 
 
-        <p>
-            Sorry, the page you are looking for does not
-            exist, may have been moved, or is still being
-            prepared.
+        <p class="error-description">
+
+            The page you are trying to visit may not have
+            been created yet, may have been moved, or the
+            link may be incorrect.
+
+            You can safely return to the AFC Isiu Youth
+            Portal dashboard and continue exploring.
+
         </p>
 
 
-        <div class="not-found-actions">
+        <!-- =================================================
+             ACTIONS
+        ================================================== -->
+
+        <div class="error-actions">
 
 
             <a
                 href="/"
-                class="not-found-btn primary"
+                class="
+                    error-btn
+                    error-btn-primary
+                "
             >
 
-                <i class="fa-solid fa-house"></i>
+                <i
+                    class="fa-solid fa-house"
+                    aria-hidden="true"
+                ></i>
 
                 Back to Dashboard
 
             </a>
 
 
-            <a
-                href="/pages/lessons"
-                class="not-found-btn secondary"
+            <button
+                type="button"
+                class="
+                    error-btn
+                    error-btn-secondary
+                "
+                id="goBackButton"
             >
 
-                <i class="fa-solid fa-book-open"></i>
+                <i
+                    class="fa-solid fa-arrow-left"
+                    aria-hidden="true"
+                ></i>
 
-                View Lessons
+                Go Back
 
-            </a>
+            </button>
 
 
         </div>
 
 
-        <div class="not-found-footer">
+        <!-- =================================================
+             FOOTER
+        ================================================== -->
 
-            AFC Isiu Youth Portal
+        <div class="error-footer">
+
+            <strong>
+                AFC Isiu Youth Portal
+            </strong>
+
+            <br>
+
+            Building young people for Christ.
 
         </div>
 
 
     </section>
 
+
 </main>
 
 
-<script src="/js/main.js"></script>
+<!-- =====================================================
+     PAGE SCRIPT
+====================================================== -->
+
+<script>
+
+    "use strict";
+
+
+    /* ================================================
+       APPLY SAVED THEME IMMEDIATELY
+    ================================================ */
+
+    (function () {
+
+        const savedTheme =
+            localStorage.getItem(
+                "afcTheme"
+            );
+
+
+        if (
+            savedTheme === "dark" ||
+            savedTheme === "light"
+        ) {
+
+            document.documentElement
+                .setAttribute(
+                    "data-theme",
+                    savedTheme
+                );
+
+            return;
+
+        }
+
+
+        const prefersDark =
+
+            window.matchMedia &&
+
+            window.matchMedia(
+                "(prefers-color-scheme: dark)"
+            ).matches;
+
+
+        document.documentElement
+            .setAttribute(
+
+                "data-theme",
+
+                prefersDark
+                    ? "dark"
+                    : "light"
+
+            );
+
+    })();
+
+
+    /* ================================================
+       SAFE BACK BUTTON
+    ================================================ */
+
+    const goBackButton =
+        document.getElementById(
+            "goBackButton"
+        );
+
+
+    if (goBackButton) {
+
+        goBackButton.addEventListener(
+            "click",
+            () => {
+
+                /*
+                 * If there is a useful history entry,
+                 * return to the previous page.
+                 */
+
+                if (
+                    window.history.length > 1
+                ) {
+
+                    window.history.back();
+
+                } else {
+
+                    /*
+                     * Direct visitors should always
+                     * have somewhere safe to go.
+                     */
+
+                    window.location.href =
+                        "/";
+
+                }
+
+            }
+        );
+
+    }
+
+</script>
  
 
 </body>
