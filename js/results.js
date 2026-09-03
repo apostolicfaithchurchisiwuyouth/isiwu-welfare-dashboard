@@ -1,71 +1,74 @@
-/**
- * ============================================================
- * AFC ISIU YOUTH PORTAL V2
- * FILE: results.js
- * PURPOSE: SLC RESULTS + QUIZ HISTORY CONTROLLER
- * ============================================================
- *
- * IMPORTANT:
- *
- * This page is responsible for HISTORY.
- *
- * It does NOT decide whether the current SLC is completed.
- *
- * The quiz page/backend handle current completion.
- *
- * Results page simply displays all completed quizzes belonging
- * to the requested member ID.
- *
- * ============================================================
- */
+/* ============================================================
+   AFC ISIU YOUTH PORTAL V2
+   FILE: results.js
+   PURPOSE: SLC RESULTS + QUIZ HISTORY CONTROLLER
+   ============================================================
+
+   IMPORTANT:
+
+   - URL memberId has highest priority.
+   - Current session memberId is second.
+   - Saved memberId is third.
+   - Results are ALWAYS filtered by the exact member ID.
+   - Quiz history contains ALL completed lessons for that member.
+   - A result from an old lesson must never be treated as the
+     current lesson's completion.
+   - Answer review is loaded using memberId + lessonNo.
+   ============================================================ */
 
 "use strict";
 
 
 /* ============================================================
    API
-   ============================================================ */
+============================================================ */
 
 const RESULTS_API =
-    "https://script.google.com/macros/s/AKfycbw1mVwpgAcIOSNbpgzy52TFyozEGMtWWwVWUDFaofGNzpsguBIaKR4q1dXVtgVHO2xZ1w/exec";
+    "https://script.google.com/macros/s/AKfycbw1mVwpgAcIOSNbpgzy52TFyozEGMtWWwVWUDFaofGNpzsguBIaKR4q1dXVtgVHO2xZ1w/exec";
 
 
 /* ============================================================
-   SESSION KEYS
-   ============================================================ */
+   STORAGE KEYS
+============================================================ */
 
 const RESULTS_MEMBER_KEY =
     "afc_isiu_slc_member_v1";
 
-
-const RESULTS_SLC_SESSION_KEY =
+const RESULTS_SESSION_KEY =
     "afc_isiu_slc_quiz_session_v1";
 
 
 /* ============================================================
    STATE
-   ============================================================ */
+============================================================ */
 
-let memberId =
-    "";
+let memberId = "";
 
-let memberName =
-    "";
+let memberName = "";
 
-let historyData =
-    [];
+let historyData = [];
 
-let currentReview =
-    null;
+let selectedReviewLesson = "";
+
+let queryLessonNo = "";
 
 
 /* ============================================================
    DOM READY
-   ============================================================ */
+============================================================ */
 
 document.addEventListener(
     "DOMContentLoaded",
     async function () {
+
+        if (typeof AOS !== "undefined") {
+
+            AOS.init({
+                duration: 650,
+                once: true
+            });
+
+        }
 
         setupResultsListeners();
 
@@ -77,55 +80,37 @@ document.addEventListener(
 
 /* ============================================================
    DOM HELPERS
-   ============================================================ */
+============================================================ */
 
-function resultElement(
-    id
-) {
+function resultElement(id) {
 
-    return document.getElementById(
-        id
-    );
+    return document.getElementById(id);
 
 }
 
 
-function showResultElement(
-    id
-) {
+function showResultElement(id) {
 
     const element =
-        resultElement(
-            id
-        );
-
+        resultElement(id);
 
     if (element) {
 
-        element.classList.remove(
-            "hidden"
-        );
+        element.classList.remove("hidden");
 
     }
 
 }
 
 
-function hideResultElement(
-    id
-) {
+function hideResultElement(id) {
 
     const element =
-        resultElement(
-            id
-        );
-
+        resultElement(id);
 
     if (element) {
 
-        element.classList.add(
-            "hidden"
-        );
+        element.classList.add("hidden");
 
     }
 
@@ -134,57 +119,24 @@ function hideResultElement(
 
 /* ============================================================
    SAFE HTML
-   ============================================================ */
+============================================================ */
 
-function escapeResultHTML(
-    value
-) {
+function escapeResultHTML(value) {
 
-    return String(
-        value === null ||
-        value === undefined
-            ? ""
-            : value
-    )
-        .replace(
-            /&/g,
-            "&amp;"
-        )
-        .replace(
-            /</g,
-            "&lt;"
-        )
-        .replace(
-            />/g,
-            "&gt;"
-        )
-        .replace(
-            /"/g,
-            "&quot;"
-        )
-        .replace(
-            /'/g,
-            "&#039;"
-        );
+    return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
 
 }
 
 
 /* ============================================================
    IDENTIFY MEMBER
-   ============================================================ */
+============================================================ */
 
-
-/**
- * Priority:
- *
- * 1. URL memberId
- * 2. Active SLC session
- * 3. Saved results member
- *
- * The URL is intentionally FIRST because a quiz submission
- * explicitly passes the selected participant's member ID.
- */
 async function identifyMember() {
 
     const params =
@@ -193,146 +145,58 @@ async function identifyMember() {
         );
 
 
-    const queryMemberId =
+    /*
+     * Query lesson is only used to identify which
+     * result should be highlighted.
+     */
+
+    queryLessonNo =
         String(
-            params.get(
-                "memberId"
-            ) ||
-            ""
+            params.get("lessonNo") || ""
         ).trim();
 
 
-    const queryLessonNo =
+    /*
+     * ========================================================
+     * PRIORITY 1 — URL MEMBER ID
+     * ========================================================
+     */
+
+    memberId =
         String(
-            params.get(
-                "lessonNo"
-            ) ||
-            ""
+            params.get("memberId") || ""
         ).trim();
 
 
-    /* ========================================================
-       1. URL MEMBER ID
-       ======================================================== */
+    /*
+     * ========================================================
+     * PRIORITY 2 — ACTIVE SLC SESSION
+     * ========================================================
+     */
 
-    if (
-        queryMemberId
-    ) {
-
-        memberId =
-            queryMemberId;
-
-
-        /*
-         * Store the exact member that the results page
-         * was opened for.
-         */
-
-        const sessionName =
-            getSessionMemberName();
-
-
-        if (
-            sessionName
-        ) {
-
-            memberName =
-                sessionName;
-
-        }
-
-
-        saveResultsMember();
-
-    }
-
-
-    /* ========================================================
-       2. ACTIVE SLC SESSION
-       ======================================================== */
-
-    if (
-        !memberId
-    ) {
+    if (!memberId) {
 
         try {
 
             const raw =
                 sessionStorage.getItem(
-                    RESULTS_SLC_SESSION_KEY
+                    RESULTS_SESSION_KEY
                 );
 
-
-            if (
-                raw
-            ) {
-
-                const session =
-                    JSON.parse(
-                        raw
-                    );
-
-
-                if (
-                    session &&
-                    session.memberId
-                ) {
-
-                    memberId =
-                        String(
-                            session.memberId
-                        ).trim();
-
-
-                    memberName =
-                        String(
-                            session.memberName ||
-                            ""
-                        ).trim();
-
-                }
-
-            }
-
-        }
-
-        catch (error) {
-
-            console.warn(
-                "Unable to read SLC session.",
-                error
-            );
-
-        }
-
-    }
-
-
-    /* ========================================================
-       3. SAVED RESULTS MEMBER
-       ======================================================== */
-
-    if (
-        !memberId
-    ) {
-
-        try {
-
-            const saved =
-                localStorage.getItem(
-                    RESULTS_MEMBER_KEY
-                );
-
-
-            if (
-                saved
-            ) {
+            if (raw) {
 
                 const parsed =
-                    JSON.parse(
-                        saved
-                    );
+                    JSON.parse(raw);
 
+                const savedLesson =
+                    String(
+                        parsed?.lessonNo || ""
+                    ).trim();
+
+                /*
+                 * Only restore a session that actually
+                 * contains a member ID.
+                 */
 
                 if (
                     parsed &&
@@ -343,7 +207,6 @@ async function identifyMember() {
                         String(
                             parsed.memberId
                         ).trim();
-
 
                     memberName =
                         String(
@@ -356,11 +219,10 @@ async function identifyMember() {
             }
 
         }
-
         catch (error) {
 
             console.warn(
-                "Unable to read saved results member.",
+                "Unable to read SLC session.",
                 error
             );
 
@@ -369,33 +231,82 @@ async function identifyMember() {
     }
 
 
-    /* ========================================================
-       NO MEMBER
-       ======================================================== */
+    /*
+     * ========================================================
+     * PRIORITY 3 — SAVED LOCAL MEMBER
+     * ========================================================
+     */
 
-    if (
-        !memberId
-    ) {
+    if (!memberId) {
+
+        try {
+
+            const raw =
+                localStorage.getItem(
+                    RESULTS_MEMBER_KEY
+                );
+
+            if (raw) {
+
+                const parsed =
+                    JSON.parse(raw);
+
+                if (
+                    parsed &&
+                    parsed.memberId
+                ) {
+
+                    memberId =
+                        String(
+                            parsed.memberId
+                        ).trim();
+
+                    memberName =
+                        String(
+                            parsed.memberName ||
+                            ""
+                        ).trim();
+
+                }
+
+            }
+
+        }
+        catch (error) {
+
+            console.warn(
+                "Unable to read saved member.",
+                error
+            );
+
+        }
+
+    }
+
+
+    /*
+     * ========================================================
+     * NO MEMBER
+     * ========================================================
+     */
+
+    if (!memberId) {
 
         showResultsMessage(
             "Please complete an SLC quiz or select your participant first."
         );
 
-
         hideResultElement(
             "latestResult"
         );
-
 
         hideResultElement(
             "reviewSection"
         );
 
-
         showResultElement(
             "emptyResults"
         );
-
 
         return;
 
@@ -404,75 +315,14 @@ async function identifyMember() {
 
     updateMemberDisplay();
 
-
-    saveResultsMember();
-
-
-    await loadQuizHistory(
-        queryLessonNo
-    );
-
-}
-
-
-/* ============================================================
-   GET MEMBER NAME FROM SLC SESSION
-   ============================================================ */
-
-function getSessionMemberName() {
-
-    try {
-
-        const raw =
-            sessionStorage.getItem(
-                RESULTS_SLC_SESSION_KEY
-            );
-
-
-        if (!raw) {
-
-            return "";
-
-        }
-
-
-        const session =
-            JSON.parse(
-                raw
-            );
-
-
-        if (
-            session &&
-            session.memberName
-        ) {
-
-            return String(
-                session.memberName
-            ).trim();
-
-        }
-
-    }
-
-    catch (error) {
-
-        console.warn(
-            "Unable to read session member name.",
-            error
-        );
-
-    }
-
-
-    return "";
+    await loadQuizHistory();
 
 }
 
 
 /* ============================================================
    MEMBER DISPLAY
-   ============================================================ */
+============================================================ */
 
 function updateMemberDisplay() {
 
@@ -481,13 +331,9 @@ function updateMemberDisplay() {
             "resultsMember"
         );
 
-
     if (!element) {
-
         return;
-
     }
-
 
     element.innerHTML = `
 
@@ -507,11 +353,9 @@ function updateMemberDisplay() {
 
 /* ============================================================
    LOAD QUIZ HISTORY
-   ============================================================ */
+============================================================ */
 
-async function loadQuizHistory(
-    submittedLesson
-) {
+async function loadQuizHistory() {
 
     showResultsMessage(
         "Loading your quiz results..."
@@ -522,19 +366,11 @@ async function loadQuizHistory(
 
         const response =
             await fetch(
-
-                `${RESULTS_API}` +
-                `?action=getMemberQuizHistory` +
-                `&memberId=${encodeURIComponent(
-                    memberId
-                )}`
-
+                `${RESULTS_API}?action=getMemberQuizHistory&memberId=${encodeURIComponent(memberId)}`
             );
 
 
-        if (
-            !response.ok
-        ) {
+        if (!response.ok) {
 
             throw new Error(
                 `HTTP ${response.status}`
@@ -562,33 +398,19 @@ async function loadQuizHistory(
                 "Unable to load your results."
             );
 
-
             return;
 
         }
 
-
-        /*
-         * IMPORTANT:
-         *
-         * The backend returns the member name belonging
-         * to the requested member ID.
-         *
-         * Never substitute another member's name.
-         */
 
         if (
             data.memberName
         ) {
 
             memberName =
-                String(
-                    data.memberName
-                ).trim();
-
+                data.memberName;
 
             updateMemberDisplay();
-
 
             saveResultsMember();
 
@@ -603,45 +425,19 @@ async function loadQuizHistory(
                 : [];
 
 
-        /*
-         * The backend also provides the actual number of
-         * completed quizzes.
-         */
-
-        updateQuizCount(
-            Number(
-                data.quizCount
-            ) || historyData.length
-        );
-
-
         hideResultsMessage();
-
 
         renderHistory();
 
-
-        /*
-         * If this page was opened immediately after submitting
-         * a quiz, try to display that exact submitted lesson
-         * as the latest/current result.
-         *
-         * This is still based on THIS MEMBER'S history.
-         */
-
-        renderLatestResult(
-            submittedLesson
-        );
+        renderLatestResult();
 
     }
-
     catch (error) {
 
         console.error(
             "loadQuizHistory error:",
             error
         );
-
 
         showResultsMessage(
             "Unable to load your results. Please check your connection and try again."
@@ -653,64 +449,19 @@ async function loadQuizHistory(
 
 
 /* ============================================================
-   UPDATE QUIZ COUNT
-   ============================================================ */
-
-function updateQuizCount(
-    count
-) {
-
-    const element =
-        resultElement(
-            "historyCount"
-        );
-
-
-    if (!element) {
-
-        return;
-
-    }
-
-
-    const safeCount =
-        Number(
-            count
-        ) || 0;
-
-
-    element.textContent =
-
-        `${safeCount} ${
-            safeCount === 1
-                ? "quiz"
-                : "quizzes"
-        }`;
-
-}
-
-
-/* ============================================================
    SAVE RESULTS MEMBER
-   ============================================================ */
+============================================================ */
 
 function saveResultsMember() {
 
-    if (
-        !memberId
-    ) {
-
+    if (!memberId) {
         return;
-
     }
-
 
     try {
 
         localStorage.setItem(
-
             RESULTS_MEMBER_KEY,
-
             JSON.stringify({
 
                 memberId:
@@ -720,11 +471,9 @@ function saveResultsMember() {
                     memberName
 
             })
-
         );
 
     }
-
     catch (error) {
 
         console.warn(
@@ -739,7 +488,7 @@ function saveResultsMember() {
 
 /* ============================================================
    RENDER HISTORY
-   ============================================================ */
+============================================================ */
 
 function renderHistory() {
 
@@ -748,31 +497,40 @@ function renderHistory() {
             "historyList"
         );
 
+    const count =
+        resultElement(
+            "historyCount"
+        );
 
     if (!list) {
-
         return;
-
     }
 
 
-    updateQuizCount(
-        historyData.length
-    );
+    if (count) {
+
+        const quizCount =
+            historyData.length;
+
+        count.textContent =
+            `${quizCount} ${
+                quizCount === 1
+                    ? "quiz"
+                    : "quizzes"
+            }`;
+
+    }
 
 
     if (
         !historyData.length
     ) {
 
-        list.innerHTML =
-            "";
-
+        list.innerHTML = "";
 
         showResultElement(
             "emptyResults"
         );
-
 
         return;
 
@@ -785,273 +543,177 @@ function renderHistory() {
 
 
     list.innerHTML =
-
         historyData
             .map(
-
                 function (
-                    item,
+                    result,
                     index
                 ) {
 
-                    const score =
-                        item.score ??
-                        0;
+                    const lesson =
+                        String(
+                            result.lessonNo ??
+                            result.lesson ??
+                            ""
+                        ).trim();
 
+                    const score =
+                        escapeResultHTML(
+                            result.score ??
+                            "-"
+                        );
 
                     const points =
-                        item.pointsEarned ??
-                        0;
-
-
-                    const total =
-                        item.totalPoints ??
-                        0;
-
+                        escapeResultHTML(
+                            result.pointsEarned ??
+                            result.points ??
+                            "0"
+                        );
 
                     const date =
                         formatDate(
-                            item.timestamp
+                            result.timestamp ??
+                            result.date ??
+                            result.createdAt
                         );
-
-
-                    const percentage =
-                        Number(
-                            total
-                        ) > 0
-
-                            ? Math.round(
-
-                                (
-                                    Number(
-                                        points
-                                    ) /
-                                    Number(
-                                        total
-                                    )
-                                ) *
-                                100
-
-                            )
-
-                            : 0;
 
 
                     return `
 
-                        <article
+                        <div
                             class="history-item"
+                            data-lesson="${escapeResultHTML(lesson)}"
                         >
 
-                            <div
-                                class="history-number"
-                            >
+                            <div class="history-number">
                                 ${index + 1}
                             </div>
 
+                            <div class="history-main">
 
-                            <div
-                                class="history-main"
-                            >
-
-                                <div
-                                    class="history-top"
-                                >
+                                <div class="history-top">
 
                                     <strong>
-                                        Lesson
-                                        ${escapeResultHTML(
-                                            item.lessonNo
-                                        )}
+                                        Lesson ${escapeResultHTML(lesson)}
                                     </strong>
 
-
                                     <span>
-                                        ${escapeResultHTML(
-                                            date
-                                        )}
+                                        ${escapeResultHTML(date)}
                                     </span>
 
                                 </div>
 
+                                <div class="history-score">
 
-                                <div
-                                    class="history-score"
-                                >
+                                    <span>
+                                        Score: ${score}
+                                    </span>
 
-                                    <div>
-
-                                        <span>
-                                            Score
-                                        </span>
-
-                                        <strong>
-                                            ${escapeResultHTML(
-                                                score
-                                            )}
-                                        </strong>
-
-                                    </div>
-
-
-                                    <div>
-
-                                        <span>
-                                            Points
-                                        </span>
-
-                                        <strong>
-                                            ${escapeResultHTML(
-                                                points
-                                            )}
-                                        </strong>
-
-                                    </div>
-
-
-                                    <div>
-
-                                        <span>
-                                            Performance
-                                        </span>
-
-                                        <strong>
-                                            ${percentage}%
-                                        </strong>
-
-                                    </div>
+                                    <span>
+                                        +${points} points
+                                    </span>
 
                                 </div>
 
                             </div>
 
-
-                            <button
-                                type="button"
-                                class="review-history-btn"
-                                data-lesson="${escapeResultHTML(
-                                    item.lessonNo
-                                )}"
-                            >
-
-                                <span>
-                                    Review
-                                </span>
-
-                                <i
-                                    class="fa-solid fa-arrow-right"
-                                ></i>
-
-                            </button>
-
-
-                        </article>
+                        </div>
 
                     `;
 
                 }
-
             )
             .join("");
-
-
-    list
-        .querySelectorAll(
-            ".review-history-btn"
-        )
-        .forEach(
-
-            function (
-                button
-            ) {
-
-                button.addEventListener(
-
-                    "click",
-
-                    function () {
-
-                        const lessonNo =
-                            button.dataset.lesson;
-
-
-                        openReview(
-                            lessonNo
-                        );
-
-                    }
-
-                );
-
-            }
-
-        );
 
 }
 
 
 /* ============================================================
-   LATEST RESULT
-   ============================================================ */
+   RENDER LATEST RESULT
+============================================================ */
 
 function renderLatestResult(
     submittedLesson
 ) {
 
-    let latest =
-        null;
+    const latest =
+        resultElement(
+            "latestResult"
+        );
 
+    if (!latest) {
+        return;
+    }
 
-    /*
-     * If we just came from quiz submission,
-     * find that exact lesson in THIS MEMBER'S history.
-     */
 
     if (
-        submittedLesson
+        !historyData.length
     ) {
-
-        latest =
-            historyData.find(
-
-                function (
-                    item
-                ) {
-
-                    return (
-                        String(
-                            item.lessonNo
-                        ).trim() ===
-                        String(
-                            submittedLesson
-                        ).trim()
-                    );
-
-                }
-
-            );
-
-    }
-
-
-    /*
-     * Otherwise use the newest result.
-     */
-
-    if (!latest) {
-
-        latest =
-            historyData[0];
-
-    }
-
-
-    if (!latest) {
 
         hideResultElement(
             "latestResult"
         );
 
+        return;
+
+    }
+
+
+    let result = null;
+
+
+    /*
+     * If the quiz just redirected here with a lessonNo,
+     * ALWAYS prefer that exact lesson.
+     */
+
+    const exactLesson =
+        String(
+            submittedLesson ||
+            queryLessonNo ||
+            ""
+        ).trim();
+
+
+    if (exactLesson) {
+
+        result =
+            historyData.find(
+                function (item) {
+
+                    return (
+                        String(
+                            item.lessonNo ??
+                            item.lesson ??
+                            ""
+                        ).trim() ===
+                        exactLesson
+                    );
+
+                }
+            ) || null;
+
+    }
+
+
+    /*
+     * If no exact lesson was requested,
+     * use the newest result returned by the backend.
+     */
+
+    if (!result) {
+
+        result =
+            historyData[0];
+
+    }
+
+
+    if (!result) {
+
+        hideResultElement(
+            "latestResult"
+        );
 
         return;
 
@@ -1064,14 +726,35 @@ function renderLatestResult(
 
 
     const lesson =
-        resultElement(
-            "latestLesson"
-        );
+        String(
+            result.lessonNo ??
+            result.lesson ??
+            ""
+        ).trim();
 
 
     const score =
-        resultElement(
-            "latestScore"
+        result.score ??
+        "-";
+
+
+    const points =
+        result.pointsEarned ??
+        result.points ??
+        "0";
+
+
+    const total =
+        result.totalPoints ??
+        result.total ??
+        "";
+
+
+    const date =
+        formatDate(
+            result.timestamp ??
+            result.date ??
+            result.createdAt
         );
 
 
@@ -1080,108 +763,91 @@ function renderLatestResult(
             "latestTitle"
         );
 
-
-    const date =
+    const lessonElement =
         resultElement(
-            "latestDate"
+            "latestLesson"
         );
 
-
-    const points =
+    const scoreElement =
         resultElement(
-            "latestPoints"
+            "latestScore"
         );
 
-
-    const total =
+    const totalElement =
         resultElement(
             "latestTotal"
         );
 
+    const pointsElement =
+        resultElement(
+            "latestPoints"
+        );
 
-    if (
-        lesson
-    ) {
+    const dateElement =
+        resultElement(
+            "latestDate"
+        );
 
-        lesson.textContent =
-            `Lesson ${latest.lessonNo}`;
-
-    }
-
-
-    if (
-        score
-    ) {
-
-        score.textContent =
-            latest.score ??
-            0;
-
-    }
-
-
-    if (
-        title
-    ) {
-
-        title.textContent =
-            `Lesson ${latest.lessonNo} Quiz`;
-
-    }
-
-
-    if (
-        date
-    ) {
-
-        date.textContent =
-            `Completed ${formatDate(
-                latest.timestamp
-            )}`;
-
-    }
-
-
-    if (
-        points
-    ) {
-
-        points.textContent =
-            latest.pointsEarned ??
-            0;
-
-    }
-
-
-    if (
-        total
-    ) {
-
-        total.textContent =
-            latest.totalPoints ??
-            0;
-
-    }
-
-
-    const latestReviewBtn =
+    const reviewButton =
         resultElement(
             "latestReviewBtn"
         );
 
 
-    if (
-        latestReviewBtn
-    ) {
+    if (title) {
 
-        latestReviewBtn.onclick =
-            function () {
+        title.textContent =
+            `Lesson ${lesson} Result`;
 
-                openReview(
-                    latest.lessonNo
-                );
+    }
 
-            };
+
+    if (lessonElement) {
+
+        lessonElement.textContent =
+            `Lesson ${lesson}`;
+
+    }
+
+
+    if (scoreElement) {
+
+        scoreElement.textContent =
+            score;
+
+    }
+
+
+    if (totalElement) {
+
+        totalElement.textContent =
+            total
+                ? `/ ${total}`
+                : "";
+
+    }
+
+
+    if (pointsElement) {
+
+        pointsElement.textContent =
+            `+${points} points`;
+
+    }
+
+
+    if (dateElement) {
+
+        dateElement.textContent =
+            date;
+
+    }
+
+
+    if (reviewButton) {
+
+        reviewButton.dataset.lesson =
+            lesson;
 
     }
 
@@ -1190,15 +856,19 @@ function renderLatestResult(
 
 /* ============================================================
    OPEN REVIEW
-   ============================================================ */
+============================================================ */
 
-async function openReview(
-    lessonNo
-) {
+async function openReview(lessonNo) {
+
+    const lesson =
+        String(
+            lessonNo || ""
+        ).trim();
+
 
     if (
         !memberId ||
-        !lessonNo
+        !lesson
     ) {
 
         return;
@@ -1206,38 +876,8 @@ async function openReview(
     }
 
 
-    const reviewSection =
-        resultElement(
-            "reviewSection"
-        );
-
-
-    const reviewContainer =
-        resultElement(
-            "reviewContainer"
-        );
-
-
-    const reviewTitle =
-        resultElement(
-            "reviewTitle"
-        );
-
-
-    const reviewSubtitle =
-        resultElement(
-            "reviewSubtitle"
-        );
-
-
-    if (
-        !reviewSection ||
-        !reviewContainer
-    ) {
-
-        return;
-
-    }
+    selectedReviewLesson =
+        lesson;
 
 
     showResultElement(
@@ -1245,74 +885,64 @@ async function openReview(
     );
 
 
-    reviewContainer.innerHTML = `
+    const title =
+        resultElement(
+            "reviewTitle"
+        );
 
-        <div class="review-loading">
+    const subtitle =
+        resultElement(
+            "reviewSubtitle"
+        );
 
-            <i
-                class="fa-solid fa-spinner fa-spin"
-            ></i>
-
-            <span>
-                Loading your answers...
-            </span>
-
-        </div>
-
-    `;
+    const container =
+        resultElement(
+            "reviewContainer"
+        );
 
 
-    if (
-        reviewTitle
-    ) {
+    if (title) {
 
-        reviewTitle.textContent =
-            `Lesson ${lessonNo} — Answer Review`;
+        title.textContent =
+            `Lesson ${lesson} Answer Review`;
 
     }
 
 
-    if (
-        reviewSubtitle
-    ) {
+    if (subtitle) {
 
-        reviewSubtitle.textContent =
-            "Loading your submitted answers...";
+        subtitle.textContent =
+            "Loading your answers...";
 
     }
 
 
-    reviewSection.scrollIntoView({
+    if (container) {
 
-        behavior:
-            "smooth",
+        container.innerHTML = `
 
-        block:
-            "start"
+            <div class="review-loading">
 
-    });
+                <i class="fa-solid fa-spinner fa-spin"></i>
+
+                Loading review...
+
+            </div>
+
+        `;
+
+    }
 
 
     try {
 
         const response =
             await fetch(
-
-                `${RESULTS_API}` +
-                `?action=getQuizReview` +
-                `&memberId=${encodeURIComponent(
-                    memberId
-                )}` +
-                `&lessonNo=${encodeURIComponent(
-                    lessonNo
-                )}`
-
+                `${RESULTS_API}?action=getQuizReview&memberId=${encodeURIComponent(memberId)}&lessonNo=${encodeURIComponent(lesson)}`
             );
 
 
-        if (
-            !response.ok
-        ) {
+        if (!response.ok) {
 
             throw new Error(
                 `HTTP ${response.status}`
@@ -1326,7 +956,7 @@ async function openReview(
 
 
         console.log(
-            "Review response:",
+            "Quiz review:",
             data
         );
 
@@ -1335,115 +965,49 @@ async function openReview(
             !data.success
         ) {
 
-            reviewContainer.innerHTML = `
-
-                <div class="review-empty">
-
-                    <i
-                        class="fa-solid fa-circle-info"
-                    ></i>
-
-                    <h3>
-                        Review not available
-                    </h3>
-
-                    <p>
-                        ${escapeResultHTML(
-                            data.message ||
-                            "The answer review could not be found."
-                        )}
-                    </p>
-
-                </div>
-
-            `;
-
-
-            return;
+            throw new Error(
+                data.message ||
+                "Unable to load review."
+            );
 
         }
 
 
-        const review =
-            Array.isArray(
-                data.review
-            )
-                ? data.review
-                : [];
+        if (subtitle) {
 
-
-        const questions =
-            Array.isArray(
-                data.questions
-            )
-                ? data.questions
-                : [];
-
-
-        currentReview = {
-
-            lessonNo:
-                lessonNo,
-
-            review:
-                review,
-
-            questions:
-                questions
-
-        };
-
-
-        if (
-            !review.length ||
-            !questions.length
-        ) {
-
-            reviewContainer.innerHTML = `
-
-                <div class="review-empty">
-
-                    <i
-                        class="fa-solid fa-circle-info"
-                    ></i>
-
-                    <h3>
-                        Review not available
-                    </h3>
-
-                    <p>
-                        We found the quiz attempt,
-                        but the answer review is not
-                        available for this lesson.
-                    </p>
-
-                </div>
-
-            `;
-
-
-            return;
-
-        }
-
-
-        if (
-            reviewSubtitle
-        ) {
-
-            reviewSubtitle.textContent =
-                `${review.length} questions reviewed`;
+            subtitle.textContent =
+                "Your submitted answers";
 
         }
 
 
         renderReview(
-            review,
-            questions
+            data
         );
 
-    }
 
+        const review =
+            resultElement(
+                "reviewSection"
+            );
+
+        if (review) {
+
+            setTimeout(
+                function () {
+
+                    review.scrollIntoView({
+                        behavior: "smooth",
+                        block: "start"
+                    });
+
+                },
+                100
+            );
+
+        }
+
+    }
     catch (error) {
 
         console.error(
@@ -1452,26 +1016,28 @@ async function openReview(
         );
 
 
-        reviewContainer.innerHTML = `
+        if (subtitle) {
 
-            <div class="review-empty">
+            subtitle.textContent =
+                "Unable to load your answer review.";
 
-                <i
-                    class="fa-solid fa-triangle-exclamation"
-                ></i>
+        }
 
-                <h3>
-                    Unable to load review
-                </h3>
 
-                <p>
-                    Please check your connection
-                    and try again.
-                </p>
+        if (container) {
 
-            </div>
+            container.innerHTML = `
 
-        `;
+                <div class="review-empty">
+
+                    Unable to load your answer review.
+                    Please try again.
+
+                </div>
+
+            `;
+
+        }
 
     }
 
@@ -1480,11 +1046,10 @@ async function openReview(
 
 /* ============================================================
    RENDER REVIEW
-   ============================================================ */
+============================================================ */
 
 function renderReview(
-    reviewData,
-    reviewQuestions
+    data
 ) {
 
     const container =
@@ -1492,259 +1057,263 @@ function renderReview(
             "reviewContainer"
         );
 
-
     if (!container) {
+        return;
+    }
+
+
+    let reviews =
+        Array.isArray(data.review)
+            ? data.review
+            : [];
+
+
+    let questions =
+        Array.isArray(data.questions)
+            ? data.questions
+            : [];
+
+
+    /*
+     * Some backend responses may return JSON strings.
+     */
+
+    if (
+        typeof data.review === "string"
+    ) {
+
+        try {
+
+            reviews =
+                JSON.parse(
+                    data.review
+                );
+
+        }
+        catch (error) {
+
+            reviews = [];
+
+        }
+
+    }
+
+
+    if (
+        typeof data.questions === "string"
+    ) {
+
+        try {
+
+            questions =
+                JSON.parse(
+                    data.questions
+                );
+
+        }
+        catch (error) {
+
+            questions = [];
+
+        }
+
+    }
+
+
+    if (
+        !Array.isArray(reviews) ||
+        !reviews.length
+    ) {
+
+        container.innerHTML = `
+
+            <div class="review-empty">
+
+                No answer review is available for this quiz.
+
+            </div>
+
+        `;
 
         return;
 
     }
 
 
-    let html =
-        "";
-
-
-    reviewData.forEach(
-
-        function (
-            item,
-            index
-        ) {
-
-            const question =
-                reviewQuestions[
-                    index
-                ];
-
-
-            if (!question) {
-
-                return;
-
-            }
-
-
-            const correctAnswer =
-                String(
-                    item.correctAnswer ||
-                    ""
-                )
-                    .trim()
-                    .toUpperCase();
-
-
-            const userAnswer =
-                String(
-                    item.userAnswer ||
-                    ""
-                )
-                    .trim()
-                    .toUpperCase();
-
-
-            const wasCorrect =
-                item.correct === true ||
-                (
-                    correctAnswer &&
-                    userAnswer &&
-                    correctAnswer ===
-                    userAnswer
-                );
-
-
-            html += `
-
-                <article
-                    class="review-question"
-                >
-
-                    <div
-                        class="review-question-top"
-                    >
-
-                        <span>
-                            QUESTION ${index + 1}
-                        </span>
-
-
-                        <strong
-                            class="${
-                                wasCorrect
-                                    ? "review-correct"
-                                    : "review-wrong"
-                            }"
-                        >
-
-                            ${
-                                wasCorrect
-                                    ? "✓ Correct"
-                                    : "✕ Incorrect"
-                            }
-
-                        </strong>
-
-                    </div>
-
-
-                    <h3>
-                        ${escapeResultHTML(
-                            question.question
-                        )}
-                    </h3>
-
-
-                    <div
-                        class="review-options"
-                    >
-
-            `;
-
-
-            [
-
-                "A",
-
-                "B",
-
-                "C",
-
-                "D"
-
-            ].forEach(
-
+    container.innerHTML =
+        reviews
+            .map(
                 function (
-                    letter
+                    review,
+                    index
                 ) {
 
-                    const text =
-                        question[
-                            `option${letter}`
-                        ];
+                    const question =
+                        questions[index] ||
+                        {};
 
 
-                    if (!text) {
-
-                        return;
-
-                    }
-
-
-                    let classes =
-                        "review-option";
+                    const questionText =
+                        review.question ||
+                        question.question ||
+                        `Question ${index + 1}`;
 
 
-                    if (
-                        letter ===
-                        correctAnswer
-                    ) {
-
-                        classes +=
-                            " correct";
-
-                    }
+                    const selectedAnswer =
+                        review.selectedAnswer ||
+                        review.answer ||
+                        review.selected ||
+                        "";
 
 
-                    if (
-                        letter ===
-                            userAnswer &&
-                        !wasCorrect
-                    ) {
-
-                        classes +=
-                            " wrong";
-
-                    }
+                    const correctAnswer =
+                        review.correctAnswer ||
+                        review.correct ||
+                        question.correctAnswer ||
+                        question.correct ||
+                        "";
 
 
-                    html += `
-
-                        <div
-                            class="${classes}"
-                        >
-
-                            <span
-                                class="review-option-letter"
-                            >
-                                ${letter}
-                            </span>
+                    const isCorrect =
+                        review.isCorrect === true ||
+                        String(
+                            selectedAnswer
+                        ).trim().toUpperCase() ===
+                        String(
+                            correctAnswer
+                        ).trim().toUpperCase();
 
 
-                            <span
-                                class="review-option-text"
-                            >
+                    const options =
+                        [
+                            "A",
+                            "B",
+                            "C",
+                            "D"
+                        ]
+                            .map(
+                                function (
+                                    letter
+                                ) {
+
+                                    const optionText =
+                                        question[
+                                            `option${letter}`
+                                        ] ||
+                                        review[
+                                            `option${letter}`
+                                        ] ||
+                                        "";
+
+                                    if (!optionText) {
+                                        return "";
+                                    }
+
+                                    const selected =
+                                        String(
+                                            selectedAnswer
+                                        ).trim().toUpperCase() ===
+                                        letter;
+
+                                    const correct =
+                                        String(
+                                            correctAnswer
+                                        ).trim().toUpperCase() ===
+                                        letter;
+
+                                    let className =
+                                        "review-option";
+
+                                    if (correct) {
+
+                                        className +=
+                                            " review-correct";
+
+                                    }
+                                    else if (selected && !correct) {
+
+                                        className +=
+                                            " review-wrong";
+
+                                    }
+
+                                    return `
+
+                                        <div
+                                            class="${className}"
+                                        >
+
+                                            <span
+                                                class="review-option-letter"
+                                            >
+                                                ${letter}
+                                            </span>
+
+                                            <span
+                                                class="review-option-text"
+                                            >
+                                                ${escapeResultHTML(
+                                                    optionText
+                                                )}
+                                            </span>
+
+                                        </div>
+
+                                    `;
+
+                                }
+                            )
+                            .join("");
+
+
+                    return `
+
+                        <div class="review-question">
+
+                            <div class="review-question-top">
+
+                                <span>
+                                    Question ${index + 1}
+                                </span>
+
+                                <strong>
+                                    ${
+                                        isCorrect
+                                            ? "Correct"
+                                            : "Incorrect"
+                                    }
+                                </strong>
+
+                            </div>
+
+                            <div class="review-question-text">
+
                                 ${escapeResultHTML(
-                                    text
+                                    questionText
                                 )}
-                            </span>
 
+                            </div>
 
-                            ${
-                                letter ===
-                                correctAnswer
+                            <div class="review-options">
 
-                                    ? `
+                                ${options}
 
-                                        <span
-                                            class="review-badge correct-badge"
-                                        >
-                                            Correct answer
-                                        </span>
-
-                                    `
-
-                                    : ""
-                            }
-
-
-                            ${
-                                letter ===
-                                    userAnswer &&
-                                !wasCorrect
-
-                                    ? `
-
-                                        <span
-                                            class="review-badge wrong-badge"
-                                        >
-                                            Your answer
-                                        </span>
-
-                                    `
-
-                                    : ""
-                            }
+                            </div>
 
                         </div>
 
                     `;
 
                 }
-
-            );
-
-
-            html += `
-
-                    </div>
-
-                </article>
-
-            `;
-
-        }
-
-    );
-
-
-    container.innerHTML =
-        html;
+            )
+            .join("");
 
 }
 
 
 /* ============================================================
    CLOSE REVIEW
-   ============================================================ */
+============================================================ */
 
 function closeReview() {
 
@@ -1752,53 +1321,94 @@ function closeReview() {
         "reviewSection"
     );
 
-
-    currentReview =
-        null;
-
-
-    window.scrollTo({
-
-        top:
-            0,
-
-        behavior:
-            "smooth"
-
-    });
+    selectedReviewLesson = "";
 
 }
 
 
 /* ============================================================
-   LISTENERS
-   ============================================================ */
+   RESULTS LISTENERS
+============================================================ */
 
 function setupResultsListeners() {
 
-    const closeButton =
+    const closeReviewBtn =
         resultElement(
             "closeReviewBtn"
         );
 
+    const latestReviewBtn =
+        resultElement(
+            "latestReviewBtn"
+        );
 
-    if (
-        closeButton
-    ) {
 
-        closeButton.addEventListener(
+    if (closeReviewBtn) {
+
+        closeReviewBtn.addEventListener(
             "click",
             closeReview
         );
 
     }
 
+
+    if (latestReviewBtn) {
+
+        latestReviewBtn.addEventListener(
+            "click",
+            function () {
+
+                const lesson =
+                    latestReviewBtn.dataset.lesson ||
+                    queryLessonNo;
+
+                openReview(
+                    lesson
+                );
+
+            }
+        );
+
+    }
+
+
+    /*
+     * Event delegation for history review buttons.
+     *
+     * This also works when history is rendered
+     * dynamically after the API response.
+     */
+
+    document.addEventListener(
+        "click",
+        function (event) {
+
+            const button =
+                event.target.closest(
+                    "[data-review-lesson]"
+                );
+
+            if (!button) {
+                return;
+            }
+
+            const lesson =
+                button.dataset.reviewLesson;
+
+            openReview(
+                lesson
+            );
+
+        }
+    );
+
 }
 
 
 /* ============================================================
    RESULTS MESSAGE
-   ============================================================ */
+============================================================ */
 
 function showResultsMessage(
     message
@@ -1809,17 +1419,16 @@ function showResultsMessage(
             "resultsMessage"
         );
 
-
     if (!element) {
-
         return;
-
     }
-
 
     element.textContent =
         message;
 
+    element.classList.remove(
+        "hidden"
+    );
 
     element.classList.add(
         "show"
@@ -1828,6 +1437,10 @@ function showResultsMessage(
 }
 
 
+/* ============================================================
+   HIDE RESULTS MESSAGE
+============================================================ */
+
 function hideResultsMessage() {
 
     const element =
@@ -1835,23 +1448,24 @@ function hideResultsMessage() {
             "resultsMessage"
         );
 
-
-    if (
-        element
-    ) {
-
-        element.classList.remove(
-            "show"
-        );
-
+    if (!element) {
+        return;
     }
+
+    element.classList.add(
+        "hidden"
+    );
+
+    element.classList.remove(
+        "show"
+    );
 
 }
 
 
 /* ============================================================
-   DATE FORMAT
-   ============================================================ */
+   FORMAT DATE
+============================================================ */
 
 function formatDate(
     value
@@ -1859,7 +1473,7 @@ function formatDate(
 
     if (!value) {
 
-        return "Date unavailable";
+        return "";
 
     }
 
@@ -1884,22 +1498,12 @@ function formatDate(
 
 
     return date.toLocaleDateString(
-
         "en-NG",
-
         {
-
-            day:
-                "numeric",
-
-            month:
-                "short",
-
-            year:
-                "numeric"
-
+            day: "numeric",
+            month: "short",
+            year: "numeric"
         }
-
     );
 
 }
