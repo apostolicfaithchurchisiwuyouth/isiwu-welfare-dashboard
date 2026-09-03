@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+ 
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+>
+
+<title>Page Not Found | AFC Isiu Youth Portal</title>
+
+
+<!-- PWA -->
+
+<link
+    rel="manifest"
+    href="/manifest.json"
+>
+
+<meta
+    name="theme-color"
+    content="#ea580c"
+>
+
+
+<!-- ICONS -->
+
+<link
+    rel="icon"
+    type="image/png"
+    href="/images/logo.png"
+>
+
+<link
+    rel="apple-touch-icon"
+    href="/images/logo.png"
+>
+
+
+<!-- FONTS -->
+
+<link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+>
+
+<link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+>
+
+<link
+    href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap"
+    rel="stylesheet"
+>
+
+
+<!-- FONT AWESOME -->
+
+<link
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    rel="stylesheet"
+>
+
+
+<!-- GLOBAL CSS -->
+
+<link
+    rel="stylesheet"
+    href="/css/main.css"
+>
+
+<link
+    rel="stylesheet"
+    href="/css/layout.css"
+>
+
+
+<!-- 404 PAGE STYLE -->
+
+<style>
+
+    body {
+
+        min-height: 100vh;
+
+        margin: 0;
+
+        font-family:
+            "DM Sans",
+            sans-serif;
+
+        background:
+            radial-gradient(
+                circle at top right,
+                rgba(234, 88, 12, .12),
+                transparent 30%
+            ),
+            radial-gradient(
+                circle at bottom left,
+                rgba(74, 7, 84, .10),
+                transparent 35%
+            ),
+            var(--background);
+
+    }
+
+
+    .not-found-page {
+
+        min-height: 100vh;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        padding:
+            24px 18px;
+
+    }
+
+
+    .not-found-card {
+
+        position: relative;
+
+        width: min(560px, 100%);
+
+        overflow: hidden;
+
+        padding:
+            52px 34px;
+
+        text-align: center;
+
+        background:
+            rgba(255, 255, 255, .88);
+
+        border:
+            1px solid
+            rgba(255, 255, 255, .8);
+
+        border-radius:
+            30px;
+
+        box-shadow:
+            0 25px 70px
+            rgba(15, 23, 42, .12);
+
+        backdrop-filter:
+            blur(18px);
+
+        -webkit-backdrop-filter:
+            blur(18px);
+
+    }
+
+
+    .not-found-card::before {
+
+        content: "";
+
+        position: absolute;
+
+        width: 230px;
+
+        height: 230px;
+
+        top: -130px;
+
+        right: -100px;
+
+        border-radius: 50%;
+
+        background:
+            radial-gradient(
+                circle,
+                rgba(234, 88, 12, .16),
+                transparent 70%
+            );
+
+        pointer-events: none;
+
+    }
+
+
+    .not-found-logo {
+
+        position: relative;
+
+        width: 78px;
+
+        height: 78px;
+
+        margin:
+            0 auto 26px;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        border-radius: 24px;
+
+        background:
+            linear-gradient(
+                135deg,
+                var(--primary),
+                #7a1688
+            );
+
+        box-shadow:
+            0 15px 35px
+            rgba(74, 7, 84, .22);
+
+    }
+
+
+    .not-found-logo img {
+
+        width: 56px;
+
+        height: 56px;
+
+        object-fit: contain;
+
+    }
+
+
+    .error-code {
+
+        margin: 0;
+
+        font-family:
+            "Bricolage Grotesque",
+            sans-serif;
+
+        font-size:
+            clamp(5rem, 18vw, 8rem);
+
+        font-weight: 800;
+
+        line-height: .9;
+
+        letter-spacing:
+            -.06em;
+
+        background:
+            linear-gradient(
+                135deg,
+                var(--primary),
+                #ea580c
+            );
+
+        -webkit-background-clip:
+            text;
+
+        background-clip:
+            text;
+
+        -webkit-text-fill-color:
+            transparent;
+
+    }
+
+
+    .not-found-card h1 {
+
+        margin:
+            24px 0 10px;
+
+        color:
+            var(--text);
+
+        font-size:
+            1.65rem;
+
+        font-weight:
+            800;
+
+    }
+
+
+    .not-found-card p {
+
+        max-width:
+            420px;
+
+        margin:
+            0 auto;
+
+        color:
+            var(--text-light);
+
+        font-size:
+            .9rem;
+
+        line-height:
+            1.65;
+
+    }
+
+
+    .not-found-actions {
+
+        display: flex;
+
+        justify-content: center;
+
+        flex-wrap: wrap;
+
+        gap: 12px;
+
+        margin-top: 30px;
+
+    }
+
+
+    .not-found-btn {
+
+        min-height: 48px;
+
+        display: inline-flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        gap: 9px;
+
+        padding:
+            0 20px;
+
+        border-radius:
+            14px;
+
+        font-family:
+            "DM Sans",
+            sans-serif;
+
+        font-size:
+            .84rem;
+
+        font-weight:
+            700;
+
+        text-decoration:
+            none;
+
+        transition:
+            transform .25s ease,
+            box-shadow .25s ease;
+
+    }
+
+
+    .not-found-btn:hover {
+
+        transform:
+            translateY(-2px);
+
+    }
+
+
+    .not-found-btn.primary {
+
+        background:
+            linear-gradient(
+                135deg,
+                #ea580c,
+                #fb923c
+            );
+
+        color:
+            #ffffff;
+
+        box-shadow:
+            0 12px 28px
+            rgba(234, 88, 12, .25);
+
+    }
+
+
+    .not-found-btn.secondary {
+
+        background:
+            rgba(74, 7, 84, .07);
+
+        color:
+            var(--primary);
+
+    }
+
+
+    .not-found-footer {
+
+        margin-top:
+            30px;
+
+        color:
+            var(--text-light);
+
+        font-size:
+            .68rem;
+
+        opacity:
+            .75;
+
+    }
+
+
+    @media (max-width: 520px) {
+
+        .not-found-card {
+
+            padding:
+                42px 22px;
+
+            border-radius:
+                25px;
+
+        }
+
+
+        .not-found-card h1 {
+
+            font-size:
+                1.4rem;
+
+        }
+
+
+        .not-found-actions {
+
+            flex-direction:
+                column;
+
+        }
+
+
+        .not-found-btn {
+
+            width:
+                100%;
+
+        }
+
+    }
+
+
+    [data-theme="dark"] body {
+
+        background:
+            radial-gradient(
+                circle at top right,
+                rgba(234, 88, 12, .12),
+                transparent 30%
+            ),
+            #101114;
+
+    }
+
+
+    [data-theme="dark"]
+    .not-found-card {
+
+        background:
+            rgba(24, 25, 29, .92);
+
+        border-color:
+            rgba(255, 255, 255, .08);
+
+    }
+
+</style>
+ 
+
+</head>
+
+<body>
+
+ 
+<main class="not-found-page">
+
+    <section class="not-found-card">
+
+
+        <div class="not-found-logo">
+
+            <img
+                src="/images/logo.png"
+                alt="AFC Isiu Youth Portal"
+            >
+
+        </div>
+
+
+        <div
+            class="error-code"
+            aria-label="Error 404"
+        >
+            404
+        </div>
+
+
+        <h1>
+            Page Not Found
+        </h1>
+
+
+        <p>
+            Sorry, the page you are looking for does not
+            exist, may have been moved, or is still being
+            prepared.
+        </p>
+
+
+        <div class="not-found-actions">
+
+
+            <a
+                href="/"
+                class="not-found-btn primary"
+            >
+
+                <i class="fa-solid fa-house"></i>
+
+                Back to Dashboard
+
+            </a>
+
+
+            <a
+                href="/pages/lessons"
+                class="not-found-btn secondary"
+            >
+
+                <i class="fa-solid fa-book-open"></i>
+
+                View Lessons
+
+            </a>
+
+
+        </div>
+
+
+        <div class="not-found-footer">
+
+            AFC Isiu Youth Portal
+
+        </div>
+
+
+    </section>
+
+</main>
+
+
+<script src="/js/main.js"></script>
+ 
+
+</body>
+
+</html>
