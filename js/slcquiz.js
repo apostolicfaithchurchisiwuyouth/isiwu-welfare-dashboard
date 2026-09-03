@@ -1,51 +1,41 @@
-/* ============================================================
-   AFC ISIU YOUTH PORTAL V2
-   FILE: slcquiz.js
-   PURPOSE: WEEKLY SLC QUIZ CONTROLLER
-   ============================================================
-
-   FLOW:
-
-   Quiz Opens
-        ↓
-   Select Participant
-        ↓
-   Add Name if Necessary
-        ↓
-   Lock Participant
-        ↓
-   Check CURRENT LESSON Completion
-        ↓
-   ┌─────────────────────────────────────┐
-   │                                     │
-   │ Already completed CURRENT lesson    │
-   │        ↓                            │
-   │ Show completed state                │
-   │                                     │
-   │ Not completed CURRENT lesson        │
-   │        ↓                            │
-   │ Reflection                          │
-   │        ↓                            │
-   │ Quiz                                │
-   │        ↓                            │
-   │ Submit                              │
-   │        ↓                            │
-   │ Results                             │
-   └─────────────────────────────────────┘
-
-   IMPORTANT:
-
-   - Quiz Settings lesson number identifies ONLY the
-     currently active lesson.
-   - Previous lessons do NOT block the current lesson.
-   - Participant cannot be changed after selection.
-   - Reflection requires all 3 questions.
-   - Minimum 100 meaningful characters.
-   - Backend remains the final authority.
-   - A participant is considered completed ONLY when
-     Quiz Attempts contains an attempt for THIS lesson.
-   - Completed lessons cannot be repeated.
-   ============================================================ */
+/**
+ * ============================================================
+ * AFC ISIU YOUTH PORTAL V2
+ * FILE: slcquiz.js
+ * PURPOSE: WEEKLY SLC QUIZ CONTROLLER
+ * ============================================================
+ *
+ * CURRENT SLC FLOW
+ *
+ * Open Quiz
+ *      ↓
+ * Select Participant
+ *      ↓
+ * Lock Participant
+ *      ↓
+ * Check CURRENT Lesson
+ *      ↓
+ * Reflection
+ *      ↓
+ * Quiz
+ *      ↓
+ * Submit
+ *      ↓
+ * Results
+ *
+ * IMPORTANT:
+ *
+ * Previous quiz history NEVER determines whether the
+ * current quiz is completed.
+ *
+ * Only:
+ *
+ *     data.quizCompleted === true
+ *
+ * can indicate that the CURRENT lesson is complete.
+ *
+ * ============================================================
+ */
 
 "use strict";
 
@@ -62,13 +52,12 @@ const API =
    CONFIG
    ============================================================ */
 
-const REFLECTION_MIN_CHARACTERS = 100;
+const REFLECTION_MIN_CHARACTERS =
+    100;
+
 
 const SESSION_KEY =
     "afc_isiu_slc_quiz_session_v1";
-
-const RESULTS_MEMBER_KEY =
-    "afc_isiu_slc_member_v1";
 
 
 /* ============================================================
@@ -79,9 +68,9 @@ let quizData = [];
 
 let selectedLesson = "";
 
-let quizCloseTime = null;
-
 let quizOpenTime = null;
+
+let quizCloseTime = null;
 
 let countdownInterval = null;
 
@@ -95,12 +84,6 @@ let quizLoaded = false;
 
 let quizCompleted = false;
 
-let isCheckingCompletion = false;
-
-let isSubmittingReflection = false;
-
-let isSubmittingQuiz = false;
-
 
 /* ============================================================
    DOM READY
@@ -110,28 +93,39 @@ document.addEventListener(
     "DOMContentLoaded",
     async function () {
 
-        if (typeof AOS !== "undefined") {
+        if (
+            typeof AOS !==
+            "undefined"
+        ) {
 
             AOS.init({
-                duration: 650,
-                once: true
+
+                duration:
+                    650,
+
+                once:
+                    true
+
             });
 
         }
+
 
         setupParticipantListeners();
 
         setupReflectionListeners();
 
-        setupQuizListeners();
-
         await loadQuiz();
 
-        if (!quizLoaded) {
+
+        if (
+            !quizLoaded
+        ) {
 
             return;
 
         }
+
 
         await loadMembers();
 
@@ -147,7 +141,9 @@ document.addEventListener(
 
 function getElement(id) {
 
-    return document.getElementById(id);
+    return document.getElementById(
+        id
+    );
 
 }
 
@@ -157,9 +153,12 @@ function showElement(id) {
     const element =
         getElement(id);
 
+
     if (element) {
 
-        element.classList.remove("hidden");
+        element.classList.remove(
+            "hidden"
+        );
 
     }
 
@@ -171,9 +170,12 @@ function hideElement(id) {
     const element =
         getElement(id);
 
+
     if (element) {
 
-        element.classList.add("hidden");
+        element.classList.add(
+            "hidden"
+        );
 
     }
 
@@ -184,14 +186,36 @@ function hideElement(id) {
    SAFE HTML
    ============================================================ */
 
-function escapeHTML(value) {
+function escapeHTML(
+    value
+) {
 
-    return String(value ?? "")
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+    return String(
+        value === null ||
+        value === undefined
+            ? ""
+            : value
+    )
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
 
 }
 
@@ -203,10 +227,16 @@ function escapeHTML(value) {
 async function loadQuiz() {
 
     const status =
-        getElement("quizStatus");
+        getElement(
+            "quizStatus"
+        );
+
 
     const countdown =
-        getElement("quizCountdown");
+        getElement(
+            "quizCountdown"
+        );
+
 
     if (!status) {
 
@@ -214,17 +244,22 @@ async function loadQuiz() {
 
     }
 
+
     try {
 
         status.textContent =
             "Loading quiz...";
+
 
         const response =
             await fetch(
                 `${API}?action=getQuiz`
             );
 
-        if (!response.ok) {
+
+        if (
+            !response.ok
+        ) {
 
             throw new Error(
                 `HTTP ${response.status}`
@@ -232,8 +267,10 @@ async function loadQuiz() {
 
         }
 
+
         const data =
             await response.json();
+
 
         console.log(
             "Quiz response:",
@@ -246,11 +283,13 @@ async function loadQuiz() {
            ==================================================== */
 
         if (
-            data.status === "closed"
+            data.status ===
+            "closed"
         ) {
 
             status.textContent =
                 "🔒 This week's quiz has closed.";
+
 
             if (countdown) {
 
@@ -259,14 +298,31 @@ async function loadQuiz() {
 
             }
 
-            hideElement("participantSection");
-            hideElement("lockedParticipantSection");
-            hideElement("reflectionSection");
-            hideElement("quizSection");
-            hideElement("completedSection");
+
+            hideElement(
+                "participantSection"
+            );
+
+            hideElement(
+                "lockedParticipantSection"
+            );
+
+            hideElement(
+                "reflectionSection"
+            );
+
+            hideElement(
+                "quizSection"
+            );
+
+            hideElement(
+                "completedSection"
+            );
+
 
             quizLoaded =
                 false;
+
 
             return;
 
@@ -278,31 +334,55 @@ async function loadQuiz() {
            ==================================================== */
 
         if (
-            data.status === "not_open"
+            data.status ===
+            "not_open"
         ) {
 
             status.textContent =
                 "⏳ The weekly SLC quiz opens soon.";
 
-            hideElement("participantSection");
-            hideElement("lockedParticipantSection");
-            hideElement("reflectionSection");
-            hideElement("quizSection");
-            hideElement("completedSection");
 
-            if (data.openTime) {
+            hideElement(
+                "participantSection"
+            );
+
+            hideElement(
+                "lockedParticipantSection"
+            );
+
+            hideElement(
+                "reflectionSection"
+            );
+
+            hideElement(
+                "quizSection"
+            );
+
+            hideElement(
+                "completedSection"
+            );
+
+
+            if (
+                data.openTime
+            ) {
 
                 quizOpenTime =
                     new Date(
                         data.openTime
                     );
 
-                startCountdown("open");
+
+                startCountdown(
+                    "open"
+                );
 
             }
 
+
             quizLoaded =
                 false;
+
 
             return;
 
@@ -321,12 +401,15 @@ async function loadQuiz() {
                 data.message ||
                 "Unable to load the quiz.";
 
+
             hideElement(
                 "participantSection"
             );
 
+
             quizLoaded =
                 false;
+
 
             return;
 
@@ -338,33 +421,60 @@ async function loadQuiz() {
            ==================================================== */
 
         quizData =
-            Array.isArray(data.questions)
+            Array.isArray(
+                data.questions
+            )
                 ? data.questions
                 : [];
 
+
         selectedLesson =
             String(
-                data.lessonNo || ""
+                data.lessonNo ||
+                ""
             ).trim();
+
+
+        quizOpenTime =
+            data.openTime
+                ? new Date(
+                    data.openTime
+                )
+                : null;
+
 
         quizCloseTime =
             data.closeTime
-                ? new Date(data.closeTime)
+                ? new Date(
+                    data.closeTime
+                )
                 : null;
+
+
+        /*
+         * IMPORTANT:
+         *
+         * Every time a new active quiz is loaded,
+         * completion state starts false.
+         *
+         * The backend must confirm the participant's
+         * CURRENT lesson status.
+         */
 
         quizCompleted =
             false;
 
+
         reflectionSubmitted =
             false;
+
 
         quizLoaded =
             true;
 
+
         status.textContent =
-            selectedLesson
-                ? `🟢 Lesson ${selectedLesson} Quiz is Open`
-                : "🟢 Weekly SLC Quiz is Open";
+            `🟢 Lesson ${selectedLesson} Quiz is Open`;
 
 
         const questionBadge =
@@ -372,7 +482,10 @@ async function loadQuiz() {
                 "questionCountBadge"
             );
 
-        if (questionBadge) {
+
+        if (
+            questionBadge
+        ) {
 
             questionBadge.textContent =
                 `${quizData.length} Questions`;
@@ -380,34 +493,50 @@ async function loadQuiz() {
         }
 
 
-        if (quizCloseTime) {
+        if (
+            quizCloseTime
+        ) {
 
-            startCountdown("close");
+            startCountdown(
+                "close"
+            );
 
         }
 
+
+        /*
+         * ALWAYS begin at participant selection.
+         *
+         * Never redirect to results simply because
+         * the quiz is active.
+         */
 
         showElement(
             "participantSection"
         );
 
+
         hideElement(
             "lockedParticipantSection"
         );
+
 
         hideElement(
             "reflectionSection"
         );
 
+
         hideElement(
             "quizSection"
         );
+
 
         hideElement(
             "completedSection"
         );
 
     }
+
     catch (error) {
 
         console.error(
@@ -415,15 +544,14 @@ async function loadQuiz() {
             error
         );
 
+
         status.textContent =
             "Unable to connect to the quiz service.";
+
 
         hideElement(
             "participantSection"
         );
-
-        quizLoaded =
-            false;
 
     }
 
@@ -434,16 +562,20 @@ async function loadQuiz() {
    COUNTDOWN
    ============================================================ */
 
-function startCountdown(mode) {
+function startCountdown(
+    mode
+) {
 
     clearInterval(
         countdownInterval
     );
 
+
     const countdown =
         getElement(
             "quizCountdown"
         );
+
 
     if (!countdown) {
 
@@ -451,88 +583,109 @@ function startCountdown(mode) {
 
     }
 
+
     countdown.style.display =
         "";
 
-    function updateCountdown() {
-
-        const target =
-            mode === "open"
-                ? quizOpenTime
-                : quizCloseTime;
-
-        if (!target) {
-
-            clearInterval(
-                countdownInterval
-            );
-
-            return;
-
-        }
-
-        const diff =
-            target.getTime() -
-            Date.now();
-
-        if (
-            diff <= 0
-        ) {
-
-            clearInterval(
-                countdownInterval
-            );
-
-            window.location.reload();
-
-            return;
-
-        }
-
-        const days =
-            Math.floor(
-                diff / 86400000
-            );
-
-        const hours =
-            Math.floor(
-                (diff % 86400000) /
-                3600000
-            );
-
-        const mins =
-            Math.floor(
-                (diff % 3600000) /
-                60000
-            );
-
-        const secs =
-            Math.floor(
-                (diff % 60000) /
-                1000
-            );
-
-        countdown.innerHTML = `
-            ${
-                mode === "open"
-                    ? "⏳ Opens in"
-                    : "⏳ Closes in"
-            }
-            <strong>
-                ${days}d
-                ${hours}h
-                ${mins}m
-                ${secs}s
-            </strong>
-        `;
-
-    }
-
-    updateCountdown();
 
     countdownInterval =
         setInterval(
-            updateCountdown,
+            function () {
+
+                const target =
+                    mode === "open"
+                        ? quizOpenTime
+                        : quizCloseTime;
+
+
+                if (!target) {
+
+                    clearInterval(
+                        countdownInterval
+                    );
+
+                    return;
+
+                }
+
+
+                const diff =
+                    target -
+                    new Date();
+
+
+                if (
+                    diff <= 0
+                ) {
+
+                    clearInterval(
+                        countdownInterval
+                    );
+
+
+                    window.location.reload();
+
+
+                    return;
+
+                }
+
+
+                const days =
+                    Math.floor(
+                        diff /
+                        86400000
+                    );
+
+
+                const hours =
+                    Math.floor(
+                        (
+                            diff %
+                            86400000
+                        ) /
+                        3600000
+                    );
+
+
+                const mins =
+                    Math.floor(
+                        (
+                            diff %
+                            3600000
+                        ) /
+                        60000
+                    );
+
+
+                const secs =
+                    Math.floor(
+                        (
+                            diff %
+                            60000
+                        ) /
+                        1000
+                    );
+
+
+                countdown.innerHTML = `
+
+                    ${
+                        mode === "open"
+                            ? "⏳ Opens in"
+                            : "⏳ Closes in"
+                    }
+
+                    <strong>
+                        ${days}d
+                        ${hours}h
+                        ${mins}m
+                        ${secs}s
+                    </strong>
+
+                `;
+
+            },
             1000
         );
 
@@ -550,17 +703,22 @@ async function loadMembers() {
             "memberSelect"
         );
 
+
     if (!select) {
 
         return;
 
     }
 
+
     select.innerHTML = `
+
         <option value="">
             Select your name here
         </option>
+
     `;
+
 
     try {
 
@@ -569,7 +727,10 @@ async function loadMembers() {
                 `${API}?action=getMembers`
             );
 
-        if (!response.ok) {
+
+        if (
+            !response.ok
+        ) {
 
             throw new Error(
                 `HTTP ${response.status}`
@@ -577,45 +738,43 @@ async function loadMembers() {
 
         }
 
+
         const data =
             await response.json();
 
+
         if (
             !data.success ||
-            !Array.isArray(data.members)
+            !Array.isArray(
+                data.members
+            )
         ) {
 
             return;
 
         }
 
+
         data.members.forEach(
-            function (member) {
-
-                if (
-                    !member ||
-                    !member.memberId ||
-                    !member.name
-                ) {
-
-                    return;
-
-                }
+            function (
+                member
+            ) {
 
                 const option =
                     document.createElement(
                         "option"
                     );
 
+
                 option.value =
                     String(
                         member.memberId
-                    ).trim();
+                    );
+
 
                 option.textContent =
-                    String(
-                        member.name
-                    ).trim();
+                    member.name;
+
 
                 select.appendChild(
                     option
@@ -625,6 +784,7 @@ async function loadMembers() {
         );
 
     }
+
     catch (error) {
 
         console.error(
@@ -648,10 +808,12 @@ function setupParticipantListeners() {
             "memberSelect"
         );
 
+
     const continueBtn =
         getElement(
             "continueToReflectionBtn"
         );
+
 
     const addButton =
         getElement(
@@ -659,7 +821,9 @@ function setupParticipantListeners() {
         );
 
 
-    if (select) {
+    if (
+        select
+    ) {
 
         select.addEventListener(
             "change",
@@ -674,7 +838,10 @@ function setupParticipantListeners() {
 
                 }
 
-                if (continueBtn) {
+
+                if (
+                    continueBtn
+                ) {
 
                     continueBtn.disabled =
                         !select.value;
@@ -687,7 +854,9 @@ function setupParticipantListeners() {
     }
 
 
-    if (continueBtn) {
+    if (
+        continueBtn
+    ) {
 
         continueBtn.addEventListener(
             "click",
@@ -697,34 +866,13 @@ function setupParticipantListeners() {
     }
 
 
-    if (addButton) {
+    if (
+        addButton
+    ) {
 
         addButton.addEventListener(
             "click",
             addNewMember
-        );
-
-    }
-
-}
-
-
-/* ============================================================
-   QUIZ LISTENERS
-   ============================================================ */
-
-function setupQuizListeners() {
-
-    const submitBtn =
-        getElement(
-            "submitBtn"
-        );
-
-    if (submitBtn) {
-
-        submitBtn.addEventListener(
-            "click",
-            submitQuiz
         );
 
     }
@@ -747,20 +895,24 @@ async function addNewMember() {
 
     }
 
+
     const input =
         getElement(
             "newName"
         );
+
 
     const button =
         getElement(
             "addNameBtn"
         );
 
+
     const select =
         getElement(
             "memberSelect"
         );
+
 
     if (
         !input ||
@@ -772,8 +924,10 @@ async function addNewMember() {
 
     }
 
+
     const name =
         input.value.trim();
+
 
     if (!name) {
 
@@ -781,11 +935,14 @@ async function addNewMember() {
             "Please enter your name."
         );
 
+
         input.focus();
+
 
         return;
 
     }
+
 
     if (
         name.length < 2
@@ -795,22 +952,30 @@ async function addNewMember() {
             "Please enter your full name."
         );
 
+
         input.focus();
+
 
         return;
 
     }
 
+
     const oldHTML =
         button.innerHTML;
+
 
     button.disabled =
         true;
 
+
     button.innerHTML = `
+
         <i class="fa-solid fa-spinner fa-spin"></i>
         Adding...
+
     `;
+
 
     try {
 
@@ -818,27 +983,28 @@ async function addNewMember() {
             await fetch(
                 API,
                 {
-                    method: "POST",
 
-                    headers: {
-                        "Content-Type":
-                            "text/plain;charset=utf-8"
-                    },
+                    method:
+                        "POST",
 
-                    body: JSON.stringify({
+                    body:
+                        JSON.stringify({
 
-                        action:
-                            "addMember",
+                            action:
+                                "addMember",
 
-                        name:
-                            name
+                            name:
+                                name
 
-                    })
+                        })
 
                 }
             );
 
-        if (!response.ok) {
+
+        if (
+            !response.ok
+        ) {
 
             throw new Error(
                 `HTTP ${response.status}`
@@ -846,8 +1012,10 @@ async function addNewMember() {
 
         }
 
+
         const data =
             await response.json();
+
 
         if (
             !data.success
@@ -858,50 +1026,49 @@ async function addNewMember() {
                 "Unable to add your name."
             );
 
+
             return;
 
         }
+
 
         await loadMembers();
 
-        const newMemberId =
-            String(
-                data.memberId || ""
-            ).trim();
-
-        if (!newMemberId) {
-
-            alert(
-                "Your name was added, but the participant ID was not returned. Please select your name from the list."
-            );
-
-            return;
-
-        }
 
         select.value =
-            newMemberId;
+            String(
+                data.memberId
+            );
+
 
         input.value =
             "";
+
 
         const continueBtn =
             getElement(
                 "continueToReflectionBtn"
             );
 
-        if (continueBtn) {
+
+        if (
+            continueBtn
+        ) {
 
             continueBtn.disabled =
                 false;
 
         }
 
+
         alert(
-            "Your name has been added successfully."
+            data.existing
+                ? "Your name is already on the participant list."
+                : "Your name has been added successfully."
         );
 
     }
+
     catch (error) {
 
         console.error(
@@ -909,15 +1076,18 @@ async function addNewMember() {
             error
         );
 
+
         alert(
             "Unable to add your name. Please try again."
         );
 
     }
+
     finally {
 
         button.disabled =
             false;
+
 
         button.innerHTML =
             oldHTML;
@@ -942,10 +1112,12 @@ async function lockSelectedParticipant() {
 
     }
 
+
     const select =
         getElement(
             "memberSelect"
         );
+
 
     if (!select) {
 
@@ -953,10 +1125,13 @@ async function lockSelectedParticipant() {
 
     }
 
+
     const memberId =
         String(
-            select.value || ""
+            select.value ||
+            ""
         ).trim();
+
 
     if (!memberId) {
 
@@ -964,21 +1139,23 @@ async function lockSelectedParticipant() {
             "Please select your name first."
         );
 
+
         return;
 
     }
+
 
     const selectedOption =
         select.options[
             select.selectedIndex
         ];
 
+
     const memberName =
         selectedOption
-            ? String(
-                selectedOption.textContent || ""
-            ).trim()
+            ? selectedOption.textContent.trim()
             : "";
+
 
     if (!memberName) {
 
@@ -986,113 +1163,114 @@ async function lockSelectedParticipant() {
             "Unable to identify the selected participant."
         );
 
+
         return;
 
     }
 
 
+    /*
+     * Lock participant.
+     */
+
     selectedMemberId =
         memberId;
+
 
     selectedMemberName =
         memberName;
 
 
-    lockParticipantControls();
+    select.disabled =
+        true;
 
-    updateLockedMemberName();
-
-    showElement(
-        "lockedParticipantSection"
-    );
-
-    hideElement(
-        "participantSection"
-    );
-
-    saveQuizSession();
-
-    saveResultsMember();
-
-    await checkCompletionStatus();
-
-}
-
-
-/* ============================================================
-   LOCK PARTICIPANT CONTROLS
-   ============================================================ */
-
-function lockParticipantControls() {
-
-    const select =
-        getElement(
-            "memberSelect"
-        );
 
     const input =
         getElement(
             "newName"
         );
 
-    const addButton =
-        getElement(
-            "addNameBtn"
-        );
 
-    const continueBtn =
-        getElement(
-            "continueToReflectionBtn"
-        );
-
-    if (select) {
-
-        select.disabled =
-            true;
-
-    }
-
-    if (input) {
+    if (
+        input
+    ) {
 
         input.disabled =
             true;
 
     }
 
-    if (addButton) {
+
+    const addButton =
+        getElement(
+            "addNameBtn"
+        );
+
+
+    if (
+        addButton
+    ) {
 
         addButton.disabled =
             true;
 
     }
 
-    if (continueBtn) {
+
+    const continueBtn =
+        getElement(
+            "continueToReflectionBtn"
+        );
+
+
+    if (
+        continueBtn
+    ) {
 
         continueBtn.disabled =
             true;
 
     }
 
-}
-
-
-/* ============================================================
-   UPDATE LOCKED MEMBER NAME
-   ============================================================ */
-
-function updateLockedMemberName() {
 
     const lockedName =
         getElement(
             "lockedMemberName"
         );
 
-    if (lockedName) {
+
+    if (
+        lockedName
+    ) {
 
         lockedName.textContent =
             selectedMemberName;
 
     }
+
+
+    showElement(
+        "lockedParticipantSection"
+    );
+
+
+    hideElement(
+        "participantSection"
+    );
+
+
+    saveQuizSession();
+
+
+    /*
+     * The backend now checks:
+     *
+     * selectedMemberId + selectedLesson
+     *
+     * and nothing else.
+     */
+
+    await checkCompletionStatus();
 
 }
 
@@ -1112,6 +1290,7 @@ function saveQuizSession() {
 
     }
 
+
     const session = {
 
         memberId:
@@ -1128,58 +1307,22 @@ function saveQuizSession() {
 
     };
 
+
     try {
 
         sessionStorage.setItem(
             SESSION_KEY,
-            JSON.stringify(session)
+            JSON.stringify(
+                session
+            )
         );
 
     }
+
     catch (error) {
 
         console.warn(
             "Unable to save quiz session:",
-            error
-        );
-
-    }
-
-}
-
-
-/* ============================================================
-   SAVE RESULTS MEMBER
-   ============================================================ */
-
-function saveResultsMember() {
-
-    if (!selectedMemberId) {
-
-        return;
-
-    }
-
-    try {
-
-        localStorage.setItem(
-            RESULTS_MEMBER_KEY,
-            JSON.stringify({
-
-                memberId:
-                    selectedMemberId,
-
-                memberName:
-                    selectedMemberName
-
-            })
-        );
-
-    }
-    catch (error) {
-
-        console.warn(
-            "Unable to save results member:",
             error
         );
 
@@ -1203,7 +1346,9 @@ async function restoreQuizSession() {
 
     }
 
+
     let saved;
+
 
     try {
 
@@ -1212,16 +1357,21 @@ async function restoreQuizSession() {
                 SESSION_KEY
             );
 
+
         if (!raw) {
 
             return;
 
         }
 
+
         saved =
-            JSON.parse(raw);
+            JSON.parse(
+                raw
+            );
 
     }
+
     catch (error) {
 
         console.warn(
@@ -1229,7 +1379,37 @@ async function restoreQuizSession() {
             error
         );
 
-        clearQuizSession();
+
+        sessionStorage.removeItem(
+            SESSION_KEY
+        );
+
+
+        return;
+
+    }
+
+
+    /*
+     * CRITICAL:
+     *
+     * Never restore an old lesson's participant session.
+     */
+
+    if (
+        !saved ||
+        String(
+            saved.lessonNo
+        ).trim() !==
+        String(
+            selectedLesson
+        ).trim()
+    ) {
+
+        sessionStorage.removeItem(
+            SESSION_KEY
+        );
+
 
         return;
 
@@ -1237,26 +1417,8 @@ async function restoreQuizSession() {
 
 
     if (
-        !saved ||
-        String(
-            saved.lessonNo || ""
-        ).trim()
-        !==
-        String(
-            selectedLesson
-        ).trim()
+        !saved.memberId
     ) {
-
-        clearQuizSession();
-
-        return;
-
-    }
-
-
-    if (!saved.memberId) {
-
-        clearQuizSession();
 
         return;
 
@@ -1268,29 +1430,41 @@ async function restoreQuizSession() {
             "memberSelect"
         );
 
+
     if (!select) {
 
         return;
 
     }
 
+
     const option =
         Array.from(
             select.options
         ).find(
-            function (item) {
+            function (
+                item
+            ) {
 
                 return (
-                    String(item.value).trim() ===
-                    String(saved.memberId).trim()
+                    String(
+                        item.value
+                    ) ===
+                    String(
+                        saved.memberId
+                    )
                 );
 
             }
         );
 
+
     if (!option) {
 
-        clearQuizSession();
+        sessionStorage.removeItem(
+            SESSION_KEY
+        );
+
 
         return;
 
@@ -1302,6 +1476,7 @@ async function restoreQuizSession() {
             saved.memberId
         ).trim();
 
+
     selectedMemberName =
         String(
             saved.memberName ||
@@ -1310,19 +1485,94 @@ async function restoreQuizSession() {
         ).trim();
 
 
-    lockParticipantControls();
+    select.value =
+        selectedMemberId;
 
-    updateLockedMemberName();
+
+    select.disabled =
+        true;
+
+
+    const input =
+        getElement(
+            "newName"
+        );
+
+
+    if (
+        input
+    ) {
+
+        input.disabled =
+            true;
+
+    }
+
+
+    const addButton =
+        getElement(
+            "addNameBtn"
+        );
+
+
+    if (
+        addButton
+    ) {
+
+        addButton.disabled =
+            true;
+
+    }
+
+
+    const continueBtn =
+        getElement(
+            "continueToReflectionBtn"
+        );
+
+
+    if (
+        continueBtn
+    ) {
+
+        continueBtn.disabled =
+            true;
+
+    }
+
+
+    const lockedName =
+        getElement(
+            "lockedMemberName"
+        );
+
+
+    if (
+        lockedName
+    ) {
+
+        lockedName.textContent =
+            selectedMemberName;
+
+    }
+
 
     showElement(
         "lockedParticipantSection"
     );
 
+
     hideElement(
         "participantSection"
     );
 
-    saveResultsMember();
+
+    /*
+     * NEVER assume the saved session means the quiz
+     * was completed.
+     *
+     * Ask the backend.
+     */
 
     await checkCompletionStatus();
 
@@ -1337,40 +1587,53 @@ async function checkCompletionStatus() {
 
     if (
         !selectedMemberId ||
-        !selectedLesson ||
-        isCheckingCompletion
+        !selectedLesson
     ) {
 
         return;
 
     }
 
-    isCheckingCompletion =
-        true;
 
     const reflectionMessage =
         getElement(
             "reflectionMessage"
         );
 
-    if (reflectionMessage) {
+
+    if (
+        reflectionMessage
+    ) {
 
         reflectionMessage.className =
             "reflection-message show";
+
 
         reflectionMessage.textContent =
             "Checking your quiz status...";
 
     }
 
+
     try {
 
         const response =
             await fetch(
-                `${API}?action=getSLCCompletionStatus&memberId=${encodeURIComponent(selectedMemberId)}&lessonNo=${encodeURIComponent(selectedLesson)}`
+
+                `${API}?action=getSLCCompletionStatus` +
+                `&memberId=${encodeURIComponent(
+                    selectedMemberId
+                )}` +
+                `&lessonNo=${encodeURIComponent(
+                    selectedLesson
+                )}`
+
             );
 
-        if (!response.ok) {
+
+        if (
+            !response.ok
+        ) {
 
             throw new Error(
                 `HTTP ${response.status}`
@@ -1378,22 +1641,39 @@ async function checkCompletionStatus() {
 
         }
 
+
         const data =
             await response.json();
 
+
         console.log(
             "SLC completion status:",
-            data
+            {
+
+                memberId:
+                    selectedMemberId,
+
+                lessonNo:
+                    selectedLesson,
+
+                response:
+                    data
+
+            }
         );
+
 
         if (
             !data.success
         ) {
 
-            if (reflectionMessage) {
+            if (
+                reflectionMessage
+            ) {
 
                 reflectionMessage.className =
                     "reflection-message show error";
+
 
                 reflectionMessage.textContent =
                     data.message ||
@@ -1401,16 +1681,36 @@ async function checkCompletionStatus() {
 
             }
 
+
             return;
 
         }
 
 
-        const currentLessonQuizCompleted =
+        /*
+         * ====================================================
+         * CRITICAL RULE
+         * ====================================================
+         *
+         * DO NOT use:
+         *
+         *     data.completed
+         *
+         * to decide whether this participant has completed
+         * the current quiz.
+         *
+         * ONLY:
+         *
+         *     data.quizCompleted === true
+         *
+         * ====================================================
+         */
+
+        const currentQuizCompleted =
             data.quizCompleted === true;
 
 
-        const currentLessonReflectionCompleted =
+        const currentReflectionCompleted =
             data.reflectionCompleted === true;
 
 
@@ -1419,22 +1719,24 @@ async function checkCompletionStatus() {
            ==================================================== */
 
         if (
-            currentLessonQuizCompleted
+            currentQuizCompleted
         ) {
 
             quizCompleted =
                 true;
 
+
             reflectionSubmitted =
                 true;
 
-            saveResultsMember();
 
             clearQuizSession();
+
 
             showCompletedState(
                 data
             );
+
 
             return;
 
@@ -1446,20 +1748,22 @@ async function checkCompletionStatus() {
            ==================================================== */
 
         if (
-            currentLessonReflectionCompleted
+            currentReflectionCompleted
         ) {
 
             quizCompleted =
                 false;
 
+
             reflectionSubmitted =
                 true;
 
+
             saveQuizSession();
 
-            saveResultsMember();
 
             unlockQuiz();
+
 
             return;
 
@@ -1473,38 +1777,47 @@ async function checkCompletionStatus() {
         quizCompleted =
             false;
 
+
         reflectionSubmitted =
             false;
 
+
         saveQuizSession();
 
-        saveResultsMember();
 
         showElement(
             "reflectionSection"
         );
 
+
         hideElement(
             "quizSection"
         );
+
 
         hideElement(
             "completedSection"
         );
 
-        if (reflectionMessage) {
+
+        if (
+            reflectionMessage
+        ) {
 
             reflectionMessage.className =
                 "reflection-message";
+
 
             reflectionMessage.textContent =
                 "";
 
         }
 
+
         updateReflectionProgress();
 
     }
+
     catch (error) {
 
         console.error(
@@ -1512,21 +1825,19 @@ async function checkCompletionStatus() {
             error
         );
 
-        if (reflectionMessage) {
+
+        if (
+            reflectionMessage
+        ) {
 
             reflectionMessage.className =
                 "reflection-message show error";
+
 
             reflectionMessage.textContent =
                 "We could not check your quiz status. Please check your connection and try again.";
 
         }
-
-    }
-    finally {
-
-        isCheckingCompletion =
-            false;
 
     }
 
@@ -1537,19 +1848,24 @@ async function checkCompletionStatus() {
    SHOW COMPLETED STATE
    ============================================================ */
 
-function showCompletedState(data) {
+function showCompletedState(
+    data
+) {
 
     hideElement(
         "participantSection"
     );
 
+
     hideElement(
         "lockedParticipantSection"
     );
 
+
     hideElement(
         "reflectionSection"
     );
+
 
     hideElement(
         "quizSection"
@@ -1561,6 +1877,7 @@ function showCompletedState(data) {
             "completedSection"
         );
 
+
     if (!completedSection) {
 
         const container =
@@ -1568,49 +1885,67 @@ function showCompletedState(data) {
                 ".slcquiz-container"
             );
 
+
         if (!container) {
 
             return;
 
         }
 
+
         const card =
             document.createElement(
                 "section"
             );
 
+
         card.id =
             "completedSection";
+
 
         card.className =
             "quiz-card completed-card";
 
+
         card.innerHTML = `
+
             <div class="completed-icon">
                 <i class="fa-solid fa-circle-check"></i>
             </div>
 
-            <h2>You've already completed this quiz</h2>
+            <h2>
+                You've already completed this quiz
+            </h2>
 
             <p>
                 You have already completed Lesson
-                ${escapeHTML(selectedLesson)}.
-                You cannot repeat the reflection or quiz
-                for the same lesson.
+                ${escapeHTML(
+                    selectedLesson
+                )}.
+                You cannot repeat the reflection
+                or quiz for the same lesson.
             </p>
 
             <a
-                href="results.html?memberId=${encodeURIComponent(selectedMemberId)}"
+                href="results.html?memberId=${encodeURIComponent(
+                    selectedMemberId
+                )}"
                 class="purple-btn"
             >
-                <span>View My Results</span>
+                <span>
+                    View My Results
+                </span>
+
                 <i class="fa-solid fa-arrow-right"></i>
             </a>
+
         `;
+
 
         container.appendChild(
             card
         );
+
 
         return;
 
@@ -1622,20 +1957,30 @@ function showCompletedState(data) {
             "completedLesson"
         );
 
-    if (completedLesson) {
+
+    if (
+        completedLesson
+    ) {
 
         completedLesson.textContent =
             selectedLesson;
 
     }
 
+
     showElement(
         "completedSection"
     );
 
+
     window.scrollTo({
-        top: 0,
-        behavior: "smooth"
+
+        top:
+            0,
+
+        behavior:
+            "smooth"
+
     });
 
 }
@@ -1654,6 +1999,7 @@ function clearQuizSession() {
         );
 
     }
+
     catch (error) {
 
         console.warn(
@@ -1675,22 +2021,31 @@ function setupReflectionListeners() {
     const ids = [
 
         "reflection1",
+
         "reflection2",
+
         "reflection3"
 
     ];
 
+
     ids.forEach(
-        function (id) {
+        function (
+            id
+        ) {
 
             const field =
-                getElement(id);
+                getElement(
+                    id
+                );
+
 
             if (!field) {
 
                 return;
 
             }
+
 
             field.addEventListener(
                 "input",
@@ -1706,7 +2061,10 @@ function setupReflectionListeners() {
             "submitReflectionBtn"
         );
 
-    if (button) {
+
+    if (
+        button
+    ) {
 
         button.addEventListener(
             "click",
@@ -1722,17 +2080,25 @@ function setupReflectionListeners() {
    CLEAN REFLECTION TEXT
    ============================================================ */
 
-function cleanReflectionText(text) {
+function cleanReflectionText(
+    text
+) {
 
-    return String(text || "")
-        .replace(/\s+/g, " ")
+    return String(
+        text ||
+        ""
+    )
+        .replace(
+            /\s+/g,
+            " "
+        )
         .trim();
 
 }
 
 
 /* ============================================================
-   MEANINGFUL CHARACTER COUNT
+   REFLECTION CHARACTER COUNT
    ============================================================ */
 
 function getReflectionCharacterCount() {
@@ -1740,16 +2106,26 @@ function getReflectionCharacterCount() {
     const fields = [
 
         "reflection1",
+
         "reflection2",
+
         "reflection3"
 
     ];
 
+
     return fields.reduce(
-        function (total, id) {
+
+        function (
+            total,
+            id
+        ) {
 
             const field =
-                getElement(id);
+                getElement(
+                    id
+                );
+
 
             const text =
                 cleanReflectionText(
@@ -1758,15 +2134,21 @@ function getReflectionCharacterCount() {
                         : ""
                 );
 
+
             return (
                 total +
                 text
-                    .replace(/\s/g, "")
+                    .replace(
+                        /\s/g,
+                        ""
+                    )
                     .length
             );
 
         },
+
         0
+
     );
 
 }
@@ -1800,16 +2182,20 @@ function reflectionRequirementsMet() {
 
     ];
 
+
     const allAnswered =
         answers.every(
             Boolean
         );
 
+
     return (
+
         allAnswered &&
-        getReflectionCharacterCount()
-            >=
-            REFLECTION_MIN_CHARACTERS
+
+        getReflectionCharacterCount() >=
+        REFLECTION_MIN_CHARACTERS
+
     );
 
 }
@@ -1824,20 +2210,24 @@ function updateReflectionProgress() {
     const count =
         getReflectionCharacterCount();
 
+
     const button =
         getElement(
             "submitReflectionBtn"
         );
+
 
     const countDisplay =
         getElement(
             "reflectionCharacterCount"
         );
 
+
     const progressBar =
         getElement(
             "reflectionProgressBar"
         );
+
 
     const requirementText =
         getElement(
@@ -1874,7 +2264,9 @@ function updateReflectionProgress() {
         ).length;
 
 
-    if (countDisplay) {
+    if (
+        countDisplay
+    ) {
 
         countDisplay.textContent =
             `${count} / ${REFLECTION_MIN_CHARACTERS} characters`;
@@ -1882,18 +2274,27 @@ function updateReflectionProgress() {
     }
 
 
-    if (progressBar) {
+    if (
+        progressBar
+    ) {
 
         const percentage =
             Math.min(
+
                 100,
+
                 Math.round(
+
                     (
                         count /
                         REFLECTION_MIN_CHARACTERS
-                    ) * 100
+                    ) *
+                    100
+
                 )
+
             );
+
 
         progressBar.style.width =
             `${percentage}%`;
@@ -1905,23 +2306,29 @@ function updateReflectionProgress() {
         reflectionRequirementsMet();
 
 
-    if (button) {
+    if (
+        button
+    ) {
 
         button.disabled =
-            !ready ||
-            isSubmittingReflection;
+            !ready;
 
     }
 
 
-    if (requirementText) {
+    if (
+        requirementText
+    ) {
 
-        if (ready) {
+        if (
+            ready
+        ) {
 
             requirementText.textContent =
                 "You're ready. Submit your reflection to unlock the quiz.";
 
         }
+
         else if (
             answeredCount < 3
         ) {
@@ -1930,14 +2337,19 @@ function updateReflectionProgress() {
                 `Answer all three questions. ${answeredCount}/3 answered.`;
 
         }
+
         else {
 
             const remaining =
                 Math.max(
+
                     0,
+
                     REFLECTION_MIN_CHARACTERS -
                     count
+
                 );
+
 
             requirementText.textContent =
                 `You need ${remaining} more meaningful characters.`;
@@ -1957,8 +2369,7 @@ async function submitReflection() {
 
     if (
         reflectionSubmitted ||
-        quizCompleted ||
-        isSubmittingReflection
+        quizCompleted
     ) {
 
         return;
@@ -1966,35 +2377,45 @@ async function submitReflection() {
     }
 
 
-    if (!selectedMemberId) {
+    if (
+        !selectedMemberId
+    ) {
 
         alert(
             "Please select your name first."
         );
 
+
         return;
 
     }
 
 
-    if (!selectedLesson) {
+    if (
+        !selectedLesson
+    ) {
 
         alert(
             "The current quiz lesson could not be identified."
         );
 
+
         return;
 
     }
 
 
-    if (!reflectionRequirementsMet()) {
+    if (
+        !reflectionRequirementsMet()
+    ) {
 
         updateReflectionProgress();
+
 
         alert(
             "Please answer all three reflection questions and write at least 100 meaningful characters altogether."
         );
+
 
         return;
 
@@ -2005,21 +2426,23 @@ async function submitReflection() {
         cleanReflectionText(
             getElement(
                 "reflection1"
-            ).value
+            )?.value
         );
+
 
     const answer2 =
         cleanReflectionText(
             getElement(
                 "reflection2"
-            ).value
+            )?.value
         );
+
 
     const answer3 =
         cleanReflectionText(
             getElement(
                 "reflection3"
-            ).value
+            )?.value
         );
 
 
@@ -2028,33 +2451,38 @@ async function submitReflection() {
             "submitReflectionBtn"
         );
 
+
     const message =
         getElement(
             "reflectionMessage"
         );
 
 
-    isSubmittingReflection =
-        true;
-
-
-    if (button) {
+    if (
+        button
+    ) {
 
         button.disabled =
             true;
 
+
         button.innerHTML = `
+
             <i class="fa-solid fa-spinner fa-spin"></i>
             Saving Reflection...
+
         `;
 
     }
 
 
-    if (message) {
+    if (
+        message
+    ) {
 
         message.className =
             "reflection-message show";
+
 
         message.textContent =
             "Saving your reflection...";
@@ -2066,42 +2494,45 @@ async function submitReflection() {
 
         const response =
             await fetch(
+
                 API,
+
                 {
-                    method: "POST",
 
-                    headers: {
-                        "Content-Type":
-                            "text/plain;charset=utf-8"
-                    },
+                    method:
+                        "POST",
 
-                    body: JSON.stringify({
+                    body:
+                        JSON.stringify({
 
-                        action:
-                            "submitReflection",
+                            action:
+                                "submitReflection",
 
-                        memberId:
-                            selectedMemberId,
+                            memberId:
+                                selectedMemberId,
 
-                        lessonNo:
-                            selectedLesson,
+                            lessonNo:
+                                selectedLesson,
 
-                        question1:
-                            answer1,
+                            question1:
+                                answer1,
 
-                        question2:
-                            answer2,
+                            question2:
+                                answer2,
 
-                        question3:
-                            answer3
+                            question3:
+                                answer3
 
-                    })
+                        })
 
                 }
+
             );
 
 
-        if (!response.ok) {
+        if (
+            !response.ok
+        ) {
 
             throw new Error(
                 `HTTP ${response.status}`
@@ -2113,80 +2544,114 @@ async function submitReflection() {
         const data =
             await response.json();
 
+
         console.log(
             "Submit reflection response:",
             data
         );
 
 
+        /* ====================================================
+           SUCCESS
+           ==================================================== */
+
         if (
-            data.status ===
-            "already_completed"
+            data.success
         ) {
 
             reflectionSubmitted =
                 true;
 
+
+            quizCompleted =
+                false;
+
+
             saveQuizSession();
 
-            saveResultsMember();
 
-            unlockQuiz();
-
-            return;
-
-        }
-
-
-        if (
-            !data.success
-        ) {
-
-            if (message) {
+            if (
+                message
+            ) {
 
                 message.className =
-                    "reflection-message show error";
+                    "reflection-message show success";
+
 
                 message.textContent =
-                    data.message ||
-                    "Unable to save your reflection.";
+                    "Reflection saved successfully. Your quiz is now unlocked.";
 
             }
 
+
+            setTimeout(
+                function () {
+
+                    unlockQuiz();
+
+                },
+                500
+            );
+
+
             return;
 
         }
 
 
-        reflectionSubmitted =
-            true;
+        /* ====================================================
+           QUIZ ALREADY COMPLETED
+           ==================================================== */
 
-        saveQuizSession();
+        if (
+            data.status ===
+            "quiz_completed"
+        ) {
 
-        saveResultsMember();
+            quizCompleted =
+                true;
 
 
-        if (message) {
+            reflectionSubmitted =
+                true;
 
-            message.className =
-                "reflection-message show success";
 
-            message.textContent =
-                "Reflection saved successfully. Your quiz is now unlocked.";
+            clearQuizSession();
+
+
+            showCompletedState(
+                data
+            );
+
+
+            return;
 
         }
 
 
-        setTimeout(
-            function () {
+        /* ====================================================
+           OTHER ERROR
+           ==================================================== */
 
-                unlockQuiz();
+        if (
+            message
+        ) {
 
-            },
-            500
-        );
+            message.className =
+                "reflection-message show error";
+
+
+            message.textContent =
+                data.message ||
+                "Unable to save your reflection.";
+
+        }
+
+
+        restoreReflectionButton();
 
     }
+
     catch (error) {
 
         console.error(
@@ -2194,27 +2659,22 @@ async function submitReflection() {
             error
         );
 
-        if (message) {
+
+        if (
+            message
+        ) {
 
             message.className =
                 "reflection-message show error";
+
 
             message.textContent =
                 "Unable to save your reflection. Please check your connection and try again.";
 
         }
 
-    }
-    finally {
 
-        isSubmittingReflection =
-            false;
-
-        if (!reflectionSubmitted) {
-
-            restoreReflectionButton();
-
-        }
+        restoreReflectionButton();
 
     }
 
@@ -2232,21 +2692,26 @@ function restoreReflectionButton() {
             "submitReflectionBtn"
         );
 
+
     if (!button) {
 
         return;
 
     }
 
+
     button.disabled =
         !reflectionRequirementsMet();
 
+
     button.innerHTML = `
+
         <span>
             Submit Reflection
         </span>
 
         <i class="fa-solid fa-arrow-right"></i>
+
     `;
 
 }
@@ -2272,28 +2737,44 @@ function unlockQuiz() {
     reflectionSubmitted =
         true;
 
+
     quizCompleted =
         false;
 
 
     saveQuizSession();
 
-    saveResultsMember();
 
-    updateLockedMemberName();
+    const lockedName =
+        getElement(
+            "lockedMemberName"
+        );
+
+
+    if (
+        lockedName
+    ) {
+
+        lockedName.textContent =
+            selectedMemberName;
+
+    }
 
 
     showElement(
         "lockedParticipantSection"
     );
 
+
     hideElement(
         "participantSection"
     );
 
+
     hideElement(
         "reflectionSection"
     );
+
 
     hideElement(
         "completedSection"
@@ -2301,6 +2782,7 @@ function unlockQuiz() {
 
 
     renderQuestions();
+
 
     showElement(
         "quizSection"
@@ -2315,9 +2797,13 @@ function unlockQuiz() {
                     "quizSection"
                 );
 
-            if (quiz) {
+
+            if (
+                quiz
+            ) {
 
                 quiz.scrollIntoView({
+
                     behavior:
                         "smooth",
 
@@ -2346,6 +2832,7 @@ function renderQuestions() {
             "questions"
         );
 
+
     if (!container) {
 
         return;
@@ -2362,12 +2849,17 @@ function renderQuestions() {
     ) {
 
         container.innerHTML = `
+
             <div class="question-card">
+
                 <h3>
                     No quiz questions are available right now.
                 </h3>
+
             </div>
+
         `;
+
 
         return;
 
@@ -2385,49 +2877,61 @@ function renderQuestions() {
 
 
             [
+
                 "A",
+
                 "B",
+
                 "C",
+
                 "D"
 
             ].forEach(
-                function (letter) {
+                function (
+                    letter
+                ) {
 
                     const text =
                         question[
                             `option${letter}`
                         ];
 
-                    if (
-                        text === undefined ||
-                        text === null ||
-                        String(text).trim() === ""
-                    ) {
+
+                    if (!text) {
 
                         return;
 
                     }
 
+
                     options += `
+
                         <label class="option">
 
                             <input
                                 type="radio"
                                 name="q${index}"
-                                value="${escapeHTML(letter)}"
+                                value="${escapeHTML(
+                                    letter
+                                )}"
                             >
 
                             <span>
 
                                 <strong>
-                                    ${escapeHTML(letter)}.
+                                    ${escapeHTML(
+                                        letter
+                                    )}.
                                 </strong>
 
-                                ${escapeHTML(text)}
+                                ${escapeHTML(
+                                    text
+                                )}
 
                             </span>
 
                         </label>
+
                     `;
 
                 }
@@ -2435,6 +2939,7 @@ function renderQuestions() {
 
 
             container.innerHTML += `
+
                 <div class="question-card">
 
                     <div class="question-number">
@@ -2448,10 +2953,13 @@ function renderQuestions() {
                     </h3>
 
                     <div class="options">
+
                         ${options}
+
                     </div>
 
                 </div>
+
             `;
 
         }
@@ -2467,8 +2975,7 @@ function renderQuestions() {
 async function submitQuiz() {
 
     if (
-        quizCompleted ||
-        isSubmittingQuiz
+        quizCompleted
     ) {
 
         return;
@@ -2476,52 +2983,49 @@ async function submitQuiz() {
     }
 
 
-    if (!selectedMemberId) {
+    if (
+        !selectedMemberId
+    ) {
 
         alert(
             "Your participant has not been selected."
         );
 
+
         return;
 
     }
 
 
-    if (!reflectionSubmitted) {
+    if (
+        !reflectionSubmitted
+    ) {
 
         alert(
             "Please complete the reflection before taking the quiz."
         );
 
+
         return;
 
     }
 
 
-    if (!selectedLesson) {
+    if (
+        !selectedLesson
+    ) {
 
         alert(
             "The current quiz lesson could not be identified."
         );
 
-        return;
-
-    }
-
-
-    if (!quizData.length) {
-
-        alert(
-            "No quiz questions are available."
-        );
 
         return;
 
     }
 
 
-    const answers =
-        [];
+    const answers = [];
 
 
     for (
@@ -2535,22 +3039,26 @@ async function submitQuiz() {
                 `input[name="q${i}"]:checked`
             );
 
+
         if (!selected) {
 
             alert(
                 `Please answer question ${i + 1}.`
             );
 
+
             const questionCards =
                 document.querySelectorAll(
                     ".question-card"
                 );
+
 
             if (
                 questionCards[i]
             ) {
 
                 questionCards[i].scrollIntoView({
+
                     behavior:
                         "smooth",
 
@@ -2561,9 +3069,11 @@ async function submitQuiz() {
 
             }
 
+
             return;
 
         }
+
 
         answers.push(
             selected.value
@@ -2578,18 +3088,19 @@ async function submitQuiz() {
         );
 
 
-    isSubmittingQuiz =
-        true;
-
-
-    if (submitBtn) {
+    if (
+        submitBtn
+    ) {
 
         submitBtn.disabled =
             true;
 
+
         submitBtn.innerHTML = `
+
             <i class="fa-solid fa-spinner fa-spin"></i>
             Submitting...
+
         `;
 
     }
@@ -2599,36 +3110,39 @@ async function submitQuiz() {
 
         const response =
             await fetch(
+
                 API,
+
                 {
-                    method: "POST",
 
-                    headers: {
-                        "Content-Type":
-                            "text/plain;charset=utf-8"
-                    },
+                    method:
+                        "POST",
 
-                    body: JSON.stringify({
+                    body:
+                        JSON.stringify({
 
-                        action:
-                            "scoreQuiz",
+                            action:
+                                "scoreQuiz",
 
-                        memberId:
-                            selectedMemberId,
+                            memberId:
+                                selectedMemberId,
 
-                        lessonNo:
-                            selectedLesson,
+                            lessonNo:
+                                selectedLesson,
 
-                        answers:
-                            answers
+                            answers:
+                                answers
 
-                    })
+                        })
 
                 }
+
             );
 
 
-        if (!response.ok) {
+        if (
+            !response.ok
+        ) {
 
             throw new Error(
                 `HTTP ${response.status}`
@@ -2640,6 +3154,7 @@ async function submitQuiz() {
         const data =
             await response.json();
 
+
         console.log(
             "Score response:",
             data
@@ -2647,7 +3162,7 @@ async function submitQuiz() {
 
 
         /* ====================================================
-           DUPLICATE ATTEMPT
+           ALREADY COMPLETED
            ==================================================== */
 
         if (
@@ -2655,15 +3170,25 @@ async function submitQuiz() {
             "already_attempted"
         ) {
 
+            /*
+             * This is safe because the backend only returns
+             * this after checking EXACT member + current lesson.
+             */
+
             quizCompleted =
                 true;
 
-            saveResultsMember();
 
             clearQuizSession();
 
+
             window.location.href =
-                `results.html?memberId=${encodeURIComponent(selectedMemberId)}&lessonNo=${encodeURIComponent(selectedLesson)}`;
+                `results.html?memberId=${encodeURIComponent(
+                    selectedMemberId
+                )}&lessonNo=${encodeURIComponent(
+                    selectedLesson
+                )}`;
+
 
             return;
 
@@ -2682,20 +3207,51 @@ async function submitQuiz() {
             reflectionSubmitted =
                 false;
 
+
             showElement(
                 "reflectionSection"
             );
+
 
             hideElement(
                 "quizSection"
             );
 
+
             await checkCompletionStatus();
+
 
             alert(
                 data.message ||
                 "Please complete your reflection before taking the quiz."
             );
+
+
+            restoreQuizSubmitButton();
+
+
+            return;
+
+        }
+
+
+        /* ====================================================
+           LESSON MISMATCH
+           ==================================================== */
+
+        if (
+            data.status ===
+            "lesson_mismatch"
+        ) {
+
+            alert(
+                data.message ||
+                "This quiz is no longer active."
+            );
+
+
+            window.location.reload();
+
 
             return;
 
@@ -2715,6 +3271,10 @@ async function submitQuiz() {
                 "Unable to submit quiz."
             );
 
+
+            restoreQuizSubmitButton();
+
+
             return;
 
         }
@@ -2727,26 +3287,36 @@ async function submitQuiz() {
         quizCompleted =
             true;
 
+
         reflectionSubmitted =
             true;
 
 
-        /*
-        CRITICAL FIX:
-
-        Save the participant for results
-        BEFORE clearing the active quiz session.
-        */
-
-        saveResultsMember();
-
         clearQuizSession();
 
 
+        /*
+         * IMPORTANT:
+         *
+         * Pass the exact selected member ID.
+         *
+         * Results page will use this member ID to load
+         * that participant's history.
+         */
+
         window.location.href =
-            `results.html?memberId=${encodeURIComponent(selectedMemberId)}&lessonNo=${encodeURIComponent(selectedLesson)}&completed=1`;
+
+            `results.html` +
+            `?memberId=${encodeURIComponent(
+                selectedMemberId
+            )}` +
+            `&lessonNo=${encodeURIComponent(
+                selectedLesson
+            )}` +
+            `&completed=1`;
 
     }
+
     catch (error) {
 
         console.error(
@@ -2754,21 +3324,13 @@ async function submitQuiz() {
             error
         );
 
+
         alert(
             "Unable to submit quiz. Please check your connection and try again."
         );
 
-    }
-    finally {
 
-        isSubmittingQuiz =
-            false;
-
-        if (!quizCompleted) {
-
-            restoreQuizSubmitButton();
-
-        }
+        restoreQuizSubmitButton();
 
     }
 
@@ -2786,18 +3348,23 @@ function restoreQuizSubmitButton() {
             "submitBtn"
         );
 
+
     if (!submitBtn) {
 
         return;
 
     }
 
+
     submitBtn.disabled =
         false;
 
+
     submitBtn.innerHTML = `
+
         <i class="fa-solid fa-paper-plane"></i>
         Submit Quiz
+
     `;
 
 }
