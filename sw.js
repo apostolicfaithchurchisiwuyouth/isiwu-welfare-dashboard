@@ -1,32 +1,33 @@
 /* ============================================================
    AFC ISIU YOUTH PORTAL V2
    FILE: sw.js
-   PURPOSE: SERVICE WORKER / OFFLINE ENGINE
+   PURPOSE: PWA SERVICE WORKER
    VERSION: 13
-
-   RESPONSIBILITIES:
-   - Cache the core application shell
-   - Cache important page assets
-   - Support offline navigation
-   - Preserve real server 404 responses
-   - Provide a built-in offline fallback screen
-   - Never own application UI logic
-   - Never register itself
    ============================================================ */
 
 "use strict";
 
 
 /* ============================================================
-   CONFIGURATION
+   CACHE VERSION
    ============================================================ */
 
-const CACHE_VERSION = "afc-isiu-pwa-v13";
+const CACHE_VERSION =
+    "afc-isiu-pwa-v13";
 
-const STATIC_CACHE = `${CACHE_VERSION}-static`;
-const PAGE_CACHE = `${CACHE_VERSION}-pages`;
+const STATIC_CACHE =
+    `${CACHE_VERSION}-static`;
+
+const PAGE_CACHE =
+    `${CACHE_VERSION}-pages`;
+
+
+/* ============================================================
+   APPLICATION SHELL
+   ============================================================ */
 
 const APP_SHELL = [
+
     "/",
     "/index.html",
     "/manifest.json",
@@ -35,17 +36,22 @@ const APP_SHELL = [
     "/css/main.css",
     "/css/layout.css",
 
-    /* Global JavaScript */
+    /* Lessons CSS */
+    "/css/lessons.css",
+
+    /* Global JS */
     "/js/main.js",
     "/js/pwa.js",
 
-    /* Lessons page */
-    "/pages/lessons.html",
-    "/css/lessons.css",
+    /* Lessons JS */
     "/js/lessons.js",
 
     /* Branding */
-    "/images/logo.png"
+    "/images/logo.png",
+
+    /* Lessons page */
+    "/pages/lessons.html"
+
 ];
 
 
@@ -53,421 +59,568 @@ const APP_SHELL = [
    INSTALL
    ============================================================ */
 
-self.addEventListener("install", event => {
+self.addEventListener(
+    "install",
+    event => {
 
-    console.log(
-        "[SW] Installing:",
-        CACHE_VERSION
-    );
-
-    event.waitUntil(
-        Promise.all([
-            cacheAppShell(),
-            self.skipWaiting()
-        ])
-    );
-});
+        console.log(
+            "AFC Isiu PWA: Installing:",
+            CACHE_VERSION
+        );
 
 
-/* ============================================================
-   CACHE APP SHELL
-   ============================================================ */
+        event.waitUntil(
 
-async function cacheAppShell() {
+            (async () => {
 
-    const cache = await caches.open(STATIC_CACHE);
+                try {
 
-    /*
-     * Do not fail the entire installation because one optional
-     * asset is temporarily unavailable.
-     */
-    await Promise.allSettled(
-        APP_SHELL.map(async url => {
+                    const cache =
+                        await caches.open(
+                            STATIC_CACHE
+                        );
 
-            try {
 
-                const request = new Request(url, {
-                    cache: "no-cache"
-                });
+                    /*
+                     * Cache each file individually.
+                     *
+                     * One missing file should not prevent the
+                     * service worker from installing.
+                     */
 
-                const response = await fetch(request);
+                    for (
+                        const file of APP_SHELL
+                    ) {
 
-                if (response.ok) {
+                        try {
 
-                    await cache.put(
-                        request,
-                        response.clone()
-                    );
+                            const response =
+                                await fetch(
+                                    file,
+                                    {
+                                        cache:
+                                            "no-store"
+                                    }
+                                );
+
+
+                            if (
+                                response.ok
+                            ) {
+
+                                await cache.put(
+                                    file,
+                                    response.clone()
+                                );
+
+
+                                console.log(
+                                    "AFC Isiu PWA: Cached:",
+                                    file
+                                );
+
+                            }
+
+                        }
+
+                        catch (error) {
+
+                            console.warn(
+                                "AFC Isiu PWA: Could not cache:",
+                                file,
+                                error
+                            );
+
+                        }
+
+                    }
+
+
+                    /*
+                     * Activate the new worker immediately.
+                     */
+
+                    await self.skipWaiting();
+
 
                     console.log(
-                        "[SW] Cached:",
-                        url
-                    );
-
-                } else {
-
-                    console.warn(
-                        "[SW] Could not cache:",
-                        url,
-                        response.status
+                        "AFC Isiu PWA: Installation complete."
                     );
 
                 }
 
-            } catch (error) {
+                catch (error) {
 
-                console.warn(
-                    "[SW] Cache failed:",
-                    url,
-                    error
-                );
+                    console.error(
+                        "AFC Isiu PWA: Installation failed:",
+                        error
+                    );
 
-            }
+                }
 
-        })
-    );
-}
+            })()
+
+        );
+
+    }
+
+);
 
 
 /* ============================================================
    ACTIVATE
    ============================================================ */
 
-self.addEventListener("activate", event => {
+self.addEventListener(
+    "activate",
+    event => {
 
-    console.log(
-        "[SW] Activating:",
-        CACHE_VERSION
-    );
+        console.log(
+            "AFC Isiu PWA: Activating:",
+            CACHE_VERSION
+        );
 
-    event.waitUntil(
-        Promise.all([
-            removeOldCaches(),
-            self.clients.claim()
-        ])
-    );
-});
+
+        event.waitUntil(
+
+            (async () => {
+
+                const cacheNames =
+                    await caches.keys();
+
+
+                await Promise.all(
+
+                    cacheNames.map(
+                        cacheName => {
+
+                            /*
+                             * Delete old AFC caches.
+                             */
+
+                            if (
+                                cacheName.startsWith(
+                                    "afc-isiu-pwa-"
+                                ) &&
+                                cacheName !==
+                                    STATIC_CACHE &&
+                                cacheName !==
+                                    PAGE_CACHE
+                            ) {
+
+                                console.log(
+                                    "AFC Isiu PWA: Deleting old cache:",
+                                    cacheName
+                                );
+
+
+                                return caches.delete(
+                                    cacheName
+                                );
+
+                            }
+
+
+                            return Promise.resolve();
+
+                        }
+                    )
+
+                );
+
+
+                /*
+                 * Take control immediately.
+                 */
+
+                await self.clients.claim();
+
+
+                console.log(
+                    "AFC Isiu PWA: Service worker activated."
+                );
+
+            })()
+
+        );
+
+    }
+
+);
 
 
 /* ============================================================
-   REMOVE OLD CACHES
+   MESSAGE HANDLER
    ============================================================ */
 
-async function removeOldCaches() {
+self.addEventListener(
+    "message",
+    event => {
 
-    const cacheNames = await caches.keys();
+        if (
+            event.data &&
+            event.data.type ===
+                "SKIP_WAITING"
+        ) {
 
-    await Promise.all(
+            self.skipWaiting();
 
-        cacheNames.map(cacheName => {
+        }
 
-            if (
-                cacheName.startsWith("afc-isiu-pwa-") &&
-                !cacheName.startsWith(CACHE_VERSION)
-            ) {
+    }
 
-                console.log(
-                    "[SW] Removing old cache:",
-                    cacheName
-                );
-
-                return caches.delete(cacheName);
-
-            }
-
-            return Promise.resolve();
-
-        })
-
-    );
-}
+);
 
 
 /* ============================================================
    FETCH
    ============================================================ */
 
-self.addEventListener("fetch", event => {
+self.addEventListener(
+    "fetch",
+    event => {
 
-    const request = event.request;
-
-    /*
-     * Only handle GET requests.
-     */
-    if (request.method !== "GET") {
-        return;
-    }
-
-    const url = new URL(request.url);
-
-    /*
-     * Only control this website's own requests.
-     *
-     * External resources such as:
-     * - Google Fonts
-     * - Font Awesome CDN
-     * - jsDelivr
-     * - Google Sheets
-     *
-     * remain outside the service worker's cache control.
-     */
-    if (url.origin !== self.location.origin) {
-        return;
-    }
+        const request =
+            event.request;
 
 
-    /* --------------------------------------------------------
-       AUDIO
-       -------------------------------------------------------- */
+        /*
+         * Only GET requests.
+         */
 
-    /*
-     * Audio is intentionally not aggressively pre-cached.
-     *
-     * Yoruba audio may be large, so it continues to use the
-     * network rather than filling the application cache.
-     */
-    if (url.pathname.startsWith("/audio/")) {
+        if (
+            request.method !== "GET"
+        ) {
+
+            return;
+
+        }
+
+
+        const url =
+            new URL(
+                request.url
+            );
+
+
+        /*
+         * Never intercept external websites.
+         *
+         * This includes:
+         * - Google Sheets
+         * - Google Fonts
+         * - Font Awesome
+         * - jsDelivr
+         * - other CDNs
+         */
+
+        if (
+            url.origin !==
+            self.location.origin
+        ) {
+
+            return;
+
+        }
+
+
+        /*
+         * Audio remains network-only for now.
+         */
+
+        if (
+            url.pathname.startsWith(
+                "/audio/"
+            )
+        ) {
+
+            event.respondWith(
+                fetch(request)
+            );
+
+            return;
+
+        }
+
+
+        /*
+         * Navigation requests.
+         */
+
+        if (
+            request.mode ===
+            "navigate"
+        ) {
+
+            event.respondWith(
+                handleNavigation(
+                    request
+                )
+            );
+
+            return;
+
+        }
+
+
+        /*
+         * CSS / JS / images / other assets.
+         */
 
         event.respondWith(
-            networkOnly(request)
+            handleAsset(
+                request
+            )
         );
 
-        return;
     }
 
-
-    /* --------------------------------------------------------
-       NAVIGATION REQUESTS
-       -------------------------------------------------------- */
-
-    if (request.mode === "navigate") {
-
-        event.respondWith(
-            handleNavigationRequest(request)
-        );
-
-        return;
-    }
-
-
-    /* --------------------------------------------------------
-       NORMAL STATIC ASSETS
-       -------------------------------------------------------- */
-
-    event.respondWith(
-        handleStaticRequest(request)
-    );
-
-});
+);
 
 
 /* ============================================================
    NAVIGATION HANDLER
    ============================================================ */
 
-async function handleNavigationRequest(request) {
+async function handleNavigation(
+    request
+) {
+
+    const pageCache =
+        await caches.open(
+            PAGE_CACHE
+        );
+
+
+    /*
+     * NETWORK FIRST
+     *
+     * Always attempt to get the newest page.
+     */
 
     try {
 
-        /*
-         * Always try the network first for pages.
-         *
-         * This means:
-         * - New pages are available immediately.
-         * - Vercel 404 pages remain real 404s.
-         * - Updated HTML is received when online.
-         */
-        const networkResponse = await fetch(request);
+        const networkResponse =
+            await fetch(
+                request,
+                {
+                    cache:
+                        "no-store"
+                }
+            );
+
 
         /*
          * IMPORTANT:
          *
-         * Never replace a real 404 response with the offline
-         * page.
+         * Never replace a genuine 404 with
+         * the offline page.
          */
+
         if (
-            networkResponse.status === 404 ||
-            networkResponse.status === 410
+            networkResponse.status ===
+                404 ||
+            networkResponse.status ===
+                410
         ) {
 
             return networkResponse;
+
         }
 
 
         /*
-         * Cache successful HTML pages.
+         * Cache successful pages.
          */
-        if (networkResponse.ok) {
 
-            const cache = await caches.open(PAGE_CACHE);
+        if (
+            networkResponse.ok
+        ) {
 
-            await cache.put(
+            await pageCache.put(
                 request,
                 networkResponse.clone()
             );
 
         }
 
+
         return networkResponse;
 
-    } catch (error) {
+    }
 
-        console.warn(
-            "[SW] Navigation network failed:",
-            request.url
+    catch (error) {
+
+        console.log(
+            "AFC Isiu PWA: Navigation network unavailable."
         );
-
-
-        /*
-         * First try the exact requested page from the page cache.
-         */
-        const cachedPage = await caches.match(request);
-
-        if (cachedPage) {
-
-            return cachedPage;
-        }
-
-
-        /*
-         * Then try the exact requested page from the static cache.
-         */
-        const cachedStaticPage = await caches.match(request);
-
-        if (cachedStaticPage) {
-
-            return cachedStaticPage;
-        }
-
-
-        /*
-         * If this is a known app-shell route, try the cached
-         * corresponding file.
-         */
-        const pathname = new URL(
-            request.url
-        ).pathname;
-
-        const shellMatch = APP_SHELL.find(
-            shellPath => shellPath === pathname
-        );
-
-        if (shellMatch) {
-
-            const shellResponse = await caches.match(
-                shellMatch
-            );
-
-            if (shellResponse) {
-
-                return shellResponse;
-            }
-
-        }
-
-
-        /*
-         * Nothing is available locally.
-         *
-         * Return the built-in offline page.
-         */
-        return createOfflineResponse();
 
     }
+
+
+    /*
+     * Try exact page from page cache.
+     */
+
+    const cachedPage =
+        await pageCache.match(
+            request
+        );
+
+
+    if (
+        cachedPage
+    ) {
+
+        return cachedPage;
+
+    }
+
+
+    /*
+     * Try exact page from static cache.
+     */
+
+    const staticPage =
+        await caches.match(
+            request
+        );
+
+
+    if (
+        staticPage
+    ) {
+
+        return staticPage;
+
+    }
+
+
+    /*
+     * Try matching pathname from static cache.
+     */
+
+    const url =
+        new URL(
+            request.url
+        );
+
+
+    const shellPage =
+        await caches.match(
+            url.pathname
+        );
+
+
+    if (
+        shellPage
+    ) {
+
+        return shellPage;
+
+    }
+
+
+    /*
+     * Built-in offline page.
+     */
+
+    return createOfflineResponse();
 
 }
 
 
 /* ============================================================
-   STATIC REQUEST HANDLER
+   ASSET HANDLER
    ============================================================ */
 
-async function handleStaticRequest(request) {
+async function handleAsset(
+    request
+) {
 
     /*
-     * Cache first.
+     * NETWORK FIRST.
      *
-     * This makes CSS, JS, images and other application assets
-     * available immediately when offline.
+     * This is intentional so updated lessons.js,
+     * lessons.css and other assets become available
+     * immediately after deployment.
      */
-    const cachedResponse = await caches.match(request);
 
-    if (cachedResponse) {
-
-        /*
-         * For application assets we can return the cached
-         * version immediately.
-         */
-        return cachedResponse;
-    }
-
-
-    /*
-     * Not cached yet — try the network.
-     */
     try {
 
-        const networkResponse = await fetch(request);
+        const networkResponse =
+            await fetch(
+                request,
+                {
+                    cache:
+                        "no-store"
+                }
+            );
 
-        if (networkResponse.ok) {
 
-            const cache = await caches.open(STATIC_CACHE);
+        if (
+            networkResponse &&
+            networkResponse.ok
+        ) {
+
+            const cache =
+                await caches.open(
+                    STATIC_CACHE
+                );
+
 
             await cache.put(
                 request,
                 networkResponse.clone()
             );
 
+
+            return networkResponse;
+
         }
 
-        return networkResponse;
+    }
 
-    } catch (error) {
+    catch (error) {
 
-        console.warn(
-            "[SW] Static request failed:",
+        console.log(
+            "AFC Isiu PWA: Asset network unavailable:",
             request.url
         );
 
-        /*
-         * No generic HTML fallback is returned here because
-         * CSS/JS/image requests should fail naturally rather
-         * than receiving an HTML document.
-         */
-        return new Response(
-            "",
-            {
-                status: 503,
-                statusText: "Offline"
-            }
+    }
+
+
+    /*
+     * OFFLINE FALLBACK.
+     */
+
+    const cachedResponse =
+        await caches.match(
+            request
         );
+
+
+    if (
+        cachedResponse
+    ) {
+
+        return cachedResponse;
 
     }
 
-}
 
+    /*
+     * Return a normal 503 for assets.
+     */
 
-/* ============================================================
-   NETWORK ONLY
-   ============================================================ */
-
-async function networkOnly(request) {
-
-    try {
-
-        return await fetch(request);
-
-    } catch (error) {
-
-        return new Response(
-            "",
-            {
-                status: 503,
-                statusText: "Offline"
-            }
-        );
-
-    }
+    return new Response(
+        "",
+        {
+            status: 503,
+            statusText: "Offline"
+        }
+    );
 
 }
 
@@ -478,7 +631,9 @@ async function networkOnly(request) {
 
 function createOfflineResponse() {
 
-    const html = `
+    return new Response(
+
+        `
 <!DOCTYPE html>
 
 <html lang="en">
@@ -498,14 +653,10 @@ function createOfflineResponse() {
     >
 
     <title>
-        You're Offline
+        You're Offline | AFC Isiu Youth
     </title>
 
     <style>
-
-        :root {
-            color-scheme: dark;
-        }
 
         * {
             box-sizing: border-box;
@@ -514,7 +665,6 @@ function createOfflineResponse() {
         html,
         body {
             margin: 0;
-            width: 100%;
             min-height: 100%;
         }
 
@@ -530,98 +680,83 @@ function createOfflineResponse() {
 
             padding: 24px;
 
-            overflow-x: hidden;
-
             background:
                 radial-gradient(
-                    circle at 20% 10%,
-                    rgba(74, 7, 84, 0.45),
-                    transparent 38%
+                    circle at 15% 15%,
+                    rgba(74, 7, 84, .5),
+                    transparent 35%
                 ),
                 radial-gradient(
-                    circle at 85% 90%,
-                    rgba(234, 88, 12, 0.18),
+                    circle at 85% 85%,
+                    rgba(234, 88, 12, .2),
                     transparent 35%
                 ),
                 #0A0016;
 
-            color: #ffffff;
+            color: white;
 
             font-family:
-                Inter,
-                system-ui,
-                -apple-system,
-                BlinkMacSystemFont,
-                "Segoe UI",
+                "DM Sans",
+                Arial,
                 sans-serif;
 
         }
 
 
-        .offline-page {
+        .offline-card {
 
             width: 100%;
 
-            max-width: 520px;
+            max-width: 500px;
+
+            padding: 40px 28px;
 
             text-align: center;
 
-            padding: 42px 26px;
-
-            border: 1px solid
-                rgba(255, 255, 255, 0.09);
-
-            border-radius: 28px;
+            border-radius: 26px;
 
             background:
-                rgba(255, 255, 255, 0.045);
+                rgba(255,255,255,.05);
 
-            backdrop-filter: blur(22px);
+            border:
+                1px solid
+                rgba(255,255,255,.1);
 
-            -webkit-backdrop-filter: blur(22px);
-
-            box-shadow:
-                0 24px 80px
-                rgba(0, 0, 0, 0.35);
+            backdrop-filter:
+                blur(20px);
 
         }
 
 
         .offline-logo {
 
-            width: 76px;
-
-            height: 76px;
-
-            object-fit: contain;
-
-            margin-bottom: 24px;
-
-            filter:
-                drop-shadow(
-                    0 8px 24px
-                    rgba(234, 88, 12, 0.2)
-                );
-
-        }
-
-
-        .wifi-icon {
-
             width: 72px;
 
             height: 72px;
 
+            object-fit: contain;
+
+            margin-bottom: 22px;
+
+        }
+
+
+        .wifi {
+
+            width: 64px;
+
+            height: 54px;
+
             margin:
-                0 auto 22px;
+                0 auto 24px;
 
             position: relative;
 
         }
 
 
-        .wifi-icon::before,
-        .wifi-icon::after {
+        .wifi::before,
+        .wifi::after {
 
             content: "";
 
@@ -633,36 +768,36 @@ function createOfflineResponse() {
                 translateX(-50%)
                 rotate(-45deg);
 
-            border: 5px solid
-                rgba(255, 255, 255, 0.78);
+            border:
+                5px solid
+                rgba(255,255,255,.8);
 
-            border-left-color: transparent;
+            border-left-color:
+                transparent;
 
-            border-bottom-color: transparent;
+            border-bottom-color:
+                transparent;
 
-            border-radius: 50%;
-
-        }
-
-
-        .wifi-icon::before {
-
-            width: 58px;
-
-            height: 58px;
-
-            top: 4px;
+            border-radius:
+                50%;
 
         }
 
 
-        .wifi-icon::after {
+        .wifi::before {
+
+            width: 56px;
+            height: 56px;
+            top: 0;
+
+        }
+
+
+        .wifi::after {
 
             width: 34px;
-
             height: 34px;
-
-            top: 16px;
+            top: 12px;
 
         }
 
@@ -671,109 +806,69 @@ function createOfflineResponse() {
 
             position: absolute;
 
-            width: 9px;
-
-            height: 9px;
-
-            border-radius: 50%;
-
-            background: #ea580c;
-
             left: 50%;
+            bottom: 0;
 
-            bottom: 8px;
+            width: 8px;
+            height: 8px;
 
             transform:
                 translateX(-50%);
+
+            border-radius: 50%;
+
+            background:
+                #ea580c;
 
         }
 
 
         h1 {
 
-            margin: 0 0 12px;
+            margin:
+                0 0 12px;
 
-            font-size: clamp(
-                1.7rem,
-                5vw,
-                2.35rem
-            );
+            font-family:
+                "Bricolage Grotesque",
+                Arial,
+                sans-serif;
 
-            line-height: 1.1;
+            font-size:
+                2rem;
 
-            letter-spacing: -0.04em;
+            line-height:
+                1.1;
 
         }
 
 
         p {
 
-            margin: 0 auto;
-
-            max-width: 410px;
+            margin: 0;
 
             color:
-                rgba(255, 255, 255, 0.68);
+                rgba(255,255,255,.68);
 
-            font-size: 0.95rem;
+            line-height:
+                1.65;
 
-            line-height: 1.65;
-
-        }
-
-
-        .connection-status {
-
-            display: inline-flex;
-
-            align-items: center;
-
-            gap: 8px;
-
-            margin-top: 22px;
-
-            padding: 9px 13px;
-
-            border-radius: 999px;
-
-            background:
-                rgba(234, 88, 12, 0.1);
-
-            border: 1px solid
-                rgba(234, 88, 12, 0.18);
-
-            color:
-                rgba(255, 255, 255, 0.76);
-
-            font-size: 0.78rem;
+            font-size:
+                .9rem;
 
         }
 
 
-        .status-dot {
+        .actions {
 
-            width: 7px;
+            display:
+                flex;
 
-            height: 7px;
-
-            border-radius: 50%;
-
-            background: #ea580c;
-
-        }
-
-
-        .offline-actions {
-
-            display: flex;
+            justify-content:
+                center;
 
             gap: 10px;
 
-            justify-content: center;
-
             margin-top: 28px;
-
-            flex-wrap: wrap;
 
         }
 
@@ -782,26 +877,28 @@ function createOfflineResponse() {
 
             border: 0;
 
-            border-radius: 13px;
+            border-radius:
+                12px;
 
-            padding: 12px 18px;
-
-            font: inherit;
-
-            font-size: 0.85rem;
-
-            font-weight: 700;
-
-            cursor: pointer;
-
-            color: #ffffff;
+            padding:
+                12px 18px;
 
             background:
-                linear-gradient(
-                    135deg,
-                    #4a0754,
-                    #6b1477
-                );
+                #4a0754;
+
+            color: white;
+
+            font:
+                inherit;
+
+            font-size:
+                .82rem;
+
+            font-weight:
+                700;
+
+            cursor:
+                pointer;
 
         }
 
@@ -809,52 +906,24 @@ function createOfflineResponse() {
         button.secondary {
 
             background:
-                rgba(255, 255, 255, 0.07);
-
-            border: 1px solid
-                rgba(255, 255, 255, 0.1);
+                rgba(255,255,255,.08);
 
         }
 
 
-        button:active {
+        @media(max-width:480px) {
 
-            transform: scale(0.98);
-
-        }
-
-
-        @media (max-width: 480px) {
-
-            .offline-page {
-
-                padding: 34px 20px;
-
-                border-radius: 23px;
-
+            .offline-card {
+                padding: 32px 20px;
             }
 
-            .offline-actions {
-
-                flex-direction: column;
-
+            .actions {
+                flex-direction:
+                    column;
             }
 
             button {
-
                 width: 100%;
-
-            }
-
-        }
-
-
-        @media (prefers-reduced-motion: reduce) {
-
-            * {
-                scroll-behavior: auto !important;
-                transition: none !important;
-                animation: none !important;
             }
 
         }
@@ -863,19 +932,18 @@ function createOfflineResponse() {
 
 </head>
 
-
 <body>
 
-    <main class="offline-page">
+    <main class="offline-card">
 
         <img
-            class="offline-logo"
             src="/images/logo.png"
-            alt="AFC Isiwu Youth"
+            class="offline-logo"
+            alt="AFC Isiu Youth"
         >
 
         <div
-            class="wifi-icon"
+            class="wifi"
             aria-hidden="true"
         >
             <span class="wifi-dot"></span>
@@ -890,22 +958,11 @@ function createOfflineResponse() {
             so this page can't load fresh information.
         </p>
 
-        <div class="connection-status">
-
-            <span
-                class="status-dot"
-                aria-hidden="true"
-            ></span>
-
-            Waiting for connection
-
-        </div>
-
-        <div class="offline-actions">
+        <div class="actions">
 
             <button
                 type="button"
-                id="tryAgain"
+                onclick="location.reload()"
             >
                 Try Again
             </button>
@@ -913,7 +970,7 @@ function createOfflineResponse() {
             <button
                 type="button"
                 class="secondary"
-                id="goHome"
+                onclick="location.href='/'"
             >
                 Go Home
             </button>
@@ -922,63 +979,21 @@ function createOfflineResponse() {
 
     </main>
 
-
-    <script>
-
-        const tryAgain =
-            document.getElementById("tryAgain");
-
-        const goHome =
-            document.getElementById("goHome");
-
-
-        if (tryAgain) {
-
-            tryAgain.addEventListener(
-                "click",
-                () => {
-                    window.location.reload();
-                }
-            );
-
-        }
-
-
-        if (goHome) {
-
-            goHome.addEventListener(
-                "click",
-                () => {
-                    window.location.href = "/";
-                }
-            );
-
-        }
-
-
-        window.addEventListener(
-            "online",
-            () => {
-                window.location.reload();
-            }
-        );
-
-    </script>
-
 </body>
 
 </html>
-    `;
+        `,
 
-    return new Response(
-        html,
         {
             status: 503,
-            statusText: "Offline",
+
             headers: {
-                "Content-Type": "text/html; charset=UTF-8"
+                "Content-Type":
+                    "text/html; charset=UTF-8"
             }
+
         }
+
     );
 
 }
