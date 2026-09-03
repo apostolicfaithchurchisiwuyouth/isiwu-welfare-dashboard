@@ -1,7 +1,21 @@
 /* =========================================================
    AFC ISIU YOUTH PORTAL
    SERVICE WORKER
-   PWA CACHE + OFFLINE SUPPORT
+   VERSION: 11.0
+
+   PURPOSE:
+   - PWA caching
+   - Offline support
+   - Reliable navigation
+   - Preserve real server 404 responses
+   - Network-first page loading
+   - Network-first local assets
+   - No interception of external services
+
+   IMPORTANT:
+   - Missing online pages MUST remain 404.
+   - The service worker must NEVER turn an online 404
+     into the dashboard/index page.
    ========================================================= */
 
 "use strict";
@@ -11,7 +25,7 @@
    CACHE VERSION
    ========================================================= */
 
-const CACHE_VERSION = "afc-isiu-pwa-v10";
+const CACHE_VERSION = "afc-isiu-pwa-v11";
 
 const STATIC_CACHE =
     `${CACHE_VERSION}-static`;
@@ -33,7 +47,7 @@ const OFFLINE_PAGE =
 
 /* =========================================================
    APP SHELL
-========================================================= */
+   ========================================================= */
 
 const APP_SHELL = [
 
@@ -41,13 +55,11 @@ const APP_SHELL = [
 
     "/index.html",
 
-    "/offline.html",
-
     "/manifest.json",
 
     /* =====================================================
        CSS
-    ===================================================== */
+       ===================================================== */
 
     "/css/main.css",
 
@@ -57,10 +69,9 @@ const APP_SHELL = [
 
     "/css/pwa.css",
 
-
     /* =====================================================
        JAVASCRIPT
-    ===================================================== */
+       ===================================================== */
 
     "/js/main.js",
 
@@ -68,10 +79,9 @@ const APP_SHELL = [
 
     "/js/pwa.js",
 
-
     /* =====================================================
        BRAND
-    ===================================================== */
+       ===================================================== */
 
     "/images/logo.png"
 
@@ -80,7 +90,7 @@ const APP_SHELL = [
 
 /* =========================================================
    INSTALL
-========================================================= */
+   ========================================================= */
 
 self.addEventListener(
     "install",
@@ -98,6 +108,10 @@ self.addEventListener(
 
                 try {
 
+                    /*
+                     * Create the static cache.
+                     */
+
                     const staticCache =
                         await caches.open(
                             STATIC_CACHE
@@ -105,13 +119,11 @@ self.addEventListener(
 
 
                     /*
-                     * Cache app-shell files individually.
+                     * Cache each app-shell file
+                     * independently.
                      *
-                     * This is intentional.
-                     *
-                     * If one file is unavailable,
-                     * the remaining files can still
-                     * be cached.
+                     * This means one missing asset
+                     * will not stop installation.
                      */
 
                     for (
@@ -175,7 +187,58 @@ self.addEventListener(
 
 
                     /*
-                     * Activate immediately.
+                     * Cache the offline page
+                     * in its dedicated cache.
+                     */
+
+                    try {
+
+                        const offlineResponse =
+                            await fetch(
+                                OFFLINE_PAGE,
+                                {
+                                    cache: "no-store"
+                                }
+                            );
+
+
+                        if (
+                            offlineResponse &&
+                            offlineResponse.ok
+                        ) {
+
+                            const offlineCache =
+                                await caches.open(
+                                    OFFLINE_CACHE
+                                );
+
+
+                            await offlineCache.put(
+                                OFFLINE_PAGE,
+                                offlineResponse.clone()
+                            );
+
+
+                            console.log(
+                                "AFC Isiu PWA: Offline page cached."
+                            );
+
+                        }
+
+                    }
+
+                    catch (error) {
+
+                        console.warn(
+                            "AFC Isiu PWA: Offline page cache failed:",
+                            error
+                        );
+
+                    }
+
+
+                    /*
+                     * Activate this worker immediately.
                      */
 
                     await self.skipWaiting();
@@ -206,7 +269,7 @@ self.addEventListener(
 
 /* =========================================================
    ACTIVATE
-========================================================= */
+   ========================================================= */
 
 self.addEventListener(
     "activate",
@@ -234,8 +297,8 @@ self.addEventListener(
                             cacheName => {
 
                                 /*
-                                 * Remove previous AFC
-                                 * PWA cache versions.
+                                 * Delete old AFC Isiu
+                                 * service-worker caches.
                                  */
 
                                 if (
@@ -275,7 +338,8 @@ self.addEventListener(
 
 
                     /*
-                     * Take control immediately.
+                     * Take control of open pages
+                     * immediately.
                      */
 
                     await self.clients.claim();
@@ -307,7 +371,7 @@ self.addEventListener(
 
 /* =========================================================
    MESSAGE HANDLER
-========================================================= */
+   ========================================================= */
 
 self.addEventListener(
     "message",
@@ -324,7 +388,7 @@ self.addEventListener(
 
         if (
             event.data.type ===
-                "SKIP_WAITING"
+            "SKIP_WAITING"
         ) {
 
             console.log(
@@ -342,7 +406,7 @@ self.addEventListener(
 
 /* =========================================================
    FETCH HANDLER
-========================================================= */
+   ========================================================= */
 
 self.addEventListener(
     "fetch",
@@ -353,12 +417,12 @@ self.addEventListener(
 
 
         /*
-         * Only GET requests.
+         * Only intercept GET requests.
          */
 
         if (
             request.method !==
-                "GET"
+            "GET"
         ) {
 
             return;
@@ -386,12 +450,12 @@ self.addEventListener(
          * - CDNs
          * - Font Awesome
          * - PapaParse
-         * - other external resources
+         * - Other external services
          */
 
         if (
             url.origin !==
-                self.location.origin
+            self.location.origin
         ) {
 
             return;
@@ -404,7 +468,7 @@ self.addEventListener(
          * AUDIO
          * =================================================
          *
-         * Audio files are intentionally NOT cached.
+         * Audio is intentionally not cached.
          */
 
         if (
@@ -414,11 +478,7 @@ self.addEventListener(
         ) {
 
             event.respondWith(
-
-                fetch(
-                    request
-                )
-
+                fetch(request)
             );
 
             return;
@@ -434,15 +494,11 @@ self.addEventListener(
 
         if (
             request.mode ===
-                "navigate"
+            "navigate"
         ) {
 
             event.respondWith(
-
-                handleNavigation(
-                    request
-                )
-
+                handleNavigation(request)
             );
 
             return;
@@ -457,11 +513,7 @@ self.addEventListener(
          */
 
         event.respondWith(
-
-            handleAsset(
-                request
-            )
-
+            handleAsset(request)
         );
 
     }
@@ -470,7 +522,7 @@ self.addEventListener(
 
 /* =========================================================
    NAVIGATION HANDLER
-========================================================= */
+   ========================================================= */
 
 async function handleNavigation(
     request
@@ -487,7 +539,9 @@ async function handleNavigation(
      * NETWORK FIRST
      * =====================================================
      *
-     * Always attempt to load the newest page first.
+     * The network gets the first opportunity to answer.
+     *
+     * This is extremely important for routing.
      */
 
     try {
@@ -501,14 +555,50 @@ async function handleNavigation(
             );
 
 
+        /*
+         * =================================================
+         * IMPORTANT 404 RULE
+         * =================================================
+         *
+         * If Vercel returns a real 404, return it
+         * immediately.
+         *
+         * DO NOT:
+         *
+         * - replace it with index.html
+         * - replace it with /
+         * - replace it with a cached page
+         * - turn it into an offline page
+         */
+
+        if (
+            networkResponse &&
+            networkResponse.status === 404
+        ) {
+
+            console.log(
+                "AFC Isiu PWA: Server 404:",
+                request.url
+            );
+
+
+            return networkResponse;
+
+        }
+
+
+        /*
+         * =================================================
+         * OTHER SERVER RESPONSES
+         * =================================================
+         *
+         * Successful pages are cached.
+         */
+
         if (
             networkResponse &&
             networkResponse.ok
         ) {
-
-            /*
-             * Save the newest page.
-             */
 
             await pageCache.put(
                 request,
@@ -520,9 +610,32 @@ async function handleNavigation(
 
         }
 
+
+        /*
+         * For other unsuccessful responses,
+         * do NOT automatically return the root page.
+         *
+         * We only fall through to cache when appropriate.
+         */
+
+        console.warn(
+            "AFC Isiu PWA: Navigation returned:",
+            networkResponse
+                ? networkResponse.status
+                : "No response",
+            request.url
+        );
+
     }
 
     catch (error) {
+
+        /*
+         * A fetch failure normally means the device
+         * is offline or the network is unavailable.
+         *
+         * Only in this situation do we use cache fallback.
+         */
 
         console.log(
             "AFC Isiu PWA: Navigation network unavailable."
@@ -535,6 +648,9 @@ async function handleNavigation(
      * =====================================================
      * PAGE CACHE FALLBACK
      * =====================================================
+     *
+     * Used only when the network cannot provide
+     * a usable response.
      */
 
     const cachedPage =
@@ -547,6 +663,12 @@ async function handleNavigation(
         cachedPage
     ) {
 
+        console.log(
+            "AFC Isiu PWA: Serving cached page:",
+            request.url
+        );
+
+
         return cachedPage;
 
     }
@@ -554,8 +676,15 @@ async function handleNavigation(
 
     /*
      * =====================================================
-     * APP SHELL FALLBACK
+     * APP-SHELL CACHE FALLBACK
      * =====================================================
+     *
+     * This can serve explicitly cached shell pages.
+     *
+     * We deliberately DO NOT fall back to "/" here.
+     *
+     * That is what prevents a missing page from becoming
+     * the dashboard.
      */
 
     const shellPage =
@@ -575,29 +704,13 @@ async function handleNavigation(
 
     /*
      * =====================================================
-     * ROOT FALLBACK
-     * =====================================================
-     */
-
-    const rootPage =
-        await caches.match(
-            "/"
-        );
-
-
-    if (
-        rootPage
-    ) {
-
-        return rootPage;
-
-    }
-
-
-    /*
-     * =====================================================
      * OFFLINE PAGE
      * =====================================================
+     *
+     * Only reached when:
+     *
+     * - network is unavailable
+     * - requested page isn't cached
      */
 
     const offlineCache =
@@ -616,6 +729,11 @@ async function handleNavigation(
         offlinePage
     ) {
 
+        console.log(
+            "AFC Isiu PWA: Serving offline page."
+        );
+
+
         return offlinePage;
 
     }
@@ -623,7 +741,7 @@ async function handleNavigation(
 
     /*
      * =====================================================
-     * FINAL FALLBACK
+     * FINAL OFFLINE FALLBACK
      * =====================================================
      */
 
@@ -634,7 +752,7 @@ async function handleNavigation(
 
 /* =========================================================
    ASSET HANDLER
-========================================================= */
+   ========================================================= */
 
 async function handleAsset(
     request
@@ -645,16 +763,14 @@ async function handleAsset(
      * NETWORK FIRST
      * =====================================================
      *
-     * This is important for development.
-     *
-     * Updated:
+     * This ensures updated:
      *
      * - CSS
      * - JS
      * - images
      * - manifest
      *
-     * are obtained from the network whenever possible.
+     * are retrieved whenever online.
      */
 
     try {
@@ -689,6 +805,21 @@ async function handleAsset(
 
         }
 
+
+        /*
+         * If the server explicitly says the asset
+         * does not exist, preserve that response.
+         */
+
+        if (
+            networkResponse &&
+            networkResponse.status === 404
+        ) {
+
+            return networkResponse;
+
+        }
+
     }
 
     catch (error) {
@@ -704,8 +835,7 @@ async function handleAsset(
     /*
      * =====================================================
      * CACHE FALLBACK
-     * =====================================================
-     */
+     * ===================================================== */
 
     const cachedResponse =
         await caches.match(
@@ -725,8 +855,7 @@ async function handleAsset(
     /*
      * =====================================================
      * NO CACHE
-     * =====================================================
-     */
+     * ===================================================== */
 
     return new Response(
         "",
@@ -742,7 +871,7 @@ async function handleAsset(
 
 /* =========================================================
    OFFLINE RESPONSE
-========================================================= */
+   ========================================================= */
 
 function createOfflineResponse() {
 
