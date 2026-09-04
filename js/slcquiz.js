@@ -72,6 +72,9 @@ const LAST_POINTS_KEY =
 const LAST_TOTAL_KEY =
     "lastQuizTotal";
 
+const LAST_LESSON_KEY =
+    "lastQuizLesson";
+
 
 /* ============================================================
    STATE
@@ -98,6 +101,8 @@ let selectedMemberName = "";
 let reflectionSubmitted = false;
 
 let quizLoaded = false;
+
+let quizSubmitted = false;
 
 
 /* ============================================================
@@ -383,6 +388,42 @@ async function loadQuiz() {
             `🟢 Lesson ${selectedLesson} Quiz is Open`;
 
 
+        /* =========================================
+           UPDATE HERO INFORMATION
+        ========================================== */
+
+        const heroLesson =
+            getElement(
+                "heroLessonNumber"
+            );
+
+
+        const heroQuestionCount =
+            getElement(
+                "heroQuestionCount"
+            );
+
+
+        if (heroLesson) {
+
+            heroLesson.textContent =
+                selectedLesson || "—";
+
+        }
+
+
+        if (heroQuestionCount) {
+
+            heroQuestionCount.textContent =
+                quizData.length;
+
+        }
+
+
+        /* =========================================
+           QUESTION COUNT BADGE
+        ========================================== */
+
         const questionBadge =
             getElement(
                 "questionCountBadge"
@@ -396,6 +437,10 @@ async function loadQuiz() {
 
         }
 
+
+        /* =========================================
+           COUNTDOWN
+        ========================================== */
 
         if (
             quizCloseTime
@@ -465,6 +510,10 @@ function startCountdown(mode) {
         return;
 
     }
+
+
+    countdown.style.display =
+        "inline-flex";
 
 
     countdownInterval =
@@ -859,18 +908,8 @@ async function addNewMember() {
         }
 
 
-        /*
-        Reload members so the newly created
-        member appears in the select.
-        */
-
         await loadMembers();
 
-
-        /*
-        Automatically select the new/existing
-        member returned by the backend.
-        */
 
         select.value =
             data.memberId;
@@ -1000,10 +1039,6 @@ function lockSelectedParticipant() {
         memberName;
 
 
-    /*
-    Lock the participant immediately.
-    */
-
     select.disabled =
         true;
 
@@ -1050,16 +1085,8 @@ function lockSelectedParticipant() {
     }
 
 
-    /*
-    Save current session.
-    */
-
     saveQuizSession();
 
-
-    /*
-    Show locked participant.
-    */
 
     const lockedName =
         getElement(
@@ -1084,11 +1111,6 @@ function lockSelectedParticipant() {
         "participantSection"
     );
 
-
-    /*
-    Now check whether this participant
-    has already completed reflection.
-    */
 
     checkReflectionStatus();
 
@@ -1209,11 +1231,6 @@ async function restoreQuizSession() {
     }
 
 
-    /*
-    Never restore a session belonging
-    to another week's quiz.
-    */
-
     if (
         !saved ||
         String(
@@ -1242,10 +1259,6 @@ async function restoreQuizSession() {
 
     }
 
-
-    /*
-    Make sure the saved member still exists.
-    */
 
     const select =
         getElement(
@@ -1276,10 +1289,6 @@ async function restoreQuizSession() {
 
 
     if (!option) {
-
-        /*
-        Do not restore an invalid member.
-        */
 
         sessionStorage.removeItem(
             SESSION_KEY
@@ -1322,11 +1331,6 @@ async function restoreQuizSession() {
         "participantSection"
     );
 
-
-    /*
-    Always verify the reflection from the
-    backend instead of trusting sessionStorage.
-    */
 
     await checkReflectionStatus();
 
@@ -1433,11 +1437,6 @@ function getReflectionCharacterCount() {
             )?.value
         );
 
-
-    /*
-    Count actual characters without
-    whitespace.
-    */
 
     return (
 
@@ -1668,10 +1667,6 @@ async function checkReflectionStatus() {
     }
 
 
-    /*
-    Show reflection while checking.
-    */
-
     showElement(
         "reflectionSection"
     );
@@ -1736,10 +1731,6 @@ async function checkReflectionStatus() {
         }
 
 
-        /*
-        Reflection has not been completed.
-        */
-
         reflectionSubmitted =
             false;
 
@@ -1786,19 +1777,19 @@ async function checkReflectionStatus() {
         );
 
 
-        const message =
+        const errorMessage =
             getElement(
                 "reflectionMessage"
             );
 
 
-        if (message) {
+        if (errorMessage) {
 
-            message.className =
+            errorMessage.className =
                 "reflection-message show error";
 
 
-            message.textContent =
+            errorMessage.textContent =
                 "We could not check your reflection status. Please check your connection and try again.";
 
         }
@@ -2013,10 +2004,6 @@ async function submitReflection() {
         }
 
 
-        /*
-        Reflection successfully saved.
-        */
-
         reflectionSubmitted =
             true;
 
@@ -2035,11 +2022,6 @@ async function submitReflection() {
 
         }
 
-
-        /*
-        Small delay so the success message
-        can be seen before moving forward.
-        */
 
         setTimeout(
             function () {
@@ -2117,10 +2099,6 @@ function unlockQuiz() {
     saveQuizSession();
 
 
-    /*
-    Make sure participant remains locked.
-    */
-
     const lockedName =
         getElement(
             "lockedMemberName"
@@ -2145,19 +2123,10 @@ function unlockQuiz() {
     );
 
 
-    /*
-    Hide reflection after successful
-    completion.
-    */
-
     hideElement(
         "reflectionSection"
     );
 
-
-    /*
-    Render quiz.
-    */
 
     renderQuestions();
 
@@ -2166,10 +2135,6 @@ function unlockQuiz() {
         "quizSection"
     );
 
-
-    /*
-    Scroll gently to quiz.
-    */
 
     setTimeout(
         function () {
@@ -2240,6 +2205,10 @@ function renderQuestions() {
     }
 
 
+    let allQuestionsHTML =
+        "";
+
+
     quizData.forEach(
         function (
             question,
@@ -2302,7 +2271,7 @@ function renderQuestions() {
             );
 
 
-            container.innerHTML += `
+            allQuestionsHTML += `
 
                 <div class="question-card">
 
@@ -2335,6 +2304,10 @@ function renderQuestions() {
         }
     );
 
+
+    container.innerHTML =
+        allQuestionsHTML;
+
 }
 
 
@@ -2344,9 +2317,14 @@ function renderQuestions() {
 
 async function submitQuiz() {
 
-    /*
-    Frontend guard.
-    */
+    if (
+        quizSubmitted
+    ) {
+
+        return;
+
+    }
+
 
     if (
         !selectedMemberId
@@ -2391,10 +2369,6 @@ async function submitQuiz() {
         [];
 
 
-    /*
-    Collect every answer.
-    */
-
     for (
         let i = 0;
         i < quizData.length;
@@ -2416,7 +2390,7 @@ async function submitQuiz() {
 
             const questionCards =
                 document.querySelectorAll(
-                    ".question-card"
+                    "#questions .question-card"
                 );
 
 
@@ -2511,11 +2485,6 @@ async function submitQuiz() {
             !data.success
         ) {
 
-            /*
-            If the backend says reflection is
-            required, send the user back to it.
-            */
-
             if (
                 data.status ===
                 "reflection_required"
@@ -2545,7 +2514,6 @@ async function submitQuiz() {
 
 
                 await checkReflectionStatus();
-
 
             }
             else {
@@ -2579,9 +2547,9 @@ async function submitQuiz() {
         }
 
 
-        /*
-        Store result data.
-        */
+        /* =========================================
+           STORE RESULT DATA
+        ========================================== */
 
         reviewData =
             Array.isArray(
@@ -2633,14 +2601,19 @@ async function submitQuiz() {
         );
 
 
-        /*
-        Clear the current week's active
-        quiz session.
+        localStorage.setItem(
+            LAST_LESSON_KEY,
+            selectedLesson
+        );
 
-        This prevents the participant from
-        reopening the quiz and changing
-        anything after submission.
-        */
+
+        /* =========================================
+           MARK QUIZ AS SUBMITTED
+        ========================================== */
+
+        quizSubmitted =
+            true;
+
 
         try {
 
@@ -2659,9 +2632,9 @@ async function submitQuiz() {
         }
 
 
-        /*
-        Hide quiz and show individual result.
-        */
+        /* =========================================
+           HIDE QUIZ
+        ========================================== */
 
         hideElement(
             "quizSection"
@@ -2682,6 +2655,10 @@ async function submitQuiz() {
             "resultSection"
         );
 
+
+        /* =========================================
+           RESULT VALUES
+        ========================================== */
 
         const scoreText =
             getElement(
@@ -2709,10 +2686,16 @@ async function submitQuiz() {
         }
 
 
+        /*
+        IMPORTANT:
+        The labels already exist in the HTML.
+        Therefore we only place the number here.
+        */
+
         if (pointsText) {
 
             pointsText.textContent =
-                `Points earned: ${data.pointsEarned}`;
+                data.pointsEarned;
 
         }
 
@@ -2720,7 +2703,7 @@ async function submitQuiz() {
         if (totalPointsText) {
 
             totalPointsText.textContent =
-                `Total points: ${data.totalPoints}`;
+                data.totalPoints;
 
         }
 
@@ -2917,12 +2900,35 @@ function showReview() {
                     }
 
 
-                    let background =
-                        "#ffffff";
+                    const correctAnswer =
+                        String(
+                            item.correctAnswer
+                        )
+                            .trim()
+                            .toUpperCase();
 
 
-                    let border =
-                        "#ececec";
+                    const userAnswer =
+                        String(
+                            item.userAnswer
+                        )
+                            .trim()
+                            .toUpperCase();
+
+
+                    const isCorrectAnswer =
+                        letter ===
+                        correctAnswer;
+
+
+                    const isWrongUserAnswer =
+                        letter ===
+                        userAnswer &&
+                        !item.correct;
+
+
+                    let classes =
+                        "review-option";
 
 
                     let badge =
@@ -2930,17 +2936,11 @@ function showReview() {
 
 
                     if (
-                        letter ===
-                        String(
-                            item.correctAnswer
-                        ).trim().toUpperCase()
+                        isCorrectAnswer
                     ) {
 
-                        background =
-                            "#ecfdf5";
-
-                        border =
-                            "#22c55e";
+                        classes +=
+                            " correct";
 
                         badge =
                             "✓ Correct Answer";
@@ -2949,19 +2949,11 @@ function showReview() {
 
 
                     if (
-                        letter ===
-                        String(
-                            item.userAnswer
-                        ).trim().toUpperCase()
-                        &&
-                        !item.correct
+                        isWrongUserAnswer
                     ) {
 
-                        background =
-                            "#fef2f2";
-
-                        border =
-                            "#ef4444";
+                        classes +=
+                            " incorrect";
 
                         badge =
                             "✕ Your Answer";
@@ -2971,37 +2963,18 @@ function showReview() {
 
                     html += `
 
-                        <div
-                            style="
-                                padding:14px;
-                                border-radius:13px;
-                                margin-bottom:9px;
-                                background:${background};
-                                border:2px solid ${border};
-                                font-size:.68rem;
-                                line-height:1.45;
-                            "
-                        >
+                        <div class="${classes}">
 
                             <strong>
-
                                 ${escapeHTML(letter)}.
-
                             </strong>
 
                             ${escapeHTML(text)}
 
-
                             ${
                                 badge
                                     ? `
-                                        <div
-                                            style="
-                                                margin-top:7px;
-                                                font-size:.58rem;
-                                                font-weight:700;
-                                            "
-                                        >
+                                        <div class="review-option-badge">
                                             ${badge}
                                         </div>
                                     `
@@ -3136,7 +3109,7 @@ function openSavedScore() {
     if (pointsText) {
 
         pointsText.textContent =
-            `Points earned: ${points}`;
+            points || "0";
 
     }
 
@@ -3144,9 +3117,13 @@ function openSavedScore() {
     if (totalPointsText) {
 
         totalPointsText.textContent =
-            `Total points: ${total}`;
+            total || "0";
 
     }
+
+
+    quizSubmitted =
+        true;
 
 
     hideElement(
@@ -3161,6 +3138,11 @@ function openSavedScore() {
 
     hideElement(
         "reviewSection"
+    );
+
+
+    hideElement(
+        "lockedParticipantSection"
     );
 
 
@@ -3226,6 +3208,10 @@ function openSavedReview() {
     }
 
 
+    quizSubmitted =
+        true;
+
+
     showReview();
 
 }
@@ -3238,14 +3224,36 @@ function openSavedReview() {
 function backToQuiz() {
 
     /*
-    This button only returns to the quiz
-    while the quiz is still in the current
-    in-memory session.
+    Once a quiz has been submitted, the user should
+    not be allowed to reopen the active quiz UI.
 
-    If the quiz was already submitted,
-    backend duplicate-attempt protection
-    prevents another submission.
+    The result should remain the final state.
     */
+
+    if (
+        quizSubmitted
+    ) {
+
+        hideElement(
+            "reviewSection"
+        );
+
+
+        showElement(
+            "resultSection"
+        );
+
+
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+
+
+        return;
+
+    }
+
 
     hideElement(
         "resultSection"
