@@ -710,8 +710,8 @@ button:disabled {
 }
 
 .locked-participant-icon {
-    width: 43px;
-    height: 43px;
+    width: 35px;
+    height: 35px;
 
     flex: 0 0 auto;
 
@@ -752,7 +752,7 @@ button:disabled {
 
     font-family: "Bricolage Grotesque", sans-serif;
 
-    font-size: .95rem;
+    font-size: .78rem;
 }
 
 .locked-participant-info small {
@@ -762,7 +762,7 @@ button:disabled {
 
     font-family: "DM Sans", sans-serif;
 
-    font-size: .73rem;
+    font-size: .68rem;
 }
 
 .locked-badge {
