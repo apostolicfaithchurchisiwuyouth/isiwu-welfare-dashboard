@@ -1,21 +1,25 @@
 /* ============================================================
    AFC ISIU YOUTH PORTAL V2
    FILE: results.js
-   PURPOSE: SLC RESULTS + QUIZ HISTORY CONTROLLER
-   ============================================================
+   PURPOSE:
+   SLC RESULTS + QUIZ HISTORY CONTROLLER
 
-   IMPORTANT:
+   RESULTS FLOW:
 
-   - URL memberId has highest priority.
-   - Current session memberId is second.
-   - Saved memberId is third.
-   - Results are ALWAYS filtered by the exact member ID.
-   - Quiz history contains ALL completed lessons for that member.
-   - A result from an old lesson must never be treated as the
-     current lesson's completion.
-   - Answer review is loaded using memberId + lessonNo.
-   - This page is completely independent from the quiz page.
+   1. Identify participant.
+   2. Load every completed quiz for that participant.
+   3. Display summary statistics.
+   4. Highlight the latest or requested lesson result.
+   5. Display complete quiz history.
+   6. Allow answer review for every completed quiz.
+
+   MEMBER IDENTIFICATION PRIORITY:
+
+   1. URL memberId
+   2. Active quiz session
+   3. Saved local member
    ============================================================ */
+
 
 "use strict";
 
@@ -63,18 +67,7 @@ document.addEventListener(
     "DOMContentLoaded",
     async function () {
 
-        if (typeof AOS !== "undefined") {
-
-            AOS.init({
-                duration: 650,
-                once: true
-            });
-
-        }
-
-
         setupResultsListeners();
-
 
         await identifyMember();
 
@@ -101,7 +94,9 @@ function showResultElement(id) {
 
     if (element) {
 
-        element.classList.remove("hidden");
+        element.classList.remove(
+            "hidden"
+        );
 
     }
 
@@ -116,7 +111,9 @@ function hideResultElement(id) {
 
     if (element) {
 
-        element.classList.add("hidden");
+        element.classList.add(
+            "hidden"
+        );
 
     }
 
@@ -129,12 +126,140 @@ function hideResultElement(id) {
 
 function escapeResultHTML(value) {
 
-    return String(value ?? "")
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+    return String(
+        value ?? ""
+    )
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+
+/* ============================================================
+   NUMBER HELPERS
+============================================================ */
+
+function getNumber(value) {
+
+    if (
+        value === null ||
+        value === undefined ||
+        value === ""
+    ) {
+
+        return 0;
+
+    }
+
+
+    const cleaned =
+        String(value)
+            .replace(
+                /,/g,
+                ""
+            )
+            .replace(
+                /[^0-9.-]/g,
+                ""
+            );
+
+
+    const number =
+        Number(cleaned);
+
+
+    return Number.isFinite(number)
+        ? number
+        : 0;
+
+}
+
+
+function formatNumber(value) {
+
+    const number =
+        getNumber(value);
+
+
+    return number.toLocaleString(
+        "en-NG"
+    );
+
+}
+
+
+/* ============================================================
+   RESULT HELPERS
+============================================================ */
+
+function getLessonNumber(result) {
+
+    return String(
+        result.lessonNo ??
+        result.lesson ??
+        result.lessonNumber ??
+        ""
+    ).trim();
+
+}
+
+
+function getResultScore(result) {
+
+    return result.score ??
+        result.correctAnswers ??
+        result.correct ??
+        0;
+
+}
+
+
+function getResultPoints(result) {
+
+    return result.pointsEarned ??
+        result.points ??
+        result.totalPointsEarned ??
+        0;
+
+}
+
+
+function getResultTotal(result) {
+
+    return result.totalQuestions ??
+        result.total ??
+        result.questionCount ??
+        result.maxScore ??
+        "";
+
+}
+
+
+function getResultDate(result) {
+
+    return result.timestamp ??
+        result.date ??
+        result.createdAt ??
+        result.submittedAt ??
+        "";
 
 }
 
@@ -151,11 +276,6 @@ async function identifyMember() {
         );
 
 
-    /*
-     * Lesson number is only used to identify which
-     * result should be highlighted.
-     */
-
     queryLessonNo =
         String(
             params.get("lessonNo") || ""
@@ -164,7 +284,8 @@ async function identifyMember() {
 
     /*
      * ========================================================
-     * PRIORITY 1 — URL MEMBER ID
+     * PRIORITY 1
+     * URL MEMBER ID
      * ========================================================
      */
 
@@ -176,7 +297,8 @@ async function identifyMember() {
 
     /*
      * ========================================================
-     * PRIORITY 2 — ACTIVE SLC SESSION
+     * PRIORITY 2
+     * ACTIVE QUIZ SESSION
      * ========================================================
      */
 
@@ -210,6 +332,7 @@ async function identifyMember() {
                     memberName =
                         String(
                             parsed.memberName ||
+                            parsed.name ||
                             ""
                         ).trim();
 
@@ -232,7 +355,8 @@ async function identifyMember() {
 
     /*
      * ========================================================
-     * PRIORITY 3 — SAVED LOCAL MEMBER
+     * PRIORITY 3
+     * SAVED MEMBER
      * ========================================================
      */
 
@@ -266,6 +390,7 @@ async function identifyMember() {
                     memberName =
                         String(
                             parsed.memberName ||
+                            parsed.name ||
                             ""
                         ).trim();
 
@@ -288,31 +413,13 @@ async function identifyMember() {
 
     /*
      * ========================================================
-     * NO MEMBER
+     * NO MEMBER FOUND
      * ========================================================
      */
 
     if (!memberId) {
 
-        showResultsMessage(
-            "Please complete an SLC quiz or select your participant first."
-        );
-
-
-        hideResultElement(
-            "latestResult"
-        );
-
-
-        hideResultElement(
-            "reviewSection"
-        );
-
-
-        showResultElement(
-            "emptyResults"
-        );
-
+        handleNoMember();
 
         return;
 
@@ -321,8 +428,56 @@ async function identifyMember() {
 
     updateMemberDisplay();
 
-
     await loadQuizHistory();
+
+}
+
+
+/* ============================================================
+   HANDLE NO MEMBER
+============================================================ */
+
+function handleNoMember() {
+
+    hideResultsMessage();
+
+    hideResultElement(
+        "resultsSummary"
+    );
+
+    hideResultElement(
+        "latestResult"
+    );
+
+    hideResultElement(
+        "historySection"
+    );
+
+    hideResultElement(
+        "reviewSection"
+    );
+
+    hideResultElement(
+        "emptyResults"
+    );
+
+    showResultElement(
+        "noMemberResults"
+    );
+
+
+    const memberNameElement =
+        resultElement(
+            "resultsMemberName"
+        );
+
+
+    if (memberNameElement) {
+
+        memberNameElement.textContent =
+            "Participant not selected";
+
+    }
 
 }
 
@@ -333,29 +488,22 @@ async function identifyMember() {
 
 function updateMemberDisplay() {
 
-    const element =
+    const memberNameElement =
         resultElement(
-            "resultsMember"
+            "resultsMemberName"
         );
 
 
-    if (!element) {
+    if (!memberNameElement) {
+
         return;
+
     }
 
 
-    element.innerHTML = `
-
-        <i class="fa-solid fa-user"></i>
-
-        <span>
-            ${escapeResultHTML(
-                memberName ||
-                "My Results"
-            )}
-        </span>
-
-    `;
+    memberNameElement.textContent =
+        memberName ||
+        "My Results";
 
 }
 
@@ -367,7 +515,12 @@ function updateMemberDisplay() {
 async function loadQuizHistory() {
 
     showResultsMessage(
-        "Loading your quiz results..."
+        "Loading your quiz history..."
+    );
+
+
+    hideResultElement(
+        "noMemberResults"
     );
 
 
@@ -393,40 +546,44 @@ async function loadQuizHistory() {
 
 
         console.log(
-            "Quiz history:",
+            "Quiz history response:",
             data
         );
 
 
-        if (
-            !data.success
-        ) {
+        if (!data.success) {
 
-            showResultsMessage(
+            throw new Error(
                 data.message ||
                 "Unable to load your results."
             );
 
-            return;
-
         }
 
 
-        if (
-            data.memberName
-        ) {
+        /*
+         * Update member name returned
+         * from the backend.
+         */
+
+        if (data.memberName) {
 
             memberName =
-                data.memberName;
+                String(
+                    data.memberName
+                ).trim();
 
 
             updateMemberDisplay();
-
 
             saveResultsMember();
 
         }
 
+
+        /*
+         * Get results safely.
+         */
 
         historyData =
             Array.isArray(
@@ -436,11 +593,26 @@ async function loadQuizHistory() {
                 : [];
 
 
+        /*
+         * Sort results.
+         *
+         * Newest first where a valid date exists.
+         * If dates cannot be compared, original
+         * backend order is maintained.
+         */
+
+        historyData =
+            sortHistory(
+                historyData
+            );
+
+
         hideResultsMessage();
 
 
-        renderHistory();
+        renderSummary();
 
+        renderHistory();
 
         renderLatestResult();
 
@@ -450,6 +622,15 @@ async function loadQuizHistory() {
         console.error(
             "loadQuizHistory error:",
             error
+        );
+
+
+        hideResultElement(
+            "resultsSummary"
+        );
+
+        hideResultElement(
+            "latestResult"
         );
 
 
@@ -463,13 +644,75 @@ async function loadQuizHistory() {
 
 
 /* ============================================================
-   SAVE RESULTS MEMBER
+   SORT HISTORY
+============================================================ */
+
+function sortHistory(results) {
+
+    if (!Array.isArray(results)) {
+
+        return [];
+
+    }
+
+
+    return [
+        ...results
+    ].sort(
+        function (
+            first,
+            second
+        ) {
+
+            const firstDate =
+                new Date(
+                    getResultDate(first)
+                );
+
+
+            const secondDate =
+                new Date(
+                    getResultDate(second)
+                );
+
+
+            const firstTime =
+                Number.isNaN(
+                    firstDate.getTime()
+                )
+                    ? 0
+                    : firstDate.getTime();
+
+
+            const secondTime =
+                Number.isNaN(
+                    secondDate.getTime()
+                )
+                    ? 0
+                    : secondDate.getTime();
+
+
+            return (
+                secondTime -
+                firstTime
+            );
+
+        }
+    );
+
+}
+
+
+/* ============================================================
+   SAVE MEMBER
 ============================================================ */
 
 function saveResultsMember() {
 
     if (!memberId) {
+
         return;
+
     }
 
 
@@ -502,6 +745,120 @@ function saveResultsMember() {
 
 
 /* ============================================================
+   RENDER SUMMARY
+============================================================ */
+
+function renderSummary() {
+
+    if (!historyData.length) {
+
+        hideResultElement(
+            "resultsSummary"
+        );
+
+        return;
+
+    }
+
+
+    showResultElement(
+        "resultsSummary"
+    );
+
+
+    const quizCount =
+        historyData.length;
+
+
+    const totalPoints =
+        historyData.reduce(
+            function (
+                total,
+                result
+            ) {
+
+                return (
+                    total +
+                    getNumber(
+                        getResultPoints(result)
+                    )
+                );
+
+            },
+            0
+        );
+
+
+    const bestScore =
+        historyData.reduce(
+            function (
+                highest,
+                result
+            ) {
+
+                const score =
+                    getNumber(
+                        getResultScore(result)
+                    );
+
+
+                return Math.max(
+                    highest,
+                    score
+                );
+
+            },
+            0
+        );
+
+
+    const quizCountElement =
+        resultElement(
+            "summaryQuizCount"
+        );
+
+
+    const pointsElement =
+        resultElement(
+            "summaryPoints"
+        );
+
+
+    const bestScoreElement =
+        resultElement(
+            "summaryBestScore"
+        );
+
+
+    if (quizCountElement) {
+
+        quizCountElement.textContent =
+            quizCount;
+
+    }
+
+
+    if (pointsElement) {
+
+        pointsElement.textContent =
+            formatNumber(
+                totalPoints
+            );
+
+    }
+
+
+    if (bestScoreElement) {
+
+        bestScoreElement.textContent =
+            bestScore;
+
+    }
+
+}
+
+
+/* ============================================================
    RENDER HISTORY
 ============================================================ */
 
@@ -520,15 +877,17 @@ function renderHistory() {
 
 
     if (!list) {
+
         return;
+
     }
 
 
+    const quizCount =
+        historyData.length;
+
+
     if (count) {
-
-        const quizCount =
-            historyData.length;
-
 
         count.textContent =
             `${quizCount} ${
@@ -540,17 +899,27 @@ function renderHistory() {
     }
 
 
-    if (
-        !historyData.length
-    ) {
+    /*
+     * ========================================================
+     * EMPTY HISTORY
+     * ========================================================
+     */
+
+    if (!historyData.length) {
 
         list.innerHTML = "";
 
+        hideResultElement(
+            "resultsSummary"
+        );
+
+        hideResultElement(
+            "latestResult"
+        );
 
         showResultElement(
             "emptyResults"
         );
-
 
         return;
 
@@ -562,6 +931,12 @@ function renderHistory() {
     );
 
 
+    /*
+     * ========================================================
+     * RENDER EVERY QUIZ
+     * ========================================================
+     */
+
     list.innerHTML =
         historyData
             .map(
@@ -571,90 +946,177 @@ function renderHistory() {
                 ) {
 
                     const lesson =
-                        String(
-                            result.lessonNo ??
-                            result.lesson ??
-                            ""
-                        ).trim();
+                        getLessonNumber(
+                            result
+                        );
 
 
                     const score =
-                        escapeResultHTML(
-                            result.score ??
-                            "-"
+                        getResultScore(
+                            result
                         );
 
 
                     const points =
-                        escapeResultHTML(
-                            result.pointsEarned ??
-                            result.points ??
-                            "0"
+                        getResultPoints(
+                            result
+                        );
+
+
+                    const total =
+                        getResultTotal(
+                            result
                         );
 
 
                     const date =
                         formatDate(
-                            result.timestamp ??
-                            result.date ??
-                            result.createdAt
+                            getResultDate(
+                                result
+                            )
                         );
+
+
+                    const scoreText =
+                        total
+                            ? `${score} / ${total}`
+                            : score;
 
 
                     return `
 
-                        <div
+                        <article
                             class="history-item"
-                            data-lesson="${escapeResultHTML(lesson)}"
                         >
 
-                            <div class="history-number">
+                            <div
+                                class="history-number"
+                            >
                                 ${index + 1}
                             </div>
 
-                            <div class="history-main">
 
-                                <div class="history-top">
+                            <div
+                                class="history-main"
+                            >
 
-                                    <strong>
-                                        Lesson ${escapeResultHTML(lesson)}
+                                <div
+                                    class="history-top"
+                                >
+
+                                    <strong
+                                        class="history-title"
+                                    >
+                                        ${
+                                            lesson
+                                                ? `Lesson ${escapeResultHTML(lesson)}`
+                                                : "Sunday Lesson Challenge"
+                                        }
                                     </strong>
 
-                                    <span>
+
+                                    <span
+                                        class="history-date"
+                                    >
                                         ${escapeResultHTML(date)}
                                     </span>
 
                                 </div>
 
-                                <div class="history-score">
 
-                                    <span>
-                                        Score: ${score}
+                                <div
+                                    class="history-score"
+                                >
+
+                                    <span
+                                        class="history-score-item"
+                                    >
+
+                                        Score:
+
+                                        <strong>
+                                            ${escapeResultHTML(scoreText)}
+                                        </strong>
+
                                     </span>
 
-                                    <span>
-                                        +${points} points
+
+                                    <span
+                                        class="history-score-item"
+                                    >
+
+                                        Points:
+
+                                        <strong>
+                                            +${escapeResultHTML(formatNumber(points))}
+                                        </strong>
+
                                     </span>
 
                                 </div>
 
                             </div>
+
 
                             <button
                                 type="button"
                                 class="history-review-btn"
                                 data-review-lesson="${escapeResultHTML(lesson)}"
                             >
-                                Review
+
+                                <span>
+                                    Review
+                                </span>
+
+                                <i
+                                    class="fa-solid fa-arrow-right"
+                                ></i>
+
                             </button>
 
-                        </div>
+                        </article>
 
                     `;
 
                 }
             )
             .join("");
+
+}
+
+
+/* ============================================================
+   FIND RESULT FOR LESSON
+============================================================ */
+
+function findResultByLesson(lessonNo) {
+
+    const lesson =
+        String(
+            lessonNo || ""
+        ).trim();
+
+
+    if (!lesson) {
+
+        return null;
+
+    }
+
+
+    return (
+        historyData.find(
+            function (item) {
+
+                return (
+                    getLessonNumber(item) ===
+                    lesson
+                );
+
+            }
+        )
+        || null
+    );
 
 }
 
@@ -674,13 +1136,13 @@ function renderLatestResult(
 
 
     if (!latest) {
+
         return;
+
     }
 
 
-    if (
-        !historyData.length
-    ) {
+    if (!historyData.length) {
 
         hideResultElement(
             "latestResult"
@@ -691,10 +1153,14 @@ function renderLatestResult(
     }
 
 
-    let result = null;
+    /*
+     * First priority:
+     *
+     * The lesson supplied after submission
+     * or from the URL.
+     */
 
-
-    const exactLesson =
+    const requestedLesson =
         String(
             submittedLesson ||
             queryLessonNo ||
@@ -702,26 +1168,17 @@ function renderLatestResult(
         ).trim();
 
 
-    if (exactLesson) {
+    let result =
+        requestedLesson
+            ? findResultByLesson(
+                requestedLesson
+            )
+            : null;
 
-        result =
-            historyData.find(
-                function (item) {
 
-                    return (
-                        String(
-                            item.lessonNo ??
-                            item.lesson ??
-                            ""
-                        ).trim() ===
-                        exactLesson
-                    );
-
-                }
-            ) || null;
-
-    }
-
+    /*
+     * Otherwise use the newest result.
+     */
 
     if (!result) {
 
@@ -748,35 +1205,48 @@ function renderLatestResult(
 
 
     const lesson =
-        String(
-            result.lessonNo ??
-            result.lesson ??
-            ""
-        ).trim();
+        getLessonNumber(
+            result
+        );
 
 
     const score =
-        result.score ??
-        "-";
+        getResultScore(
+            result
+        );
 
 
     const points =
-        result.pointsEarned ??
-        result.points ??
-        "0";
+        getResultPoints(
+            result
+        );
 
 
     const total =
-        result.totalPoints ??
-        result.total ??
-        "";
+        getResultTotal(
+            result
+        );
 
 
     const date =
         formatDate(
-            result.timestamp ??
-            result.date ??
-            result.createdAt
+            getResultDate(
+                result
+            )
+        );
+
+
+    const performance =
+        getPerformanceText(
+            score,
+            total
+        );
+
+
+    const note =
+        getPerformanceNote(
+            score,
+            total
         );
 
 
@@ -810,9 +1280,21 @@ function renderLatestResult(
         );
 
 
+    const performanceElement =
+        resultElement(
+            "latestPerformance"
+        );
+
+
     const dateElement =
         resultElement(
             "latestDate"
+        );
+
+
+    const noteElement =
+        resultElement(
+            "latestNote"
         );
 
 
@@ -825,7 +1307,9 @@ function renderLatestResult(
     if (title) {
 
         title.textContent =
-            `Lesson ${lesson} Result`;
+            lesson
+                ? `Lesson ${lesson} Result`
+                : "Your Latest Result";
 
     }
 
@@ -833,7 +1317,9 @@ function renderLatestResult(
     if (lessonElement) {
 
         lessonElement.textContent =
-            `Lesson ${lesson}`;
+            lesson
+                ? `Lesson ${lesson}`
+                : "Latest Quiz";
 
     }
 
@@ -859,7 +1345,15 @@ function renderLatestResult(
     if (pointsElement) {
 
         pointsElement.textContent =
-            `+${points} points`;
+            `+${formatNumber(points)}`;
+
+    }
+
+
+    if (performanceElement) {
+
+        performanceElement.textContent =
+            performance;
 
     }
 
@@ -867,7 +1361,17 @@ function renderLatestResult(
     if (dateElement) {
 
         dateElement.textContent =
-            date;
+            date
+                ? `Completed on ${date}`
+                : "Quiz completed";
+
+    }
+
+
+    if (noteElement) {
+
+        noteElement.textContent =
+            note;
 
     }
 
@@ -878,6 +1382,131 @@ function renderLatestResult(
             lesson;
 
     }
+
+}
+
+
+/* ============================================================
+   PERFORMANCE TEXT
+============================================================ */
+
+function getPerformancePercentage(
+    score,
+    total
+) {
+
+    const scoreNumber =
+        getNumber(score);
+
+
+    const totalNumber =
+        getNumber(total);
+
+
+    if (
+        totalNumber <= 0
+    ) {
+
+        return null;
+
+    }
+
+
+    return Math.round(
+        (
+            scoreNumber /
+            totalNumber
+        ) * 100
+    );
+
+}
+
+
+function getPerformanceText(
+    score,
+    total
+) {
+
+    const percentage =
+        getPerformancePercentage(
+            score,
+            total
+        );
+
+
+    if (
+        percentage === null
+    ) {
+
+        return "Completed";
+
+    }
+
+
+    return `${percentage}%`;
+
+}
+
+
+function getPerformanceNote(
+    score,
+    total
+) {
+
+    const percentage =
+        getPerformancePercentage(
+            score,
+            total
+        );
+
+
+    if (
+        percentage === null
+    ) {
+
+        return (
+            "Well done for completing this Sunday Lesson Challenge."
+        );
+
+    }
+
+
+    if (
+        percentage >= 90
+    ) {
+
+        return (
+            "Excellent work! You showed a very strong understanding of the lesson."
+        );
+
+    }
+
+
+    if (
+        percentage >= 70
+    ) {
+
+        return (
+            "Well done! You demonstrated a good understanding of the lesson."
+        );
+
+    }
+
+
+    if (
+        percentage >= 50
+    ) {
+
+        return (
+            "Good effort. Reviewing the lesson again can help you grow even more."
+        );
+
+    }
+
+
+    return (
+        "Keep learning. Review the lesson and use the answer review to strengthen your understanding."
+    );
 
 }
 
@@ -894,10 +1523,18 @@ async function openReview(lessonNo) {
         ).trim();
 
 
-    if (
-        !memberId ||
-        !lesson
-    ) {
+    if (!memberId) {
+
+        return;
+
+    }
+
+
+    if (!lesson) {
+
+        showResultsMessage(
+            "This quiz does not have a lesson number available for review."
+        );
 
         return;
 
@@ -942,7 +1579,7 @@ async function openReview(lessonNo) {
     if (subtitle) {
 
         subtitle.textContent =
-            "Loading your answers...";
+            "Loading your submitted answers...";
 
     }
 
@@ -953,9 +1590,13 @@ async function openReview(lessonNo) {
 
             <div class="review-loading">
 
-                <i class="fa-solid fa-spinner fa-spin"></i>
+                <i
+                    class="fa-solid fa-spinner fa-spin"
+                ></i>
 
-                Loading review...
+                <span>
+                    Loading answer review...
+                </span>
 
             </div>
 
@@ -986,18 +1627,16 @@ async function openReview(lessonNo) {
 
 
         console.log(
-            "Quiz review:",
+            "Quiz review response:",
             data
         );
 
 
-        if (
-            !data.success
-        ) {
+        if (!data.success) {
 
             throw new Error(
                 data.message ||
-                "Unable to load review."
+                "Unable to load answer review."
             );
 
         }
@@ -1006,7 +1645,7 @@ async function openReview(lessonNo) {
         if (subtitle) {
 
             subtitle.textContent =
-                "Your submitted answers";
+                "See what you selected and compare it with the correct answer.";
 
         }
 
@@ -1016,27 +1655,32 @@ async function openReview(lessonNo) {
         );
 
 
-        const review =
-            resultElement(
-                "reviewSection"
-            );
+        setTimeout(
+            function () {
+
+                const review =
+                    resultElement(
+                        "reviewSection"
+                    );
 
 
-        if (review) {
-
-            setTimeout(
-                function () {
+                if (review) {
 
                     review.scrollIntoView({
-                        behavior: "smooth",
-                        block: "start"
+
+                        behavior:
+                            "smooth",
+
+                        block:
+                            "start"
+
                     });
 
-                },
-                100
-            );
+                }
 
-        }
+            },
+            100
+        );
 
     }
     catch (error) {
@@ -1050,7 +1694,7 @@ async function openReview(lessonNo) {
         if (subtitle) {
 
             subtitle.textContent =
-                "Unable to load your answer review.";
+                "We could not load this answer review.";
 
         }
 
@@ -1061,8 +1705,14 @@ async function openReview(lessonNo) {
 
                 <div class="review-empty">
 
-                    Unable to load your answer review.
-                    Please try again.
+                    <i
+                        class="fa-solid fa-circle-exclamation"
+                    ></i>
+
+                    <span>
+                        Unable to load your answer review.
+                        Please check your connection and try again.
+                    </span>
 
                 </div>
 
@@ -1076,12 +1726,112 @@ async function openReview(lessonNo) {
 
 
 /* ============================================================
+   NORMALIZE ARRAY DATA
+============================================================ */
+
+function parseResultArray(value) {
+
+    if (
+        Array.isArray(value)
+    ) {
+
+        return value;
+
+    }
+
+
+    if (
+        typeof value === "string"
+    ) {
+
+        try {
+
+            const parsed =
+                JSON.parse(value);
+
+
+            return Array.isArray(parsed)
+                ? parsed
+                : [];
+
+        }
+        catch (error) {
+
+            return [];
+
+        }
+
+    }
+
+
+    return [];
+
+}
+
+
+/* ============================================================
+   GET OPTION TEXT
+============================================================ */
+
+function getOptionText(
+    source,
+    letter
+) {
+
+    if (!source) {
+
+        return "";
+
+    }
+
+
+    return (
+
+        source[
+            `option${letter}`
+        ]
+
+        ||
+
+        source[
+            `Option${letter}`
+        ]
+
+        ||
+
+        source[
+            letter
+        ]
+
+        ||
+
+        ""
+
+    );
+
+}
+
+
+/* ============================================================
+   NORMALIZE ANSWER
+============================================================ */
+
+function normalizeAnswer(value) {
+
+    return String(
+        value ?? ""
+    )
+        .trim()
+        .toUpperCase();
+
+}
+
+
+/* ============================================================
    RENDER REVIEW
 ============================================================ */
 
-function renderReview(
-    data
-) {
+function renderReview(data) {
 
     const container =
         resultElement(
@@ -1090,74 +1840,37 @@ function renderReview(
 
 
     if (!container) {
+
         return;
-    }
-
-
-    let reviews =
-        Array.isArray(data.review)
-            ? data.review
-            : [];
-
-
-    let questions =
-        Array.isArray(data.questions)
-            ? data.questions
-            : [];
-
-
-    if (
-        typeof data.review === "string"
-    ) {
-
-        try {
-
-            reviews =
-                JSON.parse(
-                    data.review
-                );
-
-        }
-        catch (error) {
-
-            reviews = [];
-
-        }
 
     }
 
 
-    if (
-        typeof data.questions === "string"
-    ) {
-
-        try {
-
-            questions =
-                JSON.parse(
-                    data.questions
-                );
-
-        }
-        catch (error) {
-
-            questions = [];
-
-        }
-
-    }
+    const reviews =
+        parseResultArray(
+            data.review
+        );
 
 
-    if (
-        !Array.isArray(reviews) ||
-        !reviews.length
-    ) {
+    const questions =
+        parseResultArray(
+            data.questions
+        );
+
+
+    if (!reviews.length) {
 
         container.innerHTML = `
 
             <div class="review-empty">
 
-                No answer review is available for this quiz.
+                <i
+                    class="fa-solid fa-clipboard-question"
+                ></i>
+
+                <span>
+                    No answer review is available for this quiz.
+                </span>
 
             </div>
 
@@ -1183,33 +1896,68 @@ function renderReview(
 
                     const questionText =
                         review.question ||
+                        review.questionText ||
                         question.question ||
+                        question.questionText ||
                         `Question ${index + 1}`;
 
 
                     const selectedAnswer =
-                        review.selectedAnswer ||
-                        review.answer ||
-                        review.selected ||
-                        "";
+                        normalizeAnswer(
+
+                            review.selectedAnswer ||
+
+                            review.answer ||
+
+                            review.selected ||
+
+                            ""
+
+                        );
 
 
                     const correctAnswer =
-                        review.correctAnswer ||
-                        review.correct ||
-                        question.correctAnswer ||
-                        question.correct ||
-                        "";
+                        normalizeAnswer(
+
+                            review.correctAnswer ||
+
+                            review.correct ||
+
+                            question.correctAnswer ||
+
+                            question.correct ||
+
+                            ""
+
+                        );
 
 
-                    const isCorrect =
-                        review.isCorrect === true ||
-                        String(
-                            selectedAnswer
-                        ).trim().toUpperCase() ===
-                        String(
-                            correctAnswer
-                        ).trim().toUpperCase();
+                    /*
+                     * Backend may explicitly return
+                     * isCorrect.
+                     */
+
+                    let isCorrect;
+
+
+                    if (
+                        typeof review.isCorrect ===
+                        "boolean"
+                    ) {
+
+                        isCorrect =
+                            review.isCorrect;
+
+                    }
+                    else {
+
+                        isCorrect =
+                            selectedAnswer &&
+                            correctAnswer &&
+                            selectedAnswer ===
+                            correctAnswer;
+
+                    }
 
 
                     const options =
@@ -1225,31 +1973,35 @@ function renderReview(
                                 ) {
 
                                     const optionText =
-                                        question[
-                                            `option${letter}`
-                                        ] ||
-                                        review[
-                                            `option${letter}`
-                                        ] ||
-                                        "";
+                                        getOptionText(
+                                            question,
+                                            letter
+                                        )
+
+                                        ||
+
+                                        getOptionText(
+                                            review,
+                                            letter
+                                        );
 
 
-                                    if (!optionText) {
+                                    if (
+                                        !optionText
+                                    ) {
+
                                         return "";
+
                                     }
 
 
                                     const selected =
-                                        String(
-                                            selectedAnswer
-                                        ).trim().toUpperCase() ===
+                                        selectedAnswer ===
                                         letter;
 
 
                                     const correct =
-                                        String(
-                                            correctAnswer
-                                        ).trim().toUpperCase() ===
+                                        correctAnswer ===
                                         letter;
 
 
@@ -1257,19 +2009,55 @@ function renderReview(
                                         "review-option";
 
 
+                                    let badge =
+                                        "";
+
+
+                                    /*
+                                     * Correct answer.
+                                     */
+
                                     if (correct) {
 
                                         className +=
-                                            " review-correct";
+                                            " correct";
+
+
+                                        badge = `
+
+                                            <span
+                                                class="review-option-badge correct-badge"
+                                            >
+                                                Correct
+                                            </span>
+
+                                        `;
 
                                     }
-                                    else if (
+
+
+                                    /*
+                                     * Wrong answer selected.
+                                     */
+
+                                    if (
                                         selected &&
                                         !correct
                                     ) {
 
                                         className +=
-                                            " review-wrong";
+                                            " wrong";
+
+
+                                        badge = `
+
+                                            <span
+                                                class="review-option-badge wrong-badge"
+                                            >
+                                                Your answer
+                                            </span>
+
+                                        `;
 
                                     }
 
@@ -1286,13 +2074,19 @@ function renderReview(
                                                 ${letter}
                                             </span>
 
+
                                             <span
                                                 class="review-option-text"
                                             >
+
                                                 ${escapeResultHTML(
                                                     optionText
                                                 )}
+
                                             </span>
+
+
+                                            ${badge}
 
                                         </div>
 
@@ -1303,27 +2097,59 @@ function renderReview(
                             .join("");
 
 
+                    const statusClass =
+                        isCorrect
+                            ? "correct"
+                            : "wrong";
+
+
+                    const statusText =
+                        isCorrect
+                            ? "Correct"
+                            : "Incorrect";
+
+
+                    const statusIcon =
+                        isCorrect
+                            ? "fa-circle-check"
+                            : "fa-circle-xmark";
+
+
                     return `
 
-                        <div class="review-question">
+                        <article
+                            class="review-question"
+                        >
 
-                            <div class="review-question-top">
+                            <div
+                                class="review-question-top"
+                            >
 
-                                <span>
+                                <span
+                                    class="review-question-number"
+                                >
                                     Question ${index + 1}
                                 </span>
 
-                                <strong>
-                                    ${
-                                        isCorrect
-                                            ? "Correct"
-                                            : "Incorrect"
-                                    }
-                                </strong>
+
+                                <span
+                                    class="review-status ${statusClass}"
+                                >
+
+                                    <i
+                                        class="fa-solid ${statusIcon}"
+                                    ></i>
+
+                                    ${statusText}
+
+                                </span>
 
                             </div>
 
-                            <div class="review-question-text">
+
+                            <div
+                                class="review-question-text"
+                            >
 
                                 ${escapeResultHTML(
                                     questionText
@@ -1331,13 +2157,16 @@ function renderReview(
 
                             </div>
 
-                            <div class="review-options">
+
+                            <div
+                                class="review-options"
+                            >
 
                                 ${options}
 
                             </div>
 
-                        </div>
+                        </article>
 
                     `;
 
@@ -1359,13 +2188,14 @@ function closeReview() {
     );
 
 
-    selectedReviewLesson = "";
+    selectedReviewLesson =
+        "";
 
 }
 
 
 /* ============================================================
-   RESULTS LISTENERS
+   EVENT LISTENERS
 ============================================================ */
 
 function setupResultsListeners() {
@@ -1414,8 +2244,12 @@ function setupResultsListeners() {
 
 
     /*
-     * Event delegation for dynamically rendered
-     * history review buttons.
+     * ========================================================
+     * HISTORY REVIEW BUTTONS
+     *
+     * Event delegation is used because
+     * history is created dynamically.
+     * ========================================================
      */
 
     document.addEventListener(
@@ -1429,7 +2263,9 @@ function setupResultsListeners() {
 
 
             if (!button) {
+
                 return;
+
             }
 
 
@@ -1462,17 +2298,14 @@ function showResultsMessage(
 
 
     if (!element) {
+
         return;
+
     }
 
 
     element.textContent =
         message;
-
-
-    element.classList.remove(
-        "hidden"
-    );
 
 
     element.classList.add(
@@ -1481,10 +2314,6 @@ function showResultsMessage(
 
 }
 
-
-/* ============================================================
-   HIDE RESULTS MESSAGE
-============================================================ */
 
 function hideResultsMessage() {
 
@@ -1495,13 +2324,10 @@ function hideResultsMessage() {
 
 
     if (!element) {
+
         return;
+
     }
-
-
-    element.classList.add(
-        "hidden"
-    );
 
 
     element.classList.remove(
@@ -1515,9 +2341,7 @@ function hideResultsMessage() {
    FORMAT DATE
 ============================================================ */
 
-function formatDate(
-    value
-) {
+function formatDate(value) {
 
     if (!value) {
 
@@ -1527,9 +2351,7 @@ function formatDate(
 
 
     const date =
-        new Date(
-            value
-        );
+        new Date(value);
 
 
     if (
@@ -1538,9 +2360,7 @@ function formatDate(
         )
     ) {
 
-        return String(
-            value
-        );
+        return String(value);
 
     }
 
@@ -1548,9 +2368,16 @@ function formatDate(
     return date.toLocaleDateString(
         "en-NG",
         {
-            day: "numeric",
-            month: "short",
-            year: "numeric"
+
+            day:
+                "numeric",
+
+            month:
+                "short",
+
+            year:
+                "numeric"
+
         }
     );
 
