@@ -2,6 +2,7 @@
    AFC ISIU YOUTH PORTAL V2
    FILE: slcquiz.js
    PURPOSE: WEEKLY SLC QUIZ CONTROLLER
+   ============================================================
 
    FLOW:
 
@@ -9,45 +10,44 @@
         ↓
    Select Participant
         ↓
+   Add Name if Necessary
+        ↓
    Lock Participant
         ↓
-   Check Reflection Status
+   Check CURRENT LESSON status
         ↓
-   ┌───────────────────────────────┐
-   │ Reflection already completed? │
-   └───────────────┬───────────────┘
-                   │
-          YES ─────┴───── NO
-           ↓              ↓
-        Quiz          Reflection
-                          ↓
-                  Submit Reflection
-                          ↓
-                        Quiz
-                          ↓
-                  Answer Questions
-                          ↓
-                 Answers auto-saved
-                          ↓
-                    Submit Quiz
-                          ↓
-                   Individual Result
-                          ↓
-                    Review Answers
+   ┌─────────────────────────────────────┐
+   │                                     │
+   │ Quiz already completed              │
+   │        ↓                            │
+   │ Show completed state                │
+   │                                     │
+   │ Quiz NOT completed                  │
+   │        ↓                            │
+   │ Reflection already submitted?       │
+   │        ↓                            │
+   │ YES → Open Quiz directly            │
+   │ NO  → Show Reflection               │
+   │                                     │
+   │ Reflection submitted                │
+   │        ↓                            │
+   │ Quiz                                │
+   │        ↓                            │
+   │ Submit                              │
+   │        ↓                            │
+   │ Results                             │
+   └─────────────────────────────────────┘
 
    IMPORTANT:
 
-   - Participant cannot be changed after selection.
-   - Reflection is checked PER LESSON and PER PARTICIPANT.
-   - Backend is the source of truth for reflection completion.
-   - A completed reflection for Lesson X does NOT unlock Lesson Y.
-   - Returning users are checked against the backend again.
-   - Reflection is never displayed while its status is being checked.
-   - Quiz answers are saved locally.
-   - Saved answers can be restored after browser/device restart.
-   - User can change saved answers before final submission.
+   - Completion is checked by memberId + current lesson.
+   - Previous lessons do NOT block the current lesson.
+   - Reflection completion and quiz completion are separate.
+   - Refreshing after reflection skips reflection.
+   - Refreshing during quiz restores saved answers.
+   - Completed quizzes cannot be repeated.
+   - Backend remains the final authority.
    ============================================================ */
-
 
 "use strict";
 
@@ -57,7 +57,7 @@
 ============================================================ */
 
 const API =
-    "https://script.google.com/macros/s/AKfycbw1mVwpgAcIOSNbpgzy52TFyozEGMtWWwVWUDFaofGNzpsguBIaKR4q1dXVtgVHO2xZ1w/exec";
+    "https://script.google.com/macros/s/AKfycbw1mVwpgAcIOSNbpgzy52TFyozEGMtWWwVWUDFaofGNpsguBIaKR4q1dXVtgVHO2xZ1w/exec";
 
 
 /* ============================================================
@@ -66,54 +66,26 @@ const API =
 
 const REFLECTION_MIN_CHARACTERS = 100;
 
-
-/*
-   Session information.
-
-   sessionStorage is used only to remember the active
-   participant during the current browser session.
-
-   IMPORTANT:
-   sessionStorage is NOT trusted as proof that a reflection
-   has been completed.
-
-   The backend is checked every time.
-*/
 const SESSION_KEY =
     "afc_isiu_slc_quiz_session_v1";
 
-
-/*
-   localStorage is used for quiz answers.
-
-   Answers can survive:
-   - browser closing
-   - phone restart
-   - page refresh
-*/
 const ANSWERS_KEY =
     "afc_isiu_slc_saved_answers_v2";
-
 
 const LAST_REVIEW_KEY =
     "lastQuizReview";
 
-
 const LAST_QUESTIONS_KEY =
     "lastQuizQuestions";
-
 
 const LAST_SCORE_KEY =
     "lastQuizScore";
 
-
 const LAST_POINTS_KEY =
     "lastQuizPoints";
 
-
 const LAST_TOTAL_KEY =
     "lastQuizTotal";
-
 
 const LAST_RESULT_LESSON_KEY =
     "lastQuizResultLesson";
@@ -147,12 +119,9 @@ let quizLoaded = false;
 
 let quizSubmitted = false;
 
+let quizCompleted = false;
 
-/*
-   Prevent multiple reflection-status requests from
-   interfering with one another.
-*/
-let reflectionCheckInProgress = false;
+let completionCheckInProgress = false;
 
 
 /* ============================================================
@@ -166,60 +135,27 @@ document.addEventListener(
         if (typeof AOS !== "undefined") {
 
             AOS.init({
-
                 duration: 650,
-
-                once: true,
-
-                offset: 30
-
+                once: true
             });
 
         }
-
 
         setupReflectionListeners();
 
         setupParticipantListeners();
 
+        setupQuizListeners();
 
         await loadQuiz();
 
-
         if (!quizLoaded) {
-
             return;
-
         }
-
 
         await loadMembers();
 
-
-        /*
-           Restore any existing participant session.
-
-           IMPORTANT:
-           restoreQuizSession() will check the backend
-           reflection status for this exact lesson and
-           participant.
-        */
-
         await restoreQuizSession();
-
-
-        /*
-           If there is no saved participant,
-           keep participant selection visible.
-        */
-
-        if (!selectedMemberId) {
-
-            showElement(
-                "participantSection"
-            );
-
-        }
 
     }
 );
@@ -289,33 +225,36 @@ async function loadQuiz() {
     const status =
         getElement("quizStatus");
 
-
     const countdown =
         getElement("quizCountdown");
 
-
     if (!status) {
-
         return;
-
     }
-
 
     try {
 
         status.textContent =
-            "Loading this week's challenge...";
-
+            "Loading quiz...";
 
         const response =
             await fetch(
-                `${API}?action=getQuiz`
+                `${API}?action=getQuiz`,
+                {
+                    cache: "no-store"
+                }
             );
 
+        if (!response.ok) {
+
+            throw new Error(
+                `HTTP ${response.status}`
+            );
+
+        }
 
         const data =
             await response.json();
-
 
         console.log(
             "Quiz response:",
@@ -323,9 +262,9 @@ async function loadQuiz() {
         );
 
 
-        /* =========================================
+        /* ====================================================
            CLOSED
-        ========================================== */
+        ==================================================== */
 
         if (
             data.status === "closed"
@@ -334,7 +273,6 @@ async function loadQuiz() {
             status.textContent =
                 "🔒 This week's quiz has closed.";
 
-
             if (countdown) {
 
                 countdown.style.display =
@@ -342,34 +280,24 @@ async function loadQuiz() {
 
             }
 
+            hideElement("participantSection");
+            hideElement("lockedParticipantSection");
+            hideElement("reflectionSection");
+            hideElement("quizSection");
+            hideElement("resultSection");
+            hideElement("completedSection");
 
-            hideElement(
-                "participantSection"
-            );
-
-            hideElement(
-                "lockedParticipantSection"
-            );
-
-            hideElement(
-                "reflectionSection"
-            );
-
-            hideElement(
-                "quizSection"
-            );
-
-
-            quizLoaded = false;
+            quizLoaded =
+                false;
 
             return;
 
         }
 
 
-        /* =========================================
+        /* ====================================================
            NOT OPEN
-        ========================================== */
+        ==================================================== */
 
         if (
             data.status === "not_open"
@@ -378,128 +306,91 @@ async function loadQuiz() {
             status.textContent =
                 "⏳ The weekly SLC quiz opens soon.";
 
+            hideElement("participantSection");
+            hideElement("lockedParticipantSection");
+            hideElement("reflectionSection");
+            hideElement("quizSection");
+            hideElement("resultSection");
+            hideElement("completedSection");
 
-            hideElement(
-                "participantSection"
-            );
-
-            hideElement(
-                "lockedParticipantSection"
-            );
-
-            hideElement(
-                "reflectionSection"
-            );
-
-            hideElement(
-                "quizSection"
-            );
-
-
-            if (
-                data.openTime
-            ) {
+            if (data.openTime) {
 
                 quizOpenTime =
                     new Date(
                         data.openTime
                     );
 
-
-                startCountdown(
-                    "open"
-                );
+                startCountdown("open");
 
             }
 
-
-            quizLoaded = false;
+            quizLoaded =
+                false;
 
             return;
 
         }
 
 
-        /* =========================================
+        /* ====================================================
            API ERROR
-        ========================================== */
+        ==================================================== */
 
         if (
-            !data.success
+            data.success === false
         ) {
 
             status.textContent =
                 data.message ||
                 "Unable to load the quiz.";
 
-
             hideElement(
                 "participantSection"
             );
 
-            hideElement(
-                "lockedParticipantSection"
-            );
-
-            hideElement(
-                "reflectionSection"
-            );
-
-            hideElement(
-                "quizSection"
-            );
-
-
-            quizLoaded = false;
+            quizLoaded =
+                false;
 
             return;
 
         }
 
 
-        /* =========================================
-           QUIZ OPEN
-        ========================================== */
+        /* ====================================================
+           ACTIVE QUIZ
+        ==================================================== */
 
         quizData =
-            Array.isArray(
-                data.questions
-            )
+            Array.isArray(data.questions)
                 ? data.questions
                 : [];
-
 
         selectedLesson =
             String(
                 data.lessonNo || ""
             ).trim();
 
-
         quizCloseTime =
             data.closeTime
-                ? new Date(
-                    data.closeTime
-                )
+                ? new Date(data.closeTime)
                 : null;
 
+        quizOpenTime =
+            data.openTime
+                ? new Date(data.openTime)
+                : null;
 
-        quizLoaded = true;
+        quizCompleted =
+            false;
 
+        quizSubmitted =
+            false;
 
-        const lessonNumber =
-            getElement(
-                "heroLessonNumber"
-            );
+        reflectionSubmitted =
+            false;
 
-
-        if (lessonNumber) {
-
-            lessonNumber.textContent =
-                selectedLesson
-                    ? `Lesson ${selectedLesson}`
-                    : "Weekly SLC";
-
-        }
+        quizLoaded =
+            true;
 
 
         status.textContent =
@@ -511,7 +402,6 @@ async function loadQuiz() {
                 "questionCountBadge"
             );
 
-
         if (questionBadge) {
 
             questionBadge.textContent =
@@ -520,23 +410,28 @@ async function loadQuiz() {
         }
 
 
-        if (
-            quizCloseTime
-        ) {
+        if (quizCloseTime) {
 
-            startCountdown(
-                "close"
-            );
+            startCountdown("close");
 
         }
 
 
         /*
-           At this point nobody has been selected yet.
+         * Always begin with participant selection.
+         *
+         * restoreQuizSession() will decide whether
+         * this participant should resume at reflection,
+         * quiz, or completed state.
+         */
 
-           Reflection and quiz remain hidden until
-           participant selection is completed.
-        */
+        showElement(
+            "participantSection"
+        );
+
+        hideElement(
+            "lockedParticipantSection"
+        );
 
         hideElement(
             "reflectionSection"
@@ -546,13 +441,15 @@ async function loadQuiz() {
             "quizSection"
         );
 
+        hideElement(
+            "resultSection"
+        );
 
-        showElement(
-            "participantSection"
+        hideElement(
+            "completedSection"
         );
 
     }
-
     catch (error) {
 
         console.error(
@@ -560,21 +457,11 @@ async function loadQuiz() {
             error
         );
 
-
         status.textContent =
             "Unable to connect to the quiz service.";
 
-
         hideElement(
             "participantSection"
-        );
-
-        hideElement(
-            "reflectionSection"
-        );
-
-        hideElement(
-            "quizSection"
         );
 
     }
@@ -592,18 +479,17 @@ function startCountdown(mode) {
         countdownInterval
     );
 
-
     const countdown =
         getElement(
             "quizCountdown"
         );
 
-
     if (!countdown) {
-
         return;
-
     }
+
+    countdown.style.display =
+        "";
 
 
     countdownInterval =
@@ -614,7 +500,6 @@ function startCountdown(mode) {
                     mode === "open"
                         ? quizOpenTime
                         : quizCloseTime;
-
 
                 if (!target) {
 
@@ -640,8 +525,7 @@ function startCountdown(mode) {
                         countdownInterval
                     );
 
-
-                    location.reload();
+                    window.location.reload();
 
                     return;
 
@@ -686,7 +570,6 @@ function startCountdown(mode) {
 
 
                 countdown.innerHTML = `
-
                     ${
                         mode === "open"
                             ? "⏳ Opens in"
@@ -699,7 +582,6 @@ function startCountdown(mode) {
                         ${mins}m
                         ${secs}s
                     </strong>
-
                 `;
 
             },
@@ -720,20 +602,14 @@ async function loadMembers() {
             "memberSelect"
         );
 
-
     if (!select) {
-
         return;
-
     }
 
-
     select.innerHTML = `
-
         <option value="">
             Select your name here
         </option>
-
     `;
 
 
@@ -741,8 +617,19 @@ async function loadMembers() {
 
         const response =
             await fetch(
-                `${API}?action=getMembers`
+                `${API}?action=getMembers`,
+                {
+                    cache: "no-store"
+                }
             );
+
+        if (!response.ok) {
+
+            throw new Error(
+                `HTTP ${response.status}`
+            );
+
+        }
 
 
         const data =
@@ -751,15 +638,8 @@ async function loadMembers() {
 
         if (
             !data.success ||
-            !Array.isArray(
-                data.members
-            )
+            !Array.isArray(data.members)
         ) {
-
-            console.warn(
-                "Members could not be loaded.",
-                data
-            );
 
             return;
 
@@ -774,14 +654,13 @@ async function loadMembers() {
                         "option"
                     );
 
-
                 option.value =
-                    member.memberId;
-
+                    String(
+                        member.memberId
+                    );
 
                 option.textContent =
                     member.name;
-
 
                 select.appendChild(
                     option
@@ -791,7 +670,6 @@ async function loadMembers() {
         );
 
     }
-
     catch (error) {
 
         console.error(
@@ -815,10 +693,14 @@ function setupParticipantListeners() {
             "memberSelect"
         );
 
-
     const continueBtn =
         getElement(
             "continueToReflectionBtn"
+        );
+
+    const addButton =
+        getElement(
+            "addNameBtn"
         );
 
 
@@ -828,42 +710,19 @@ function setupParticipantListeners() {
             "change",
             function () {
 
-                /*
-                   Once a participant has been locked,
-                   the selection cannot be changed.
-                */
-
                 if (
-                    selectedMemberId
+                    selectedMemberId ||
+                    quizCompleted
                 ) {
 
                     return;
 
                 }
 
-
-                const memberId =
-                    select.value;
-
-
-                if (!memberId) {
-
-                    if (continueBtn) {
-
-                        continueBtn.disabled =
-                            true;
-
-                    }
-
-                    return;
-
-                }
-
-
                 if (continueBtn) {
 
                     continueBtn.disabled =
-                        false;
+                        !select.value;
 
                 }
 
@@ -877,14 +736,19 @@ function setupParticipantListeners() {
 
         continueBtn.addEventListener(
             "click",
-            function () {
-
-                lockSelectedParticipant();
-
-            }
+            lockSelectedParticipant
         );
 
     }
+
+
+    /*
+     * The HTML already has onclick="addNewMember()".
+     *
+     * Therefore we intentionally DO NOT add another
+     * click listener here. This prevents duplicate
+     * requests to the backend.
+     */
 
 }
 
@@ -895,17 +759,25 @@ function setupParticipantListeners() {
 
 async function addNewMember() {
 
+    if (
+        selectedMemberId ||
+        quizCompleted
+    ) {
+
+        return;
+
+    }
+
+
     const input =
         getElement(
             "newName"
         );
 
-
     const button =
         getElement(
             "addNameBtn"
         );
-
 
     const select =
         getElement(
@@ -934,7 +806,6 @@ async function addNewMember() {
             "Please enter your name."
         );
 
-
         input.focus();
 
         return;
@@ -950,7 +821,6 @@ async function addNewMember() {
             "Please enter your full name."
         );
 
-
         input.focus();
 
         return;
@@ -965,13 +835,9 @@ async function addNewMember() {
     button.disabled =
         true;
 
-
     button.innerHTML = `
-
         <i class="fa-solid fa-spinner fa-spin"></i>
-
         Adding...
-
     `;
 
 
@@ -982,20 +848,23 @@ async function addNewMember() {
                 API,
                 {
                     method: "POST",
-
-                    body:
-                        JSON.stringify({
-
-                            action:
-                                "addMember",
-
-                            name:
-                                name
-
-                        })
-
+                    body: JSON.stringify({
+                        action:
+                            "addMember",
+                        name:
+                            name
+                    })
                 }
             );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                `HTTP ${response.status}`
+            );
+
+        }
 
 
         const data =
@@ -1020,7 +889,9 @@ async function addNewMember() {
 
 
         select.value =
-            data.memberId;
+            String(
+                data.memberId
+            );
 
 
         input.value =
@@ -1046,7 +917,6 @@ async function addNewMember() {
         );
 
     }
-
     catch (error) {
 
         console.error(
@@ -1054,18 +924,15 @@ async function addNewMember() {
             error
         );
 
-
         alert(
             "Unable to add your name. Please try again."
         );
 
     }
-
     finally {
 
         button.disabled =
             false;
-
 
         button.innerHTML =
             oldHTML;
@@ -1079,14 +946,11 @@ async function addNewMember() {
    LOCK PARTICIPANT
 ============================================================ */
 
-function lockSelectedParticipant() {
-
-    /*
-       Prevent participant from being selected twice.
-    */
+async function lockSelectedParticipant() {
 
     if (
-        selectedMemberId
+        selectedMemberId ||
+        quizCompleted
     ) {
 
         return;
@@ -1101,14 +965,14 @@ function lockSelectedParticipant() {
 
 
     if (!select) {
-
         return;
-
     }
 
 
     const memberId =
-        select.value;
+        String(
+            select.value || ""
+        ).trim();
 
 
     if (!memberId) {
@@ -1145,21 +1009,26 @@ function lockSelectedParticipant() {
     }
 
 
-    /*
-       Store participant.
-    */
-
     selectedMemberId =
-        String(memberId).trim();
-
+        memberId;
 
     selectedMemberName =
         memberName;
 
 
+    reflectionSubmitted =
+        false;
+
+    quizCompleted =
+        false;
+
+    quizSubmitted =
+        false;
+
+
     /*
-       Lock participant controls.
-    */
+     * Lock participant controls.
+     */
 
     select.disabled =
         true;
@@ -1169,7 +1038,6 @@ function lockSelectedParticipant() {
         getElement(
             "newName"
         );
-
 
     if (input) {
 
@@ -1184,7 +1052,6 @@ function lockSelectedParticipant() {
             "addNameBtn"
         );
 
-
     if (addButton) {
 
         addButton.disabled =
@@ -1198,7 +1065,6 @@ function lockSelectedParticipant() {
             "continueToReflectionBtn"
         );
 
-
     if (continueBtn) {
 
         continueBtn.disabled =
@@ -1207,29 +1073,10 @@ function lockSelectedParticipant() {
     }
 
 
-    /*
-       Save the participant session.
-
-       IMPORTANT:
-       reflectionSubmitted is NOT trusted here.
-    */
-
-    reflectionSubmitted =
-        false;
-
-
-    saveQuizSession();
-
-
-    /*
-       Display locked participant.
-    */
-
     const lockedName =
         getElement(
             "lockedMemberName"
         );
-
 
     if (lockedName) {
 
@@ -1243,25 +1090,41 @@ function lockSelectedParticipant() {
         "lockedParticipantSection"
     );
 
-
     hideElement(
         "participantSection"
     );
 
+    hideElement(
+        "reflectionSection"
+    );
+
+    hideElement(
+        "quizSection"
+    );
+
+    hideElement(
+        "completedSection"
+    );
+
+
+    saveQuizSession();
+
 
     /*
-       Do NOT immediately show reflection.
+     * IMPORTANT:
+     *
+     * Do not assume the participant needs reflection.
+     *
+     * Check the server first.
+     *
+     * The server decides:
+     *
+     * 1. Quiz completed
+     * 2. Reflection completed
+     * 3. Nothing completed
+     */
 
-       We first check the backend.
-
-       If reflection exists:
-           → Quiz
-
-       If reflection does not exist:
-           → Reflection
-    */
-
-    checkReflectionStatus();
+    await checkCompletionStatus();
 
 }
 
@@ -1293,9 +1156,6 @@ function saveQuizSession() {
         lessonNo:
             selectedLesson,
 
-        reflectionSubmitted:
-            reflectionSubmitted,
-
         savedAt:
             new Date().toISOString()
 
@@ -1306,13 +1166,10 @@ function saveQuizSession() {
 
         sessionStorage.setItem(
             SESSION_KEY,
-            JSON.stringify(
-                session
-            )
+            JSON.stringify(session)
         );
 
     }
-
     catch (error) {
 
         console.warn(
@@ -1341,7 +1198,7 @@ async function restoreQuizSession() {
     }
 
 
-    let saved = null;
+    let saved;
 
 
     try {
@@ -1360,12 +1217,9 @@ async function restoreQuizSession() {
 
 
         saved =
-            JSON.parse(
-                raw
-            );
+            JSON.parse(raw);
 
     }
-
     catch (error) {
 
         console.warn(
@@ -1373,11 +1227,9 @@ async function restoreQuizSession() {
             error
         );
 
-
         sessionStorage.removeItem(
             SESSION_KEY
         );
-
 
         return;
 
@@ -1385,38 +1237,28 @@ async function restoreQuizSession() {
 
 
     /*
-       Never restore another week's quiz.
-
-       This makes the session lesson-specific.
-    */
+     * Only restore a session belonging
+     * to the current active lesson.
+     */
 
     if (
         !saved ||
-        String(
-            saved.lessonNo
-        ).trim()
+        String(saved.lessonNo).trim()
         !==
-        String(
-            selectedLesson
-        ).trim()
+        String(selectedLesson).trim()
     ) {
 
         sessionStorage.removeItem(
             SESSION_KEY
         );
 
-
         return;
 
     }
 
 
-    if (
-        !saved.memberId
-    ) {
-
+    if (!saved.memberId) {
         return;
-
     }
 
 
@@ -1427,16 +1269,8 @@ async function restoreQuizSession() {
 
 
     if (!select) {
-
         return;
-
     }
-
-
-    const savedMemberId =
-        String(
-            saved.memberId
-        ).trim();
 
 
     const option =
@@ -1446,11 +1280,8 @@ async function restoreQuizSession() {
             function (item) {
 
                 return (
-                    String(
-                        item.value
-                    ).trim()
-                    ===
-                    savedMemberId
+                    String(item.value) ===
+                    String(saved.memberId)
                 );
 
             }
@@ -1463,28 +1294,32 @@ async function restoreQuizSession() {
             SESSION_KEY
         );
 
-
         return;
 
     }
 
 
     selectedMemberId =
-        savedMemberId;
+        String(
+            saved.memberId
+        );
 
 
     selectedMemberName =
-        saved.memberName ||
-        option.textContent.trim();
+        String(
+            saved.memberName ||
+            option.textContent ||
+            ""
+        ).trim();
 
-
-    /*
-       Never trust saved reflectionSubmitted.
-
-       The backend must verify it again.
-    */
 
     reflectionSubmitted =
+        false;
+
+    quizCompleted =
+        false;
+
+    quizSubmitted =
         false;
 
 
@@ -1502,22 +1337,558 @@ async function restoreQuizSession() {
     }
 
 
+    select.disabled =
+        true;
+
+
+    const input =
+        getElement(
+            "newName"
+        );
+
+    if (input) {
+
+        input.disabled =
+            true;
+
+    }
+
+
+    const addButton =
+        getElement(
+            "addNameBtn"
+        );
+
+    if (addButton) {
+
+        addButton.disabled =
+            true;
+
+    }
+
+
+    const continueBtn =
+        getElement(
+            "continueToReflectionBtn"
+        );
+
+    if (continueBtn) {
+
+        continueBtn.disabled =
+            true;
+
+    }
+
+
     showElement(
         "lockedParticipantSection"
     );
-
 
     hideElement(
         "participantSection"
     );
 
+    hideElement(
+        "reflectionSection"
+    );
+
+    hideElement(
+        "quizSection"
+    );
+
+    hideElement(
+        "completedSection"
+    );
+
 
     /*
-       Backend check happens every time the
-       session is restored.
-    */
+     * VERY IMPORTANT:
+     *
+     * Never trust the old session as proof
+     * that the reflection was completed.
+     *
+     * Check the backend again.
+     */
 
-    await checkReflectionStatus();
+    await checkCompletionStatus();
+
+}
+
+
+/* ============================================================
+   CHECK CURRENT LESSON COMPLETION
+============================================================ */
+
+async function checkCompletionStatus() {
+
+    if (
+        !selectedMemberId ||
+        !selectedLesson
+    ) {
+
+        return;
+
+    }
+
+
+    /*
+     * Prevent multiple simultaneous checks.
+     */
+
+    if (completionCheckInProgress) {
+
+        return;
+
+    }
+
+
+    completionCheckInProgress =
+        true;
+
+
+    /*
+     * While checking, do not accidentally
+     * show reflection or quiz.
+     */
+
+    hideElement(
+        "reflectionSection"
+    );
+
+    hideElement(
+        "quizSection"
+    );
+
+    hideElement(
+        "completedSection"
+    );
+
+
+    const message =
+        getElement(
+            "reflectionMessage"
+        );
+
+
+    if (message) {
+
+        message.className =
+            "reflection-message show";
+
+        message.textContent =
+            "Checking your quiz status...";
+
+    }
+
+
+    try {
+
+        const url =
+            `${API}?action=getSLCCompletionStatus` +
+            `&memberId=${encodeURIComponent(selectedMemberId)}` +
+            `&lessonNo=${encodeURIComponent(selectedLesson)}`;
+
+
+        const response =
+            await fetch(
+                url,
+                {
+                    cache: "no-store"
+                }
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                `HTTP ${response.status}`
+            );
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        console.log(
+            "SLC completion status:",
+            {
+                memberId:
+                    selectedMemberId,
+
+                lessonNo:
+                    selectedLesson,
+
+                response:
+                    data
+            }
+        );
+
+
+        if (
+            !data.success
+        ) {
+
+            throw new Error(
+                data.message ||
+                "Unable to check quiz status."
+            );
+
+        }
+
+
+        /*
+         * ======================================================
+         * SERVER STATE
+         * ======================================================
+         *
+         * The backend should return:
+         *
+         * quizCompleted
+         * reflectionCompleted
+         *
+         * for THIS member + THIS lesson.
+         */
+
+
+        const currentLessonQuizCompleted =
+            data.quizCompleted === true;
+
+
+        const currentLessonReflectionCompleted =
+            data.reflectionCompleted === true;
+
+
+        /* ====================================================
+           CASE 1 — QUIZ ALREADY COMPLETED
+        ==================================================== */
+
+        if (
+            currentLessonQuizCompleted
+        ) {
+
+            quizCompleted =
+                true;
+
+            quizSubmitted =
+                true;
+
+            reflectionSubmitted =
+                true;
+
+
+            clearSavedAnswers();
+
+            clearQuizSession();
+
+
+            showCompletedState(
+                data
+            );
+
+
+            return;
+
+        }
+
+
+        /* ====================================================
+           CASE 2 — REFLECTION ALREADY COMPLETED
+        ==================================================== */
+
+        if (
+            currentLessonReflectionCompleted
+        ) {
+
+            quizCompleted =
+                false;
+
+            quizSubmitted =
+                false;
+
+            reflectionSubmitted =
+                true;
+
+
+            saveQuizSession();
+
+
+            /*
+             * THIS IS THE IMPORTANT PART.
+             *
+             * The participant has already completed
+             * the reflection.
+             *
+             * Therefore:
+             *
+             * DO NOT SHOW REFLECTION AGAIN.
+             *
+             * Go directly to the quiz.
+             */
+
+            unlockQuiz();
+
+
+            return;
+
+        }
+
+
+        /* ====================================================
+           CASE 3 — NOTHING COMPLETED
+        ==================================================== */
+
+        quizCompleted =
+            false;
+
+        quizSubmitted =
+            false;
+
+        reflectionSubmitted =
+            false;
+
+
+        saveQuizSession();
+
+
+        showElement(
+            "reflectionSection"
+        );
+
+        hideElement(
+            "quizSection"
+        );
+
+        hideElement(
+            "completedSection"
+        );
+
+
+        if (message) {
+
+            message.className =
+                "reflection-message";
+
+            message.textContent =
+                "";
+
+        }
+
+
+        updateReflectionProgress();
+
+
+        /*
+         * Clear old reflection text so a previous
+         * lesson/session cannot accidentally appear.
+         */
+
+        clearReflectionFields();
+
+
+    }
+    catch (error) {
+
+        console.error(
+            "checkCompletionStatus error:",
+            error
+        );
+
+
+        /*
+         * SECURITY/STATE RULE:
+         *
+         * If we cannot verify the status,
+         * do NOT unlock the quiz.
+         *
+         * Keep the quiz hidden.
+         */
+
+        hideElement(
+            "quizSection"
+        );
+
+
+        hideElement(
+            "completedSection"
+        );
+
+
+        showElement(
+            "reflectionSection"
+        );
+
+
+        if (message) {
+
+            message.className =
+                "reflection-message show error";
+
+            message.textContent =
+                "We could not check your quiz status. Please check your connection and try again.";
+
+        }
+
+    }
+    finally {
+
+        completionCheckInProgress =
+            false;
+
+    }
+
+}
+
+
+/* ============================================================
+   SHOW COMPLETED STATE
+============================================================ */
+
+function showCompletedState(data) {
+
+    hideElement(
+        "participantSection"
+    );
+
+    hideElement(
+        "lockedParticipantSection"
+    );
+
+    hideElement(
+        "reflectionSection"
+    );
+
+    hideElement(
+        "quizSection"
+    );
+
+
+    /*
+     * Use existing result/completion section if
+     * your HTML contains one.
+     */
+
+    const completedSection =
+        getElement(
+            "completedSection"
+        );
+
+
+    if (!completedSection) {
+
+        const container =
+            document.querySelector(
+                ".slcquiz-container"
+            );
+
+
+        if (!container) {
+            return;
+        }
+
+
+        const card =
+            document.createElement(
+                "section"
+            );
+
+
+        card.id =
+            "completedSection";
+
+
+        card.className =
+            "quiz-card completed-card";
+
+
+        card.innerHTML = `
+            <div class="completed-icon">
+                <i class="fa-solid fa-circle-check"></i>
+            </div>
+
+            <h2>
+                You've already completed this quiz
+            </h2>
+
+            <p>
+                You have already completed Lesson
+                ${escapeHTML(selectedLesson)}.
+                You cannot repeat the reflection or quiz
+                for the same lesson.
+            </p>
+
+            <a
+                href="results.html?memberId=${encodeURIComponent(selectedMemberId)}&lessonNo=${encodeURIComponent(selectedLesson)}"
+                class="purple-btn"
+            >
+                <span>View My Results</span>
+                <i class="fa-solid fa-arrow-right"></i>
+            </a>
+        `;
+
+
+        container.appendChild(
+            card
+        );
+
+
+        return;
+
+    }
+
+
+    const completedLesson =
+        getElement(
+            "completedLesson"
+        );
+
+
+    if (completedLesson) {
+
+        completedLesson.textContent =
+            selectedLesson;
+
+    }
+
+
+    showElement(
+        "completedSection"
+    );
+
+
+    window.scrollTo({
+
+        top: 0,
+
+        behavior: "smooth"
+
+    });
+
+}
+
+
+/* ============================================================
+   CLEAR QUIZ SESSION
+============================================================ */
+
+function clearQuizSession() {
+
+    try {
+
+        sessionStorage.removeItem(
+            SESSION_KEY
+        );
+
+    }
+    catch (error) {
+
+        console.warn(
+            "Unable to clear quiz session:",
+            error
+        );
+
+    }
 
 }
 
@@ -1545,9 +1916,7 @@ function setupReflectionListeners() {
 
 
             if (!field) {
-
                 return;
-
             }
 
 
@@ -1579,14 +1948,45 @@ function setupReflectionListeners() {
 
 
 /* ============================================================
+   CLEAR REFLECTION FIELDS
+============================================================ */
+
+function clearReflectionFields() {
+
+    [
+        "reflection1",
+        "reflection2",
+        "reflection3"
+    ].forEach(
+        function (id) {
+
+            const field =
+                getElement(id);
+
+
+            if (field) {
+
+                field.value =
+                    "";
+
+            }
+
+        }
+    );
+
+
+    updateReflectionProgress();
+
+}
+
+
+/* ============================================================
    CLEAN REFLECTION TEXT
 ============================================================ */
 
 function cleanReflectionText(text) {
 
-    return String(
-        text || ""
-    )
+    return String(text || "")
         .replace(/\s+/g, " ")
         .trim();
 
@@ -1599,38 +1999,39 @@ function cleanReflectionText(text) {
 
 function getReflectionCharacterCount() {
 
-    const one =
-        cleanReflectionText(
-            getElement(
-                "reflection1"
-            )?.value
-        );
+    const fields = [
+
+        "reflection1",
+        "reflection2",
+        "reflection3"
+
+    ];
 
 
-    const two =
-        cleanReflectionText(
-            getElement(
-                "reflection2"
-            )?.value
-        );
+    return fields.reduce(
+        function (total, id) {
+
+            const field =
+                getElement(id);
 
 
-    const three =
-        cleanReflectionText(
-            getElement(
-                "reflection3"
-            )?.value
-        );
+            const text =
+                cleanReflectionText(
+                    field
+                        ? field.value
+                        : ""
+                );
 
 
-    return (
+            return (
+                total +
+                text
+                    .replace(/\s/g, "")
+                    .length
+            );
 
-        one.replace(/\s/g, "").length +
-
-        two.replace(/\s/g, "").length +
-
-        three.replace(/\s/g, "").length
-
+        },
+        0
     );
 
 }
@@ -1642,49 +2043,40 @@ function getReflectionCharacterCount() {
 
 function reflectionRequirementsMet() {
 
-    const answer1 =
+    const answers = [
+
         cleanReflectionText(
             getElement(
                 "reflection1"
             )?.value
-        );
+        ),
 
-
-    const answer2 =
         cleanReflectionText(
             getElement(
                 "reflection2"
             )?.value
-        );
+        ),
 
-
-    const answer3 =
         cleanReflectionText(
             getElement(
                 "reflection3"
             )?.value
-        );
+        )
+
+    ];
 
 
     const allAnswered =
-        Boolean(
-            answer1 &&
-            answer2 &&
-            answer3
+        answers.every(
+            Boolean
         );
 
 
-    const characterCount =
-        getReflectionCharacterCount();
-
-
     return (
-
         allAnswered &&
-
-        characterCount >=
+        getReflectionCharacterCount()
+            >=
             REFLECTION_MIN_CHARACTERS
-
     );
 
 }
@@ -1724,37 +2116,33 @@ function updateReflectionProgress() {
         );
 
 
-    const answer1 =
+    const answers = [
+
         cleanReflectionText(
             getElement(
                 "reflection1"
             )?.value
-        );
+        ),
 
-
-    const answer2 =
         cleanReflectionText(
             getElement(
                 "reflection2"
             )?.value
-        );
+        ),
 
-
-    const answer3 =
         cleanReflectionText(
             getElement(
                 "reflection3"
             )?.value
-        );
+        )
+
+    ];
 
 
-    const answeredCount = [
-
-        answer1,
-        answer2,
-        answer3
-
-    ].filter(Boolean).length;
+    const answeredCount =
+        answers.filter(
+            Boolean
+        ).length;
 
 
     if (countDisplay) {
@@ -1774,7 +2162,8 @@ function updateReflectionProgress() {
                     (
                         count /
                         REFLECTION_MIN_CHARACTERS
-                    ) * 100
+                    ) *
+                    100
                 )
             );
 
@@ -1805,7 +2194,6 @@ function updateReflectionProgress() {
                 "You're ready. Submit your reflection to unlock the quiz.";
 
         }
-
         else if (
             answeredCount < 3
         ) {
@@ -1814,7 +2202,6 @@ function updateReflectionProgress() {
                 `Answer all three questions. ${answeredCount}/3 answered.`;
 
         }
-
         else {
 
             const remaining =
@@ -1836,509 +2223,38 @@ function updateReflectionProgress() {
 
 
 /* ============================================================
-   REFLECTION STATUS HELPERS
-============================================================ */
-
-/*
-   Different backend versions may return completion in
-   slightly different forms.
-
-   This helper normalizes them into one boolean.
-*/
-
-function isReflectionCompleted(data) {
-
-    if (!data) {
-
-        return false;
-
-    }
-
-
-    /*
-       Boolean true.
-    */
-
-    if (
-        data.completed === true
-    ) {
-
-        return true;
-
-    }
-
-
-    /*
-       String "true".
-    */
-
-    if (
-        String(
-            data.completed ?? ""
-        )
-            .trim()
-            .toLowerCase()
-            ===
-            "true"
-    ) {
-
-        return true;
-
-    }
-
-
-    /*
-       Explicit completed status.
-    */
-
-    if (
-        String(
-            data.status ?? ""
-        )
-            .trim()
-            .toLowerCase()
-        ===
-        "completed"
-    ) {
-
-        return true;
-
-    }
-
-
-    /*
-       Some backend implementations may use
-       already_submitted / submitted.
-    */
-
-    if (
-        data.alreadySubmitted === true ||
-        data.submitted === true
-    ) {
-
-        return true;
-
-    }
-
-
-    if (
-        String(
-            data.alreadySubmitted ?? ""
-        )
-            .trim()
-            .toLowerCase()
-        ===
-        "true"
-    ) {
-
-        return true;
-
-    }
-
-
-    if (
-        String(
-            data.submitted ?? ""
-        )
-            .trim()
-            .toLowerCase()
-        ===
-        "true"
-    ) {
-
-        return true;
-
-    }
-
-
-    return false;
-
-}
-
-
-/* ============================================================
-   SHOW REFLECTION CHECKING STATE
-============================================================ */
-
-function showReflectionCheckingState() {
-
-    /*
-       VERY IMPORTANT:
-
-       Keep the reflection section hidden while
-       the backend is checking.
-
-       This prevents a completed participant from
-       seeing the reflection form again, even briefly.
-    */
-
-    hideElement(
-        "reflectionSection"
-    );
-
-
-    hideElement(
-        "quizSection"
-    );
-
-
-    const message =
-        getElement(
-            "reflectionMessage"
-        );
-
-
-    if (message) {
-
-        message.className =
-            "reflection-message show";
-
-
-        message.textContent =
-            "Checking your reflection status...";
-
-    }
-
-}
-
-
-/* ============================================================
-   CHECK REFLECTION STATUS
-============================================================ */
-
-async function checkReflectionStatus() {
-
-    if (
-        !selectedMemberId ||
-        !selectedLesson
-    ) {
-
-        return;
-
-    }
-
-
-    /*
-       Prevent duplicate simultaneous checks.
-    */
-
-    if (
-        reflectionCheckInProgress
-    ) {
-
-        return;
-
-    }
-
-
-    reflectionCheckInProgress =
-        true;
-
-
-    /*
-       Make sure the quiz and reflection are both
-       hidden until we know the correct state.
-    */
-
-    showReflectionCheckingState();
-
-
-    try {
-
-        const url =
-            `${API}?action=getReflectionStatus` +
-            `&memberId=${encodeURIComponent(selectedMemberId)}` +
-            `&lessonNo=${encodeURIComponent(selectedLesson)}`;
-
-
-        console.log(
-            "Checking reflection:",
-            {
-                memberId:
-                    selectedMemberId,
-
-                lessonNo:
-                    selectedLesson
-            }
-        );
-
-
-        const response =
-            await fetch(
-                url,
-                {
-                    cache:
-                        "no-store"
-                }
-            );
-
-
-        if (
-            !response.ok
-        ) {
-
-            throw new Error(
-                `Reflection status request failed: ${response.status}`
-            );
-
-        }
-
-
-        const data =
-            await response.json();
-
-
-        console.log(
-            "Reflection status:",
-            data
-        );
-
-
-        /*
-           =====================================================
-           REFLECTION ALREADY COMPLETED
-           =====================================================
-        */
-
-        if (
-            data.success &&
-            isReflectionCompleted(data)
-        ) {
-
-            reflectionSubmitted =
-                true;
-
-
-            saveQuizSession();
-
-
-            /*
-               Clear any old reflection form values.
-
-               This is not required for the backend, but it
-               prevents stale answers from appearing if the
-               section is ever opened later.
-            */
-
-            clearReflectionFields();
-
-
-            /*
-               GO DIRECTLY TO QUIZ.
-
-               The reflection section remains hidden.
-            */
-
-            unlockQuiz();
-
-
-            return;
-
-        }
-
-
-        /*
-           =====================================================
-           REFLECTION NOT COMPLETED
-           =====================================================
-        */
-
-        reflectionSubmitted =
-            false;
-
-
-        saveQuizSession();
-
-
-        /*
-           Quiz must remain locked until reflection
-           is successfully completed.
-        */
-
-        hideElement(
-            "quizSection"
-        );
-
-
-        /*
-           Now — and only now — display reflection.
-        */
-
-        showElement(
-            "reflectionSection"
-        );
-
-
-        const message =
-            getElement(
-                "reflectionMessage"
-            );
-
-
-        if (message) {
-
-            message.className =
-                "reflection-message";
-
-
-            message.textContent =
-                "";
-
-        }
-
-
-        updateReflectionProgress();
-
-
-        /*
-           Scroll to reflection so the user sees
-           the correct step after participant selection.
-        */
-
-        setTimeout(
-            function () {
-
-                const reflection =
-                    getElement(
-                        "reflectionSection"
-                    );
-
-
-                if (reflection) {
-
-                    reflection.scrollIntoView({
-
-                        behavior:
-                            "smooth",
-
-                        block:
-                            "start"
-
-                    });
-
-                }
-
-            },
-            100
-        );
-
-    }
-
-    catch (error) {
-
-        console.error(
-            "checkReflectionStatus error:",
-            error
-        );
-
-
-        /*
-           IMPORTANT:
-
-           If we cannot verify the backend status,
-           do NOT assume the reflection was completed.
-
-           Also do NOT unlock the quiz.
-        */
-
-        reflectionSubmitted =
-            false;
-
-
-        hideElement(
-            "quizSection"
-        );
-
-
-        showElement(
-            "reflectionSection"
-        );
-
-
-        const errorMessage =
-            getElement(
-                "reflectionMessage"
-            );
-
-
-        if (errorMessage) {
-
-            errorMessage.className =
-                "reflection-message show error";
-
-
-            errorMessage.textContent =
-                "We could not check your reflection status. Please check your connection and try again.";
-        }
-
-    }
-
-    finally {
-
-        reflectionCheckInProgress =
-            false;
-
-    }
-
-}
-
-
-/* ============================================================
-   CLEAR REFLECTION FIELDS
-============================================================ */
-
-function clearReflectionFields() {
-
-    const ids = [
-
-        "reflection1",
-        "reflection2",
-        "reflection3"
-
-    ];
-
-
-    ids.forEach(
-        function (id) {
-
-            const field =
-                getElement(id);
-
-
-            if (field) {
-
-                field.value =
-                    "";
-
-            }
-
-        }
-    );
-
-
-    updateReflectionProgress();
-
-}
-
-
-/* ============================================================
    SUBMIT REFLECTION
 ============================================================ */
 
 async function submitReflection() {
 
     if (
-        reflectionSubmitted
+        reflectionSubmitted ||
+        quizCompleted
     ) {
+
+        /*
+         * Reflection has already been completed.
+         *
+         * If this function somehow gets called again,
+         * simply move the participant to the quiz.
+         */
+
+        if (
+            reflectionSubmitted &&
+            !quizCompleted
+        ) {
+
+            unlockQuiz();
+
+        }
 
         return;
 
     }
 
 
-    if (
-        !selectedMemberId
-    ) {
+    if (!selectedMemberId) {
 
         alert(
             "Please select your name first."
@@ -2349,9 +2265,7 @@ async function submitReflection() {
     }
 
 
-    if (
-        !selectedLesson
-    ) {
+    if (!selectedLesson) {
 
         alert(
             "The current quiz lesson could not be identified."
@@ -2362,17 +2276,13 @@ async function submitReflection() {
     }
 
 
-    if (
-        !reflectionRequirementsMet()
-    ) {
+    if (!reflectionRequirementsMet()) {
 
         updateReflectionProgress();
-
 
         alert(
             "Please answer all three reflection questions and write at least 100 meaningful characters altogether."
         );
-
 
         return;
 
@@ -2420,13 +2330,9 @@ async function submitReflection() {
         button.disabled =
             true;
 
-
         button.innerHTML = `
-
             <i class="fa-solid fa-spinner fa-spin"></i>
-
             Saving Reflection...
-
         `;
 
     }
@@ -2436,7 +2342,6 @@ async function submitReflection() {
 
         message.className =
             "reflection-message show";
-
 
         message.textContent =
             "Saving your reflection...";
@@ -2450,43 +2355,37 @@ async function submitReflection() {
             await fetch(
                 API,
                 {
+                    method: "POST",
 
-                    method:
-                        "POST",
+                    body: JSON.stringify({
 
-                    body:
-                        JSON.stringify({
+                        action:
+                            "submitReflection",
 
-                            action:
-                                "submitReflection",
+                        memberId:
+                            selectedMemberId,
 
-                            memberId:
-                                selectedMemberId,
+                        lessonNo:
+                            selectedLesson,
 
-                            lessonNo:
-                                selectedLesson,
+                        question1:
+                            answer1,
 
-                            question1:
-                                answer1,
+                        question2:
+                            answer2,
 
-                            question2:
-                                answer2,
+                        question3:
+                            answer3
 
-                            question3:
-                                answer3
-
-                        })
-
+                    })
                 }
             );
 
 
-        if (
-            !response.ok
-        ) {
+        if (!response.ok) {
 
             throw new Error(
-                `Reflection submission failed: ${response.status}`
+                `HTTP ${response.status}`
             );
 
         }
@@ -2503,45 +2402,43 @@ async function submitReflection() {
 
 
         /*
-           =====================================================
-           BACKEND SAYS REFLECTION ALREADY EXISTS
-           =====================================================
-        */
+         * The reflection may already have been
+         * submitted from another tab/device.
+         *
+         * That still means the participant is
+         * allowed to continue to the quiz,
+         * unless the quiz itself has already
+         * been completed.
+         */
+
+        if (
+            data.status ===
+            "already_completed"
+        ) {
+
+            reflectionSubmitted =
+                true;
+
+
+            saveQuizSession();
+
+
+            await checkCompletionStatus();
+
+
+            return;
+
+        }
+
 
         if (
             !data.success
         ) {
 
-            if (
-                isReflectionCompleted(data)
-            ) {
-
-                reflectionSubmitted =
-                    true;
-
-
-                saveQuizSession();
-
-
-                /*
-                   Do NOT show reflection again.
-
-                   Go directly to quiz.
-                */
-
-                unlockQuiz();
-
-
-                return;
-
-            }
-
-
             if (message) {
 
                 message.className =
                     "reflection-message show error";
-
 
                 message.textContent =
                     data.message ||
@@ -2557,12 +2454,6 @@ async function submitReflection() {
         }
 
 
-        /*
-           =====================================================
-           REFLECTION SUCCESSFULLY SAVED
-           =====================================================
-        */
-
         reflectionSubmitted =
             true;
 
@@ -2575,7 +2466,6 @@ async function submitReflection() {
             message.className =
                 "reflection-message show success";
 
-
             message.textContent =
                 "Reflection saved successfully. Your quiz is now unlocked.";
 
@@ -2583,21 +2473,25 @@ async function submitReflection() {
 
 
         /*
-           Small transition delay so the user can see
-           the successful save message.
-        */
+         * Do not immediately assume everything is fine.
+         *
+         * Re-check the server.
+         *
+         * This makes the backend the final authority
+         * and protects against duplicate/completed
+         * quiz attempts.
+         */
 
         setTimeout(
-            function () {
+            async function () {
 
-                unlockQuiz();
+                await checkCompletionStatus();
 
             },
             500
         );
 
     }
-
     catch (error) {
 
         console.error(
@@ -2610,7 +2504,6 @@ async function submitReflection() {
 
             message.className =
                 "reflection-message show error";
-
 
             message.textContent =
                 "Unable to save your reflection. Please check your connection and try again.";
@@ -2638,9 +2531,7 @@ function restoreReflectionButton() {
 
 
     if (!button) {
-
         return;
-
     }
 
 
@@ -2649,13 +2540,11 @@ function restoreReflectionButton() {
 
 
     button.innerHTML = `
-
         <span>
             Submit Reflection
         </span>
 
         <i class="fa-solid fa-arrow-right"></i>
-
     `;
 
 }
@@ -2669,7 +2558,8 @@ function unlockQuiz() {
 
     if (
         !selectedMemberId ||
-        !selectedLesson
+        !selectedLesson ||
+        quizCompleted
     ) {
 
         return;
@@ -2679,6 +2569,12 @@ function unlockQuiz() {
 
     reflectionSubmitted =
         true;
+
+    quizCompleted =
+        false;
+
+    quizSubmitted =
+        false;
 
 
     saveQuizSession();
@@ -2702,73 +2598,41 @@ function unlockQuiz() {
         "lockedParticipantSection"
     );
 
-
     hideElement(
         "participantSection"
     );
-
-
-    /*
-       =====================================================
-       REFLECTION IS HIDDEN
-       =====================================================
-
-       This is the key behavior.
-
-       Once the backend has confirmed that this participant
-       has completed the reflection for THIS lesson, the
-       reflection step is skipped.
-    */
 
     hideElement(
         "reflectionSection"
     );
 
+    hideElement(
+        "completedSection"
+    );
 
-    /*
-       Render questions.
-    */
 
     renderQuestions();
 
 
     /*
-       Restore previously selected answers.
-    */
+     * Restore answers that were saved locally
+     * before the participant left/closed the page.
+     */
 
     restoreSavedAnswers();
 
-
-    /*
-       Show quiz.
-    */
 
     showElement(
         "quizSection"
     );
 
 
-    /*
-       Refresh AOS if available.
-    */
-
     if (typeof AOS !== "undefined") {
 
-        setTimeout(
-            function () {
-
-                AOS.refresh();
-
-            },
-            100
-        );
+        AOS.refresh();
 
     }
 
-
-    /*
-       Scroll to quiz.
-    */
 
     setTimeout(
         function () {
@@ -2813,9 +2677,7 @@ function renderQuestions() {
 
 
     if (!container) {
-
         return;
-
     }
 
 
@@ -2828,7 +2690,6 @@ function renderQuestions() {
     ) {
 
         container.innerHTML = `
-
             <div class="question-card">
 
                 <h3>
@@ -2836,16 +2697,11 @@ function renderQuestions() {
                 </h3>
 
             </div>
-
         `;
 
         return;
 
     }
-
-
-    const fragment =
-        document.createDocumentFragment();
 
 
     quizData.forEach(
@@ -2854,17 +2710,7 @@ function renderQuestions() {
             index
         ) {
 
-            const card =
-                document.createElement(
-                    "div"
-                );
-
-
-            card.className =
-                "question-card";
-
-
-            let optionsHTML =
+            let options =
                 "";
 
 
@@ -2884,21 +2730,17 @@ function renderQuestions() {
 
 
                     if (!text) {
-
                         return;
-
                     }
 
 
-                    optionsHTML += `
-
+                    options += `
                         <label class="option">
 
                             <input
                                 type="radio"
                                 name="q${index}"
                                 value="${escapeHTML(letter)}"
-                                data-question-index="${index}"
                             >
 
                             <span>
@@ -2912,67 +2754,51 @@ function renderQuestions() {
                             </span>
 
                         </label>
-
                     `;
 
                 }
             );
 
 
-            card.innerHTML = `
+            container.innerHTML += `
 
-                <div class="question-number">
+                <div class="question-card">
 
-                    QUESTION ${index + 1}
+                    <div class="question-number">
+                        QUESTION ${index + 1}
+                    </div>
 
-                </div>
+                    <h3>
+                        ${escapeHTML(
+                            question.question
+                        )}
+                    </h3>
 
-
-                <h3>
-
-                    ${escapeHTML(
-                        question.question
-                    )}
-
-                </h3>
-
-
-                <div class="options">
-
-                    ${optionsHTML}
+                    <div class="options">
+                        ${options}
+                    </div>
 
                 </div>
 
             `;
 
-
-            fragment.appendChild(
-                card
-            );
-
         }
     );
 
 
-    container.appendChild(
-        fragment
-    );
-
-
     /*
-       Listen for answer changes.
-
-       Every selected answer is saved immediately.
-    */
+     * Save answers immediately whenever
+     * an option is selected.
+     */
 
     container
         .querySelectorAll(
             'input[type="radio"]'
         )
         .forEach(
-            function (input) {
+            function (radio) {
 
-                input.addEventListener(
+                radio.addEventListener(
                     "change",
                     saveCurrentAnswers
                 );
@@ -2984,23 +2810,56 @@ function renderQuestions() {
 
 
 /* ============================================================
-   GET ANSWER STORAGE KEY
+   QUIZ LISTENERS
 ============================================================ */
 
-function getAnswersStorageKey() {
+function setupQuizListeners() {
 
-    if (
-        !selectedLesson ||
-        !selectedMemberId
-    ) {
+    const submitBtn =
+        getElement(
+            "submitBtn"
+        );
 
-        return null;
+
+    if (!submitBtn) {
+
+        console.warn(
+            "submitBtn was not found on the page."
+        );
+
+        return;
 
     }
 
 
+    /*
+     * IMPORTANT:
+     *
+     * We use ONLY this listener.
+     *
+     * Do not add another onclick listener
+     * in JavaScript because the HTML already
+     * contains onclick="submitQuiz()".
+     */
+
+    submitBtn.addEventListener(
+        "click",
+        submitQuiz
+    );
+
+}
+
+
+/* ============================================================
+   ANSWERS STORAGE KEY
+============================================================ */
+
+function getAnswersStorageKey() {
+
     return (
-        `${ANSWERS_KEY}_${selectedLesson}_${selectedMemberId}`
+        `${ANSWERS_KEY}_` +
+        `${selectedLesson}_` +
+        `${selectedMemberId}`
     );
 
 }
@@ -3012,46 +2871,48 @@ function getAnswersStorageKey() {
 
 function saveCurrentAnswers() {
 
-    const key =
-        getAnswersStorageKey();
-
-
-    if (!key) {
+    if (
+        !selectedLesson ||
+        !selectedMemberId
+    ) {
 
         return;
 
     }
 
 
-    const answers =
-        [];
+    const answers = {};
 
 
-    for (
-        let i = 0;
-        i < quizData.length;
-        i++
-    ) {
+    quizData.forEach(
+        function (
+            question,
+            index
+        ) {
 
-        const selected =
-            document.querySelector(
-                `input[name="q${i}"]:checked`
-            );
+            const selected =
+                document.querySelector(
+                    `input[name="q${index}"]:checked`
+                );
 
 
-        answers.push(
-            selected
-                ? selected.value
-                : ""
-        );
+            if (selected) {
 
-    }
+                answers[index] =
+                    selected.value;
+
+            }
+
+        }
+    );
 
 
     try {
 
         localStorage.setItem(
-            key,
+
+            getAnswersStorageKey(),
+
             JSON.stringify({
 
                 lessonNo:
@@ -3067,15 +2928,10 @@ function saveCurrentAnswers() {
                     new Date().toISOString()
 
             })
-        );
 
-
-        console.log(
-            "Quiz answers saved locally."
         );
 
     }
-
     catch (error) {
 
         console.warn(
@@ -3094,60 +2950,9 @@ function saveCurrentAnswers() {
 
 function restoreSavedAnswers() {
 
-    const key =
-        getAnswersStorageKey();
-
-
-    if (!key) {
-
-        return;
-
-    }
-
-
-    let saved = null;
-
-
-    try {
-
-        const raw =
-            localStorage.getItem(
-                key
-            );
-
-
-        if (!raw) {
-
-            return;
-
-        }
-
-
-        saved =
-            JSON.parse(
-                raw
-            );
-
-    }
-
-    catch (error) {
-
-        console.warn(
-            "Unable to read saved quiz answers.",
-            error
-        );
-
-
-        return;
-
-    }
-
-
     if (
-        !saved ||
-        !Array.isArray(
-            saved.answers
-        )
+        !selectedLesson ||
+        !selectedMemberId
     ) {
 
         return;
@@ -3155,39 +2960,79 @@ function restoreSavedAnswers() {
     }
 
 
-    saved.answers.forEach(
-        function (
-            answer,
-            index
+    try {
+
+        const raw =
+            localStorage.getItem(
+                getAnswersStorageKey()
+            );
+
+
+        if (!raw) {
+            return;
+        }
+
+
+        const saved =
+            JSON.parse(raw);
+
+
+        if (
+            !saved ||
+            String(saved.lessonNo) !==
+            String(selectedLesson) ||
+            String(saved.memberId) !==
+            String(selectedMemberId)
         ) {
 
-            if (!answer) {
-
-                return;
-
-            }
-
-
-            const input =
-                document.querySelector(
-                    `input[name="q${index}"][value="${CSS.escape(answer)}"]`
-                );
-
-
-            if (input) {
-
-                input.checked =
-                    true;
-
-            }
+            return;
 
         }
-    );
 
 
-    console.log(
-        "Saved quiz answers restored."
-    );
+        const answers =
+            saved.answers || {};
+
+
+        Object.keys(
+            answers
+        ).forEach(
+            function (index) {
+
+                const value =
+                    answers[index];
+
+
+                const radio =
+                    document.querySelector(
+                        `input[name="q${index}"][value="${CSS.escape(value)}"]`
+                    );
+
+
+                if (radio) {
+
+                    radio.checked =
+                        true;
+
+                }
+
+            }
+        );
+
+
+        console.log(
+            "Saved quiz answers restored."
+        );
+
+    }
+    catch (error) {
+
+        console.warn(
+            "Unable to restore saved answers:",
+            error
+        );
+
+    }
 
 }
 
@@ -3198,11 +3043,10 @@ function restoreSavedAnswers() {
 
 function clearSavedAnswers() {
 
-    const key =
-        getAnswersStorageKey();
-
-
-    if (!key) {
+    if (
+        !selectedLesson ||
+        !selectedMemberId
+    ) {
 
         return;
 
@@ -3212,15 +3056,14 @@ function clearSavedAnswers() {
     try {
 
         localStorage.removeItem(
-            key
+            getAnswersStorageKey()
         );
 
     }
-
     catch (error) {
 
         console.warn(
-            "Unable to clear saved quiz answers:",
+            "Unable to clear saved answers:",
             error
         );
 
@@ -3236,6 +3079,7 @@ function clearSavedAnswers() {
 async function submitQuiz() {
 
     if (
+        quizCompleted ||
         quizSubmitted
     ) {
 
@@ -3244,9 +3088,7 @@ async function submitQuiz() {
     }
 
 
-    if (
-        !selectedMemberId
-    ) {
+    if (!selectedMemberId) {
 
         alert(
             "Your participant has not been selected."
@@ -3257,22 +3099,38 @@ async function submitQuiz() {
     }
 
 
-    if (
-        !reflectionSubmitted
-    ) {
+    /*
+     * Reflection must already be completed.
+     */
 
-        alert(
-            "Please complete the reflection before taking the quiz."
-        );
+    if (!reflectionSubmitted) {
+
+        /*
+         * Before telling the participant to
+         * complete reflection, check the backend.
+         *
+         * It may already have been completed
+         * from another tab/device.
+         */
+
+        await checkCompletionStatus();
+
+
+        if (!reflectionSubmitted) {
+
+            alert(
+                "Please complete the reflection before taking the quiz."
+            );
+
+        }
+
 
         return;
 
     }
 
 
-    if (
-        !selectedLesson
-    ) {
+    if (!selectedLesson) {
 
         alert(
             "The current quiz lesson could not be identified."
@@ -3283,13 +3141,8 @@ async function submitQuiz() {
     }
 
 
-    const answers =
-        [];
+    const answers = [];
 
-
-    /*
-       Collect every answer.
-    */
 
     for (
         let i = 0;
@@ -3356,16 +3209,16 @@ async function submitQuiz() {
         submitBtn.disabled =
             true;
 
-
         submitBtn.innerHTML = `
-
             <i class="fa-solid fa-spinner fa-spin"></i>
-
             Submitting...
-
         `;
 
     }
+
+
+    quizSubmitted =
+        true;
 
 
     try {
@@ -3374,37 +3227,32 @@ async function submitQuiz() {
             await fetch(
                 API,
                 {
+                    method: "POST",
 
-                    method:
-                        "POST",
+                    body: JSON.stringify({
 
-                    body:
-                        JSON.stringify({
+                        action:
+                            "scoreQuiz",
 
-                            action:
-                                "scoreQuiz",
+                        memberId:
+                            selectedMemberId,
 
-                            memberId:
-                                selectedMemberId,
+                        lessonNo:
+                            selectedLesson,
 
-                            lessonNo:
-                                selectedLesson,
+                        answers:
+                            answers
 
-                            answers:
-                                answers
-
-                        })
+                    })
 
                 }
             );
 
 
-        if (
-            !response.ok
-        ) {
+        if (!response.ok) {
 
             throw new Error(
-                `Quiz submission failed: ${response.status}`
+                `HTTP ${response.status}`
             );
 
         }
@@ -3420,248 +3268,224 @@ async function submitQuiz() {
         );
 
 
+        /* ====================================================
+           DUPLICATE ATTEMPT
+        ==================================================== */
+
         if (
-            !data.success
+            data.status ===
+            "already_attempted"
         ) {
 
-            /*
-               Backend reflection protection.
-            */
+            quizCompleted =
+                true;
 
-            if (
-                data.status ===
-                "reflection_required"
-            ) {
-
-                reflectionSubmitted =
-                    false;
+            quizSubmitted =
+                true;
 
 
-                saveQuizSession();
+            clearSavedAnswers();
+
+            clearQuizSession();
 
 
-                /*
-                   Do not assume the reflection is missing.
-
-                   Check the backend again before deciding
-                   whether to show the reflection.
-                */
-
-                await checkReflectionStatus();
+            alert(
+                data.message ||
+                "You have already completed this quiz."
+            );
 
 
-                alert(
-                    data.message ||
-                    "Please complete your reflection before taking the quiz."
-                );
+            window.location.href =
+                `results.html?memberId=${encodeURIComponent(selectedMemberId)}&lessonNo=${encodeURIComponent(selectedLesson)}`;
 
-
-                restoreSubmitButton();
-
-                return;
-
-            }
-
-
-            else {
-
-                alert(
-                    data.message ||
-                    "Unable to submit quiz."
-                );
-
-            }
-
-
-            restoreSubmitButton();
 
             return;
 
         }
 
 
-        /*
-           =====================================================
-           QUIZ SUCCESSFULLY SUBMITTED
-           =====================================================
-        */
+        /* ====================================================
+           REFLECTION REQUIRED
+        ==================================================== */
+
+        if (
+            data.status ===
+            "reflection_required"
+        ) {
+
+            quizSubmitted =
+                false;
+
+            reflectionSubmitted =
+                false;
+
+
+            /*
+             * DO NOT blindly show reflection.
+             *
+             * Ask the backend again.
+             *
+             * If the backend says reflection is already
+             * completed, checkCompletionStatus() will
+             * send the participant directly back to quiz.
+             *
+             * If not completed, it will show reflection.
+             */
+
+            await checkCompletionStatus();
+
+
+            if (
+                !reflectionSubmitted
+            ) {
+
+                alert(
+                    data.message ||
+                    "Please complete your reflection before taking the quiz."
+                );
+
+            }
+
+
+            restoreQuizSubmitButton();
+
+
+            return;
+
+        }
+
+
+        /* ====================================================
+           OTHER ERROR
+        ==================================================== */
+
+        if (
+            !data.success
+        ) {
+
+            quizSubmitted =
+                false;
+
+
+            alert(
+                data.message ||
+                "Unable to submit quiz."
+            );
+
+
+            restoreQuizSubmitButton();
+
+
+            return;
+
+        }
+
+
+        /* ====================================================
+           SUCCESS
+        ==================================================== */
+
+        quizCompleted =
+            true;
 
         quizSubmitted =
             true;
 
-
-        reviewData =
-            Array.isArray(
-                data.review
-            )
-                ? data.review
-                : [];
-
-
-        reviewQuestions =
-            Array.isArray(
-                data.questions
-            )
-                ? data.questions
-                : [];
+        reflectionSubmitted =
+            true;
 
 
         /*
-           Save result.
-        */
-
-        localStorage.setItem(
-            LAST_REVIEW_KEY,
-            JSON.stringify(
-                reviewData
-            )
-        );
-
-
-        localStorage.setItem(
-            LAST_QUESTIONS_KEY,
-            JSON.stringify(
-                reviewQuestions
-            )
-        );
-
-
-        localStorage.setItem(
-            LAST_SCORE_KEY,
-            data.score
-        );
-
-
-        localStorage.setItem(
-            LAST_POINTS_KEY,
-            data.pointsEarned
-        );
-
-
-        localStorage.setItem(
-            LAST_TOTAL_KEY,
-            data.totalPoints
-        );
-
-
-        localStorage.setItem(
-            LAST_RESULT_LESSON_KEY,
-            selectedLesson
-        );
-
-
-        /*
-           Answers are no longer needed locally
-           after successful submission.
-        */
-
-        clearSavedAnswers();
-
-
-        /*
-           Clear active participant session.
-        */
+         * Save result information before clearing
+         * the participant session.
+         */
 
         try {
 
-            sessionStorage.removeItem(
-                SESSION_KEY
+            localStorage.setItem(
+                LAST_REVIEW_KEY,
+                JSON.stringify(
+                    data.review ||
+                    data.answers ||
+                    []
+                )
+            );
+
+
+            localStorage.setItem(
+                LAST_QUESTIONS_KEY,
+                JSON.stringify(
+                    quizData
+                )
+            );
+
+
+            localStorage.setItem(
+                LAST_SCORE_KEY,
+                String(
+                    data.score ?? 0
+                )
+            );
+
+
+            localStorage.setItem(
+                LAST_POINTS_KEY,
+                String(
+                    data.points ?? 0
+                )
+            );
+
+
+            localStorage.setItem(
+                LAST_TOTAL_KEY,
+                String(
+                    data.totalPoints ??
+                    data.total ??
+                    0
+                )
+            );
+
+
+            localStorage.setItem(
+                LAST_RESULT_LESSON_KEY,
+                String(
+                    selectedLesson
+                )
             );
 
         }
-
-        catch (error) {
+        catch (storageError) {
 
             console.warn(
-                "Unable to clear quiz session:",
-                error
+                "Unable to save result information:",
+                storageError
             );
 
         }
 
 
         /*
-           Hide quiz.
-        */
+         * The quiz has now been permanently completed
+         * for this participant + lesson.
+         *
+         * Remove temporary answers and session.
+         */
 
-        hideElement(
-            "quizSection"
-        );
+        clearSavedAnswers();
 
-
-        hideElement(
-            "reflectionSection"
-        );
-
-
-        hideElement(
-            "lockedParticipantSection"
-        );
+        clearQuizSession();
 
 
         /*
-           Show result.
-        */
+         * Send participant to the results page.
+         *
+         * The backend remains the source of truth.
+         */
 
-        showElement(
-            "resultSection"
-        );
-
-
-        const scoreText =
-            getElement(
-                "scoreText"
-            );
-
-
-        const pointsText =
-            getElement(
-                "pointsText"
-            );
-
-
-        const totalPointsText =
-            getElement(
-                "totalPointsText"
-            );
-
-
-        if (scoreText) {
-
-            scoreText.textContent =
-                data.score;
-
-        }
-
-
-        if (pointsText) {
-
-            pointsText.textContent =
-                data.pointsEarned;
-
-        }
-
-
-        if (totalPointsText) {
-
-            totalPointsText.textContent =
-                data.totalPoints;
-
-        }
-
-
-        window.scrollTo({
-
-            top:
-                0,
-
-            behavior:
-                "smooth"
-
-        });
+        window.location.href =
+            `results.html?memberId=${encodeURIComponent(selectedMemberId)}&lessonNo=${encodeURIComponent(selectedLesson)}&completed=1`;
 
     }
-
     catch (error) {
 
         console.error(
@@ -3670,12 +3494,21 @@ async function submitQuiz() {
         );
 
 
+        /*
+         * Allow another attempt if the request
+         * genuinely failed.
+         */
+
+        quizSubmitted =
+            false;
+
+
         alert(
             "Unable to submit quiz. Please check your connection and try again."
         );
 
 
-        restoreSubmitButton();
+        restoreQuizSubmitButton();
 
     }
 
@@ -3683,10 +3516,10 @@ async function submitQuiz() {
 
 
 /* ============================================================
-   RESTORE SUBMIT BUTTON
+   RESTORE QUIZ SUBMIT BUTTON
 ============================================================ */
 
-function restoreSubmitButton() {
+function restoreQuizSubmitButton() {
 
     const submitBtn =
         getElement(
@@ -3695,9 +3528,7 @@ function restoreSubmitButton() {
 
 
     if (!submitBtn) {
-
         return;
-
     }
 
 
@@ -3706,281 +3537,193 @@ function restoreSubmitButton() {
 
 
     submitBtn.innerHTML = `
-
         <i class="fa-solid fa-paper-plane"></i>
-
         Submit Quiz
-
     `;
 
 }
 
 
 /* ============================================================
-   SHOW REVIEW
+   REVIEW
 ============================================================ */
 
 function showReview() {
 
-    if (
-        !reviewData ||
-        reviewData.length === 0
-    ) {
-
-        try {
-
-            reviewData =
-                JSON.parse(
-                    localStorage.getItem(
-                        LAST_REVIEW_KEY
-                    )
-                ) || [];
-
-        }
-
-        catch (error) {
-
-            reviewData =
-                [];
-
-        }
-
-    }
-
-
-    if (
-        !reviewQuestions ||
-        reviewQuestions.length === 0
-    ) {
-
-        try {
-
-            reviewQuestions =
-                JSON.parse(
-                    localStorage.getItem(
-                        LAST_QUESTIONS_KEY
-                    )
-                ) || [];
-
-        }
-
-        catch (error) {
-
-            reviewQuestions =
-                [];
-
-        }
-
-    }
-
-
-    if (
-        reviewData.length === 0 ||
-        reviewQuestions.length === 0
-    ) {
-
-        alert(
-            "No review is available."
+    const reviewSection =
+        getElement(
+            "reviewSection"
         );
 
-        return;
 
-    }
-
-
-    const container =
+    const reviewContainer =
         getElement(
             "reviewContainer"
         );
 
 
-    if (!container) {
+    if (
+        !reviewSection ||
+        !reviewContainer
+    ) {
 
         return;
 
     }
 
 
-    let html =
+    reviewContainer.innerHTML =
         "";
 
 
-    reviewData.forEach(
+    let review =
+        reviewData;
+
+
+    if (
+        !Array.isArray(review) ||
+        !review.length
+    ) {
+
+        try {
+
+            const saved =
+                localStorage.getItem(
+                    LAST_REVIEW_KEY
+                );
+
+
+            if (saved) {
+
+                review =
+                    JSON.parse(
+                        saved
+                    );
+
+            }
+
+        }
+        catch (error) {
+
+            console.warn(
+                "Unable to load saved review:",
+                error
+            );
+
+        }
+
+    }
+
+
+    if (
+        !Array.isArray(review) ||
+        !review.length
+    ) {
+
+        reviewContainer.innerHTML = `
+            <div class="question-card">
+                <h3>
+                    Review information is not available.
+                </h3>
+            </div>
+        `;
+
+        showElement(
+            "reviewSection"
+        );
+
+        hideElement(
+            "resultSection"
+        );
+
+        return;
+
+    }
+
+
+    review.forEach(
         function (
             item,
             index
         ) {
 
-            const q =
-                reviewQuestions[
-                    index
-                ];
+            const question =
+                item.question ||
+                item.questionText ||
+                quizData[index]?.question ||
+                "";
 
 
-            if (!q) {
+            const selected =
+                item.selectedAnswer ||
+                item.answer ||
+                item.userAnswer ||
+                "";
 
-                return;
 
-            }
+            const correct =
+                item.correctAnswer ||
+                item.correct ||
+                "";
 
 
-            html += `
+            const isCorrect =
+                String(selected).trim().toUpperCase() ===
+                String(correct).trim().toUpperCase();
 
-                <div class="question-card">
 
-                    <div class="question-number">
+            const card =
+                document.createElement(
+                    "div"
+                );
 
-                        QUESTION ${index + 1}
 
-                    </div>
+            card.className =
+                "question-card";
 
 
-                    <h3>
+            card.innerHTML = `
 
-                        ${escapeHTML(
-                            q.question
-                        )}
-
-                    </h3>
-
-            `;
-
-
-            [
-                "A",
-                "B",
-                "C",
-                "D"
-
-            ].forEach(
-                function (letter) {
-
-                    const text =
-                        q[
-                            `option${letter}`
-                        ];
-
-
-                    if (!text) {
-
-                        return;
-
-                    }
-
-
-                    const correctAnswer =
-                        String(
-                            item.correctAnswer
-                        )
-                            .trim()
-                            .toUpperCase();
-
-
-                    const userAnswer =
-                        String(
-                            item.userAnswer
-                        )
-                            .trim()
-                            .toUpperCase();
-
-
-                    const isCorrect =
-                        letter ===
-                        correctAnswer;
-
-
-                    const isWrongUserAnswer =
-                        letter ===
-                        userAnswer &&
-                        !item.correct;
-
-
-                    let className =
-                        "review-option";
-
-
-                    let badge =
-                        "";
-
-
-                    if (isCorrect) {
-
-                        className +=
-                            " correct";
-
-
-                        badge = `
-
-                            <div class="review-option-label">
-
-                                ✓ Correct Answer
-
-                            </div>
-
-                        `;
-
-                    }
-
-
-                    else if (
-                        isWrongUserAnswer
-                    ) {
-
-                        className +=
-                            " incorrect";
-
-
-                        badge = `
-
-                            <div class="review-option-label">
-
-                                ✕ Your Answer
-
-                            </div>
-
-                        `;
-
-                    }
-
-
-                    html += `
-
-                        <div class="${className}">
-
-                            <strong>
-
-                                ${escapeHTML(letter)}.
-
-                            </strong>
-
-                            ${escapeHTML(text)}
-
-                            ${badge}
-
-                        </div>
-
-                    `;
-
-                }
-            );
-
-
-            html += `
-
+                <div class="question-number">
+                    QUESTION ${index + 1}
                 </div>
 
+                <h3>
+                    ${escapeHTML(question)}
+                </h3>
+
+                <p>
+                    <strong>
+                        Your answer:
+                    </strong>
+
+                    ${escapeHTML(selected)}
+                </p>
+
+                <p>
+                    <strong>
+                        Correct answer:
+                    </strong>
+
+                    ${escapeHTML(correct)}
+                </p>
+
+                <p class="${isCorrect ? "review-correct" : "review-wrong"}">
+                    ${
+                        isCorrect
+                            ? "✓ Correct"
+                            : "✗ Incorrect"
+                    }
+                </p>
+
             `;
 
+
+            reviewContainer.appendChild(
+                card
+            );
+
         }
-    );
-
-
-    container.innerHTML =
-        html;
-
-
-    hideElement(
-        "resultSection"
     );
 
 
@@ -3989,13 +3732,16 @@ function showReview() {
     );
 
 
+    hideElement(
+        "resultSection"
+    );
+
+
     window.scrollTo({
 
-        top:
-            0,
+        top: 0,
 
-        behavior:
-            "smooth"
+        behavior: "smooth"
 
     });
 
@@ -4012,21 +3758,22 @@ function hideReview() {
         "reviewSection"
     );
 
+}
 
-    showElement(
-        "resultSection"
+
+/* ============================================================
+   BACK TO QUIZ
+============================================================ */
+
+function backToQuiz() {
+
+    hideElement(
+        "reviewSection"
     );
 
-
-    window.scrollTo({
-
-        top:
-            0,
-
-        behavior:
-            "smooth"
-
-    });
+    showElement(
+        "quizSection"
+    );
 
 }
 
@@ -4037,106 +3784,88 @@ function hideReview() {
 
 function openSavedScore() {
 
-    const score =
-        localStorage.getItem(
-            LAST_SCORE_KEY
+    try {
+
+        const score =
+            localStorage.getItem(
+                LAST_SCORE_KEY
+            );
+
+        const points =
+            localStorage.getItem(
+                LAST_POINTS_KEY
+            );
+
+        const total =
+            localStorage.getItem(
+                LAST_TOTAL_KEY
+            );
+
+
+        if (score !== null) {
+
+            const scoreText =
+                getElement(
+                    "scoreText"
+                );
+
+            if (scoreText) {
+
+                scoreText.textContent =
+                    score;
+
+            }
+
+        }
+
+
+        if (points !== null) {
+
+            const pointsText =
+                getElement(
+                    "pointsText"
+                );
+
+            if (pointsText) {
+
+                pointsText.textContent =
+                    points;
+
+            }
+
+        }
+
+
+        if (total !== null) {
+
+            const totalPointsText =
+                getElement(
+                    "totalPointsText"
+                );
+
+            if (totalPointsText) {
+
+                totalPointsText.textContent =
+                    total;
+
+            }
+
+        }
+
+
+        showElement(
+            "resultSection"
         );
-
-
-    const points =
-        localStorage.getItem(
-            LAST_POINTS_KEY
-        );
-
-
-    const total =
-        localStorage.getItem(
-            LAST_TOTAL_KEY
-        );
-
-
-    if (!score) {
-
-        alert(
-            "No saved score found."
-        );
-
-        return;
 
     }
+    catch (error) {
 
-
-    const scoreText =
-        getElement(
-            "scoreText"
+        console.warn(
+            "Unable to open saved score:",
+            error
         );
 
-
-    const pointsText =
-        getElement(
-            "pointsText"
-        );
-
-
-    const totalPointsText =
-        getElement(
-            "totalPointsText"
-        );
-
-
-    if (scoreText) {
-
-        scoreText.textContent =
-            score;
-
     }
-
-
-    if (pointsText) {
-
-        pointsText.textContent =
-            points;
-
-    }
-
-
-    if (totalPointsText) {
-
-        totalPointsText.textContent =
-            total;
-
-    }
-
-
-    hideElement(
-        "quizSection"
-    );
-
-
-    hideElement(
-        "reflectionSection"
-    );
-
-
-    hideElement(
-        "reviewSection"
-    );
-
-
-    showElement(
-        "resultSection"
-    );
-
-
-    window.scrollTo({
-
-        top:
-            0,
-
-        behavior:
-            "smooth"
-
-    });
 
 }
 
@@ -4149,156 +3878,48 @@ function openSavedReview() {
 
     try {
 
-        reviewData =
-            JSON.parse(
-                localStorage.getItem(
-                    LAST_REVIEW_KEY
-                )
-            ) || [];
+        const rawReview =
+            localStorage.getItem(
+                LAST_REVIEW_KEY
+            );
 
 
-        reviewQuestions =
-            JSON.parse(
-                localStorage.getItem(
-                    LAST_QUESTIONS_KEY
-                )
-            ) || [];
+        const rawQuestions =
+            localStorage.getItem(
+                LAST_QUESTIONS_KEY
+            );
+
+
+        if (rawQuestions) {
+
+            reviewQuestions =
+                JSON.parse(
+                    rawQuestions
+                );
+
+        }
+
+
+        if (rawReview) {
+
+            reviewData =
+                JSON.parse(
+                    rawReview
+                );
+
+        }
+
+
+        showReview();
 
     }
-
     catch (error) {
 
-        reviewData =
-            [];
-
-        reviewQuestions =
-            [];
-
-    }
-
-
-    if (
-        reviewData.length === 0 ||
-        reviewQuestions.length === 0
-    ) {
-
-        alert(
-            "No review available."
-        );
-
-        return;
-
-    }
-
-
-    showReview();
-
-}
-
-
-/* ============================================================
-   BACK TO QUIZ
-============================================================ */
-
-function backToQuiz() {
-
-    /*
-       Once a quiz has been successfully submitted,
-       NEVER reopen the actual quiz.
-    */
-
-    if (
-        quizSubmitted
-    ) {
-
-        showElement(
-            "resultSection"
-        );
-
-
-        hideElement(
-            "quizSection"
-        );
-
-
-        hideElement(
-            "reflectionSection"
-        );
-
-
-        hideElement(
-            "reviewSection"
-        );
-
-
-        window.scrollTo({
-
-            top:
-                0,
-
-            behavior:
-                "smooth"
-
-        });
-
-
-        return;
-
-    }
-
-
-    hideElement(
-        "resultSection"
-    );
-
-
-    hideElement(
-        "reviewSection"
-    );
-
-
-    if (
-        quizData.length &&
-        selectedMemberId &&
-        reflectionSubmitted
-    ) {
-
-        showElement(
-            "lockedParticipantSection"
-        );
-
-
-        showElement(
-            "quizSection"
-        );
-
-
-        hideElement(
-            "reflectionSection"
-        );
-
-
-        restoreSavedAnswers();
-
-    }
-
-    else {
-
-        showElement(
-            "resultSection"
+        console.warn(
+            "Unable to open saved review:",
+            error
         );
 
     }
-
-
-    window.scrollTo({
-
-        top:
-            0,
-
-        behavior:
-            "smooth"
-
-    });
 
 }
