@@ -26,7 +26,7 @@
 
     <meta
         name="theme-color"
-        content="#ea580c"
+        content="#4a0754"
     >
 
     <meta
@@ -82,7 +82,7 @@
     >
 
     <link
-        href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=DM+Sans:ital,opsz,wght@9..40,100..1000;1,9..40,100..1000&display=swap"
         rel="stylesheet"
     >
 
@@ -366,7 +366,7 @@
 
 
         <!-- =================================================
-             PERMANENT TOPBAR
+             TOPBAR
         ================================================== -->
 
         <header class="topbar">
@@ -444,7 +444,7 @@
 
 
         <!-- =================================================
-             SLC QUIZ CONTENT
+             SLC CONTENT
         ================================================== -->
 
         <main class="dashboard-content slcquiz-page">
@@ -461,13 +461,20 @@
                     data-aos="fade-down"
                 >
 
+                    <div class="quiz-hero-glow"></div>
+
+                    <div class="quiz-hero-grid"></div>
+
+
                     <div class="quiz-hero-content">
 
-                        <div>
+                        <div class="quiz-hero-copy">
 
                             <div class="quiz-hero-badge">
 
-                                <i class="fa-solid fa-clipboard-question"></i>
+                                <span class="hero-badge-icon">
+                                    <i class="fa-solid fa-bolt"></i>
+                                </span>
 
                                 WEEKLY SLC QUIZ
 
@@ -475,40 +482,97 @@
 
 
                             <h1>
-                                Test Your Knowledge
+                                Learn it.
+                                <span>Live it.</span>
+                                Test it.
                             </h1>
 
 
                             <p>
-                                Read the lesson, reflect on what you
-                                learned, and put your knowledge to the test.
+                                You have read the lesson.
+                                You have reflected on it.
+                                Now put what you have learned
+                                into action.
                             </p>
 
+
+                            <div class="quiz-hero-meta">
+
+                                <div class="hero-meta-item">
+
+                                    <i class="fa-solid fa-book-open"></i>
+
+                                    <span>
+                                        Lesson
+                                        <strong id="heroLessonNumber">—</strong>
+                                    </span>
+
+                                </div>
+
+
+                                <div class="hero-meta-divider"></div>
+
+
+                                <div class="hero-meta-item">
+
+                                    <i class="fa-solid fa-circle-question"></i>
+
+                                    <span>
+                                        <strong id="heroQuestionCount">
+                                            —
+                                        </strong>
+                                        Questions
+                                    </span>
+
+                                </div>
+
+                            </div>
+
                         </div>
 
 
-                        <div class="quiz-hero-icon">
+                        <div class="quiz-hero-visual">
 
-                            <i class="fa-solid fa-brain"></i>
+                            <div class="hero-orbit orbit-one"></div>
+
+                            <div class="hero-orbit orbit-two"></div>
+
+
+                            <div class="hero-icon-card">
+
+                                <i class="fa-solid fa-brain"></i>
+
+                            </div>
+
+
+                            <span class="hero-floating-dot dot-one"></span>
+
+                            <span class="hero-floating-dot dot-two"></span>
+
+                            <span class="hero-floating-dot dot-three"></span>
 
                         </div>
 
                     </div>
 
 
-                    <div
-                        id="quizStatus"
-                        class="quiz-status"
-                    >
-                        Loading quiz...
-                    </div>
+                    <div class="quiz-hero-bottom">
+
+                        <div
+                            id="quizStatus"
+                            class="quiz-status"
+                        >
+                            Loading quiz...
+                        </div>
 
 
-                    <div
-                        id="quizCountdown"
-                        class="countdown-card"
-                    >
-                        Loading countdown...
+                        <div
+                            id="quizCountdown"
+                            class="countdown-card"
+                        >
+                            Loading countdown...
+                        </div>
+
                     </div>
 
                 </section>
@@ -808,9 +872,7 @@
 
                         <div class="reflection-question">
 
-                            <label
-                                for="reflection1"
-                            >
+                            <label for="reflection1">
 
                                 <span class="reflection-question-number">
                                     01
@@ -839,9 +901,7 @@
 
                         <div class="reflection-question">
 
-                            <label
-                                for="reflection2"
-                            >
+                            <label for="reflection2">
 
                                 <span class="reflection-question-number">
                                     02
@@ -869,9 +929,7 @@
 
                         <div class="reflection-question">
 
-                            <label
-                                for="reflection3"
-                            >
+                            <label for="reflection3">
 
                                 <span class="reflection-question-number">
                                     03
@@ -1031,9 +1089,7 @@
                         </div>
 
 
-                        <div
-                            id="questions"
-                        ></div>
+                        <div id="questions"></div>
 
 
                         <div class="quiz-submit-area">
@@ -1217,9 +1273,7 @@
                     </div>
 
 
-                    <div
-                        id="reviewContainer"
-                    ></div>
+                    <div id="reviewContainer"></div>
 
                 </section>
 
