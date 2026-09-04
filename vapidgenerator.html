@@ -1,0 +1,301 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AFC Isiu VAPID Key Generator</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 30px 20px;
+            font-family: Arial, sans-serif;
+            background: #0a0016;
+            color: white;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            margin-bottom: 10px;
+        }
+
+        p {
+            color: #cfc7d8;
+            line-height: 1.6;
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            margin: 20px 0;
+            border: 0;
+            border-radius: 10px;
+            background: #ea580c;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .box {
+            margin-top: 20px;
+            padding: 18px;
+            background: #160523;
+            border-radius: 12px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 100px;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #493052;
+            background: #09000f;
+            color: white;
+            resize: vertical;
+        }
+
+        .private-warning {
+            color: #ffb4b4;
+            font-weight: bold;
+        }
+
+        .success {
+            color: #8ff0a4;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>AFC Isiu VAPID Key Generator</h1>
+
+    <p>
+        This page generates the cryptographic keys needed for
+        Web Push notifications.
+    </p>
+
+    <p class="private-warning">
+        ⚠️ Never share the private key with anyone.
+    </p>
+
+    <button id="generateBtn">
+        Generate VAPID Keys
+    </button>
+
+    <div id="result" style="display:none;">
+
+        <div class="box">
+
+            <label>VAPID Public Key</label>
+
+            <textarea id="publicKey" readonly></textarea>
+
+        </div>
+
+        <div class="box">
+
+            <label>VAPID Private Key</label>
+
+            <textarea id="privateKey" readonly></textarea>
+
+            <p class="private-warning">
+                Keep this private.
+            </p>
+
+        </div>
+
+        <div class="box">
+
+            <label>VAPID Subject</label>
+
+            <textarea id="subject">mailto:afcisiuyouth@gmail.com</textarea>
+
+        </div>
+
+        <p class="success">
+            ✓ Keys generated successfully.
+        </p>
+
+    </div>
+
+</div>
+
+
+<script>
+
+"use strict";
+
+
+/* ============================================================
+   BASE64URL ENCODING
+   ============================================================ */
+
+function arrayBufferToBase64Url(buffer) {
+
+    const bytes = new Uint8Array(buffer);
+
+    let binary = "";
+
+    for (const byte of bytes) {
+        binary += String.fromCharCode(byte);
+    }
+
+    return btoa(binary)
+        .replace(/\+/g, "-")
+        .replace(/\//g, "_")
+        .replace(/=+$/, "");
+
+}
+
+
+/* ============================================================
+   GENERATE VAPID KEYS
+   ============================================================ */
+
+async function generateVapidKeys() {
+
+    /*
+     * VAPID uses an ECDSA P-256 key pair.
+     */
+
+    const keyPair = await crypto.subtle.generateKey(
+
+        {
+            name: "ECDSA",
+
+            namedCurve: "P-256"
+
+        },
+
+        true,
+
+        [
+            "sign",
+            "verify"
+        ]
+
+    );
+
+
+    /* ========================================================
+       EXPORT PUBLIC KEY
+       ======================================================== */
+
+    const publicKeyBuffer =
+        await crypto.subtle.exportKey(
+            "raw",
+            keyPair.publicKey
+        );
+
+
+    /* ========================================================
+       EXPORT PRIVATE KEY
+       ======================================================== */
+
+    const privateKeyBuffer =
+        await crypto.subtle.exportKey(
+            "jwk",
+            keyPair.privateKey
+        );
+
+
+    /*
+     * The private EC key is represented by the JWK "d" value.
+     */
+
+    const publicKey =
+        arrayBufferToBase64Url(publicKeyBuffer);
+
+
+    const privateKey =
+        privateKeyBuffer.d;
+
+
+    return {
+        publicKey,
+        privateKey
+    };
+
+}
+
+
+/* ============================================================
+   BUTTON
+   ============================================================ */
+
+document
+    .getElementById("generateBtn")
+    .addEventListener("click", async function () {
+
+        const button = this;
+
+        button.disabled = true;
+
+        button.textContent = "Generating...";
+
+
+        try {
+
+            const keys = await generateVapidKeys();
+
+
+            document
+                .getElementById("publicKey")
+                .value = keys.publicKey;
+
+
+            document
+                .getElementById("privateKey")
+                .value = keys.privateKey;
+
+
+            document
+                .getElementById("result")
+                .style.display = "block";
+
+
+            button.textContent = "Generate New Keys";
+
+
+        } catch (error) {
+
+            console.error(error);
+
+            alert(
+                "Unable to generate the VAPID keys in this browser."
+            );
+
+            button.textContent = "Generate VAPID Keys";
+
+        }
+
+
+        button.disabled = false;
+
+    });
+
+</script>
+
+</body>
+</html>
+ 
