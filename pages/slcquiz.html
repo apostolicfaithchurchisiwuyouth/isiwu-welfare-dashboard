@@ -26,7 +26,7 @@
 
     <meta
         name="theme-color"
-        content="#4a0754"
+        content="#ea580c"
     >
 
     <meta
@@ -82,7 +82,7 @@
     >
 
     <link
-        href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=DM+Sans:ital,opsz,wght@9..40,100..1000;1,9..40,100..1000&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap"
         rel="stylesheet"
     >
 
@@ -444,7 +444,7 @@
 
 
         <!-- =================================================
-             SLC CONTENT
+             SLC QUIZ CONTENT
         ================================================== -->
 
         <main class="dashboard-content slcquiz-page">
@@ -463,93 +463,107 @@
 
                     <div class="quiz-hero-glow"></div>
 
-                    <div class="quiz-hero-grid"></div>
+                    <div class="quiz-hero-top">
 
+                        <div class="quiz-hero-badge">
 
-                    <div class="quiz-hero-content">
+                            <i class="fa-solid fa-bolt"></i>
 
-                        <div class="quiz-hero-copy">
-
-                            <div class="quiz-hero-badge">
-
-                                <span class="hero-badge-icon">
-                                    <i class="fa-solid fa-bolt"></i>
-                                </span>
-
-                                WEEKLY SLC QUIZ
-
-                            </div>
-
-
-                            <h1>
-                                Learn it.
-                                <span>Live it.</span>
-                                Test it.
-                            </h1>
-
-
-                            <p>
-                                You have read the lesson.
-                                You have reflected on it.
-                                Now put what you have learned
-                                into action.
-                            </p>
-
-
-                            <div class="quiz-hero-meta">
-
-                                <div class="hero-meta-item">
-
-                                    <i class="fa-solid fa-book-open"></i>
-
-                                    <span>
-                                        Lesson
-                                        <strong id="heroLessonNumber">—</strong>
-                                    </span>
-
-                                </div>
-
-
-                                <div class="hero-meta-divider"></div>
-
-
-                                <div class="hero-meta-item">
-
-                                    <i class="fa-solid fa-circle-question"></i>
-
-                                    <span>
-                                        <strong id="heroQuestionCount">
-                                            —
-                                        </strong>
-                                        Questions
-                                    </span>
-
-                                </div>
-
-                            </div>
+                            WEEKLY SLC
 
                         </div>
 
 
-                        <div class="quiz-hero-visual">
+                        <div class="quiz-hero-icon">
 
-                            <div class="hero-orbit orbit-one"></div>
+                            <i class="fa-solid fa-brain"></i>
 
-                            <div class="hero-orbit orbit-two"></div>
+                        </div>
+
+                    </div>
 
 
-                            <div class="hero-icon-card">
+                    <div class="quiz-hero-main">
 
-                                <i class="fa-solid fa-brain"></i>
+                        <div class="quiz-hero-copy">
+
+                            <span class="quiz-hero-kicker">
+                                SUNDAY LESSON CHALLENGE
+                            </span>
+
+
+                            <h1>
+                                Ready to test
+                                <span>what you learned?</span>
+                            </h1>
+
+
+                            <p>
+                                Read the lesson, think about what God is
+                                teaching you, reflect honestly, and then
+                                challenge yourself with this week's quiz.
+                            </p>
+
+                        </div>
+
+
+                        <div class="quiz-hero-side">
+
+                            <div class="hero-mini-card">
+
+                                <i class="fa-solid fa-book-open"></i>
+
+                                <div>
+
+                                    <strong>
+                                        Learn
+                                    </strong>
+
+                                    <span>
+                                        Read the lesson
+                                    </span>
+
+                                </div>
 
                             </div>
 
 
-                            <span class="hero-floating-dot dot-one"></span>
+                            <div class="hero-mini-card">
 
-                            <span class="hero-floating-dot dot-two"></span>
+                                <i class="fa-solid fa-lightbulb"></i>
 
-                            <span class="hero-floating-dot dot-three"></span>
+                                <div>
+
+                                    <strong>
+                                        Reflect
+                                    </strong>
+
+                                    <span>
+                                        Think it through
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="hero-mini-card">
+
+                                <i class="fa-solid fa-trophy"></i>
+
+                                <div>
+
+                                    <strong>
+                                        Challenge
+                                    </strong>
+
+                                    <span>
+                                        Take the quiz
+                                    </span>
+
+                                </div>
+
+                            </div>
 
                         </div>
 
@@ -579,84 +593,6 @@
 
 
                 <!-- =========================================
-                     SAVED ACTIVITY
-                ========================================== -->
-
-                <section
-                    id="savedSection"
-                    class="saved-section hidden"
-                >
-
-                    <div
-                        class="saved-card"
-                        data-aos="fade-up"
-                    >
-
-                        <div class="saved-card-header">
-
-                            <div class="saved-icon">
-
-                                <i class="fa-solid fa-clock-rotate-left"></i>
-
-                            </div>
-
-                            <div>
-
-                                <span>
-                                    YOUR LAST ACTIVITY
-                                </span>
-
-                                <h2>
-                                    Continue where you stopped
-                                </h2>
-
-                            </div>
-
-                        </div>
-
-
-                        <p class="saved-note">
-                            Your previous quiz result and review are
-                            available on this device.
-                        </p>
-
-
-                        <div class="saved-actions">
-
-                            <button
-                                id="viewScoreBtn"
-                                type="button"
-                                onclick="openSavedScore()"
-                            >
-
-                                <i class="fa-solid fa-chart-line"></i>
-
-                                View My Score
-
-                            </button>
-
-
-                            <button
-                                id="viewReviewBtn"
-                                type="button"
-                                class="purple-btn"
-                                onclick="openSavedReview()"
-                            >
-
-                                <i class="fa-solid fa-eye"></i>
-
-                                Review My Answers
-
-                            </button>
-
-                        </div>
-
-                    </div>
-
-                </section>
-
-
-                <!-- =========================================
                      PARTICIPANT SECTION
                 ========================================== -->
 
@@ -677,10 +613,11 @@
 
                             </div>
 
+
                             <div>
 
                                 <span>
-                                    STEP 1
+                                    STEP 01
                                 </span>
 
                                 <h2>
@@ -688,7 +625,8 @@
                                 </h2>
 
                                 <p>
-                                    Select your name to begin.
+                                    Select your name to begin your SLC
+                                    experience.
                                 </p>
 
                             </div>
@@ -724,7 +662,7 @@
                                 <input
                                     type="text"
                                     id="newName"
-                                    placeholder="If your name is not listed, add it here"
+                                    placeholder="Can't find your name? Add it here"
                                     maxlength="100"
                                     autocomplete="name"
                                 >
@@ -837,7 +775,7 @@
                             <div>
 
                                 <span>
-                                    STEP 2 · REFLECTION
+                                    STEP 02 · REFLECTION
                                 </span>
 
                                 <h2>
@@ -1042,7 +980,7 @@
                         <div>
 
                             <span>
-                                STEP 3 · QUIZ UNLOCKED
+                                STEP 03 · QUIZ UNLOCKED
                             </span>
 
                             <h2>
@@ -1050,8 +988,9 @@
                             </h2>
 
                             <p>
-                                Your reflection has been submitted.
-                                Take your time and answer every question.
+                                You've read, reflected, and you're ready
+                                to test what you know. Take your time and
+                                answer every question carefully.
                             </p>
 
                         </div>
@@ -1096,7 +1035,7 @@
 
                             <p>
                                 Make sure you have answered every question
-                                before submitting.
+                                before submitting your quiz.
                             </p>
 
 
@@ -1196,7 +1135,6 @@
 
                         <div class="result-buttons">
 
-
                             <button
                                 type="button"
                                 onclick="showReview()"
@@ -1243,7 +1181,7 @@
                         <div>
 
                             <span>
-                                STEP 4 · REVIEW
+                                STEP 04 · REVIEW
                             </span>
 
                             <h2>
@@ -1364,9 +1302,7 @@
      JAVASCRIPT
 ========================================================= -->
 
-<script
-    src="https://unpkg.com/aos@2.3.4/dist/aos.js"
-></script>
+<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
 
 <script src="../js/main.js"></script>
 
