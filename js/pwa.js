@@ -10,15 +10,8 @@
    - Installed-state detection
    - Manifest verification
    - PWA diagnostics
-
-   IMPORTANT:
-   - This is the ONLY file that registers the service worker.
-   - Service worker: /sw.js
-   - Native installation uses beforeinstallprompt.
-   - Manual installation instructions are NEVER shown
-     automatically by the Install App button when the
-     native installation prompt is available.
-========================================================= */
+   - Push notification subscription
+   ========================================================= */
 
 (function () {
 
@@ -41,14 +34,20 @@
             "(display-mode: standalone)",
 
         INSTALL_DISPLAY_MODE_FULLSCREEN:
-            "(display-mode: fullscreen)"
+            "(display-mode: fullscreen)",
+
+        PUSH_API_URL:
+            "https://script.google.com/macros/s/AKfycbw1mVwpgAcIOSNbpgzy52TFyozEGMtWWwVWUDFaofGNpzsguBIaKR4q1dXVtgVHO2xZ1w/exec",
+
+        PUSH_CONFIG_URL:
+            "/api/push/config"
 
     };
 
 
     /* =====================================================
        STATE
-    ===================================================== */
+       ===================================================== */
 
     let deferredInstallPrompt =
         null;
@@ -59,7 +58,7 @@
 
     /* =====================================================
        DOM HELPERS
-    ===================================================== */
+       ===================================================== */
 
     function $(id) {
 
@@ -70,7 +69,7 @@
 
     /* =====================================================
        DOM ELEMENTS
-    ===================================================== */
+       ===================================================== */
 
     let installButton =
         null;
@@ -90,7 +89,7 @@
 
     /* =====================================================
        INITIALISE DOM REFERENCES
-    ===================================================== */
+       ===================================================== */
 
     function cacheDOM() {
 
@@ -114,7 +113,7 @@
 
     /* =====================================================
        STATUS
-    ===================================================== */
+       ===================================================== */
 
     function setStatus(
         type,
@@ -129,7 +128,6 @@
                 "checking",
                 "unavailable"
             );
-
 
             if (type) {
 
@@ -150,7 +148,6 @@
                 "checking",
                 "unavailable"
             );
-
 
             if (type) {
 
@@ -175,7 +172,7 @@
 
     /* =====================================================
        INSTALLED DETECTION
-    ===================================================== */
+       ===================================================== */
 
     function isAppInstalled() {
 
@@ -208,7 +205,7 @@
 
     /* =====================================================
        SHOW INSTALL BUTTON
-    ===================================================== */
+       ===================================================== */
 
     function showInstallButton() {
 
@@ -222,14 +219,11 @@
         installButton.hidden =
             false;
 
-
         installButton.style.display =
             "inline-flex";
 
-
         installButton.disabled =
             false;
-
 
         installButton.removeAttribute(
             "aria-hidden"
@@ -240,7 +234,7 @@
 
     /* =====================================================
        HIDE INSTALL BUTTON
-    ===================================================== */
+       ===================================================== */
 
     function hideInstallButton() {
 
@@ -254,10 +248,8 @@
         installButton.hidden =
             true;
 
-
         installButton.style.display =
             "none";
-
 
         installButton.setAttribute(
             "aria-hidden",
@@ -269,7 +261,7 @@
 
     /* =====================================================
        SET INSTALL BUTTON READY
-    ===================================================== */
+       ===================================================== */
 
     function setInstallButtonReady() {
 
@@ -282,15 +274,12 @@
 
         showInstallButton();
 
-
         installButton.disabled =
             false;
-
 
         installButton.classList.add(
             "pwa-install-ready"
         );
-
 
         installButton.setAttribute(
             "aria-label",
@@ -302,7 +291,7 @@
 
     /* =====================================================
        SET INSTALL BUTTON WAITING
-    ===================================================== */
+       ===================================================== */
 
     function setInstallButtonWaiting() {
 
@@ -315,10 +304,8 @@
 
         showInstallButton();
 
-
         installButton.disabled =
             false;
-
 
         installButton.classList.remove(
             "pwa-install-ready"
@@ -329,7 +316,7 @@
 
     /* =====================================================
        INSTALL BUTTON LOADING STATE
-    ===================================================== */
+       ===================================================== */
 
     function setInstallingState() {
 
@@ -342,7 +329,6 @@
 
         installButton.disabled =
             true;
-
 
         installButton.classList.add(
             "is-installing"
@@ -362,7 +348,6 @@
                 "fa-mobile-screen-button",
                 "fa-plus"
             );
-
 
             icon.classList.add(
                 "fa-spinner",
@@ -385,11 +370,6 @@
 
         }
         else {
-
-            /*
-             * Fallback for buttons without
-             * the optional text span.
-             */
 
             const textNodes =
                 Array.from(
@@ -417,7 +397,7 @@
 
     /* =====================================================
        RESET INSTALL BUTTON
-    ===================================================== */
+       ===================================================== */
 
     function resetInstallButton() {
 
@@ -430,7 +410,6 @@
 
         installButton.disabled =
             false;
-
 
         installButton.classList.remove(
             "is-installing"
@@ -449,7 +428,6 @@
                 "fa-spinner",
                 "fa-spin"
             );
-
 
             icon.classList.add(
                 "fa-download"
@@ -476,7 +454,7 @@
 
     /* =====================================================
        OPEN MANUAL INSTALL HELP
-    ===================================================== */
+       ===================================================== */
 
     function openInstallHelp() {
 
@@ -490,7 +468,6 @@
                 "[PWA] Install help modal not found."
             );
 
-
             return;
 
         }
@@ -500,12 +477,10 @@
             "show"
         );
 
-
         modal.setAttribute(
             "aria-hidden",
             "false"
         );
-
 
         document.body.classList.add(
             "pwa-modal-open"
@@ -516,7 +491,7 @@
 
     /* =====================================================
        CLOSE MANUAL INSTALL HELP
-    ===================================================== */
+       ===================================================== */
 
     function closeInstallHelp() {
 
@@ -535,12 +510,10 @@
             "show"
         );
 
-
         modal.setAttribute(
             "aria-hidden",
             "true"
         );
-
 
         document.body.classList.remove(
             "pwa-modal-open"
@@ -551,28 +524,15 @@
 
     /* =====================================================
        NATIVE INSTALL
-    ===================================================== */
+       ===================================================== */
 
     async function triggerNativeInstall() {
-
-        /*
-         * This is the critical part.
-
-         * The browser supplies this event through
-         * beforeinstallprompt.
-
-         * We MUST use the stored event.
-         *
-         * There is no other JavaScript API that can
-         * force Chrome to install a PWA.
-         */
 
         if (!deferredInstallPrompt) {
 
             console.warn(
                 "[PWA] Native installation prompt is not available."
             );
-
 
             return false;
 
@@ -588,13 +548,6 @@
 
             setInstallingState();
 
-
-            /*
-             * IMPORTANT:
-             *
-             * prompt() MUST be called from the
-             * user's button interaction.
-             */
 
             deferredInstallPrompt.prompt();
 
@@ -619,20 +572,10 @@
                     "Installing AFC Isiu Youth Portal..."
                 );
 
-
-                /*
-                 * Chrome fires appinstalled after
-                 * successful installation.
-                 */
-
                 return true;
 
             }
 
-
-            /*
-             * User dismissed installation.
-             */
 
             setStatus(
                 "available",
@@ -641,7 +584,6 @@
 
 
             resetInstallButton();
-
 
             return false;
 
@@ -662,16 +604,10 @@
 
             resetInstallButton();
 
-
             return false;
 
         }
         finally {
-
-            /*
-             * A BeforeInstallPromptEvent should not
-             * be reused after prompt().
-             */
 
             deferredInstallPrompt =
                 null;
@@ -683,7 +619,7 @@
 
     /* =====================================================
        INSTALL BUTTON
-    ===================================================== */
+       ===================================================== */
 
     function bindInstallButton() {
 
@@ -692,7 +628,6 @@
             console.warn(
                 "[PWA] #installAppBtn not found."
             );
-
 
             return;
 
@@ -711,15 +646,6 @@
                 );
 
 
-                /*
-                 * NEVER open the manual help modal
-                 * from this button.
-                 *
-                 * The user specifically wants the
-                 * Install App button to be the native
-                 * installation action.
-                 */
-
                 if (
                     !deferredInstallPrompt
                 ) {
@@ -734,11 +660,6 @@
                         "Native installation is not currently available in this browser session."
                     );
 
-
-                    /*
-                     * Do NOT open the manual
-                     * installation instructions.
-                     */
 
                     return;
 
@@ -755,7 +676,7 @@
 
     /* =====================================================
        MANUAL HELP BUTTON
-    ===================================================== */
+       ===================================================== */
 
     function bindHelpButton() {
 
@@ -782,7 +703,7 @@
 
     /* =====================================================
        MODAL CONTROLS
-    ===================================================== */
+       ===================================================== */
 
     function bindModalControls() {
 
@@ -872,7 +793,7 @@
 
     /* =====================================================
        BEFORE INSTALL PROMPT
-    ===================================================== */
+       ===================================================== */
 
     window.addEventListener(
         "beforeinstallprompt",
@@ -882,14 +803,6 @@
                 "[PWA] beforeinstallprompt received."
             );
 
-
-            /*
-             * Stop Chrome from showing its own
-             * automatic mini-infobar/prompt.
-             *
-             * We will launch it from the user's
-             * Install App button.
-             */
 
             event.preventDefault();
 
@@ -917,7 +830,7 @@
 
     /* =====================================================
        APP INSTALLED
-    ===================================================== */
+       ===================================================== */
 
     window.addEventListener(
         "appinstalled",
@@ -940,7 +853,6 @@
 
             hideInstallButton();
 
-
             resetInstallButton();
 
         }
@@ -949,7 +861,7 @@
 
     /* =====================================================
        DISPLAY MODE CHANGE
-    ===================================================== */
+       ===================================================== */
 
     function monitorDisplayMode() {
 
@@ -1026,7 +938,7 @@
 
     /* =====================================================
        SERVICE WORKER REGISTRATION
-    ===================================================== */
+       ===================================================== */
 
     async function registerServiceWorker() {
 
@@ -1037,7 +949,6 @@
             console.warn(
                 "[PWA] Service workers are not supported."
             );
-
 
             return null;
 
@@ -1101,7 +1012,7 @@
 
     /* =====================================================
        MANIFEST CHECK
-    ===================================================== */
+       ===================================================== */
 
     async function checkManifest() {
 
@@ -1167,7 +1078,7 @@
 
     /* =====================================================
        INITIAL STATE
-    ===================================================== */
+       ===================================================== */
 
     function initialiseState() {
 
@@ -1188,18 +1099,10 @@
 
             hideInstallButton();
 
-
             return;
 
         }
 
-
-        /*
-         * Keep Install App visible.
-         *
-         * The button itself will only work when
-         * Chrome supplies beforeinstallprompt.
-         */
 
         setInstallButtonWaiting();
 
@@ -1213,8 +1116,562 @@
 
 
     /* =====================================================
+       PUSH NOTIFICATION HELPERS
+       ===================================================== */
+
+    function isPushSupported() {
+
+        return (
+            window.isSecureContext &&
+            "serviceWorker" in navigator &&
+            "PushManager" in window &&
+            "Notification" in window
+        );
+
+    }
+
+
+    function base64UrlToUint8Array(
+        base64String
+    ) {
+
+        const padding =
+            "=".repeat(
+                (4 - (
+                    base64String.length % 4
+                )) % 4
+            );
+
+
+        const base64 =
+            (
+                base64String +
+                padding
+            )
+                .replace(/-/g, "+")
+                .replace(/_/g, "/");
+
+
+        const rawData =
+            window.atob(
+                base64
+            );
+
+
+        const outputArray =
+            new Uint8Array(
+                rawData.length
+            );
+
+
+        for (
+            let i = 0;
+            i < rawData.length;
+            i++
+        ) {
+
+            outputArray[i] =
+                rawData.charCodeAt(i);
+
+        }
+
+
+        return outputArray;
+
+    }
+
+
+    async function getPushRegistration() {
+
+        if (
+            serviceWorkerRegistration
+        ) {
+
+            return serviceWorkerRegistration;
+
+        }
+
+
+        if (
+            !("serviceWorker" in navigator)
+        ) {
+
+            return null;
+
+        }
+
+
+        return registerServiceWorker();
+
+    }
+
+
+    async function getVapidPublicKey() {
+
+        const response =
+            await fetch(
+                PWA_CONFIG.PUSH_CONFIG_URL,
+                {
+                    method: "GET",
+                    cache: "no-store",
+                    headers: {
+                        "Accept":
+                            "application/json"
+                    }
+                }
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Push configuration returned HTTP " +
+                response.status
+            );
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        const publicKey =
+            String(
+                data.publicKey ||
+                data.vapidPublicKey ||
+                ""
+            ).trim();
+
+
+        if (!publicKey) {
+
+            throw new Error(
+                "The push server did not provide a VAPID public key."
+            );
+
+        }
+
+
+        return publicKey;
+
+    }
+
+
+    async function getPushSubscription() {
+
+        if (
+            !isPushSupported()
+        ) {
+
+            return null;
+
+        }
+
+
+        const registration =
+            await getPushRegistration();
+
+
+        if (!registration) {
+
+            return null;
+
+        }
+
+
+        return registration.pushManager
+            .getSubscription();
+
+    }
+
+
+    async function savePushSubscription(
+        subscription,
+        memberId,
+        memberName
+    ) {
+
+        const cleanMemberId =
+            String(
+                memberId || ""
+            ).trim();
+
+
+        const cleanMemberName =
+            String(
+                memberName || ""
+            ).trim();
+
+
+        if (!cleanMemberId) {
+
+            throw new Error(
+                "A member ID is required before enabling notifications."
+            );
+
+        }
+
+
+        if (!subscription) {
+
+            throw new Error(
+                "No push subscription is available."
+            );
+
+        }
+
+
+        const response =
+            await fetch(
+                PWA_CONFIG.PUSH_API_URL,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type":
+                            "text/plain;charset=utf-8"
+                    },
+                    body:
+                        JSON.stringify({
+                            action:
+                                "savePushSubscription",
+
+                            memberId:
+                                cleanMemberId,
+
+                            memberName:
+                                cleanMemberName,
+
+                            subscription:
+                                subscription.toJSON(),
+
+                            userAgent:
+                                navigator.userAgent
+                        })
+                }
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Push subscription could not be saved. HTTP " +
+                response.status
+            );
+
+        }
+
+
+        const result =
+            await response.json();
+
+
+        if (!result.success) {
+
+            throw new Error(
+                result.message ||
+                "Push subscription could not be saved."
+            );
+
+        }
+
+
+        return result;
+
+    }
+
+
+    async function subscribeToPush(
+        memberId,
+        memberName
+    ) {
+
+        if (
+            !isPushSupported()
+        ) {
+
+            throw new Error(
+                "Push notifications are not supported by this browser or app."
+            );
+
+        }
+
+
+        const cleanMemberId =
+            String(
+                memberId || ""
+            ).trim();
+
+
+        if (!cleanMemberId) {
+
+            throw new Error(
+                "A member ID is required before enabling notifications."
+            );
+
+        }
+
+
+        const registration =
+            await getPushRegistration();
+
+
+        if (!registration) {
+
+            throw new Error(
+                "The AFC Isiu service worker is not ready."
+            );
+
+        }
+
+
+        let permission =
+            Notification.permission;
+
+
+        if (
+            permission === "default"
+        ) {
+
+            permission =
+                await Notification.requestPermission();
+
+        }
+
+
+        if (
+            permission !== "granted"
+        ) {
+
+            if (
+                permission === "denied"
+            ) {
+
+                throw new Error(
+                    "Notifications are blocked. Enable notifications for AFC Isiu in your browser settings."
+                );
+
+            }
+
+
+            throw new Error(
+                "Notification permission was not granted."
+            );
+
+        }
+
+
+        let subscription =
+            await registration.pushManager
+                .getSubscription();
+
+
+        if (!subscription) {
+
+            const publicKey =
+                await getVapidPublicKey();
+
+
+            subscription =
+                await registration.pushManager
+                    .subscribe({
+
+                        userVisibleOnly:
+                            true,
+
+                        applicationServerKey:
+                            base64UrlToUint8Array(
+                                publicKey
+                            )
+
+                    });
+
+        }
+
+
+        const saved =
+            await savePushSubscription(
+                subscription,
+                cleanMemberId,
+                memberName
+            );
+
+
+        return {
+            success:
+                true,
+
+            subscription,
+
+            result:
+                saved
+        };
+
+    }
+
+
+    async function deletePushSubscriptionFromServer(
+        subscription
+    ) {
+
+        if (!subscription) {
+
+            return {
+                success: true
+            };
+
+        }
+
+
+        const response =
+            await fetch(
+                PWA_CONFIG.PUSH_API_URL,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type":
+                            "text/plain;charset=utf-8"
+                    },
+                    body:
+                        JSON.stringify({
+
+                            action:
+                                "deletePushSubscription",
+
+                            endpoint:
+                                subscription.endpoint
+
+                        })
+                }
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Push subscription could not be removed from the server. HTTP " +
+                response.status
+            );
+
+        }
+
+
+        const result =
+            await response.json();
+
+
+        if (!result.success) {
+
+            throw new Error(
+                result.message ||
+                "Push subscription could not be removed from the server."
+            );
+
+        }
+
+
+        return result;
+
+    }
+
+
+    async function unsubscribeFromPush() {
+
+        if (
+            !isPushSupported()
+        ) {
+
+            return {
+                success:
+                    false,
+
+                supported:
+                    false,
+
+                message:
+                    "Push notifications are not supported."
+            };
+
+        }
+
+
+        const registration =
+            await getPushRegistration();
+
+
+        if (!registration) {
+
+            return {
+                success:
+                    false,
+
+                supported:
+                    true,
+
+                message:
+                    "The service worker is not ready."
+            };
+
+        }
+
+
+        const subscription =
+            await registration.pushManager
+                .getSubscription();
+
+
+        if (!subscription) {
+
+            return {
+                success:
+                    true,
+
+                subscribed:
+                    false
+            };
+
+        }
+
+
+        await deletePushSubscriptionFromServer(
+            subscription
+        );
+
+
+        const unsubscribed =
+            await subscription.unsubscribe();
+
+
+        return {
+            success:
+                unsubscribed,
+
+            subscribed:
+                false
+        };
+
+    }
+
+
+    async function getPushPermissionState() {
+
+        if (
+            !isPushSupported()
+        ) {
+
+            return "unsupported";
+
+        }
+
+
+        return Notification.permission;
+
+    }
+
+
+    /* =====================================================
        PUBLIC API
-    ===================================================== */
+       ===================================================== */
 
     window.AFC_PWA = {
 
@@ -1242,14 +1699,29 @@
 
                 return serviceWorkerRegistration;
 
-            }
+            },
+
+        isPushSupported:
+            isPushSupported,
+
+        getPushPermissionState:
+            getPushPermissionState,
+
+        getPushSubscription:
+            getPushSubscription,
+
+        subscribeToPush:
+            subscribeToPush,
+
+        unsubscribeFromPush:
+            unsubscribeFromPush
 
     };
 
 
     /* =====================================================
        STARTUP
-    ===================================================== */
+       ===================================================== */
 
     async function initialise() {
 
@@ -1271,22 +1743,11 @@
         monitorDisplayMode();
 
 
-        /*
-         * Register SW and check manifest.
-         *
-         * These are intentionally independent
-         * of the button click.
-         */
-
         await registerServiceWorker();
 
 
         await checkManifest();
 
-
-        /*
-         * Re-check standalone state after SW setup.
-         */
 
         if (
             isAppInstalled()
@@ -1312,7 +1773,7 @@
 
     /* =====================================================
        RUN AFTER DOM
-    ===================================================== */
+       ===================================================== */
 
     if (
         document.readyState ===
@@ -1327,7 +1788,8 @@
             }
         );
 
-    } else {
+    }
+    else {
 
         initialise();
 
@@ -1335,4 +1797,3 @@
 
 
 })();
- 
