@@ -2,15 +2,12 @@
    AFC ISIU YOUTH PORTAL V2
    FILE: slcquiz.js
    PURPOSE: WEEKLY SLC QUIZ CONTROLLER
-   ============================================================
 
    FLOW:
 
    Quiz Opens
         ↓
    Select Participant
-        ↓
-   Add Name if Necessary
         ↓
    Lock Participant
         ↓
@@ -22,6 +19,8 @@
         ↓
    Answer Questions
         ↓
+   Answers are automatically saved
+        ↓
    Submit Quiz
         ↓
    Individual Result
@@ -31,9 +30,11 @@
    IMPORTANT:
 
    - Participant cannot be changed after selection.
-   - Reflection requires all 3 questions.
-   - Minimum 100 meaningful characters.
-   - Backend also verifies reflection before scoring.
+   - Reflection can only be submitted once.
+   - Backend verifies reflection status.
+   - Quiz answers are saved locally.
+   - Saved answers can be restored after browser/device restart.
+   - User can change saved answers before final submission.
    ============================================================ */
 
 
@@ -54,26 +55,50 @@ const API =
 
 const REFLECTION_MIN_CHARACTERS = 100;
 
+
+/*
+   Session information.
+
+   sessionStorage is used for the active participant flow.
+*/
 const SESSION_KEY =
     "afc_isiu_slc_quiz_session_v1";
+
+
+/*
+   localStorage is used for answers.
+
+   This means answers can survive:
+   - browser closing
+   - phone restart
+   - page refresh
+*/
+const ANSWERS_KEY =
+    "afc_isiu_slc_saved_answers_v2";
+
 
 const LAST_REVIEW_KEY =
     "lastQuizReview";
 
+
 const LAST_QUESTIONS_KEY =
     "lastQuizQuestions";
+
 
 const LAST_SCORE_KEY =
     "lastQuizScore";
 
+
 const LAST_POINTS_KEY =
     "lastQuizPoints";
+
 
 const LAST_TOTAL_KEY =
     "lastQuizTotal";
 
-const LAST_LESSON_KEY =
-    "lastQuizLesson";
+
+const LAST_RESULT_LESSON_KEY =
+    "lastQuizResultLesson";
 
 
 /* ============================================================
@@ -116,8 +141,13 @@ document.addEventListener(
         if (typeof AOS !== "undefined") {
 
             AOS.init({
+
                 duration: 650,
-                once: true
+
+                once: true,
+
+                offset: 30
+
             });
 
         }
@@ -133,8 +163,6 @@ document.addEventListener(
 
         if (!quizLoaded) {
 
-            checkSavedQuiz();
-
             return;
 
         }
@@ -146,7 +174,18 @@ document.addEventListener(
         await restoreQuizSession();
 
 
-        checkSavedQuiz();
+        /*
+        If there is no saved participant,
+        the participant section remains visible.
+        */
+
+        if (!selectedMemberId) {
+
+            showElement(
+                "participantSection"
+            );
+
+        }
 
     }
 );
@@ -165,7 +204,8 @@ function getElement(id) {
 
 function showElement(id) {
 
-    const element = getElement(id);
+    const element =
+        getElement(id);
 
     if (element) {
 
@@ -178,7 +218,8 @@ function showElement(id) {
 
 function hideElement(id) {
 
-    const element = getElement(id);
+    const element =
+        getElement(id);
 
     if (element) {
 
@@ -214,8 +255,10 @@ async function loadQuiz() {
     const status =
         getElement("quizStatus");
 
+
     const countdown =
         getElement("quizCountdown");
+
 
     if (!status) {
 
@@ -227,7 +270,7 @@ async function loadQuiz() {
     try {
 
         status.textContent =
-            "Loading quiz...";
+            "Loading this week's challenge...";
 
 
         const response =
@@ -257,12 +300,14 @@ async function loadQuiz() {
             status.textContent =
                 "🔒 This week's quiz has closed.";
 
+
             if (countdown) {
 
                 countdown.style.display =
                     "none";
 
             }
+
 
             hideElement(
                 "participantSection"
@@ -279,6 +324,7 @@ async function loadQuiz() {
             hideElement(
                 "quizSection"
             );
+
 
             quizLoaded = false;
 
@@ -298,6 +344,7 @@ async function loadQuiz() {
             status.textContent =
                 "⏳ The weekly SLC quiz opens soon.";
 
+
             hideElement(
                 "participantSection"
             );
@@ -310,6 +357,7 @@ async function loadQuiz() {
                 "quizSection"
             );
 
+
             if (
                 data.openTime
             ) {
@@ -319,11 +367,13 @@ async function loadQuiz() {
                         data.openTime
                     );
 
+
                 startCountdown(
                     "open"
                 );
 
             }
+
 
             quizLoaded = false;
 
@@ -344,9 +394,11 @@ async function loadQuiz() {
                 data.message ||
                 "Unable to load the quiz.";
 
+
             hideElement(
                 "participantSection"
             );
+
 
             quizLoaded = false;
 
@@ -388,42 +440,6 @@ async function loadQuiz() {
             `🟢 Lesson ${selectedLesson} Quiz is Open`;
 
 
-        /* =========================================
-           UPDATE HERO INFORMATION
-        ========================================== */
-
-        const heroLesson =
-            getElement(
-                "heroLessonNumber"
-            );
-
-
-        const heroQuestionCount =
-            getElement(
-                "heroQuestionCount"
-            );
-
-
-        if (heroLesson) {
-
-            heroLesson.textContent =
-                selectedLesson || "—";
-
-        }
-
-
-        if (heroQuestionCount) {
-
-            heroQuestionCount.textContent =
-                quizData.length;
-
-        }
-
-
-        /* =========================================
-           QUESTION COUNT BADGE
-        ========================================== */
-
         const questionBadge =
             getElement(
                 "questionCountBadge"
@@ -438,10 +454,6 @@ async function loadQuiz() {
         }
 
 
-        /* =========================================
-           COUNTDOWN
-        ========================================== */
-
         if (
             quizCloseTime
         ) {
@@ -452,13 +464,6 @@ async function loadQuiz() {
 
         }
 
-
-        /*
-        Do NOT immediately show the quiz.
-
-        The participant must first be selected
-        and reflection completed.
-        */
 
         showElement(
             "participantSection"
@@ -510,10 +515,6 @@ function startCountdown(mode) {
         return;
 
     }
-
-
-    countdown.style.display =
-        "inline-flex";
 
 
     countdownInterval =
@@ -597,9 +598,10 @@ function startCountdown(mode) {
 
                 countdown.innerHTML = `
 
-                    ${mode === "open"
-                        ? "⏳ Opens in"
-                        : "⏳ Closes in"
+                    ${
+                        mode === "open"
+                            ? "⏳ Opens in"
+                            : "⏳ Closes in"
                     }
 
                     <strong>
@@ -694,8 +696,8 @@ async function loadMembers() {
             }
         );
 
-
     }
+
     catch (error) {
 
         console.error(
@@ -834,6 +836,7 @@ async function addNewMember() {
             "Please enter your name."
         );
 
+
         input.focus();
 
         return;
@@ -848,6 +851,7 @@ async function addNewMember() {
         alert(
             "Please enter your full name."
         );
+
 
         input.focus();
 
@@ -880,12 +884,18 @@ async function addNewMember() {
                 API,
                 {
                     method: "POST",
-                    body: JSON.stringify({
-                        action:
-                            "addMember",
-                        name:
-                            name
-                    })
+
+                    body:
+                        JSON.stringify({
+
+                            action:
+                                "addMember",
+
+                            name:
+                                name
+
+                        })
+
                 }
             );
 
@@ -937,8 +947,8 @@ async function addNewMember() {
             "Your name has been added successfully."
         );
 
-
     }
+
     catch (error) {
 
         console.error(
@@ -952,10 +962,12 @@ async function addNewMember() {
         );
 
     }
+
     finally {
 
         button.disabled =
             false;
+
 
         button.innerHTML =
             oldHTML;
@@ -1039,6 +1051,10 @@ function lockSelectedParticipant() {
         memberName;
 
 
+    /*
+       Lock participant.
+    */
+
     select.disabled =
         true;
 
@@ -1085,8 +1101,16 @@ function lockSelectedParticipant() {
     }
 
 
+    /*
+       Save participant session.
+    */
+
     saveQuizSession();
 
+
+    /*
+       Display locked participant.
+    */
 
     const lockedName =
         getElement(
@@ -1111,6 +1135,16 @@ function lockSelectedParticipant() {
         "participantSection"
     );
 
+
+    /*
+       Check backend reflection status.
+
+       If already completed:
+       go straight to quiz.
+
+       If not:
+       show reflection.
+    */
 
     checkReflectionStatus();
 
@@ -1163,6 +1197,7 @@ function saveQuizSession() {
         );
 
     }
+
     catch (error) {
 
         console.warn(
@@ -1215,6 +1250,7 @@ async function restoreQuizSession() {
             );
 
     }
+
     catch (error) {
 
         console.warn(
@@ -1222,14 +1258,20 @@ async function restoreQuizSession() {
             error
         );
 
+
         sessionStorage.removeItem(
             SESSION_KEY
         );
+
 
         return;
 
     }
 
+
+    /*
+       Never restore another week's quiz.
+    */
 
     if (
         !saved ||
@@ -1245,6 +1287,7 @@ async function restoreQuizSession() {
         sessionStorage.removeItem(
             SESSION_KEY
         );
+
 
         return;
 
@@ -1294,6 +1337,7 @@ async function restoreQuizSession() {
             SESSION_KEY
         );
 
+
         return;
 
     }
@@ -1331,6 +1375,12 @@ async function restoreQuizSession() {
         "participantSection"
     );
 
+
+    /*
+       Never trust sessionStorage for reflection completion.
+
+       The backend is checked every time.
+    */
 
     await checkReflectionStatus();
 
@@ -1589,8 +1639,7 @@ function updateReflectionProgress() {
                     (
                         count /
                         REFLECTION_MIN_CHARACTERS
-                    ) *
-                    100
+                    ) * 100
                 )
             );
 
@@ -1615,14 +1664,13 @@ function updateReflectionProgress() {
 
     if (requirementText) {
 
-        if (
-            ready
-        ) {
+        if (ready) {
 
             requirementText.textContent =
                 "You're ready. Submit your reflection to unlock the quiz.";
 
         }
+
         else if (
             answeredCount < 3
         ) {
@@ -1631,6 +1679,7 @@ function updateReflectionProgress() {
                 `Answer all three questions. ${answeredCount}/3 answered.`;
 
         }
+
         else {
 
             const remaining =
@@ -1666,6 +1715,10 @@ async function checkReflectionStatus() {
 
     }
 
+
+    /*
+       Always show a small checking state.
+    */
 
     showElement(
         "reflectionSection"
@@ -1708,6 +1761,10 @@ async function checkReflectionStatus() {
         );
 
 
+        /*
+           REFLECTION ALREADY COMPLETED
+        */
+
         if (
             data.success &&
             (
@@ -1723,13 +1780,23 @@ async function checkReflectionStatus() {
             saveQuizSession();
 
 
-            unlockQuiz();
+            /*
+               VERY IMPORTANT:
 
+               Do not show reflection again.
+               Go directly to quiz.
+            */
+
+            unlockQuiz();
 
             return;
 
         }
 
+
+        /*
+           REFLECTION NOT COMPLETED
+        */
 
         reflectionSubmitted =
             false;
@@ -1738,13 +1805,13 @@ async function checkReflectionStatus() {
         saveQuizSession();
 
 
-        showElement(
-            "reflectionSection"
+        hideElement(
+            "quizSection"
         );
 
 
-        hideElement(
-            "quizSection"
+        showElement(
+            "reflectionSection"
         );
 
 
@@ -1762,8 +1829,8 @@ async function checkReflectionStatus() {
 
         updateReflectionProgress();
 
-
     }
+
     catch (error) {
 
         console.error(
@@ -1851,6 +1918,7 @@ async function submitReflection() {
             "Please answer all three reflection questions and write at least 100 meaningful characters altogether."
         );
 
+
         return;
 
     }
@@ -1897,6 +1965,7 @@ async function submitReflection() {
         button.disabled =
             true;
 
+
         button.innerHTML = `
 
             <i class="fa-solid fa-spinner fa-spin"></i>
@@ -1926,29 +1995,31 @@ async function submitReflection() {
             await fetch(
                 API,
                 {
+
                     method: "POST",
 
-                    body: JSON.stringify({
+                    body:
+                        JSON.stringify({
 
-                        action:
-                            "submitReflection",
+                            action:
+                                "submitReflection",
 
-                        memberId:
-                            selectedMemberId,
+                            memberId:
+                                selectedMemberId,
 
-                        lessonNo:
-                            selectedLesson,
+                            lessonNo:
+                                selectedLesson,
 
-                        question1:
-                            answer1,
+                            question1:
+                                answer1,
 
-                        question2:
-                            answer2,
+                            question2:
+                                answer2,
 
-                        question3:
-                            answer3
+                            question3:
+                                answer3
 
-                    })
+                        })
 
                 }
             );
@@ -1964,9 +2035,36 @@ async function submitReflection() {
         );
 
 
+        /*
+           Backend may tell us that the reflection
+           was already submitted.
+
+           Treat that as completed.
+        */
+
         if (
             !data.success
         ) {
+
+            if (
+                data.status === "completed" ||
+                data.completed === true
+            ) {
+
+                reflectionSubmitted =
+                    true;
+
+
+                saveQuizSession();
+
+
+                unlockQuiz();
+
+
+                return;
+
+            }
+
 
             if (message) {
 
@@ -1981,28 +2079,16 @@ async function submitReflection() {
             }
 
 
-            if (button) {
-
-                button.disabled =
-                    false;
-
-                button.innerHTML = `
-
-                    <span>
-                        Submit Reflection
-                    </span>
-
-                    <i class="fa-solid fa-arrow-right"></i>
-
-                `;
-
-            }
-
+            restoreReflectionButton();
 
             return;
 
         }
 
+
+        /*
+           Reflection successfully saved.
+        */
 
         reflectionSubmitted =
             true;
@@ -2032,8 +2118,8 @@ async function submitReflection() {
             500
         );
 
-
     }
+
     catch (error) {
 
         console.error(
@@ -2054,24 +2140,45 @@ async function submitReflection() {
         }
 
 
-        if (button) {
-
-            button.disabled =
-                false;
-
-            button.innerHTML = `
-
-                <span>
-                    Submit Reflection
-                </span>
-
-                <i class="fa-solid fa-arrow-right"></i>
-
-            `;
-
-        }
+        restoreReflectionButton();
 
     }
+
+}
+
+
+/* ============================================================
+   RESTORE REFLECTION BUTTON
+============================================================ */
+
+function restoreReflectionButton() {
+
+    const button =
+        getElement(
+            "submitReflectionBtn"
+        );
+
+
+    if (!button) {
+
+        return;
+
+    }
+
+
+    button.disabled =
+        !reflectionRequirementsMet();
+
+
+    button.innerHTML = `
+
+        <span>
+            Submit Reflection
+        </span>
+
+        <i class="fa-solid fa-arrow-right"></i>
+
+    `;
 
 }
 
@@ -2123,18 +2230,56 @@ function unlockQuiz() {
     );
 
 
+    /*
+       Reflection is permanently skipped
+       once backend confirms completion.
+    */
+
     hideElement(
         "reflectionSection"
     );
 
 
+    /*
+       Render questions.
+    */
+
     renderQuestions();
+
+
+    /*
+       Restore previously selected answers.
+    */
+
+    restoreSavedAnswers();
 
 
     showElement(
         "quizSection"
     );
 
+
+    /*
+       Refresh AOS if available.
+    */
+
+    if (typeof AOS !== "undefined") {
+
+        setTimeout(
+            function () {
+
+                AOS.refresh();
+
+            },
+            100
+        );
+
+    }
+
+
+    /*
+       Scroll to quiz.
+    */
 
     setTimeout(
         function () {
@@ -2148,8 +2293,11 @@ function unlockQuiz() {
             if (quiz) {
 
                 quiz.scrollIntoView({
+
                     behavior: "smooth",
+
                     block: "start"
+
                 });
 
             }
@@ -2205,8 +2353,8 @@ function renderQuestions() {
     }
 
 
-    let allQuestionsHTML =
-        "";
+    const fragment =
+        document.createDocumentFragment();
 
 
     quizData.forEach(
@@ -2215,7 +2363,17 @@ function renderQuestions() {
             index
         ) {
 
-            let options =
+            const card =
+                document.createElement(
+                    "div"
+                );
+
+
+            card.className =
+                "question-card";
+
+
+            let optionsHTML =
                 "";
 
 
@@ -2234,16 +2392,14 @@ function renderQuestions() {
                         ];
 
 
-                    if (
-                        !text
-                    ) {
+                    if (!text) {
 
                         return;
 
                     }
 
 
-                    options += `
+                    optionsHTML += `
 
                         <label class="option">
 
@@ -2251,6 +2407,7 @@ function renderQuestions() {
                                 type="radio"
                                 name="q${index}"
                                 value="${escapeHTML(letter)}"
+                                data-question-index="${index}"
                             >
 
                             <span>
@@ -2271,42 +2428,310 @@ function renderQuestions() {
             );
 
 
-            allQuestionsHTML += `
+            card.innerHTML = `
 
-                <div class="question-card">
+                <div class="question-number">
 
-                    <div class="question-number">
+                    QUESTION ${index + 1}
 
-                        QUESTION ${index + 1}
-
-                    </div>
+                </div>
 
 
-                    <h3>
+                <h3>
 
-                        ${escapeHTML(
-                            question.question
-                        )}
+                    ${escapeHTML(
+                        question.question
+                    )}
 
-                    </h3>
+                </h3>
 
 
-                    <div class="options">
+                <div class="options">
 
-                        ${options}
-
-                    </div>
+                    ${optionsHTML}
 
                 </div>
 
             `;
 
+
+            fragment.appendChild(
+                card
+            );
+
         }
     );
 
 
-    container.innerHTML =
-        allQuestionsHTML;
+    container.appendChild(
+        fragment
+    );
+
+
+    /*
+       Listen for answer changes.
+
+       Every selected answer is saved immediately.
+    */
+
+    container
+        .querySelectorAll(
+            'input[type="radio"]'
+        )
+        .forEach(
+            function (input) {
+
+                input.addEventListener(
+                    "change",
+                    saveCurrentAnswers
+                );
+
+            }
+        );
+
+}
+
+
+/* ============================================================
+   GET ANSWER STORAGE KEY
+============================================================ */
+
+function getAnswersStorageKey() {
+
+    if (
+        !selectedLesson ||
+        !selectedMemberId
+    ) {
+
+        return null;
+
+    }
+
+
+    return (
+        `${ANSWERS_KEY}_${selectedLesson}_${selectedMemberId}`
+    );
+
+}
+
+
+/* ============================================================
+   SAVE CURRENT ANSWERS
+============================================================ */
+
+function saveCurrentAnswers() {
+
+    const key =
+        getAnswersStorageKey();
+
+
+    if (!key) {
+
+        return;
+
+    }
+
+
+    const answers =
+        [];
+
+
+    for (
+        let i = 0;
+        i < quizData.length;
+        i++
+    ) {
+
+        const selected =
+            document.querySelector(
+                `input[name="q${i}"]:checked`
+            );
+
+
+        answers.push(
+            selected
+                ? selected.value
+                : ""
+        );
+
+    }
+
+
+    try {
+
+        localStorage.setItem(
+            key,
+            JSON.stringify({
+                lessonNo:
+                    selectedLesson,
+
+                memberId:
+                    selectedMemberId,
+
+                answers:
+                    answers,
+
+                savedAt:
+                    new Date().toISOString()
+            })
+        );
+
+
+        console.log(
+            "Quiz answers saved locally."
+        );
+
+    }
+
+    catch (error) {
+
+        console.warn(
+            "Unable to save quiz answers:",
+            error
+        );
+
+    }
+
+}
+
+
+/* ============================================================
+   RESTORE SAVED ANSWERS
+============================================================ */
+
+function restoreSavedAnswers() {
+
+    const key =
+        getAnswersStorageKey();
+
+
+    if (!key) {
+
+        return;
+
+    }
+
+
+    let saved = null;
+
+
+    try {
+
+        const raw =
+            localStorage.getItem(
+                key
+            );
+
+
+        if (!raw) {
+
+            return;
+
+        }
+
+
+        saved =
+            JSON.parse(
+                raw
+            );
+
+    }
+
+    catch (error) {
+
+        console.warn(
+            "Unable to read saved quiz answers.",
+            error
+        );
+
+
+        return;
+
+    }
+
+
+    if (
+        !saved ||
+        !Array.isArray(
+            saved.answers
+        )
+    ) {
+
+        return;
+
+    }
+
+
+    saved.answers.forEach(
+        function (
+            answer,
+            index
+        ) {
+
+            if (!answer) {
+
+                return;
+
+            }
+
+
+            const input =
+                document.querySelector(
+                    `input[name="q${index}"][value="${CSS.escape(answer)}"]`
+                );
+
+
+            if (input) {
+
+                input.checked =
+                    true;
+
+            }
+
+        }
+    );
+
+
+    console.log(
+        "Saved quiz answers restored."
+    );
+
+}
+
+
+/* ============================================================
+   CLEAR SAVED ANSWERS
+============================================================ */
+
+function clearSavedAnswers() {
+
+    const key =
+        getAnswersStorageKey();
+
+
+    if (!key) {
+
+        return;
+
+    }
+
+
+    try {
+
+        localStorage.removeItem(
+            key
+        );
+
+    }
+
+    catch (error) {
+
+        console.warn(
+            "Unable to clear saved quiz answers:",
+            error
+        );
+
+    }
 
 }
 
@@ -2369,6 +2794,10 @@ async function submitQuiz() {
         [];
 
 
+    /*
+       Collect every answer.
+    */
+
     for (
         let i = 0;
         i < quizData.length;
@@ -2390,7 +2819,7 @@ async function submitQuiz() {
 
             const questionCards =
                 document.querySelectorAll(
-                    "#questions .question-card"
+                    ".question-card"
                 );
 
 
@@ -2399,8 +2828,11 @@ async function submitQuiz() {
             ) {
 
                 questionCards[i].scrollIntoView({
+
                     behavior: "smooth",
+
                     block: "center"
+
                 });
 
             }
@@ -2428,6 +2860,7 @@ async function submitQuiz() {
 
         submitBtn.disabled =
             true;
+
 
         submitBtn.innerHTML = `
 
@@ -2485,6 +2918,10 @@ async function submitQuiz() {
             !data.success
         ) {
 
+            /*
+               Backend reflection protection.
+            */
+
             if (
                 data.status ===
                 "reflection_required"
@@ -2516,6 +2953,7 @@ async function submitQuiz() {
                 await checkReflectionStatus();
 
             }
+
             else {
 
                 alert(
@@ -2526,30 +2964,20 @@ async function submitQuiz() {
             }
 
 
-            if (submitBtn) {
-
-                submitBtn.disabled =
-                    false;
-
-                submitBtn.innerHTML = `
-
-                    <i class="fa-solid fa-paper-plane"></i>
-
-                    Submit Quiz
-
-                `;
-
-            }
-
+            restoreSubmitButton();
 
             return;
 
         }
 
 
-        /* =========================================
-           STORE RESULT DATA
-        ========================================== */
+        /*
+           Quiz successfully submitted.
+        */
+
+        quizSubmitted =
+            true;
+
 
         reviewData =
             Array.isArray(
@@ -2566,6 +2994,10 @@ async function submitQuiz() {
                 ? data.questions
                 : [];
 
+
+        /*
+           Save result.
+        */
 
         localStorage.setItem(
             LAST_REVIEW_KEY,
@@ -2602,18 +3034,22 @@ async function submitQuiz() {
 
 
         localStorage.setItem(
-            LAST_LESSON_KEY,
+            LAST_RESULT_LESSON_KEY,
             selectedLesson
         );
 
 
-        /* =========================================
-           MARK QUIZ AS SUBMITTED
-        ========================================== */
+        /*
+           Answers are no longer needed locally
+           after successful submission.
+        */
 
-        quizSubmitted =
-            true;
+        clearSavedAnswers();
 
+
+        /*
+           Clear active participant session.
+        */
 
         try {
 
@@ -2622,6 +3058,7 @@ async function submitQuiz() {
             );
 
         }
+
         catch (error) {
 
             console.warn(
@@ -2632,9 +3069,9 @@ async function submitQuiz() {
         }
 
 
-        /* =========================================
-           HIDE QUIZ
-        ========================================== */
+        /*
+           Hide quiz.
+        */
 
         hideElement(
             "quizSection"
@@ -2651,14 +3088,14 @@ async function submitQuiz() {
         );
 
 
+        /*
+           Show result.
+        */
+
         showElement(
             "resultSection"
         );
 
-
-        /* =========================================
-           RESULT VALUES
-        ========================================== */
 
         const scoreText =
             getElement(
@@ -2687,9 +3124,12 @@ async function submitQuiz() {
 
 
         /*
-        IMPORTANT:
-        The labels already exist in the HTML.
-        Therefore we only place the number here.
+           FIX:
+           These fields already have labels
+           above them in HTML.
+
+           Therefore only the numbers should
+           be displayed here.
         */
 
         if (pointsText) {
@@ -2709,14 +3149,15 @@ async function submitQuiz() {
 
 
         window.scrollTo({
+
             top: 0,
+
             behavior: "smooth"
+
         });
 
-
-        checkSavedQuiz();
-
     }
+
     catch (error) {
 
         console.error(
@@ -2730,22 +3171,43 @@ async function submitQuiz() {
         );
 
 
-        if (submitBtn) {
-
-            submitBtn.disabled =
-                false;
-
-            submitBtn.innerHTML = `
-
-                <i class="fa-solid fa-paper-plane"></i>
-
-                Submit Quiz
-
-            `;
-
-        }
+        restoreSubmitButton();
 
     }
+
+}
+
+
+/* ============================================================
+   RESTORE SUBMIT BUTTON
+============================================================ */
+
+function restoreSubmitButton() {
+
+    const submitBtn =
+        getElement(
+            "submitBtn"
+        );
+
+
+    if (!submitBtn) {
+
+        return;
+
+    }
+
+
+    submitBtn.disabled =
+        false;
+
+
+    submitBtn.innerHTML = `
+
+        <i class="fa-solid fa-paper-plane"></i>
+
+        Submit Quiz
+
+    `;
 
 }
 
@@ -2771,6 +3233,7 @@ function showReview() {
                 ) || [];
 
         }
+
         catch (error) {
 
             reviewData =
@@ -2796,6 +3259,7 @@ function showReview() {
                 ) || [];
 
         }
+
         catch (error) {
 
             reviewQuestions =
@@ -2916,7 +3380,7 @@ function showReview() {
                             .toUpperCase();
 
 
-                    const isCorrectAnswer =
+                    const isCorrect =
                         letter ===
                         correctAnswer;
 
@@ -2927,7 +3391,7 @@ function showReview() {
                         !item.correct;
 
 
-                    let classes =
+                    let className =
                         "review-option";
 
 
@@ -2935,51 +3399,59 @@ function showReview() {
                         "";
 
 
-                    if (
-                        isCorrectAnswer
-                    ) {
+                    if (isCorrect) {
 
-                        classes +=
+                        className +=
                             " correct";
 
-                        badge =
-                            "✓ Correct Answer";
+
+                        badge = `
+
+                            <div class="review-option-label">
+
+                                ✓ Correct Answer
+
+                            </div>
+
+                        `;
 
                     }
 
 
-                    if (
+                    else if (
                         isWrongUserAnswer
                     ) {
 
-                        classes +=
+                        className +=
                             " incorrect";
 
-                        badge =
-                            "✕ Your Answer";
+
+                        badge = `
+
+                            <div class="review-option-label">
+
+                                ✕ Your Answer
+
+                            </div>
+
+                        `;
 
                     }
 
 
                     html += `
 
-                        <div class="${classes}">
+                        <div class="${className}">
 
                             <strong>
+
                                 ${escapeHTML(letter)}.
+
                             </strong>
 
                             ${escapeHTML(text)}
 
-                            ${
-                                badge
-                                    ? `
-                                        <div class="review-option-badge">
-                                            ${badge}
-                                        </div>
-                                    `
-                                    : ""
-                            }
+                            ${badge}
 
                         </div>
 
@@ -3014,8 +3486,11 @@ function showReview() {
 
 
     window.scrollTo({
+
         top: 0,
+
         behavior: "smooth"
+
     });
 
 }
@@ -3038,8 +3513,11 @@ function hideReview() {
 
 
     window.scrollTo({
+
         top: 0,
+
         behavior: "smooth"
+
     });
 
 }
@@ -3109,7 +3587,7 @@ function openSavedScore() {
     if (pointsText) {
 
         pointsText.textContent =
-            points || "0";
+            points;
 
     }
 
@@ -3117,13 +3595,9 @@ function openSavedScore() {
     if (totalPointsText) {
 
         totalPointsText.textContent =
-            total || "0";
+            total;
 
     }
-
-
-    quizSubmitted =
-        true;
 
 
     hideElement(
@@ -3141,19 +3615,17 @@ function openSavedScore() {
     );
 
 
-    hideElement(
-        "lockedParticipantSection"
-    );
-
-
     showElement(
         "resultSection"
     );
 
 
     window.scrollTo({
+
         top: 0,
+
         behavior: "smooth"
+
     });
 
 }
@@ -3183,6 +3655,7 @@ function openSavedReview() {
             ) || [];
 
     }
+
     catch (error) {
 
         reviewData =
@@ -3208,10 +3681,6 @@ function openSavedReview() {
     }
 
 
-    quizSubmitted =
-        true;
-
-
     showReview();
 
 }
@@ -3224,29 +3693,43 @@ function openSavedReview() {
 function backToQuiz() {
 
     /*
-    Once a quiz has been submitted, the user should
-    not be allowed to reopen the active quiz UI.
+       Once a quiz has been successfully submitted,
+       NEVER reopen the actual quiz.
 
-    The result should remain the final state.
+       The results page will eventually handle
+       the result/review experience separately.
     */
 
     if (
         quizSubmitted
     ) {
 
-        hideElement(
-            "reviewSection"
-        );
-
-
         showElement(
             "resultSection"
         );
 
 
+        hideElement(
+            "quizSection"
+        );
+
+
+        hideElement(
+            "reflectionSection"
+        );
+
+
+        hideElement(
+            "reviewSection"
+        );
+
+
         window.scrollTo({
+
             top: 0,
+
             behavior: "smooth"
+
         });
 
 
@@ -3280,7 +3763,11 @@ function backToQuiz() {
             "quizSection"
         );
 
+
+        restoreSavedAnswers();
+
     }
+
     else {
 
         showElement(
@@ -3291,62 +3778,11 @@ function backToQuiz() {
 
 
     window.scrollTo({
+
         top: 0,
+
         behavior: "smooth"
+
     });
-
-}
-
-
-/* ============================================================
-   CHECK SAVED QUIZ
-============================================================ */
-
-function checkSavedQuiz() {
-
-    const score =
-        localStorage.getItem(
-            LAST_SCORE_KEY
-        );
-
-
-    const review =
-        localStorage.getItem(
-            LAST_REVIEW_KEY
-        );
-
-
-    const savedSection =
-        getElement(
-            "savedSection"
-        );
-
-
-    if (
-        !savedSection
-    ) {
-
-        return;
-
-    }
-
-
-    if (
-        score ||
-        review
-    ) {
-
-        savedSection.classList.remove(
-            "hidden"
-        );
-
-    }
-    else {
-
-        savedSection.classList.add(
-            "hidden"
-        );
-
-    }
 
 }
