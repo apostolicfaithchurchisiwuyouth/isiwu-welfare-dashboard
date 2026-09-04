@@ -1,285 +1,502 @@
 <!DOCTYPE html>
+
 <html lang="en">
 
 <head>
 
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
 
-    <title>My SLC Results | AFC Isiwu Youth</title>
+<title>
+    My SLC Results | AFC Isiu Youth Portal
+</title>
 
-    <!-- PWA -->
-    <link
-        rel="manifest"
-        href="../manifest.json"
-    >
 
-    <meta
-        name="theme-color"
-        content="#ea580c"
-    >
+<!-- =====================================================
+     PWA
+====================================================== -->
 
-    <meta
-        name="mobile-web-app-capable"
-        content="yes"
-    >
+<link
+    rel="manifest"
+    href="/manifest.json"
+>
 
-    <meta
-        name="apple-mobile-web-app-capable"
-        content="yes"
-    >
+<meta
+    name="theme-color"
+    content="#ea580c"
+>
 
-    <meta
-        name="apple-mobile-web-app-status-bar-style"
-        content="default"
-    >
+<meta
+    name="mobile-web-app-capable"
+    content="yes"
+>
 
-    <link
-        rel="apple-touch-icon"
-        href="../images/logo.png"
-    >
+<meta
+    name="apple-mobile-web-app-capable"
+    content="yes"
+>
 
-    <!-- Fonts -->
-    <link
-        rel="preconnect"
-        href="https://fonts.googleapis.com"
-    >
+<meta
+    name="apple-mobile-web-app-status-bar-style"
+    content="default"
+>
 
-    <link
-        rel="preconnect"
-        href="https://fonts.gstatic.com"
-        crossorigin
-    >
+<meta
+    name="apple-mobile-web-app-title"
+    content="AFC Isiu"
+>
 
-    <link
-        href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=DM+Sans:wght@400;500;600;700&display=swap"
-        rel="stylesheet"
-    >
 
-    <!-- Icons -->
-    <link
-        rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
-    >
+<!-- =====================================================
+     ICON
+====================================================== -->
 
-    <link
-        rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/remixicon@4.6.0/fonts/remixicon.css"
-    >
+<link
+    rel="icon"
+    type="image/png"
+    href="../images/logo.png"
+>
 
-    <!-- Global CSS -->
-    <link
-        rel="stylesheet"
-        href="../css/main.css"
-    >
+<link
+    rel="apple-touch-icon"
+    href="../images/logo.png"
+>
 
-    <link
-        rel="stylesheet"
-        href="../css/layout.css"
-    >
 
-    <!-- Page CSS -->
-    <link
-        rel="stylesheet"
-        href="../css/results.css"
-    >
+<!-- =====================================================
+     FONTS
+====================================================== -->
+
+<link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+>
+
+<link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+>
+
+<link
+    href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap"
+    rel="stylesheet"
+>
+
+
+<!-- =====================================================
+     ICONS
+====================================================== -->
+
+<link
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    rel="stylesheet"
+>
+
+<link
+    href="https://cdn.jsdelivr.net/npm/remixicon@4.6.0/fonts/remixicon.css"
+    rel="stylesheet"
+>
+
+
+<!-- =====================================================
+     AOS
+====================================================== -->
+
+<link
+    rel="stylesheet"
+    href="https://unpkg.com/aos@2.3.4/dist/aos.css"
+>
+
+
+<!-- =====================================================
+     GLOBAL CSS
+====================================================== -->
+
+<link
+    rel="stylesheet"
+    href="../css/main.css"
+>
+
+<link
+    rel="stylesheet"
+    href="../css/layout.css"
+>
+
+
+<!-- =====================================================
+     RESULTS CSS
+====================================================== -->
+
+<link
+    rel="stylesheet"
+    href="../css/results.css"
+>
 
 </head>
 
 
 <body>
 
-    <!-- =========================================================
-         APP SHELL
-         ========================================================= -->
 
-    <div class="dashboard-layout">
+<div class="app-layout">
 
 
-        <!-- =====================================================
-             SIDEBAR
-             ===================================================== -->
+<!-- =====================================================
+     SIDEBAR OVERLAY
+====================================================== -->
 
-        <aside class="sidebar">
+<div
+    class="sidebar-overlay"
+    id="sidebarOverlay"
+></div>
 
-            <div class="sidebar-header">
 
-                <a
-                    href="../index.html"
-                    class="sidebar-brand"
-                >
+<!-- =====================================================
+     SIDEBAR
+====================================================== -->
 
-                    <img
-                        src="../images/logo.png"
-                        alt="AFC Isiwu Youth"
-                    >
+<aside
+    class="sidebar"
+    id="sidebar"
+>
 
-                    <div class="sidebar-brand-text">
+    <div class="sidebar-top">
 
-                        <strong>AFC Isiwu</strong>
+        <div class="sidebar-logo">
 
-                        <span>Youth Portal</span>
+            <i class="fa-solid fa-shield-heart"></i>
 
-                    </div>
+            <div>
 
-                </a>
+                <h2>
+                    AFC Isiu
+                </h2>
+
+                <span>
+                    Youth Portal
+                </span>
 
             </div>
 
+        </div>
 
-            <nav class="sidebar-nav">
 
-                <div class="sidebar-section">
+        <nav class="sidebar-menu">
 
-                    <span class="sidebar-section-title">
-                        MAIN
-                    </span>
+            <div class="menu-title">
+                Ministry
+            </div>
 
-                    <a
-                        href="../index.html"
-                        class="sidebar-link"
-                    >
-                        <i class="ri-home-5-line"></i>
-                        <span>Dashboard</span>
-                    </a>
 
-                    <a
-                        href="../pages/lessons.html"
-                        class="sidebar-link"
-                    >
-                        <i class="ri-book-open-line"></i>
-                        <span>Lessons</span>
-                    </a>
+            <a href="../">
 
-                    <a
-                        href="../pages/slcquiz.html"
-                        class="sidebar-link"
-                    >
-                        <i class="ri-questionnaire-line"></i>
-                        <span>SLC Quiz</span>
-                    </a>
+                <i class="fa-solid fa-house"></i>
 
-                    <a
-                        href="../pages/results.html"
-                        class="sidebar-link active"
-                    >
-                        <i class="ri-bar-chart-box-line"></i>
-                        <span>My Results</span>
-                    </a>
+                <span>
+                    Dashboard
+                </span>
+
+            </a>
+
+
+            <a href="/pages/lessons">
+
+                <i class="fa-solid fa-book-open"></i>
+
+                <span>
+                    Sunday School Lesson
+                </span>
+
+            </a>
+
+
+            <a
+                href="/pages/slcquiz"
+                data-online-only
+                data-feature="Weekly SLC Quiz"
+            >
+
+                <i class="fa-solid fa-clipboard-question"></i>
+
+                <span>
+                    Take SL Quiz
+                </span>
+
+            </a>
+
+
+            <a
+                href="/pages/results"
+                class="active"
+                data-online-only
+                data-feature="Growth Tracker"
+            >
+
+                <i class="fa-solid fa-chart-line"></i>
+
+                <span>
+                    Check SL Quiz Result
+                </span>
+
+            </a>
+
+
+            <div class="menu-title">
+                Community
+            </div>
+
+
+            <a
+                href="/pages/gallery"
+                data-online-only
+                data-feature="Gallery"
+            >
+
+                <i class="fa-solid fa-images"></i>
+
+                <span>
+                    Gallery
+                </span>
+
+            </a>
+
+
+            <a
+                href="/pages/events"
+                data-online-only
+                data-feature="Youth Events"
+            >
+
+                <i class="fa-solid fa-calendar-days"></i>
+
+                <span>
+                    Youth Events
+                </span>
+
+            </a>
+
+
+            <a
+                href="/pages/welfare"
+                data-online-only
+                data-feature="Welfare"
+            >
+
+                <i class="fa-solid fa-hand-holding-heart"></i>
+
+                <span>
+                    Welfare
+                </span>
+
+            </a>
+
+
+            <a
+                href="/pages/prayer"
+                data-online-only
+                data-feature="Prayer Requests"
+            >
+
+                <i class="fa-solid fa-hands-praying"></i>
+
+                <span>
+                    Prayer Requests
+                </span>
+
+            </a>
+
+
+            <a
+                href="/pages/program-report"
+                data-online-only
+                data-feature="Secretariat Reports"
+            >
+
+                <i class="fa-solid fa-file-lines"></i>
+
+                <span>
+                    Secretariat Reports
+                </span>
+
+            </a>
+
+        </nav>
+
+    </div>
+
+
+    <div class="sidebar-bottom">
+
+        <div class="menu-title">
+            Account
+        </div>
+
+
+        <a href="/pages/profile">
+
+            <i class="fa-solid fa-user"></i>
+
+            <span>
+                Profile
+            </span>
+
+        </a>
+
+
+        <a href="/pages/settings">
+
+            <i class="fa-solid fa-gear"></i>
+
+            <span>
+                Settings
+            </span>
+
+        </a>
+
+    </div>
+
+</aside>
+
+
+<!-- =====================================================
+     MAIN AREA
+====================================================== -->
+
+<div class="main-area">
+
+
+    <!-- =================================================
+         TOPBAR
+    ================================================== -->
+
+    <header class="topbar">
+
+        <div class="topbar-left">
+
+            <button
+                class="mobile-menu-btn"
+                id="mobileMenuBtn"
+                type="button"
+                aria-label="Open navigation menu"
+                aria-expanded="false"
+            >
+
+                <i class="fa-solid fa-bars"></i>
+
+            </button>
+
+
+            <div class="portal-brand">
+
+                <img
+                    src="../images/logo.png"
+                    alt="AFC Logo"
+                    class="portal-logo"
+                >
+
+                <div>
+
+                    <h2>
+                        AFC Isiu Youth
+                    </h2>
+
+                    <p>
+                        Building young people for Christ
+                    </p>
 
                 </div>
 
+            </div>
 
-                <div class="sidebar-section">
+        </div>
 
-                    <span class="sidebar-section-title">
-                        COMMUNITY
-                    </span>
 
-                    <a
-                        href="../pages/gallery.html"
-                        class="sidebar-link"
+        <div class="topbar-right">
+
+            <button
+                class="header-icon"
+                id="notificationBtn"
+                type="button"
+                aria-label="Notifications"
+            >
+
+                <i class="fa-regular fa-bell"></i>
+
+                <span class="notify-dot"></span>
+
+            </button>
+
+
+            <button
+                class="header-icon"
+                id="themeBtn"
+                type="button"
+                aria-label="Change theme"
+            >
+
+                <i class="fa-solid fa-moon"></i>
+
+            </button>
+
+        </div>
+
+    </header>
+
+
+    <!-- =================================================
+         RESULTS CONTENT
+    ================================================== -->
+
+    <main class="dashboard-content results-page">
+
+        <div class="dashboard-container results-container">
+
+
+            <!-- =========================================
+                 RESULTS HERO
+            ========================================== -->
+
+            <section
+                class="results-hero"
+                data-aos="fade-down"
+            >
+
+                <div class="results-hero-content">
+
+                    <div class="results-eyebrow">
+
+                        <span class="results-eyebrow-dot"></span>
+
+                        GROWTH TRACKER
+
+                    </div>
+
+
+                    <h1>
+                        My SLC Results
+                    </h1>
+
+
+                    <p>
+                        See your quiz performance, review your answers,
+                        and track your progress across every SLC quiz.
+                    </p>
+
+
+                    <div
+                        id="resultsMember"
+                        class="results-member"
                     >
-                        <i class="ri-image-line"></i>
-                        <span>Gallery</span>
-                    </a>
 
-                    <a
-                        href="../pages/events.html"
-                        class="sidebar-link"
-                    >
-                        <i class="ri-calendar-event-line"></i>
-                        <span>Events</span>
-                    </a>
+                        <i class="fa-solid fa-lock"></i>
 
-                    <a
-                        href="../pages/welfare.html"
-                        class="sidebar-link"
-                    >
-                        <i class="ri-heart-pulse-line"></i>
-                        <span>Welfare</span>
-                    </a>
-
-                    <a
-                        href="../pages/prayer.html"
-                        class="sidebar-link"
-                    >
-                        <i class="ri-hand-heart-line"></i>
-                        <span>Prayer</span>
-                    </a>
-
-                </div>
-
-
-                <div class="sidebar-section">
-
-                    <span class="sidebar-section-title">
-                        ADMINISTRATION
-                    </span>
-
-                    <a
-                        href="../pages/program-report.html"
-                        class="sidebar-link"
-                    >
-                        <i class="ri-file-chart-line"></i>
-                        <span>Program Report</span>
-                    </a>
-
-                    <a
-                        href="../pages/profile.html"
-                        class="sidebar-link"
-                    >
-                        <i class="ri-user-line"></i>
-                        <span>Profile</span>
-                    </a>
-
-                    <a
-                        href="../pages/settings.html"
-                        class="sidebar-link"
-                    >
-                        <i class="ri-settings-3-line"></i>
-                        <span>Settings</span>
-                    </a>
-
-                </div>
-
-            </nav>
-
-        </aside>
-
-
-        <!-- =====================================================
-             MAIN AREA
-             ===================================================== -->
-
-        <div class="dashboard-main">
-
-
-            <!-- =================================================
-                 TOP BAR
-                 ================================================= -->
-
-            <header class="topbar">
-
-                <div class="topbar-left">
-
-                    <button
-                        type="button"
-                        class="menu-toggle"
-                        id="menuToggle"
-                        aria-label="Open menu"
-                    >
-                        <i class="ri-menu-line"></i>
-                    </button>
-
-                    <div class="topbar-title">
-
-                        <span class="topbar-title-main">
-                            My Results
+                        <span>
+                            Loading participant...
                         </span>
 
                     </div>
@@ -287,458 +504,435 @@
                 </div>
 
 
-                <div class="topbar-right">
+                <div class="results-hero-mark">
 
-                    <a
-                        href="../pages/profile.html"
-                        class="topbar-profile"
-                        aria-label="My profile"
-                    >
-                        <i class="ri-user-3-line"></i>
-                    </a>
+                    <div class="results-hero-circle">
+
+                        <i class="fa-solid fa-chart-line"></i>
+
+                    </div>
+
+                    <span>
+                        KEEP<br>
+                        GROWING
+                    </span>
 
                 </div>
 
-            </header>
+            </section>
 
 
-            <!-- =================================================
-                 RESULTS CONTENT
-                 ================================================= -->
+            <!-- =========================================
+                 MESSAGE
+            ========================================== -->
 
-            <main class="dashboard-content results-page">
-
-                <div class="dashboard-container results-container">
-
-
-                    <!-- =================================================
-                         HERO
-                         ================================================= -->
-
-                    <section
-                        class="results-hero"
-                        data-aos="fade-up"
-                    >
-
-                        <div class="results-hero-content">
-
-                            <div class="results-eyebrow">
-
-                                <span class="results-eyebrow-icon">
-                                    <i class="ri-bar-chart-2-line"></i>
-                                </span>
-
-                                <span>GROWTH TRACKER</span>
-
-                            </div>
+            <div
+                id="resultsMessage"
+                class="results-message hidden"
+                role="status"
+                aria-live="polite"
+            ></div>
 
 
-                            <h1>
-                                My SLC Results
-                            </h1>
+            <!-- =========================================
+                 LATEST RESULT
+            ========================================== -->
 
+            <section
+                id="latestResult"
+                class="latest-result hidden"
+                data-aos="fade-up"
+            >
 
-                            <p>
-                                See your latest quiz performance,
-                                track your progress, and review
-                                answers from quizzes you have completed.
-                            </p>
+                <div class="latest-result-top">
 
+                    <div>
 
-                            <div
-                                class="results-member"
-                                id="resultsMember"
-                            >
+                        <span class="content-eyebrow">
+                            LATEST RESULT
+                        </span>
 
-                                <span class="results-member-icon">
-                                    <i class="ri-user-3-line"></i>
-                                </span>
+                        <h2 id="latestTitle">
+                            Your latest quiz result
+                        </h2>
 
-                                <span>
-                                    Loading participant...
-                                </span>
-
-                                <span class="results-member-lock">
-                                    <i class="ri-lock-line"></i>
-                                </span>
-
-                            </div>
-
-                        </div>
-
-
-                        <div class="results-hero-decoration">
-
-                            <div class="results-hero-decoration-icon">
-                                <i class="ri-trophy-line"></i>
-                            </div>
-
-                        </div>
-
-                    </section>
-
-
-                    <!-- =================================================
-                         MESSAGE
-                         ================================================= -->
-
-                    <div
-                        class="results-message"
-                        id="resultsMessage"
-                    >
-                        Loading your results...
                     </div>
 
 
-                    <!-- =================================================
-                         LATEST RESULT
-                         ================================================= -->
+                    <div class="latest-lesson-pill">
 
-                    <section
-                        class="latest-result hidden"
-                        id="latestResult"
-                        data-aos="fade-up"
-                        data-aos-delay="80"
-                    >
+                        <i class="fa-solid fa-book-open"></i>
 
-                        <div class="latest-result-header">
+                        <span id="latestLesson">
+                            Lesson —
+                        </span>
 
-                            <div>
-
-                                <span class="section-kicker">
-                                    LATEST RESULT
-                                </span>
-
-                                <h2 id="latestTitle">
-                                    Your Latest Quiz
-                                </h2>
-
-                                <p id="latestDate">
-                                    —
-                                </p>
-
-                            </div>
-
-
-                            <div class="latest-completed-badge">
-
-                                <i class="ri-checkbox-circle-fill"></i>
-
-                                <span>Completed</span>
-
-                            </div>
-
-                        </div>
-
-
-                        <div class="latest-result-body">
-
-
-                            <!-- Score -->
-                            <div class="latest-score-block">
-
-                                <div class="latest-score-circle">
-
-                                    <span
-                                        class="latest-score"
-                                        id="latestScore"
-                                    >
-                                        —
-                                    </span>
-
-                                    <span
-                                        class="latest-total"
-                                        id="latestTotal"
-                                    >
-                                        —
-                                    </span>
-
-                                </div>
-
-
-                                <div class="latest-score-label">
-                                    Correct Answers
-                                </div>
-
-                            </div>
-
-
-                            <!-- Details -->
-                            <div class="latest-result-details">
-
-                                <div class="latest-lesson-label">
-                                    <i class="ri-book-open-line"></i>
-
-                                    <span id="latestLesson">
-                                        Lesson —
-                                    </span>
-                                </div>
-
-
-                                <div class="latest-stat-grid">
-
-                                    <div class="latest-stat">
-
-                                        <span class="latest-stat-label">
-                                            POINTS EARNED
-                                        </span>
-
-                                        <strong
-                                            id="latestPoints"
-                                            class="latest-points"
-                                        >
-                                            +0
-                                        </strong>
-
-                                    </div>
-
-
-                                    <div class="latest-stat">
-
-                                        <span class="latest-stat-label">
-                                            STATUS
-                                        </span>
-
-                                        <strong class="latest-status">
-                                            Completed
-                                        </strong>
-
-                                    </div>
-
-                                </div>
-
-
-                                <button
-                                    type="button"
-                                    class="results-primary-btn"
-                                    id="latestReviewBtn"
-                                >
-
-                                    <i class="ri-eye-line"></i>
-
-                                    <span>Review Answers</span>
-
-                                </button>
-
-                            </div>
-
-                        </div>
-
-                    </section>
-
-
-                    <!-- =================================================
-                         HISTORY
-                         ================================================= -->
-
-                    <section
-                        class="results-card"
-                        id="historyCard"
-                        data-aos="fade-up"
-                        data-aos-delay="140"
-                    >
-
-                        <div class="results-card-header">
-
-                            <div>
-
-                                <span class="section-kicker">
-                                    QUIZ HISTORY
-                                </span>
-
-                                <h2>
-                                    Your Previous Quizzes
-                                </h2>
-
-                                <p>
-                                    Every SLC quiz you have completed
-                                    is listed here.
-                                </p>
-
-                            </div>
-
-
-                            <div
-                                class="history-count"
-                                id="historyCount"
-                            >
-                                0 quizzes
-                            </div>
-
-                        </div>
-
-
-                        <div
-                            class="history-list"
-                            id="historyList"
-                        >
-                            <!-- JS inserts history -->
-                        </div>
-
-                    </section>
-
-
-                    <!-- =================================================
-                         EMPTY STATE
-                         ================================================= -->
-
-                    <section
-                        class="results-card empty-results hidden"
-                        id="emptyResults"
-                    >
-
-                        <div class="empty-results-icon">
-
-                            <i class="ri-bar-chart-box-line"></i>
-
-                        </div>
-
-                        <h2>
-                            No quiz results yet
-                        </h2>
-
-                        <p>
-                            Complete your first SLC quiz and your
-                            result will appear here.
-                        </p>
-
-                        <a
-                            href="../pages/slcquiz.html"
-                            class="results-primary-btn"
-                        >
-
-                            <i class="ri-questionnaire-line"></i>
-
-                            <span>Take an SLC Quiz</span>
-
-                        </a>
-
-                    </section>
-
-
-                    <!-- =================================================
-                         REVIEW SECTION
-                         ================================================= -->
-
-                    <section
-                        class="review-card hidden"
-                        id="reviewSection"
-                        data-aos="fade-up"
-                    >
-
-                        <div class="review-header">
-
-                            <div>
-
-                                <span class="section-kicker">
-                                    ANSWER REVIEW
-                                </span>
-
-                                <h2 id="reviewTitle">
-                                    Lesson Answer Review
-                                </h2>
-
-                                <p id="reviewSubtitle">
-                                    Your submitted answers
-                                </p>
-
-                            </div>
-
-
-                            <button
-                                type="button"
-                                class="review-close-btn"
-                                id="closeReviewBtn"
-                                aria-label="Close review"
-                            >
-
-                                <i class="ri-close-line"></i>
-
-                                <span>Close</span>
-
-                            </button>
-
-                        </div>
-
-
-                        <div
-                            class="review-container"
-                            id="reviewContainer"
-                        >
-                            <!-- JS inserts review -->
-                        </div>
-
-                    </section>
+                    </div>
 
                 </div>
 
-            </main>
+
+                <div class="latest-result-body">
 
 
-            <!-- =================================================
-                 MOBILE BOTTOM NAVIGATION
-                 ================================================= -->
+                    <div class="score-panel">
 
-            <nav class="bottom-nav">
+                        <span class="score-panel-label">
+                            YOUR SCORE
+                        </span>
+
+
+                        <div class="score-display">
+
+                            <strong id="latestScore">
+                                —
+                            </strong>
+
+                            <span id="latestTotal"></span>
+
+                        </div>
+
+
+                        <span class="score-panel-note">
+                            Quiz performance
+                        </span>
+
+                    </div>
+
+
+                    <div class="latest-result-details">
+
+
+                        <div class="result-detail-card">
+
+                            <div class="result-detail-icon points-icon">
+
+                                <i class="fa-solid fa-star"></i>
+
+                            </div>
+
+                            <div>
+
+                                <span>
+                                    Points earned
+                                </span>
+
+                                <strong id="latestPoints">
+                                    +0
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="result-detail-card">
+
+                            <div class="result-detail-icon date-icon">
+
+                                <i class="fa-regular fa-calendar"></i>
+
+                            </div>
+
+                            <div>
+
+                                <span>
+                                    Completed
+                                </span>
+
+                                <strong id="latestDate">
+                                    —
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <button
+                            id="latestReviewBtn"
+                            type="button"
+                            class="results-review-btn"
+                        >
+
+                            <span>
+                                Review this quiz
+                            </span>
+
+                            <i class="fa-solid fa-arrow-right"></i>
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =========================================
+                 QUIZ HISTORY
+            ========================================== -->
+
+            <section
+                class="results-card history-card"
+                data-aos="fade-up"
+            >
+
+                <div class="card-heading">
+
+                    <div class="card-heading-left">
+
+                        <div class="card-heading-icon">
+
+                            <i class="fa-solid fa-clock-rotate-left"></i>
+
+                        </div>
+
+
+                        <div>
+
+                            <span>
+                                YOUR PROGRESS
+                            </span>
+
+                            <h2>
+                                Quiz History
+                            </h2>
+
+                            <p>
+                                Every SLC quiz you have completed appears here.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        id="historyCount"
+                        class="history-count"
+                    >
+                        0 quizzes
+                    </div>
+
+                </div>
+
+
+                <div
+                    id="historyList"
+                    class="history-list"
+                ></div>
+
+            </section>
+
+
+            <!-- =========================================
+                 EMPTY RESULTS
+            ========================================== -->
+
+            <section
+                id="emptyResults"
+                class="results-card empty-results hidden"
+                data-aos="fade-up"
+            >
+
+                <div class="empty-results-icon">
+
+                    <i class="fa-solid fa-chart-simple"></i>
+
+                </div>
+
+
+                <span>
+                    NO RESULTS YET
+                </span>
+
+
+                <h2>
+                    Your quiz journey starts here.
+                </h2>
+
+
+                <p>
+                    Complete your first SLC quiz and your result will
+                    appear here automatically.
+                </p>
+
 
                 <a
-                    href="../index.html"
-                    class="bottom-nav-item"
+                    href="/pages/slcquiz"
+                    class="results-primary-link"
                 >
-                    <i class="ri-home-5-line"></i>
-                    <span>Home</span>
+
+                    <i class="fa-solid fa-clipboard-question"></i>
+
+                    Take SLC Quiz
+
                 </a>
 
-                <a
-                    href="../pages/lessons.html"
-                    class="bottom-nav-item"
-                >
-                    <i class="ri-book-open-line"></i>
-                    <span>Lessons</span>
-                </a>
+            </section>
 
-                <a
-                    href="../pages/slcquiz.html"
-                    class="bottom-nav-center"
-                    aria-label="SLC Quiz"
-                >
-                    <i class="ri-questionnaire-line"></i>
-                </a>
 
-                <a
-                    href="../pages/gallery.html"
-                    class="bottom-nav-item"
-                >
-                    <i class="ri-image-line"></i>
-                    <span>Gallery</span>
-                </a>
+            <!-- =========================================
+                 ANSWER REVIEW
+            ========================================== -->
 
-                <a
-                    href="../pages/profile.html"
-                    class="bottom-nav-item"
-                >
-                    <i class="ri-user-line"></i>
-                    <span>Profile</span>
-                </a>
+            <section
+                id="reviewSection"
+                class="review-section hidden"
+                data-aos="fade-up"
+            >
 
-            </nav>
+                <div class="review-header-card">
+
+                    <div class="review-heading">
+
+                        <div class="review-heading-icon">
+
+                            <i class="fa-solid fa-list-check"></i>
+
+                        </div>
+
+
+                        <div>
+
+                            <span>
+                                ANSWER REVIEW
+                            </span>
+
+                            <h2 id="reviewTitle">
+                                Review Your Answers
+                            </h2>
+
+                            <p id="reviewSubtitle">
+                                See what you answered and learn from the correct answers.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <button
+                        type="button"
+                        class="review-close-btn"
+                        id="closeReviewBtn"
+                    >
+
+                        <i class="fa-solid fa-xmark"></i>
+
+                        <span>
+                            Close Review
+                        </span>
+
+                    </button>
+
+                </div>
+
+
+                <div
+                    id="reviewContainer"
+                    class="review-container"
+                ></div>
+
+            </section>
+
 
         </div>
 
-    </div>
+    </main>
+
+</div>
 
 
-    <!-- =========================================================
-         JAVASCRIPT
-         ========================================================= -->
+<!-- =====================================================
+     MOBILE BOTTOM NAVIGATION
+====================================================== -->
 
-    <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+<nav
+    class="bottom-nav"
+    aria-label="Mobile navigation"
+>
 
-    <script src="../js/main.js"></script>
+    <a href="../">
 
-    <script src="../js/results.js"></script>
+        <i class="fa-solid fa-house"></i>
 
-    <script src="../js/pwa.js"></script>
+        <span>
+            Home
+        </span>
+
+    </a>
+
+
+    <a href="/pages/lessons">
+
+        <i class="fa-solid fa-book-open"></i>
+
+        <span>
+            Lessons
+        </span>
+
+    </a>
+
+
+    <button
+        class="hub-button"
+        id="hubButton"
+        type="button"
+        aria-label="Open main navigation"
+        aria-expanded="false"
+    >
+
+        <i class="ri-apps-2-line"></i>
+
+    </button>
+
+
+    <a
+        href="/pages/gallery"
+        data-online-only
+        data-feature="Gallery"
+    >
+
+        <i class="fa-solid fa-images"></i>
+
+        <span>
+            Gallery
+        </span>
+
+    </a>
+
+
+    <a href="/pages/profile">
+
+        <i class="fa-solid fa-user"></i>
+
+        <span>
+            Profile
+        </span>
+
+    </a>
+
+</nav>
+
+
+</div>
+
+
+<!-- =====================================================
+     JAVASCRIPT
+====================================================== -->
+
+<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+
+<script src="../js/main.js"></script>
+
+<script src="../js/results.js"></script>
+
+<script src="../js/pwa.js"></script>
+
 
 </body>
 
