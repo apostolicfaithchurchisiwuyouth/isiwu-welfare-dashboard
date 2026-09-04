@@ -2,7 +2,7 @@
    AFC ISIU YOUTH PORTAL V2
    FILE: sw.js
    PURPOSE: PWA SERVICE WORKER
-   VERSION: 15
+   VERSION: 16
    ============================================================ */
 
 "use strict";
@@ -13,7 +13,7 @@
    ============================================================ */
 
 const CACHE_VERSION =
-    "afc-isiu-pwa-v15";
+    "afc-isiu-pwa-v16";
 
 const STATIC_CACHE =
     `${CACHE_VERSION}-static`;
@@ -27,7 +27,7 @@ const AUDIO_CACHE =
 
 /* ============================================================
    APPLICATION SHELL
-============================================================ */
+   ============================================================ */
 
 const APP_SHELL = [
 
@@ -60,7 +60,7 @@ const APP_SHELL = [
 
 /* ============================================================
    OFFLINE PAGE ROUTES
-============================================================ */
+   ============================================================ */
 
 /*
  * These are clean URLs used by the application.
@@ -89,7 +89,7 @@ const CLEAN_PAGE_MAP = {
 
 /* ============================================================
    INSTALL
-============================================================ */
+   ============================================================ */
 
 self.addEventListener(
     "install",
@@ -251,7 +251,7 @@ self.addEventListener(
 
 /* ============================================================
    ACTIVATE
-============================================================ */
+   ============================================================ */
 
 self.addEventListener(
     "activate",
@@ -284,10 +284,13 @@ self.addEventListener(
                                 cacheName.startsWith(
                                     "afc-isiu-pwa-"
                                 ) &&
+
                                 cacheName !==
                                     STATIC_CACHE &&
+
                                 cacheName !==
                                     PAGE_CACHE &&
+
                                 cacheName !==
                                     AUDIO_CACHE
                             ) {
@@ -335,7 +338,7 @@ self.addEventListener(
 
 /* ============================================================
    MESSAGE HANDLER
-============================================================ */
+   ============================================================ */
 
 self.addEventListener(
     "message",
@@ -402,8 +405,361 @@ self.addEventListener(
 
 
 /* ============================================================
+   PUSH NOTIFICATIONS
+   ============================================================ */
+
+self.addEventListener(
+    "push",
+    event => {
+
+        let data = {};
+
+
+        /*
+         * Read the push payload.
+         */
+
+        try {
+
+            if (
+                event.data
+            ) {
+
+                data =
+                    event.data.json();
+
+            }
+
+        }
+
+        catch (error) {
+
+            console.warn(
+                "AFC Isiu PWA: Invalid push JSON.",
+                error
+            );
+
+
+            /*
+             * Fallback for a plain-text payload.
+             */
+
+            try {
+
+                data = {
+
+                    body:
+                        event.data
+                            ? event.data.text()
+                            : "You have a new notification."
+
+                };
+
+            }
+
+            catch (textError) {
+
+                data = {};
+
+            }
+
+        }
+
+
+        /*
+         * Notification content.
+         */
+
+        const title =
+            String(
+                data.title ||
+                "AFC Isiu Youth Portal"
+            );
+
+
+        const body =
+            String(
+                data.body ||
+                "You have a new notification."
+            );
+
+
+        const icon =
+            String(
+                data.icon ||
+                "/images/logo.png"
+            );
+
+
+        const badge =
+            String(
+                data.badge ||
+                "/images/logo.png"
+            );
+
+
+        const tag =
+            String(
+                data.tag ||
+                "afc-isiu-notification"
+            );
+
+
+        /*
+         * Only allow notification links
+         * belonging to this portal.
+         */
+
+        let targetUrl = "/";
+
+
+        try {
+
+            const parsedUrl =
+                new URL(
+                    String(
+                        data.url ||
+                        "/"
+                    ),
+                    self.location.origin
+                );
+
+
+            if (
+                parsedUrl.origin ===
+                self.location.origin
+            ) {
+
+                targetUrl =
+                    parsedUrl.pathname +
+                    parsedUrl.search +
+                    parsedUrl.hash;
+
+            }
+
+        }
+
+        catch (error) {
+
+            targetUrl = "/";
+
+        }
+
+
+        /*
+         * Display notification.
+         */
+
+        event.waitUntil(
+
+            self.registration.showNotification(
+                title,
+                {
+
+                    body,
+
+                    icon,
+
+                    badge,
+
+                    tag,
+
+                    renotify:
+                        Boolean(
+                            data.renotify
+                        ),
+
+                    requireInteraction:
+                        Boolean(
+                            data.requireInteraction
+                        ),
+
+                    data: {
+
+                        url:
+                            targetUrl
+
+                    }
+
+                }
+            )
+
+        );
+
+    }
+
+);
+
+
+/* ============================================================
+   NOTIFICATION CLICK
+   ============================================================ */
+
+self.addEventListener(
+    "notificationclick",
+    event => {
+
+        /*
+         * Close the notification immediately.
+         */
+
+        event.notification.close();
+
+
+        /*
+         * Default destination.
+         */
+
+        let targetUrl =
+            self.location.origin +
+            "/";
+
+
+        /*
+         * Read notification destination.
+         */
+
+        try {
+
+            const parsedUrl =
+                new URL(
+
+                    String(
+                        event
+                            .notification
+                            ?.data
+                            ?.url ||
+                        "/"
+                    ),
+
+                    self.location.origin
+
+                );
+
+
+            /*
+             * Only navigate to our own
+             * website.
+             */
+
+            if (
+                parsedUrl.origin ===
+                self.location.origin
+            ) {
+
+                targetUrl =
+                    parsedUrl.href;
+
+            }
+
+        }
+
+        catch (error) {
+
+            console.warn(
+                "AFC Isiu PWA: Invalid notification URL.",
+                error
+            );
+
+        }
+
+
+        event.waitUntil(
+
+            (async () => {
+
+                /*
+                 * Look for an existing portal window.
+                 */
+
+                const clients =
+                    await self.clients.matchAll(
+                        {
+                            type:
+                                "window",
+
+                            includeUncontrolled:
+                                true
+                        }
+                    );
+
+
+                /*
+                 * If the portal is already open,
+                 * navigate/focus that window.
+                 */
+
+                for (
+                    const client of clients
+                ) {
+
+                    try {
+
+                        if (
+                            typeof client.navigate ===
+                            "function"
+                        ) {
+
+                            await client.navigate(
+                                targetUrl
+                            );
+
+                        }
+
+                    }
+
+                    catch (error) {
+
+                        console.warn(
+                            "AFC Isiu PWA: Could not navigate existing window.",
+                            error
+                        );
+
+                    }
+
+
+                    if (
+                        typeof client.focus ===
+                        "function"
+                    ) {
+
+                        return client.focus();
+
+                    }
+
+                }
+
+
+                /*
+                 * Otherwise open a new portal window.
+                 */
+
+                if (
+                    typeof self.clients.openWindow ===
+                    "function"
+                ) {
+
+                    return self.clients.openWindow(
+                        targetUrl
+                    );
+
+                }
+
+
+                return undefined;
+
+            })()
+
+        );
+
+    }
+
+);
+
+
+/* ============================================================
    FETCH
-============================================================ */
+   ============================================================ */
 
 self.addEventListener(
     "fetch",
@@ -527,7 +883,7 @@ self.addEventListener(
 
 /* ============================================================
    CACHE ALL LESSON AUDIO
-============================================================ */
+   ============================================================ */
 
 async function cacheLessonAudio(
     audioUrls
@@ -681,7 +1037,7 @@ async function cacheLessonAudio(
 
 /* ============================================================
    AUDIO HANDLER
-============================================================ */
+   ============================================================ */
 
 async function handleAudio(
     request
@@ -791,8 +1147,11 @@ async function handleAudio(
     return new Response(
         "",
         {
-            status: 503,
-            statusText: "Offline"
+            status:
+                503,
+
+            statusText:
+                "Offline"
         }
     );
 
@@ -801,7 +1160,7 @@ async function handleAudio(
 
 /* ============================================================
    NAVIGATION HANDLER
-============================================================ */
+   ============================================================ */
 
 async function handleNavigation(
     request
@@ -843,6 +1202,7 @@ async function handleNavigation(
         if (
             networkResponse.status ===
                 404 ||
+
             networkResponse.status ===
                 410
         ) {
@@ -1056,7 +1416,7 @@ async function handleNavigation(
 
 /* ============================================================
    ASSET HANDLER
-============================================================ */
+   ============================================================ */
 
 async function handleAsset(
     request
@@ -1139,8 +1499,11 @@ async function handleAsset(
     return new Response(
         "",
         {
-            status: 503,
-            statusText: "Offline"
+            status:
+                503,
+
+            statusText:
+                "Offline"
         }
     );
 
@@ -1149,7 +1512,7 @@ async function handleAsset(
 
 /* ============================================================
    BUILT-IN OFFLINE PAGE
-============================================================ */
+   ============================================================ */
 
 function createOfflineResponse() {
 
@@ -1184,11 +1547,13 @@ function createOfflineResponse() {
             box-sizing: border-box;
         }
 
+
         html,
         body {
             margin: 0;
             min-height: 100%;
         }
+
 
         body {
 
@@ -1203,16 +1568,19 @@ function createOfflineResponse() {
             padding: 24px;
 
             background:
+
                 radial-gradient(
                     circle at 15% 15%,
                     rgba(74, 7, 84, .5),
                     transparent 35%
                 ),
+
                 radial-gradient(
                     circle at 85% 85%,
                     rgba(234, 88, 12, .2),
                     transparent 35%
                 ),
+
                 #0A0016;
 
             color: white;
@@ -1309,7 +1677,9 @@ function createOfflineResponse() {
         .wifi::before {
 
             width: 56px;
+
             height: 56px;
+
             top: 0;
 
         }
@@ -1318,7 +1688,9 @@ function createOfflineResponse() {
         .wifi::after {
 
             width: 34px;
+
             height: 34px;
+
             top: 12px;
 
         }
@@ -1329,9 +1701,11 @@ function createOfflineResponse() {
             position: absolute;
 
             left: 50%;
+
             bottom: 0;
 
             width: 8px;
+
             height: 8px;
 
             transform:
@@ -1424,18 +1798,27 @@ function createOfflineResponse() {
 
         }
 
-      button,
-a {
-    -webkit-tap-highlight-color: transparent;
-}
 
-button:focus,
-button:focus-visible,
-a:focus,
-a:focus-visible {
-    outline: none !important;
-    box-shadow: none !important;
-}
+        button,
+        a {
+
+            -webkit-tap-highlight-color:
+                transparent;
+
+        }
+
+
+        button:focus,
+        button:focus-visible,
+        a:focus,
+        a:focus-visible {
+
+            outline: none !important;
+
+            box-shadow: none !important;
+
+        }
+
 
         button.secondary {
 
@@ -1448,16 +1831,25 @@ a:focus-visible {
         @media(max-width:480px) {
 
             .offline-card {
-                padding: 32px 20px;
+
+                padding:
+                    32px 20px;
+
             }
+
 
             .actions {
+
                 flex-direction:
                     column;
+
             }
 
+
             button {
+
                 width: 100%;
+
             }
 
         }
@@ -1465,6 +1857,7 @@ a:focus-visible {
     </style>
 
 </head>
+
 
 <body>
 
@@ -1476,21 +1869,27 @@ a:focus-visible {
             alt="AFC Isiu Youth"
         >
 
+
         <div
             class="wifi"
             aria-hidden="true"
         >
+
             <span class="wifi-dot"></span>
+
         </div>
+
 
         <h1>
             You're currently offline
         </h1>
 
+
         <p>
             We couldn't connect to the internet right now,
             so this page can't load fresh information.
         </p>
+
 
         <div class="actions">
 
@@ -1500,6 +1899,7 @@ a:focus-visible {
             >
                 Try Again
             </button>
+
 
             <button
                 type="button"
@@ -1519,11 +1919,14 @@ a:focus-visible {
         `,
 
         {
-            status: 503,
+            status:
+                503,
 
             headers: {
+
                 "Content-Type":
                     "text/html; charset=UTF-8"
+
             }
 
         }
