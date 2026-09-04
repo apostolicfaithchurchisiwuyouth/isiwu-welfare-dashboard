@@ -2,161 +2,250 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
 
     <meta
         name="viewport"
-        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+        content="width=device-width, initial-scale=1.0"
     >
 
-    <title>My SLC Results | AFC Isiu Youth</title>
+    <title>My SLC Results | AFC Isiwu Youth</title>
 
     <!-- PWA -->
-    <link rel="manifest" href="../manifest.json">
+    <link
+        rel="manifest"
+        href="../manifest.json"
+    >
 
-    <meta name="theme-color" content="#ea580c">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta
+        name="theme-color"
+        content="#ea580c"
+    >
 
-    <link rel="apple-touch-icon" href="../images/logo.png">
+    <meta
+        name="mobile-web-app-capable"
+        content="yes"
+    >
 
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <meta
+        name="apple-mobile-web-app-capable"
+        content="yes"
+    >
+
+    <meta
+        name="apple-mobile-web-app-status-bar-style"
+        content="default"
+    >
 
     <link
-        href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@10..48,400;10..48,500;10..48,600;10..48,700;10..48,800&family=DM+Sans:wght@400;500;600;700&display=swap"
+        rel="apple-touch-icon"
+        href="../images/logo.png"
+    >
+
+    <!-- Fonts -->
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=DM+Sans:wght@400;500;600;700&display=swap"
         rel="stylesheet"
     >
 
-    <!-- Font Awesome -->
+    <!-- Icons -->
     <link
         rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
     >
 
-    <!-- Remix Icon -->
     <link
-        href="https://cdn.jsdelivr.net/npm/remixicon@4.6.0/fonts/remixicon.css"
         rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/remixicon@4.6.0/fonts/remixicon.css"
     >
 
-    <!-- Global Styles -->
-    <link rel="stylesheet" href="../css/main.css">
-    <link rel="stylesheet" href="../css/layout.css">
+    <!-- Global CSS -->
+    <link
+        rel="stylesheet"
+        href="../css/main.css"
+    >
 
-    <!-- Page Styles -->
-    <link rel="stylesheet" href="../css/results.css">
+    <link
+        rel="stylesheet"
+        href="../css/layout.css"
+    >
+
+    <!-- Page CSS -->
+    <link
+        rel="stylesheet"
+        href="../css/results.css"
+    >
+
 </head>
+
 
 <body>
 
-    <div class="app-shell">
+    <!-- =========================================================
+         APP SHELL
+         ========================================================= -->
+
+    <div class="dashboard-layout">
+
 
         <!-- =====================================================
              SIDEBAR
-        ====================================================== -->
+             ===================================================== -->
 
-        <aside class="sidebar" id="sidebar">
+        <aside class="sidebar">
 
             <div class="sidebar-header">
 
-                <a href="../index.html" class="sidebar-brand">
+                <a
+                    href="../index.html"
+                    class="sidebar-brand"
+                >
 
                     <img
                         src="../images/logo.png"
-                        alt="AFC Isiu Youth"
-                        class="sidebar-logo"
+                        alt="AFC Isiwu Youth"
                     >
 
                     <div class="sidebar-brand-text">
-                        <strong>AFC Isiu</strong>
+
+                        <strong>AFC Isiwu</strong>
+
                         <span>Youth Portal</span>
+
                     </div>
 
                 </a>
-
-                <button
-                    type="button"
-                    class="sidebar-close"
-                    id="sidebarClose"
-                    aria-label="Close menu"
-                >
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
 
             </div>
 
 
             <nav class="sidebar-nav">
 
-                <div class="sidebar-section-label">
-                    MAIN
+                <div class="sidebar-section">
+
+                    <span class="sidebar-section-title">
+                        MAIN
+                    </span>
+
+                    <a
+                        href="../index.html"
+                        class="sidebar-link"
+                    >
+                        <i class="ri-home-5-line"></i>
+                        <span>Dashboard</span>
+                    </a>
+
+                    <a
+                        href="../pages/lessons.html"
+                        class="sidebar-link"
+                    >
+                        <i class="ri-book-open-line"></i>
+                        <span>Lessons</span>
+                    </a>
+
+                    <a
+                        href="../pages/slcquiz.html"
+                        class="sidebar-link"
+                    >
+                        <i class="ri-questionnaire-line"></i>
+                        <span>SLC Quiz</span>
+                    </a>
+
+                    <a
+                        href="../pages/results.html"
+                        class="sidebar-link active"
+                    >
+                        <i class="ri-bar-chart-box-line"></i>
+                        <span>My Results</span>
+                    </a>
+
                 </div>
 
-                <a href="../index.html" class="sidebar-link">
-                    <i class="ri-home-5-line"></i>
-                    <span>Dashboard</span>
-                </a>
 
-                <a href="../lessons.html" class="sidebar-link">
-                    <i class="ri-book-open-line"></i>
-                    <span>Lessons</span>
-                </a>
+                <div class="sidebar-section">
 
-                <a href="../slcquiz.html" class="sidebar-link">
-                    <i class="ri-questionnaire-line"></i>
-                    <span>SLC Quiz</span>
-                </a>
+                    <span class="sidebar-section-title">
+                        COMMUNITY
+                    </span>
 
-                <a href="../results.html" class="sidebar-link active">
-                    <i class="ri-bar-chart-box-line"></i>
-                    <span>My Results</span>
-                </a>
+                    <a
+                        href="../pages/gallery.html"
+                        class="sidebar-link"
+                    >
+                        <i class="ri-image-line"></i>
+                        <span>Gallery</span>
+                    </a>
 
-                <div class="sidebar-section-label">
-                    COMMUNITY
+                    <a
+                        href="../pages/events.html"
+                        class="sidebar-link"
+                    >
+                        <i class="ri-calendar-event-line"></i>
+                        <span>Events</span>
+                    </a>
+
+                    <a
+                        href="../pages/welfare.html"
+                        class="sidebar-link"
+                    >
+                        <i class="ri-heart-pulse-line"></i>
+                        <span>Welfare</span>
+                    </a>
+
+                    <a
+                        href="../pages/prayer.html"
+                        class="sidebar-link"
+                    >
+                        <i class="ri-hand-heart-line"></i>
+                        <span>Prayer</span>
+                    </a>
+
                 </div>
 
-                <a href="../gallery.html" class="sidebar-link">
-                    <i class="ri-gallery-line"></i>
-                    <span>Gallery</span>
-                </a>
 
-                <a href="../events.html" class="sidebar-link">
-                    <i class="ri-calendar-event-line"></i>
-                    <span>Events</span>
-                </a>
+                <div class="sidebar-section">
 
-                <a href="../welfare.html" class="sidebar-link">
-                    <i class="ri-heart-pulse-line"></i>
-                    <span>Welfare</span>
-                </a>
+                    <span class="sidebar-section-title">
+                        ADMINISTRATION
+                    </span>
 
-                <a href="../prayer.html" class="sidebar-link">
-                    <i class="ri-hand-heart-line"></i>
-                    <span>Prayer</span>
-                </a>
+                    <a
+                        href="../pages/program-report.html"
+                        class="sidebar-link"
+                    >
+                        <i class="ri-file-chart-line"></i>
+                        <span>Program Report</span>
+                    </a>
 
-                <div class="sidebar-section-label">
-                    ADMINISTRATION
+                    <a
+                        href="../pages/profile.html"
+                        class="sidebar-link"
+                    >
+                        <i class="ri-user-line"></i>
+                        <span>Profile</span>
+                    </a>
+
+                    <a
+                        href="../pages/settings.html"
+                        class="sidebar-link"
+                    >
+                        <i class="ri-settings-3-line"></i>
+                        <span>Settings</span>
+                    </a>
+
                 </div>
-
-                <a href="../program-report.html" class="sidebar-link">
-                    <i class="ri-file-chart-line"></i>
-                    <span>Program Reports</span>
-                </a>
-
-                <a href="../profile.html" class="sidebar-link">
-                    <i class="ri-user-3-line"></i>
-                    <span>Profile</span>
-                </a>
-
-                <a href="../settings.html" class="sidebar-link">
-                    <i class="ri-settings-3-line"></i>
-                    <span>Settings</span>
-                </a>
 
             </nav>
 
@@ -165,37 +254,47 @@
 
         <!-- =====================================================
              MAIN AREA
-        ====================================================== -->
+             ===================================================== -->
 
-        <div class="main-area">
+        <div class="dashboard-main">
 
-            <!-- TOPBAR -->
+
+            <!-- =================================================
+                 TOP BAR
+                 ================================================= -->
 
             <header class="topbar">
 
-                <button
-                    type="button"
-                    class="menu-toggle"
-                    id="menuToggle"
-                    aria-label="Open menu"
-                >
-                    <i class="fa-solid fa-bars"></i>
-                </button>
+                <div class="topbar-left">
 
+                    <button
+                        type="button"
+                        class="menu-toggle"
+                        id="menuToggle"
+                        aria-label="Open menu"
+                    >
+                        <i class="ri-menu-line"></i>
+                    </button>
 
-                <div class="topbar-title">
-                    <span>My Results</span>
+                    <div class="topbar-title">
+
+                        <span class="topbar-title-main">
+                            My Results
+                        </span>
+
+                    </div>
+
                 </div>
 
 
-                <div class="topbar-actions">
+                <div class="topbar-right">
 
                     <a
-                        href="../profile.html"
+                        href="../pages/profile.html"
                         class="topbar-profile"
                         aria-label="My profile"
                     >
-                        <i class="fa-regular fa-user"></i>
+                        <i class="ri-user-3-line"></i>
                     </a>
 
                 </div>
@@ -204,68 +303,96 @@
 
 
             <!-- =================================================
-                 CONTENT
-            ================================================== -->
+                 RESULTS CONTENT
+                 ================================================= -->
 
             <main class="dashboard-content results-page">
 
                 <div class="dashboard-container results-container">
 
 
-                    <!-- =========================================
+                    <!-- =================================================
                          HERO
-                    ========================================== -->
+                         ================================================= -->
 
-                    <section class="results-hero" data-aos="fade-up">
+                    <section
+                        class="results-hero"
+                        data-aos="fade-up"
+                    >
 
-                        <div class="results-hero-copy">
+                        <div class="results-hero-content">
 
                             <div class="results-eyebrow">
-                                <span class="results-eyebrow-dot"></span>
-                                GROWTH TRACKER
+
+                                <span class="results-eyebrow-icon">
+                                    <i class="ri-bar-chart-2-line"></i>
+                                </span>
+
+                                <span>GROWTH TRACKER</span>
+
                             </div>
+
 
                             <h1>
                                 My SLC Results
                             </h1>
 
+
                             <p>
-                                See how you have performed across your
-                                Sunday Lesson Challenge quizzes.
+                                See your latest quiz performance,
+                                track your progress, and review
+                                answers from quizzes you have completed.
                             </p>
+
+
+                            <div
+                                class="results-member"
+                                id="resultsMember"
+                            >
+
+                                <span class="results-member-icon">
+                                    <i class="ri-user-3-line"></i>
+                                </span>
+
+                                <span>
+                                    Loading participant...
+                                </span>
+
+                                <span class="results-member-lock">
+                                    <i class="ri-lock-line"></i>
+                                </span>
+
+                            </div>
 
                         </div>
 
 
-                        <div
-                            class="results-member"
-                            id="resultsMember"
-                        >
-                            <span class="member-status-icon">
-                                <i class="fa-solid fa-lock"></i>
-                            </span>
+                        <div class="results-hero-decoration">
 
-                            <span class="member-status-text">
-                                Loading participant...
-                            </span>
+                            <div class="results-hero-decoration-icon">
+                                <i class="ri-trophy-line"></i>
+                            </div>
+
                         </div>
 
                     </section>
 
 
-                    <!-- STATUS MESSAGE -->
+                    <!-- =================================================
+                         MESSAGE
+                         ================================================= -->
 
                     <div
                         class="results-message"
                         id="resultsMessage"
-                        role="status"
-                        aria-live="polite"
-                    ></div>
+                    >
+                        Loading your results...
+                    </div>
 
 
-                    <!-- =========================================
+                    <!-- =================================================
                          LATEST RESULT
-                    ========================================== -->
+                         ================================================= -->
 
                     <section
                         class="latest-result hidden"
@@ -278,19 +405,27 @@
 
                             <div>
 
-                                <div class="section-kicker">
-                                    MOST RECENT
-                                </div>
+                                <span class="section-kicker">
+                                    LATEST RESULT
+                                </span>
 
                                 <h2 id="latestTitle">
-                                    Latest Quiz Result
+                                    Your Latest Quiz
                                 </h2>
+
+                                <p id="latestDate">
+                                    —
+                                </p>
 
                             </div>
 
+
                             <div class="latest-completed-badge">
-                                <i class="fa-solid fa-circle-check"></i>
-                                Completed
+
+                                <i class="ri-checkbox-circle-fill"></i>
+
+                                <span>Completed</span>
+
                             </div>
 
                         </div>
@@ -299,48 +434,44 @@
                         <div class="latest-result-body">
 
 
-                            <!-- SCORE -->
+                            <!-- Score -->
+                            <div class="latest-score-block">
 
-                            <div class="latest-score-area">
+                                <div class="latest-score-circle">
 
-                                <div class="score-circle">
-
-                                    <div
-                                        class="score-value"
+                                    <span
+                                        class="latest-score"
                                         id="latestScore"
                                     >
                                         —
-                                    </div>
+                                    </span>
 
-                                    <div class="score-total">
-                                        <span id="latestTotal"></span>
-                                    </div>
+                                    <span
+                                        class="latest-total"
+                                        id="latestTotal"
+                                    >
+                                        —
+                                    </span>
 
                                 </div>
 
-                                <div class="score-label">
-                                    Quiz Score
+
+                                <div class="latest-score-label">
+                                    Correct Answers
                                 </div>
 
                             </div>
 
 
-                            <!-- DETAILS -->
-
+                            <!-- Details -->
                             <div class="latest-result-details">
 
-                                <div class="result-lesson-label">
-                                    <span class="result-icon">
-                                        <i class="ri-book-open-line"></i>
+                                <div class="latest-lesson-label">
+                                    <i class="ri-book-open-line"></i>
+
+                                    <span id="latestLesson">
+                                        Lesson —
                                     </span>
-
-                                    <div>
-                                        <small>Lesson</small>
-
-                                        <strong id="latestLesson">
-                                            —
-                                        </strong>
-                                    </div>
                                 </div>
 
 
@@ -348,34 +479,29 @@
 
                                     <div class="latest-stat">
 
-                                        <span class="latest-stat-icon">
-                                            <i class="fa-solid fa-star"></i>
+                                        <span class="latest-stat-label">
+                                            POINTS EARNED
                                         </span>
 
-                                        <div>
-                                            <small>Points earned</small>
-
-                                            <strong id="latestPoints">
-                                                0
-                                            </strong>
-                                        </div>
+                                        <strong
+                                            id="latestPoints"
+                                            class="latest-points"
+                                        >
+                                            +0
+                                        </strong>
 
                                     </div>
 
 
                                     <div class="latest-stat">
 
-                                        <span class="latest-stat-icon">
-                                            <i class="ri-calendar-line"></i>
+                                        <span class="latest-stat-label">
+                                            STATUS
                                         </span>
 
-                                        <div>
-                                            <small>Completed</small>
-
-                                            <strong id="latestDate">
-                                                —
-                                            </strong>
-                                        </div>
+                                        <strong class="latest-status">
+                                            Completed
+                                        </strong>
 
                                     </div>
 
@@ -384,16 +510,14 @@
 
                                 <button
                                     type="button"
-                                    class="review-primary-btn"
+                                    class="results-primary-btn"
                                     id="latestReviewBtn"
                                 >
-                                    <span>
-                                        <i class="ri-search-eye-line"></i>
-                                    </span>
 
-                                    Review Answers
+                                    <i class="ri-eye-line"></i>
 
-                                    <i class="fa-solid fa-arrow-right"></i>
+                                    <span>Review Answers</span>
+
                                 </button>
 
                             </div>
@@ -403,41 +527,43 @@
                     </section>
 
 
-                    <!-- =========================================
-                         QUIZ HISTORY
-                    ========================================== -->
+                    <!-- =================================================
+                         HISTORY
+                         ================================================= -->
 
                     <section
-                        class="results-card history-card"
+                        class="results-card"
+                        id="historyCard"
                         data-aos="fade-up"
                         data-aos-delay="140"
                     >
 
-                        <div class="card-heading">
+                        <div class="results-card-header">
 
-                            <div class="card-heading-copy">
+                            <div>
 
-                                <div class="section-kicker">
-                                    YOUR JOURNEY
-                                </div>
+                                <span class="section-kicker">
+                                    QUIZ HISTORY
+                                </span>
 
                                 <h2>
-                                    Quiz History
+                                    Your Previous Quizzes
                                 </h2>
 
                                 <p>
-                                    Every SLC quiz you have completed,
-                                    starting with your most recent result.
+                                    Every SLC quiz you have completed
+                                    is listed here.
                                 </p>
 
                             </div>
 
-                            <span
+
+                            <div
                                 class="history-count"
                                 id="historyCount"
                             >
                                 0 quizzes
-                            </span>
+                            </div>
 
                         </div>
 
@@ -445,45 +571,54 @@
                         <div
                             class="history-list"
                             id="historyList"
-                        ></div>
-
-
-                        <!-- EMPTY STATE -->
-
-                        <div
-                            class="empty-results hidden"
-                            id="emptyResults"
                         >
-
-                            <div class="empty-results-icon">
-                                <i class="ri-bar-chart-line"></i>
-                            </div>
-
-                            <h3>
-                                No quiz results yet
-                            </h3>
-
-                            <p>
-                                Once you complete an SLC quiz,
-                                your score and quiz history will appear here.
-                            </p>
-
-                            <a
-                                href="../slcquiz.html"
-                                class="empty-results-btn"
-                            >
-                                Take an SLC Quiz
-                                <i class="fa-solid fa-arrow-right"></i>
-                            </a>
-
+                            <!-- JS inserts history -->
                         </div>
 
                     </section>
 
 
-                    <!-- =========================================
-                         ANSWER REVIEW
-                    ========================================== -->
+                    <!-- =================================================
+                         EMPTY STATE
+                         ================================================= -->
+
+                    <section
+                        class="results-card empty-results hidden"
+                        id="emptyResults"
+                    >
+
+                        <div class="empty-results-icon">
+
+                            <i class="ri-bar-chart-box-line"></i>
+
+                        </div>
+
+                        <h2>
+                            No quiz results yet
+                        </h2>
+
+                        <p>
+                            Complete your first SLC quiz and your
+                            result will appear here.
+                        </p>
+
+                        <a
+                            href="../pages/slcquiz.html"
+                            class="results-primary-btn"
+                        >
+
+                            <i class="ri-questionnaire-line"></i>
+
+                            <span>Take an SLC Quiz</span>
+
+                        </a>
+
+                    </section>
+
+
+                    <!-- =================================================
+                         REVIEW SECTION
+                         ================================================= -->
 
                     <section
                         class="review-card hidden"
@@ -493,18 +628,18 @@
 
                         <div class="review-header">
 
-                            <div class="review-heading">
+                            <div>
 
-                                <div class="section-kicker">
+                                <span class="section-kicker">
                                     ANSWER REVIEW
-                                </div>
+                                </span>
 
                                 <h2 id="reviewTitle">
-                                    Quiz Answer Review
+                                    Lesson Answer Review
                                 </h2>
 
                                 <p id="reviewSubtitle">
-                                    Review your submitted answers.
+                                    Your submitted answers
                                 </p>
 
                             </div>
@@ -516,25 +651,24 @@
                                 id="closeReviewBtn"
                                 aria-label="Close review"
                             >
-                                <i class="fa-solid fa-xmark"></i>
+
+                                <i class="ri-close-line"></i>
+
+                                <span>Close</span>
+
                             </button>
 
                         </div>
 
 
                         <div
-                            class="review-summary"
-                            id="reviewSummary"
-                        ></div>
-
-
-                        <div
                             class="review-container"
                             id="reviewContainer"
-                        ></div>
+                        >
+                            <!-- JS inserts review -->
+                        </div>
 
                     </section>
-
 
                 </div>
 
@@ -542,50 +676,48 @@
 
 
             <!-- =================================================
-                 MOBILE BOTTOM NAV
-            ================================================== -->
+                 MOBILE BOTTOM NAVIGATION
+                 ================================================= -->
 
-            <nav class="mobile-bottom-nav">
+            <nav class="bottom-nav">
 
                 <a
                     href="../index.html"
-                    class="mobile-nav-item"
+                    class="bottom-nav-item"
                 >
                     <i class="ri-home-5-line"></i>
                     <span>Home</span>
                 </a>
 
                 <a
-                    href="../lessons.html"
-                    class="mobile-nav-item"
+                    href="../pages/lessons.html"
+                    class="bottom-nav-item"
                 >
                     <i class="ri-book-open-line"></i>
                     <span>Lessons</span>
                 </a>
 
                 <a
-                    href="../slcquiz.html"
-                    class="mobile-nav-center"
+                    href="../pages/slcquiz.html"
+                    class="bottom-nav-center"
                     aria-label="SLC Quiz"
                 >
-                    <span>
-                        <i class="ri-questionnaire-line"></i>
-                    </span>
+                    <i class="ri-questionnaire-line"></i>
                 </a>
 
                 <a
-                    href="../gallery.html"
-                    class="mobile-nav-item"
+                    href="../pages/gallery.html"
+                    class="bottom-nav-item"
                 >
-                    <i class="ri-gallery-line"></i>
+                    <i class="ri-image-line"></i>
                     <span>Gallery</span>
                 </a>
 
                 <a
-                    href="../profile.html"
-                    class="mobile-nav-item"
+                    href="../pages/profile.html"
+                    class="bottom-nav-item"
                 >
-                    <i class="ri-user-3-line"></i>
+                    <i class="ri-user-line"></i>
                     <span>Profile</span>
                 </a>
 
@@ -596,20 +728,16 @@
     </div>
 
 
-    <!-- OVERLAY -->
-
-    <div
-        class="sidebar-overlay"
-        id="sidebarOverlay"
-    ></div>
-
-
-    <!-- GLOBAL JS -->
+    <!-- =========================================================
+         JAVASCRIPT
+         ========================================================= -->
 
     <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
 
     <script src="../js/main.js"></script>
+
     <script src="../js/results.js"></script>
+
     <script src="../js/pwa.js"></script>
 
 </body>
