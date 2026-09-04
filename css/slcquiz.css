@@ -2177,11 +2177,11 @@ button:disabled {
     }
 
     .quiz-hero h1 {
-        font-size: 1.6rem;
+        font-size: 1.25rem;
     }
 
     .quiz-hero-main > p {
-        font-size: .76rem;
+        font-size: .75rem;
     }
 
     .quiz-card,
@@ -2205,23 +2205,23 @@ button:disabled {
     }
 
     .section-heading h2 {
-        font-size: 1.13rem;
+        font-size: 0.9rem;
     }
 
     .section-heading p {
-        font-size: .78rem;
+        font-size: .75rem;
     }
 
     .reflection-header h2 {
-        font-size: 1.17rem;
+        font-size: 0.90rem;
     }
 
     .reflection-question label {
-        font-size: .8rem;
+        font-size: .75rem;
     }
 
     .reflection-question textarea {
-        font-size: .8rem;
+        font-size: .75rem;
     }
 
     .question-card {
@@ -2229,7 +2229,7 @@ button:disabled {
     }
 
     .question-card h3 {
-        font-size: .92rem;
+        font-size: .9rem;
     }
 
     .option {
@@ -2239,7 +2239,7 @@ button:disabled {
     }
 
     .option span {
-        font-size: .79rem;
+        font-size: .75rem;
     }
 
     .question-count-badge {
