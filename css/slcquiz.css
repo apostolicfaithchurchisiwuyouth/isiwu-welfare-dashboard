@@ -1,76 +1,114 @@
 /* ============================================================
    AFC ISIU YOUTH PORTAL V2
-
-   FILE:
-   slcquiz.css
+   FILE: slcquiz.css
 
    PURPOSE:
-   SUNDAY LESSON CHALLENGE QUIZ PAGE
+   WEEKLY SLC QUIZ PAGE
 
    DESIGN:
-   Clean / Modern / Next.js-inspired
-   Purple AFC Isiu visual identity
-   Responsive / Mobile-first
+   - Uses existing portal header
+   - Uses existing portal bottom navigation
+   - No large hero section
+   - Wide desktop content
+   - Nearly edge-to-edge mobile cards
    ============================================================ */
 
 
 /* ============================================================
-   DESIGN TOKENS
-   ============================================================ */
+   VARIABLES
+============================================================ */
 
 :root {
 
-  --slc-purple: #4a0754;
-  --slc-purple-dark: #320338;
+    --slc-purple:
+        #4a0754;
 
-  --slc-purple-soft: #f5edf7;
-  --slc-purple-pale: #fbf8fc;
+    --slc-purple-dark:
+        #320338;
 
-  --slc-text: #17121a;
-  --slc-muted: #746b78;
+    --slc-purple-soft:
+        #f5edf7;
 
-  --slc-border: #e8e0ea;
+    --slc-purple-pale:
+        #fbf8fc;
 
-  --slc-success: #16803c;
-  --slc-success-bg: #edf9f1;
+    --slc-text:
+        #17121a;
 
-  --slc-warning: #a16207;
-  --slc-warning-bg: #fff8e8;
+    --slc-muted:
+        #746b78;
 
-  --slc-danger: #b42318;
-  --slc-danger-bg: #fff1f0;
+    --slc-border:
+        #e7dfe9;
 
-  --slc-white: #ffffff;
+    --slc-white:
+        #ffffff;
 
-  --slc-shadow:
-    0 18px 50px rgba(50, 3, 56, .08);
+    --slc-success:
+        #16803c;
 
-  --slc-shadow-sm:
-    0 8px 28px rgba(50, 3, 56, .07);
+    --slc-success-bg:
+        #edf9f1;
 
-  --slc-radius-xl: 28px;
-  --slc-radius-lg: 22px;
-  --slc-radius-md: 16px;
+    --slc-warning:
+        #a16207;
+
+    --slc-warning-bg:
+        #fff8e8;
+
+    --slc-danger:
+        #b42318;
+
+    --slc-danger-bg:
+        #fff1f0;
+
+    --slc-shadow:
+        0 10px 35px rgba(
+            50,
+            3,
+            56,
+            .06
+        );
+
+    --slc-shadow-small:
+        0 5px 20px rgba(
+            50,
+            3,
+            56,
+            .05
+        );
 
 }
 
 
 /* ============================================================
-   PAGE SHELL
-   ============================================================ */
+   PAGE
+============================================================ */
+
+.slc-dashboard-content {
+
+    width:
+        100%;
+
+    padding:
+        0 !important;
+
+}
+
 
 .slc-page {
 
-  width: 100%;
+    width:
+        100%;
 
-  max-width: 1180px;
+    max-width:
+        none;
 
-  margin: 0 auto;
+    margin:
+        0;
 
-  padding:
-    34px
-    28px
-    100px;
+    padding:
+        28px 24px 100px;
 
 }
 
@@ -78,765 +116,455 @@
 .slc-page,
 .slc-page * {
 
-  -webkit-tap-highlight-color:
-    transparent;
+    -webkit-tap-highlight-color:
+        transparent;
+
+    box-sizing:
+        border-box;
 
 }
 
 
 /* ============================================================
-   TYPOGRAPHY
-   ============================================================ */
+   FONTS
+============================================================ */
 
 .slc-page h1,
 .slc-page h2,
 .slc-page h3,
-.slc-page h4,
 .slc-page button,
+.slc-page .slc-eyebrow,
 .slc-page .slc-label,
-.slc-page .slc-badge,
-.slc-page .slc-eyebrow {
+.slc-page .slc-question-number {
 
-  font-family:
-    "Bricolage Grotesque",
-    "Precolaritas",
-    "DM Sans",
-    sans-serif;
+    font-family:
+        "Bricolage Grotesque",
+        "Precolaritas",
+        sans-serif;
 
 }
 
 
 .slc-page p,
+.slc-page span,
 .slc-page label,
 .slc-page input,
 .slc-page textarea,
-.slc-page select,
-.slc-page span {
+.slc-page select {
 
-  font-family:
-    "DM Sans",
-    sans-serif;
+    font-family:
+        "DM Sans",
+        sans-serif;
 
 }
 
 
 /* ============================================================
    PAGE HEADER
-   ============================================================ */
+============================================================ */
 
-.slc-heading {
+.slc-page-header {
 
-  display: flex;
+    width:
+        100%;
 
-  align-items: flex-end;
+    display:
+        flex;
 
-  justify-content:
-    space-between;
+    align-items:
+        center;
 
-  gap: 28px;
+    justify-content:
+        space-between;
 
-  margin-bottom: 26px;
+    gap:
+        25px;
+
+    margin-bottom:
+        20px;
 
 }
 
 
-.slc-heading-copy {
+.slc-page-header h1 {
 
-  max-width: 720px;
+    margin:
+        5px 0 0;
+
+    color:
+        var(--slc-text);
+
+    font-size:
+        clamp(
+            1.45rem,
+            2.5vw,
+            2rem
+        );
+
+    line-height:
+        1.1;
+
+    letter-spacing:
+        -.03em;
+
+}
+
+
+.slc-page-header p {
+
+    max-width:
+        700px;
+
+    margin:
+        8px 0 0;
+
+    color:
+        var(--slc-muted);
+
+    font-size:
+        .78rem;
+
+    line-height:
+        1.55;
 
 }
 
 
 .slc-eyebrow {
 
-  display: inline-flex;
+    display:
+        inline-flex;
 
-  align-items: center;
+    align-items:
+        center;
 
-  gap: 7px;
+    gap:
+        7px;
 
-  margin-bottom: 10px;
+    color:
+        var(--slc-purple);
 
-  color:
-    var(--slc-purple);
+    font-size:
+        .64rem;
 
-  font-size:
-    .68rem;
+    font-weight:
+        800;
 
-  font-weight:
-    800;
+    letter-spacing:
+        .1em;
 
-  letter-spacing:
-    .12em;
-
-  text-transform:
-    uppercase;
+    text-transform:
+        uppercase;
 
 }
 
 
 .slc-eyebrow i {
 
-  font-size:
-    .72rem;
-
-}
-
-
-.slc-heading h1 {
-
-  margin: 0;
-
-  color:
-    var(--slc-text);
-
-  font-size:
-    clamp(1.75rem, 3vw, 2.45rem);
-
-  line-height:
-    1.08;
-
-  letter-spacing:
-    -.035em;
-
-  font-weight:
-    800;
-
-}
-
-
-.slc-heading p {
-
-  max-width: 650px;
-
-  margin:
-    11px 0 0;
-
-  color:
-    var(--slc-muted);
-
-  font-size:
-    .88rem;
-
-  line-height:
-    1.65;
-
-}
-
-
-.slc-week-chip {
-
-  display: inline-flex;
-
-  align-items: center;
-
-  gap: 9px;
-
-  flex:
-    0 0 auto;
-
-  padding:
-    11px 14px;
-
-  border:
-    1px solid var(--slc-border);
-
-  border-radius:
-    999px;
-
-  background:
-    rgba(255,255,255,.85);
-
-  color:
-    var(--slc-muted);
-
-  font-size:
-    .72rem;
-
-  font-weight:
-    700;
-
-  box-shadow:
-    0 5px 18px rgba(50,3,56,.04);
-
-}
-
-
-.slc-week-chip i {
-
-  color:
-    var(--slc-purple);
+    font-size:
+        .68rem;
 
 }
 
 
 /* ============================================================
-   HERO STATUS CARD
-   ============================================================ */
+   QUIZ INFO
+============================================================ */
 
-.slc-status-card {
+.slc-quiz-info {
 
-  position:
-    relative;
+    flex:
+        0 0 auto;
 
-  overflow:
-    hidden;
+    display:
+        flex;
 
-  display:
-    grid;
+    flex-direction:
+        column;
 
-  grid-template-columns:
-    minmax(0, 1fr)
-    auto;
+    align-items:
+        flex-end;
 
-  align-items:
-    center;
+    gap:
+        4px;
 
-  gap: 28px;
+    padding:
+        11px 15px;
 
-  min-height:
-    190px;
+    border:
+        1px solid var(--slc-border);
 
-  padding:
-    30px 32px;
+    border-radius:
+        14px;
 
-  margin-bottom:
-    22px;
+    background:
+        var(--slc-white);
 
-  border-radius:
-    var(--slc-radius-xl);
-
-  background:
-    linear-gradient(
-      135deg,
-      #4a0754 0%,
-      #64106f 58%,
-      #7c2385 100%
-    );
-
-  color:
-    white;
-
-  box-shadow:
-    0 22px 55px
-    rgba(74,7,84,.22);
+    box-shadow:
+        var(--slc-shadow-small);
 
 }
 
 
-.slc-status-card::before,
-.slc-status-card::after {
+.slc-quiz-info span {
 
-  content: "";
+    color:
+        var(--slc-muted);
 
-  position:
-    absolute;
-
-  border:
-    1px solid
-    rgba(255,255,255,.12);
-
-  border-radius:
-    50%;
-
-  pointer-events:
-    none;
+    font-size:
+        .62rem;
 
 }
 
 
-.slc-status-card::before {
+.slc-quiz-info span i {
 
-  width:
-    230px;
+    margin-right:
+        4px;
 
-  height:
-    230px;
-
-  right:
-    -75px;
-
-  top:
-    -100px;
+    color:
+        var(--slc-purple);
 
 }
 
 
-.slc-status-card::after {
+.slc-quiz-info strong {
 
-  width:
-    150px;
+    color:
+        var(--slc-purple);
 
-  height:
-    150px;
+    font-family:
+        "Bricolage Grotesque",
+        sans-serif;
 
-  right:
-    30px;
-
-  bottom:
-    -105px;
-
-}
-
-
-.slc-status-copy,
-.slc-status-visual {
-
-  position:
-    relative;
-
-  z-index:
-    1;
-
-}
-
-
-.slc-status-label {
-
-  display:
-    inline-flex;
-
-  align-items:
-    center;
-
-  gap:
-    7px;
-
-  margin-bottom:
-    9px;
-
-  color:
-    rgba(255,255,255,.78);
-
-  font-size:
-    .65rem;
-
-  font-weight:
-    800;
-
-  letter-spacing:
-    .12em;
-
-  text-transform:
-    uppercase;
-
-}
-
-
-.slc-status-copy h2 {
-
-  margin:
-    0;
-
-  font-size:
-    clamp(1.35rem, 2.5vw, 1.9rem);
-
-  line-height:
-    1.12;
-
-  letter-spacing:
-    -.025em;
-
-}
-
-
-.slc-status-copy p {
-
-  max-width:
-    660px;
-
-  margin:
-    10px 0 0;
-
-  color:
-    rgba(255,255,255,.82);
-
-  font-size:
-    .82rem;
-
-  line-height:
-    1.6;
-
-}
-
-
-.slc-status-visual {
-
-  width:
-    94px;
-
-  height:
-    94px;
-
-  display:
-    grid;
-
-  place-items:
-    center;
-
-  border:
-    1px solid
-    rgba(255,255,255,.2);
-
-  border-radius:
-    28px;
-
-  background:
-    rgba(255,255,255,.1);
-
-  backdrop-filter:
-    blur(12px);
-
-}
-
-
-.slc-status-visual i {
-
-  font-size:
-    2.35rem;
+    font-size:
+        .72rem;
 
 }
 
 
 /* ============================================================
-   STATE CARDS
-   ============================================================ */
+   STATUS
+============================================================ */
+
+.slc-status {
+
+    width:
+        100%;
+
+    margin-bottom:
+        18px;
+
+    padding:
+        12px 15px;
+
+    border:
+        1px solid var(--slc-border);
+
+    border-radius:
+        13px;
+
+    background:
+        var(--slc-purple-pale);
+
+    color:
+        var(--slc-text);
+
+    font-size:
+        .72rem;
+
+    line-height:
+        1.5;
+
+}
+
+
+/* ============================================================
+   STATES
+============================================================ */
 
 .slc-state {
 
-  margin-bottom:
-    22px;
+    width:
+        100%;
+
+    margin-bottom:
+        18px;
 
 }
 
+
+.slc-state[hidden] {
+
+    display:
+        none !important;
+
+}
+
+
+/* ============================================================
+   CARD
+============================================================ */
 
 .slc-card {
 
-  background:
-    var(--slc-white);
+    width:
+        100%;
 
-  border:
-    1px solid
-    var(--slc-border);
+    background:
+        var(--slc-white);
 
-  border-radius:
-    var(--slc-radius-lg);
+    border:
+        1px solid var(--slc-border);
 
-  box-shadow:
-    var(--slc-shadow-sm);
+    border-radius:
+        18px;
 
-}
-
-
-.slc-card-pad {
-
-  padding:
-    28px;
+    box-shadow:
+        var(--slc-shadow);
 
 }
 
 
 /* ============================================================
-   SECTION TITLE
-   ============================================================ */
+   CARD HEADING
+============================================================ */
 
-.slc-section-title {
+.slc-card-heading {
 
-  display:
-    flex;
+    display:
+        flex;
 
-  align-items:
-    flex-start;
+    align-items:
+        flex-start;
 
-  gap:
-    13px;
+    gap:
+        12px;
 
-  margin-bottom:
-    20px;
+    padding:
+        25px 27px 20px;
 
-}
-
-
-.slc-section-icon {
-
-  width:
-    42px;
-
-  height:
-    42px;
-
-  flex:
-    0 0 42px;
-
-  display:
-    grid;
-
-  place-items:
-    center;
-
-  border-radius:
-    13px;
-
-  background:
-    var(--slc-purple-soft);
-
-  color:
-    var(--slc-purple);
+    border-bottom:
+        1px solid #f0eaf1;
 
 }
 
 
-.slc-section-title h2 {
+.slc-heading-icon {
 
-  margin:
-    0;
+    width:
+        40px;
 
-  color:
-    var(--slc-text);
+    height:
+        40px;
 
-  font-size:
-    1.08rem;
+    flex:
+        0 0 40px;
 
-  line-height:
-    1.25;
+    display:
+        grid;
 
-  font-weight:
-    800;
+    place-items:
+        center;
 
-}
+    border-radius:
+        12px;
 
+    background:
+        var(--slc-purple-soft);
 
-.slc-section-title p {
-
-  margin:
-    4px 0 0;
-
-  color:
-    var(--slc-muted);
-
-  font-size:
-    .76rem;
-
-  line-height:
-    1.55;
+    color:
+        var(--slc-purple);
 
 }
 
 
-/* ============================================================
-   QUIZ STATUS MESSAGE
-   ============================================================ */
+.slc-card-heading h2 {
 
-#quizStatus {
+    margin:
+        0;
 
-  margin-bottom:
-    18px;
+    color:
+        var(--slc-text);
 
-}
+    font-size:
+        1.02rem;
 
-
-.slc-status-message {
-
-  display:
-    flex;
-
-  align-items:
-    flex-start;
-
-  gap:
-    12px;
-
-  padding:
-    14px 16px;
-
-  border:
-    1px solid
-    var(--slc-border);
-
-  border-radius:
-    var(--slc-radius-md);
-
-  background:
-    var(--slc-purple-pale);
-
-  color:
-    var(--slc-text);
-
-  font-size:
-    .76rem;
-
-  line-height:
-    1.55;
+    line-height:
+        1.25;
 
 }
 
 
-.slc-status-message i {
+.slc-card-heading p {
 
-  margin-top:
-    2px;
+    margin:
+        4px 0 0;
 
-  color:
-    var(--slc-purple);
+    color:
+        var(--slc-muted);
 
-}
+    font-size:
+        .7rem;
 
-
-.slc-status-message.success {
-
-  background:
-    var(--slc-success-bg);
-
-  border-color:
-    #ccebd6;
-
-}
-
-
-.slc-status-message.success i {
-
-  color:
-    var(--slc-success);
-
-}
-
-
-.slc-status-message.warning {
-
-  background:
-    var(--slc-warning-bg);
-
-  border-color:
-    #f3dfae;
-
-}
-
-
-.slc-status-message.warning i {
-
-  color:
-    var(--slc-warning);
-
-}
-
-
-.slc-status-message.error {
-
-  background:
-    var(--slc-danger-bg);
-
-  border-color:
-    #f3cfcc;
-
-}
-
-
-.slc-status-message.error i {
-
-  color:
-    var(--slc-danger);
+    line-height:
+        1.5;
 
 }
 
 
 /* ============================================================
-   PARTICIPANT SELECTION
-   ============================================================ */
+   PARTICIPANT
+============================================================ */
 
-.slc-participant-layout {
+.slc-participant-main {
 
-  display:
-    grid;
+    display:
+        grid;
 
-  grid-template-columns:
-    minmax(0, 1.25fr)
-    minmax(270px, .75fr);
+    grid-template-columns:
+        minmax(
+            0,
+            1fr
+        )
+        minmax(
+            280px,
+            340px
+        );
 
-  gap:
-    22px;
+    gap:
+        35px;
 
-}
-
-
-.slc-select-wrap {
-
-  position:
-    relative;
-
-}
-
-
-.slc-field-label {
-
-  display:
-    block;
-
-  margin-bottom:
-    8px;
-
-  color:
-    var(--slc-text);
-
-  font-size:
-    .74rem;
-
-  font-weight:
-    800;
+    padding:
+        25px 27px 28px;
 
 }
 
 
-.slc-field-help {
+.slc-participant-form {
 
-  margin:
-    7px 0 0;
-
-  color:
-    var(--slc-muted);
-
-  font-size:
-    .68rem;
-
-  line-height:
-    1.5;
+    min-width:
+        0;
 
 }
 
 
-/* ============================================================
-   INPUTS
-   ============================================================ */
+.slc-label {
 
-.slc-select,
-.slc-input,
-.slc-textarea {
+    display:
+        block;
 
-  width:
-    100%;
+    margin-bottom:
+        7px;
 
-  border:
-    1px solid
-    var(--slc-border);
+    color:
+        var(--slc-text);
 
-  border-radius:
-    14px;
+    font-size:
+        .7rem;
 
-  outline:
-    none;
-
-  background:
-    #fff;
-
-  color:
-    var(--slc-text);
-
-  font-size:
-    .78rem;
-
-  transition:
-    border-color .2s ease,
-    box-shadow .2s ease,
-    background .2s ease;
+    font-weight:
+        800;
 
 }
 
@@ -844,1948 +572,2116 @@
 .slc-select,
 .slc-input {
 
-  min-height:
-    48px;
+    width:
+        100%;
 
-  padding:
-    0 14px;
+    min-height:
+        48px;
 
-}
+    padding:
+        0 14px;
 
+    border:
+        1px solid var(--slc-border);
 
-.slc-textarea {
+    border-radius:
+        12px;
 
-  min-height:
-    145px;
+    outline:
+        none;
 
-  padding:
-    14px;
+    background:
+        #fff;
 
-  resize:
-    vertical;
+    color:
+        var(--slc-text);
 
-  line-height:
-    1.65;
+    font-size:
+        .75rem;
+
+    transition:
+        .2s ease;
 
 }
 
 
 .slc-select:focus,
-.slc-input:focus,
-.slc-textarea:focus {
+.slc-input:focus {
 
-  border-color:
-    rgba(74,7,84,.52);
+    border-color:
+        rgba(
+            74,
+            7,
+            84,
+            .5
+        );
 
-  box-shadow:
-    0 0 0 4px
-    rgba(74,7,84,.08);
+    box-shadow:
+        0 0 0 4px
+        rgba(
+            74,
+            7,
+            84,
+            .07
+        );
+
+}
+
+
+.slc-help {
+
+    margin:
+        7px 0 15px;
+
+    color:
+        var(--slc-muted);
+
+    font-size:
+        .65rem;
+
+    line-height:
+        1.55;
 
 }
 
 
 /* ============================================================
    BUTTONS
-   ============================================================ */
+============================================================ */
 
 .slc-btn {
 
-  min-height:
-    46px;
+    min-height:
+        45px;
 
-  display:
-    inline-flex;
+    display:
+        inline-flex;
 
-  align-items:
-    center;
+    align-items:
+        center;
 
-  justify-content:
-    center;
+    justify-content:
+        center;
 
-  gap:
-    8px;
+    gap:
+        8px;
 
-  padding:
-    0 17px;
+    padding:
+        0 17px;
 
-  border:
-    0;
+    border:
+        0;
 
-  border-radius:
-    13px;
+    border-radius:
+        12px;
 
-  cursor:
-    pointer;
+    cursor:
+        pointer;
 
-  font-size:
-    .74rem;
+    font-size:
+        .72rem;
 
-  font-weight:
-    800;
+    font-weight:
+        800;
 
-  transition:
-    transform .18s ease,
-    box-shadow .18s ease,
-    background .18s ease,
-    opacity .18s ease;
+    transition:
+        transform .18s ease,
+        background .18s ease,
+        box-shadow .18s ease,
+        opacity .18s ease;
 
 }
 
 
 .slc-btn:hover {
 
-  transform:
-    translateY(-1px);
+    transform:
+        translateY(-1px);
 
 }
 
 
 .slc-btn:active {
 
-  transform:
-    translateY(0);
+    transform:
+        translateY(0);
 
 }
 
 
 .slc-btn:disabled {
 
-  opacity:
-    .55;
+    opacity:
+        .5;
 
-  cursor:
-    not-allowed;
+    cursor:
+        not-allowed;
 
-  transform:
-    none;
+    transform:
+        none;
 
 }
 
 
-/* PRIMARY */
-
 .slc-btn-primary {
 
-  background:
-    var(--slc-purple);
+    background:
+        var(--slc-purple);
 
-  color:
-    #fff;
+    color:
+        #fff;
 
-  box-shadow:
-    0 9px 22px
-    rgba(74,7,84,.18);
+    box-shadow:
+        0 8px 20px
+        rgba(
+            74,
+            7,
+            84,
+            .16
+        );
 
 }
 
 
 .slc-btn-primary:hover {
 
-  background:
-    var(--slc-purple-dark);
+    background:
+        var(--slc-purple-dark);
 
 }
 
-
-/* SECONDARY */
 
 .slc-btn-secondary {
 
-  background:
-    var(--slc-purple-soft);
+    background:
+        var(--slc-purple-soft);
 
-  color:
-    var(--slc-purple);
-
-}
-
-
-/* GHOST */
-
-.slc-btn-ghost {
-
-  background:
-    transparent;
-
-  border:
-    1px solid
-    var(--slc-border);
-
-  color:
-    var(--slc-text);
-
-}
-
-
-/* SUCCESS */
-
-.slc-btn-success {
-
-  background:
-    var(--slc-success);
-
-  color:
-    white;
+    color:
+        var(--slc-purple);
 
 }
 
 
 /* ============================================================
-   PARTICIPANT ACTIONS
-   ============================================================ */
+   ADD NAME
+============================================================ */
 
-.slc-participant-actions {
+.slc-add-member {
 
-  display:
-    flex;
+    margin-top:
+        22px;
 
-  gap:
-    10px;
+    padding-top:
+        19px;
 
-  margin-top:
-    14px;
+    border-top:
+        1px dashed var(--slc-border);
+
+}
+
+
+.slc-add-divider {
+
+    margin-bottom:
+        10px;
+
+    color:
+        var(--slc-muted);
+
+    font-size:
+        .62rem;
+
+}
+
+
+.slc-add-row {
+
+    display:
+        flex;
+
+    gap:
+        9px;
+
+}
+
+
+.slc-add-row .slc-input {
+
+    flex:
+        1;
 
 }
 
 
 /* ============================================================
-   PARTICIPANT NOTE
-   ============================================================ */
+   PARTICIPANT INFO
+============================================================ */
 
-.slc-participant-note {
+.slc-participant-info {
 
-  display:
-    flex;
+    align-self:
+        start;
 
-  align-items:
-    flex-start;
+    padding:
+        22px;
 
-  gap:
-    12px;
+    border:
+        1px solid #eee4f0;
 
-  padding:
-    18px;
+    border-radius:
+        16px;
 
-  border-radius:
-    17px;
-
-  background:
-    linear-gradient(
-      145deg,
-      #fbf8fc,
-      #f5edf7
-    );
-
-  border:
-    1px solid
-    #eee3f0;
+    background:
+        linear-gradient(
+            145deg,
+            #fbf8fc,
+            #f6eef8
+        );
 
 }
 
 
-.slc-participant-note-icon {
+.slc-info-icon {
 
-  width:
-    38px;
+    width:
+        40px;
 
-  height:
-    38px;
+    height:
+        40px;
 
-  flex:
-    0 0 38px;
+    display:
+        grid;
 
-  display:
-    grid;
+    place-items:
+        center;
 
-  place-items:
-    center;
+    margin-bottom:
+        13px;
 
-  border-radius:
-    12px;
+    border-radius:
+        12px;
 
-  background:
-    #fff;
+    background:
+        #fff;
 
-  color:
-    var(--slc-purple);
-
-}
-
-
-.slc-participant-note strong {
-
-  display:
-    block;
-
-  color:
-    var(--slc-text);
-
-  font-family:
-    "Bricolage Grotesque",
-    "Precolaritas",
-    "DM Sans",
-    sans-serif;
-
-  font-size:
-    .8rem;
+    color:
+        var(--slc-purple);
 
 }
 
 
-.slc-participant-note p {
+.slc-participant-info h3 {
 
-  margin:
-    5px 0 0;
+    margin:
+        0;
 
-  color:
-    var(--slc-muted);
+    color:
+        var(--slc-text);
 
-  font-size:
-    .7rem;
+    font-size:
+        .8rem;
 
-  line-height:
-    1.6;
+}
+
+
+.slc-participant-info p {
+
+    margin:
+        6px 0 0;
+
+    color:
+        var(--slc-muted);
+
+    font-size:
+        .67rem;
+
+    line-height:
+        1.6;
 
 }
 
 
 /* ============================================================
-   SELECTED MEMBER
-   ============================================================ */
+   LOCKED PARTICIPANT
+============================================================ */
 
-.slc-selected-member {
+.slc-locked-participant {
 
-  display:
-    flex;
+    padding:
+        17px 21px;
 
-  align-items:
-    center;
-
-  justify-content:
-    space-between;
-
-  gap:
-    14px;
-
-  padding:
-    14px 16px;
-
-  margin-top:
-    14px;
-
-  border:
-    1px solid
-    #e5d7e8;
-
-  border-radius:
-    15px;
-
-  background:
-    #fcf9fd;
+    background:
+        #fcf9fd;
 
 }
 
 
-.slc-member-profile {
+.slc-locked-left {
 
-  display:
-    flex;
+    display:
+        flex;
 
-  align-items:
-    center;
+    align-items:
+        center;
 
-  min-width:
-    0;
-
-  gap:
-    11px;
+    gap:
+        12px;
 
 }
 
 
-.slc-member-avatar {
+.slc-locked-avatar {
 
-  width:
-    40px;
+    width:
+        40px;
 
-  height:
-    40px;
+    height:
+        40px;
 
-  flex:
-    0 0 40px;
+    flex:
+        0 0 40px;
 
-  display:
-    grid;
+    display:
+        grid;
 
-  place-items:
-    center;
+    place-items:
+        center;
 
-  border-radius:
-    13px;
+    border-radius:
+        12px;
 
-  background:
-    var(--slc-purple);
+    background:
+        var(--slc-purple-soft);
 
-  color:
-    #fff;
-
-  font-family:
-    "Bricolage Grotesque",
-    "Precolaritas",
-    "DM Sans",
-    sans-serif;
-
-  font-size:
-    .9rem;
-
-  font-weight:
-    800;
+    color:
+        var(--slc-purple);
 
 }
 
 
-.slc-member-copy {
+.slc-small-label {
 
-  min-width:
-    0;
+    display:
+        block;
 
-}
+    margin-bottom:
+        2px;
 
+    color:
+        var(--slc-muted);
 
-.slc-member-copy strong,
-.slc-member-copy small {
+    font-size:
+        .55rem;
 
-  display:
-    block;
+    font-weight:
+        800;
 
-  overflow:
-    hidden;
-
-  text-overflow:
-    ellipsis;
-
-  white-space:
-    nowrap;
+    letter-spacing:
+        .08em;
 
 }
 
 
-.slc-member-copy strong {
+.slc-locked-left strong {
 
-  color:
-    var(--slc-text);
+    display:
+        block;
 
-  font-size:
-    .77rem;
+    color:
+        var(--slc-text);
 
-}
+    font-family:
+        "Bricolage Grotesque",
+        sans-serif;
 
-
-.slc-member-copy small {
-
-  margin-top:
-    2px;
-
-  color:
-    var(--slc-muted);
-
-  font-size:
-    .64rem;
+    font-size:
+        .78rem;
 
 }
 
 
-/* ============================================================
-   NEW MEMBER
-   ============================================================ */
+.slc-locked-left p {
 
-.slc-new-member {
+    margin:
+        2px 0 0;
 
-  display:
-    flex;
+    color:
+        var(--slc-muted);
 
-  gap:
-    9px;
-
-  margin-top:
-    18px;
-
-  padding-top:
-    18px;
-
-  border-top:
-    1px dashed
-    var(--slc-border);
-
-}
-
-
-.slc-new-member .slc-input {
-
-  flex:
-    1;
+    font-size:
+        .62rem;
 
 }
 
 
 /* ============================================================
    LOADING
-   ============================================================ */
+============================================================ */
 
-#quizLoading {
+.slc-loading-card {
 
-  min-height:
-    150px;
+    min-height:
+        130px;
 
-  display:
-    grid;
+    display:
+        grid;
 
-  place-items:
-    center;
+    place-items:
+        center;
 
 }
 
 
 .slc-loading {
 
-  display:
-    flex;
+    display:
+        flex;
 
-  align-items:
-    center;
+    align-items:
+        center;
 
-  gap:
-    10px;
+    gap:
+        10px;
 
-  color:
-    var(--slc-muted);
+    color:
+        var(--slc-muted);
 
-  font-size:
-    .74rem;
+    font-size:
+        .7rem;
 
 }
 
 
 .slc-spinner {
 
-  width:
-    18px;
+    width:
+        18px;
 
-  height:
-    18px;
+    height:
+        18px;
 
-  border:
-    2px solid
-    #e8ddea;
+    border:
+        2px solid #eadfec;
 
-  border-top-color:
-    var(--slc-purple);
+    border-top-color:
+        var(--slc-purple);
 
-  border-radius:
-    50%;
+    border-radius:
+        50%;
 
-  animation:
-    slc-spin .8s linear infinite;
+    animation:
+        slc-spin .8s linear infinite;
 
 }
 
 
 @keyframes slc-spin {
 
-  to {
-    transform:
-      rotate(360deg);
-  }
+    to {
+
+        transform:
+            rotate(360deg);
+
+    }
 
 }
 
 
 /* ============================================================
-   PROGRESS
-   ============================================================ */
-
-.slc-progress-card {
-
-  padding:
-    17px 20px;
-
-  margin-bottom:
-    18px;
-
-  border:
-    1px solid
-    var(--slc-border);
-
-  border-radius:
-    18px;
-
-  background:
-    #fff;
-
-  box-shadow:
-    0 7px 24px
-    rgba(50,3,56,.05);
-
-}
-
-
-.slc-progress-head {
-
-  display:
-    flex;
-
-  align-items:
-    center;
-
-  justify-content:
-    space-between;
-
-  gap:
-    12px;
-
-  margin-bottom:
-    9px;
-
-}
-
-
-.slc-progress-head span {
-
-  color:
-    var(--slc-muted);
-
-  font-size:
-    .68rem;
-
-  font-weight:
-    700;
-
-}
-
-
-.slc-progress-head strong {
-
-  color:
-    var(--slc-purple);
-
-  font-size:
-    .7rem;
-
-  font-weight:
-    800;
-
-}
-
-
-.slc-progress-track {
-
-  height:
-    7px;
-
-  overflow:
-    hidden;
-
-  border-radius:
-    99px;
-
-  background:
-    #eee7ef;
-
-}
-
-
-.slc-progress-bar {
-
-  width:
-    0;
-
-  height:
-    100%;
-
-  border-radius:
-    inherit;
-
-  background:
-    linear-gradient(
-      90deg,
-      var(--slc-purple),
-      #8b3c96
-    );
-
-  transition:
-    width .25s ease;
-
-}
-
-
-/* ============================================================
-   REFLECTION
-   ============================================================ */
+   REFLECTION INTRO
+============================================================ */
 
 .slc-reflection-intro {
 
-  margin:
-    -7px 0 20px;
+    display:
+        flex;
 
-  color:
-    var(--slc-muted);
+    align-items:
+        flex-start;
 
-  font-size:
-    .74rem;
+    gap:
+        9px;
 
-  line-height:
-    1.6;
+    margin:
+        20px 27px;
+
+    padding:
+        12px 14px;
+
+    border-radius:
+        12px;
+
+    background:
+        var(--slc-purple-pale);
 
 }
 
 
+.slc-reflection-intro i {
+
+    margin-top:
+        2px;
+
+    color:
+        var(--slc-purple);
+
+}
+
+
+.slc-reflection-intro p {
+
+    margin:
+        0;
+
+    color:
+        var(--slc-muted);
+
+    font-size:
+        .67rem;
+
+    line-height:
+        1.55;
+
+}
+
+
+/* ============================================================
+   REFLECTION GRID
+============================================================ */
+
 .slc-reflection-grid {
 
-  display:
-    grid;
+    display:
+        grid;
 
-  grid-template-columns:
-    repeat(3, minmax(0, 1fr));
+    grid-template-columns:
+        repeat(
+            3,
+            minmax(
+                0,
+                1fr
+            )
+        );
 
-  gap:
-    16px;
+    gap:
+        18px;
+
+    padding:
+        0 27px;
 
 }
 
 
 .slc-reflection-field {
 
-  position:
-    relative;
+    min-width:
+        0;
 
 }
 
 
 .slc-reflection-field label {
 
-  display:
-    flex;
+    display:
+        flex;
 
-  align-items:
-    flex-start;
+    align-items:
+        flex-start;
 
-  gap:
-    8px;
+    gap:
+        8px;
 
-  min-height:
-    39px;
+    min-height:
+        38px;
 
-  margin-bottom:
-    8px;
+    margin-bottom:
+        8px;
 
-  color:
-    var(--slc-text);
+    color:
+        var(--slc-text);
 
-  font-size:
-    .73rem;
+    font-size:
+        .68rem;
 
-  font-weight:
-    800;
+    font-weight:
+        800;
 
-  line-height:
-    1.45;
-
-}
-
-
-.slc-question-number {
-
-  width:
-    24px;
-
-  height:
-    24px;
-
-  flex:
-    0 0 24px;
-
-  display:
-    grid;
-
-  place-items:
-    center;
-
-  border-radius:
-    8px;
-
-  background:
-    var(--slc-purple-soft);
-
-  color:
-    var(--slc-purple);
-
-  font-family:
-    "Bricolage Grotesque",
-    "Precolaritas",
-    "DM Sans",
-    sans-serif;
-
-  font-size:
-    .65rem;
+    line-height:
+        1.45;
 
 }
 
 
-.slc-char-count {
+.slc-number {
 
-  display:
-    flex;
+    width:
+        25px;
 
-  justify-content:
-    flex-end;
+    height:
+        25px;
 
-  margin-top:
-    6px;
+    flex:
+        0 0 25px;
 
-  color:
-    #8b818e;
+    display:
+        grid;
 
-  font-size:
-    .61rem;
+    place-items:
+        center;
 
-}
+    border-radius:
+        8px;
 
+    background:
+        var(--slc-purple-soft);
 
-.slc-reflection-submit {
+    color:
+        var(--slc-purple);
 
-  display:
-    flex;
+    font-family:
+        "Bricolage Grotesque",
+        sans-serif;
 
-  align-items:
-    center;
-
-  justify-content:
-    space-between;
-
-  gap:
-    16px;
-
-  margin-top:
-    20px;
-
-  padding-top:
-    18px;
-
-  border-top:
-    1px dashed
-    var(--slc-border);
+    font-size:
+        .6rem;
 
 }
 
 
-.slc-reflection-submit p {
+.slc-reflection-field textarea {
 
-  margin:
-    0;
+    width:
+        100%;
 
-  color:
-    var(--slc-muted);
+    min-height:
+        145px;
 
-  font-size:
-    .66rem;
+    padding:
+        13px;
 
-  line-height:
-    1.5;
+    resize:
+        vertical;
+
+    border:
+        1px solid var(--slc-border);
+
+    border-radius:
+        12px;
+
+    outline:
+        none;
+
+    color:
+        var(--slc-text);
+
+    background:
+        #fff;
+
+    font-family:
+        "DM Sans",
+        sans-serif;
+
+    font-size:
+        .72rem;
+
+    line-height:
+        1.55;
+
+}
+
+
+.slc-reflection-field textarea:focus {
+
+    border-color:
+        rgba(
+            74,
+            7,
+            84,
+            .5
+        );
+
+    box-shadow:
+        0 0 0 4px
+        rgba(
+            74,
+            7,
+            84,
+            .07
+        );
+
+}
+
+
+.slc-text-counter {
+
+    display:
+        flex;
+
+    justify-content:
+        flex-end;
+
+    margin-top:
+        5px;
+
+    color:
+        #8b818e;
+
+    font-size:
+        .58rem;
+
+}
+
+
+/* ============================================================
+   REFLECTION PROGRESS
+============================================================ */
+
+.slc-reflection-progress {
+
+    margin:
+        22px 27px 0;
+
+    padding-top:
+        18px;
+
+    border-top:
+        1px dashed var(--slc-border);
+
+}
+
+
+.slc-reflection-progress-top {
+
+    display:
+        flex;
+
+    justify-content:
+        space-between;
+
+    gap:
+        12px;
+
+    margin-bottom:
+        8px;
+
+}
+
+
+.slc-reflection-progress-top span {
+
+    color:
+        var(--slc-muted);
+
+    font-size:
+        .62rem;
+
+    line-height:
+        1.45;
+
+}
+
+
+.slc-reflection-progress-top strong {
+
+    flex:
+        0 0 auto;
+
+    color:
+        var(--slc-purple);
+
+    font-size:
+        .62rem;
+
+}
+
+
+.slc-progress-track {
+
+    width:
+        100%;
+
+    height:
+        6px;
+
+    overflow:
+        hidden;
+
+    border-radius:
+        99px;
+
+    background:
+        #eee7ef;
+
+}
+
+
+.slc-progress-bar {
+
+    width:
+        0;
+
+    height:
+        100%;
+
+    border-radius:
+        inherit;
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--slc-purple),
+            #8b3c96
+        );
+
+    transition:
+        width .25s ease;
+
+}
+
+
+/* ============================================================
+   REFLECTION ACTIONS
+============================================================ */
+
+.slc-reflection-actions {
+
+    display:
+        flex;
+
+    justify-content:
+        flex-end;
+
+    margin:
+        18px 27px 25px;
+
+}
+
+
+.slc-reflection-actions .slc-btn {
+
+    min-width:
+        175px;
 
 }
 
 
 /* ============================================================
    QUIZ HEADER
-   ============================================================ */
+============================================================ */
 
-.slc-quiz-header {
+.slc-quiz-top {
 
-  display:
-    flex;
+    display:
+        flex;
 
-  align-items:
-    flex-start;
+    align-items:
+        center;
 
-  justify-content:
-    space-between;
+    justify-content:
+        space-between;
 
-  gap:
-    18px;
+    gap:
+        20px;
 
-  margin-bottom:
-    20px;
+    padding:
+        24px 27px 20px;
 
-}
-
-
-.slc-quiz-header-copy h2 {
-
-  margin:
-    0;
-
-  color:
-    var(--slc-text);
-
-  font-size:
-    1.1rem;
+    border-bottom:
+        1px solid #f0eaf1;
 
 }
 
 
-.slc-quiz-header-copy p {
+.slc-quiz-top h2 {
 
-  margin:
-    5px 0 0;
+    margin:
+        5px 0 0;
 
-  color:
-    var(--slc-muted);
+    color:
+        var(--slc-text);
 
-  font-size:
-    .7rem;
+    font-size:
+        1.05rem;
 
 }
 
 
-.slc-quiz-badge {
+.slc-quiz-top p {
 
-  padding:
-    8px 10px;
+    margin:
+        4px 0 0;
 
-  border-radius:
-    10px;
+    color:
+        var(--slc-muted);
 
-  background:
-    var(--slc-purple-soft);
+    font-size:
+        .68rem;
 
-  color:
-    var(--slc-purple);
+}
 
-  font-size:
-    .62rem;
 
-  font-weight:
-    800;
+.slc-question-count {
 
-  white-space:
-    nowrap;
+    padding:
+        8px 11px;
+
+    border-radius:
+        9px;
+
+    background:
+        var(--slc-purple-soft);
+
+    color:
+        var(--slc-purple);
+
+    font-size:
+        .6rem;
+
+    font-weight:
+        800;
+
+    white-space:
+        nowrap;
 
 }
 
 
 /* ============================================================
    QUESTIONS
-   ============================================================ */
 
-.slc-question-card {
+   IMPORTANT:
+   These class names match the current slcquiz.js.
+============================================================ */
 
-  padding:
-    21px;
+#questions {
 
-  margin-bottom:
-    14px;
-
-  border:
-    1px solid
-    var(--slc-border);
-
-  border-radius:
-    18px;
-
-  background:
-    #fff;
-
-  transition:
-    border-color .2s ease,
-    box-shadow .2s ease;
+    padding:
+        22px 27px 0;
 
 }
 
 
-.slc-question-card:focus-within {
+.question-card {
 
-  border-color:
-    #d9c5dd;
+    width:
+        100%;
 
-  box-shadow:
-    0 10px 28px
-    rgba(74,7,84,.06);
+    margin-bottom:
+        15px;
 
-}
+    padding:
+        20px;
 
+    border:
+        1px solid var(--slc-border);
 
-.slc-question-top {
+    border-radius:
+        15px;
 
-  display:
-    flex;
+    background:
+        #fff;
 
-  align-items:
-    flex-start;
-
-  gap:
-    11px;
-
-  margin-bottom:
-    15px;
+    transition:
+        border-color .2s ease,
+        box-shadow .2s ease;
 
 }
 
 
-.slc-question-index {
+.question-card:focus-within {
 
-  width:
-    30px;
+    border-color:
+        #d8c4dd;
 
-  height:
-    30px;
-
-  flex:
-    0 0 30px;
-
-  display:
-    grid;
-
-  place-items:
-    center;
-
-  border-radius:
-    10px;
-
-  background:
-    var(--slc-purple);
-
-  color:
-    white;
-
-  font-family:
-    "Bricolage Grotesque",
-    "Precolaritas",
-    "DM Sans",
-    sans-serif;
-
-  font-size:
-    .66rem;
-
-  font-weight:
-    800;
+    box-shadow:
+        0 8px 25px
+        rgba(
+            74,
+            7,
+            84,
+            .06
+        );
 
 }
 
 
-.slc-question-text {
+.question-number {
 
-  margin:
-    0;
+    display:
+        inline-flex;
 
-  color:
-    var(--slc-text);
+    align-items:
+        center;
 
-  font-size:
-    .83rem;
+    min-height:
+        25px;
 
-  line-height:
-    1.55;
+    margin-bottom:
+        9px;
 
-  font-weight:
-    700;
+    padding:
+        0 9px;
+
+    border-radius:
+        7px;
+
+    background:
+        var(--slc-purple-soft);
+
+    color:
+        var(--slc-purple);
+
+    font-family:
+        "Bricolage Grotesque",
+        sans-serif;
+
+    font-size:
+        .57rem;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        .06em;
+
+}
+
+
+.question-card h3 {
+
+    margin:
+        0 0 15px;
+
+    color:
+        var(--slc-text);
+
+    font-family:
+        "DM Sans",
+        sans-serif;
+
+    font-size:
+        .78rem;
+
+    font-weight:
+        700;
+
+    line-height:
+        1.55;
 
 }
 
 
 /* ============================================================
-   ANSWER OPTIONS
-   ============================================================ */
+   OPTIONS
 
-.slc-options {
+   IMPORTANT:
+   Matches .option generated by slcquiz.js.
+============================================================ */
 
-  display:
-    grid;
+.options {
 
-  grid-template-columns:
-    repeat(2, minmax(0, 1fr));
+    display:
+        grid;
 
-  gap:
-    10px;
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(
+                0,
+                1fr
+            )
+        );
 
-}
-
-
-.slc-option {
-
-  position:
-    relative;
-
-  display:
-    block;
+    gap:
+        9px;
 
 }
 
 
-.slc-option input {
+.option {
 
-  position:
-    absolute;
+    position:
+        relative;
 
-  width:
-    1px;
+    display:
+        flex;
 
-  height:
-    1px;
+    align-items:
+        center;
 
-  opacity:
-    0;
+    min-height:
+        52px;
 
-  pointer-events:
-    none;
+    padding:
+        10px 13px;
 
-}
+    border:
+        1px solid var(--slc-border);
 
+    border-radius:
+        11px;
 
-.slc-option-label {
+    background:
+        #fff;
 
-  min-height:
-    55px;
+    color:
+        var(--slc-text);
 
-  display:
-    flex;
+    cursor:
+        pointer;
 
-  align-items:
-    center;
+    font-size:
+        .69rem;
 
-  gap:
-    10px;
+    line-height:
+        1.45;
 
-  padding:
-    11px 13px;
-
-  border:
-    1px solid
-    var(--slc-border);
-
-  border-radius:
-    13px;
-
-  background:
-    #fff;
-
-  color:
-    var(--slc-text);
-
-  cursor:
-    pointer;
-
-  font-size:
-    .72rem;
-
-  line-height:
-    1.45;
-
-  transition:
-    border-color .18s ease,
-    background .18s ease,
-    transform .18s ease,
-    box-shadow .18s ease;
+    transition:
+        border-color .18s ease,
+        background .18s ease,
+        transform .18s ease,
+        box-shadow .18s ease;
 
 }
 
 
-.slc-option-label:hover {
+.option:hover {
 
-  border-color:
-    #d4bdd9;
+    border-color:
+        #d3bad8;
 
-  transform:
-    translateY(-1px);
-
-}
-
-
-.slc-option input:checked
-+ .slc-option-label {
-
-  border-color:
-    var(--slc-purple);
-
-  background:
-    var(--slc-purple-soft);
-
-  color:
-    var(--slc-purple-dark);
-
-  box-shadow:
-    0 7px 18px
-    rgba(74,7,84,.08);
+    transform:
+        translateY(-1px);
 
 }
 
 
-.slc-option-letter {
+.option input {
 
-  width:
-    27px;
+    position:
+        absolute;
 
-  height:
-    27px;
+    width:
+        1px;
 
-  flex:
-    0 0 27px;
+    height:
+        1px;
 
-  display:
-    grid;
+    opacity:
+        0;
 
-  place-items:
-    center;
-
-  border:
-    1px solid
-    var(--slc-border);
-
-  border-radius:
-    9px;
-
-  background:
-    #fff;
-
-  color:
-    var(--slc-muted);
-
-  font-family:
-    "Bricolage Grotesque",
-    "Precolaritas",
-    "DM Sans",
-    sans-serif;
-
-  font-size:
-    .64rem;
-
-  font-weight:
-    800;
+    pointer-events:
+        none;
 
 }
 
 
-.slc-option input:checked
-+ .slc-option-label
-.slc-option-letter {
+.option span {
 
-  border-color:
-    var(--slc-purple);
+    display:
+        block;
 
-  background:
-    var(--slc-purple);
+    width:
+        100%;
 
-  color:
-    #fff;
+}
+
+
+.option input:checked + span {
+
+    color:
+        var(--slc-purple);
+
+}
+
+
+.option:has(
+    input:checked
+) {
+
+    border-color:
+        var(--slc-purple);
+
+    background:
+        var(--slc-purple-soft);
+
+    box-shadow:
+        0 6px 16px
+        rgba(
+            74,
+            7,
+            84,
+            .07
+        );
+
+}
+
+
+.option strong {
+
+    margin-right:
+        5px;
+
+    color:
+        var(--slc-purple);
+
+    font-family:
+        "Bricolage Grotesque",
+        sans-serif;
 
 }
 
 
 /* ============================================================
    QUIZ SUBMIT
-   ============================================================ */
+============================================================ */
 
-.slc-quiz-submit {
+.slc-submit-area {
 
-  display:
-    flex;
+    display:
+        flex;
 
-  justify-content:
-    flex-end;
+    justify-content:
+        flex-end;
 
-  margin-top:
-    18px;
+    margin:
+        20px 27px 27px;
+
+    padding-top:
+        18px;
+
+    border-top:
+        1px dashed var(--slc-border);
 
 }
 
 
-.slc-submit-main {
+.slc-submit-btn {
 
-  min-width:
-    190px;
-
-  min-height:
-    50px;
+    min-width:
+        180px;
 
 }
 
 
 /* ============================================================
-   LOCKED STATE
-   ============================================================ */
+   STATE CARD
+============================================================ */
 
-.slc-locked-card {
+.slc-state-card {
 
-  text-align:
-    center;
+    padding:
+        45px 25px;
 
-  padding:
-    44px 28px;
+    text-align:
+        center;
 
 }
 
 
 .slc-state-icon {
 
-  width:
-    66px;
+    width:
+        65px;
 
-  height:
-    66px;
+    height:
+        65px;
 
-  display:
-    grid;
+    display:
+        grid;
 
-  place-items:
-    center;
+    place-items:
+        center;
 
-  margin:
-    0 auto 17px;
+    margin:
+        0 auto 16px;
 
-  border-radius:
-    21px;
+    border-radius:
+        20px;
 
-  background:
-    var(--slc-warning-bg);
-
-  color:
-    var(--slc-warning);
-
-  font-size:
-    1.5rem;
+    font-size:
+        1.45rem;
 
 }
 
 
-.slc-locked-card h2,
-.slc-completed-card h2 {
+.slc-state-icon.warning {
 
-  margin:
-    0;
+    background:
+        var(--slc-warning-bg);
 
-  color:
-    var(--slc-text);
-
-  font-size:
-    1.25rem;
+    color:
+        var(--slc-warning);
 
 }
 
 
-.slc-locked-card p,
-.slc-completed-card p {
+.slc-state-icon.success {
 
-  max-width:
-    560px;
+    background:
+        var(--slc-success-bg);
 
-  margin:
-    9px auto 0;
+    color:
+        var(--slc-success);
 
-  color:
-    var(--slc-muted);
+}
 
-  font-size:
-    .75rem;
 
-  line-height:
-    1.65;
+.slc-state-card h2 {
+
+    margin:
+        0;
+
+    color:
+        var(--slc-text);
+
+    font-size:
+        1.25rem;
+
+}
+
+
+.slc-state-card p {
+
+    max-width:
+        560px;
+
+    margin:
+        8px auto 0;
+
+    color:
+        var(--slc-muted);
+
+    font-size:
+        .72rem;
+
+    line-height:
+        1.6;
 
 }
 
 
 /* ============================================================
-   COMPLETED STATE
-   ============================================================ */
+   COMPLETED
+============================================================ */
 
-.slc-completed-card {
+.slc-state-card.completed {
 
-  position:
-    relative;
+    border-color:
+        #d7eadc;
 
-  overflow:
-    hidden;
-
-  text-align:
-    center;
-
-  padding:
-    44px 28px;
-
-  border-color:
-    #d6eadc;
-
-  background:
-    linear-gradient(
-      145deg,
-      #ffffff,
-      #f6fcf8
-    );
-
-}
-
-
-.slc-completed-card
-.slc-state-icon {
-
-  background:
-    var(--slc-success-bg);
-
-  color:
-    var(--slc-success);
+    background:
+        linear-gradient(
+            145deg,
+            #fff,
+            #f7fcf8
+        );
 
 }
 
 
 .slc-completed-details {
 
-  display:
-    flex;
+    display:
+        flex;
 
-  justify-content:
-    center;
+    justify-content:
+        center;
 
-  flex-wrap:
-    wrap;
+    flex-wrap:
+        wrap;
 
-  gap:
-    9px;
+    gap:
+        8px;
 
-  margin:
-    20px 0;
+    margin:
+        18px 0;
 
 }
 
 
 .slc-result-pill {
 
-  padding:
-    8px 11px;
+    padding:
+        7px 10px;
 
-  border-radius:
-    999px;
+    border:
+        1px solid #dfece2;
 
-  background:
-    #fff;
+    border-radius:
+        999px;
 
-  border:
-    1px solid
-    #dfece2;
+    background:
+        #fff;
 
-  color:
-    var(--slc-text);
+    color:
+        var(--slc-text);
 
-  font-size:
-    .67rem;
+    font-size:
+        .61rem;
 
-  font-weight:
-    800;
+    font-weight:
+        800;
 
 }
 
 
 .slc-result-pill strong {
 
-  color:
-    var(--slc-success);
+    color:
+        var(--slc-success);
 
 }
 
 
 .slc-completed-actions {
 
-  display:
-    flex;
+    display:
+        flex;
 
-  justify-content:
-    center;
+    align-items:
+        center;
 
-  flex-wrap:
-    wrap;
+    justify-content:
+        center;
 
-  gap:
-    10px;
+    flex-wrap:
+        wrap;
 
-  margin-top:
-    22px;
+    gap:
+        10px;
+
+    margin-top:
+        20px;
 
 }
 
 
 /* ============================================================
-   HIDDEN UTILITY
-   ============================================================ */
+   BUTTONS CREATED BY JS
+============================================================ */
 
-.slc-page [hidden] {
+.purple-btn {
 
-  display:
-    none !important;
+    min-height:
+        45px;
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    gap:
+        8px;
+
+    padding:
+        0 16px;
+
+    border:
+        0;
+
+    border-radius:
+        12px;
+
+    background:
+        var(--slc-purple);
+
+    color:
+        #fff;
+
+    text-decoration:
+        none;
+
+    cursor:
+        pointer;
+
+    font-family:
+        "Bricolage Grotesque",
+        sans-serif;
+
+    font-size:
+        .68rem;
+
+    font-weight:
+        800;
+
+}
+
+
+.purple-btn:hover {
+
+    background:
+        var(--slc-purple-dark);
+
+}
+
+
+/* ============================================================
+   HIDDEN
+============================================================ */
+
+.hidden {
+
+    display:
+        none !important;
+
+}
+
+
+[hidden] {
+
+    display:
+        none !important;
 
 }
 
 
 /* ============================================================
    TABLET
-   ============================================================ */
+============================================================ */
 
-@media (max-width: 900px) {
+@media (
+    max-width: 900px
+) {
 
-  .slc-page {
+    .slc-page {
 
-    padding:
-      28px
-      22px
-      100px;
+        padding:
+            23px 18px 100px;
 
-  }
-
-
-  .slc-participant-layout {
-
-    grid-template-columns:
-      1fr;
-
-  }
+    }
 
 
-  .slc-reflection-grid {
+    .slc-participant-main {
 
-    grid-template-columns:
-      1fr;
+        grid-template-columns:
+            1fr;
 
-  }
+        gap:
+            20px;
+
+    }
+
+
+    .slc-participant-info {
+
+        width:
+            100%;
+
+    }
+
+
+    .slc-reflection-grid {
+
+        grid-template-columns:
+            1fr;
+
+    }
 
 }
 
 
 /* ============================================================
    MOBILE
-   ============================================================ */
+============================================================ */
 
-@media (max-width: 700px) {
+@media (
+    max-width: 700px
+) {
 
-  .slc-page {
+    .slc-page {
 
-    padding:
-      20px
-      12px
-      92px;
+        padding:
+            17px 8px 95px;
 
-  }
+    }
 
 
-  /* PAGE HEADER */
+    .slc-page-header {
 
-  .slc-heading {
+        align-items:
+            flex-start;
 
-    align-items:
-      flex-start;
+        flex-direction:
+            column;
 
-    flex-direction:
-      column;
+        gap:
+            12px;
 
-    gap:
-      12px;
+        margin-bottom:
+            15px;
 
-    margin-bottom:
-      18px;
+    }
 
-  }
 
+    .slc-page-header h1 {
 
-  .slc-heading h1 {
+        font-size:
+            1.35rem;
 
-    font-size:
-      1.5rem;
+    }
 
-  }
 
+    .slc-page-header p {
 
-  .slc-heading p {
+        font-size:
+            .7rem;
 
-    font-size:
-      .75rem;
+    }
 
-    line-height:
-      1.55;
 
-  }
+    .slc-quiz-info {
 
+        width:
+            100%;
 
-  .slc-week-chip {
+        align-items:
+            flex-start;
 
-    font-size:
-      .64rem;
+        padding:
+            10px 12px;
 
-    padding:
-      9px 11px;
+    }
 
-  }
 
+    .slc-status {
 
-  /* HERO */
+        margin-bottom:
+            13px;
 
-  .slc-status-card {
+        padding:
+            10px 12px;
 
-    grid-template-columns:
-      1fr;
+        font-size:
+            .66rem;
 
-    min-height:
-      auto;
+    }
 
-    gap:
-      17px;
 
-    padding:
-      22px;
+    .slc-card {
 
-    border-radius:
-      22px;
+        border-radius:
+            15px;
 
-  }
+    }
 
 
-  .slc-status-copy h2 {
+    .slc-card-heading {
 
-    font-size:
-      1.2rem;
+        padding:
+            19px 15px 16px;
 
-  }
+    }
 
 
-  .slc-status-copy p {
+    .slc-heading-icon {
 
-    font-size:
-      .75rem;
+        width:
+            35px;
 
-  }
+        height:
+            35px;
 
+        flex-basis:
+            35px;
 
-  .slc-status-visual {
+        border-radius:
+            10px;
 
-    width:
-      62px;
+    }
 
-    height:
-      62px;
 
-    border-radius:
-      18px;
+    .slc-card-heading h2 {
 
-  }
+        font-size:
+            .9rem;
 
+    }
 
-  .slc-status-visual i {
 
-    font-size:
-      1.55rem;
+    .slc-card-heading p {
 
-  }
+        font-size:
+            .63rem;
 
+    }
 
-  /* CARDS */
 
-  .slc-card-pad {
+    .slc-participant-main {
 
-    padding:
-      19px 15px;
+        padding:
+            17px 15px 19px;
 
-  }
+    }
 
 
-  .slc-section-title {
+    .slc-select,
+    .slc-input {
 
-    margin-bottom:
-      16px;
+        min-height:
+            44px;
 
-  }
+        font-size:
+            .7rem;
 
+    }
 
-  .slc-section-icon {
 
-    width:
-      36px;
+    .slc-btn {
 
-    height:
-      36px;
+        min-height:
+            44px;
 
-    flex-basis:
-      36px;
+        font-size:
+            .68rem;
 
-    border-radius:
-      11px;
+    }
 
-  }
 
+    .slc-participant-form > .slc-btn {
 
-  .slc-section-title h2 {
+        width:
+            100%;
 
-    font-size:
-      .94rem;
+    }
 
-  }
 
+    .slc-add-row {
 
-  .slc-section-title p {
+        flex-direction:
+            column;
 
-    font-size:
-      .68rem;
+    }
 
-  }
 
+    .slc-add-row .slc-btn {
 
-  /* PARTICIPANT NOTE */
+        width:
+            100%;
 
-  .slc-participant-note {
+    }
 
-    padding:
-      14px;
 
-  }
+    .slc-participant-info {
 
+        padding:
+            17px;
 
-  .slc-participant-note strong {
+    }
 
-    font-size:
-      .75rem;
 
-  }
+    .slc-participant-info h3 {
 
+        font-size:
+            .75rem;
 
-  .slc-participant-note p {
+    }
 
-    font-size:
-      .66rem;
 
-  }
+    .slc-participant-info p {
 
+        font-size:
+            .63rem;
 
-  /* NEW MEMBER */
+    }
 
-  .slc-new-member {
 
-    flex-direction:
-      column;
+    .slc-reflection-intro {
 
-  }
+        margin:
+            15px;
 
+        padding:
+            11px;
 
-  .slc-new-member .slc-btn {
+    }
 
-    width:
-      100%;
 
-  }
+    .slc-reflection-grid {
 
+        gap:
+            17px;
 
-  /* INPUTS */
+        padding:
+            0 15px;
 
-  .slc-select,
-  .slc-input {
+    }
 
-    min-height:
-      45px;
 
-    font-size:
-      .75rem;
+    .slc-reflection-field label {
 
-  }
+        font-size:
+            .66rem;
 
+    }
 
-  .slc-textarea {
 
-    min-height:
-      125px;
+    .slc-reflection-field textarea {
 
-    font-size:
-      .75rem;
+        min-height:
+            125px;
 
-  }
+        font-size:
+            .68rem;
 
+    }
 
-  /* REFLECTION */
 
-  .slc-reflection-field label {
+    .slc-reflection-progress {
 
-    font-size:
-      .7rem;
+        margin:
+            18px 15px 0;
 
-  }
+    }
 
 
-  .slc-reflection-submit {
+    .slc-reflection-progress-top span {
 
-    align-items:
-      stretch;
+        font-size:
+            .58rem;
 
-    flex-direction:
-      column;
+    }
 
-  }
 
+    .slc-reflection-actions {
 
-  .slc-reflection-submit .slc-btn {
+        margin:
+            16px 15px 19px;
 
-    width:
-      100%;
+    }
 
-  }
 
+    .slc-reflection-actions .slc-btn {
 
-  /* ANSWERS */
+        width:
+            100%;
 
-  .slc-options {
+    }
 
-    grid-template-columns:
-      1fr;
 
-  }
+    .slc-quiz-top {
 
+        align-items:
+            flex-start;
 
-  .slc-question-card {
+        flex-direction:
+            column;
 
-    padding:
-      16px;
+        padding:
+            18px 15px 15px;
 
-  }
+    }
 
 
-  .slc-question-text {
+    .slc-quiz-top h2 {
 
-    font-size:
-      .75rem;
+        font-size:
+            .9rem;
 
-  }
+    }
 
 
-  .slc-option-label {
+    .slc-quiz-top p {
 
-    min-height:
-      50px;
+        font-size:
+            .63rem;
 
-    font-size:
-      .7rem;
+    }
 
-  }
 
+    #questions {
 
-  /* QUIZ HEADER */
+        padding:
+            15px 8px 0;
 
-  .slc-quiz-header {
+    }
 
-    flex-direction:
-      column;
 
-  }
+    .question-card {
 
+        margin-bottom:
+            11px;
 
-  .slc-quiz-badge {
+        padding:
+            15px;
 
-    align-self:
-      flex-start;
+        border-radius:
+            13px;
 
-  }
+    }
 
 
-  .slc-submit-main {
+    .question-number {
 
-    width:
-      100%;
+        font-size:
+            .53rem;
 
-  }
+    }
 
 
-  .slc-quiz-submit {
+    .question-card h3 {
 
-    display:
-      block;
+        font-size:
+            .7rem;
 
-  }
+    }
 
 
-  /* LOCKED / COMPLETED */
+    .options {
 
-  .slc-locked-card,
-  .slc-completed-card {
+        grid-template-columns:
+            1fr;
 
-    padding:
-      34px 17px;
+        gap:
+            8px;
 
-  }
+    }
 
 
-  .slc-locked-card h2,
-  .slc-completed-card h2 {
+    .option {
 
-    font-size:
-      1.05rem;
+        min-height:
+            49px;
 
-  }
+        padding:
+            9px 11px;
 
+        font-size:
+            .65rem;
 
-  .slc-locked-card p,
-  .slc-completed-card p {
+    }
 
-    font-size:
-      .72rem;
 
-  }
+    .slc-submit-area {
 
+        display:
+            block;
 
-  .slc-completed-actions .slc-btn {
+        margin:
+            17px 15px 19px;
 
-    width:
-      100%;
+    }
 
-  }
+
+    .slc-submit-btn {
+
+        width:
+            100%;
+
+    }
+
+
+    .slc-state-card {
+
+        padding:
+            35px 16px;
+
+    }
+
+
+    .slc-state-card h2 {
+
+        font-size:
+            1.05rem;
+
+    }
+
+
+    .slc-state-card p {
+
+        font-size:
+            .67rem;
+
+    }
+
+
+    .slc-completed-actions {
+
+        flex-direction:
+            column;
+
+    }
+
+
+    .slc-completed-actions .purple-btn {
+
+        width:
+            100%;
+
+    }
 
 }
 
 
 /* ============================================================
-   VERY SMALL PHONES
-   ============================================================ */
+   SMALL PHONES
+============================================================ */
 
-@media (max-width: 380px) {
+@media (
+    max-width: 380px
+) {
 
-  .slc-page {
+    .slc-page {
 
-    padding-left:
-      9px;
+        padding-left:
+            6px;
 
-    padding-right:
-      9px;
+        padding-right:
+            6px;
 
-  }
-
-
-  .slc-status-card {
-
-    padding:
-      18px;
-
-  }
+    }
 
 
-  .slc-card-pad {
+    .slc-page-header h1 {
 
-    padding:
-      17px 12px;
+        font-size:
+            1.25rem;
 
-  }
-
-
-  .slc-question-card {
-
-    padding:
-      14px;
-
-  }
+    }
 
 
-  .slc-option-label {
+    .slc-card-heading {
 
-    padding:
-      9px 10px;
+        padding-left:
+            13px;
 
-  }
+        padding-right:
+            13px;
+
+    }
+
+
+    .slc-participant-main {
+
+        padding-left:
+            13px;
+
+        padding-right:
+            13px;
+
+    }
+
+
+    #questions {
+
+        padding-left:
+            5px;
+
+        padding-right:
+            5px;
+
+    }
+
+
+    .question-card {
+
+        padding:
+            13px;
+
+    }
 
 }
