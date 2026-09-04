@@ -431,52 +431,74 @@
              CONTENT
         ================================================== -->
 
-        <main
-            class="dashboard-content results-page"
-        >
+        <main class="dashboard-content results-page">
 
-            <div
-                class="dashboard-container results-container"
-            >
+            <div class="dashboard-container results-container">
 
 
                 <!-- =========================================
-                     HERO
+                     PAGE INTRODUCTION
                 ========================================== -->
 
-                <section
-                    class="results-hero"
-                >
+                <section class="results-intro">
 
-                    <div>
+                    <div class="results-intro-content">
 
-                        <span class="eyebrow">
-                            GROWTH TRACKER
-                        </span>
+                        <div class="results-intro-copy">
 
-                        <h1>
-                            My SLC Results
-                        </h1>
+                            <span class="eyebrow">
+                                SUNDAY LESSON CHALLENGE
+                            </span>
 
-                        <p>
-                            See your quiz performance,
-                            points earned, and review your
-                            previous answers.
-                        </p>
+                            <h1>
+                                My Quiz Results
+                            </h1>
 
-                    </div>
+                            <p>
+                                Track every Sunday Lesson Challenge
+                                you have completed, see your points,
+                                and review your answers whenever you
+                                want.
+                            </p>
+
+                        </div>
 
 
-                    <div
-                        class="results-member"
-                        id="resultsMember"
-                    >
+                        <!-- MEMBER LOCKED DISPLAY -->
 
-                        <i class="fa-solid fa-user"></i>
+                        <div
+                            class="results-member-card"
+                            id="resultsMember"
+                        >
 
-                        <span>
-                            Loading participant...
-                        </span>
+                            <div class="results-member-icon">
+
+                                <i class="fa-solid fa-user"></i>
+
+                            </div>
+
+
+                            <div class="results-member-info">
+
+                                <span>
+                                    RESULTS FOR
+                                </span>
+
+                                <strong
+                                    id="resultsMemberName"
+                                >
+                                    Loading...
+                                </strong>
+
+                            </div>
+
+
+                            <i
+                                class="fa-solid fa-lock results-lock-icon"
+                                aria-hidden="true"
+                            ></i>
+
+                        </div>
 
                     </div>
 
@@ -484,15 +506,105 @@
 
 
                 <!-- =========================================
-                     STATUS
+                     STATUS MESSAGE
                 ========================================== -->
 
                 <div
                     class="results-message"
                     id="resultsMessage"
+                    role="status"
+                    aria-live="polite"
                 >
+
                     Loading your results...
+
                 </div>
+
+
+                <!-- =========================================
+                     SUMMARY
+                ========================================== -->
+
+                <section
+                    class="results-summary hidden"
+                    id="resultsSummary"
+                >
+
+                    <div class="summary-card">
+
+                        <div class="summary-icon">
+
+                            <i class="fa-solid fa-clipboard-check"></i>
+
+                        </div>
+
+                        <div>
+
+                            <span>
+                                QUIZZES COMPLETED
+                            </span>
+
+                            <strong
+                                id="summaryQuizCount"
+                            >
+                                0
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="summary-card">
+
+                        <div class="summary-icon">
+
+                            <i class="fa-solid fa-star"></i>
+
+                        </div>
+
+                        <div>
+
+                            <span>
+                                TOTAL POINTS
+                            </span>
+
+                            <strong
+                                id="summaryPoints"
+                            >
+                                0
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="summary-card">
+
+                        <div class="summary-icon">
+
+                            <i class="fa-solid fa-chart-line"></i>
+
+                        </div>
+
+                        <div>
+
+                            <span>
+                                BEST SCORE
+                            </span>
+
+                            <strong
+                                id="summaryBestScore"
+                            >
+                                -
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </section>
 
 
                 <!-- =========================================
@@ -500,107 +612,153 @@
                 ========================================== -->
 
                 <section
-                    class="result-highlight hidden"
+                    class="latest-result-card hidden"
                     id="latestResult"
                 >
 
-                    <div class="result-highlight-label">
+                    <div class="latest-result-top">
 
-                        <span class="eyebrow">
-                            LATEST RESULT
-                        </span>
+                        <div>
 
-                        <span id="latestLesson">
-                            Lesson
-                        </span>
-
-                    </div>
-
-
-                    <div class="latest-score-row">
-
-                        <div class="score-circle">
-
-                            <strong id="latestScore">
-                                0
-                            </strong>
-
-                            <span>
-                                SCORE
+                            <span class="eyebrow">
+                                MOST RECENT RESULT
                             </span>
+
+                            <h2
+                                id="latestTitle"
+                            >
+                                Your Latest Quiz
+                            </h2>
 
                         </div>
 
 
-                        <div class="latest-details">
+                        <div
+                            class="lesson-pill"
+                            id="latestLesson"
+                        >
+                            Lesson
+                        </div>
 
-                            <h2 id="latestTitle">
-                                Your latest SLC result
-                            </h2>
+                    </div>
 
 
-                            <p id="latestDate">
+                    <div class="latest-result-content">
+
+
+                        <!-- SCORE -->
+
+                        <div class="latest-score-box">
+
+                            <span>
+                                YOUR SCORE
+                            </span>
+
+                            <div class="latest-score-value">
+
+                                <strong
+                                    id="latestScore"
+                                >
+                                    0
+                                </strong>
+
+                                <span
+                                    id="latestTotal"
+                                >
+                                    / 0
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- DETAILS -->
+
+                        <div class="latest-result-details">
+
+                            <p
+                                class="latest-result-date"
+                                id="latestDate"
+                            >
                                 Completed
                             </p>
 
 
-                            <div class="latest-stats">
+                            <div class="latest-stat-grid">
 
-                                <div>
+                                <div class="latest-stat">
 
                                     <span>
-                                        Points
+                                        Points Earned
                                     </span>
 
-                                    <strong id="latestPoints">
+                                    <strong
+                                        id="latestPoints"
+                                    >
                                         0
                                     </strong>
 
                                 </div>
 
 
-                                <div>
+                                <div class="latest-stat">
 
                                     <span>
-                                        Total
+                                        Performance
                                     </span>
 
-                                    <strong id="latestTotal">
-                                        0
+                                    <strong
+                                        id="latestPerformance"
+                                    >
+                                        -
                                     </strong>
 
                                 </div>
 
                             </div>
 
+
+                            <p
+                                class="latest-result-note"
+                                id="latestNote"
+                            >
+                                Well done for completing this quiz.
+                            </p>
+
                         </div>
 
                     </div>
 
 
-                    <button
-                        type="button"
-                        class="purple-btn"
-                        id="latestReviewBtn"
-                    >
+                    <div class="latest-result-actions">
 
-                        <span>
-                            Review Latest Answers
-                        </span>
+                        <button
+                            type="button"
+                            class="purple-btn"
+                            id="latestReviewBtn"
+                        >
 
-                        <i class="fa-solid fa-arrow-right"></i>
+                            <span>
+                                Review My Answers
+                            </span>
 
-                    </button>
+                            <i class="fa-solid fa-arrow-right"></i>
+
+                        </button>
+
+                    </div>
 
                 </section>
 
 
                 <!-- =========================================
-                     HISTORY
+                     QUIZ HISTORY
                 ========================================== -->
 
                 <section
-                    class="results-card"
+                    class="results-card history-card"
+                    id="historySection"
                 >
 
                     <div class="results-card-header">
@@ -614,6 +772,11 @@
                             <h2>
                                 Your SLC Journey
                             </h2>
+
+                            <p>
+                                Every Sunday Lesson Challenge you have
+                                completed appears here.
+                            </p>
 
                         </div>
 
@@ -631,13 +794,25 @@
                     <div
                         class="history-list"
                         id="historyList"
-                    ></div>
+                    >
+
+                        <div class="history-loading">
+
+                            <i class="fa-solid fa-spinner fa-spin"></i>
+
+                            <span>
+                                Loading quiz history...
+                            </span>
+
+                        </div>
+
+                    </div>
 
                 </section>
 
 
                 <!-- =========================================
-                     REVIEW
+                     ANSWER REVIEW
                 ========================================== -->
 
                 <section
@@ -653,12 +828,17 @@
                                 ANSWER REVIEW
                             </span>
 
-                            <h2 id="reviewTitle">
-                                Review Answers
+                            <h2
+                                id="reviewTitle"
+                            >
+                                Review My Answers
                             </h2>
 
-                            <p id="reviewSubtitle">
-                                See how you answered each question.
+                            <p
+                                id="reviewSubtitle"
+                            >
+                                See the answers you selected and the
+                                correct answers for this quiz.
                             </p>
 
                         </div>
@@ -668,7 +848,7 @@
                             type="button"
                             class="close-review-btn"
                             id="closeReviewBtn"
-                            aria-label="Close review"
+                            aria-label="Close answer review"
                         >
 
                             <i class="fa-solid fa-xmark"></i>
@@ -702,24 +882,78 @@
                     </div>
 
 
+                    <span class="eyebrow">
+                        NO RESULTS YET
+                    </span>
+
+
                     <h2>
-                        No quiz results yet
+                        Your quiz journey starts here
                     </h2>
 
 
                     <p>
-                        Complete your first SLC quiz and
-                        your results will appear here.
+                        Once you complete a Sunday Lesson Challenge,
+                        your score, points, and answer review will
+                        appear on this page.
                     </p>
 
 
                     <a
-                        href="slcquiz.html"
+                        href="slcquiz"
                         class="purple-btn"
                     >
 
                         <span>
                             Take This Week's Quiz
+                        </span>
+
+                        <i class="fa-solid fa-arrow-right"></i>
+
+                    </a>
+
+                </section>
+
+
+                <!-- =========================================
+                     NO MEMBER STATE
+                ========================================== -->
+
+                <section
+                    class="results-card no-member-results hidden"
+                    id="noMemberResults"
+                >
+
+                    <div class="empty-results-icon">
+
+                        <i class="fa-solid fa-user-lock"></i>
+
+                    </div>
+
+
+                    <span class="eyebrow">
+                        PARTICIPANT REQUIRED
+                    </span>
+
+
+                    <h2>
+                        We could not identify your results
+                    </h2>
+
+
+                    <p>
+                        Please take a quiz or select your participant
+                        before checking your SLC results.
+                    </p>
+
+
+                    <a
+                        href="slcquiz"
+                        class="purple-btn"
+                    >
+
+                        <span>
+                            Go to SLC Quiz
                         </span>
 
                         <i class="fa-solid fa-arrow-right"></i>
@@ -808,6 +1042,10 @@
 
 </div>
 
+
+<!-- =====================================================
+     SCRIPTS
+===================================================== -->
 
 <script src="../js/main.js"></script>
 
