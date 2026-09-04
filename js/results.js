@@ -14,6 +14,7 @@
    - A result from an old lesson must never be treated as the
      current lesson's completion.
    - Answer review is loaded using memberId + lessonNo.
+   - This page is completely independent from the quiz page.
    ============================================================ */
 
 "use strict";
@@ -24,7 +25,7 @@
 ============================================================ */
 
 const RESULTS_API =
-    "https://script.google.com/macros/s/AKfycbw1mVwpgAcIOSNbpgzy52TFyozEGMtWWwVWUDFaofGNpzsguBIaKR4q1dXVtgVHO2xZ1w/exec";
+    "https://script.google.com/macros/s/AKfycbw1mVwpgAcIOSNbpgzy52TFyozEGMtWWwVWUDFaofGNpsguBIaKR4q1dXVtgVHO2xZ1w/exec";
 
 
 /* ============================================================
@@ -33,6 +34,7 @@ const RESULTS_API =
 
 const RESULTS_MEMBER_KEY =
     "afc_isiu_slc_member_v1";
+
 
 const RESULTS_SESSION_KEY =
     "afc_isiu_slc_quiz_session_v1";
@@ -70,7 +72,9 @@ document.addEventListener(
 
         }
 
+
         setupResultsListeners();
+
 
         await identifyMember();
 
@@ -94,6 +98,7 @@ function showResultElement(id) {
     const element =
         resultElement(id);
 
+
     if (element) {
 
         element.classList.remove("hidden");
@@ -107,6 +112,7 @@ function hideResultElement(id) {
 
     const element =
         resultElement(id);
+
 
     if (element) {
 
@@ -146,7 +152,7 @@ async function identifyMember() {
 
 
     /*
-     * Query lesson is only used to identify which
+     * Lesson number is only used to identify which
      * result should be highlighted.
      */
 
@@ -183,20 +189,12 @@ async function identifyMember() {
                     RESULTS_SESSION_KEY
                 );
 
+
             if (raw) {
 
                 const parsed =
                     JSON.parse(raw);
 
-                const savedLesson =
-                    String(
-                        parsed?.lessonNo || ""
-                    ).trim();
-
-                /*
-                 * Only restore a session that actually
-                 * contains a member ID.
-                 */
 
                 if (
                     parsed &&
@@ -207,6 +205,7 @@ async function identifyMember() {
                         String(
                             parsed.memberId
                         ).trim();
+
 
                     memberName =
                         String(
@@ -246,10 +245,12 @@ async function identifyMember() {
                     RESULTS_MEMBER_KEY
                 );
 
+
             if (raw) {
 
                 const parsed =
                     JSON.parse(raw);
+
 
                 if (
                     parsed &&
@@ -260,6 +261,7 @@ async function identifyMember() {
                         String(
                             parsed.memberId
                         ).trim();
+
 
                     memberName =
                         String(
@@ -296,17 +298,21 @@ async function identifyMember() {
             "Please complete an SLC quiz or select your participant first."
         );
 
+
         hideResultElement(
             "latestResult"
         );
+
 
         hideResultElement(
             "reviewSection"
         );
 
+
         showResultElement(
             "emptyResults"
         );
+
 
         return;
 
@@ -314,6 +320,7 @@ async function identifyMember() {
 
 
     updateMemberDisplay();
+
 
     await loadQuizHistory();
 
@@ -331,9 +338,11 @@ function updateMemberDisplay() {
             "resultsMember"
         );
 
+
     if (!element) {
         return;
     }
+
 
     element.innerHTML = `
 
@@ -410,7 +419,9 @@ async function loadQuizHistory() {
             memberName =
                 data.memberName;
 
+
             updateMemberDisplay();
+
 
             saveResultsMember();
 
@@ -427,7 +438,9 @@ async function loadQuizHistory() {
 
         hideResultsMessage();
 
+
         renderHistory();
+
 
         renderLatestResult();
 
@@ -438,6 +451,7 @@ async function loadQuizHistory() {
             "loadQuizHistory error:",
             error
         );
+
 
         showResultsMessage(
             "Unable to load your results. Please check your connection and try again."
@@ -457,6 +471,7 @@ function saveResultsMember() {
     if (!memberId) {
         return;
     }
+
 
     try {
 
@@ -497,10 +512,12 @@ function renderHistory() {
             "historyList"
         );
 
+
     const count =
         resultElement(
             "historyCount"
         );
+
 
     if (!list) {
         return;
@@ -511,6 +528,7 @@ function renderHistory() {
 
         const quizCount =
             historyData.length;
+
 
         count.textContent =
             `${quizCount} ${
@@ -528,9 +546,11 @@ function renderHistory() {
 
         list.innerHTML = "";
 
+
         showResultElement(
             "emptyResults"
         );
+
 
         return;
 
@@ -557,11 +577,13 @@ function renderHistory() {
                             ""
                         ).trim();
 
+
                     const score =
                         escapeResultHTML(
                             result.score ??
                             "-"
                         );
+
 
                     const points =
                         escapeResultHTML(
@@ -569,6 +591,7 @@ function renderHistory() {
                             result.points ??
                             "0"
                         );
+
 
                     const date =
                         formatDate(
@@ -617,6 +640,14 @@ function renderHistory() {
 
                             </div>
 
+                            <button
+                                type="button"
+                                class="history-review-btn"
+                                data-review-lesson="${escapeResultHTML(lesson)}"
+                            >
+                                Review
+                            </button>
+
                         </div>
 
                     `;
@@ -641,6 +672,7 @@ function renderLatestResult(
             "latestResult"
         );
 
+
     if (!latest) {
         return;
     }
@@ -661,11 +693,6 @@ function renderLatestResult(
 
     let result = null;
 
-
-    /*
-     * If the quiz just redirected here with a lessonNo,
-     * ALWAYS prefer that exact lesson.
-     */
 
     const exactLesson =
         String(
@@ -695,11 +722,6 @@ function renderLatestResult(
 
     }
 
-
-    /*
-     * If no exact lesson was requested,
-     * use the newest result returned by the backend.
-     */
 
     if (!result) {
 
@@ -763,30 +785,36 @@ function renderLatestResult(
             "latestTitle"
         );
 
+
     const lessonElement =
         resultElement(
             "latestLesson"
         );
+
 
     const scoreElement =
         resultElement(
             "latestScore"
         );
 
+
     const totalElement =
         resultElement(
             "latestTotal"
         );
+
 
     const pointsElement =
         resultElement(
             "latestPoints"
         );
 
+
     const dateElement =
         resultElement(
             "latestDate"
         );
+
 
     const reviewButton =
         resultElement(
@@ -890,10 +918,12 @@ async function openReview(lessonNo) {
             "reviewTitle"
         );
 
+
     const subtitle =
         resultElement(
             "reviewSubtitle"
         );
+
 
     const container =
         resultElement(
@@ -991,6 +1021,7 @@ async function openReview(lessonNo) {
                 "reviewSection"
             );
 
+
         if (review) {
 
             setTimeout(
@@ -1057,6 +1088,7 @@ function renderReview(
             "reviewContainer"
         );
 
+
     if (!container) {
         return;
     }
@@ -1073,10 +1105,6 @@ function renderReview(
             ? data.questions
             : [];
 
-
-    /*
-     * Some backend responses may return JSON strings.
-     */
 
     if (
         typeof data.review === "string"
@@ -1205,9 +1233,11 @@ function renderReview(
                                         ] ||
                                         "";
 
+
                                     if (!optionText) {
                                         return "";
                                     }
+
 
                                     const selected =
                                         String(
@@ -1215,14 +1245,17 @@ function renderReview(
                                         ).trim().toUpperCase() ===
                                         letter;
 
+
                                     const correct =
                                         String(
                                             correctAnswer
                                         ).trim().toUpperCase() ===
                                         letter;
 
+
                                     let className =
                                         "review-option";
+
 
                                     if (correct) {
 
@@ -1230,12 +1263,16 @@ function renderReview(
                                             " review-correct";
 
                                     }
-                                    else if (selected && !correct) {
+                                    else if (
+                                        selected &&
+                                        !correct
+                                    ) {
 
                                         className +=
                                             " review-wrong";
 
                                     }
+
 
                                     return `
 
@@ -1321,6 +1358,7 @@ function closeReview() {
         "reviewSection"
     );
 
+
     selectedReviewLesson = "";
 
 }
@@ -1336,6 +1374,7 @@ function setupResultsListeners() {
         resultElement(
             "closeReviewBtn"
         );
+
 
     const latestReviewBtn =
         resultElement(
@@ -1363,6 +1402,7 @@ function setupResultsListeners() {
                     latestReviewBtn.dataset.lesson ||
                     queryLessonNo;
 
+
                 openReview(
                     lesson
                 );
@@ -1374,10 +1414,8 @@ function setupResultsListeners() {
 
 
     /*
-     * Event delegation for history review buttons.
-     *
-     * This also works when history is rendered
-     * dynamically after the API response.
+     * Event delegation for dynamically rendered
+     * history review buttons.
      */
 
     document.addEventListener(
@@ -1389,12 +1427,15 @@ function setupResultsListeners() {
                     "[data-review-lesson]"
                 );
 
+
             if (!button) {
                 return;
             }
 
+
             const lesson =
                 button.dataset.reviewLesson;
+
 
             openReview(
                 lesson
@@ -1419,16 +1460,20 @@ function showResultsMessage(
             "resultsMessage"
         );
 
+
     if (!element) {
         return;
     }
 
+
     element.textContent =
         message;
+
 
     element.classList.remove(
         "hidden"
     );
+
 
     element.classList.add(
         "show"
@@ -1448,13 +1493,16 @@ function hideResultsMessage() {
             "resultsMessage"
         );
 
+
     if (!element) {
         return;
     }
 
+
     element.classList.add(
         "hidden"
     );
+
 
     element.classList.remove(
         "show"
