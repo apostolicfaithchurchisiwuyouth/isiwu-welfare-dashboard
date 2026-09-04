@@ -11,27 +11,38 @@
         ↓
    Lock Participant
         ↓
-   Reflection
+   Check Reflection Status
         ↓
-   Submit Reflection
-        ↓
-   Quiz Unlocks
-        ↓
-   Answer Questions
-        ↓
-   Answers are automatically saved
-        ↓
-   Submit Quiz
-        ↓
-   Individual Result
-        ↓
-   Review Answers
+   ┌───────────────────────────────┐
+   │ Reflection already completed? │
+   └───────────────┬───────────────┘
+                   │
+          YES ─────┴───── NO
+           ↓              ↓
+        Quiz          Reflection
+                          ↓
+                  Submit Reflection
+                          ↓
+                        Quiz
+                          ↓
+                  Answer Questions
+                          ↓
+                 Answers auto-saved
+                          ↓
+                    Submit Quiz
+                          ↓
+                   Individual Result
+                          ↓
+                    Review Answers
 
    IMPORTANT:
 
    - Participant cannot be changed after selection.
-   - Reflection can only be submitted once.
-   - Backend verifies reflection status.
+   - Reflection is checked PER LESSON and PER PARTICIPANT.
+   - Backend is the source of truth for reflection completion.
+   - A completed reflection for Lesson X does NOT unlock Lesson Y.
+   - Returning users are checked against the backend again.
+   - Reflection is never displayed while its status is being checked.
    - Quiz answers are saved locally.
    - Saved answers can be restored after browser/device restart.
    - User can change saved answers before final submission.
@@ -46,7 +57,7 @@
 ============================================================ */
 
 const API =
-    "https://script.google.com/macros/s/AKfycbw1mVwpgAcIOSNbpgzy52TFyozEGMtWWwVWUDFaofGNzpsguBIaKR4q1dXVtgVHO2xZ1w/exec";
+    "https://script.google.com/macros/s/AKfycbw1mVwVpgAcIOSNbpgzy52TFyozEGMtWWwVWUDFaofGNzpsguBIaKR4q1dXVtgVHO2xZ1w/exec";
 
 
 /* ============================================================
@@ -59,16 +70,23 @@ const REFLECTION_MIN_CHARACTERS = 100;
 /*
    Session information.
 
-   sessionStorage is used for the active participant flow.
+   sessionStorage is used only to remember the active
+   participant during the current browser session.
+
+   IMPORTANT:
+   sessionStorage is NOT trusted as proof that a reflection
+   has been completed.
+
+   The backend is checked every time.
 */
 const SESSION_KEY =
     "afc_isiu_slc_quiz_session_v1";
 
 
 /*
-   localStorage is used for answers.
+   localStorage is used for quiz answers.
 
-   This means answers can survive:
+   Answers can survive:
    - browser closing
    - phone restart
    - page refresh
@@ -130,6 +148,13 @@ let quizLoaded = false;
 let quizSubmitted = false;
 
 
+/*
+   Prevent multiple reflection-status requests from
+   interfering with one another.
+*/
+let reflectionCheckInProgress = false;
+
+
 /* ============================================================
    DOM READY
 ============================================================ */
@@ -171,12 +196,21 @@ document.addEventListener(
         await loadMembers();
 
 
+        /*
+           Restore any existing participant session.
+
+           IMPORTANT:
+           restoreQuizSession() will check the backend
+           reflection status for this exact lesson and
+           participant.
+        */
+
         await restoreQuizSession();
 
 
         /*
-        If there is no saved participant,
-        the participant section remains visible.
+           If there is no saved participant,
+           keep participant selection visible.
         */
 
         if (!selectedMemberId) {
@@ -350,6 +384,10 @@ async function loadQuiz() {
             );
 
             hideElement(
+                "lockedParticipantSection"
+            );
+
+            hideElement(
                 "reflectionSection"
             );
 
@@ -399,6 +437,18 @@ async function loadQuiz() {
                 "participantSection"
             );
 
+            hideElement(
+                "lockedParticipantSection"
+            );
+
+            hideElement(
+                "reflectionSection"
+            );
+
+            hideElement(
+                "quizSection"
+            );
+
 
             quizLoaded = false;
 
@@ -436,6 +486,22 @@ async function loadQuiz() {
         quizLoaded = true;
 
 
+        const lessonNumber =
+            getElement(
+                "heroLessonNumber"
+            );
+
+
+        if (lessonNumber) {
+
+            lessonNumber.textContent =
+                selectedLesson
+                    ? `Lesson ${selectedLesson}`
+                    : "Weekly SLC";
+
+        }
+
+
         status.textContent =
             `🟢 Lesson ${selectedLesson} Quiz is Open`;
 
@@ -465,10 +531,25 @@ async function loadQuiz() {
         }
 
 
+        /*
+           At this point nobody has been selected yet.
+
+           Reflection and quiz remain hidden until
+           participant selection is completed.
+        */
+
+        hideElement(
+            "reflectionSection"
+        );
+
+        hideElement(
+            "quizSection"
+        );
+
+
         showElement(
             "participantSection"
         );
-
 
     }
 
@@ -486,6 +567,14 @@ async function loadQuiz() {
 
         hideElement(
             "participantSection"
+        );
+
+        hideElement(
+            "reflectionSection"
+        );
+
+        hideElement(
+            "quizSection"
         );
 
     }
@@ -667,6 +756,11 @@ async function loadMembers() {
             )
         ) {
 
+            console.warn(
+                "Members could not be loaded.",
+                data
+            );
+
             return;
 
         }
@@ -734,8 +828,12 @@ function setupParticipantListeners() {
             "change",
             function () {
 
+                /*
+                   Once a participant has been locked,
+                   the selection cannot be changed.
+                */
+
                 if (
-                    reflectionSubmitted ||
                     selectedMemberId
                 ) {
 
@@ -983,6 +1081,10 @@ async function addNewMember() {
 
 function lockSelectedParticipant() {
 
+    /*
+       Prevent participant from being selected twice.
+    */
+
     if (
         selectedMemberId
     ) {
@@ -1043,8 +1145,12 @@ function lockSelectedParticipant() {
     }
 
 
+    /*
+       Store participant.
+    */
+
     selectedMemberId =
-        memberId;
+        String(memberId).trim();
 
 
     selectedMemberName =
@@ -1052,7 +1158,7 @@ function lockSelectedParticipant() {
 
 
     /*
-       Lock participant.
+       Lock participant controls.
     */
 
     select.disabled =
@@ -1102,8 +1208,15 @@ function lockSelectedParticipant() {
 
 
     /*
-       Save participant session.
+       Save the participant session.
+
+       IMPORTANT:
+       reflectionSubmitted is NOT trusted here.
     */
+
+    reflectionSubmitted =
+        false;
+
 
     saveQuizSession();
 
@@ -1137,13 +1250,15 @@ function lockSelectedParticipant() {
 
 
     /*
-       Check backend reflection status.
+       Do NOT immediately show reflection.
 
-       If already completed:
-       go straight to quiz.
+       We first check the backend.
 
-       If not:
-       show reflection.
+       If reflection exists:
+           → Quiz
+
+       If reflection does not exist:
+           → Reflection
     */
 
     checkReflectionStatus();
@@ -1271,6 +1386,8 @@ async function restoreQuizSession() {
 
     /*
        Never restore another week's quiz.
+
+       This makes the session lesson-specific.
     */
 
     if (
@@ -1316,6 +1433,12 @@ async function restoreQuizSession() {
     }
 
 
+    const savedMemberId =
+        String(
+            saved.memberId
+        ).trim();
+
+
     const option =
         Array.from(
             select.options
@@ -1323,8 +1446,11 @@ async function restoreQuizSession() {
             function (item) {
 
                 return (
-                    item.value ===
-                    saved.memberId
+                    String(
+                        item.value
+                    ).trim()
+                    ===
+                    savedMemberId
                 );
 
             }
@@ -1344,12 +1470,22 @@ async function restoreQuizSession() {
 
 
     selectedMemberId =
-        saved.memberId;
+        savedMemberId;
 
 
     selectedMemberName =
         saved.memberName ||
         option.textContent.trim();
+
+
+    /*
+       Never trust saved reflectionSubmitted.
+
+       The backend must verify it again.
+    */
+
+    reflectionSubmitted =
+        false;
 
 
     const lockedName =
@@ -1377,9 +1513,8 @@ async function restoreQuizSession() {
 
 
     /*
-       Never trust sessionStorage for reflection completion.
-
-       The backend is checked every time.
+       Backend check happens every time the
+       session is restored.
     */
 
     await checkReflectionStatus();
@@ -1701,27 +1836,149 @@ function updateReflectionProgress() {
 
 
 /* ============================================================
-   CHECK REFLECTION STATUS
+   REFLECTION STATUS HELPERS
 ============================================================ */
 
-async function checkReflectionStatus() {
+/*
+   Different backend versions may return completion in
+   slightly different forms.
 
-    if (
-        !selectedMemberId ||
-        !selectedLesson
-    ) {
+   This helper normalizes them into one boolean.
+*/
 
-        return;
+function isReflectionCompleted(data) {
+
+    if (!data) {
+
+        return false;
 
     }
 
 
     /*
-       Always show a small checking state.
+       Boolean true.
     */
 
-    showElement(
+    if (
+        data.completed === true
+    ) {
+
+        return true;
+
+    }
+
+
+    /*
+       String "true".
+    */
+
+    if (
+        String(
+            data.completed ?? ""
+        )
+            .trim()
+            .toLowerCase()
+            ===
+            "true"
+    ) {
+
+        return true;
+
+    }
+
+
+    /*
+       Explicit completed status.
+    */
+
+    if (
+        String(
+            data.status ?? ""
+        )
+            .trim()
+            .toLowerCase()
+        ===
+        "completed"
+    ) {
+
+        return true;
+
+    }
+
+
+    /*
+       Some backend implementations may use
+       already_submitted / submitted.
+    */
+
+    if (
+        data.alreadySubmitted === true ||
+        data.submitted === true
+    ) {
+
+        return true;
+
+    }
+
+
+    if (
+        String(
+            data.alreadySubmitted ?? ""
+        )
+            .trim()
+            .toLowerCase()
+        ===
+        "true"
+    ) {
+
+        return true;
+
+    }
+
+
+    if (
+        String(
+            data.submitted ?? ""
+        )
+            .trim()
+            .toLowerCase()
+        ===
+        "true"
+    ) {
+
+        return true;
+
+    }
+
+
+    return false;
+
+}
+
+
+/* ============================================================
+   SHOW REFLECTION CHECKING STATE
+============================================================ */
+
+function showReflectionCheckingState() {
+
+    /*
+       VERY IMPORTANT:
+
+       Keep the reflection section hidden while
+       the backend is checking.
+
+       This prevents a completed participant from
+       seeing the reflection form again, even briefly.
+    */
+
+    hideElement(
         "reflectionSection"
+    );
+
+
+    hideElement(
+        "quizSection"
     );
 
 
@@ -1742,13 +1999,89 @@ async function checkReflectionStatus() {
 
     }
 
+}
+
+
+/* ============================================================
+   CHECK REFLECTION STATUS
+============================================================ */
+
+async function checkReflectionStatus() {
+
+    if (
+        !selectedMemberId ||
+        !selectedLesson
+    ) {
+
+        return;
+
+    }
+
+
+    /*
+       Prevent duplicate simultaneous checks.
+    */
+
+    if (
+        reflectionCheckInProgress
+    ) {
+
+        return;
+
+    }
+
+
+    reflectionCheckInProgress =
+        true;
+
+
+    /*
+       Make sure the quiz and reflection are both
+       hidden until we know the correct state.
+    */
+
+    showReflectionCheckingState();
+
 
     try {
 
+        const url =
+            `${API}?action=getReflectionStatus` +
+            `&memberId=${encodeURIComponent(selectedMemberId)}` +
+            `&lessonNo=${encodeURIComponent(selectedLesson)}`;
+
+
+        console.log(
+            "Checking reflection:",
+            {
+                memberId:
+                    selectedMemberId,
+
+                lessonNo:
+                    selectedLesson
+            }
+        );
+
+
         const response =
             await fetch(
-                `${API}?action=getReflectionStatus&memberId=${encodeURIComponent(selectedMemberId)}&lessonNo=${encodeURIComponent(selectedLesson)}`
+                url,
+                {
+                    cache:
+                        "no-store"
+                }
             );
+
+
+        if (
+            !response.ok
+        ) {
+
+            throw new Error(
+                `Reflection status request failed: ${response.status}`
+            );
+
+        }
 
 
         const data =
@@ -1762,15 +2095,14 @@ async function checkReflectionStatus() {
 
 
         /*
+           =====================================================
            REFLECTION ALREADY COMPLETED
+           =====================================================
         */
 
         if (
             data.success &&
-            (
-                data.completed === true ||
-                data.status === "completed"
-            )
+            isReflectionCompleted(data)
         ) {
 
             reflectionSubmitted =
@@ -1781,13 +2113,24 @@ async function checkReflectionStatus() {
 
 
             /*
-               VERY IMPORTANT:
+               Clear any old reflection form values.
 
-               Do not show reflection again.
-               Go directly to quiz.
+               This is not required for the backend, but it
+               prevents stale answers from appearing if the
+               section is ever opened later.
+            */
+
+            clearReflectionFields();
+
+
+            /*
+               GO DIRECTLY TO QUIZ.
+
+               The reflection section remains hidden.
             */
 
             unlockQuiz();
+
 
             return;
 
@@ -1795,7 +2138,9 @@ async function checkReflectionStatus() {
 
 
         /*
+           =====================================================
            REFLECTION NOT COMPLETED
+           =====================================================
         */
 
         reflectionSubmitted =
@@ -1805,14 +2150,29 @@ async function checkReflectionStatus() {
         saveQuizSession();
 
 
+        /*
+           Quiz must remain locked until reflection
+           is successfully completed.
+        */
+
         hideElement(
             "quizSection"
         );
 
 
+        /*
+           Now — and only now — display reflection.
+        */
+
         showElement(
             "reflectionSection"
         );
+
+
+        const message =
+            getElement(
+                "reflectionMessage"
+            );
 
 
         if (message) {
@@ -1829,6 +2189,39 @@ async function checkReflectionStatus() {
 
         updateReflectionProgress();
 
+
+        /*
+           Scroll to reflection so the user sees
+           the correct step after participant selection.
+        */
+
+        setTimeout(
+            function () {
+
+                const reflection =
+                    getElement(
+                        "reflectionSection"
+                    );
+
+
+                if (reflection) {
+
+                    reflection.scrollIntoView({
+
+                        behavior:
+                            "smooth",
+
+                        block:
+                            "start"
+
+                    });
+
+                }
+
+            },
+            100
+        );
+
     }
 
     catch (error) {
@@ -1836,6 +2229,24 @@ async function checkReflectionStatus() {
         console.error(
             "checkReflectionStatus error:",
             error
+        );
+
+
+        /*
+           IMPORTANT:
+
+           If we cannot verify the backend status,
+           do NOT assume the reflection was completed.
+
+           Also do NOT unlock the quiz.
+        */
+
+        reflectionSubmitted =
+            false;
+
+
+        hideElement(
+            "quizSection"
         );
 
 
@@ -1858,10 +2269,54 @@ async function checkReflectionStatus() {
 
             errorMessage.textContent =
                 "We could not check your reflection status. Please check your connection and try again.";
-
         }
 
     }
+
+    finally {
+
+        reflectionCheckInProgress =
+            false;
+
+    }
+
+}
+
+
+/* ============================================================
+   CLEAR REFLECTION FIELDS
+============================================================ */
+
+function clearReflectionFields() {
+
+    const ids = [
+
+        "reflection1",
+        "reflection2",
+        "reflection3"
+
+    ];
+
+
+    ids.forEach(
+        function (id) {
+
+            const field =
+                getElement(id);
+
+
+            if (field) {
+
+                field.value =
+                    "";
+
+            }
+
+        }
+    );
+
+
+    updateReflectionProgress();
 
 }
 
@@ -1996,7 +2451,8 @@ async function submitReflection() {
                 API,
                 {
 
-                    method: "POST",
+                    method:
+                        "POST",
 
                     body:
                         JSON.stringify({
@@ -2025,6 +2481,17 @@ async function submitReflection() {
             );
 
 
+        if (
+            !response.ok
+        ) {
+
+            throw new Error(
+                `Reflection submission failed: ${response.status}`
+            );
+
+        }
+
+
         const data =
             await response.json();
 
@@ -2036,10 +2503,9 @@ async function submitReflection() {
 
 
         /*
-           Backend may tell us that the reflection
-           was already submitted.
-
-           Treat that as completed.
+           =====================================================
+           BACKEND SAYS REFLECTION ALREADY EXISTS
+           =====================================================
         */
 
         if (
@@ -2047,8 +2513,7 @@ async function submitReflection() {
         ) {
 
             if (
-                data.status === "completed" ||
-                data.completed === true
+                isReflectionCompleted(data)
             ) {
 
                 reflectionSubmitted =
@@ -2057,6 +2522,12 @@ async function submitReflection() {
 
                 saveQuizSession();
 
+
+                /*
+                   Do NOT show reflection again.
+
+                   Go directly to quiz.
+                */
 
                 unlockQuiz();
 
@@ -2087,7 +2558,9 @@ async function submitReflection() {
 
 
         /*
-           Reflection successfully saved.
+           =====================================================
+           REFLECTION SUCCESSFULLY SAVED
+           =====================================================
         */
 
         reflectionSubmitted =
@@ -2108,6 +2581,11 @@ async function submitReflection() {
 
         }
 
+
+        /*
+           Small transition delay so the user can see
+           the successful save message.
+        */
 
         setTimeout(
             function () {
@@ -2231,8 +2709,15 @@ function unlockQuiz() {
 
 
     /*
-       Reflection is permanently skipped
-       once backend confirms completion.
+       =====================================================
+       REFLECTION IS HIDDEN
+       =====================================================
+
+       This is the key behavior.
+
+       Once the backend has confirmed that this participant
+       has completed the reflection for THIS lesson, the
+       reflection step is skipped.
     */
 
     hideElement(
@@ -2253,6 +2738,10 @@ function unlockQuiz() {
 
     restoreSavedAnswers();
 
+
+    /*
+       Show quiz.
+    */
 
     showElement(
         "quizSection"
@@ -2294,9 +2783,11 @@ function unlockQuiz() {
 
                 quiz.scrollIntoView({
 
-                    behavior: "smooth",
+                    behavior:
+                        "smooth",
 
-                    block: "start"
+                    block:
+                        "start"
 
                 });
 
@@ -2562,6 +3053,7 @@ function saveCurrentAnswers() {
         localStorage.setItem(
             key,
             JSON.stringify({
+
                 lessonNo:
                     selectedLesson,
 
@@ -2573,6 +3065,7 @@ function saveCurrentAnswers() {
 
                 savedAt:
                     new Date().toISOString()
+
             })
         );
 
@@ -2829,9 +3322,11 @@ async function submitQuiz() {
 
                 questionCards[i].scrollIntoView({
 
-                    behavior: "smooth",
+                    behavior:
+                        "smooth",
 
-                    block: "center"
+                    block:
+                        "center"
 
                 });
 
@@ -2904,6 +3399,17 @@ async function submitQuiz() {
             );
 
 
+        if (
+            !response.ok
+        ) {
+
+            throw new Error(
+                `Quiz submission failed: ${response.status}`
+            );
+
+        }
+
+
         const data =
             await response.json();
 
@@ -2934,14 +3440,14 @@ async function submitQuiz() {
                 saveQuizSession();
 
 
-                showElement(
-                    "reflectionSection"
-                );
+                /*
+                   Do not assume the reflection is missing.
 
+                   Check the backend again before deciding
+                   whether to show the reflection.
+                */
 
-                hideElement(
-                    "quizSection"
-                );
+                await checkReflectionStatus();
 
 
                 alert(
@@ -2950,9 +3456,12 @@ async function submitQuiz() {
                 );
 
 
-                await checkReflectionStatus();
+                restoreSubmitButton();
+
+                return;
 
             }
+
 
             else {
 
@@ -2972,7 +3481,9 @@ async function submitQuiz() {
 
 
         /*
-           Quiz successfully submitted.
+           =====================================================
+           QUIZ SUCCESSFULLY SUBMITTED
+           =====================================================
         */
 
         quizSubmitted =
@@ -3123,15 +3634,6 @@ async function submitQuiz() {
         }
 
 
-        /*
-           FIX:
-           These fields already have labels
-           above them in HTML.
-
-           Therefore only the numbers should
-           be displayed here.
-        */
-
         if (pointsText) {
 
             pointsText.textContent =
@@ -3150,9 +3652,11 @@ async function submitQuiz() {
 
         window.scrollTo({
 
-            top: 0,
+            top:
+                0,
 
-            behavior: "smooth"
+            behavior:
+                "smooth"
 
         });
 
@@ -3487,9 +3991,11 @@ function showReview() {
 
     window.scrollTo({
 
-        top: 0,
+        top:
+            0,
 
-        behavior: "smooth"
+        behavior:
+            "smooth"
 
     });
 
@@ -3514,9 +4020,11 @@ function hideReview() {
 
     window.scrollTo({
 
-        top: 0,
+        top:
+            0,
 
-        behavior: "smooth"
+        behavior:
+            "smooth"
 
     });
 
@@ -3622,9 +4130,11 @@ function openSavedScore() {
 
     window.scrollTo({
 
-        top: 0,
+        top:
+            0,
 
-        behavior: "smooth"
+        behavior:
+            "smooth"
 
     });
 
@@ -3695,9 +4205,6 @@ function backToQuiz() {
     /*
        Once a quiz has been successfully submitted,
        NEVER reopen the actual quiz.
-
-       The results page will eventually handle
-       the result/review experience separately.
     */
 
     if (
@@ -3726,9 +4233,11 @@ function backToQuiz() {
 
         window.scrollTo({
 
-            top: 0,
+            top:
+                0,
 
-            behavior: "smooth"
+            behavior:
+                "smooth"
 
         });
 
@@ -3764,6 +4273,11 @@ function backToQuiz() {
         );
 
 
+        hideElement(
+            "reflectionSection"
+        );
+
+
         restoreSavedAnswers();
 
     }
@@ -3779,9 +4293,11 @@ function backToQuiz() {
 
     window.scrollTo({
 
-        top: 0,
+        top:
+            0,
 
-        behavior: "smooth"
+        behavior:
+            "smooth"
 
     });
 
