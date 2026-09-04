@@ -13,6 +13,8 @@
 
     width: 100%;
 
+    box-sizing: border-box;
+
 }
 
 
@@ -36,9 +38,67 @@
 }
 
 
+/* ============================================================
+   FONT CONTROL
+   IMPORTANT:
+   Keep headings on Bricolage Grotesque.
+   Keep normal content on DM Sans.
+============================================================ */
+
+.slcquiz-page h1,
+.slcquiz-page h2,
+.slcquiz-page h3,
+.slcquiz-page h4,
+.slcquiz-page button,
+.slcquiz-page .section-heading span,
+.slcquiz-page .quiz-hero-kicker,
+.slcquiz-page .quiz-hero-badge,
+.slcquiz-page .quiz-status,
+.slcquiz-page .quiz-ready-card span,
+.slcquiz-page .question-number,
+.slcquiz-page .questions-header span,
+.slcquiz-page .question-count-badge,
+.slcquiz-page .reflection-number,
+.slcquiz-page .reflection-header span,
+.slcquiz-page .reflection-question label,
+.slcquiz-page .reflection-progress-top strong,
+.slcquiz-page .result-eyebrow,
+.slcquiz-page .score-number,
+.slcquiz-page .review-header-card span {
+
+    font-family:
+        "Bricolage Grotesque",
+        sans-serif;
+
+}
+
+
+.slcquiz-page p,
+.slcquiz-page span,
+.slcquiz-page label,
+.slcquiz-page input,
+.slcquiz-page select,
+.slcquiz-page textarea {
+
+    font-family:
+        "DM Sans",
+        sans-serif;
+
+}
+
+
+/* ============================================================
+   GENERAL
+============================================================ */
+
+.hidden {
+
+    display: none !important;
+
+}
+
+
 .quiz-step-section,
-.saved-section,
-.locked-participant-section,
 .result-section,
 .review-section {
 
@@ -47,22 +107,8 @@
 }
 
 
-.quiz-card,
-.saved-card,
-.reflection-card,
-.questions-card,
-.result-card,
-.review-header-card,
-.locked-participant-card,
-.quiz-ready-card {
-
-    width: 100%;
-
-}
-
-
 /* ============================================================
-   HERO
+   QUIZ HERO
 ============================================================ */
 
 .quiz-hero {
@@ -73,9 +119,9 @@
 
     width: 100%;
 
-    margin-bottom: 26px;
+    margin-bottom: 28px;
 
-    padding: clamp(25px, 4vw, 42px);
+    padding: 30px;
 
     border-radius: 30px;
 
@@ -83,16 +129,15 @@
 
         linear-gradient(
             135deg,
-            #0a0016 0%,
-            #180021 38%,
-            #4a0754 72%,
-            #65116f 100%
+            #10051a 0%,
+            #21082b 45%,
+            #4a0754 100%
         );
 
     color: #ffffff;
 
     box-shadow:
-        0 25px 65px rgba(74, 7, 84, .20);
+        0 25px 70px rgba(74, 7, 84, .18);
 
     isolation: isolate;
 
@@ -105,26 +150,25 @@
 
     position: absolute;
 
-    width: 360px;
-
-    height: 360px;
-
-    right: -140px;
-
-    top: -170px;
-
-    border-radius: 50%;
+    inset: 0;
 
     background:
+
         radial-gradient(
-            circle,
-            rgba(251, 146, 60, .28),
-            transparent 68%
+            circle at 88% 10%,
+            rgba(234, 88, 12, .24),
+            transparent 28%
+        ),
+
+        radial-gradient(
+            circle at 12% 90%,
+            rgba(139, 92, 246, .18),
+            transparent 34%
         );
 
-    filter: blur(5px);
-
     pointer-events: none;
+
+    z-index: -2;
 
 }
 
@@ -132,32 +176,6 @@
 .quiz-hero::after {
 
     content: "";
-
-    position: absolute;
-
-    width: 300px;
-
-    height: 300px;
-
-    left: -170px;
-
-    bottom: -180px;
-
-    border-radius: 50%;
-
-    background:
-        radial-gradient(
-            circle,
-            rgba(124, 58, 237, .25),
-            transparent 68%
-        );
-
-    pointer-events: none;
-
-}
-
-
-.quiz-hero-grid {
 
     position: absolute;
 
@@ -178,7 +196,7 @@
 
     background-size: 34px 34px;
 
-    opacity: .30;
+    opacity: .28;
 
     pointer-events: none;
 
@@ -191,27 +209,26 @@
 
     position: absolute;
 
-    width: 240px;
+    width: 220px;
 
-    height: 240px;
+    height: 220px;
 
-    right: 17%;
+    top: -120px;
 
-    bottom: -170px;
+    right: 100px;
 
     border-radius: 50%;
 
-    background:
-        rgba(6, 182, 212, .12);
+    background: rgba(234, 88, 12, .12);
 
-    filter: blur(55px);
+    filter: blur(30px);
 
     pointer-events: none;
 
 }
 
 
-.quiz-hero-content {
+.quiz-hero-top {
 
     position: relative;
 
@@ -223,16 +240,9 @@
 
     justify-content: space-between;
 
-    gap: 35px;
+    gap: 20px;
 
-}
-
-
-.quiz-hero-copy {
-
-    min-width: 0;
-
-    max-width: 720px;
+    margin-bottom: 28px;
 
 }
 
@@ -243,27 +253,17 @@
 
     align-items: center;
 
-    gap: 9px;
+    gap: 8px;
 
-    padding: 7px 11px 7px 7px;
-
-    margin-bottom: 17px;
+    padding: 9px 13px;
 
     border-radius: 999px;
 
     background: rgba(255,255,255,.09);
 
-    border: 1px solid rgba(255,255,255,.11);
+    border: 1px solid rgba(255,255,255,.10);
 
-    backdrop-filter: blur(12px);
-
-    -webkit-backdrop-filter: blur(12px);
-
-    font-family:
-        "Bricolage Grotesque",
-        sans-serif;
-
-    font-size: .59rem;
+    font-size: .66rem;
 
     font-weight: 800;
 
@@ -272,134 +272,106 @@
 }
 
 
-.hero-badge-icon {
+.quiz-hero-badge i {
 
-    width: 25px;
+    color: #fb923c;
 
-    height: 25px;
+}
 
-    display: inline-flex;
+
+.quiz-hero-icon {
+
+    width: 58px;
+
+    height: 58px;
+
+    flex: 0 0 auto;
+
+    display: flex;
 
     align-items: center;
 
     justify-content: center;
 
-    border-radius: 50%;
+    border-radius: 19px;
 
-    background: #ea580c;
+    background: rgba(255,255,255,.08);
+
+    border: 1px solid rgba(255,255,255,.10);
 
     color: #ffffff;
 
-    font-size: .58rem;
+    font-size: 1.25rem;
 
     box-shadow:
-        0 5px 15px rgba(234,88,12,.25);
+        inset 0 1px 0 rgba(255,255,255,.08);
+
+}
+
+
+.quiz-hero-main {
+
+    position: relative;
+
+    z-index: 2;
+
+    display: grid;
+
+    grid-template-columns: minmax(0, 1.35fr) minmax(260px, .65fr);
+
+    gap: 45px;
+
+    align-items: center;
+
+}
+
+
+.quiz-hero-copy {
+
+    min-width: 0;
+
+}
+
+
+.quiz-hero-kicker {
+
+    display: block;
+
+    margin-bottom: 9px;
+
+    color: rgba(255,255,255,.55);
+
+    font-size: .62rem;
+
+    font-weight: 800;
+
+    letter-spacing: .12em;
 
 }
 
 
 .quiz-hero h1 {
 
-    margin: 0;
+    max-width: 650px;
 
-    max-width: 680px;
+    margin: 0 0 13px;
 
-    font-family:
-        "Bricolage Grotesque",
-        sans-serif;
+    font-size: clamp(1.65rem, 4vw, 2.65rem);
 
-    font-size: clamp(2rem, 5vw, 3.45rem);
-
-    line-height: .98;
-
-    letter-spacing: -.045em;
+    line-height: 1.02;
 
     font-weight: 800;
+
+    letter-spacing: -.035em;
 
 }
 
 
 .quiz-hero h1 span {
 
-    color: #fb925c;
+    display: block;
 
-}
-
-
-.quiz-hero p {
-
-    max-width: 610px;
-
-    margin: 17px 0 0;
-
-    font-family:
-        "DM Sans",
-        sans-serif;
-
-    font-size: .78rem;
-
-    line-height: 1.65;
-
-    color: rgba(255,255,255,.74);
-
-}
-
-
-.quiz-hero-meta {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 15px;
-
-    margin-top: 24px;
-
-}
-
-
-.hero-meta-item {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 8px;
-
-    color: rgba(255,255,255,.62);
-
-    font-family:
-        "DM Sans",
-        sans-serif;
-
-    font-size: .62rem;
-
-}
-
-
-.hero-meta-item i {
-
-    color: #fb925c;
-
-    font-size: .72rem;
-
-}
-
-
-.hero-meta-item span {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 4px;
-
-}
-
-
-.hero-meta-item strong {
-
-    color: #ffffff;
+    color: #fb923c;
 
     font-family:
         "Bricolage Grotesque",
@@ -408,30 +380,58 @@
 }
 
 
-.hero-meta-divider {
+.quiz-hero p {
 
-    width: 1px;
+    max-width: 650px;
 
-    height: 20px;
+    margin: 0;
 
-    background: rgba(255,255,255,.13);
+    color: rgba(255,255,255,.78);
+
+    font-size: .78rem;
+
+    line-height: 1.65;
 
 }
 
 
-/* ============================================================
-   HERO VISUAL
-============================================================ */
+.quiz-hero-side {
 
-.quiz-hero-visual {
+    display: grid;
 
-    position: relative;
+    gap: 9px;
 
-    width: 180px;
+}
 
-    height: 180px;
 
-    flex: 0 0 180px;
+.hero-mini-card {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 11px;
+
+    padding: 12px 14px;
+
+    border-radius: 17px;
+
+    background: rgba(255,255,255,.065);
+
+    border: 1px solid rgba(255,255,255,.08);
+
+    backdrop-filter: blur(12px);
+
+}
+
+
+.hero-mini-card > i {
+
+    width: 33px;
+
+    height: 33px;
+
+    flex: 0 0 auto;
 
     display: flex;
 
@@ -439,148 +439,51 @@
 
     justify-content: center;
 
+    border-radius: 11px;
+
+    background: rgba(255,255,255,.08);
+
+    color: #fb923c;
+
+    font-size: .78rem;
+
 }
 
 
-.hero-icon-card {
+.hero-mini-card div {
 
-    position: relative;
+    min-width: 0;
 
-    z-index: 4;
+}
 
-    width: 92px;
 
-    height: 92px;
+.hero-mini-card strong {
 
-    display: flex;
+    display: block;
 
-    align-items: center;
-
-    justify-content: center;
-
-    border-radius: 29px;
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(255,255,255,.17),
-            rgba(255,255,255,.06)
-        );
-
-    border:
-        1px solid rgba(255,255,255,.18);
-
-    box-shadow:
-        0 20px 45px rgba(0,0,0,.22),
-        inset 0 1px 0 rgba(255,255,255,.12);
-
-    backdrop-filter: blur(15px);
-
-    -webkit-backdrop-filter: blur(15px);
-
-    font-size: 2.1rem;
+    margin-bottom: 2px;
 
     color: #ffffff;
 
-}
+    font-family:
+        "Bricolage Grotesque",
+        sans-serif;
 
-
-.hero-orbit {
-
-    position: absolute;
-
-    border: 1px solid rgba(255,255,255,.11);
-
-    border-radius: 50%;
+    font-size: .72rem;
 
 }
 
 
-.orbit-one {
+.hero-mini-card span {
 
-    width: 142px;
+    display: block;
 
-    height: 142px;
+    color: rgba(255,255,255,.58);
 
-}
-
-
-.orbit-two {
-
-    width: 180px;
-
-    height: 180px;
-
-    border-color: rgba(251,146,60,.18);
+    font-size: .62rem;
 
 }
 
-
-.hero-floating-dot {
-
-    position: absolute;
-
-    z-index: 5;
-
-    border-radius: 50%;
-
-}
-
-
-.dot-one {
-
-    width: 8px;
-
-    height: 8px;
-
-    top: 19px;
-
-    right: 29px;
-
-    background: #fb925c;
-
-    box-shadow:
-        0 0 20px rgba(251,146,60,.65);
-
-}
-
-
-.dot-two {
-
-    width: 6px;
-
-    height: 6px;
-
-    bottom: 24px;
-
-    left: 19px;
-
-    background: #06b6d4;
-
-    box-shadow:
-        0 0 18px rgba(6,182,212,.7);
-
-}
-
-
-.dot-three {
-
-    width: 5px;
-
-    height: 5px;
-
-    top: 52px;
-
-    left: 15px;
-
-    background: rgba(255,255,255,.65);
-
-}
-
-
-/* ============================================================
-   HERO BOTTOM
-============================================================ */
 
 .quiz-hero-bottom {
 
@@ -596,7 +499,7 @@
 
     gap: 10px;
 
-    margin-top: 31px;
+    margin-top: 28px;
 
     padding-top: 18px;
 
@@ -611,25 +514,19 @@
 
     align-items: center;
 
-    min-height: 32px;
+    min-height: 38px;
 
-    padding: 7px 11px;
+    padding: 8px 13px;
 
     border-radius: 999px;
 
-    background: rgba(255,255,255,.08);
-
-    border: 1px solid rgba(255,255,255,.08);
-
-    font-family:
-        "Bricolage Grotesque",
-        sans-serif;
-
-    font-size: .61rem;
-
-    font-weight: 700;
+    background: rgba(255,255,255,.075);
 
     color: rgba(255,255,255,.86);
+
+    font-size: .72rem;
+
+    font-weight: 700;
 
 }
 
@@ -640,23 +537,19 @@
 
     align-items: center;
 
-    min-height: 32px;
+    min-height: 38px;
 
-    padding: 7px 12px;
+    padding: 8px 13px;
 
     border-radius: 999px;
 
     background: rgba(234,88,12,.13);
 
-    border: 1px solid rgba(251,146,60,.16);
+    border: 1px solid rgba(251,146,60,.15);
 
-    font-family:
-        "DM Sans",
-        sans-serif;
+    color: rgba(255,255,255,.86);
 
-    font-size: .61rem;
-
-    color: rgba(255,255,255,.76);
+    font-size: .69rem;
 
 }
 
@@ -675,32 +568,21 @@
 
 
 /* ============================================================
-   GENERAL CARDS
+   CARD SYSTEM
 ============================================================ */
 
-.hidden {
-
-    display: none !important;
-
-}
-
-
 .quiz-card,
-.saved-card,
 .reflection-card,
 .questions-card,
 .result-card,
-.review-header-card {
+.review-header-card,
+.question-card,
+.quiz-ready-card,
+.locked-participant-card {
 
-    background: #ffffff;
+    width: 100%;
 
-    border:
-        1px solid rgba(15,23,42,.055);
-
-    border-radius: 25px;
-
-    box-shadow:
-        0 16px 45px rgba(15,23,42,.055);
+    max-width: none;
 
 }
 
@@ -710,19 +592,87 @@
 .questions-card,
 .result-card {
 
-    padding: clamp(21px, 3vw, 31px);
+    background: #ffffff;
+
+    border: 1px solid rgba(15,23,42,.055);
+
+    box-shadow:
+        0 16px 45px rgba(15,23,42,.055);
 
 }
 
 
-.quiz-card,
-.saved-card,
-.reflection-card,
-.questions-card,
-.result-card,
-.review-header-card {
+.quiz-card {
 
-    margin-bottom: 22px;
+    border-radius: 26px;
+
+    padding: clamp(24px, 4vw, 34px);
+
+    margin-bottom: 24px;
+
+}
+
+
+.reflection-card {
+
+    border-radius: 28px;
+
+    padding: clamp(24px, 4vw, 36px);
+
+    margin-bottom: 24px;
+
+}
+
+
+.questions-card {
+
+    border-radius: 28px;
+
+    padding: clamp(22px, 4vw, 34px);
+
+    margin-bottom: 24px;
+
+}
+
+
+.result-card {
+
+    border-radius: 28px;
+
+    padding: clamp(28px, 5vw, 42px);
+
+}
+
+
+.question-card {
+
+    background: #ffffff;
+
+    border: 1px solid #e9edf2;
+
+    border-radius: 22px;
+
+    padding: clamp(21px, 3.5vw, 29px);
+
+    margin-bottom: 16px;
+
+    box-shadow:
+        0 8px 28px rgba(15,23,42,.035);
+
+    transition:
+        border-color .2s ease,
+        box-shadow .2s ease,
+        transform .2s ease;
+
+}
+
+
+.question-card:hover {
+
+    border-color: rgba(74,7,84,.14);
+
+    box-shadow:
+        0 12px 32px rgba(15,23,42,.05);
 
 }
 
@@ -737,20 +687,20 @@
 
     align-items: flex-start;
 
-    gap: 14px;
+    gap: 15px;
 
-    margin-bottom: 25px;
+    margin-bottom: 27px;
 
 }
 
 
 .section-heading-icon {
 
+    width: 46px;
+
+    height: 46px;
+
     flex: 0 0 auto;
-
-    width: 45px;
-
-    height: 45px;
 
     display: flex;
 
@@ -758,16 +708,13 @@
 
     justify-content: center;
 
-    border-radius: 14px;
+    border-radius: 15px;
 
-    background:
-        linear-gradient(
-            145deg,
-            rgba(234,88,12,.12),
-            rgba(234,88,12,.055)
-        );
+    background: rgba(234,88,12,.09);
 
     color: #ea580c;
+
+    font-size: .95rem;
 
 }
 
@@ -776,32 +723,30 @@
 
     display: block;
 
-    margin-bottom: 4px;
+    margin-bottom: 5px;
 
-    font-size: .58rem;
+    color: #ea580c;
+
+    font-size: .62rem;
 
     font-weight: 800;
 
     letter-spacing: .09em;
-
-    color: #ea580c;
 
 }
 
 
 .section-heading h2 {
 
-    margin: 0 0 4px;
+    margin: 0 0 5px;
 
-    font-family:
-        "Bricolage Grotesque",
-        sans-serif;
+    color: #111827;
 
-    font-size: 1.08rem;
+    font-size: 1.2rem;
 
     line-height: 1.2;
 
-    letter-spacing: -.02em;
+    font-weight: 800;
 
 }
 
@@ -810,15 +755,11 @@
 
     margin: 0;
 
-    font-family:
-        "DM Sans",
-        sans-serif;
+    color: #6b7280;
 
-    font-size: .68rem;
+    font-size: .75rem;
 
     line-height: 1.5;
-
-    color: #6b7280;
 
 }
 
@@ -831,22 +772,18 @@
 
     display: grid;
 
-    gap: 13px;
+    gap: 14px;
 
 }
 
 
 .field-label {
 
-    font-family:
-        "Bricolage Grotesque",
-        sans-serif;
+    color: #374151;
 
-    font-size: .67rem;
+    font-size: .74rem;
 
     font-weight: 700;
-
-    color: #374151;
 
 }
 
@@ -856,15 +793,13 @@
 
     width: 100%;
 
-    min-width: 0;
+    min-height: 54px;
 
-    height: 52px;
+    padding: 0 16px;
 
-    padding: 0 15px;
+    border-radius: 15px;
 
-    border-radius: 14px;
-
-    border: 1px solid #e5e7eb;
+    border: 1px solid #e3e7ec;
 
     background: #ffffff;
 
@@ -876,7 +811,7 @@
         "DM Sans",
         sans-serif;
 
-    font-size: .72rem;
+    font-size: .75rem;
 
     transition:
         border-color .2s ease,
@@ -897,6 +832,13 @@
 }
 
 
+.member-box input::placeholder {
+
+    color: #9ca3af;
+
+}
+
+
 .add-member {
 
     display: grid;
@@ -908,20 +850,12 @@
 }
 
 
-button {
-
-    font-family:
-        "Bricolage Grotesque",
-        sans-serif;
-
-}
-
-
 .member-box button,
 .quiz-submit-area button,
 .result-buttons button,
-.saved-actions button,
 .review-header-card button {
+
+    min-height: 46px;
 
     border: none;
 
@@ -929,13 +863,11 @@ button {
 
     border-radius: 999px;
 
-    min-height: 44px;
+    padding: 12px 20px;
 
-    padding: 12px 18px;
+    font-size: .73rem;
 
-    font-size: .67rem;
-
-    font-weight: 700;
+    font-weight: 750;
 
     color: #ffffff;
 
@@ -947,22 +879,20 @@ button {
 }
 
 
-.member-box button:hover:not(:disabled),
-.quiz-submit-area button:hover:not(:disabled),
-.result-buttons button:hover:not(:disabled),
-.saved-actions button:hover:not(:disabled),
-.review-header-card button:hover:not(:disabled) {
+.member-box button:hover,
+.quiz-submit-area button:hover,
+.result-buttons button:hover,
+.review-header-card button:hover {
 
     transform: translateY(-2px);
 
 }
 
 
-.member-box button:active:not(:disabled),
-.quiz-submit-area button:active:not(:disabled),
-.result-buttons button:active:not(:disabled),
-.saved-actions button:active:not(:disabled),
-.review-header-card button:active:not(:disabled) {
+.member-box button:active,
+.quiz-submit-area button:active,
+.result-buttons button:active,
+.review-header-card button:active {
 
     transform: scale(.97);
 
@@ -988,17 +918,17 @@ button {
 
     width: 100%;
 
-    margin-top: 4px;
+    margin-top: 5px;
 
     background:
         linear-gradient(
             135deg,
             #ea580c,
-            #fb925c
+            #f97316
         );
 
     box-shadow:
-        0 10px 25px rgba(234,88,12,.16);
+        0 12px 28px rgba(234,88,12,.18);
 
 }
 
@@ -1030,12 +960,12 @@ button:disabled {
     background:
         linear-gradient(
             135deg,
-            #0a0016,
+            #10051a,
             #4a0754
         );
 
     box-shadow:
-        0 10px 25px rgba(74,7,84,.17);
+        0 10px 25px rgba(74,7,84,.18);
 
 }
 
@@ -1045,6 +975,8 @@ button:disabled {
 ============================================================ */
 
 .locked-participant-section {
+
+    width: 100%;
 
     margin-bottom: 20px;
 
@@ -1057,12 +989,15 @@ button:disabled {
 
     align-items: center;
 
-    gap: 13px;
+    gap: 14px;
 
-    padding: 15px 18px;
+    padding: 16px 19px;
 
-    border:
-        1px solid rgba(8,145,178,.12);
+    border-radius: 21px;
+
+    background: #ffffff;
+
+    border: 1px solid rgba(8,145,178,.12);
 
     box-shadow:
         0 10px 30px rgba(0,0,0,.04);
@@ -1072,9 +1007,9 @@ button:disabled {
 
 .locked-participant-icon {
 
-    width: 40px;
+    width: 41px;
 
-    height: 40px;
+    height: 41px;
 
     flex: 0 0 auto;
 
@@ -1108,13 +1043,13 @@ button:disabled {
 
 .locked-participant-info span {
 
-    font-size: .53rem;
+    color: #0891b2;
+
+    font-size: .59rem;
 
     font-weight: 800;
 
     letter-spacing: .08em;
-
-    color: #0891b2;
 
 }
 
@@ -1123,37 +1058,29 @@ button:disabled {
 
     margin-top: 2px;
 
-    overflow: hidden;
-
-    text-overflow: ellipsis;
-
-    white-space: nowrap;
+    color: #111827;
 
     font-family:
         "Bricolage Grotesque",
         sans-serif;
 
-    font-size: .82rem;
-
-    color: #111827;
+    font-size: .85rem;
 
 }
 
 
 .locked-participant-info small {
 
-    margin-top: 2px;
-
-    font-size: .59rem;
+    margin-top: 3px;
 
     color: #6b7280;
+
+    font-size: .64rem;
 
 }
 
 
 .locked-badge {
-
-    flex: 0 0 auto;
 
     display: inline-flex;
 
@@ -1169,7 +1096,7 @@ button:disabled {
 
     color: #4b5563;
 
-    font-size: .55rem;
+    font-size: .58rem;
 
     font-weight: 700;
 
@@ -1180,31 +1107,24 @@ button:disabled {
    REFLECTION
 ============================================================ */
 
-.reflection-card {
-
-    border-color: rgba(74,7,84,.065);
-
-}
-
-
 .reflection-header {
 
     display: flex;
 
     align-items: flex-start;
 
-    gap: 15px;
+    gap: 16px;
 
-    margin-bottom: 22px;
+    margin-bottom: 24px;
 
 }
 
 
 .reflection-number {
 
-    width: 47px;
+    width: 49px;
 
-    height: 47px;
+    height: 49px;
 
     flex: 0 0 auto;
 
@@ -1214,7 +1134,7 @@ button:disabled {
 
     justify-content: center;
 
-    border-radius: 15px;
+    border-radius: 16px;
 
     background:
         linear-gradient(
@@ -1225,16 +1145,9 @@ button:disabled {
 
     color: #ffffff;
 
-    font-family:
-        "Bricolage Grotesque",
-        sans-serif;
-
-    font-size: .73rem;
+    font-size: .76rem;
 
     font-weight: 800;
-
-    box-shadow:
-        0 10px 24px rgba(74,7,84,.16);
 
 }
 
@@ -1243,45 +1156,45 @@ button:disabled {
 
     display: block;
 
-    margin-bottom: 4px;
+    margin-bottom: 5px;
 
-    font-size: .57rem;
+    color: #4a0754;
+
+    font-size: .61rem;
 
     font-weight: 800;
 
-    letter-spacing: .08em;
-
-    color: #4a0754;
+    letter-spacing: .09em;
 
 }
 
 
 .reflection-header h2 {
 
-    margin: 0 0 5px;
+    margin: 0 0 6px;
 
-    font-family:
-        "Bricolage Grotesque",
-        sans-serif;
+    color: #111827;
 
-    font-size: 1.18rem;
+    font-size: 1.28rem;
 
     line-height: 1.2;
+
+    font-weight: 800;
 
 }
 
 
 .reflection-header p {
 
+    max-width: 720px;
+
     margin: 0;
 
-    max-width: 650px;
-
-    font-size: .68rem;
-
-    line-height: 1.5;
-
     color: #6b7280;
+
+    font-size: .75rem;
+
+    line-height: 1.6;
 
 }
 
@@ -1292,26 +1205,28 @@ button:disabled {
 
     align-items: flex-start;
 
-    gap: 11px;
+    gap: 12px;
 
-    padding: 14px 16px;
+    padding: 16px 17px;
 
-    margin-bottom: 25px;
+    margin-bottom: 28px;
 
-    border-radius: 16px;
+    border-radius: 17px;
 
     background: rgba(234,88,12,.055);
 
-    border: 1px solid rgba(234,88,12,.08);
+    border: 1px solid rgba(234,88,12,.09);
 
 }
 
 
 .reflection-intro i {
 
-    margin-top: 2px;
+    margin-top: 3px;
 
     color: #ea580c;
+
+    font-size: .9rem;
 
 }
 
@@ -1320,18 +1235,18 @@ button:disabled {
 
     margin: 0;
 
-    font-size: .67rem;
-
-    line-height: 1.55;
-
     color: #4b5563;
+
+    font-size: .75rem;
+
+    line-height: 1.6;
 
 }
 
 
 .reflection-question {
 
-    margin-bottom: 22px;
+    margin-bottom: 25px;
 
 }
 
@@ -1342,21 +1257,17 @@ button:disabled {
 
     align-items: flex-start;
 
-    gap: 10px;
+    gap: 11px;
 
-    margin-bottom: 10px;
-
-    font-family:
-        "Bricolage Grotesque",
-        sans-serif;
-
-    font-size: .71rem;
-
-    line-height: 1.45;
-
-    font-weight: 650;
+    margin-bottom: 11px;
 
     color: #1f2937;
+
+    font-size: .78rem;
+
+    line-height: 1.5;
+
+    font-weight: 700;
 
     cursor: text;
 
@@ -1365,11 +1276,11 @@ button:disabled {
 
 .reflection-question-number {
 
+    width: 27px;
+
+    height: 27px;
+
     flex: 0 0 auto;
-
-    width: 25px;
-
-    height: 25px;
 
     display: flex;
 
@@ -1377,13 +1288,13 @@ button:disabled {
 
     justify-content: center;
 
-    border-radius: 8px;
+    border-radius: 9px;
 
     background: #f3f4f6;
 
     color: #4a0754;
 
-    font-size: .55rem;
+    font-size: .59rem;
 
     font-weight: 800;
 
@@ -1392,17 +1303,19 @@ button:disabled {
 
 .reflection-question textarea {
 
+    display: block;
+
     width: 100%;
 
-    min-height: 125px;
+    min-height: 145px;
 
     resize: vertical;
 
-    padding: 14px 15px;
+    padding: 15px 16px;
 
-    border-radius: 15px;
+    border-radius: 16px;
 
-    border: 1px solid #e5e7eb;
+    border: 1px solid #e1e6eb;
 
     outline: none;
 
@@ -1414,9 +1327,9 @@ button:disabled {
         "DM Sans",
         sans-serif;
 
-    font-size: .72rem;
+    font-size: .75rem;
 
-    line-height: 1.55;
+    line-height: 1.65;
 
     transition:
         border-color .2s ease,
@@ -1427,7 +1340,7 @@ button:disabled {
 
 .reflection-question textarea::placeholder {
 
-    color: #9ca3af;
+    color: #a0a7b0;
 
 }
 
@@ -1443,7 +1356,7 @@ button:disabled {
 
 
 /* ============================================================
-   REFLECTION PROGRESS
+   REFLECTION FOOTER
 ============================================================ */
 
 .reflection-footer {
@@ -1454,22 +1367,22 @@ button:disabled {
 
     justify-content: space-between;
 
-    gap: 20px;
+    gap: 24px;
 
     margin-top: 8px;
 
-    padding-top: 20px;
+    padding-top: 22px;
 
-    border-top: 1px solid #f1f1f1;
+    border-top: 1px solid #eef0f3;
 
 }
 
 
 .reflection-progress {
 
-    flex: 1;
-
     min-width: 0;
+
+    flex: 1;
 
 }
 
@@ -1484,31 +1397,29 @@ button:disabled {
 
     gap: 12px;
 
-    margin-bottom: 8px;
+    margin-bottom: 9px;
 
 }
 
 
 .reflection-progress-top span {
 
-    font-size: .6rem;
+    color: #6b7280;
+
+    font-size: .67rem;
 
     font-weight: 700;
-
-    color: #6b7280;
 
 }
 
 
 .reflection-progress-top strong {
 
-    font-family:
-        "Bricolage Grotesque",
-        sans-serif;
-
-    font-size: .6rem;
-
     color: #4a0754;
+
+    font-size: .67rem;
+
+    font-weight: 800;
 
 }
 
@@ -1517,13 +1428,13 @@ button:disabled {
 
     width: 100%;
 
-    height: 7px;
+    height: 8px;
 
     overflow: hidden;
 
     border-radius: 999px;
 
-    background: #f1f5f9;
+    background: #eef1f5;
 
 }
 
@@ -1550,18 +1461,20 @@ button:disabled {
 
 .reflection-progress p {
 
-    margin: 8px 0 0;
-
-    font-size: .59rem;
-
-    line-height: 1.45;
+    margin: 9px 0 0;
 
     color: #6b7280;
+
+    font-size: .67rem;
+
+    line-height: 1.5;
 
 }
 
 
 .reflection-submit-btn {
+
+    min-height: 49px;
 
     flex: 0 0 auto;
 
@@ -1575,9 +1488,7 @@ button:disabled {
 
     border: none;
 
-    min-height: 44px;
-
-    padding: 13px 18px;
+    padding: 13px 21px;
 
     border-radius: 999px;
 
@@ -1594,19 +1505,18 @@ button:disabled {
         "Bricolage Grotesque",
         sans-serif;
 
-    font-size: .65rem;
+    font-size: .75rem;
 
-    font-weight: 700;
+    font-weight: 750;
 
     cursor: pointer;
 
     box-shadow:
-        0 10px 25px rgba(74,7,84,.2);
+        0 12px 27px rgba(74,7,84,.2);
 
     transition:
         transform .2s ease,
-        opacity .2s ease,
-        box-shadow .2s ease;
+        opacity .2s ease;
 
 }
 
@@ -1633,15 +1543,15 @@ button:disabled {
 
     display: none;
 
-    margin-top: 15px;
+    margin-top: 16px;
 
-    padding: 11px 14px;
+    padding: 12px 15px;
 
-    border-radius: 13px;
+    border-radius: 14px;
 
-    font-size: .63rem;
+    font-size: .7rem;
 
-    line-height: 1.45;
+    line-height: 1.5;
 
 }
 
@@ -1685,13 +1595,13 @@ button:disabled {
 
     align-items: center;
 
-    gap: 14px;
+    gap: 15px;
 
     margin-bottom: 18px;
 
-    padding: 17px 19px;
+    padding: 18px 20px;
 
-    border-radius: 20px;
+    border-radius: 21px;
 
     background:
         linear-gradient(
@@ -1707,9 +1617,9 @@ button:disabled {
 
 .quiz-ready-icon {
 
-    width: 43px;
+    width: 46px;
 
-    height: 43px;
+    height: 46px;
 
     flex: 0 0 auto;
 
@@ -1732,28 +1642,28 @@ button:disabled {
 
     display: block;
 
-    margin-bottom: 3px;
+    margin-bottom: 4px;
 
-    font-size: .55rem;
+    color: #047857;
+
+    font-size: .61rem;
 
     font-weight: 800;
 
     letter-spacing: .08em;
-
-    color: #047857;
 
 }
 
 
 .quiz-ready-card h2 {
 
-    margin: 0 0 3px;
+    margin: 0 0 4px;
 
-    font-family:
-        "Bricolage Grotesque",
-        sans-serif;
+    color: #111827;
 
-    font-size: .92rem;
+    font-size: 1rem;
+
+    font-weight: 800;
 
 }
 
@@ -1762,23 +1672,18 @@ button:disabled {
 
     margin: 0;
 
-    font-size: .64rem;
-
     color: #4b5563;
+
+    font-size: .75rem;
+
+    line-height: 1.55;
 
 }
 
 
 /* ============================================================
-   QUESTIONS WRAPPER
+   QUESTIONS HEADER
 ============================================================ */
-
-.questions-card {
-
-    overflow: hidden;
-
-}
-
 
 .questions-header {
 
@@ -1788,13 +1693,13 @@ button:disabled {
 
     justify-content: space-between;
 
-    gap: 15px;
+    gap: 18px;
 
-    margin-bottom: 23px;
+    margin-bottom: 24px;
 
-    padding-bottom: 18px;
+    padding-bottom: 19px;
 
-    border-bottom: 1px solid #f1f1f1;
+    border-bottom: 1px solid #eef0f3;
 
 }
 
@@ -1803,15 +1708,15 @@ button:disabled {
 
     display: block;
 
-    margin-bottom: 4px;
+    margin-bottom: 5px;
 
-    font-size: .55rem;
+    color: #ea580c;
+
+    font-size: .61rem;
 
     font-weight: 800;
 
     letter-spacing: .08em;
-
-    color: #ea580c;
 
 }
 
@@ -1820,26 +1725,22 @@ button:disabled {
 
     margin: 0;
 
-    font-family:
-        "Bricolage Grotesque",
-        sans-serif;
+    color: #111827;
 
-    font-size: 1.05rem;
+    font-size: 1.18rem;
 
-    line-height: 1.25;
+    line-height: 1.2;
+
+    font-weight: 800;
 
 }
 
-
-/* ============================================================
-   QUESTION COUNT
-============================================================ */
 
 .question-count-badge {
 
     flex: 0 0 auto;
 
-    padding: 8px 11px;
+    padding: 8px 12px;
 
     border-radius: 999px;
 
@@ -1847,75 +1748,24 @@ button:disabled {
 
     color: #4b5563;
 
-    font-size: .58rem;
+    font-size: .63rem;
 
-    font-weight: 700;
+    font-weight: 750;
 
 }
 
 
 /* ============================================================
-   QUESTION CARDS
+   QUESTIONS
 ============================================================ */
-
-#questions,
-#reviewContainer {
-
-    width: 100%;
-
-}
-
-
-.question-card {
-
-    width: 100%;
-
-    margin-bottom: 16px;
-
-    padding: clamp(18px, 3vw, 24px);
-
-    border-radius: 21px;
-
-    background: #ffffff;
-
-    border: 1px solid #e8ebef;
-
-    box-shadow:
-        0 8px 25px rgba(0,0,0,.032);
-
-}
-
-
-.question-card:last-child {
-
-    margin-bottom: 0;
-
-}
-
 
 .question-number {
 
-    display: inline-flex;
-
-    align-items: center;
-
-    min-height: 24px;
-
     margin-bottom: 10px;
-
-    padding: 5px 8px;
-
-    border-radius: 8px;
-
-    background: rgba(74,7,84,.065);
 
     color: #4a0754;
 
-    font-family:
-        "Bricolage Grotesque",
-        sans-serif;
-
-    font-size: .55rem;
+    font-size: .62rem;
 
     font-weight: 800;
 
@@ -1926,7 +1776,9 @@ button:disabled {
 
 .question-card h3 {
 
-    margin: 0 0 17px;
+    margin: 0 0 19px;
+
+    color: #111827;
 
     font-family:
         "Bricolage Grotesque",
@@ -1936,45 +1788,37 @@ button:disabled {
 
     line-height: 1.48;
 
-    letter-spacing: -.01em;
-
-    color: #111827;
+    font-weight: 700;
 
 }
 
-
-/* ============================================================
-   OPTIONS
-============================================================ */
 
 .options {
 
     display: grid;
 
-    gap: 9px;
+    gap: 10px;
 
 }
 
 
 .option {
 
-    position: relative;
-
     display: flex;
 
     align-items: flex-start;
 
-    gap: 11px;
+    gap: 12px;
 
     width: 100%;
 
-    min-height: 50px;
+    min-height: 49px;
 
     padding: 13px 14px;
 
     border-radius: 14px;
 
-    border: 1px solid #e2e6ea;
+    border: 1px solid #e3e7ec;
 
     background: #ffffff;
 
@@ -1985,10 +1829,9 @@ button:disabled {
     -webkit-tap-highlight-color: transparent;
 
     transition:
-        background .18s ease,
-        border-color .18s ease,
-        box-shadow .18s ease,
-        transform .18s ease;
+        background .2s ease,
+        border-color .2s ease,
+        transform .15s ease;
 
 }
 
@@ -1997,7 +1840,7 @@ button:disabled {
 
     border-color: #0891b2;
 
-    background: rgba(8,145,178,.025);
+    background: rgba(8,145,178,.035);
 
 }
 
@@ -2025,15 +1868,13 @@ button:disabled {
 
     border-radius: 50%;
 
-    border: 2px solid #94a3b8;
+    border: 2px solid #0891b2;
 
     position: relative;
 
     cursor: pointer;
 
     outline: none;
-
-    background: #ffffff;
 
 }
 
@@ -2051,9 +1892,9 @@ button:disabled {
 
     position: absolute;
 
-    width: 9px;
+    width: 8px;
 
-    height: 9px;
+    height: 8px;
 
     left: 50%;
 
@@ -2074,9 +1915,6 @@ button:disabled {
 
     background: rgba(234,88,12,.055);
 
-    box-shadow:
-        0 5px 18px rgba(234,88,12,.07);
-
 }
 
 
@@ -2084,28 +1922,28 @@ button:disabled {
 
     min-width: 0;
 
+    color: #374151;
+
     font-family:
         "DM Sans",
         sans-serif;
 
     font-size: .75rem;
 
-    line-height: 1.5;
-
-    color: #374151;
+    line-height: 1.55;
 
 }
 
 
 .option span strong {
 
-    margin-right: 2px;
-
-    color: #4a0754;
+    color: #111827;
 
     font-family:
-        "Bricolage Grotesque",
+        "DM Sans",
         sans-serif;
+
+    font-weight: 750;
 
 }
 
@@ -2122,28 +1960,28 @@ button:disabled {
 
     justify-content: space-between;
 
-    gap: 20px;
+    gap: 22px;
 
-    margin-top: 23px;
+    margin-top: 25px;
 
-    padding-top: 20px;
+    padding-top: 21px;
 
-    border-top: 1px solid #f1f1f1;
+    border-top: 1px solid #eef0f3;
 
 }
 
 
 .quiz-submit-area p {
 
+    max-width: 570px;
+
     margin: 0;
 
-    max-width: 500px;
+    color: #6b7280;
 
-    font-size: .62rem;
+    font-size: .68rem;
 
     line-height: 1.5;
-
-    color: #6b7280;
 
 }
 
@@ -2170,10 +2008,6 @@ button:disabled {
 
     text-align: center;
 
-    padding:
-        clamp(28px, 5vw, 48px)
-        clamp(21px, 5vw, 45px);
-
 }
 
 
@@ -2193,12 +2027,7 @@ button:disabled {
 
     border-radius: 20px;
 
-    background:
-        linear-gradient(
-            145deg,
-            rgba(234,88,12,.13),
-            rgba(234,88,12,.055)
-        );
+    background: rgba(234,88,12,.09);
 
     color: #ea580c;
 
@@ -2215,7 +2044,7 @@ button:disabled {
 
     color: #ea580c;
 
-    font-size: .55rem;
+    font-size: .6rem;
 
     font-weight: 800;
 
@@ -2226,49 +2055,43 @@ button:disabled {
 
 .result-card h2 {
 
-    margin: 0 0 8px;
+    margin: 0 0 9px;
 
-    font-family:
-        "Bricolage Grotesque",
-        sans-serif;
+    color: #111827;
 
-    font-size: 1.28rem;
+    font-size: 1.3rem;
+
+    font-weight: 800;
 
 }
 
 
 .result-intro {
 
-    max-width: 470px;
+    max-width: 500px;
 
     margin: 0 auto;
 
-    font-size: .67rem;
-
-    line-height: 1.5;
-
     color: #6b7280;
+
+    font-size: .72rem;
+
+    line-height: 1.55;
 
 }
 
 
 .score-number {
 
-    margin: 23px 0 20px;
+    margin: 24px 0 20px;
 
-    font-family:
-        "Bricolage Grotesque",
-        sans-serif;
+    color: #4a0754;
 
-    font-size: clamp(2.8rem, 9vw, 4.8rem);
+    font-size: clamp(3rem, 9vw, 4.8rem);
 
     line-height: 1;
 
     font-weight: 800;
-
-    letter-spacing: -.05em;
-
-    color: #4a0754;
 
 }
 
@@ -2288,11 +2111,11 @@ button:disabled {
 
 .result-stat {
 
-    min-width: 145px;
+    min-width: 155px;
 
-    padding: 14px 16px;
+    padding: 14px 17px;
 
-    border-radius: 15px;
+    border-radius: 16px;
 
     background: #f8fafc;
 
@@ -2307,22 +2130,22 @@ button:disabled {
 
     margin-bottom: 4px;
 
-    font-size: .55rem;
-
     color: #6b7280;
+
+    font-size: .6rem;
 
 }
 
 
 .result-stat strong {
 
+    color: #111827;
+
     font-family:
         "Bricolage Grotesque",
         sans-serif;
 
-    font-size: .88rem;
-
-    color: #111827;
+    font-size: .86rem;
 
 }
 
@@ -2361,7 +2184,18 @@ button:disabled {
 
     gap: 20px;
 
-    padding: 20px;
+    margin-bottom: 20px;
+
+    padding: 21px;
+
+    border-radius: 23px;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 10px 35px rgba(0,0,0,.045);
+
+    border: 1px solid rgba(15,23,42,.05);
 
 }
 
@@ -2370,11 +2204,11 @@ button:disabled {
 
     display: block;
 
-    margin-bottom: 4px;
+    margin-bottom: 5px;
 
     color: #4a0754;
 
-    font-size: .55rem;
+    font-size: .59rem;
 
     font-weight: 800;
 
@@ -2387,11 +2221,11 @@ button:disabled {
 
     margin: 0 0 5px;
 
-    font-family:
-        "Bricolage Grotesque",
-        sans-serif;
+    color: #111827;
 
-    font-size: 1.03rem;
+    font-size: 1.1rem;
+
+    font-weight: 800;
 
 }
 
@@ -2400,18 +2234,11 @@ button:disabled {
 
     margin: 0;
 
-    font-size: .64rem;
-
-    line-height: 1.5;
-
     color: #6b7280;
 
-}
+    font-size: .7rem;
 
-
-.review-header-card button {
-
-    flex: 0 0 auto;
+    line-height: 1.5;
 
 }
 
@@ -2424,207 +2251,54 @@ button:disabled {
 
     width: 100%;
 
-    margin-bottom: 9px;
-
     padding: 14px;
+
+    margin-bottom: 9px;
 
     border-radius: 14px;
 
+    background: #ffffff;
+
     border: 1px solid #e5e7eb;
 
-    background: #ffffff;
+    color: #374151;
 
     font-family:
         "DM Sans",
         sans-serif;
 
-    font-size: .71rem;
+    font-size: .73rem;
 
     line-height: 1.5;
-
-    color: #374151;
-
-}
-
-
-.review-option:last-child {
-
-    margin-bottom: 0;
 
 }
 
 
 .review-option.correct {
 
-    border-color: #22c55e;
-
     background: #ecfdf5;
+
+    border-color: #22c55e;
 
 }
 
 
 .review-option.incorrect {
 
-    border-color: #ef4444;
-
     background: #fef2f2;
 
-}
-
-
-.review-option strong {
-
-    margin-right: 2px;
-
-    font-family:
-        "Bricolage Grotesque",
-        sans-serif;
-
-    color: #4a0754;
+    border-color: #ef4444;
 
 }
 
 
-.review-option.correct strong {
-
-    color: #047857;
-
-}
-
-
-.review-option.incorrect strong {
-
-    color: #b91c1c;
-
-}
-
-
-.review-option-badge {
+.review-option-label {
 
     margin-top: 7px;
 
-    font-family:
-        "Bricolage Grotesque",
-        sans-serif;
+    font-size: .62rem;
 
-    font-size: .57rem;
-
-    font-weight: 800;
-
-}
-
-
-.review-option.correct .review-option-badge {
-
-    color: #047857;
-
-}
-
-
-.review-option.incorrect .review-option-badge {
-
-    color: #b91c1c;
-
-}
-
-
-/* ============================================================
-   SAVED ACTIVITY
-============================================================ */
-
-.saved-card {
-
-    padding: 20px;
-
-}
-
-
-.saved-card-header {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 12px;
-
-}
-
-
-.saved-icon {
-
-    width: 41px;
-
-    height: 41px;
-
-    flex: 0 0 auto;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    border-radius: 13px;
-
-    background: rgba(74,7,84,.08);
-
-    color: #4a0754;
-
-}
-
-
-.saved-card-header span {
-
-    display: block;
-
-    margin-bottom: 3px;
-
-    font-size: .53rem;
-
-    font-weight: 800;
-
-    letter-spacing: .08em;
-
-    color: #4a0754;
-
-}
-
-
-.saved-card-header h2 {
-
-    margin: 0;
-
-    font-family:
-        "Bricolage Grotesque",
-        sans-serif;
-
-    font-size: .87rem;
-
-}
-
-
-.saved-note {
-
-    margin: 13px 0 0;
-
-    font-size: .63rem;
-
-    line-height: 1.5;
-
-    color: #6b7280;
-
-}
-
-
-.saved-actions {
-
-    display: flex;
-
-    flex-wrap: wrap;
-
-    gap: 10px;
-
-    margin-top: 16px;
+    font-weight: 750;
 
 }
 
@@ -2663,63 +2337,6 @@ button {
 
 
 /* ============================================================
-   TABLET
-============================================================ */
-
-@media (max-width: 900px) {
-
-    .quiz-hero-content {
-
-        gap: 20px;
-
-    }
-
-
-    .quiz-hero-visual {
-
-        width: 150px;
-
-        height: 150px;
-
-        flex-basis: 150px;
-
-    }
-
-
-    .hero-icon-card {
-
-        width: 78px;
-
-        height: 78px;
-
-        border-radius: 24px;
-
-        font-size: 1.7rem;
-
-    }
-
-
-    .orbit-one {
-
-        width: 120px;
-
-        height: 120px;
-
-    }
-
-
-    .orbit-two {
-
-        width: 150px;
-
-        height: 150px;
-
-    }
-
-}
-
-
-/* ============================================================
    MOBILE
 ============================================================ */
 
@@ -2738,156 +2355,133 @@ button {
 
         margin-bottom: 20px;
 
-        padding: 23px;
+        padding: 21px;
 
         border-radius: 23px;
 
     }
 
 
-    .quiz-hero-content {
+    .quiz-hero-top {
 
-        align-items: flex-start;
+        margin-bottom: 22px;
 
     }
 
 
-    .quiz-hero-copy {
+    .quiz-hero-icon {
 
-        max-width: none;
+        width: 47px;
 
-        width: 100%;
+        height: 47px;
+
+        border-radius: 15px;
+
+        font-size: 1rem;
+
+    }
+
+
+    .quiz-hero-main {
+
+        grid-template-columns: 1fr;
+
+        gap: 22px;
+
+    }
+
+
+    .quiz-hero-kicker {
+
+        font-size: .59rem;
 
     }
 
 
     .quiz-hero h1 {
 
-        max-width: 400px;
+        font-size: clamp(1.55rem, 7vw, 2rem);
 
-        font-size: clamp(1.75rem, 8vw, 2.35rem);
-
-        line-height: 1;
+        line-height: 1.05;
 
     }
 
 
     .quiz-hero p {
 
-        max-width: 500px;
+        font-size: .75rem;
 
-        margin-top: 14px;
-
-        font-size: .70rem;
-
-        line-height: 1.6;
+        line-height: 1.65;
 
     }
 
 
-    .quiz-hero-badge {
+    .quiz-hero-side {
 
-        margin-bottom: 14px;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
 
-        font-size: .54rem;
-
-    }
-
-
-    .quiz-hero-meta {
-
-        gap: 12px;
-
-        margin-top: 20px;
+        gap: 8px;
 
     }
 
 
-    .hero-meta-item {
+    .hero-mini-card {
 
-        font-size: .57rem;
+        align-items: flex-start;
 
-    }
+        flex-direction: column;
 
+        gap: 8px;
 
-    .quiz-hero-visual {
+        min-height: 92px;
 
-        width: 100px;
+        padding: 11px;
 
-        height: 100px;
-
-        flex: 0 0 100px;
-
-    }
-
-
-    .hero-icon-card {
-
-        width: 58px;
-
-        height: 58px;
-
-        border-radius: 18px;
-
-        font-size: 1.25rem;
+        border-radius: 15px;
 
     }
 
 
-    .orbit-one {
+    .hero-mini-card > i {
 
-        width: 82px;
+        width: 29px;
 
-        height: 82px;
+        height: 29px;
 
-    }
+        border-radius: 9px;
 
-
-    .orbit-two {
-
-        width: 105px;
-
-        height: 105px;
+        font-size: .7rem;
 
     }
 
 
-    .dot-one {
+    .hero-mini-card strong {
 
-        width: 6px;
-
-        height: 6px;
-
-        top: 8px;
-
-        right: 8px;
+        font-size: .68rem;
 
     }
 
 
-    .dot-two {
+    .hero-mini-card span {
 
-        width: 5px;
+        font-size: .58rem;
 
-        height: 5px;
-
-        bottom: 8px;
-
-        left: 4px;
-
-    }
-
-
-    .dot-three {
-
-        display: none;
+        line-height: 1.35;
 
     }
 
 
     .quiz-hero-bottom {
 
-        margin-top: 24px;
+        align-items: stretch;
+
+        flex-direction: column;
+
+        gap: 8px;
+
+        margin-top: 22px;
+
+        padding-top: 16px;
 
     }
 
@@ -2895,7 +2489,13 @@ button {
     .quiz-status,
     .countdown-card {
 
-        font-size: .57rem;
+        width: 100%;
+
+        justify-content: center;
+
+        text-align: center;
+
+        font-size: .68rem;
 
     }
 
@@ -2907,21 +2507,38 @@ button {
 
         border-radius: 21px;
 
-        padding: 18px;
-
-    }
-
-
-    .section-heading {
-
-        margin-bottom: 21px;
+        padding: 20px;
 
     }
 
 
     .section-heading h2 {
 
-        font-size: 1rem;
+        font-size: 1.08rem;
+
+    }
+
+
+    .section-heading p {
+
+        font-size: .75rem;
+
+    }
+
+
+    .field-label {
+
+        font-size: .74rem;
+
+    }
+
+
+    .member-box select,
+    .member-box input {
+
+        min-height: 54px;
+
+        font-size: .75rem;
 
     }
 
@@ -2933,9 +2550,18 @@ button {
     }
 
 
+    .member-box button {
+
+        width: 100%;
+
+        min-height: 48px;
+
+    }
+
+
     .locked-participant-card {
 
-        padding: 13px;
+        padding: 14px;
 
     }
 
@@ -2947,23 +2573,59 @@ button {
     }
 
 
+    .reflection-header {
+
+        gap: 13px;
+
+    }
+
+
+    .reflection-number {
+
+        width: 43px;
+
+        height: 43px;
+
+        border-radius: 14px;
+
+    }
+
+
     .reflection-header h2 {
 
-        font-size: 1.08rem;
+        font-size: 1.15rem;
+
+    }
+
+
+    .reflection-header p {
+
+        font-size: .75rem;
+
+    }
+
+
+    .reflection-intro p {
+
+        font-size: .75rem;
 
     }
 
 
     .reflection-question label {
 
-        font-size: .72rem;
+        font-size: .76rem;
+
+        line-height: 1.55;
 
     }
 
 
     .reflection-question textarea {
 
-        font-size: .72rem;
+        min-height: 140px;
+
+        font-size: .75rem;
 
     }
 
@@ -2981,21 +2643,27 @@ button {
 
         width: 100%;
 
+        min-height: 50px;
+
         justify-content: center;
+
+        font-size: .76rem;
 
     }
 
 
     .quiz-ready-card {
 
-        padding: 15px;
+        align-items: flex-start;
+
+        padding: 17px;
 
     }
 
 
     .quiz-ready-card p {
 
-        line-height: 1.5;
+        font-size: .75rem;
 
     }
 
@@ -3009,41 +2677,32 @@ button {
 
     .questions-header h2 {
 
-        font-size: .96rem;
-
-    }
-
-
-    .question-count-badge {
-
-        font-size: .55rem;
+        font-size: 1.05rem;
 
     }
 
 
     .question-card {
 
-        padding: 17px;
+        padding: 20px;
 
-        border-radius: 18px;
+        border-radius: 20px;
 
     }
 
 
     .question-card h3 {
 
-        font-size: .88rem;
+        font-size: .9rem;
 
-        line-height: 1.5;
+        line-height: 1.52;
 
     }
 
 
     .option {
 
-        min-height: 51px;
-
-        padding: 13px;
+        padding: 14px;
 
     }
 
@@ -3052,7 +2711,7 @@ button {
 
         font-size: .75rem;
 
-        line-height: 1.52;
+        line-height: 1.58;
 
     }
 
@@ -3070,12 +2729,16 @@ button {
 
         max-width: none;
 
+        font-size: .68rem;
+
     }
 
 
     .submit-quiz-btn {
 
         width: 100%;
+
+        min-height: 50px;
 
     }
 
@@ -3125,108 +2788,84 @@ button {
 
     }
 
-
-    .saved-actions {
-
-        flex-direction: column;
-
-    }
-
-
-    .saved-actions button {
-
-        width: 100%;
-
-    }
-
 }
 
 
 /* ============================================================
-   SMALL PHONES
+   VERY SMALL PHONES
 ============================================================ */
 
 @media (max-width: 480px) {
 
     .quiz-hero {
 
-        padding: 20px;
+        padding: 18px;
 
     }
 
 
-    .quiz-hero-content {
+    .quiz-hero-top {
 
-        display: block;
-
-    }
-
-
-    .quiz-hero-visual {
-
-        position: absolute;
-
-        top: 12px;
-
-        right: 8px;
-
-        opacity: .72;
-
-        transform: scale(.78);
-
-        transform-origin: top right;
+        margin-bottom: 19px;
 
     }
 
 
-    .quiz-hero-copy {
+    .quiz-hero-badge {
 
-        padding-right: 45px;
+        padding: 8px 11px;
+
+        font-size: .59rem;
+
+    }
+
+
+    .quiz-hero-icon {
+
+        width: 43px;
+
+        height: 43px;
+
+        border-radius: 14px;
 
     }
 
 
     .quiz-hero h1 {
 
-        font-size: 1.82rem;
+        font-size: 1.48rem;
 
     }
 
 
     .quiz-hero p {
 
-        font-size: .68rem;
+        font-size: .75rem;
 
     }
 
 
-    .quiz-hero-meta {
+    .quiz-hero-side {
 
-        flex-wrap: wrap;
-
-    }
-
-
-    .hero-meta-divider {
-
-        display: none;
+        grid-template-columns: 1fr;
 
     }
 
 
-    .quiz-hero-bottom {
+    .hero-mini-card {
 
-        display: grid;
+        min-height: auto;
 
-        gap: 8px;
+        flex-direction: row;
+
+        align-items: center;
 
     }
 
 
-    .quiz-status,
-    .countdown-card {
+    .hero-mini-card > i {
 
-        width: 100%;
+        flex: 0 0 auto;
 
     }
 
@@ -3236,39 +2875,21 @@ button {
     .questions-card,
     .result-card {
 
-        padding: 16px;
+        padding: 18px;
 
-        border-radius: 19px;
+        border-radius: 20px;
+
+    }
+
+
+    .section-heading {
+
+        gap: 12px;
 
     }
 
 
     .section-heading-icon {
-
-        width: 40px;
-
-        height: 40px;
-
-        border-radius: 12px;
-
-    }
-
-
-    .section-heading h2 {
-
-        font-size: .95rem;
-
-    }
-
-
-    .section-heading p {
-
-        font-size: .64rem;
-
-    }
-
-
-    .reflection-number {
 
         width: 42px;
 
@@ -3279,247 +2900,69 @@ button {
     }
 
 
-    .reflection-header {
-
-        gap: 11px;
-
-    }
-
-
-    .reflection-header span {
-
-        font-size: .53rem;
-
-    }
-
-
-    .reflection-header h2 {
+    .section-heading h2 {
 
         font-size: 1rem;
 
     }
 
 
-    .reflection-header p {
+    .section-heading p {
 
-        font-size: .64rem;
-
-    }
-
-
-    .reflection-intro {
-
-        padding: 12px 13px;
+        font-size: .75rem;
 
     }
 
 
-    .reflection-intro p {
+    .reflection-header h2 {
 
-        font-size: .63rem;
+        font-size: 1.08rem;
 
     }
 
 
     .reflection-question label {
 
-        font-size: .69rem;
-
-    }
-
-
-    .reflection-question textarea {
-
-        min-height: 115px;
-
-        font-size: .70rem;
-
-    }
-
-
-    .reflection-progress-top span,
-    .reflection-progress-top strong {
-
-        font-size: .56rem;
-
-    }
-
-
-    .reflection-progress p {
-
-        font-size: .56rem;
-
-    }
-
-
-    .questions-header {
-
-        gap: 8px;
-
-    }
-
-
-    .questions-header h2 {
-
-        font-size: .9rem;
-
-    }
-
-
-    .question-count-badge {
-
-        padding: 7px 8px;
+        font-size: .75rem;
 
     }
 
 
     .question-card {
-
-        padding: 15px;
-
-        border-radius: 17px;
-
-    }
-
-
-    .question-number {
-
-        font-size: .52rem;
-
-    }
-
-
-    .question-card h3 {
-
-        font-size: .84rem;
-
-        line-height: 1.5;
-
-        margin-bottom: 15px;
-
-    }
-
-
-    .options {
-
-        gap: 8px;
-
-    }
-
-
-    .option {
-
-        padding: 12px;
-
-        border-radius: 13px;
-
-    }
-
-
-    .option span {
-
-        font-size: .74rem;
-
-        line-height: 1.52;
-
-    }
-
-
-    .option input {
-
-        width: 18px;
-
-        height: 18px;
-
-        min-width: 18px;
-
-    }
-
-
-    .saved-card {
-
-        padding: 16px;
-
-    }
-
-
-    .saved-card-header h2 {
-
-        font-size: .82rem;
-
-    }
-
-}
-
-
-/* ============================================================
-   VERY SMALL PHONES
-============================================================ */
-
-@media (max-width: 360px) {
-
-    .quiz-hero {
 
         padding: 18px;
 
     }
 
 
-    .quiz-hero-visual {
+    .question-card h3 {
 
-        display: none;
-
-    }
-
-
-    .quiz-hero-copy {
-
-        padding-right: 0;
-
-    }
-
-
-    .quiz-hero h1 {
-
-        font-size: 1.7rem;
-
-    }
-
-
-    .quiz-hero p {
-
-        font-size: .65rem;
-
-    }
-
-
-    .quiz-card,
-    .reflection-card,
-    .questions-card,
-    .result-card {
-
-        padding: 14px;
-
-    }
-
-
-    .question-card {
-
-        padding: 14px;
+        font-size: .88rem;
 
     }
 
 
     .option {
 
-        padding: 11px;
+        padding: 13px;
+
+        gap: 10px;
 
     }
 
 
     .option span {
 
-        font-size: .72rem;
+        font-size: .75rem;
+
+    }
+
+
+    .question-count-badge {
+
+        font-size: .59rem;
+
+        padding: 7px 9px;
 
     }
 
@@ -3527,7 +2970,7 @@ button {
 
 
 /* ============================================================
-   REDUCED MOTION
+   ACCESSIBILITY / REDUCED MOTION
 ============================================================ */
 
 @media (prefers-reduced-motion: reduce) {
@@ -3535,10 +2978,7 @@ button {
     .quiz-hero *,
     .quiz-card *,
     .reflection-card *,
-    .questions-card *,
-    .result-card * {
-
-        scroll-behavior: auto !important;
+    .questions-card * {
 
         transition: none !important;
 
