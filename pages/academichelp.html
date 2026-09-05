@@ -17,15 +17,15 @@
 
     <meta
         name="description"
-        content="Academic Help for AFC Isiu Youth — guidance for school, examinations, university, scholarships, study skills and career preparation."
+        content="Academic Help for young people at AFC Isiu Youth Portal."
     >
 
     <title>Academic Help | AFC Isiu Youth Portal</title>
 
 
-    <!-- =====================================================
+    <!-- =========================================================
          PWA
-    ====================================================== -->
+    ========================================================== -->
 
     <link
         rel="manifest"
@@ -38,9 +38,9 @@
     >
 
 
-    <!-- =====================================================
-         FONT PRECONNECT
-    ====================================================== -->
+    <!-- =========================================================
+         FONTS
+    ========================================================== -->
 
     <link
         rel="preconnect"
@@ -53,23 +53,15 @@
         crossorigin
     >
 
-    <!--
-        Bricolage Grotesque
-        = headings / buttons / labels
-
-        DM Sans
-        = body / inputs / answers
-    -->
-
     <link
         href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@10..48,400;10..48,500;10..48,600;10..48,700;10..48,800&family=DM+Sans:wght@400;500;600;700&display=swap"
         rel="stylesheet"
     >
 
 
-    <!-- =====================================================
+    <!-- =========================================================
          ICONS
-    ====================================================== -->
+    ========================================================== -->
 
     <link
         rel="stylesheet"
@@ -77,14 +69,24 @@
     >
 
     <link
-        href="https://cdn.jsdelivr.net/npm/remixicon@4.6.0/fonts/remixicon.css"
         rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/remixicon@4.6.0/fonts/remixicon.css"
     >
 
 
-    <!-- =====================================================
+    <!-- =========================================================
+         AOS
+    ========================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/aos@2.3.4/dist/aos.css"
+    >
+
+
+    <!-- =========================================================
          PORTAL CSS
-    ====================================================== -->
+    ========================================================== -->
 
     <link
         rel="stylesheet"
@@ -97,9 +99,9 @@
     >
 
 
-    <!-- =====================================================
+    <!-- =========================================================
          PAGE CSS
-    ====================================================== -->
+    ========================================================== -->
 
     <link
         rel="stylesheet"
@@ -111,1234 +113,856 @@
 
 <body>
 
-    <div class="app-layout">
 
-        <!-- =================================================
-             SIDEBAR
-        ================================================== -->
-
-        <div id="app-sidebar"></div>
+<div class="app-layout">
 
 
-        <div class="main-area">
+    <!-- =========================================================
+         SIDEBAR
+    ========================================================== -->
+
+    <div id="app-sidebar"></div>
+
+
+    <!-- =========================================================
+         MAIN AREA
+    ========================================================== -->
+
+    <div class="main-area">
+
+
+        <!-- =====================================================
+             TOPBAR
+        ====================================================== -->
+
+        <div id="app-topbar"></div>
+
+
+        <!-- =====================================================
+             PAGE
+        ====================================================== -->
+
+        <main class="dashboard-content academic-page">
+
 
             <!-- =================================================
-                 TOPBAR
+                 HERO
             ================================================== -->
 
-            <div id="app-topbar"></div>
+            <section
+                class="academic-hero"
+                data-aos="fade-up"
+            >
 
+                <div class="academic-hero-copy">
 
-            <!-- =================================================
-                 PAGE
-            ================================================== -->
+                    <div class="academic-eyebrow">
 
-            <main class="dashboard-content academic-page">
-
-                <div class="academic-container">
-
-
-                    <!-- =================================================
-                         HERO
-                    ================================================== -->
-
-                    <section class="academic-hero">
-
-                        <div class="academic-hero-top">
-
-                            <div class="academic-hero-label">
-
-                                <span class="academic-hero-icon">
-                                    <i class="fa-solid fa-graduation-cap"></i>
-                                </span>
-
-                                <span>
-                                    Academic Support
-                                </span>
-
-                            </div>
-
-
-                            <div class="academic-hero-status">
-
-                                <i class="fa-solid fa-circle-check"></i>
-
-                                <span>
-                                    Here to help
-                                </span>
-
-                            </div>
-
-                        </div>
-
-
-                        <div class="academic-hero-main">
-
-                            <div class="academic-hero-content">
-
-                                <span class="academic-hero-kicker">
-                                    YOUR ACADEMIC JOURNEY
-                                </span>
-
-                                <h1>
-                                    Learn better.
-                                    <span>Prepare better.</span>
-                                    Grow better.
-                                </h1>
-
-                                <p>
-                                    Find practical answers to common academic
-                                    questions or send your own question to the
-                                    Academic Help team.
-                                </p>
-
-
-                                <div class="academic-hero-actions">
-
-                                    <button
-                                        type="button"
-                                        class="academic-primary-btn"
-                                        data-scroll-to="askQuestionSection"
-                                    >
-                                        <i class="fa-solid fa-circle-question"></i>
-                                        Ask a Question
-                                    </button>
-
-                                    <button
-                                        type="button"
-                                        class="academic-secondary-btn"
-                                        data-scroll-to="faqSection"
-                                    >
-                                        <i class="fa-solid fa-magnifying-glass"></i>
-                                        Browse Answers
-                                    </button>
-
-                                </div>
-
-                            </div>
-
-
-                            <div class="academic-hero-summary">
-
-                                <div class="hero-summary-card">
-
-                                    <div class="hero-summary-icon">
-                                        <i class="fa-solid fa-book-open"></i>
-                                    </div>
-
-                                    <div>
-                                        <span>
-                                            Explore
-                                        </span>
-
-                                        <strong>
-                                            Academic resources
-                                        </strong>
-                                    </div>
-
-                                </div>
-
-
-                                <div class="hero-summary-card">
-
-                                    <div class="hero-summary-icon orange">
-                                        <i class="fa-solid fa-lightbulb"></i>
-                                    </div>
-
-                                    <div>
-                                        <span>
-                                            Ask
-                                        </span>
-
-                                        <strong>
-                                            Get practical guidance
-                                        </strong>
-                                    </div>
-
-                                </div>
-
-
-                                <div class="hero-summary-card">
-
-                                    <div class="hero-summary-icon green">
-                                        <i class="fa-solid fa-arrow-trend-up"></i>
-                                    </div>
-
-                                    <div>
-                                        <span>
-                                            Grow
-                                        </span>
-
-                                        <strong>
-                                            Make informed decisions
-                                        </strong>
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-
-                        <div class="academic-hero-footer">
-
-                            <div class="hero-footer-item">
-
-                                <i class="fa-solid fa-school"></i>
-
-                                <span>
-                                    School
-                                </span>
-
-                            </div>
-
-                            <div class="hero-footer-item">
-
-                                <i class="fa-solid fa-pen-to-square"></i>
-
-                                <span>
-                                    Exams
-                                </span>
-
-                            </div>
-
-                            <div class="hero-footer-item">
-
-                                <i class="fa-solid fa-building-columns"></i>
-
-                                <span>
-                                    University
-                                </span>
-
-                            </div>
-
-                            <div class="hero-footer-item">
-
-                                <i class="fa-solid fa-award"></i>
-
-                                <span>
-                                    Scholarships
-                                </span>
-
-                            </div>
-
-                            <div class="hero-footer-item">
-
-                                <i class="fa-solid fa-compass"></i>
-
-                                <span>
-                                    Career
-                                </span>
-
-                            </div>
-
-                        </div>
-
-                    </section>
-
-
-
-                    <!-- =================================================
-                         QUICK CATEGORIES
-                    ================================================== -->
-
-                    <section class="academic-section academic-categories-section">
-
-                        <div class="section-heading">
-
-                            <div class="section-heading-icon">
-                                <i class="fa-solid fa-layer-group"></i>
-                            </div>
-
-                            <div>
-
-                                <span>
-                                    EXPLORE
-                                </span>
-
-                                <h2>
-                                    What do you need help with?
-                                </h2>
-
-                                <p>
-                                    Start with a category or search for a
-                                    question below.
-                                </p>
-
-                            </div>
-
-                        </div>
-
-
-                        <div class="academic-category-grid">
-
-
-                            <button
-                                type="button"
-                                class="academic-category-card"
-                                data-category="Secondary School"
-                            >
-
-                                <span class="category-icon">
-                                    <i class="fa-solid fa-school"></i>
-                                </span>
-
-                                <span class="category-copy">
-
-                                    <strong>
-                                        Secondary School
-                                    </strong>
-
-                                    <small>
-                                        Schoolwork & examinations
-                                    </small>
-
-                                </span>
-
-                                <span class="category-arrow">
-                                    <i class="fa-solid fa-arrow-right"></i>
-                                </span>
-
-                            </button>
-
-
-
-                            <button
-                                type="button"
-                                class="academic-category-card"
-                                data-category="JAMB & UTME"
-                            >
-
-                                <span class="category-icon">
-                                    <i class="fa-solid fa-pen-to-square"></i>
-                                </span>
-
-                                <span class="category-copy">
-
-                                    <strong>
-                                        JAMB & UTME
-                                    </strong>
-
-                                    <small>
-                                        Preparation & admission
-                                    </small>
-
-                                </span>
-
-                                <span class="category-arrow">
-                                    <i class="fa-solid fa-arrow-right"></i>
-                                </span>
-
-                            </button>
-
-
-
-                            <button
-                                type="button"
-                                class="academic-category-card"
-                                data-category="University"
-                            >
-
-                                <span class="category-icon">
-                                    <i class="fa-solid fa-building-columns"></i>
-                                </span>
-
-                                <span class="category-copy">
-
-                                    <strong>
-                                        University
-                                    </strong>
-
-                                    <small>
-                                        Campus & academic life
-                                    </small>
-
-                                </span>
-
-                                <span class="category-arrow">
-                                    <i class="fa-solid fa-arrow-right"></i>
-                                </span>
-
-                            </button>
-
-
-
-                            <button
-                                type="button"
-                                class="academic-category-card"
-                                data-category="Scholarships"
-                            >
-
-                                <span class="category-icon">
-                                    <i class="fa-solid fa-award"></i>
-                                </span>
-
-                                <span class="category-copy">
-
-                                    <strong>
-                                        Scholarships
-                                    </strong>
-
-                                    <small>
-                                        Funding & opportunities
-                                    </small>
-
-                                </span>
-
-                                <span class="category-arrow">
-                                    <i class="fa-solid fa-arrow-right"></i>
-                                </span>
-
-                            </button>
-
-
-
-                            <button
-                                type="button"
-                                class="academic-category-card"
-                                data-category="Study Skills"
-                            >
-
-                                <span class="category-icon">
-                                    <i class="fa-solid fa-book-bookmark"></i>
-                                </span>
-
-                                <span class="category-copy">
-
-                                    <strong>
-                                        Study Skills
-                                    </strong>
-
-                                    <small>
-                                        Better ways to learn
-                                    </small>
-
-                                </span>
-
-                                <span class="category-arrow">
-                                    <i class="fa-solid fa-arrow-right"></i>
-                                </span>
-
-                            </button>
-
-
-
-                            <button
-                                type="button"
-                                class="academic-category-card"
-                                data-category="Career"
-                            >
-
-                                <span class="category-icon">
-                                    <i class="fa-solid fa-compass"></i>
-                                </span>
-
-                                <span class="category-copy">
-
-                                    <strong>
-                                        Career
-                                    </strong>
-
-                                    <small>
-                                        Direction & preparation
-                                    </small>
-
-                                </span>
-
-                                <span class="category-arrow">
-                                    <i class="fa-solid fa-arrow-right"></i>
-                                </span>
-
-                            </button>
-
-                        </div>
-
-                    </section>
-
-
-
-                    <!-- =================================================
-                         SEARCH
-                    ================================================== -->
-
-                    <section class="academic-search-section">
-
-                        <div class="academic-search-box">
-
-                            <div class="academic-search-icon">
-                                <i class="fa-solid fa-magnifying-glass"></i>
-                            </div>
-
-                            <input
-                                type="search"
-                                id="academicSearch"
-                                placeholder="Search academic questions..."
-                                autocomplete="off"
-                                aria-label="Search academic questions"
-                            >
-
-                            <button
-                                type="button"
-                                id="clearAcademicSearch"
-                                class="academic-search-clear"
-                                aria-label="Clear search"
-                                hidden
-                            >
-                                <i class="fa-solid fa-xmark"></i>
-                            </button>
-
-                        </div>
-
-                    </section>
-
-
-
-                    <!-- =================================================
-                         FAQ
-                    ================================================== -->
-
-                    <section
-                        class="academic-section academic-faq-section"
-                        id="faqSection"
-                    >
-
-                        <div class="section-heading faq-heading">
-
-                            <div class="section-heading-icon purple">
-                                <i class="fa-solid fa-comments"></i>
-                            </div>
-
-                            <div>
-
-                                <span>
-                                    COMMON QUESTIONS
-                                </span>
-
-                                <h2>
-                                    Answers that may help you
-                                </h2>
-
-                                <p>
-                                    Explore questions young people commonly
-                                    ask about their academic journey.
-                                </p>
-
-                            </div>
-
-
-                            <button
-                                type="button"
-                                class="view-all-btn"
-                                id="showAllFaqs"
-                            >
-
-                                <span>
-                                    Show all
-                                </span>
-
-                                <i class="fa-solid fa-arrow-right"></i>
-
-                            </button>
-
-                        </div>
-
-
-                        <div
-                            class="academic-filter-row"
-                            id="academicFilterRow"
-                        >
-
-                            <button
-                                type="button"
-                                class="academic-filter active"
-                                data-filter="All"
-                            >
-                                All
-                            </button>
-
-                            <button
-                                type="button"
-                                class="academic-filter"
-                                data-filter="Secondary School"
-                            >
-                                Secondary
-                            </button>
-
-                            <button
-                                type="button"
-                                class="academic-filter"
-                                data-filter="JAMB & UTME"
-                            >
-                                JAMB
-                            </button>
-
-                            <button
-                                type="button"
-                                class="academic-filter"
-                                data-filter="University"
-                            >
-                                University
-                            </button>
-
-                            <button
-                                type="button"
-                                class="academic-filter"
-                                data-filter="Scholarships"
-                            >
-                                Scholarships
-                            </button>
-
-                            <button
-                                type="button"
-                                class="academic-filter"
-                                data-filter="Study Skills"
-                            >
-                                Study Skills
-                            </button>
-
-                            <button
-                                type="button"
-                                class="academic-filter"
-                                data-filter="Career"
-                            >
-                                Career
-                            </button>
-
-                        </div>
-
-
-                        <div
-                            class="academic-faq-list"
-                            id="academicFaqList"
-                        ></div>
-
-
-                        <div
-                            class="academic-empty-state"
-                            id="academicEmptyState"
-                            hidden
-                        >
-
-                            <div class="empty-icon">
-                                <i class="fa-solid fa-magnifying-glass"></i>
-                            </div>
-
-                            <h3>
-                                No matching questions
-                            </h3>
-
-                            <p>
-                                We couldn't find an answer matching your
-                                search. You can ask the Academic Help team
-                                directly.
-                            </p>
-
-                            <button
-                                type="button"
-                                class="academic-primary-btn"
-                                data-scroll-to="askQuestionSection"
-                            >
-                                <i class="fa-solid fa-paper-plane"></i>
-                                Ask the Team
-                            </button>
-
-                        </div>
-
-                    </section>
-
-
-
-                    <!-- =================================================
-                         ASK QUESTION
-                    ================================================== -->
-
-                    <section
-                        class="academic-section ask-question-section"
-                        id="askQuestionSection"
-                    >
-
-                        <div class="ask-question-header">
-
-                            <div class="section-heading">
-
-                                <div class="section-heading-icon orange">
-                                    <i class="fa-solid fa-headset"></i>
-                                </div>
-
-                                <div>
-
-                                    <span>
-                                        NEED PERSONAL GUIDANCE?
-                                    </span>
-
-                                    <h2>
-                                        Can't find what you're looking for?
-                                    </h2>
-
-                                    <p>
-                                        Send your question to the Academic
-                                        Help team and someone will review it
-                                        and provide guidance.
-                                    </p>
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-
-                        <!--
-                            IMPORTANT:
-                            Intro and form are deliberately separate
-                            surfaces. The form is NOT nested inside
-                            the intro card.
-                        -->
-
-                        <div class="ask-question-layout">
-
-
-                            <!-- INTRO CARD -->
-
-                            <div class="ask-question-intro">
-
-                                <div class="ask-intro-top">
-
-                                    <div class="ask-question-icon">
-                                        <i class="fa-solid fa-message"></i>
-                                    </div>
-
-                                    <span class="ask-intro-label">
-                                        HOW IT WORKS
-                                    </span>
-
-                                </div>
-
-
-                                <h3>
-                                    Ask. Get guidance. Move forward.
-                                </h3>
-
-
-                                <p>
-                                    You don't have to figure everything out
-                                    alone. Send us the question you are
-                                    struggling with and our Academic Help
-                                    personnel can review it.
-                                </p>
-
-
-                                <div class="response-note">
-
-                                    <i class="fa-solid fa-clock"></i>
-
-                                    <span>
-                                        Your question will be reviewed by
-                                        the Academic Help team.
-                                    </span>
-
-                                </div>
-
-
-                                <div class="ask-process">
-
-                                    <div class="ask-process-item">
-
-                                        <span>
-                                            01
-                                        </span>
-
-                                        <div>
-                                            <strong>
-                                                Send your question
-                                            </strong>
-
-                                            <small>
-                                                Tell us what you need help with.
-                                            </small>
-                                        </div>
-
-                                    </div>
-
-
-                                    <div class="ask-process-item">
-
-                                        <span>
-                                            02
-                                        </span>
-
-                                        <div>
-                                            <strong>
-                                                We review it
-                                            </strong>
-
-                                            <small>
-                                                Someone from the team considers
-                                                your question.
-                                            </small>
-                                        </div>
-
-                                    </div>
-
-
-                                    <div class="ask-process-item">
-
-                                        <span>
-                                            03
-                                        </span>
-
-                                        <div>
-                                            <strong>
-                                                Get guidance
-                                            </strong>
-
-                                            <small>
-                                                Receive a practical response.
-                                            </small>
-                                        </div>
-
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-
-
-                            <!-- FORM CARD -->
-
-                            <div class="academic-question-form-card">
-
-                                <form
-                                    id="academicQuestionForm"
-                                    class="academic-question-form"
-                                    novalidate
-                                >
-
-                                    <div class="form-card-heading">
-
-                                        <div>
-
-                                            <span>
-                                                SEND A QUESTION
-                                            </span>
-
-                                            <h3>
-                                                Tell us what you need help with
-                                            </h3>
-
-                                        </div>
-
-                                        <div class="form-required-note">
-                                            * Required
-                                        </div>
-
-                                    </div>
-
-
-                                    <!-- NAME / PHONE -->
-
-                                    <div class="form-row">
-
-                                        <div class="form-field">
-
-                                            <label for="questionName">
-                                                Your Name
-                                                <span>*</span>
-                                            </label>
-
-                                            <div class="input-wrapper">
-
-                                                <i class="fa-regular fa-user"></i>
-
-                                                <input
-                                                    type="text"
-                                                    id="questionName"
-                                                    name="name"
-                                                    placeholder="Enter your name"
-                                                    maxlength="100"
-                                                    required
-                                                >
-
-                                            </div>
-
-                                            <small
-                                                class="field-error"
-                                                id="questionNameError"
-                                            ></small>
-
-                                        </div>
-
-
-                                        <div class="form-field">
-
-                                            <label for="questionPhone">
-                                                WhatsApp / Phone
-                                                <span>*</span>
-                                            </label>
-
-                                            <div class="input-wrapper">
-
-                                                <i class="fa-brands fa-whatsapp"></i>
-
-                                                <input
-                                                    type="tel"
-                                                    id="questionPhone"
-                                                    name="phone"
-                                                    placeholder="e.g. 08012345678"
-                                                    maxlength="30"
-                                                    required
-                                                >
-
-                                            </div>
-
-                                            <small
-                                                class="field-error"
-                                                id="questionPhoneError"
-                                            ></small>
-
-                                        </div>
-
-                                    </div>
-
-
-                                    <!-- CATEGORY / RESPONSE -->
-
-                                    <div class="form-row">
-
-                                        <div class="form-field">
-
-                                            <label for="questionCategory">
-                                                Category
-                                                <span>*</span>
-                                            </label>
-
-                                            <div class="select-wrapper">
-
-                                                <i class="fa-solid fa-layer-group"></i>
-
-                                                <select
-                                                    id="questionCategory"
-                                                    name="category"
-                                                    required
-                                                >
-
-                                                    <option value="">
-                                                        Select a category
-                                                    </option>
-
-                                                    <option value="Secondary School">
-                                                        Secondary School
-                                                    </option>
-
-                                                    <option value="JAMB & UTME">
-                                                        JAMB & UTME
-                                                    </option>
-
-                                                    <option value="University">
-                                                        University
-                                                    </option>
-
-                                                    <option value="Scholarships">
-                                                        Scholarships
-                                                    </option>
-
-                                                    <option value="Study Skills">
-                                                        Study Skills
-                                                    </option>
-
-                                                    <option value="Career">
-                                                        Career
-                                                    </option>
-
-                                                    <option value="Other">
-                                                        Other
-                                                    </option>
-
-                                                </select>
-
-                                            </div>
-
-                                            <small
-                                                class="field-error"
-                                                id="questionCategoryError"
-                                            ></small>
-
-                                        </div>
-
-
-                                        <div class="form-field">
-
-                                            <label for="questionContact">
-                                                Preferred Response
-                                            </label>
-
-                                            <div class="select-wrapper">
-
-                                                <i class="fa-solid fa-comments"></i>
-
-                                                <select
-                                                    id="questionContact"
-                                                    name="contactPreference"
-                                                >
-
-                                                    <option value="WhatsApp">
-                                                        WhatsApp
-                                                    </option>
-
-                                                    <option value="Phone Call">
-                                                        Phone Call
-                                                    </option>
-
-                                                    <option value="Portal">
-                                                        Portal
-                                                    </option>
-
-                                                </select>
-
-                                            </div>
-
-                                        </div>
-
-                                    </div>
-
-
-                                    <!-- QUESTION -->
-
-                                    <div class="form-field">
-
-                                        <label for="questionMessage">
-                                            What would you like help with?
-                                            <span>*</span>
-                                        </label>
-
-                                        <div class="textarea-wrapper">
-
-                                            <textarea
-                                                id="questionMessage"
-                                                name="question"
-                                                rows="6"
-                                                maxlength="2000"
-                                                placeholder="Tell us clearly what you need help with..."
-                                                required
-                                            ></textarea>
-
-                                            <div class="character-count">
-                                                <span id="questionCharacterCount">
-                                                    0
-                                                </span>
-                                                / 2000
-                                            </div>
-
-                                        </div>
-
-                                        <small
-                                            class="field-error"
-                                            id="questionMessageError"
-                                        ></small>
-
-                                    </div>
-
-
-                                    <!-- CONSENT -->
-
-                                    <label class="contact-consent">
-
-                                        <input
-                                            type="checkbox"
-                                            id="questionConsent"
-                                            name="consent"
-                                            required
-                                        >
-
-                                        <span class="custom-checkbox">
-                                            <i class="fa-solid fa-check"></i>
-                                        </span>
-
-                                        <span class="consent-text">
-                                            I agree that the Academic Help team
-                                            may contact me regarding this question.
-                                        </span>
-
-                                    </label>
-
-
-                                    <!-- SUBMIT -->
-
-                                    <button
-                                        type="submit"
-                                        class="submit-question-btn"
-                                        id="submitQuestionBtn"
-                                    >
-
-                                        <span class="btn-label">
-
-                                            <i class="fa-solid fa-paper-plane"></i>
-
-                                            Send My Question
-
-                                        </span>
-
-                                        <span
-                                            class="btn-loading"
-                                            hidden
-                                        >
-
-                                            <i class="fa-solid fa-spinner fa-spin"></i>
-
-                                            Sending...
-
-                                        </span>
-
-                                    </button>
-
-
-                                    <div
-                                        class="form-status"
-                                        id="academicFormStatus"
-                                        role="status"
-                                        aria-live="polite"
-                                    ></div>
-
-                                </form>
-
-                            </div>
-
-                        </div>
-
-                    </section>
-
-
-
-                    <!-- =================================================
-                         PUBLISHED ANSWERS
-                    ================================================== -->
-
-                    <section class="academic-section published-answers-section">
-
-                        <div class="section-heading">
-
-                            <div class="section-heading-icon green">
-                                <i class="fa-solid fa-circle-check"></i>
-                            </div>
-
-                            <div>
-
-                                <span>
-                                    FROM OUR TEAM
-                                </span>
-
-                                <h2>
-                                    Questions we've answered
-                                </h2>
-
-                                <p>
-                                    Helpful responses from our Academic Help
-                                    team can become useful resources for others.
-                                </p>
-
-                            </div>
-
-                        </div>
-
-
-                        <div
-                            class="published-answer-grid"
-                            id="publishedAnswerGrid"
-                        >
-
-                            <div class="published-loading">
-
-                                <i class="fa-solid fa-spinner fa-spin"></i>
-
-                                <span>
-                                    Loading helpful answers...
-                                </span>
-
-                            </div>
-
-                        </div>
-
-                    </section>
-
-
-
-                    <!-- =================================================
-                         FINAL CTA
-                    ================================================== -->
-
-                    <section class="academic-final-cta">
-
-                        <div class="final-cta-icon">
+                        <span class="academic-eyebrow-icon">
                             <i class="fa-solid fa-graduation-cap"></i>
-                        </div>
+                        </span>
 
-                        <div class="final-cta-copy">
+                        Academic Help
 
-                            <span>
-                                KEEP MOVING FORWARD
-                            </span>
+                    </div>
 
-                            <h2>
-                                Your academic journey matters.
-                            </h2>
 
-                            <p>
-                                Don't be afraid to ask questions. Getting
-                                guidance early can make a real difference.
-                            </p>
+                    <h1>
+                        Need help with school?
+                        <span>Start here.</span>
+                    </h1>
 
-                        </div>
+
+                    <p>
+                        Find answers to common academic questions or send us
+                        your question directly.
+                    </p>
+
+
+                    <div class="academic-hero-actions">
 
                         <button
                             type="button"
                             class="academic-primary-btn"
-                            data-scroll-to="askQuestionSection"
+                            data-scroll-to="academicFaqSection"
                         >
-
-                            Ask for Help
-
-                            <i class="fa-solid fa-arrow-right"></i>
-
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            Find an Answer
                         </button>
 
-                    </section>
 
+                        <button
+                            type="button"
+                            class="academic-text-btn"
+                            data-scroll-to="askQuestionSection"
+                        >
+                            Ask a Question
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+
+                    </div>
 
                 </div>
 
-            </main>
 
-        </div>
+                <div class="academic-hero-mark">
+
+                    <div class="hero-mark-circle">
+
+                        <i class="fa-solid fa-graduation-cap"></i>
+
+                    </div>
+
+                    <span>
+                        Learn · Grow · Excel
+                    </span>
+
+                </div>
+
+            </section>
 
 
-        <!-- =====================================================
-             MOBILE BOTTOM NAV
-        ====================================================== -->
 
-        <div id="app-bottom-nav"></div>
+            <!-- =================================================
+                 QUICK CATEGORIES
+            ================================================== -->
+
+            <section
+                class="academic-categories-section"
+                data-aos="fade-up"
+            >
+
+                <div class="academic-section-heading">
+
+                    <div>
+
+                        <span class="academic-section-kicker">
+                            Quick Start
+                        </span>
+
+                        <h2>
+                            What do you need help with?
+                        </h2>
+
+                    </div>
+
+                </div>
+
+
+                <div class="academic-category-grid">
+
+
+                    <button
+                        type="button"
+                        class="academic-category-card"
+                        data-category="Secondary School"
+                    >
+
+                        <span class="category-icon">
+                            <i class="fa-solid fa-school"></i>
+                        </span>
+
+                        <span class="category-copy">
+
+                            <strong>
+                                Secondary School
+                            </strong>
+
+                            <small>
+                                Schoolwork & exams
+                            </small>
+
+                        </span>
+
+                        <i class="fa-solid fa-arrow-right category-arrow"></i>
+
+                    </button>
+
+
+
+                    <button
+                        type="button"
+                        class="academic-category-card"
+                        data-category="JAMB & UTME"
+                    >
+
+                        <span class="category-icon">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                        </span>
+
+                        <span class="category-copy">
+
+                            <strong>
+                                JAMB & UTME
+                            </strong>
+
+                            <small>
+                                Admission & preparation
+                            </small>
+
+                        </span>
+
+                        <i class="fa-solid fa-arrow-right category-arrow"></i>
+
+                    </button>
+
+
+
+                    <button
+                        type="button"
+                        class="academic-category-card"
+                        data-category="University"
+                    >
+
+                        <span class="category-icon">
+                            <i class="fa-solid fa-building-columns"></i>
+                        </span>
+
+                        <span class="category-copy">
+
+                            <strong>
+                                University
+                            </strong>
+
+                            <small>
+                                School & campus life
+                            </small>
+
+                        </span>
+
+                        <i class="fa-solid fa-arrow-right category-arrow"></i>
+
+                    </button>
+
+
+
+                    <button
+                        type="button"
+                        class="academic-category-card"
+                        data-category="Career"
+                    >
+
+                        <span class="category-icon">
+                            <i class="fa-solid fa-compass"></i>
+                        </span>
+
+                        <span class="category-copy">
+
+                            <strong>
+                                Career
+                            </strong>
+
+                            <small>
+                                Direction & preparation
+                            </small>
+
+                        </span>
+
+                        <i class="fa-solid fa-arrow-right category-arrow"></i>
+
+                    </button>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- =================================================
+                 FAQ / ANSWERS
+            ================================================== -->
+
+            <section
+                class="academic-faq-section"
+                id="academicFaqSection"
+                data-aos="fade-up"
+            >
+
+
+                <div class="academic-section-heading faq-heading">
+
+                    <div>
+
+                        <span class="academic-section-kicker">
+                            Common Questions
+                        </span>
+
+                        <h2>
+                            Answers that may help
+                        </h2>
+
+                    </div>
+
+
+                    <button
+                        type="button"
+                        class="academic-show-all"
+                        id="showAllFaqs"
+                    >
+                        <span>
+                            Show all
+                        </span>
+
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+
+                </div>
+
+
+
+                <!-- SEARCH -->
+
+                <div class="academic-search-box">
+
+                    <i class="fa-solid fa-magnifying-glass"></i>
+
+                    <input
+                        type="search"
+                        id="academicSearch"
+                        placeholder="Search questions..."
+                        autocomplete="off"
+                        aria-label="Search academic questions"
+                    >
+
+                    <button
+                        type="button"
+                        id="clearAcademicSearch"
+                        class="academic-search-clear"
+                        aria-label="Clear search"
+                        hidden
+                    >
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+
+                </div>
+
+
+
+                <!-- FILTERS -->
+
+                <div
+                    class="academic-filter-row"
+                    id="academicFilterRow"
+                >
+
+                    <button
+                        type="button"
+                        class="academic-filter active"
+                        data-filter="All"
+                    >
+                        All
+                    </button>
+
+                    <button
+                        type="button"
+                        class="academic-filter"
+                        data-filter="Secondary School"
+                    >
+                        Secondary
+                    </button>
+
+                    <button
+                        type="button"
+                        class="academic-filter"
+                        data-filter="JAMB & UTME"
+                    >
+                        JAMB
+                    </button>
+
+                    <button
+                        type="button"
+                        class="academic-filter"
+                        data-filter="University"
+                    >
+                        University
+                    </button>
+
+                    <button
+                        type="button"
+                        class="academic-filter"
+                        data-filter="Career"
+                    >
+                        Career
+                    </button>
+
+                </div>
+
+
+
+                <!-- FAQ LIST -->
+
+                <div
+                    class="academic-faq-list"
+                    id="academicFaqList"
+                ></div>
+
+
+
+                <!-- EMPTY -->
+
+                <div
+                    class="academic-empty-state"
+                    id="academicEmptyState"
+                    hidden
+                >
+
+                    <div class="empty-icon">
+
+                        <i class="fa-solid fa-magnifying-glass"></i>
+
+                    </div>
+
+                    <h3>
+                        No matching question
+                    </h3>
+
+                    <p>
+                        Can't find what you need?
+                        Ask the Academic Help team.
+                    </p>
+
+                    <button
+                        type="button"
+                        class="academic-primary-btn"
+                        data-scroll-to="askQuestionSection"
+                    >
+                        <i class="fa-solid fa-paper-plane"></i>
+                        Ask the Team
+                    </button>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- =================================================
+                 ASK QUESTION
+            ================================================== -->
+
+            <section
+                class="ask-question-section"
+                id="askQuestionSection"
+                data-aos="fade-up"
+            >
+
+
+                <!-- INTRO CARD -->
+
+                <div class="ask-question-intro">
+
+                    <div class="ask-question-icon">
+
+                        <i class="fa-solid fa-headset"></i>
+
+                    </div>
+
+
+                    <div class="ask-question-intro-copy">
+
+                        <span class="academic-section-kicker">
+                            Need Personal Help?
+                        </span>
+
+                        <h2>
+                            Can't find your answer?
+                        </h2>
+
+                        <p>
+                            Send your question to the Academic Help team.
+                            We'll review it and provide guidance.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- FORM CARD -->
+
+                <div class="academic-question-card">
+
+
+                    <form
+                        id="academicQuestionForm"
+                        class="academic-question-form"
+                        novalidate
+                    >
+
+
+                        <!-- NAME + PHONE -->
+
+                        <div class="form-row">
+
+                            <div class="form-field">
+
+                                <label for="questionName">
+                                    Your Name
+                                    <span>*</span>
+                                </label>
+
+                                <div class="input-wrapper">
+
+                                    <i class="fa-regular fa-user"></i>
+
+                                    <input
+                                        type="text"
+                                        id="questionName"
+                                        name="name"
+                                        placeholder="Your name"
+                                        maxlength="100"
+                                        autocomplete="name"
+                                        required
+                                    >
+
+                                </div>
+
+                                <small
+                                    class="field-error"
+                                    id="questionNameError"
+                                ></small>
+
+                            </div>
+
+
+
+                            <div class="form-field">
+
+                                <label for="questionPhone">
+                                    WhatsApp / Phone
+                                    <span>*</span>
+                                </label>
+
+                                <div class="input-wrapper">
+
+                                    <i class="fa-brands fa-whatsapp"></i>
+
+                                    <input
+                                        type="tel"
+                                        id="questionPhone"
+                                        name="phone"
+                                        placeholder="08012345678"
+                                        maxlength="30"
+                                        autocomplete="tel"
+                                        required
+                                    >
+
+                                </div>
+
+                                <small
+                                    class="field-error"
+                                    id="questionPhoneError"
+                                ></small>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- CATEGORY + CONTACT -->
+
+                        <div class="form-row">
+
+                            <div class="form-field">
+
+                                <label for="questionCategory">
+                                    Category
+                                    <span>*</span>
+                                </label>
+
+                                <div class="select-wrapper">
+
+                                    <i class="fa-solid fa-layer-group"></i>
+
+                                    <select
+                                        id="questionCategory"
+                                        name="category"
+                                        required
+                                    >
+
+                                        <option value="">
+                                            Select category
+                                        </option>
+
+                                        <option value="Secondary School">
+                                            Secondary School
+                                        </option>
+
+                                        <option value="JAMB & UTME">
+                                            JAMB & UTME
+                                        </option>
+
+                                        <option value="University">
+                                            University
+                                        </option>
+
+                                        <option value="Scholarships">
+                                            Scholarships
+                                        </option>
+
+                                        <option value="Study Skills">
+                                            Study Skills
+                                        </option>
+
+                                        <option value="Career">
+                                            Career
+                                        </option>
+
+                                        <option value="Other">
+                                            Other
+                                        </option>
+
+                                    </select>
+
+                                </div>
+
+                                <small
+                                    class="field-error"
+                                    id="questionCategoryError"
+                                ></small>
+
+                            </div>
+
+
+
+                            <div class="form-field">
+
+                                <label for="questionContact">
+                                    Preferred Response
+                                </label>
+
+                                <div class="select-wrapper">
+
+                                    <i class="fa-solid fa-comments"></i>
+
+                                    <select
+                                        id="questionContact"
+                                        name="contactPreference"
+                                    >
+
+                                        <option value="WhatsApp">
+                                            WhatsApp
+                                        </option>
+
+                                        <option value="Phone Call">
+                                            Phone Call
+                                        </option>
+
+                                        <option value="Portal">
+                                            Portal
+                                        </option>
+
+                                    </select>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- QUESTION -->
+
+                        <div class="form-field">
+
+                            <label for="questionMessage">
+                                Your Question
+                                <span>*</span>
+                            </label>
+
+                            <div class="textarea-wrapper">
+
+                                <textarea
+                                    id="questionMessage"
+                                    name="question"
+                                    rows="5"
+                                    maxlength="2000"
+                                    placeholder="Tell us what you need help with..."
+                                    required
+                                ></textarea>
+
+                                <div class="character-count">
+
+                                    <span id="questionCharacterCount">
+                                        0
+                                    </span>
+
+                                    / 2000
+
+                                </div>
+
+                            </div>
+
+                            <small
+                                class="field-error"
+                                id="questionMessageError"
+                            ></small>
+
+                        </div>
+
+
+
+                        <!-- CONSENT -->
+
+                        <label class="contact-consent">
+
+                            <input
+                                type="checkbox"
+                                id="questionConsent"
+                                name="consent"
+                                required
+                            >
+
+                            <span class="custom-checkbox">
+
+                                <i class="fa-solid fa-check"></i>
+
+                            </span>
+
+                            <span class="consent-text">
+
+                                I agree that the Academic Help team may
+                                contact me about this question.
+
+                            </span>
+
+                        </label>
+
+
+
+                        <!-- SUBMIT -->
+
+                        <button
+                            type="submit"
+                            class="submit-question-btn"
+                            id="submitQuestionBtn"
+                        >
+
+                            <span
+                                class="btn-label"
+                                id="submitButtonLabel"
+                            >
+
+                                <i class="fa-solid fa-paper-plane"></i>
+
+                                Send My Question
+
+                            </span>
+
+
+                            <span
+                                class="btn-loading"
+                                id="submitButtonLoading"
+                                hidden
+                            >
+
+                                <i class="fa-solid fa-spinner fa-spin"></i>
+
+                                Sending...
+
+                            </span>
+
+                        </button>
+
+
+
+                        <!-- STATUS -->
+
+                        <div
+                            class="form-status"
+                            id="academicFormStatus"
+                            role="status"
+                            aria-live="polite"
+                        ></div>
+
+
+                    </form>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- =================================================
+                 PUBLISHED ANSWERS
+            ================================================== -->
+
+            <section
+                class="published-answers-section"
+                data-aos="fade-up"
+            >
+
+                <div class="academic-section-heading">
+
+                    <div>
+
+                        <span class="academic-section-kicker">
+                            From Our Team
+                        </span>
+
+                        <h2>
+                            Questions we've answered
+                        </h2>
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    class="published-answer-grid"
+                    id="publishedAnswerGrid"
+                >
+
+                    <div class="published-loading">
+
+                        <i class="fa-solid fa-spinner fa-spin"></i>
+
+                        <span>
+                            Loading answers...
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+
+        </main>
 
     </div>
 
 
     <!-- =========================================================
-         JAVASCRIPT
-    ========================================================= -->
+         MOBILE BOTTOM NAV
+    ========================================================== -->
 
-    <script src="../js/pwa.js"></script>
+    <div id="app-bottom-nav"></div>
 
-    <script src="../js/main.js"></script>
 
-    <script src="../js/academichelp.js"></script>
+</div>
 
-    <!--
-        layout.js MUST come after main.js and academichelp.js
-        because it injects the shared layout and then fires
-        afc:layout-ready.
-    -->
 
-    <script src="../js/layout.js"></script>
+
+<!-- =============================================================
+     JAVASCRIPT
+============================================================== -->
+
+<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+
+<script src="../js/pwa.js"></script>
+
+<script src="../js/main.js"></script>
+
+<script src="../js/academichelp.js"></script>
+
+<script src="../js/layout.js"></script>
 
 
 </body>
