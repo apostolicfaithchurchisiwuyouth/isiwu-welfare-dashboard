@@ -1,7 +1,7 @@
 /* =========================================================
    AFC ISIU YOUTH PORTAL V2
    FILE: pwa.js
-   VERSION: 3.0
+   VERSION: 3.1
 
    PURPOSE:
    - PWA service worker registration
@@ -10,7 +10,8 @@
    - Installed-state detection
    - Manifest verification
    - PWA diagnostics
-   - Push notification subscription
+   - PUBLIC push notification subscription
+   - NO LOGIN REQUIRED FOR PUSH NOTIFICATIONS
    ========================================================= */
 
 (function () {
@@ -20,7 +21,7 @@
 
     /* =====================================================
        CONFIG
-    ===================================================== */
+       ===================================================== */
 
     const PWA_CONFIG = {
 
@@ -49,11 +50,9 @@
        STATE
        ===================================================== */
 
-    let deferredInstallPrompt =
-        null;
+    let deferredInstallPrompt = null;
 
-    let serviceWorkerRegistration =
-        null;
+    let serviceWorkerRegistration = null;
 
 
     /* =====================================================
@@ -71,20 +70,15 @@
        DOM ELEMENTS
        ===================================================== */
 
-    let installButton =
-        null;
+    let installButton = null;
 
-    let helpButton =
-        null;
+    let helpButton = null;
 
-    let status =
-        null;
+    let status = null;
 
-    let statusDot =
-        null;
+    let statusDot = null;
 
-    let statusText =
-        null;
+    let statusText = null;
 
 
     /* =====================================================
@@ -131,9 +125,7 @@
 
             if (type) {
 
-                status.classList.add(
-                    type
-                );
+                status.classList.add(type);
 
             }
 
@@ -151,9 +143,7 @@
 
             if (type) {
 
-                statusDot.classList.add(
-                    type
-                );
+                statusDot.classList.add(type);
 
             }
 
@@ -274,12 +264,15 @@
 
         showInstallButton();
 
+
         installButton.disabled =
             false;
+
 
         installButton.classList.add(
             "pwa-install-ready"
         );
+
 
         installButton.setAttribute(
             "aria-label",
@@ -304,8 +297,10 @@
 
         showInstallButton();
 
+
         installButton.disabled =
             false;
+
 
         installButton.classList.remove(
             "pwa-install-ready"
@@ -330,15 +325,14 @@
         installButton.disabled =
             true;
 
+
         installButton.classList.add(
             "is-installing"
         );
 
 
         const icon =
-            installButton.querySelector(
-                "i"
-            );
+            installButton.querySelector("i");
 
 
         if (icon) {
@@ -348,6 +342,7 @@
                 "fa-mobile-screen-button",
                 "fa-plus"
             );
+
 
             icon.classList.add(
                 "fa-spinner",
@@ -411,15 +406,14 @@
         installButton.disabled =
             false;
 
+
         installButton.classList.remove(
             "is-installing"
         );
 
 
         const icon =
-            installButton.querySelector(
-                "i"
-            );
+            installButton.querySelector("i");
 
 
         if (icon) {
@@ -428,6 +422,7 @@
                 "fa-spinner",
                 "fa-spin"
             );
+
 
             icon.classList.add(
                 "fa-download"
@@ -473,14 +468,14 @@
         }
 
 
-        modal.classList.add(
-            "show"
-        );
+        modal.classList.add("show");
+
 
         modal.setAttribute(
             "aria-hidden",
             "false"
         );
+
 
         document.body.classList.add(
             "pwa-modal-open"
@@ -506,14 +501,14 @@
         }
 
 
-        modal.classList.remove(
-            "show"
-        );
+        modal.classList.remove("show");
+
 
         modal.setAttribute(
             "aria-hidden",
             "true"
         );
+
 
         document.body.classList.remove(
             "pwa-modal-open"
@@ -572,6 +567,7 @@
                     "Installing AFC Isiu Youth Portal..."
                 );
 
+
                 return true;
 
             }
@@ -584,6 +580,7 @@
 
 
             resetInstallButton();
+
 
             return false;
 
@@ -603,6 +600,7 @@
 
 
             resetInstallButton();
+
 
             return false;
 
@@ -853,6 +851,7 @@
 
             hideInstallButton();
 
+
             resetInstallButton();
 
         }
@@ -1099,6 +1098,7 @@
 
             hideInstallButton();
 
+
             return;
 
         }
@@ -1131,15 +1131,23 @@
     }
 
 
+    /* =====================================================
+       BASE64URL → UINT8ARRAY
+       ===================================================== */
+
     function base64UrlToUint8Array(
         base64String
     ) {
 
         const padding =
             "=".repeat(
-                (4 - (
-                    base64String.length % 4
-                )) % 4
+                (
+                    4 -
+                    (
+                        base64String.length %
+                        4
+                    )
+                ) % 4
             );
 
 
@@ -1153,9 +1161,7 @@
 
 
         const rawData =
-            window.atob(
-                base64
-            );
+            window.atob(base64);
 
 
         const outputArray =
@@ -1181,6 +1187,10 @@
     }
 
 
+    /* =====================================================
+       GET PUSH REGISTRATION
+       ===================================================== */
+
     async function getPushRegistration() {
 
         if (
@@ -1205,6 +1215,10 @@
 
     }
 
+
+    /* =====================================================
+       GET VAPID PUBLIC KEY
+       ===================================================== */
 
     async function getVapidPublicKey() {
 
@@ -1236,6 +1250,16 @@
             await response.json();
 
 
+        if (!data.success) {
+
+            throw new Error(
+                data.message ||
+                "Unable to load push configuration."
+            );
+
+        }
+
+
         const publicKey =
             String(
                 data.publicKey ||
@@ -1257,6 +1281,10 @@
 
     }
 
+
+    /* =====================================================
+       GET CURRENT PUSH SUBSCRIPTION
+       ===================================================== */
 
     async function getPushSubscription() {
 
@@ -1286,32 +1314,18 @@
     }
 
 
+    /* =====================================================
+       SAVE PUSH SUBSCRIPTION
+       
+       IMPORTANT:
+       - NO LOGIN REQUIRED
+       - NO MEMBER ID REQUIRED
+       - NO MEMBER NAME REQUIRED
+       ===================================================== */
+
     async function savePushSubscription(
-        subscription,
-        memberId,
-        memberName
+        subscription
     ) {
-
-        const cleanMemberId =
-            String(
-                memberId || ""
-            ).trim();
-
-
-        const cleanMemberName =
-            String(
-                memberName || ""
-            ).trim();
-
-
-        if (!cleanMemberId) {
-
-            throw new Error(
-                "A member ID is required before enabling notifications."
-            );
-
-        }
-
 
         if (!subscription) {
 
@@ -1322,32 +1336,47 @@
         }
 
 
+        const subscriptionData =
+            subscription.toJSON();
+
+
+        if (
+            !subscriptionData ||
+            !subscriptionData.endpoint
+        ) {
+
+            throw new Error(
+                "The browser returned an invalid push subscription."
+            );
+
+        }
+
+
         const response =
             await fetch(
                 PWA_CONFIG.PUSH_API_URL,
                 {
                     method: "POST",
+
                     headers: {
                         "Content-Type":
                             "text/plain;charset=utf-8"
                     },
+
                     body:
                         JSON.stringify({
+
                             action:
                                 "savePushSubscription",
 
-                            memberId:
-                                cleanMemberId,
-
-                            memberName:
-                                cleanMemberName,
-
                             subscription:
-                                subscription.toJSON(),
+                                subscriptionData,
 
                             userAgent:
                                 navigator.userAgent
+
                         })
+
                 }
             );
 
@@ -1376,15 +1405,29 @@
         }
 
 
+        console.log(
+            "[PWA] Push subscription saved successfully."
+        );
+
+
         return result;
 
     }
 
 
-    async function subscribeToPush(
-        memberId,
-        memberName
-    ) {
+    /* =====================================================
+       SUBSCRIBE TO PUSH
+       
+       PUBLIC:
+       ANY VISITOR CAN ENABLE NOTIFICATIONS.
+       
+       There is deliberately NO:
+       - member ID check
+       - login check
+       - account check
+       ===================================================== */
+
+    async function subscribeToPush() {
 
         if (
             !isPushSupported()
@@ -1397,19 +1440,9 @@
         }
 
 
-        const cleanMemberId =
-            String(
-                memberId || ""
-            ).trim();
-
-
-        if (!cleanMemberId) {
-
-            throw new Error(
-                "A member ID is required before enabling notifications."
-            );
-
-        }
+        console.log(
+            "[PWA] Starting public push notification subscription."
+        );
 
 
         const registration =
@@ -1424,6 +1457,10 @@
 
         }
 
+
+        /* =================================================
+           REQUEST NOTIFICATION PERMISSION
+           ================================================= */
 
         let permission =
             Notification.permission;
@@ -1461,12 +1498,30 @@
         }
 
 
+        console.log(
+            "[PWA] Notification permission granted."
+        );
+
+
+        /* =================================================
+           GET EXISTING SUBSCRIPTION
+           ================================================= */
+
         let subscription =
             await registration.pushManager
                 .getSubscription();
 
 
+        /* =================================================
+           CREATE NEW SUBSCRIPTION
+           ================================================= */
+
         if (!subscription) {
+
+            console.log(
+                "[PWA] Creating new push subscription."
+            );
+
 
             const publicKey =
                 await getVapidPublicKey();
@@ -1486,29 +1541,53 @@
 
                     });
 
+
+            console.log(
+                "[PWA] Browser push subscription created."
+            );
+
+        }
+        else {
+
+            console.log(
+                "[PWA] Existing push subscription found."
+            );
+
         }
 
 
+        /* =================================================
+           SAVE TO GOOGLE APPS SCRIPT
+           ================================================= */
+
         const saved =
             await savePushSubscription(
-                subscription,
-                cleanMemberId,
-                memberName
+                subscription
             );
 
 
         return {
+
             success:
                 true,
 
-            subscription,
+            subscribed:
+                true,
+
+            subscription:
+                subscription,
 
             result:
                 saved
+
         };
 
     }
 
+
+    /* =====================================================
+       DELETE PUSH SUBSCRIPTION FROM SERVER
+       ===================================================== */
 
     async function deletePushSubscriptionFromServer(
         subscription
@@ -1523,15 +1602,30 @@
         }
 
 
+        const endpoint =
+            subscription.endpoint;
+
+
+        if (!endpoint) {
+
+            return {
+                success: true
+            };
+
+        }
+
+
         const response =
             await fetch(
                 PWA_CONFIG.PUSH_API_URL,
                 {
                     method: "POST",
+
                     headers: {
                         "Content-Type":
                             "text/plain;charset=utf-8"
                     },
+
                     body:
                         JSON.stringify({
 
@@ -1539,9 +1633,10 @@
                                 "deletePushSubscription",
 
                             endpoint:
-                                subscription.endpoint
+                                endpoint
 
                         })
+
                 }
             );
 
@@ -1575,6 +1670,10 @@
     }
 
 
+    /* =====================================================
+       UNSUBSCRIBE FROM PUSH
+       ===================================================== */
+
     async function unsubscribeFromPush() {
 
         if (
@@ -1582,6 +1681,7 @@
         ) {
 
             return {
+
                 success:
                     false,
 
@@ -1590,6 +1690,7 @@
 
                 message:
                     "Push notifications are not supported."
+
             };
 
         }
@@ -1602,6 +1703,7 @@
         if (!registration) {
 
             return {
+
                 success:
                     false,
 
@@ -1610,6 +1712,7 @@
 
                 message:
                     "The service worker is not ready."
+
             };
 
         }
@@ -1623,35 +1726,67 @@
         if (!subscription) {
 
             return {
+
                 success:
                     true,
 
                 subscribed:
                     false
+
             };
 
         }
 
 
-        await deletePushSubscriptionFromServer(
-            subscription
-        );
+        try {
+
+            await deletePushSubscriptionFromServer(
+                subscription
+            );
+
+        }
+        catch (error) {
+
+            console.warn(
+                "[PWA] Server subscription removal failed:",
+                error
+            );
+
+            /*
+             * We continue with the browser unsubscribe.
+             * This prevents the user from being stuck subscribed
+             * locally if the server has a temporary problem.
+             */
+
+        }
 
 
         const unsubscribed =
             await subscription.unsubscribe();
 
 
+        console.log(
+            "[PWA] Browser push subscription removed:",
+            unsubscribed
+        );
+
+
         return {
+
             success:
                 unsubscribed,
 
             subscribed:
                 false
+
         };
 
     }
 
+
+    /* =====================================================
+       PUSH PERMISSION STATE
+       ===================================================== */
 
     async function getPushPermissionState() {
 
