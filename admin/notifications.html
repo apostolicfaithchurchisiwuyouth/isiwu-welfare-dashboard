@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="theme-color"
+        content="#0a0016"
+    >
+
+    <title>
+        Notifications · AFC Isiu Youth Admin
+    </title>
+
+    <!-- Fonts -->
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700&family=DM+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <!-- Font Awesome -->
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="/admin/notifications.css"
+    >
+
+</head>
+
+
+<body>
+
+    <div class="admin-app">
+
+
+        <!-- =====================================================
+             LOGIN SCREEN
+        ====================================================== -->
+
+        <section
+            id="loginScreen"
+            class="login-screen"
+        >
+
+            <div class="login-card">
+
+                <div class="login-logo">
+
+                    <div class="logo-mark">
+                        <i class="fa-solid fa-bell"></i>
+                    </div>
+
+                </div>
+
+
+                <span class="eyebrow">
+                    AFC ISIU YOUTH PORTAL
+                </span>
+
+
+                <h1>
+                    Admin Notifications
+                </h1>
+
+
+                <p class="login-description">
+                    Sign in to manage push notifications
+                    for the Youth Portal.
+                </p>
+
+
+                <form id="loginForm">
+
+                    <label for="adminSecret">
+                        Admin password
+                    </label>
+
+                    <div class="input-wrap">
+
+                        <i class="fa-solid fa-lock"></i>
+
+                        <input
+                            id="adminSecret"
+                            type="password"
+                            autocomplete="current-password"
+                            placeholder="Enter admin password"
+                            required
+                        >
+
+                        <button
+                            type="button"
+                            id="togglePassword"
+                            class="input-action"
+                            aria-label="Show password"
+                        >
+                            <i class="fa-solid fa-eye"></i>
+                        </button>
+
+                    </div>
+
+
+                    <button
+                        type="submit"
+                        class="primary-button login-button"
+                        id="loginButton"
+                    >
+
+                        <i class="fa-solid fa-arrow-right-to-bracket"></i>
+
+                        <span>
+                            Continue
+                        </span>
+
+                    </button>
+
+
+                    <p
+                        id="loginError"
+                        class="form-error hidden"
+                    ></p>
+
+                </form>
+
+
+                <a
+                    href="/"
+                    class="back-link"
+                >
+                    <i class="fa-solid fa-arrow-left"></i>
+                    Back to portal
+                </a>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =====================================================
+             ADMIN APP
+        ====================================================== -->
+
+        <section
+            id="adminScreen"
+            class="admin-screen hidden"
+        >
+
+
+            <!-- HEADER -->
+
+            <header class="admin-header">
+
+                <div class="header-left">
+
+                    <a
+                        href="/"
+                        class="brand"
+                    >
+
+                        <div class="brand-mark">
+                            <i class="fa-solid fa-bell"></i>
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                AFC Isiu Youth
+                            </strong>
+
+                            <span>
+                                Admin
+                            </span>
+
+                        </div>
+
+                    </a>
+
+                </div>
+
+
+                <div class="header-right">
+
+                    <span
+                        id="headerStatus"
+                        class="connection-status"
+                    >
+
+                        <span class="status-dot"></span>
+
+                        Checking...
+
+                    </span>
+
+
+                    <button
+                        type="button"
+                        id="logoutButton"
+                        class="icon-button"
+                        aria-label="Logout"
+                        title="Logout"
+                    >
+
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+
+                    </button>
+
+                </div>
+
+            </header>
+
+
+
+            <!-- MAIN -->
+
+            <main class="admin-main">
+
+
+                <!-- PAGE INTRO -->
+
+                <section class="page-intro">
+
+                    <div>
+
+                        <span class="eyebrow">
+                            COMMUNICATION
+                        </span>
+
+                        <h1>
+                            Notifications
+                        </h1>
+
+                        <p>
+                            Send important updates directly
+                            to everyone who has enabled
+                            notifications on the portal.
+                        </p>
+
+                    </div>
+
+
+                    <button
+                        type="button"
+                        id="refreshButton"
+                        class="secondary-button"
+                    >
+
+                        <i class="fa-solid fa-rotate"></i>
+
+                        Refresh
+
+                    </button>
+
+                </section>
+
+
+
+                <!-- =================================================
+                     STAT CARDS
+                ================================================== -->
+
+                <section class="stats-grid">
+
+
+                    <article class="stat-card">
+
+                        <div class="stat-icon purple">
+                            <i class="fa-solid fa-users"></i>
+                        </div>
+
+                        <div>
+
+                            <span>
+                                Active subscribers
+                            </span>
+
+                            <strong id="subscriberCount">
+                                —
+                            </strong>
+
+                        </div>
+
+                    </article>
+
+
+                    <article class="stat-card">
+
+                        <div class="stat-icon green">
+                            <i class="fa-solid fa-circle-check"></i>
+                        </div>
+
+                        <div>
+
+                            <span>
+                                Push system
+                            </span>
+
+                            <strong id="systemStatus">
+                                Checking
+                            </strong>
+
+                        </div>
+
+                    </article>
+
+
+                    <article class="stat-card">
+
+                        <div class="stat-icon orange">
+                            <i class="fa-solid fa-clock"></i>
+                        </div>
+
+                        <div>
+
+                            <span>
+                                Timezone
+                            </span>
+
+                            <strong id="timezone">
+                                Africa/Lagos
+                            </strong>
+
+                        </div>
+
+                    </article>
+
+
+                </section>
+
+
+
+                <!-- =================================================
+                     SEND NOTIFICATION
+                ================================================== -->
+
+                <section class="content-grid">
+
+
+                    <div class="panel send-panel">
+
+                        <div class="panel-header">
+
+                            <div>
+
+                                <span class="panel-label">
+                                    SEND NOW
+                                </span>
+
+                                <h2>
+                                    Create notification
+                                </h2>
+
+                                <p>
+                                    This will be sent to all
+                                    active notification subscribers.
+                                </p>
+
+                            </div>
+
+                            <div class="panel-icon">
+                                <i class="fa-solid fa-paper-plane"></i>
+                            </div>
+
+                        </div>
+
+
+                        <form id="notificationForm">
+
+
+                            <div class="form-group">
+
+                                <label for="notificationTitle">
+                                    Notification title
+                                </label>
+
+                                <input
+                                    id="notificationTitle"
+                                    type="text"
+                                    maxlength="80"
+                                    placeholder="AFC Isiu Youth"
+                                    required
+                                >
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label for="notificationBody">
+                                    Message
+                                </label>
+
+                                <textarea
+                                    id="notificationBody"
+                                    maxlength="220"
+                                    rows="5"
+                                    placeholder="Enter your notification message..."
+                                    required
+                                ></textarea>
+
+                                <div class="character-count">
+                                    <span id="bodyCount">
+                                        0
+                                    </span>
+                                    / 220
+                                </div>
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label for="notificationUrl">
+                                    Open when tapped
+                                </label>
+
+                                <select
+                                    id="notificationUrl"
+                                >
+
+                                    <option value="/">
+                                        Home
+                                    </option>
+
+                                    <option value="/lessons.html">
+                                        Lessons
+                                    </option>
+
+                                    <option value="/quiz.html">
+                                        Quiz
+                                    </option>
+
+                                    <option value="/gallery.html">
+                                        Gallery
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label for="notificationTag">
+                                    Notification tag
+                                    <span class="optional">
+                                        Optional
+                                    </span>
+                                </label>
+
+                                <input
+                                    id="notificationTag"
+                                    type="text"
+                                    maxlength="50"
+                                    placeholder="general-announcement"
+                                >
+
+                            </div>
+
+
+                            <div class="send-warning">
+
+                                <i class="fa-solid fa-circle-info"></i>
+
+                                <p>
+                                    This notification will be sent
+                                    to <strong id="recipientPreview">—</strong>
+                                    active subscribers.
+                                </p>
+
+                            </div>
+
+
+                            <button
+                                type="submit"
+                                class="primary-button send-button"
+                                id="sendButton"
+                            >
+
+                                <i class="fa-solid fa-paper-plane"></i>
+
+                                <span>
+                                    Send notification
+                                </span>
+
+                            </button>
+
+
+                        </form>
+
+                    </div>
+
+
+
+                    <!-- =================================================
+                         PREVIEW
+                    ================================================== -->
+
+                    <div class="panel preview-panel">
+
+                        <div class="panel-header">
+
+                            <div>
+
+                                <span class="panel-label">
+                                    PREVIEW
+                                </span>
+
+                                <h2>
+                                    Notification preview
+                                </h2>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="phone-preview">
+
+                            <div class="phone-status">
+
+                                <span>
+                                    AFC Isiu Youth
+                                </span>
+
+                                <span>
+                                    now
+                                </span>
+
+                            </div>
+
+
+                            <div class="notification-preview">
+
+                                <div class="preview-icon">
+                                    <i class="fa-solid fa-bell"></i>
+                                </div>
+
+
+                                <div class="preview-content">
+
+                                    <strong id="previewTitle">
+                                        AFC Isiu Youth
+                                    </strong>
+
+                                    <p id="previewBody">
+                                        Your notification message
+                                        will appear here.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="preview-note">
+
+                            <i class="fa-solid fa-mobile-screen-button"></i>
+
+                            <span>
+                                The actual appearance may vary
+                                slightly by device and browser.
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                </section>
+
+
+
+                <!-- =================================================
+                     QUICK NOTIFICATIONS
+                ================================================== -->
+
+                <section class="panel quick-panel">
+
+                    <div class="panel-header">
+
+                        <div>
+
+                            <span class="panel-label">
+                                QUICK START
+                            </span>
+
+                            <h2>
+                                Common notifications
+                            </h2>
+
+                            <p>
+                                Tap one to fill the notification form.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="quick-grid">
+
+
+                        <button
+                            type="button"
+                            class="quick-card"
+                            data-title="AFC Isiu Youth"
+                            data-message="A new lesson is now available on the Youth Portal. Open the portal to study."
+                            data-url="/lessons.html"
+                        >
+
+                            <i class="fa-solid fa-book-open"></i>
+
+                            <span>
+                                New lesson
+                            </span>
+
+                        </button>
+
+
+                        <button
+                            type="button"
+                            class="quick-card"
+                            data-title="AFC Isiu Youth"
+                            data-message="This week's Sunday Lesson Challenge quiz is now available. Test what you have learned!"
+                            data-url="/quiz.html"
+                        >
+
+                            <i class="fa-solid fa-circle-question"></i>
+
+                            <span>
+                                New quiz
+                            </span>
+
+                        </button>
+
+
+                        <button
+                            type="button"
+                            class="quick-card"
+                            data-title="AFC Isiu Youth"
+                            data-message="Don't forget about today's youth programme. We look forward to seeing you!"
+                            data-url="/"
+                        >
+
+                            <i class="fa-solid fa-calendar-days"></i>
+
+                            <span>
+                                Programme reminder
+                            </span>
+
+                        </button>
+
+
+                        <button
+                            type="button"
+                            class="quick-card"
+                            data-title="AFC Isiu Youth"
+                            data-message="We have an important announcement for you. Open the Youth Portal to find out more."
+                            data-url="/"
+                        >
+
+                            <i class="fa-solid fa-bullhorn"></i>
+
+                            <span>
+                                Announcement
+                            </span>
+
+                        </button>
+
+
+                    </div>
+
+                </section>
+
+
+
+                <!-- =================================================
+                     SYSTEM INFORMATION
+                ================================================== -->
+
+                <section class="panel system-panel">
+
+                    <div class="panel-header">
+
+                        <div>
+
+                            <span class="panel-label">
+                                SYSTEM
+                            </span>
+
+                            <h2>
+                                Notification system
+                            </h2>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="system-list">
+
+
+                        <div class="system-row">
+
+                            <span>
+                                VAPID configuration
+                            </span>
+
+                            <strong id="vapidStatus">
+                                Checking...
+                            </strong>
+
+                        </div>
+
+
+                        <div class="system-row">
+
+                            <span>
+                                Push sender
+                            </span>
+
+                            <strong id="senderStatus">
+                                Checking...
+                            </strong>
+
+                        </div>
+
+
+                        <div class="system-row">
+
+                            <span>
+                                Active subscriptions
+                            </span>
+
+                            <strong id="systemSubscriberCount">
+                                —
+                            </strong>
+
+                        </div>
+
+
+                        <div class="system-row">
+
+                            <span>
+                                Last checked
+                            </span>
+
+                            <strong id="lastChecked">
+                                —
+                            </strong>
+
+                        </div>
+
+
+                    </div>
+
+                </section>
+
+
+            </main>
+
+
+            <!-- FOOTER -->
+
+            <footer class="admin-footer">
+
+                AFC Isiu Youth Portal
+
+                <span>·</span>
+
+                Notification Administration
+
+            </footer>
+
+
+        </section>
+
+
+
+        <!-- =====================================================
+             TOAST
+        ====================================================== -->
+
+        <div
+            id="toastContainer"
+            class="toast-container"
+            aria-live="polite"
+        ></div>
+
+
+    </div>
+
+
+    <script src="/admin/notifications.js"></script>
+
+</body>
+
+</html>
