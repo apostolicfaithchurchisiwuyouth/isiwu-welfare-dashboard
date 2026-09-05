@@ -1751,3 +1751,517 @@ main,
 
     color: #ffffff;
 }
+
+
+
+
+
+/* ============================================================
+   AFC ISIU YOUTH PORTAL V2
+   OFFLINE CONNECTION BANNER
+   ============================================================ */
+
+/*
+ * The banner is hidden by default.
+ *
+ * This is important:
+ * even though JavaScript creates the banner on every page,
+ * it MUST NOT appear while the device is online.
+ */
+
+.offline-banner {
+
+    position: fixed;
+
+    top: 0;
+    left: 0;
+    right: 0;
+
+    width: 100%;
+
+    z-index: 100000;
+
+    display: block;
+
+    box-sizing: border-box;
+
+    padding:
+        10px
+        14px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #0a0016 0%,
+            #26032f 52%,
+            #4a0754 100%
+        );
+
+    color: #ffffff;
+
+    border-bottom:
+        1px solid
+        rgba(255, 255, 255, 0.10);
+
+    box-shadow:
+        0 8px 30px
+        rgba(10, 0, 22, 0.28);
+
+    opacity: 0;
+
+    visibility: hidden;
+
+    pointer-events: none;
+
+    transform:
+        translateY(-110%);
+
+    transition:
+        opacity 0.28s ease,
+        transform 0.32s cubic-bezier(
+            0.22,
+            1,
+            0.36,
+            1
+        ),
+        visibility 0s linear 0.32s;
+
+}
+
+
+/*
+ * Visible state.
+ */
+
+.offline-banner.show {
+
+    opacity: 1;
+
+    visibility: visible;
+
+    pointer-events: auto;
+
+    transform:
+        translateY(0);
+
+    transition:
+        opacity 0.28s ease,
+        transform 0.32s cubic-bezier(
+            0.22,
+            1,
+            0.36,
+            1
+        ),
+        visibility 0s linear 0s;
+
+}
+
+
+/* ============================================================
+   INNER CONTAINER
+   ============================================================ */
+
+.offline-banner-inner {
+
+    width: 100%;
+
+    max-width: 1180px;
+
+    min-height: 42px;
+
+    margin: 0 auto;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 11px;
+
+    box-sizing: border-box;
+
+}
+
+
+/* ============================================================
+   ICON
+   ============================================================ */
+
+.offline-banner-icon {
+
+    width: 34px;
+
+    height: 34px;
+
+    flex: 0 0 34px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.10
+        );
+
+    border:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            0.12
+        );
+
+    box-shadow:
+        inset 0 1px 0
+        rgba(
+            255,
+            255,
+            255,
+            0.08
+        );
+
+}
+
+
+.offline-banner-icon i {
+
+    font-size: 0.85rem;
+
+    color: #ffffff;
+
+    opacity: 0.95;
+
+}
+
+
+/*
+ * Slight visual indication that the connection
+ * is unavailable.
+ */
+
+.offline-banner.show
+.offline-banner-icon i {
+
+    animation:
+        offlineWifiPulse
+        1.8s ease-in-out
+        infinite;
+
+}
+
+
+@keyframes offlineWifiPulse {
+
+    0%,
+    100% {
+
+        opacity: 0.55;
+
+        transform:
+            scale(1);
+
+    }
+
+    50% {
+
+        opacity: 1;
+
+        transform:
+            scale(1.08);
+
+    }
+
+}
+
+
+/* ============================================================
+   TEXT
+   ============================================================ */
+
+.offline-banner-copy {
+
+    min-width: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 7px;
+
+    text-align: center;
+
+}
+
+
+.offline-banner-copy strong {
+
+    margin: 0;
+
+    font-family:
+        "Bricolage Grotesque",
+        sans-serif;
+
+    font-size:
+        0.82rem;
+
+    font-weight: 700;
+
+    line-height: 1.25;
+
+    letter-spacing:
+        -0.01em;
+
+    color:
+        #ffffff;
+
+}
+
+
+.offline-banner-copy span {
+
+    margin: 0;
+
+    font-family:
+        "DM Sans",
+        sans-serif;
+
+    font-size:
+        0.76rem;
+
+    font-weight: 500;
+
+    line-height: 1.35;
+
+    color:
+        rgba(
+            255,
+            255,
+            255,
+            0.76
+        );
+
+}
+
+
+/* ============================================================
+   CREATE SPACE FOR THE FIXED BANNER
+   ============================================================ */
+
+/*
+ * The banner is fixed, so it does not occupy normal document
+ * space by itself.
+ *
+ * This wrapper creates the required space above the portal.
+ *
+ * Nothing happens while online because the variable is 0px.
+ */
+
+body.offline-active #app-topbar {
+
+    padding-top:
+        var(
+            --afc-offline-banner-height,
+            0px
+        );
+
+}
+
+
+/*
+ * If the topbar is directly inside .main-area,
+ * this ensures the main content also starts below it.
+ */
+
+body.offline-active .main-area {
+
+    padding-top:
+        var(
+            --afc-offline-banner-height,
+            0px
+        );
+
+}
+
+
+/*
+ * Avoid accidentally doubling the spacing on pages
+ * where the topbar wrapper already controls the layout.
+ */
+
+body.offline-active
+.main-area
+#app-topbar {
+
+    box-sizing: border-box;
+
+}
+
+
+/* ============================================================
+   MOBILE
+   ============================================================ */
+
+@media (max-width: 768px) {
+
+    .offline-banner {
+
+        padding:
+            8px
+            12px;
+
+    }
+
+
+    .offline-banner-inner {
+
+        min-height: 40px;
+
+        gap: 9px;
+
+    }
+
+
+    .offline-banner-icon {
+
+        width: 31px;
+
+        height: 31px;
+
+        flex-basis: 31px;
+
+    }
+
+
+    .offline-banner-icon i {
+
+        font-size:
+            0.76rem;
+
+    }
+
+
+    .offline-banner-copy {
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        justify-content: center;
+
+        gap: 2px;
+
+        text-align: left;
+
+    }
+
+
+    .offline-banner-copy strong {
+
+        font-size:
+            0.76rem;
+
+        line-height:
+            1.25;
+
+    }
+
+
+    .offline-banner-copy span {
+
+        font-size:
+            0.68rem;
+
+        line-height:
+            1.35;
+
+    }
+
+}
+
+
+/* ============================================================
+   VERY SMALL PHONES
+   ============================================================ */
+
+@media (max-width: 380px) {
+
+    .offline-banner {
+
+        padding:
+            7px
+            10px;
+
+    }
+
+
+    .offline-banner-inner {
+
+        gap: 8px;
+
+    }
+
+
+    .offline-banner-icon {
+
+        width: 29px;
+
+        height: 29px;
+
+        flex-basis: 29px;
+
+    }
+
+
+    .offline-banner-copy strong {
+
+        font-size:
+            0.72rem;
+
+    }
+
+
+    .offline-banner-copy span {
+
+        font-size:
+            0.64rem;
+
+    }
+
+}
+
+
+/* ============================================================
+   REDUCED MOTION
+   ============================================================ */
+
+@media (
+    prefers-reduced-motion: reduce
+) {
+
+    .offline-banner {
+
+        transition: none;
+
+    }
+
+
+    .offline-banner.show
+    .offline-banner-icon i {
+
+        animation: none;
+
+    }
+
+}
