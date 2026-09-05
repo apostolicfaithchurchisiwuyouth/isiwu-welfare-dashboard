@@ -1,7 +1,7 @@
 /* ============================================================
    AFC ISIU YOUTH PORTAL V2
-   ACADEMIC HELP PAGE CONTROLLER
    FILE: academichelp.js
+   PURPOSE: ACADEMIC HELP PAGE CONTROLLER
    ============================================================ */
 
 (function () {
@@ -9,237 +9,842 @@
     "use strict";
 
 
-    /* ============================================================
-       CONFIG
-       ============================================================ */
+    /* ========================================================
+       CONFIGURATION
+    ======================================================== */
 
     const ACADEMIC_CONFIG = {
 
-        VERSION: "1.0.0",
+        VERSION: "2.0.0",
 
-        APPS_SCRIPT_URL:
+        API:
             "https://script.google.com/macros/s/AKfycbw1mVwpgAcIOSNbpgzy52TFyozEGMtWWwVWUDFaofGNpzsguBIaKR4q1dXVtgVHO2xZ1w/exec",
 
-        MAX_QUESTION_LENGTH: 2000
+        MAX_QUESTION_LENGTH:
+            2000,
+
+        FAQ_INITIAL_LIMIT:
+            6
 
     };
 
 
-    /* ============================================================
-       FAQ DATA
-       ============================================================ */
+    /* ========================================================
+       STATE
+    ======================================================== */
 
-    const FAQ_DATA = [
+    let activeCategory = "All";
+
+    let searchTerm = "";
+
+    let showAllFaqs = false;
+
+    let faqData = [];
+
+    let publishedAnswers = [];
+
+    let initialized = false;
+
+
+    /* ========================================================
+       DEFAULT FAQ DATA
+       ======================================================== */
+
+    const DEFAULT_FAQS = [
 
         {
-            id: 1,
+            id: "faq-001",
+
             category: "Secondary School",
-            question: "How can I prepare better for my school examinations?",
+
+            question:
+                "How can I study effectively when I have many subjects to prepare for?",
+
             answer:
-                "Start early instead of waiting until the examination is close. Break your subjects into smaller topics, create a realistic study timetable, revise regularly, practise past questions where available, and make time to rest. If there is a topic you do not understand, ask a teacher, trusted senior, or someone who can guide you rather than leaving the topic unattended."
+                "Start by listing your subjects and identifying what needs the most attention. Break your study time into focused sessions instead of trying to study everything at once. Use active recall, practise questions and regular revision, and give difficult subjects more attention while still maintaining the others.",
+
+            featured: true
         },
 
+
         {
-            id: 2,
+            id: "faq-002",
+
             category: "Secondary School",
-            question: "What should I do if I am struggling with a particular subject?",
+
+            question:
+                "What should I do if I keep studying but still forget what I read?",
+
             answer:
-                "First identify exactly what you do not understand. Review your class notes, try simpler explanations, practise related questions, and ask your teacher or another trusted person for help. Do not conclude that you are simply bad at the subject. Sometimes the problem is the learning method rather than your ability."
+                "Reading repeatedly is not always the same as learning. After studying a topic, close your book and explain what you remember. Test yourself with questions, write short summaries and return to the material after some time. Active recall and spaced revision can make your study sessions more effective.",
+
+            featured: true
         },
 
+
         {
-            id: 3,
+            id: "faq-003",
+
             category: "JAMB & UTME",
-            question: "How should I prepare for JAMB?",
+
+            question:
+                "How should I prepare for JAMB without becoming overwhelmed?",
+
             answer:
-                "Begin preparation early. Understand the subjects required for your intended course, study the official syllabus, practise questions regularly, review your mistakes, and use reliable study materials. Avoid depending only on repeated questions or examination rumours. Your preparation should help you understand the subjects, not simply memorise answers."
+                "Start early and create a realistic study routine. Know the subjects and topics you need to cover, practise with past questions and track the areas where you repeatedly make mistakes. Do not measure your progress by how many hours you sit with a book; measure it by what you can actually remember and answer correctly.",
+
+            featured: true
         },
 
-        {
-            id: 4,
-            category: "JAMB & UTME",
-            question: "How do I choose the right course to study?",
-            answer:
-                "Consider your interests, strengths, academic performance, career direction, and the actual requirements of the course. Research the subjects involved and the kind of work graduates commonly do. Also check the requirements of institutions you are considering. It is wise to speak with teachers, counsellors, graduates, and trusted adults before making an important decision."
-        },
 
         {
-            id: 5,
+            id: "faq-004",
+
             category: "University",
-            question: "How can I adjust to university life?",
+
+            question:
+                "How do I choose a university course that is right for me?",
+
             answer:
-                "University requires more personal responsibility. Learn how your institution works, attend classes, keep track of deadlines, organise your notes, build healthy friendships, and ask for help when you need it. Do not wait until you are already overwhelmed before seeking academic support."
+                "Consider your interests, strengths, academic requirements, career opportunities and the type of work you may want to do in the future. Do not choose a course simply because friends are choosing it or because it sounds popular. Research the course carefully and seek guidance from people with relevant experience.",
+
+            featured: true
         },
 
+
         {
-            id: 6,
+            id: "faq-005",
+
+            category: "Scholarships",
+
+            question:
+                "Where should I begin when looking for scholarship opportunities?",
+
+            answer:
+                "Start by identifying scholarships that match your level of study, course, location and eligibility requirements. Read the official requirements carefully, prepare important documents early and keep track of application deadlines. Never pay someone simply because they claim they can guarantee a scholarship.",
+
+            featured: true
+        },
+
+
+        {
+            id: "faq-006",
+
+            category: "Study Skills",
+
+            question:
+                "How can I create a study timetable that I can actually follow?",
+
+            answer:
+                "Keep your timetable realistic. Assign specific subjects to specific periods, include breaks and leave room for unexpected activities. It is better to create a simple schedule you can consistently follow than an impressive timetable that becomes impossible to maintain after a few days.",
+
+            featured: true
+        },
+
+
+        {
+            id: "faq-007",
+
+            category: "Career",
+
+            question:
+                "When should I start thinking about my career?",
+
+            answer:
+                "You do not need to have your entire career figured out immediately. Start by learning about different fields, noticing your interests and strengths, developing useful skills and speaking with people who work in areas that interest you. Career direction can become clearer as you learn and gain experience.",
+
+            featured: false
+        },
+
+
+        {
+            id: "faq-008",
+
             category: "University",
-            question: "How can I manage my time as a university student?",
+
+            question:
+                "What can I do if I am struggling academically at university?",
+
             answer:
-                "Start by listing your important commitments and deadlines. Create a weekly plan that includes lectures, personal study, assignments, rest, and other responsibilities. Avoid filling every hour with activities. A simple plan that you actually follow is more useful than a complicated timetable that you abandon."
+                "Identify the specific areas causing difficulty instead of simply concluding that you are not good enough. Speak with lecturers, classmates, academic advisers or other trusted people. Review your study habits, attend classes where possible and seek help early rather than waiting until examinations are close.",
+
+            featured: false
         },
 
-        {
-            id: 7,
-            category: "Scholarships",
-            question: "Where can I find scholarship opportunities?",
-            answer:
-                "Look for opportunities through your school, university, government agencies, reputable organisations, foundations, and official scholarship websites. Always verify the source and eligibility requirements. Be careful with opportunities that demand unusual payments or ask for sensitive information before providing verifiable details."
-        },
 
         {
-            id: 8,
-            category: "Scholarships",
-            question: "What can make a scholarship application stronger?",
-            answer:
-                "Read the requirements carefully and answer exactly what the application asks. Keep your information truthful, present your achievements clearly, explain your goals thoughtfully, and proofread your application before submitting it. Where references or supporting documents are required, make sure they are accurate and submitted in the requested format."
-        },
+            id: "faq-009",
 
-        {
-            id: 9,
             category: "Study Skills",
-            question: "How can I remember what I study?",
+
+            question:
+                "Is studying for many hours always better?",
+
             answer:
-                "Do more than read the same page repeatedly. After studying a topic, close your book and try to explain what you remember. Use practice questions, flashcards, summaries, and spaced revision. Connecting a new idea to something you already understand can also make it easier to remember."
+                "Not necessarily. Concentration, understanding and retention matter more than simply counting hours. Focused study sessions with clear goals, active practice and appropriate breaks can be more useful than long sessions where your attention has already dropped.",
+
+            featured: false
         },
 
-        {
-            id: 10,
-            category: "Study Skills",
-            question: "How do I create a study timetable that I can actually follow?",
-            answer:
-                "Start with the time you genuinely have available. Give difficult subjects focused periods and include short breaks. Set specific goals for each study session rather than simply writing 'study'. Leave some flexibility for unexpected responsibilities. A realistic timetable is better than one that expects you to study for many hours every day without rest."
-        },
 
         {
-            id: 11,
+            id: "faq-010",
+
             category: "Career",
-            question: "How do I know which career is right for me?",
-            answer:
-                "Career decisions usually become clearer through exploration. Consider your interests, strengths, values, subjects you enjoy, and the kinds of problems you like solving. Research different careers and speak with people who work in those areas. You do not have to have every part of your future figured out immediately."
-        },
 
-        {
-            id: 12,
-            category: "Career",
-            question: "What should I do to prepare for life after graduation?",
+            question:
+                "How can I start developing career skills while still in school?",
+
             answer:
-                "Build both academic knowledge and practical skills. Learn how to communicate well, work with others, solve problems, use relevant digital tools, and present yourself professionally. Look for legitimate opportunities to gain experience, volunteer, learn, or work on meaningful projects while continuing your education."
+                "Begin with skills that are useful across many fields: communication, problem solving, digital literacy, teamwork, writing and time management. You can also practise through school projects, volunteering, personal projects and structured learning opportunities.",
+
+            featured: false
         }
 
     ];
 
 
-    /* ============================================================
-       STATE
-       ============================================================ */
-
-    let currentFilter = "All";
-    let searchTerm = "";
-    let showAll = false;
-
-
-    /* ============================================================
-       DOM HELPERS
-       ============================================================ */
+    /* ========================================================
+       DOM HELPER
+    ======================================================== */
 
     function $(id) {
+
         return document.getElementById(id);
+
     }
 
 
+    /* ========================================================
+       ESCAPE HTML
+    ======================================================== */
+
     function escapeHTML(value) {
 
-        return String(value || "")
+        return String(value ?? "")
+
             .replace(/&/g, "&amp;")
+
             .replace(/</g, "&lt;")
+
             .replace(/>/g, "&gt;")
+
             .replace(/"/g, "&quot;")
+
             .replace(/'/g, "&#039;");
 
     }
 
 
-    /* ============================================================
-       SCROLL HELPERS
-       ============================================================ */
+    /* ========================================================
+       NORMALIZE TEXT
+    ======================================================== */
 
-    function initializeScrollButtons() {
+    function normalizeText(value) {
 
-        document.querySelectorAll("[data-scroll-to]").forEach(button => {
+        return String(value ?? "")
 
-            button.addEventListener("click", function () {
+            .trim()
 
-                const targetId = this.dataset.scrollTo;
-                const target = $(targetId);
-
-                if (!target) return;
-
-                target.scrollIntoView({
-                    behavior: "smooth",
-                    block: "start"
-                });
-
-            });
-
-        });
+            .toLowerCase();
 
     }
 
 
-    /* ============================================================
-       FAQ RENDERING
-       ============================================================ */
+    /* ========================================================
+       DOM READY
+    ======================================================== */
 
-    function getFilteredFAQs() {
+    function initializeAcademicHelp() {
 
-        let results = FAQ_DATA.filter(item => {
+        if (initialized) {
 
-            const categoryMatch =
-                currentFilter === "All" ||
-                item.category === currentFilter;
+            return;
+        }
 
-            const searchableText =
-                `${item.question} ${item.answer} ${item.category}`
-                    .toLowerCase();
-
-            const searchMatch =
-                !searchTerm ||
-                searchableText.includes(searchTerm);
-
-            return categoryMatch && searchMatch;
-
-        });
+        initialized = true;
 
 
-        if (!showAll) {
+        console.log(
+            "[AFC Academic Help] Initializing version",
+            ACADEMIC_CONFIG.VERSION
+        );
 
-            results = results.slice(0, 6);
+
+        faqData =
+            DEFAULT_FAQS.slice();
+
+
+        setupScrollButtons();
+
+        setupCategoryButtons();
+
+        setupSearch();
+
+        setupFilters();
+
+        setupFaqToggle();
+
+        setupQuestionForm();
+
+        renderFaqs();
+
+        loadPublishedAnswers();
+
+        initializeFontCheck();
+
+    }
+
+
+    /* ========================================================
+       LAYOUT READY
+       ======================================================== */
+
+    function waitForPageReady() {
+
+        if (
+            document.readyState ===
+            "loading"
+        ) {
+
+            document.addEventListener(
+                "DOMContentLoaded",
+                initializeAcademicHelp,
+                {
+                    once: true
+                }
+            );
+
+            return;
+        }
+
+
+        initializeAcademicHelp();
+
+    }
+
+
+    /*
+     * The shared layout.js dispatches
+     * afc:layout-ready after injecting
+     * sidebar/topbar/bottom navigation.
+     *
+     * Academic Help itself does not depend
+     * on the layout, but listening here keeps
+     * the page compatible with the portal shell.
+     */
+
+    window.addEventListener(
+        "afc:layout-ready",
+        function () {
+
+            initializeAcademicHelp();
+
+        }
+    );
+
+
+    waitForPageReady();
+
+
+    /* ========================================================
+       SCROLL BUTTONS
+    ======================================================== */
+
+    function setupScrollButtons() {
+
+        document.addEventListener(
+            "click",
+            function (event) {
+
+                const button =
+                    event.target.closest(
+                        "[data-scroll-to]"
+                    );
+
+
+                if (!button) {
+
+                    return;
+                }
+
+
+                const targetId =
+                    button.getAttribute(
+                        "data-scroll-to"
+                    );
+
+
+                if (!targetId) {
+
+                    return;
+                }
+
+
+                const target =
+                    document.getElementById(
+                        targetId
+                    );
+
+
+                if (!target) {
+
+                    return;
+                }
+
+
+                event.preventDefault();
+
+
+                target.scrollIntoView({
+
+                    behavior: "smooth",
+
+                    block: "start"
+
+                });
+
+            }
+        );
+
+    }
+
+
+    /* ========================================================
+       CATEGORY BUTTONS
+    ======================================================== */
+
+    function setupCategoryButtons() {
+
+        const buttons =
+            document.querySelectorAll(
+                ".academic-category-card"
+            );
+
+
+        buttons.forEach(
+            function (button) {
+
+                button.addEventListener(
+                    "click",
+                    function () {
+
+                        const category =
+                            button.dataset.category ||
+                            "All";
+
+
+                        activeCategory =
+                            category;
+
+                        showAllFaqs =
+                            false;
+
+
+                        document
+                            .querySelectorAll(
+                                ".academic-filter"
+                            )
+                            .forEach(
+                                function (filter) {
+
+                                    filter.classList.toggle(
+                                        "active",
+                                        filter.dataset.filter ===
+                                            category
+                                    );
+
+                                }
+                            );
+
+
+                        renderFaqs();
+
+
+                        const faqSection =
+                            $("faqSection");
+
+
+                        if (faqSection) {
+
+                            setTimeout(
+                                function () {
+
+                                    faqSection.scrollIntoView({
+
+                                        behavior: "smooth",
+
+                                        block: "start"
+
+                                    });
+
+                                },
+                                80
+                            );
+
+                        }
+
+                    }
+                );
+
+            }
+        );
+
+    }
+
+
+    /* ========================================================
+       SEARCH
+    ======================================================== */
+
+    function setupSearch() {
+
+        const searchInput =
+            $("academicSearch");
+
+
+        const clearButton =
+            $("clearAcademicSearch");
+
+
+        if (!searchInput) {
+
+            return;
+        }
+
+
+        searchInput.addEventListener(
+            "input",
+            function () {
+
+                searchTerm =
+                    normalizeText(
+                        searchInput.value
+                    );
+
+
+                showAllFaqs =
+                    true;
+
+
+                if (clearButton) {
+
+                    clearButton.hidden =
+                        !searchTerm;
+
+                }
+
+
+                renderFaqs();
+
+            }
+        );
+
+
+        if (clearButton) {
+
+            clearButton.addEventListener(
+                "click",
+                function () {
+
+                    searchInput.value =
+                        "";
+
+                    searchTerm =
+                        "";
+
+                    clearButton.hidden =
+                        true;
+
+                    renderFaqs();
+
+                    searchInput.focus();
+
+                }
+            );
 
         }
 
-        return results;
+    }
+
+
+    /* ========================================================
+       FILTERS
+    ======================================================== */
+
+    function setupFilters() {
+
+        const filters =
+            document.querySelectorAll(
+                ".academic-filter"
+            );
+
+
+        filters.forEach(
+            function (filter) {
+
+                filter.addEventListener(
+                    "click",
+                    function () {
+
+                        activeCategory =
+                            filter.dataset.filter ||
+                            "All";
+
+
+                        showAllFaqs =
+                            activeCategory !==
+                            "All";
+
+
+                        filters.forEach(
+                            function (item) {
+
+                                item.classList.toggle(
+                                    "active",
+                                    item === filter
+                                );
+
+                            }
+                        );
+
+
+                        renderFaqs();
+
+                    }
+                );
+
+            }
+        );
 
     }
 
 
-    function renderFAQs() {
+    /* ========================================================
+       SHOW ALL
+    ======================================================== */
 
-        const list = $("academicFaqList");
-        const emptyState = $("academicEmptyState");
+    function setupFaqToggle() {
 
-        if (!list) return;
-
-        const results = getFilteredFAQs();
-
-        list.innerHTML = "";
+        const button =
+            $("showAllFaqs");
 
 
-        if (!results.length) {
+        if (!button) {
+
+            return;
+        }
+
+
+        button.addEventListener(
+            "click",
+            function () {
+
+                showAllFaqs =
+                    !showAllFaqs;
+
+
+                updateShowAllButton();
+
+                renderFaqs();
+
+            }
+        );
+
+    }
+
+
+    function updateShowAllButton() {
+
+        const button =
+            $("showAllFaqs");
+
+
+        if (!button) {
+
+            return;
+        }
+
+
+        const text =
+            button.querySelector(
+                "span"
+            );
+
+
+        const icon =
+            button.querySelector(
+                "i"
+            );
+
+
+        if (showAllFaqs) {
+
+            if (text) {
+
+                text.textContent =
+                    "Show less";
+
+            }
+
+            if (icon) {
+
+                icon.className =
+                    "fa-solid fa-arrow-up";
+
+            }
+
+        } else {
+
+            if (text) {
+
+                text.textContent =
+                    "Show all";
+
+            }
+
+            if (icon) {
+
+                icon.className =
+                    "fa-solid fa-arrow-right";
+
+            }
+
+        }
+
+    }
+
+
+    /* ========================================================
+       FILTER FAQ DATA
+    ======================================================== */
+
+    function getFilteredFaqs() {
+
+        return faqData.filter(
+            function (faq) {
+
+                const categoryMatches =
+                    activeCategory ===
+                    "All" ||
+                    normalizeText(
+                        faq.category
+                    ) ===
+                    normalizeText(
+                        activeCategory
+                    );
+
+
+                if (!categoryMatches) {
+
+                    return false;
+                }
+
+
+                if (!searchTerm) {
+
+                    return true;
+                }
+
+
+                const searchable =
+                    [
+
+                        faq.question,
+
+                        faq.answer,
+
+                        faq.category
+
+                    ]
+                    .join(" ");
+
+
+                return normalizeText(
+                    searchable
+                ).includes(
+                    searchTerm
+                );
+
+            }
+        );
+
+    }
+
+
+    /* ========================================================
+       RENDER FAQS
+    ======================================================== */
+
+    function renderFaqs() {
+
+        const container =
+            $("academicFaqList");
+
+
+        const emptyState =
+            $("academicEmptyState");
+
+
+        if (!container) {
+
+            return;
+        }
+
+
+        const filtered =
+            getFilteredFaqs();
+
+
+        let visible =
+            filtered;
+
+
+        if (
+            !showAllFaqs &&
+            !searchTerm &&
+            activeCategory === "All"
+        ) {
+
+            visible =
+                filtered.slice(
+                    0,
+                    ACADEMIC_CONFIG.FAQ_INITIAL_LIMIT
+                );
+
+        }
+
+
+        if (
+            !showAllFaqs &&
+            !searchTerm &&
+            activeCategory !== "All"
+        ) {
+
+            visible =
+                filtered.slice(
+                    0,
+                    ACADEMIC_CONFIG.FAQ_INITIAL_LIMIT
+                );
+
+        }
+
+
+        if (
+            filtered.length === 0
+        ) {
+
+            container.innerHTML =
+                "";
+
 
             if (emptyState) {
-                emptyState.hidden = false;
+
+                emptyState.hidden =
+                    false;
+
             }
+
 
             return;
 
@@ -247,17 +852,52 @@
 
 
         if (emptyState) {
-            emptyState.hidden = true;
+
+            emptyState.hidden =
+                true;
+
         }
 
 
-        results.forEach(item => {
+        container.innerHTML =
+            visible
+                .map(
+                    renderFaqItem
+                )
+                .join("");
 
-            const article = document.createElement("article");
 
-            article.className = "academic-faq-item";
+        bindRenderedFaqItems();
 
-            article.innerHTML = `
+        updateShowAllButton();
+
+    }
+
+
+    /* ========================================================
+       RENDER FAQ ITEM
+    ======================================================== */
+
+    function renderFaqItem(
+        faq,
+        index
+    ) {
+
+        const number =
+            String(
+                index + 1
+            ).padStart(
+                2,
+                "0"
+            );
+
+
+        return `
+
+            <article
+                class="academic-faq-item"
+                data-faq-id="${escapeHTML(faq.id)}"
+            >
 
                 <button
                     type="button"
@@ -265,15 +905,17 @@
                     aria-expanded="false"
                 >
 
-                    <span class="faq-question-icon">
-                        <i class="fa-solid fa-circle-question"></i>
+                    <span class="academic-faq-number">
+                        ${number}
                     </span>
 
-                    <span class="faq-question-text">
-                        ${escapeHTML(item.question)}
+                    <span class="academic-faq-question-text">
+                        ${escapeHTML(faq.question)}
                     </span>
 
-                    <i class="fa-solid fa-chevron-down faq-chevron"></i>
+                    <span class="academic-faq-chevron">
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </span>
 
                 </button>
 
@@ -284,13 +926,19 @@
 
                         <div class="academic-faq-answer-content">
 
-                            <span class="faq-category-label">
-                                ${escapeHTML(item.category)}
-                            </span>
-
                             <p>
-                                ${escapeHTML(item.answer)}
+                                ${escapeHTML(faq.answer)}
                             </p>
+
+                            <div class="academic-faq-meta">
+
+                                <i class="fa-solid fa-circle-check"></i>
+
+                                <span>
+                                    Academic Help resource
+                                </span>
+
+                            </div>
 
                         </div>
 
@@ -298,687 +946,883 @@
 
                 </div>
 
-            `;
+            </article>
 
-
-            const questionButton =
-                article.querySelector(".academic-faq-question");
-
-
-            questionButton.addEventListener("click", function () {
-
-                const isOpen =
-                    article.classList.contains("open");
-
-
-                document
-                    .querySelectorAll(".academic-faq-item.open")
-                    .forEach(openItem => {
-
-                        if (openItem !== article) {
-
-                            openItem.classList.remove("open");
-
-                            const button =
-                                openItem.querySelector(
-                                    ".academic-faq-question"
-                                );
-
-                            if (button) {
-                                button.setAttribute(
-                                    "aria-expanded",
-                                    "false"
-                                );
-                            }
-
-                        }
-
-                    });
-
-
-                article.classList.toggle("open", !isOpen);
-
-                this.setAttribute(
-                    "aria-expanded",
-                    String(!isOpen)
-                );
-
-            });
-
-
-            list.appendChild(article);
-
-        });
+        `;
 
     }
 
 
-    /* ============================================================
-       FILTERS
-       ============================================================ */
+    /* ========================================================
+       FAQ ACCORDION
+    ======================================================== */
 
-    function initializeFilters() {
+    function bindRenderedFaqItems() {
 
-        document
-            .querySelectorAll(".academic-filter")
-            .forEach(button => {
+        const items =
+            document.querySelectorAll(
+                ".academic-faq-item"
+            );
 
-                button.addEventListener("click", function () {
 
-                    currentFilter =
-                        this.dataset.filter || "All";
+        items.forEach(
+            function (item) {
 
-                    showAll = false;
+                const button =
+                    item.querySelector(
+                        ".academic-faq-question"
+                    );
 
-                    document
-                        .querySelectorAll(".academic-filter")
-                        .forEach(item => {
 
-                            item.classList.toggle(
-                                "active",
-                                item === this
+                if (!button) {
+
+                    return;
+                }
+
+
+                button.addEventListener(
+                    "click",
+                    function () {
+
+                        const isOpen =
+                            item.classList.contains(
+                                "open"
                             );
 
-                        });
 
-                    renderFAQs();
+                        document
+                            .querySelectorAll(
+                                ".academic-faq-item.open"
+                            )
+                            .forEach(
+                                function (openItem) {
 
-                });
+                                    if (
+                                        openItem !==
+                                        item
+                                    ) {
 
-            });
-
-    }
-
-
-    /* ============================================================
-       CATEGORY CARDS
-       ============================================================ */
-
-    function initializeCategoryCards() {
-
-        document
-            .querySelectorAll(".academic-category-card")
-            .forEach(card => {
-
-                card.addEventListener("click", function () {
-
-                    const category =
-                        this.dataset.category || "All";
+                                        openItem.classList.remove(
+                                            "open"
+                                        );
 
 
-                    currentFilter = category;
+                                        const openButton =
+                                            openItem.querySelector(
+                                                ".academic-faq-question"
+                                            );
 
-                    showAll = true;
 
+                                        if (openButton) {
 
-                    document
-                        .querySelectorAll(".academic-filter")
-                        .forEach(filter => {
+                                            openButton.setAttribute(
+                                                "aria-expanded",
+                                                "false"
+                                            );
 
-                            filter.classList.toggle(
-                                "active",
-                                filter.dataset.filter === category
+                                        }
+
+                                    }
+
+                                }
                             );
 
-                        });
+
+                        item.classList.toggle(
+                            "open",
+                            !isOpen
+                        );
 
 
-                    renderFAQs();
-
-
-                    const faqSection =
-                        $("faqSection");
-
-                    if (faqSection) {
-
-                        faqSection.scrollIntoView({
-                            behavior: "smooth",
-                            block: "start"
-                        });
+                        button.setAttribute(
+                            "aria-expanded",
+                            String(!isOpen)
+                        );
 
                     }
-
-                });
-
-            });
-
-    }
-
-
-    /* ============================================================
-       SHOW ALL
-       ============================================================ */
-
-    function initializeShowAll() {
-
-        const button = $("showAllFaqs");
-
-        if (!button) return;
-
-
-        button.addEventListener("click", function () {
-
-            showAll = !showAll;
-
-            this.querySelector("span").textContent =
-                showAll ? "Show less" : "Show all";
-
-
-            renderFAQs();
-
-        });
-
-    }
-
-
-    /* ============================================================
-       SEARCH
-       ============================================================ */
-
-    function initializeSearch() {
-
-        const input = $("academicSearch");
-        const clearButton = $("clearAcademicSearch");
-
-        if (!input) return;
-
-
-        input.addEventListener("input", function () {
-
-            searchTerm =
-                this.value.trim().toLowerCase();
-
-
-            if (clearButton) {
-
-                clearButton.hidden =
-                    !this.value.trim();
-
-            }
-
-
-            showAll = true;
-
-            renderFAQs();
-
-        });
-
-
-        if (clearButton) {
-
-            clearButton.addEventListener("click", function () {
-
-                input.value = "";
-
-                searchTerm = "";
-
-                this.hidden = true;
-
-                showAll = false;
-
-                renderFAQs();
-
-                input.focus();
-
-            });
-
-        }
-
-    }
-
-
-    /* ============================================================
-       CHARACTER COUNT
-       ============================================================ */
-
-    function initializeCharacterCount() {
-
-        const textarea = $("questionMessage");
-        const counter = $("questionCharacterCount");
-
-        if (!textarea || !counter) return;
-
-
-        textarea.addEventListener("input", function () {
-
-            counter.textContent =
-                this.value.length;
-
-        });
-
-    }
-
-
-    /* ============================================================
-       FORM ERROR HELPERS
-       ============================================================ */
-
-    function clearFormErrors() {
-
-        [
-            "questionNameError",
-            "questionPhoneError",
-            "questionCategoryError",
-            "questionMessageError"
-        ].forEach(id => {
-
-            const element = $(id);
-
-            if (element) {
-                element.textContent = "";
-            }
-
-        });
-
-    }
-
-
-    function setFieldError(id, message) {
-
-        const element = $(id);
-
-        if (element) {
-            element.textContent = message;
-        }
-
-    }
-
-
-    function validateForm() {
-
-        clearFormErrors();
-
-        let valid = true;
-
-
-        const name =
-            $("questionName")?.value.trim() || "";
-
-        const phone =
-            $("questionPhone")?.value.trim() || "";
-
-        const category =
-            $("questionCategory")?.value || "";
-
-        const question =
-            $("questionMessage")?.value.trim() || "";
-
-        const consent =
-            $("questionConsent")?.checked || false;
-
-
-        if (name.length < 2) {
-
-            setFieldError(
-                "questionNameError",
-                "Please enter your name."
-            );
-
-            valid = false;
-
-        }
-
-
-        if (phone.length < 7) {
-
-            setFieldError(
-                "questionPhoneError",
-                "Please enter a valid phone or WhatsApp number."
-            );
-
-            valid = false;
-
-        }
-
-
-        if (!category) {
-
-            setFieldError(
-                "questionCategoryError",
-                "Please select a category."
-            );
-
-            valid = false;
-
-        }
-
-
-        if (question.length < 10) {
-
-            setFieldError(
-                "questionMessageError",
-                "Please provide a little more detail about your question."
-            );
-
-            valid = false;
-
-        }
-
-
-        if (question.length > ACADEMIC_CONFIG.MAX_QUESTION_LENGTH) {
-
-            setFieldError(
-                "questionMessageError",
-                "Your question is too long."
-            );
-
-            valid = false;
-
-        }
-
-
-        if (!consent) {
-
-            showFormStatus(
-                "Please agree that the Academic Help team may contact you.",
-                "error"
-            );
-
-            valid = false;
-
-        }
-
-
-        return valid;
-
-    }
-
-
-    /* ============================================================
-       FORM STATUS
-       ============================================================ */
-
-    function showFormStatus(message, type) {
-
-        const status = $("academicFormStatus");
-
-        if (!status) return;
-
-        status.textContent = message;
-
-        status.className =
-            `form-status ${type}`;
-
-    }
-
-
-    /* ============================================================
-       BUTTON STATE
-       ============================================================ */
-
-    function setSubmitLoading(loading) {
-
-        const button = $("submitQuestionBtn");
-
-        if (!button) return;
-
-
-        button.disabled = loading;
-
-
-        const label =
-            button.querySelector(".btn-label");
-
-        const loadingElement =
-            button.querySelector(".btn-loading");
-
-
-        if (label) {
-            label.hidden = loading;
-        }
-
-        if (loadingElement) {
-            loadingElement.hidden = !loading;
-        }
-
-    }
-
-
-    /* ============================================================
-       SUBMIT QUESTION
-       ============================================================ */
-
-    async function submitQuestion(event) {
-
-        event.preventDefault();
-
-
-        if (!validateForm()) {
-            return;
-        }
-
-
-        const payload = {
-
-            action: "submitAcademicQuestion",
-
-            name:
-                $("questionName").value.trim(),
-
-            phone:
-                $("questionPhone").value.trim(),
-
-            category:
-                $("questionCategory").value,
-
-            contactPreference:
-                $("questionContact").value,
-
-            question:
-                $("questionMessage").value.trim(),
-
-            consent: true
-
-        };
-
-
-        setSubmitLoading(true);
-
-        showFormStatus("", "");
-
-
-        try {
-
-            const response = await fetch(
-                ACADEMIC_CONFIG.APPS_SCRIPT_URL,
-                {
-                    method: "POST",
-
-                    headers: {
-                        "Content-Type":
-                            "text/plain;charset=utf-8"
-                    },
-
-                    body: JSON.stringify(payload),
-
-                    redirect: "follow"
-                }
-            );
-
-
-            const rawText =
-                await response.text();
-
-
-            let result;
-
-
-            try {
-
-                result =
-                    JSON.parse(rawText);
-
-            } catch (parseError) {
-
-                throw new Error(
-                    "The server returned an unexpected response."
                 );
 
             }
-
-
-            if (!result.success) {
-
-                throw new Error(
-                    result.message ||
-                    "Unable to submit your question."
-                );
-
-            }
-
-
-            const reference =
-                result.referenceId ||
-                result.requestId ||
-                "submitted successfully";
-
-
-            showFormStatus(
-                `Your question has been submitted successfully. Your reference is ${reference}. The Academic Help team will review it.`,
-                "success"
-            );
-
-
-            $("academicQuestionForm").reset();
-
-
-            const counter =
-                $("questionCharacterCount");
-
-            if (counter) {
-                counter.textContent = "0";
-            }
-
-
-            window.scrollTo({
-                top:
-                    document
-                        .querySelector(".ask-question-section")
-                        ?.getBoundingClientRect().top +
-                    window.scrollY -
-                    80,
-                behavior: "smooth"
-            });
-
-
-        } catch (error) {
-
-            console.error(
-                "[Academic Help] Submission error:",
-                error
-            );
-
-
-            showFormStatus(
-                error.message ||
-                "Something went wrong while sending your question. Please try again.",
-                "error"
-            );
-
-        } finally {
-
-            setSubmitLoading(false);
-
-        }
-
-    }
-
-
-    /* ============================================================
-       FORM INITIALIZATION
-       ============================================================ */
-
-    function initializeForm() {
-
-        const form =
-            $("academicQuestionForm");
-
-        if (!form) return;
-
-        form.addEventListener(
-            "submit",
-            submitQuestion
         );
 
     }
 
 
-    /* ============================================================
-       PUBLISHED ANSWERS
-       ============================================================ */
+    /* ========================================================
+       QUESTION FORM
+    ======================================================== */
+
+    function setupQuestionForm() {
+
+        const form =
+            $("academicQuestionForm");
+
+
+        if (!form) {
+
+            return;
+        }
+
+
+        const message =
+            $("questionMessage");
+
+
+        const characterCount =
+            $("questionCharacterCount");
+
+
+        if (message && characterCount) {
+
+            message.addEventListener(
+                "input",
+                function () {
+
+                    characterCount.textContent =
+                        String(
+                            message.value.length
+                        );
+
+                }
+            );
+
+        }
+
+
+        form.addEventListener(
+            "submit",
+            async function (event) {
+
+                event.preventDefault();
+
+
+                clearFormErrors();
+
+
+                const values =
+                    collectFormValues();
+
+
+                const validation =
+                    validateForm(
+                        values
+                    );
+
+
+                if (!validation.valid) {
+
+                    showFormStatus(
+                        validation.message,
+                        "error"
+                    );
+
+                    return;
+                }
+
+
+                await submitAcademicQuestion(
+                    values
+                );
+
+            }
+        );
+
+    }
+
+
+    /* ========================================================
+       COLLECT FORM
+    ======================================================== */
+
+    function collectFormValues() {
+
+        return {
+
+            name:
+                String(
+                    $("questionName")?.value ||
+                    ""
+                ).trim(),
+
+            phone:
+                String(
+                    $("questionPhone")?.value ||
+                    ""
+                ).trim(),
+
+            category:
+                String(
+                    $("questionCategory")?.value ||
+                    ""
+                ).trim(),
+
+            contactPreference:
+                String(
+                    $("questionContact")?.value ||
+                    "WhatsApp"
+                ).trim(),
+
+            question:
+                String(
+                    $("questionMessage")?.value ||
+                    ""
+                ).trim(),
+
+            consent:
+                Boolean(
+                    $("questionConsent")?.checked
+                )
+
+        };
+
+    }
+
+
+    /* ========================================================
+       VALIDATE FORM
+    ======================================================== */
+
+    function validateForm(
+        values
+    ) {
+
+        let valid =
+            true;
+
+
+        if (!values.name) {
+
+            setFieldError(
+                "questionName",
+                "Please enter your name."
+            );
+
+            valid =
+                false;
+
+        } else if (
+            values.name.length < 2
+        ) {
+
+            setFieldError(
+                "questionName",
+                "Please enter your full name."
+            );
+
+            valid =
+                false;
+        }
+
+
+        if (!values.phone) {
+
+            setFieldError(
+                "questionPhone",
+                "Please provide a WhatsApp number or phone number."
+            );
+
+            valid =
+                false;
+        }
+
+
+        if (!values.category) {
+
+            setFieldError(
+                "questionCategory",
+                "Please select a category."
+            );
+
+            valid =
+                false;
+        }
+
+
+        if (!values.question) {
+
+            setFieldError(
+                "questionMessage",
+                "Please tell us what you need help with."
+            );
+
+            valid =
+                false;
+
+        } else if (
+            values.question.length < 10
+        ) {
+
+            setFieldError(
+                "questionMessage",
+                "Please provide a little more detail."
+            );
+
+            valid =
+                false;
+
+        } else if (
+            values.question.length >
+            ACADEMIC_CONFIG.MAX_QUESTION_LENGTH
+        ) {
+
+            setFieldError(
+                "questionMessage",
+                "Your question is too long."
+            );
+
+            valid =
+                false;
+        }
+
+
+        if (!values.consent) {
+
+            showFormStatus(
+                "Please agree that the Academic Help team may contact you regarding your question.",
+                "error"
+            );
+
+            valid =
+                false;
+        }
+
+
+        return {
+
+            valid: valid,
+
+            message:
+                valid
+                    ? ""
+                    : "Please check the highlighted fields."
+
+        };
+
+    }
+
+
+    /* ========================================================
+       SET FIELD ERROR
+    ======================================================== */
+
+    function setFieldError(
+        fieldId,
+        message
+    ) {
+
+        const field =
+            $(fieldId);
+
+
+        if (!field) {
+
+            return;
+        }
+
+
+        const wrapper =
+            field.closest(
+                ".form-field"
+            );
+
+
+        if (wrapper) {
+
+            wrapper.classList.add(
+                "has-error"
+            );
+
+        }
+
+
+        const error =
+            $(
+                fieldId +
+                "Error"
+            );
+
+
+        if (error) {
+
+            error.textContent =
+                message;
+
+        }
+
+    }
+
+
+    /* ========================================================
+       CLEAR ERRORS
+    ======================================================== */
+
+    function clearFormErrors() {
+
+        document
+            .querySelectorAll(
+                ".form-field.has-error"
+            )
+            .forEach(
+                function (field) {
+
+                    field.classList.remove(
+                        "has-error"
+                    );
+
+                }
+            );
+
+
+        document
+            .querySelectorAll(
+                ".field-error"
+            )
+            .forEach(
+                function (error) {
+
+                    error.textContent =
+                        "";
+
+                }
+            );
+
+    }
+
+
+    /* ========================================================
+       SUBMIT QUESTION
+    ======================================================== */
+
+    async function submitAcademicQuestion(
+        values
+    ) {
+
+        const submitButton =
+            $("submitQuestionBtn");
+
+
+        const label =
+            submitButton
+                ? submitButton.querySelector(
+                    ".btn-label"
+                )
+                : null;
+
+
+        const loading =
+            submitButton
+                ? submitButton.querySelector(
+                    ".btn-loading"
+                )
+                : null;
+
+
+        setSubmitLoading(
+            submitButton,
+            label,
+            loading,
+            true
+        );
+
+
+        showFormStatus(
+            "Sending your question...",
+            "info"
+        );
+
+
+        try {
+
+            const response =
+                await fetch(
+                    ACADEMIC_CONFIG.API,
+                    {
+
+                        method:
+                            "POST",
+
+                        headers: {
+
+                            "Content-Type":
+                                "text/plain;charset=utf-8"
+
+                        },
+
+                        body:
+                            JSON.stringify({
+
+                                action:
+                                    "submitAcademicQuestion",
+
+                                name:
+                                    values.name,
+
+                                phone:
+                                    values.phone,
+
+                                category:
+                                    values.category,
+
+                                contactPreference:
+                                    values.contactPreference,
+
+                                question:
+                                    values.question,
+
+                                consent:
+                                    values.consent
+
+                            })
+
+                    }
+                );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "HTTP " +
+                    response.status
+                );
+
+            }
+
+
+            const data =
+                await response.json();
+
+
+            console.log(
+                "[AFC Academic Help] Submit response:",
+                data
+            );
+
+
+            if (
+                data &&
+                (
+                    data.success === true ||
+                    data.status === "success"
+                )
+            ) {
+
+                handleSuccessfulSubmission(
+                    data
+                );
+
+            } else {
+
+                throw new Error(
+                    data?.message ||
+                    "The Academic Help team could not receive your question."
+                );
+
+            }
+
+        }
+        catch (error) {
+
+            console.error(
+                "[AFC Academic Help] Submission error:",
+                error
+            );
+
+
+            showFormStatus(
+                error?.message ||
+                "Unable to send your question right now. Please check your connection and try again.",
+                "error"
+            );
+
+        }
+        finally {
+
+            setSubmitLoading(
+                submitButton,
+                label,
+                loading,
+                false
+            );
+
+        }
+
+    }
+
+
+    /* ========================================================
+       SUBMIT LOADING
+    ======================================================== */
+
+    function setSubmitLoading(
+        button,
+        label,
+        loading,
+        state
+    ) {
+
+        if (button) {
+
+            button.disabled =
+                state;
+
+        }
+
+
+        if (label) {
+
+            label.hidden =
+                state;
+
+        }
+
+
+        if (loading) {
+
+            loading.hidden =
+                !state;
+
+        }
+
+    }
+
+
+    /* ========================================================
+       SUCCESS
+    ======================================================== */
+
+    function handleSuccessfulSubmission(
+        data
+    ) {
+
+        const requestId =
+            String(
+                data.requestId ||
+                data.id ||
+                data.reference ||
+                ""
+            ).trim();
+
+
+        const form =
+            $("academicQuestionForm");
+
+
+        if (form) {
+
+            form.reset();
+
+        }
+
+
+        const count =
+            $("questionCharacterCount");
+
+
+        if (count) {
+
+            count.textContent =
+                "0";
+
+        }
+
+
+        clearFormErrors();
+
+
+        let message =
+            "Your question has been received successfully. The Academic Help team will review it.";
+
+        if (requestId) {
+
+            message +=
+                " Your request ID is " +
+                requestId +
+                ".";
+
+        }
+
+
+        showFormStatus(
+            message,
+            "success"
+        );
+
+
+        const status =
+            $("academicFormStatus");
+
+
+        if (status) {
+
+            status.scrollIntoView({
+
+                behavior: "smooth",
+
+                block: "nearest"
+
+            });
+
+        }
+
+    }
+
+
+    /* ========================================================
+       FORM STATUS
+    ======================================================== */
+
+    function showFormStatus(
+        message,
+        type
+    ) {
+
+        const status =
+            $("academicFormStatus");
+
+
+        if (!status) {
+
+            return;
+        }
+
+
+        status.className =
+            "form-status show " +
+            (
+                type ||
+                "info"
+            );
+
+
+        status.textContent =
+            message;
+
+    }
+
+
+    /* ========================================================
+       LOAD PUBLISHED ANSWERS
+    ======================================================== */
 
     async function loadPublishedAnswers() {
 
         const container =
             $("publishedAnswerGrid");
 
-        if (!container) return;
+
+        if (!container) {
+
+            return;
+        }
 
 
         try {
 
             const url =
-                `${ACADEMIC_CONFIG.APPS_SCRIPT_URL}?action=getPublishedAcademicAnswers`;
+                ACADEMIC_CONFIG.API +
+                "?action=getPublishedAcademicAnswers";
 
 
             const response =
-                await fetch(url, {
-                    method: "GET",
-                    redirect: "follow"
-                });
+                await fetch(
+                    url,
+                    {
+
+                        method:
+                            "GET",
+
+                        cache:
+                            "no-store"
+
+                    }
+                );
 
 
-            const rawText =
-                await response.text();
-
-
-            let result;
-
-
-            try {
-
-                result =
-                    JSON.parse(rawText);
-
-            } catch (error) {
+            if (!response.ok) {
 
                 throw new Error(
-                    "Invalid server response."
+                    "HTTP " +
+                    response.status
                 );
 
             }
 
 
-            if (!result.success) {
-                throw new Error(
-                    result.message ||
-                    "Unable to load answers."
-                );
-            }
+            const data =
+                await response.json();
 
 
-            renderPublishedAnswers(
-                result.data || []
+            console.log(
+                "[AFC Academic Help] Published answers:",
+                data
             );
 
 
-        } catch (error) {
+            if (
+                data &&
+                Array.isArray(
+                    data.answers
+                )
+            ) {
+
+                publishedAnswers =
+                    data.answers;
+
+            } else if (
+                data &&
+                Array.isArray(
+                    data.data
+                )
+            ) {
+
+                publishedAnswers =
+                    data.data;
+
+            } else {
+
+                publishedAnswers =
+                    [];
+
+            }
+
+
+            renderPublishedAnswers();
+
+        }
+        catch (error) {
 
             console.warn(
-                "[Academic Help] Could not load published answers:",
+                "[AFC Academic Help] Could not load published answers:",
                 error
             );
 
 
+            /*
+             * Do not make the whole page look broken
+             * just because published answers are unavailable.
+             */
+
             container.innerHTML = `
 
-                <div class="published-loading">
+                <div class="published-answer-card">
 
-                    <i class="fa-solid fa-circle-info"></i>
+                    <div class="published-answer-top">
 
-                    <span>
-                        Published answers will appear here when available.
-                    </span>
+                        <span class="published-answer-category">
+                            Academic Help
+                        </span>
+
+                    </div>
+
+                    <h3 class="published-answer-title">
+                        Helpful answers will appear here.
+                    </h3>
+
+                    <p class="published-answer-copy">
+                        Once the Academic Help team publishes approved
+                        responses, they can be displayed here as resources
+                        for other young people.
+                    </p>
 
                 </div>
 
@@ -989,128 +1833,261 @@
     }
 
 
-    function renderPublishedAnswers(items) {
+    /* ========================================================
+       RENDER PUBLISHED ANSWERS
+    ======================================================== */
+
+    function renderPublishedAnswers() {
 
         const container =
             $("publishedAnswerGrid");
 
-        if (!container) return;
+
+        if (!container) {
+
+            return;
+        }
 
 
-        if (!items.length) {
+        if (
+            !publishedAnswers ||
+            publishedAnswers.length === 0
+        ) {
 
             container.innerHTML = `
 
-                <div class="published-loading">
+                <div class="published-answer-card">
 
-                    <i class="fa-solid fa-book-open"></i>
+                    <div class="published-answer-top">
 
-                    <span>
-                        Helpful answers from the Academic Help team
-                        will appear here.
-                    </span>
+                        <span class="published-answer-category">
+                            Coming Soon
+                        </span>
+
+                    </div>
+
+                    <h3 class="published-answer-title">
+                        Questions we've answered will appear here.
+                    </h3>
+
+                    <p class="published-answer-copy">
+                        Approved responses from the Academic Help team
+                        can become useful resources for everyone.
+                    </p>
+
+                    <div class="published-answer-footer">
+
+                        <i class="fa-solid fa-circle-info"></i>
+
+                        <span>
+                            Check back for new answers.
+                        </span>
+
+                    </div>
 
                 </div>
 
             `;
 
             return;
-
         }
 
 
         container.innerHTML =
-            items.slice(0, 6).map(item => `
-
-                <article class="published-answer-card">
-
-                    <div class="published-answer-category">
-
-                        <i class="fa-solid fa-tag"></i>
-
-                        ${escapeHTML(
-                            item.category || "Academic Help"
-                        )}
-
-                    </div>
-
-                    <h3>
-                        ${escapeHTML(
-                            item.question || "Academic Question"
-                        )}
-                    </h3>
-
-                    <p>
-                        ${escapeHTML(
-                            item.answer || ""
-                        )}
-                    </p>
-
-                    <div class="published-answer-footer">
-
-                        <span>
-                            <i class="fa-solid fa-circle-check"></i>
-                            Answered
-                        </span>
-
-                        <span>
-                            Academic Help Team
-                        </span>
-
-                    </div>
-
-                </article>
-
-            `).join("");
+            publishedAnswers
+                .slice(0, 8)
+                .map(
+                    renderPublishedAnswer
+                )
+                .join("");
 
     }
 
 
-    /* ============================================================
-       INITIALIZATION
-       ============================================================ */
+    /* ========================================================
+       RENDER PUBLISHED ANSWER
+    ======================================================== */
 
-    function initializeAcademicHelp() {
+    function renderPublishedAnswer(
+        answer
+    ) {
 
-        renderFAQs();
+        const category =
+            answer.category ||
+            "Academic Help";
 
-        initializeScrollButtons();
 
-        initializeFilters();
+        const question =
+            answer.question ||
+            answer.title ||
+            "Academic Question";
 
-        initializeCategoryCards();
 
-        initializeShowAll();
+        const response =
+            answer.answer ||
+            answer.response ||
+            answer.message ||
+            "A helpful response from the Academic Help team.";
 
-        initializeSearch();
 
-        initializeCharacterCount();
+        const date =
+            formatPublishedDate(
+                answer.date ||
+                answer.publishedAt ||
+                answer.updatedAt
+            );
 
-        initializeForm();
 
-        loadPublishedAnswers();
+        return `
 
-        console.log(
-            `[AFC Academic Help] Initialized v${ACADEMIC_CONFIG.VERSION}`
+            <article class="published-answer-card">
+
+                <div class="published-answer-top">
+
+                    <span class="published-answer-category">
+                        ${escapeHTML(category)}
+                    </span>
+
+                    ${
+                        date
+                            ? `
+                                <span class="published-answer-date">
+                                    ${escapeHTML(date)}
+                                </span>
+                            `
+                            : ""
+                    }
+
+                </div>
+
+
+                <h3 class="published-answer-title">
+                    ${escapeHTML(question)}
+                </h3>
+
+
+                <p class="published-answer-copy">
+                    ${escapeHTML(response)}
+                </p>
+
+
+                <div class="published-answer-footer">
+
+                    <i class="fa-solid fa-circle-check"></i>
+
+                    <span>
+                        Answered by the Academic Help team
+                    </span>
+
+                </div>
+
+            </article>
+
+        `;
+
+    }
+
+
+    /* ========================================================
+       DATE FORMAT
+    ======================================================== */
+
+    function formatPublishedDate(
+        value
+    ) {
+
+        if (!value) {
+
+            return "";
+        }
+
+
+        const date =
+            new Date(
+                value
+            );
+
+
+        if (
+            Number.isNaN(
+                date.getTime()
+            )
+        ) {
+
+            return "";
+        }
+
+
+        return date.toLocaleDateString(
+            "en-NG",
+            {
+
+                day:
+                    "numeric",
+
+                month:
+                    "short",
+
+                year:
+                    "numeric"
+
+            }
         );
 
     }
 
 
-    /* ============================================================
-       DOM READY / LAYOUT READY
-       ============================================================ */
+    /* ========================================================
+       FONT CHECK
+    ======================================================== */
 
-    if (document.readyState === "loading") {
+    function initializeFontCheck() {
 
-        document.addEventListener(
-            "DOMContentLoaded",
-            initializeAcademicHelp
-        );
+        /*
+         * This does not replace the font loading.
+         * It simply gives the browser a chance to finish
+         * loading the Google fonts before rendering the page.
+         */
 
-    } else {
+        if (
+            document.fonts &&
+            typeof document.fonts.load ===
+                "function"
+        ) {
 
-        initializeAcademicHelp();
+            Promise.all([
+
+                document.fonts.load(
+                    '800 2rem "Bricolage Grotesque"'
+                ),
+
+                document.fonts.load(
+                    '400 1rem "DM Sans"'
+                )
+
+            ])
+            .then(
+                function () {
+
+                    document.documentElement
+                        .classList.add(
+                            "academic-fonts-ready"
+                        );
+
+                }
+            )
+            .catch(
+                function (error) {
+
+                    console.warn(
+                        "[AFC Academic Help] Font loading check failed:",
+                        error
+                    );
+
+                }
+            );
+
+        }
 
     }
 
