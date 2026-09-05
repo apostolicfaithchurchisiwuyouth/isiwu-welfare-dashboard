@@ -1,71 +1,79 @@
-/* ============================================================
-   AFC ISIU YOUTH PORTAL V2
-   FILE: sw.js
-   PURPOSE: PWA SERVICE WORKER
-   VERSION: 17
-   ============================================================ */
+/**
+ * ============================================================
+ * AFC ISIU YOUTH PORTAL V2
+ * SERVICE WORKER
+ * VERSION: 18
+ * ============================================================
+ *
+ * PURPOSE:
+ * - PWA installation
+ * - Offline support
+ * - Lesson/audio caching
+ * - Push notifications
+ * - Premium branded notification handling
+ * - Notification deep linking
+ *
+ * IMPORTANT:
+ * - API requests under /api/ bypass the service worker.
+ * - Push notification data comes from /api/push/send.js.
+ * - Existing working notification architecture is preserved.
+ * ============================================================
+ */
 
 "use strict";
 
 
 /* ============================================================
-   CACHE VERSION
+   VERSION
    ============================================================ */
 
-const CACHE_VERSION =
-    "afc-isiu-pwa-v17";
+const VERSION = "18";
 
-const STATIC_CACHE =
-    `${CACHE_VERSION}-static`;
+const CACHE_NAME = `afc-isiu-pwa-v${VERSION}`;
 
-const PAGE_CACHE =
-    `${CACHE_VERSION}-pages`;
+const STATIC_CACHE = `afc-isiu-static-v${VERSION}`;
 
-const AUDIO_CACHE =
-    `${CACHE_VERSION}-audio`;
+const LESSON_CACHE = `afc-isiu-lessons-v${VERSION}`;
 
 
 /* ============================================================
-   APPLICATION SHELL
+   APP SHELL
    ============================================================ */
 
 const APP_SHELL = [
 
     "/",
+
     "/index.html",
+
     "/manifest.json",
 
-    /* Global CSS */
     "/css/main.css",
+
     "/css/layout.css",
 
-    /* Lessons CSS */
     "/css/lessons.css",
 
-    /* Global JS */
     "/js/main.js",
+
     "/js/pwa.js",
 
-    /* Lessons JS */
     "/js/lessons.js",
 
-    /* Branding */
     "/images/logo.png",
 
-    /* Lessons page */
     "/pages/lessons.html"
 
 ];
 
 
 /* ============================================================
-   OFFLINE PAGE ROUTES
+   CLEAN PAGE MAP
    ============================================================ */
 
 const CLEAN_PAGE_MAP = {
 
-    "/pages/lessons":
-        "/pages/lessons.html"
+    "/pages/lessons": "/pages/lessons.html"
 
 };
 
@@ -74,74 +82,187 @@ const CLEAN_PAGE_MAP = {
    INSTALL
    ============================================================ */
 
-self.addEventListener(
-    "install",
-    event => {
+self.addEventListener("install", event => {
 
-        console.log(
-            "AFC Isiu PWA: Installing:",
-            CACHE_VERSION
-        );
+    console.log(
+        `AFC Isiu PWA: Installing service worker V${VERSION}`
+    );
 
+    event.waitUntil(
 
-        event.waitUntil(
+        caches.open(STATIC_CACHE)
 
-            (async () => {
+            .then(async cache => {
 
-                try {
+                /*
+                 * Cache files individually.
+                 *
+                 * This prevents one missing optional asset
+                 * from breaking the entire service-worker install.
+                 */
 
-                    const cache =
-                        await caches.open(
-                            STATIC_CACHE
+                for (const url of APP_SHELL) {
+
+                    try {
+
+                        await cache.add(url);
+
+                    } catch (error) {
+
+                        console.warn(
+                            "AFC Isiu PWA: Could not cache:",
+                            url,
+                            error
                         );
 
+                    }
 
-                    /*
-                     * Cache application shell
-                     * one file at a time.
-                     */
+                }
 
-                    for (
-                        const file of APP_SHELL
-                    ) {
+            })
 
-                        try {
+            .then(() => {
 
-                            const response =
-                                await fetch(
-                                    file,
-                                    {
-                                        cache:
-                                            "no-store"
-                                    }
-                                );
+                /*
+                 * Make the new service worker available
+                 * immediately.
+                 */
 
+                return self.skipWaiting();
 
-                            if (
-                                response &&
-                                response.ok
-                            ) {
+            })
 
-                                await cache.put(
-                                    file,
-                                    response.clone()
-                                );
+    );
+
+});
 
 
-                                console.log(
-                                    "AFC Isiu PWA: Cached:",
-                                    file
-                                );
+/* ============================================================
+   ACTIVATE
+   ============================================================ */
 
-                            }
+self.addEventListener("activate", event => {
+
+    console.log(
+        `AFC Isiu PWA: Activating service worker V${VERSION}`
+    );
+
+    event.waitUntil(
+
+        caches.keys()
+
+            .then(cacheNames => {
+
+                return Promise.all(
+
+                    cacheNames.map(cacheName => {
+
+                        if (
+
+                            cacheName.startsWith("afc-isiu-") &&
+
+                            cacheName !== STATIC_CACHE &&
+
+                            cacheName !== LESSON_CACHE
+
+                        ) {
+
+                            console.log(
+                                "AFC Isiu PWA: Removing old cache:",
+                                cacheName
+                            );
+
+                            return caches.delete(cacheName);
 
                         }
 
-                        catch (error) {
+                        return null;
+
+                    })
+
+                );
+
+            })
+
+            .then(() => {
+
+                /*
+                 * Take control of all currently open pages.
+                 */
+
+                return self.clients.claim();
+
+            })
+
+    );
+
+});
+
+
+/* ============================================================
+   MESSAGE HANDLER
+   ============================================================ */
+
+self.addEventListener("message", event => {
+
+    if (!event.data) {
+
+        return;
+
+    }
+
+
+    /* --------------------------------------------------------
+       FORCE ACTIVATION
+       -------------------------------------------------------- */
+
+    if (event.data.type === "SKIP_WAITING") {
+
+        self.skipWaiting();
+
+        return;
+
+    }
+
+
+    /* --------------------------------------------------------
+       CACHE LESSON AUDIO
+       -------------------------------------------------------- */
+
+    if (event.data.type === "CACHE_LESSON_AUDIO") {
+
+        const urls = Array.isArray(event.data.urls)
+            ? event.data.urls
+            : [];
+
+        if (!urls.length) {
+
+            return;
+
+        }
+
+        event.waitUntil(
+
+            caches.open(LESSON_CACHE)
+
+                .then(async cache => {
+
+                    for (const url of urls) {
+
+                        try {
+
+                            await cache.add(url);
+
+                            console.log(
+                                "AFC Isiu PWA: Cached audio:",
+                                url
+                            );
+
+                        } catch (error) {
 
                             console.warn(
-                                "AFC Isiu PWA: Could not cache:",
-                                file,
+                                "AFC Isiu PWA: Could not cache audio:",
+                                url,
                                 error
                             );
 
@@ -149,287 +270,364 @@ self.addEventListener(
 
                     }
 
-
-                    /*
-                     * ------------------------------------------------
-                     * CACHE CLEAN LESSON URL
-                     * ------------------------------------------------
-                     */
-
-                    try {
-
-                        const lessonPage =
-                            await cache.match(
-                                "/pages/lessons.html"
-                            );
-
-
-                        if (
-                            lessonPage
-                        ) {
-
-                            await cache.put(
-                                "/pages/lessons",
-                                lessonPage.clone()
-                            );
-
-
-                            console.log(
-                                "AFC Isiu PWA: Cached clean lesson URL:",
-                                "/pages/lessons"
-                            );
-
-                        }
-
-                    }
-
-                    catch (error) {
-
-                        console.warn(
-                            "AFC Isiu PWA: Could not cache clean lesson URL:",
-                            error
-                        );
-
-                    }
-
-
-                    /*
-                     * Activate immediately.
-                     */
-
-                    await self.skipWaiting();
-
-
-                    console.log(
-                        "AFC Isiu PWA: Installation complete."
-                    );
-
-                }
-
-                catch (error) {
-
-                    console.error(
-                        "AFC Isiu PWA: Installation failed:",
-                        error
-                    );
-
-                }
-
-            })()
+                })
 
         );
 
     }
 
-);
+});
 
 
 /* ============================================================
-   ACTIVATE
+   PUSH NOTIFICATION HELPERS
    ============================================================ */
 
-self.addEventListener(
-    "activate",
-    event => {
 
-        console.log(
-            "AFC Isiu PWA: Activating:",
-            CACHE_VERSION
-        );
+/**
+ * Safely converts different values into booleans.
+ */
+function toBoolean(value, fallback = false) {
 
+    if (typeof value === "boolean") {
 
-        event.waitUntil(
-
-            (async () => {
-
-                const cacheNames =
-                    await caches.keys();
-
-
-                await Promise.all(
-
-                    cacheNames.map(
-                        cacheName => {
-
-                            /*
-                             * Remove old AFC caches.
-                             */
-
-                            if (
-                                cacheName.startsWith(
-                                    "afc-isiu-pwa-"
-                                ) &&
-
-                                cacheName !==
-                                    STATIC_CACHE &&
-
-                                cacheName !==
-                                    PAGE_CACHE &&
-
-                                cacheName !==
-                                    AUDIO_CACHE
-                            ) {
-
-                                console.log(
-                                    "AFC Isiu PWA: Deleting old cache:",
-                                    cacheName
-                                );
-
-
-                                return caches.delete(
-                                    cacheName
-                                );
-
-                            }
-
-
-                            return Promise.resolve();
-
-                        }
-                    )
-
-                );
-
-
-                /*
-                 * Take control immediately.
-                 */
-
-                await self.clients.claim();
-
-
-                console.log(
-                    "AFC Isiu PWA: Service worker activated."
-                );
-
-            })()
-
-        );
+        return value;
 
     }
 
-);
+    if (typeof value === "string") {
 
-
-/* ============================================================
-   MESSAGE HANDLER
-   ============================================================ */
-
-self.addEventListener(
-    "message",
-    event => {
+        const normalized = value
+            .trim()
+            .toLowerCase();
 
         if (
-            !event.data
+            normalized === "true" ||
+            normalized === "1" ||
+            normalized === "yes"
         ) {
 
-            return;
+            return true;
 
         }
 
-
-        /*
-         * Existing update mechanism.
-         */
-
         if (
-            event.data.type ===
-            "SKIP_WAITING"
+            normalized === "false" ||
+            normalized === "0" ||
+            normalized === "no"
         ) {
 
-            self.skipWaiting();
-
-            return;
-
-        }
-
-
-        /*
-         * LESSON AUDIO CACHE REQUEST
-         */
-
-        if (
-            event.data.type ===
-            "CACHE_LESSON_AUDIO"
-        ) {
-
-            const audioUrls =
-                Array.isArray(
-                    event.data.urls
-                )
-                    ? event.data.urls
-                    : [];
-
-
-            event.waitUntil(
-
-                cacheLessonAudio(
-                    audioUrls
-                )
-
-            );
+            return false;
 
         }
 
     }
 
-);
+    if (typeof value === "number") {
+
+        return value !== 0;
+
+    }
+
+    return fallback;
+
+}
 
 
-/* ============================================================
-   PUSH NOTIFICATIONS
-   ============================================================ */
+/**
+ * Ensures a notification URL stays inside the AFC Isiu portal.
+ */
+function getSafeNotificationUrl(value) {
 
-self.addEventListener(
-    "push",
-    event => {
+    const fallback = "/";
 
-        let data = {};
+    if (
+        typeof value !== "string" ||
+        !value.trim()
+    ) {
 
+        return fallback;
+
+    }
+
+    const rawUrl = value.trim();
+
+    try {
+
+        const url = new URL(
+            rawUrl,
+            self.location.origin
+        );
 
         /*
-         * Read the push payload.
+         * Never allow push notifications to redirect
+         * users to an unrelated external website.
          */
+
+        if (url.origin !== self.location.origin) {
+
+            return fallback;
+
+        }
+
+        return `${url.pathname}${url.search}${url.hash}`;
+
+    } catch (error) {
+
+        console.warn(
+            "AFC Isiu PWA: Invalid notification URL:",
+            value
+        );
+
+        return fallback;
+
+    }
+
+}
+
+
+/**
+ * Creates safe notification actions.
+ */
+function getNotificationActions(data, defaultUrl) {
+
+    let actions = data.actions;
+
+    /*
+     * If actions arrive as JSON text, parse them.
+     */
+
+    if (typeof actions === "string") {
 
         try {
 
-            if (
-                event.data
-            ) {
+            actions = JSON.parse(actions);
 
-                data =
-                    event.data.json();
+        } catch (error) {
 
-            }
+            actions = [];
 
         }
 
-        catch (error) {
+    }
+
+    /*
+     * Use supplied actions when valid.
+     */
+
+    if (Array.isArray(actions) && actions.length) {
+
+        return actions
+
+            .slice(0, 2)
+
+            .map(action => {
+
+                if (!action || typeof action !== "object") {
+
+                    return null;
+
+                }
+
+                const actionName =
+                    typeof action.action === "string"
+                        ? action.action.trim()
+                        : "open";
+
+                const title =
+                    typeof action.title === "string"
+                        ? action.title.trim()
+                        : "";
+
+                if (!title) {
+
+                    return null;
+
+                }
+
+                return {
+
+                    action: actionName,
+
+                    title: title.substring(0, 40),
+
+                    ...(action.icon
+                        ? {
+                            icon: getSafeNotificationUrl(
+                                action.icon
+                            )
+                        }
+                        : {})
+
+                };
+
+            })
+
+            .filter(Boolean);
+
+    }
+
+
+    /*
+     * Otherwise create a sensible action automatically
+     * based on notification type.
+     */
+
+    const type = String(
+        data.type ||
+        data.category ||
+        ""
+    )
+        .trim()
+        .toLowerCase();
+
+
+    const actionTitles = {
+
+        lesson: "Read Lesson",
+
+        new_lesson: "Read Lesson",
+
+        quiz: "Take Quiz",
+
+        new_quiz: "Take Quiz",
+
+        programme: "View Programme",
+
+        birthday: "Open Portal",
+
+        announcement: "Open",
+
+        once: "Open",
+
+        weekly: "View Programme"
+
+    };
+
+
+    const actionTitle =
+        actionTitles[type] || "Open";
+
+
+    return [{
+
+        action: "open",
+
+        title: actionTitle
+
+    }];
+
+}
+
+
+/**
+ * Opens/focuses the AFC Isiu portal.
+ */
+async function openNotificationUrl(targetUrl) {
+
+    const safeUrl = getSafeNotificationUrl(targetUrl);
+
+    const absoluteUrl = new URL(
+        safeUrl,
+        self.location.origin
+    ).href;
+
+
+    /*
+     * First try to find an already-open AFC Isiu tab/window.
+     */
+
+    const clients = await self.clients.matchAll({
+
+        type: "window",
+
+        includeUncontrolled: true
+
+    });
+
+
+    for (const client of clients) {
+
+        try {
+
+            const clientUrl = new URL(client.url);
+
+            if (
+                clientUrl.origin === self.location.origin
+            ) {
+
+                await client.navigate(absoluteUrl);
+
+                if (typeof client.focus === "function") {
+
+                    await client.focus();
+
+                }
+
+                return;
+
+            }
+
+        } catch (error) {
 
             console.warn(
-                "AFC Isiu PWA: Invalid push JSON.",
+                "AFC Isiu PWA: Could not focus existing client:",
                 error
             );
 
+        }
 
-            /*
-             * Fallback for plain text.
-             */
+    }
+
+
+    /*
+     * If no AFC Isiu window exists, open a new one.
+     */
+
+    if (self.clients.openWindow) {
+
+        await self.clients.openWindow(absoluteUrl);
+
+    }
+
+}
+
+
+/* ============================================================
+   PUSH EVENT
+   ============================================================ */
+
+self.addEventListener("push", event => {
+
+    console.log(
+        "AFC Isiu PWA: Push notification received."
+    );
+
+
+    let data = {};
+
+
+    /*
+     * Parse push payload safely.
+     */
+
+    if (event.data) {
+
+        try {
+
+            data = event.data.json();
+
+        } catch (error) {
 
             try {
 
                 data = {
 
-                    body:
-                        event.data
-                            ? event.data.text()
-                            : "You have a new notification."
+                    body: event.data.text()
 
                 };
 
-            }
-
-            catch (textError) {
+            } catch (textError) {
 
                 data = {};
 
@@ -437,485 +635,392 @@ self.addEventListener(
 
         }
 
+    }
 
-        /*
-         * Notification content.
-         */
 
-        const title =
-            String(
-                data.title ||
-                "AFC Isiu Youth Portal"
+    /* --------------------------------------------------------
+       BASIC CONTENT
+       -------------------------------------------------------- */
+
+    const type = String(
+
+        data.type ||
+        data.category ||
+        "announcement"
+
+    )
+        .trim()
+        .toLowerCase();
+
+
+    const title = String(
+
+        data.title ||
+
+        "AFC Isiu Youth"
+
+    ).trim();
+
+
+    const body = String(
+
+        data.body ||
+
+        data.message ||
+
+        "You have a new notification."
+
+    ).trim();
+
+
+    /* --------------------------------------------------------
+       BRAND ASSETS
+       -------------------------------------------------------- */
+
+    /*
+     * We are temporarily using the existing logo.
+     *
+     * Later, these can become:
+     *
+     * /images/notification-icon.png
+     * /images/notification-badge.png
+     *
+     * without changing the notification architecture.
+     */
+
+    const icon = getSafeNotificationUrl(
+
+        data.icon ||
+
+        "/images/logo.png"
+
+    );
+
+
+    const badge = getSafeNotificationUrl(
+
+        data.badge ||
+
+        "/images/logo.png"
+
+    );
+
+
+    /* --------------------------------------------------------
+       DEEP LINK
+       -------------------------------------------------------- */
+
+    const targetUrl = getSafeNotificationUrl(
+
+        data.url ||
+
+        "/"
+
+    );
+
+
+    /* --------------------------------------------------------
+       TAG
+       -------------------------------------------------------- */
+
+    const tag = String(
+
+        data.tag ||
+
+        `afc-isiu-${type}`
+
+    )
+
+        .trim()
+
+        .substring(0, 100);
+
+
+    /* --------------------------------------------------------
+       OPTIONS
+       -------------------------------------------------------- */
+
+    const options = {
+
+        body: body,
+
+        icon: icon,
+
+        badge: badge,
+
+        tag: tag,
+
+        renotify: toBoolean(
+            data.renotify,
+            false
+        ),
+
+        requireInteraction: toBoolean(
+            data.requireInteraction,
+            false
+        ),
+
+        silent: toBoolean(
+            data.silent,
+            false
+        ),
+
+        dir: "auto",
+
+        lang: "en-NG",
+
+        timestamp: Date.now(),
+
+        data: {
+
+            url: targetUrl,
+
+            type: type,
+
+            category: type,
+
+            notificationId:
+                data.notificationId ||
+                data.id ||
+                null
+
+        },
+
+        actions: getNotificationActions(
+            data,
+            targetUrl
+        )
+
+    };
+
+
+    /* --------------------------------------------------------
+       OPTIONAL LARGE IMAGE
+       -------------------------------------------------------- */
+
+    if (
+        typeof data.image === "string" &&
+        data.image.trim()
+    ) {
+
+        const safeImage =
+            getSafeNotificationUrl(
+                data.image
             );
 
+        if (safeImage !== "/") {
 
-        const body =
-            String(
-                data.body ||
-                "You have a new notification."
-            );
-
-
-        const icon =
-            String(
-                data.icon ||
-                "/images/logo.png"
-            );
-
-
-        const badge =
-            String(
-                data.badge ||
-                "/images/logo.png"
-            );
-
-
-        const tag =
-            String(
-                data.tag ||
-                "afc-isiu-notification"
-            );
-
-
-        /*
-         * Only allow notification links
-         * belonging to this portal.
-         */
-
-        let targetUrl = "/";
-
-
-        try {
-
-            const parsedUrl =
-                new URL(
-                    String(
-                        data.url ||
-                        "/"
-                    ),
-                    self.location.origin
-                );
-
-
-            if (
-                parsedUrl.origin ===
-                self.location.origin
-            ) {
-
-                targetUrl =
-                    parsedUrl.pathname +
-                    parsedUrl.search +
-                    parsedUrl.hash;
-
-            }
+            options.image = safeImage;
 
         }
-
-        catch (error) {
-
-            targetUrl = "/";
-
-        }
-
-
-        /*
-         * Display notification.
-         */
-
-        event.waitUntil(
-
-            self.registration.showNotification(
-                title,
-                {
-
-                    body,
-
-                    icon,
-
-                    badge,
-
-                    tag,
-
-                    renotify:
-                        Boolean(
-                            data.renotify
-                        ),
-
-                    requireInteraction:
-                        Boolean(
-                            data.requireInteraction
-                        ),
-
-                    data: {
-
-                        url:
-                            targetUrl
-
-                    }
-
-                }
-            )
-
-        );
 
     }
 
-);
+
+    /* --------------------------------------------------------
+       OPTIONAL VIBRATION
+       -------------------------------------------------------- */
+
+    if (Array.isArray(data.vibrate)) {
+
+        options.vibrate = data.vibrate;
+
+    }
+
+
+    /* --------------------------------------------------------
+       SHOW NOTIFICATION
+       -------------------------------------------------------- */
+
+    event.waitUntil(
+
+        self.registration
+
+            .showNotification(
+                title,
+                options
+            )
+
+            .then(() => {
+
+                console.log(
+                    "AFC Isiu PWA: Notification displayed:",
+                    title
+                );
+
+            })
+
+            .catch(error => {
+
+                console.error(
+                    "AFC Isiu PWA: Unable to display notification:",
+                    error
+                );
+
+            })
+
+    );
+
+});
 
 
 /* ============================================================
    NOTIFICATION CLICK
    ============================================================ */
 
-self.addEventListener(
-    "notificationclick",
-    event => {
+self.addEventListener("notificationclick", event => {
 
-        /*
-         * Close the notification immediately.
-         */
-
-        event.notification.close();
+    console.log(
+        "AFC Isiu PWA: Notification clicked:",
+        event.action || "body"
+    );
 
 
-        /*
-         * Default destination.
-         */
-
-        let targetUrl =
-            self.location.origin +
-            "/";
+    event.notification.close();
 
 
-        /*
-         * Read notification destination.
-         */
-
-        try {
-
-            const parsedUrl =
-                new URL(
-
-                    String(
-                        event
-                            .notification
-                            ?.data
-                            ?.url ||
-                        "/"
-                    ),
-
-                    self.location.origin
-
-                );
+    const notificationData =
+        event.notification.data || {};
 
 
-            /*
-             * Only navigate to our own website.
-             */
+    /*
+     * If an action has a custom URL, use it.
+     */
 
-            if (
-                parsedUrl.origin ===
-                self.location.origin
-            ) {
+    let targetUrl =
+        notificationData.url || "/";
 
-                targetUrl =
-                    parsedUrl.href;
 
-            }
+    /*
+     * The backend can optionally provide:
+     *
+     * actionUrls: {
+     *     open: "/pages/lessons",
+     *     quiz: "/pages/quiz"
+     * }
+     */
+
+    if (
+        event.action &&
+        notificationData.actionUrls &&
+        typeof notificationData.actionUrls === "object"
+    ) {
+
+        const actionUrl =
+            notificationData.actionUrls[
+                event.action
+            ];
+
+        if (actionUrl) {
+
+            targetUrl = actionUrl;
 
         }
-
-        catch (error) {
-
-            console.warn(
-                "AFC Isiu PWA: Invalid notification URL.",
-                error
-            );
-
-        }
-
-
-        event.waitUntil(
-
-            (async () => {
-
-                /*
-                 * Look for an existing portal window.
-                 */
-
-                const clients =
-                    await self.clients.matchAll(
-                        {
-                            type:
-                                "window",
-
-                            includeUncontrolled:
-                                true
-                        }
-                    );
-
-
-                /*
-                 * If portal is already open,
-                 * navigate/focus it.
-                 */
-
-                for (
-                    const client of clients
-                ) {
-
-                    try {
-
-                        if (
-                            typeof client.navigate ===
-                            "function"
-                        ) {
-
-                            await client.navigate(
-                                targetUrl
-                            );
-
-                        }
-
-                    }
-
-                    catch (error) {
-
-                        console.warn(
-                            "AFC Isiu PWA: Could not navigate existing window.",
-                            error
-                        );
-
-                    }
-
-
-                    if (
-                        typeof client.focus ===
-                        "function"
-                    ) {
-
-                        return client.focus();
-
-                    }
-
-                }
-
-
-                /*
-                 * Otherwise open a new portal window.
-                 */
-
-                if (
-                    typeof self.clients.openWindow ===
-                    "function"
-                ) {
-
-                    return self.clients.openWindow(
-                        targetUrl
-                    );
-
-                }
-
-
-                return undefined;
-
-            })()
-
-        );
 
     }
 
-);
+
+    /*
+     * "dismiss" simply closes the notification.
+     */
+
+    if (event.action === "dismiss") {
+
+        return;
+
+    }
+
+
+    event.waitUntil(
+
+        openNotificationUrl(targetUrl)
+
+            .catch(error => {
+
+                console.error(
+                    "AFC Isiu PWA: Could not open notification URL:",
+                    error
+                );
+
+            })
+
+    );
+
+});
+
+
+/* ============================================================
+   NOTIFICATION CLOSE
+   ============================================================ */
+
+self.addEventListener("notificationclose", event => {
+
+    console.log(
+        "AFC Isiu PWA: Notification dismissed."
+    );
+
+});
 
 
 /* ============================================================
    FETCH
    ============================================================ */
 
-self.addEventListener(
-    "fetch",
-    event => {
+self.addEventListener("fetch", event => {
 
-        const request =
-            event.request;
+    const request = event.request;
 
 
-        /*
-         * ========================================================
-         * IMPORTANT:
-         * NEVER INTERCEPT API REQUESTS
-         * ========================================================
-         *
-         * Vercel API routes such as:
-         *
-         *   /api/push/config
-         *   /api/push/send
-         *   /api/push/status
-         *   /api/push/schedules
-         *   /api/push/history
-         *   /api/push/run
-         *
-         * must always go directly to the network.
-         *
-         * We deliberately do NOT call event.respondWith()
-         * for these requests.
-         *
-         * This prevents the generic offline asset handler
-         * from turning API failures into:
-         *
-         *   503 Offline
-         *
-         * ========================================================
-         */
+    /* --------------------------------------------------------
+       ONLY HANDLE GET
+       -------------------------------------------------------- */
 
-        let url;
+    if (request.method !== "GET") {
 
-        try {
-
-            url =
-                new URL(
-                    request.url
-                );
-
-        }
-
-        catch (error) {
-
-            return;
-
-        }
-
-
-        if (
-            url.origin ===
-                self.location.origin &&
-
-            url.pathname.startsWith(
-                "/api/"
-            )
-        ) {
-
-            console.log(
-                "AFC Isiu PWA: API request bypassing service worker:",
-                url.pathname
-            );
-
-
-            return;
-
-        }
-
-
-        /*
-         * Only GET requests below this point.
-         */
-
-        if (
-            request.method !== "GET"
-        ) {
-
-            return;
-
-        }
-
-
-        /* ========================================================
-           EXTERNAL ORIGINS
-        ======================================================== */
-
-        /*
-         * Google Sheets, Google Fonts,
-         * Font Awesome, jsDelivr, etc.
-         *
-         * These are intentionally not intercepted.
-         */
-
-        if (
-            url.origin !==
-            self.location.origin
-        ) {
-
-            return;
-
-        }
-
-
-        /* ========================================================
-           AUDIO
-        ======================================================== */
-
-        if (
-            url.pathname.startsWith(
-                "/audio/"
-            )
-        ) {
-
-            event.respondWith(
-
-                handleAudio(
-                    request
-                )
-
-            );
-
-            return;
-
-        }
-
-
-        /* ========================================================
-           NAVIGATION
-        ======================================================== */
-
-        if (
-            request.mode ===
-            "navigate"
-        ) {
-
-            event.respondWith(
-
-                handleNavigation(
-                    request
-                )
-
-            );
-
-            return;
-
-        }
-
-
-        /* ========================================================
-           OTHER ASSETS
-        ======================================================== */
-
-        event.respondWith(
-
-            handleAsset(
-                request
-            )
-
-        );
+        return;
 
     }
 
-);
+
+    let url;
+
+    try {
+
+        url = new URL(request.url);
+
+    } catch (error) {
+
+        return;
+
+    }
 
 
-/* ============================================================
-   CACHE ALL LESSON AUDIO
-   ============================================================ */
+    /* --------------------------------------------------------
+       IMPORTANT: BYPASS API REQUESTS
+       -------------------------------------------------------- */
 
-async function cacheLessonAudio(
-    audioUrls
-) {
+    /*
+     * This prevents the service worker from turning
+     * /api/push/status
+     * /api/push/schedules
+     * /api/push/history
+     * /api/push/run
+     * /api/push/send
+     *
+     * into "Offline" responses.
+     */
 
     if (
-        !audioUrls.length
+
+        url.origin === self.location.origin &&
+
+        url.pathname.startsWith("/api/")
+
     ) {
 
         console.log(
-            "AFC Isiu PWA: No lesson audio to cache."
+            "AFC Isiu PWA: API request bypassing service worker:",
+            url.pathname
         );
 
         return;
@@ -923,1022 +1028,270 @@ async function cacheLessonAudio(
     }
 
 
-    const cache =
-        await caches.open(
-            AUDIO_CACHE
-        );
+    /* --------------------------------------------------------
+       EXTERNAL ORIGINS
+       -------------------------------------------------------- */
 
-
-    /*
-     * Remove duplicates.
-     */
-
-    const uniqueUrls =
-        [
-            ...new Set(
-                audioUrls
-                    .filter(Boolean)
-                    .map(
-                        value =>
-                            String(value)
-                    )
-            )
-        ];
-
-
-    console.log(
-        "AFC Isiu PWA: Preparing to cache lesson audio:",
-        uniqueUrls.length
-    );
-
-
-    for (
-        const audioUrl of uniqueUrls
+    if (
+        url.origin !== self.location.origin
     ) {
 
-        try {
+        return;
 
-            const url =
-                new URL(
-                    audioUrl,
-                    self.location.origin
-                );
+    }
 
 
-            /*
-             * Only cache audio belonging
-             * to this website.
-             */
+    /* --------------------------------------------------------
+       AUDIO
+       -------------------------------------------------------- */
 
-            if (
-                url.origin !==
-                self.location.origin
-            ) {
+    if (
+        url.pathname.startsWith("/audio/")
+    ) {
 
-                console.warn(
-                    "AFC Isiu PWA: Skipping external audio:",
-                    audioUrl
-                );
+        event.respondWith(
 
-                continue;
+            caches.open(LESSON_CACHE)
 
-            }
+                .then(async cache => {
 
+                    try {
 
-            /*
-             * Fetch audio from network.
-             */
+                        const networkResponse =
+                            await fetch(request);
 
-            const response =
-                await fetch(
-                    url.href,
-                    {
-                        cache:
-                            "no-store"
+                        if (
+                            networkResponse &&
+                            networkResponse.ok
+                        ) {
+
+                            cache.put(
+                                request,
+                                networkResponse.clone()
+                            );
+
+                        }
+
+                        return networkResponse;
+
+                    } catch (error) {
+
+                        const cachedResponse =
+                            await cache.match(request);
+
+                        if (cachedResponse) {
+
+                            return cachedResponse;
+
+                        }
+
+                        return new Response(
+                            "",
+                            {
+                                status: 503,
+                                statusText: "Offline"
+                            }
+                        );
+
                     }
-                );
 
+                })
 
-            if (
-                response &&
-                response.ok
-            ) {
+        );
 
-                await cache.put(
-                    url.href,
-                    response.clone()
-                );
-
-
-                console.log(
-                    "AFC Isiu PWA: Audio cached:",
-                    url.href
-                );
-
-            }
-
-            else {
-
-                console.warn(
-                    "AFC Isiu PWA: Audio could not be cached:",
-                    url.href,
-                    response
-                        ? response.status
-                        : "No response"
-                );
-
-            }
-
-        }
-
-        catch (error) {
-
-            /*
-             * One bad audio file must NEVER
-             * stop remaining audio files.
-             */
-
-            console.warn(
-                "AFC Isiu PWA: Audio cache error:",
-                audioUrl,
-                error
-            );
-
-        }
+        return;
 
     }
 
 
-    console.log(
-        "AFC Isiu PWA: Lesson audio caching finished."
-    );
+    /* --------------------------------------------------------
+       NAVIGATION
+       -------------------------------------------------------- */
 
-}
+    if (
+        request.mode === "navigate"
+    ) {
+
+        event.respondWith(
+
+            fetch(request)
+
+                .then(response => {
+
+                    /*
+                     * Save successful navigation response.
+                     */
+
+                    if (
+                        response &&
+                        response.ok
+                    ) {
+
+                        const responseClone =
+                            response.clone();
+
+                        caches.open(STATIC_CACHE)
+                            .then(cache => {
+
+                                cache.put(
+                                    request,
+                                    responseClone
+                                );
+
+                            });
+
+                    }
+
+                    return response;
+
+                })
+
+                .catch(async () => {
+
+                    /*
+                     * First try the exact request.
+                     */
+
+                    const cachedResponse =
+                        await caches.match(request);
+
+                    if (cachedResponse) {
+
+                        return cachedResponse;
+
+                    }
 
 
-/* ============================================================
-   AUDIO HANDLER
-   ============================================================ */
+                    /*
+                     * Then check our clean URL map.
+                     */
 
-async function handleAudio(
-    request
-) {
+                    const mappedPath =
+                        CLEAN_PAGE_MAP[
+                            url.pathname
+                        ];
 
-    const cache =
-        await caches.open(
-            AUDIO_CACHE
+                    if (mappedPath) {
+
+                        const mappedResponse =
+                            await caches.match(
+                                mappedPath
+                            );
+
+                        if (mappedResponse) {
+
+                            return mappedResponse;
+
+                        }
+
+                    }
+
+
+                    /*
+                     * Finally fall back to index.
+                     */
+
+                    const indexResponse =
+                        await caches.match(
+                            "/index.html"
+                        );
+
+                    if (indexResponse) {
+
+                        return indexResponse;
+
+                    }
+
+
+                    return new Response(
+
+                        "AFC Isiu Youth Portal is currently offline.",
+
+                        {
+
+                            status: 503,
+
+                            statusText: "Offline",
+
+                            headers: {
+
+                                "Content-Type":
+                                    "text/plain; charset=utf-8"
+
+                            }
+
+                        }
+
+                    );
+
+                })
+
         );
 
+        return;
 
-    /*
-     * NETWORK FIRST
-     */
+    }
 
-    try {
 
-        const networkResponse =
-            await fetch(
-                request,
-                {
-                    cache:
-                        "no-store"
+    /* --------------------------------------------------------
+       STATIC ASSETS
+       -------------------------------------------------------- */
+
+    event.respondWith(
+
+        fetch(request)
+
+            .then(response => {
+
+                if (
+                    response &&
+                    response.ok
+                ) {
+
+                    caches.open(STATIC_CACHE)
+                        .then(cache => {
+
+                            cache.put(
+                                request,
+                                response.clone()
+                            );
+
+                        });
+
                 }
-            );
 
+                return response;
 
-        if (
-            networkResponse &&
-            networkResponse.ok
-        ) {
+            })
 
-            await cache.put(
-                request,
-                networkResponse.clone()
-            );
+            .catch(async () => {
 
+                const cachedResponse =
+                    await caches.match(request);
 
-            return networkResponse;
+                if (cachedResponse) {
 
-        }
+                    return cachedResponse;
 
-    }
-
-    catch (error) {
-
-        console.log(
-            "AFC Isiu PWA: Audio network unavailable:",
-            request.url
-        );
-
-    }
-
-
-    /*
-     * OFFLINE AUDIO FALLBACK.
-     */
-
-    const cachedAudio =
-        await cache.match(
-            request
-        );
-
-
-    if (
-        cachedAudio
-    ) {
-
-        console.log(
-            "AFC Isiu PWA: Serving cached audio:",
-            request.url
-        );
-
-
-        return cachedAudio;
-
-    }
-
-
-    /*
-     * Also search every cache.
-     */
-
-    const anyCachedAudio =
-        await caches.match(
-            request
-        );
-
-
-    if (
-        anyCachedAudio
-    ) {
-
-        return anyCachedAudio;
-
-    }
-
-
-    /*
-     * Audio unavailable.
-     */
-
-    return new Response(
-        "",
-        {
-            status:
-                503,
-
-            statusText:
-                "Offline"
-        }
-    );
-
-}
-
-
-/* ============================================================
-   NAVIGATION HANDLER
-   ============================================================ */
-
-async function handleNavigation(
-    request
-) {
-
-    const pageCache =
-        await caches.open(
-            PAGE_CACHE
-        );
-
-
-    const requestUrl =
-        new URL(
-            request.url
-        );
-
-
-    /* ========================================================
-       NETWORK FIRST
-    ======================================================== */
-
-    try {
-
-        const networkResponse =
-            await fetch(
-                request,
-                {
-                    cache:
-                        "no-store"
                 }
-            );
 
 
-        /*
-         * Never replace genuine 404/410.
-         */
+                return new Response(
 
-        if (
-            networkResponse.status ===
-                404 ||
+                    "Offline",
 
-            networkResponse.status ===
-                410
-        ) {
+                    {
 
-            return networkResponse;
+                        status: 503,
 
-        }
+                        statusText: "Offline"
 
+                    }
 
-        /*
-         * Cache successful pages.
-         */
-
-        if (
-            networkResponse.ok
-        ) {
-
-            await pageCache.put(
-                request,
-                networkResponse.clone()
-            );
-
-
-            /*
-             * Clean lesson URL.
-             */
-
-            if (
-                requestUrl.pathname ===
-                "/pages/lessons"
-            ) {
-
-                await pageCache.put(
-                    "/pages/lessons",
-                    networkResponse.clone()
                 );
 
-
-                await pageCache.put(
-                    "/pages/lessons.html",
-                    networkResponse.clone()
-                );
-
-
-                console.log(
-                    "AFC Isiu PWA: Lesson page cached under both URLs."
-                );
-
-            }
-
-        }
-
-
-        return networkResponse;
-
-    }
-
-    catch (error) {
-
-        console.log(
-            "AFC Isiu PWA: Navigation network unavailable:",
-            requestUrl.pathname
-        );
-
-    }
-
-
-    /* ========================================================
-       EXACT PAGE CACHE
-    ======================================================== */
-
-    const cachedPage =
-        await pageCache.match(
-            request
-        );
-
-
-    if (
-        cachedPage
-    ) {
-
-        console.log(
-            "AFC Isiu PWA: Serving exact cached page:",
-            requestUrl.pathname
-        );
-
-
-        return cachedPage;
-
-    }
-
-
-    /* ========================================================
-       CLEAN URL → REAL HTML PAGE
-    ======================================================== */
-
-    const mappedPage =
-        CLEAN_PAGE_MAP[
-            requestUrl.pathname
-        ];
-
-
-    if (
-        mappedPage
-    ) {
-
-        /*
-         * First search page cache.
-         */
-
-        const mappedFromPageCache =
-            await pageCache.match(
-                mappedPage
-            );
-
-
-        if (
-            mappedFromPageCache
-        ) {
-
-            console.log(
-                "AFC Isiu PWA: Serving mapped lesson page from page cache:",
-                mappedPage
-            );
-
-
-            return mappedFromPageCache;
-
-        }
-
-
-        /*
-         * Then search all caches.
-         */
-
-        const mappedFromAnyCache =
-            await caches.match(
-                mappedPage
-            );
-
-
-        if (
-            mappedFromAnyCache
-        ) {
-
-            console.log(
-                "AFC Isiu PWA: Serving mapped lesson page:",
-                mappedPage
-            );
-
-
-            return mappedFromAnyCache;
-
-        }
-
-    }
-
-
-    /* ========================================================
-       STATIC CACHE
-    ======================================================== */
-
-    const staticPage =
-        await caches.match(
-            request
-        );
-
-
-    if (
-        staticPage
-    ) {
-
-        return staticPage;
-
-    }
-
-
-    /* ========================================================
-       PATHNAME CACHE
-    ======================================================== */
-
-    const shellPage =
-        await caches.match(
-            requestUrl.pathname
-        );
-
-
-    if (
-        shellPage
-    ) {
-
-        return shellPage;
-
-    }
-
-
-    /* ========================================================
-       FINAL BUILT-IN OFFLINE PAGE
-    ======================================================== */
-
-    return createOfflineResponse();
-
-}
-
-
-/* ============================================================
-   ASSET HANDLER
-   ============================================================ */
-
-async function handleAsset(
-    request
-) {
-
-    /*
-     * NETWORK FIRST.
-     */
-
-    try {
-
-        const networkResponse =
-            await fetch(
-                request,
-                {
-                    cache:
-                        "no-store"
-                }
-            );
-
-
-        if (
-            networkResponse &&
-            networkResponse.ok
-        ) {
-
-            const cache =
-                await caches.open(
-                    STATIC_CACHE
-                );
-
-
-            await cache.put(
-                request,
-                networkResponse.clone()
-            );
-
-
-            return networkResponse;
-
-        }
-
-    }
-
-    catch (error) {
-
-        console.log(
-            "AFC Isiu PWA: Asset network unavailable:",
-            request.url
-        );
-
-    }
-
-
-    /*
-     * OFFLINE FALLBACK.
-     */
-
-    const cachedResponse =
-        await caches.match(
-            request
-        );
-
-
-    if (
-        cachedResponse
-    ) {
-
-        return cachedResponse;
-
-    }
-
-
-    /*
-     * Normal 503.
-     */
-
-    return new Response(
-        "",
-        {
-            status:
-                503,
-
-            statusText:
-                "Offline"
-        }
-    );
-
-}
-
-
-/* ============================================================
-   BUILT-IN OFFLINE PAGE
-   ============================================================ */
-
-function createOfflineResponse() {
-
-    return new Response(
-
-        `
-<!DOCTYPE html>
-
-<html lang="en">
-
-<head>
-
-    <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
-    <meta
-        name="theme-color"
-        content="#0A0016"
-    >
-
-    <title>
-        You're Offline | AFC Isiu Youth
-    </title>
-
-    <style>
-
-        * {
-            box-sizing: border-box;
-        }
-
-
-        html,
-        body {
-            margin: 0;
-            min-height: 100%;
-        }
-
-
-        body {
-
-            min-height: 100vh;
-
-            display: flex;
-
-            align-items: center;
-
-            justify-content: center;
-
-            padding: 24px;
-
-            background:
-
-                radial-gradient(
-                    circle at 15% 15%,
-                    rgba(74, 7, 84, .5),
-                    transparent 35%
-                ),
-
-                radial-gradient(
-                    circle at 85% 85%,
-                    rgba(234, 88, 12, .2),
-                    transparent 35%
-                ),
-
-                #0A0016;
-
-            color: white;
-
-            font-family:
-                "DM Sans",
-                Arial,
-                sans-serif;
-
-        }
-
-
-        .offline-card {
-
-            width: 100%;
-
-            max-width: 500px;
-
-            padding: 40px 28px;
-
-            text-align: center;
-
-            border-radius: 26px;
-
-            background:
-                rgba(255,255,255,.05);
-
-            border:
-                1px solid
-                rgba(255,255,255,.1);
-
-            backdrop-filter:
-                blur(20px);
-
-        }
-
-
-        .offline-logo {
-
-            width: 72px;
-
-            height: 72px;
-
-            object-fit: contain;
-
-            margin-bottom: 22px;
-
-        }
-
-
-        .wifi {
-
-            width: 64px;
-
-            height: 54px;
-
-            margin:
-                0 auto 24px;
-
-            position: relative;
-
-        }
-
-
-        .wifi::before,
-        .wifi::after {
-
-            content: "";
-
-            position: absolute;
-
-            left: 50%;
-
-            transform:
-                translateX(-50%)
-                rotate(-45deg);
-
-            border:
-                5px solid
-                rgba(255,255,255,.8);
-
-            border-left-color:
-                transparent;
-
-            border-bottom-color:
-                transparent;
-
-            border-radius:
-                50%;
-
-        }
-
-
-        .wifi::before {
-
-            width: 56px;
-
-            height: 56px;
-
-            top: 0;
-
-        }
-
-
-        .wifi::after {
-
-            width: 34px;
-
-            height: 34px;
-
-            top: 12px;
-
-        }
-
-
-        .wifi-dot {
-
-            position: absolute;
-
-            left: 50%;
-
-            bottom: 0;
-
-            width: 8px;
-
-            height: 8px;
-
-            transform:
-                translateX(-50%);
-
-            border-radius: 50%;
-
-            background:
-                #ea580c;
-
-        }
-
-
-        h1 {
-
-            margin:
-                0 0 12px;
-
-            font-family:
-                "Bricolage Grotesque",
-                Arial,
-                sans-serif;
-
-            font-size:
-                2rem;
-
-            line-height:
-                1.1;
-
-        }
-
-
-        p {
-
-            margin: 0;
-
-            color:
-                rgba(255,255,255,.68);
-
-            line-height:
-                1.65;
-
-            font-size:
-                .9rem;
-
-        }
-
-
-        .actions {
-
-            display:
-                flex;
-
-            justify-content:
-                center;
-
-            gap: 10px;
-
-            margin-top: 28px;
-
-        }
-
-
-        button {
-
-            border: 0;
-
-            border-radius:
-                12px;
-
-            padding:
-                12px 18px;
-
-            background:
-                #4a0754;
-
-            color: white;
-
-            font:
-                inherit;
-
-            font-size:
-                .82rem;
-
-            font-weight:
-                700;
-
-            cursor:
-                pointer;
-
-        }
-
-
-        button,
-        a {
-
-            -webkit-tap-highlight-color:
-                transparent;
-
-        }
-
-
-        button:focus,
-        button:focus-visible,
-        a:focus,
-        a:focus-visible {
-
-            outline: none !important;
-
-            box-shadow: none !important;
-
-        }
-
-
-        button.secondary {
-
-            background:
-                rgba(255,255,255,.08);
-
-        }
-
-
-        @media(max-width:480px) {
-
-            .offline-card {
-
-                padding:
-                    32px 20px;
-
-            }
-
-
-            .actions {
-
-                flex-direction:
-                    column;
-
-            }
-
-
-            button {
-
-                width: 100%;
-
-            }
-
-        }
-
-    </style>
-
-</head>
-
-
-<body>
-
-    <main class="offline-card">
-
-        <img
-            src="/images/logo.png"
-            class="offline-logo"
-            alt="AFC Isiu Youth"
-        >
-
-
-        <div
-            class="wifi"
-            aria-hidden="true"
-        >
-
-            <span class="wifi-dot"></span>
-
-        </div>
-
-
-        <h1>
-            You're currently offline
-        </h1>
-
-
-        <p>
-            We couldn't connect to the internet right now,
-            so this page can't load fresh information.
-        </p>
-
-
-        <div class="actions">
-
-            <button
-                type="button"
-                onclick="location.reload()"
-            >
-                Try Again
-            </button>
-
-
-            <button
-                type="button"
-                class="secondary"
-                onclick="location.href='/'"
-            >
-                Go Home
-            </button>
-
-        </div>
-
-    </main>
-
-</body>
-
-</html>
-        `,
-
-        {
-            status:
-                503,
-
-            headers: {
-
-                "Content-Type":
-                    "text/html; charset=UTF-8"
-
-            }
-
-        }
+            })
 
     );
 
-}
+});
