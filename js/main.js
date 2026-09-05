@@ -1,12 +1,13 @@
 /* =========================================================
    AFC ISIU YOUTH PORTAL
    FILE: main.js
-   VERSION: 2.3
+   VERSION: 2.4
 
    PURPOSE:
    - Shared portal functionality
    - Sidebar / mobile navigation
    - Bottom hub button
+   - Notification controls
    - Reliable offline status
    - Online-only navigation
    - Theme toggle
@@ -14,11 +15,14 @@
    - Safe page initialization
 
    IMPORTANT:
+   - layout.js injects shared components.
+   - main.js initializes shared component behaviour.
    - layout.css controls header positioning.
-   - This file does NOT control header positioning.
    - lessons.js controls lesson-specific functionality.
-   - pwa.js is the ONLY file responsible for the
-     Progressive Web App service worker and installation.
+   - pwa.js is the ONLY file responsible for:
+       * service worker
+       * push subscription
+       * PWA installation
 ========================================================= */
 
 "use strict";
@@ -182,7 +186,9 @@ onDOMReady(() => {
         }
 
 
-        offlineBanner.classList.remove("show");
+        offlineBanner.classList.remove(
+            "show"
+        );
 
     }
 
@@ -227,58 +233,6 @@ onDOMReady(() => {
 
 
 /* =========================================================
-   ONLINE-ONLY FEATURES
-========================================================= */
-
-onDOMReady(() => {
-
-    const onlineOnlyLinks =
-        document.querySelectorAll(
-            "[data-online-only]"
-        );
-
-
-    if (!onlineOnlyLinks.length) {
-
-        return;
-
-    }
-
-
-    onlineOnlyLinks.forEach(
-        link => {
-
-            link.addEventListener(
-                "click",
-                event => {
-
-                    if (
-                        navigator.onLine
-                    ) {
-
-                        return;
-
-                    }
-
-
-                    event.preventDefault();
-
-
-                    showOfflineMessage(
-                        link.dataset.feature ||
-                        "This feature"
-                    );
-
-                }
-            );
-
-        }
-    );
-
-});
-
-
-/* =========================================================
    OFFLINE MESSAGE
 ========================================================= */
 
@@ -317,11 +271,9 @@ function showOfflineMessage(
 
             </div>
 
-
             <h3>
                 Internet Connection Required
             </h3>
-
 
             <p>
                 ${escapeHTML(featureName)}
@@ -329,7 +281,6 @@ function showOfflineMessage(
                 Please turn on your data or connect
                 to Wi-Fi and try again.
             </p>
-
 
             <button
                 type="button"
@@ -451,10 +402,46 @@ function escapeHTML(
 
 
 /* =========================================================
-   SIDEBAR / MOBILE NAVIGATION
+   SHARED LAYOUT READY
+=========================================================
+
+   layout.js injects:
+
+       Sidebar
+       Topbar
+       Notification panel
+       Bottom navigation
+
+   Only after that happens should we initialize
+   interactions that depend on those elements.
 ========================================================= */
 
-onDOMReady(() => {
+document.addEventListener(
+    "afc:layout-ready",
+    () => {
+
+        initializeNavigation();
+
+        initializeNotifications();
+
+        initializeTheme();
+
+        initializeOnlineOnlyLinks();
+
+        initializeHeaderSafety();
+
+    },
+    {
+        once: true
+    }
+);
+
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+function initializeNavigation() {
 
     const sidebar =
         document.getElementById(
@@ -485,7 +472,42 @@ onDOMReady(() => {
         !overlay
     ) {
 
+        console.warn(
+            "AFC Isiu: Navigation elements were not found."
+        );
+
         return;
+
+    }
+
+
+    /* -----------------------------------------------------
+       BODY SCROLL LOCK
+    ----------------------------------------------------- */
+
+    function lockPageScroll() {
+
+        document.body.classList.add(
+            "sidebar-open"
+        );
+
+    }
+
+
+    function unlockPageScroll() {
+
+        document.body.classList.remove(
+            "sidebar-open"
+        );
+
+        /*
+         * Safety cleanup.
+         * This guarantees that no old inline
+         * overflow value can remain.
+         */
+        document.body.style.removeProperty(
+            "overflow"
+        );
 
     }
 
@@ -506,13 +528,7 @@ onDOMReady(() => {
         );
 
 
-        document.body.classList.add(
-            "sidebar-open"
-        );
-
-
-        document.body.style.overflow =
-            "hidden";
+        lockPageScroll();
 
 
         if (menuButton) {
@@ -553,13 +569,7 @@ onDOMReady(() => {
         );
 
 
-        document.body.classList.remove(
-            "sidebar-open"
-        );
-
-
-        document.body.style.overflow =
-            "";
+        unlockPageScroll();
 
 
         if (menuButton) {
@@ -582,6 +592,13 @@ onDOMReady(() => {
         }
 
     }
+
+
+    /* -----------------------------------------------------
+       INITIAL STATE
+    ----------------------------------------------------- */
+
+    closeSidebar();
 
 
     /* -----------------------------------------------------
@@ -675,7 +692,9 @@ onDOMReady(() => {
     ----------------------------------------------------- */
 
     const sidebarLinks =
-        sidebar.querySelectorAll("a");
+        sidebar.querySelectorAll(
+            "a"
+        );
 
 
     sidebarLinks.forEach(
@@ -685,14 +704,7 @@ onDOMReady(() => {
                 "click",
                 () => {
 
-                    if (
-                        window.innerWidth <=
-                        AFC_MAIN_CONFIG.MOBILE_BREAKPOINT
-                    ) {
-
-                        closeSidebar();
-
-                    }
+                    closeSidebar();
 
                 }
             );
@@ -746,12 +758,237 @@ onDOMReady(() => {
 
 
     /* -----------------------------------------------------
-       INITIAL ARIA STATE
+       PAGE VISIBILITY SAFETY
+    -----------------------------------------------------
+
+       If the browser restores the page after being
+       backgrounded or restored from history, make sure
+       the page isn't accidentally left scroll-locked.
     ----------------------------------------------------- */
 
-    if (menuButton) {
+    window.addEventListener(
+        "pageshow",
+        () => {
 
-        menuButton.setAttribute(
+            if (
+                window.innerWidth >
+                AFC_MAIN_CONFIG.MOBILE_BREAKPOINT
+            ) {
+
+                closeSidebar();
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   ONLINE-ONLY FEATURES
+========================================================= */
+
+function initializeOnlineOnlyLinks() {
+
+    const onlineOnlyLinks =
+        document.querySelectorAll(
+            "[data-online-only]"
+        );
+
+
+    if (!onlineOnlyLinks.length) {
+
+        return;
+
+    }
+
+
+    onlineOnlyLinks.forEach(
+        link => {
+
+            /*
+             * Prevent duplicate listeners if layout
+             * is ever reinitialized.
+             */
+
+            if (
+                link.dataset.onlineHandlerAttached ===
+                "true"
+            ) {
+
+                return;
+
+            }
+
+
+            link.dataset.onlineHandlerAttached =
+                "true";
+
+
+            link.addEventListener(
+                "click",
+                event => {
+
+                    if (
+                        navigator.onLine
+                    ) {
+
+                        return;
+
+                    }
+
+
+                    event.preventDefault();
+
+
+                    showOfflineMessage(
+                        link.dataset.feature ||
+                        "This feature"
+                    );
+
+                }
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   NOTIFICATION CONTROLLER
+========================================================= */
+
+function initializeNotifications() {
+
+    const button =
+        document.getElementById(
+            "notificationBtn"
+        );
+
+
+    const panel =
+        document.getElementById(
+            "notificationPanel"
+        );
+
+
+    const closeButton =
+        document.getElementById(
+            "notificationPanelClose"
+        );
+
+
+    const enableButton =
+        document.getElementById(
+            "enableNotificationsBtn"
+        );
+
+
+    const disableButton =
+        document.getElementById(
+            "disableNotificationsBtn"
+        );
+
+
+    const statusText =
+        document.getElementById(
+            "notificationStatusText"
+        );
+
+
+    const statusBox =
+        document.getElementById(
+            "notificationStatus"
+        );
+
+
+    const icon =
+        document.getElementById(
+            "notificationIcon"
+        );
+
+
+    const dot =
+        document.getElementById(
+            "notifyDot"
+        );
+
+
+    if (
+        !button ||
+        !panel ||
+        !enableButton
+    ) {
+
+        console.warn(
+            "AFC Isiu: Notification UI elements were not found."
+        );
+
+        return;
+
+    }
+
+
+    /* -----------------------------------------------------
+       GUARANTEE CORRECT INITIAL BUTTON STATE
+    ----------------------------------------------------- */
+
+    enableButton.hidden =
+        false;
+
+
+    if (disableButton) {
+
+        disableButton.hidden =
+            true;
+
+    }
+
+
+    /* -----------------------------------------------------
+       PANEL STATE
+    ----------------------------------------------------- */
+
+    function openPanel() {
+
+        panel.classList.add(
+            "show"
+        );
+
+
+        panel.setAttribute(
+            "aria-hidden",
+            "false"
+        );
+
+
+        button.setAttribute(
+            "aria-expanded",
+            "true"
+        );
+
+
+        updateNotificationState();
+
+    }
+
+
+    function closePanel() {
+
+        panel.classList.remove(
+            "show"
+        );
+
+
+        panel.setAttribute(
+            "aria-hidden",
+            "true"
+        );
+
+
+        button.setAttribute(
             "aria-expanded",
             "false"
         );
@@ -759,23 +996,851 @@ onDOMReady(() => {
     }
 
 
-    if (hubButton) {
+    /* -----------------------------------------------------
+       STATUS
+    ----------------------------------------------------- */
 
-        hubButton.setAttribute(
-            "aria-expanded",
-            "false"
+    function setNotificationStatus(
+        message,
+        state
+    ) {
+
+        if (statusText) {
+
+            statusText.textContent =
+                message;
+
+        }
+
+
+        if (statusBox) {
+
+            statusBox.dataset.state =
+                state || "";
+
+        }
+
+    }
+
+
+    /* -----------------------------------------------------
+       BELL
+    ----------------------------------------------------- */
+
+    function updateBell(
+        enabled
+    ) {
+
+        if (icon) {
+
+            icon.classList.toggle(
+                "fa-regular",
+                !enabled
+            );
+
+
+            icon.classList.toggle(
+                "fa-solid",
+                enabled
+            );
+
+        }
+
+
+        if (dot) {
+
+            dot.style.display =
+                enabled
+                    ? "block"
+                    : "none";
+
+        }
+
+    }
+
+
+    /* -----------------------------------------------------
+       BUTTON STATE
+    ----------------------------------------------------- */
+
+    function showEnableButton() {
+
+        enableButton.hidden =
+            false;
+
+
+        enableButton.disabled =
+            false;
+
+
+        if (disableButton) {
+
+            disableButton.hidden =
+                true;
+
+        }
+
+    }
+
+
+    function showDisableButton() {
+
+        enableButton.hidden =
+            true;
+
+
+        enableButton.disabled =
+            false;
+
+
+        if (disableButton) {
+
+            disableButton.hidden =
+                false;
+
+            disableButton.disabled =
+                false;
+
+        }
+
+    }
+
+
+    /* -----------------------------------------------------
+       CHECK CURRENT STATE
+    ----------------------------------------------------- */
+
+    async function updateNotificationState() {
+
+        /*
+         * Always establish the safe visual state
+         * before checking anything asynchronously.
+         */
+
+        showEnableButton();
+
+        updateBell(false);
+
+
+        if (
+            !window.AFC_PWA
+        ) {
+
+            setNotificationStatus(
+                "The notification service is still loading. Please try again in a moment.",
+                "loading"
+            );
+
+            return;
+
+        }
+
+
+        if (
+            typeof AFC_PWA.isPushSupported !==
+            "function"
+        ) {
+
+            setNotificationStatus(
+                "Push notifications are not supported by this browser.",
+                "unsupported"
+            );
+
+            showEnableButton();
+
+            return;
+
+        }
+
+
+        if (
+            !AFC_PWA.isPushSupported()
+        ) {
+
+            setNotificationStatus(
+                "Push notifications are not supported by this browser.",
+                "unsupported"
+            );
+
+            showEnableButton();
+
+            return;
+
+        }
+
+
+        try {
+
+            const permission =
+                await AFC_PWA.getPushPermissionState();
+
+
+            const subscription =
+                await AFC_PWA.getPushSubscription();
+
+
+            /*
+             * ENABLED
+             */
+
+            if (
+                subscription &&
+                permission === "granted"
+            ) {
+
+                setNotificationStatus(
+                    "Notifications are enabled on this device. You will receive AFC Isiu Youth updates here.",
+                    "enabled"
+                );
+
+
+                showDisableButton();
+
+
+                updateBell(true);
+
+
+                return;
+
+            }
+
+
+            /*
+             * BLOCKED
+             */
+
+            if (
+                permission === "denied"
+            ) {
+
+                setNotificationStatus(
+                    "Notifications are blocked in your browser. Please allow notifications in your browser settings.",
+                    "blocked"
+                );
+
+
+                showEnableButton();
+
+
+                updateBell(false);
+
+
+                return;
+
+            }
+
+
+            /*
+             * NOT ENABLED
+             */
+
+            setNotificationStatus(
+                "Turn on notifications to receive important AFC Isiu Youth updates.",
+                "disabled"
+            );
+
+
+            showEnableButton();
+
+
+            updateBell(false);
+
+        }
+
+        catch (error) {
+
+            console.error(
+                "AFC Isiu: Unable to determine notification state.",
+                error
+            );
+
+
+            setNotificationStatus(
+                "Unable to check notification status. Please try again.",
+                "error"
+            );
+
+
+            showEnableButton();
+
+
+            updateBell(false);
+
+        }
+
+    }
+
+
+    /* -----------------------------------------------------
+       ENABLE NOTIFICATIONS
+    ----------------------------------------------------- */
+
+    enableButton.addEventListener(
+        "click",
+        async event => {
+
+            event.preventDefault();
+
+
+            if (
+                enableButton.disabled
+            ) {
+
+                return;
+
+            }
+
+
+            /*
+             * IMPORTANT:
+             * Do NOT allow the user to click the button
+             * repeatedly while subscription is happening.
+             */
+
+            enableButton.disabled =
+                true;
+
+
+            enableButton.hidden =
+                false;
+
+
+            const originalHTML =
+                enableButton.innerHTML;
+
+
+            enableButton.innerHTML = `
+
+                <i class="fa-solid fa-spinner fa-spin"></i>
+
+                <span>
+                    Enabling Notifications...
+                </span>
+
+            `;
+
+
+            setNotificationStatus(
+                "Setting up notifications on this device...",
+                "loading"
+            );
+
+
+            try {
+
+                if (
+                    !window.AFC_PWA
+                ) {
+
+                    throw new Error(
+                        "Notification service is unavailable."
+                    );
+
+                }
+
+
+                if (
+                    typeof AFC_PWA.subscribeToPush !==
+                    "function"
+                ) {
+
+                    throw new Error(
+                        "Push subscription is unavailable."
+                    );
+
+                }
+
+
+                /*
+                 * The current PWA implementation expects
+                 * a member ID.
+                 *
+                 * Try the existing stored member data.
+                 */
+
+                let memberId = "";
+                let memberName = "";
+
+
+                try {
+
+                    const savedMember =
+                        localStorage.getItem(
+                            "afc_isiu_slc_member_v1"
+                        );
+
+
+                    if (savedMember) {
+
+                        const parsed =
+                            JSON.parse(
+                                savedMember
+                            );
+
+
+                        memberId =
+                            String(
+                                parsed?.memberId ||
+                                ""
+                            ).trim();
+
+
+                        memberName =
+                            String(
+                                parsed?.memberName ||
+                                ""
+                            ).trim();
+
+                    }
+
+                }
+
+                catch (storageError) {
+
+                    console.warn(
+                        "AFC Isiu: Unable to read saved member data.",
+                        storageError
+                    );
+
+                }
+
+
+                /*
+                 * Also check the SLC session.
+                 */
+
+                if (!memberId) {
+
+                    try {
+
+                        const session =
+                            sessionStorage.getItem(
+                                "afc_isiu_slc_quiz_session_v1"
+                            );
+
+
+                        if (session) {
+
+                            const parsed =
+                                JSON.parse(
+                                    session
+                                );
+
+
+                            memberId =
+                                String(
+                                    parsed?.memberId ||
+                                    ""
+                                ).trim();
+
+
+                            memberName =
+                                String(
+                                    parsed?.memberName ||
+                                    ""
+                                ).trim();
+
+                        }
+
+                    }
+
+                    catch (sessionError) {
+
+                        console.warn(
+                            "AFC Isiu: Unable to read SLC session.",
+                            sessionError
+                        );
+
+                    }
+
+                }
+
+
+                /*
+                 * Subscribe.
+                 */
+
+                const result =
+                    await AFC_PWA.subscribeToPush(
+                        memberId,
+                        memberName
+                    );
+
+
+                if (
+                    !result ||
+                    result.success !== true
+                ) {
+
+                    throw new Error(
+                        result?.message ||
+                        "Unable to enable notifications."
+                    );
+
+                }
+
+
+                /*
+                 * IMPORTANT:
+                 *
+                 * Do NOT manually assume the state.
+                 * Ask pwa.js for the actual subscription
+                 * after subscribing.
+                 */
+
+                await updateNotificationState();
+
+
+                /*
+                 * If updateNotificationState() sees
+                 * the real subscription, the Enable
+                 * button will automatically disappear
+                 * and Disable will appear.
+                 */
+
+            }
+
+            catch (error) {
+
+                console.error(
+                    "AFC Isiu: Enable notification error.",
+                    error
+                );
+
+
+                setNotificationStatus(
+                    error?.message ||
+                    "Unable to enable notifications. Please try again.",
+                    "error"
+                );
+
+
+                /*
+                 * Restore original button.
+                 */
+
+                enableButton.innerHTML =
+                    originalHTML;
+
+
+                showEnableButton();
+
+            }
+
+            finally {
+
+                /*
+                 * Re-check the real state.
+                 */
+
+                try {
+
+                    await updateNotificationState();
+
+                }
+
+                catch (stateError) {
+
+                    console.warn(
+                        "AFC Isiu: Final notification state check failed.",
+                        stateError
+                    );
+
+                }
+
+            }
+
+        }
+    );
+
+
+    /* -----------------------------------------------------
+       DISABLE NOTIFICATIONS
+    ----------------------------------------------------- */
+
+    if (disableButton) {
+
+        disableButton.addEventListener(
+            "click",
+            async event => {
+
+                event.preventDefault();
+
+
+                if (
+                    disableButton.disabled
+                ) {
+
+                    return;
+
+                }
+
+
+                disableButton.disabled =
+                    true;
+
+
+                const originalHTML =
+                    disableButton.innerHTML;
+
+
+                disableButton.innerHTML = `
+
+                    <i class="fa-solid fa-spinner fa-spin"></i>
+
+                    <span>
+                        Disabling...
+                    </span>
+
+                `;
+
+
+                setNotificationStatus(
+                    "Disabling notifications on this device...",
+                    "loading"
+                );
+
+
+                try {
+
+                    if (
+                        !window.AFC_PWA
+                    ) {
+
+                        throw new Error(
+                            "Notification service is unavailable."
+                        );
+
+                    }
+
+
+                    if (
+                        typeof AFC_PWA.unsubscribeFromPush !==
+                        "function"
+                    ) {
+
+                        throw new Error(
+                            "Push unsubscribe function is unavailable."
+                        );
+
+                    }
+
+
+                    const result =
+                        await AFC_PWA.unsubscribeFromPush();
+
+
+                    if (
+                        !result ||
+                        result.success !== true
+                    ) {
+
+                        throw new Error(
+                            result?.message ||
+                            "Unable to disable notifications."
+                        );
+
+                    }
+
+
+                    /*
+                     * IMPORTANT:
+                     *
+                     * Ask pwa.js again for the actual
+                     * subscription state.
+                     *
+                     * This makes Enable reappear only
+                     * after unsubscribe has really completed.
+                     */
+
+                    await updateNotificationState();
+
+                }
+
+                catch (error) {
+
+                    console.error(
+                        "AFC Isiu: Disable notification error.",
+                        error
+                    );
+
+
+                    setNotificationStatus(
+                        error?.message ||
+                        "Unable to disable notifications. Please try again.",
+                        "error"
+                    );
+
+
+                    disableButton.innerHTML =
+                        originalHTML;
+
+
+                    showDisableButton();
+
+
+                    updateBell(true);
+
+                }
+
+                finally {
+
+                    disableButton.disabled =
+                        false;
+
+                }
+
+            }
         );
 
     }
 
-});
+
+    /* -----------------------------------------------------
+       NOTIFICATION BUTTON
+    ----------------------------------------------------- */
+
+    button.addEventListener(
+        "click",
+        event => {
+
+            event.preventDefault();
+
+            event.stopPropagation();
+
+
+            if (
+                panel.classList.contains(
+                    "show"
+                )
+            ) {
+
+                closePanel();
+
+            } else {
+
+                openPanel();
+
+            }
+
+        }
+    );
+
+
+    /* -----------------------------------------------------
+       CLOSE BUTTON
+    ----------------------------------------------------- */
+
+    if (closeButton) {
+
+        closeButton.addEventListener(
+            "click",
+            event => {
+
+                event.preventDefault();
+
+                event.stopPropagation();
+
+                closePanel();
+
+            }
+        );
+
+    }
+
+
+    /* -----------------------------------------------------
+       CLICK OUTSIDE
+    ----------------------------------------------------- */
+
+    document.addEventListener(
+        "click",
+        event => {
+
+            if (
+                !panel.classList.contains(
+                    "show"
+                )
+            ) {
+
+                return;
+
+            }
+
+
+            const wrapper =
+                document.getElementById(
+                    "notificationWrapper"
+                );
+
+
+            if (
+                wrapper &&
+                !wrapper.contains(event.target)
+            ) {
+
+                closePanel();
+
+            }
+
+        }
+    );
+
+
+    /* -----------------------------------------------------
+       ESCAPE
+    ----------------------------------------------------- */
+
+    document.addEventListener(
+        "keydown",
+        event => {
+
+            if (
+                event.key === "Escape" &&
+                panel.classList.contains(
+                    "show"
+                )
+            ) {
+
+                closePanel();
+
+            }
+
+        }
+    );
+
+
+    /* -----------------------------------------------------
+       INITIAL STATE
+    ----------------------------------------------------- */
+
+    panel.setAttribute(
+        "aria-hidden",
+        "true"
+    );
+
+
+    button.setAttribute(
+        "aria-expanded",
+        "false"
+    );
+
+
+    /*
+     * Do not wait for the user to open the panel.
+     * Establish the correct bell/button state immediately.
+     */
+
+    updateNotificationState();
+
+}
 
 
 /* =========================================================
    THEME TOGGLE
 ========================================================= */
 
-onDOMReady(() => {
+function initializeTheme() {
 
     const themeButton =
         document.getElementById(
@@ -791,10 +1856,14 @@ onDOMReady(() => {
 
 
     const icon =
-        themeButton.querySelector("i");
+        themeButton.querySelector(
+            "i"
+        );
 
 
-    function applyTheme(theme) {
+    function applyTheme(
+        theme
+    ) {
 
         if (
             theme === "dark"
@@ -818,7 +1887,9 @@ onDOMReady(() => {
 
             }
 
-        } else {
+        }
+
+        else {
 
             document.documentElement.setAttribute(
                 "data-theme",
@@ -854,9 +1925,13 @@ onDOMReady(() => {
         savedTheme === "light"
     ) {
 
-        applyTheme(savedTheme);
+        applyTheme(
+            savedTheme
+        );
 
-    } else {
+    }
+
+    else {
 
         const prefersDark =
             window.matchMedia &&
@@ -894,7 +1969,9 @@ onDOMReady(() => {
                     : "dark";
 
 
-            applyTheme(nextTheme);
+            applyTheme(
+                nextTheme
+            );
 
 
             localStorage.setItem(
@@ -905,7 +1982,7 @@ onDOMReady(() => {
         }
     );
 
-});
+}
 
 
 /* =========================================================
@@ -1018,10 +2095,10 @@ onDOMReady(() => {
 
 
 /* =========================================================
-   PORTAL BRAND / HEADER SAFETY
+   HEADER SAFETY
 ========================================================= */
 
-onDOMReady(() => {
+function initializeHeaderSafety() {
 
     const headerButtons =
         document.querySelectorAll(
@@ -1046,25 +2123,33 @@ onDOMReady(() => {
         }
     );
 
-});
+}
 
 
 /* =========================================================
-   SERVICE WORKER
-=========================================================
-
-   IMPORTANT:
-
-   Service worker registration has been intentionally
-   REMOVED from main.js.
-
-   pwa.js is the single owner of:
-
-       /sw.js
-
-   This prevents duplicate registrations and eliminates
-   the old /service-worker.js 404 error.
+   SAFETY CLEANUP
 ========================================================= */
+
+window.addEventListener(
+    "beforeunload",
+    () => {
+
+        /*
+         * Never leave the document scroll locked
+         * if the browser is navigating away.
+         */
+
+        document.body.classList.remove(
+            "sidebar-open"
+        );
+
+
+        document.body.style.removeProperty(
+            "overflow"
+        );
+
+    }
+);
 
 
 /* =========================================================
@@ -1107,6 +2192,5 @@ window.addEventListener(
 ========================================================= */
 
 console.log(
-    "AFC Isiu Youth Portal: main.js loaded successfully."
+    "AFC Isiu Youth Portal: main.js v2.4 loaded successfully."
 );
- 
