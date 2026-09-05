@@ -1,39 +1,29 @@
-/* =========================================================
+/* ============================================================
    AFC ISIU YOUTH PORTAL V2
    FILE: pwa.js
-   VERSION: 3.1
-
    PURPOSE:
-   - PWA service worker registration
-   - Native PWA installation
-   - Install prompt handling
-   - Installed-state detection
-   - Manifest verification
-   - PWA diagnostics
-   - Push notification subscription
-
-   IMPORTANT:
-   - Push notifications do NOT require login.
-   - Push notifications do NOT require member ID.
-   - Any visitor can enable notifications.
-   ========================================================= */
+   - PWA installation handling
+   - Service worker registration
+   - Push notification permission
+   - Anonymous push subscription management
+   - Notification status
+   - Push API communication
+   ============================================================ */
 
 (function () {
 
     "use strict";
 
 
-    /* =====================================================
-       CONFIG
-       ===================================================== */
+    /* ============================================================
+       CONFIGURATION
+       ============================================================ */
 
     const PWA_CONFIG = {
 
-        SERVICE_WORKER:
-            "/sw.js",
+        SERVICE_WORKER: "/sw.js",
 
-        MANIFEST:
-            "/manifest.json",
+        MANIFEST: "/manifest.json",
 
         INSTALL_DISPLAY_MODE:
             "(display-mode: standalone)",
@@ -41,525 +31,119 @@
         INSTALL_DISPLAY_MODE_FULLSCREEN:
             "(display-mode: fullscreen)",
 
+        /*
+         * IMPORTANT:
+         * This is the correct Apps Script deployment URL.
+         *
+         * Do NOT change the URL unless the Apps Script deployment
+         * itself is changed.
+         */
         PUSH_API_URL:
-            "https://script.google.com/macros/s/AKfycbw1mVwpgAcIOSNbpgzy52TFyozEGMtWWwVWUDFaofGNzpsguBIaKR4q1dXVtgVHO2xZ1w/exec",
+            "https://script.google.com/macros/s/AKfycbw1mVwpgAcIOSNbpgzy52TFyozEGMtWWwVWUDFaofGNpzsguBIaKR4q1dXVtgVHO2xZ1w/exec",
 
+        /*
+         * Vercel endpoint used to retrieve the public VAPID key.
+         */
         PUSH_CONFIG_URL:
             "/api/push/config"
 
     };
 
 
-    /* =====================================================
-       STATE
-       ===================================================== */
+    /* ============================================================
+       INTERNAL STATE
+       ============================================================ */
 
-    let deferredInstallPrompt =
-        null;
+    let deferredInstallPrompt = null;
 
-    let serviceWorkerRegistration =
-        null;
+    let serviceWorkerRegistration = null;
+
+    let pushPublicKey = null;
 
 
-    /* =====================================================
+    /* ============================================================
        DOM HELPERS
-       ===================================================== */
+       ============================================================ */
 
-    function $(id) {
+    function $(selector) {
 
-        return document.getElementById(id);
-
-    }
-
-
-    /* =====================================================
-       DOM ELEMENTS
-       ===================================================== */
-
-    let installButton = null;
-
-    let helpButton = null;
-
-    let status = null;
-
-    let statusDot = null;
-
-    let statusText = null;
-
-
-    /* =====================================================
-       INITIALISE DOM REFERENCES
-       ===================================================== */
-
-    function cacheDOM() {
-
-        installButton =
-            $("installAppBtn");
-
-        helpButton =
-            $("pwaHelpBtn");
-
-        status =
-            $("pwaStatus");
-
-        statusDot =
-            $("pwaStatusDot");
-
-        statusText =
-            $("pwaStatusText");
+        return document.querySelector(selector);
 
     }
 
 
-    /* =====================================================
-       STATUS
-       ===================================================== */
+    function $all(selector) {
 
-    function setStatus(
-        type,
-        message
-    ) {
+        return document.querySelectorAll(selector);
 
-        if (status) {
+    }
 
-            status.classList.remove(
-                "available",
-                "installed",
-                "checking",
-                "unavailable"
+
+    /* ============================================================
+       LOGGING
+       ============================================================ */
+
+    function log() {
+
+        if (window.console) {
+
+            console.log(
+                "[AFC PWA]",
+                ...arguments
             );
-
-
-            if (type) {
-
-                status.classList.add(
-                    type
-                );
-
-            }
-
-        }
-
-
-        if (statusDot) {
-
-            statusDot.classList.remove(
-                "available",
-                "installed",
-                "checking",
-                "unavailable"
-            );
-
-
-            if (type) {
-
-                statusDot.classList.add(
-                    type
-                );
-
-            }
-
-        }
-
-
-        if (statusText) {
-
-            statusText.textContent =
-                message;
 
         }
 
     }
 
 
-    /* =====================================================
-       INSTALLED DETECTION
-       ===================================================== */
+    function warn() {
 
-    function isAppInstalled() {
-
-        const standalone =
-            window.matchMedia &&
-            window.matchMedia(
-                PWA_CONFIG.INSTALL_DISPLAY_MODE
-            ).matches;
-
-
-        const fullscreen =
-            window.matchMedia &&
-            window.matchMedia(
-                PWA_CONFIG.INSTALL_DISPLAY_MODE_FULLSCREEN
-            ).matches;
-
-
-        const iosStandalone =
-            window.navigator.standalone === true;
-
-
-        return (
-
-            standalone ||
-
-            fullscreen ||
-
-            iosStandalone
-
-        );
-
-    }
-
-
-    /* =====================================================
-       SHOW INSTALL BUTTON
-       ===================================================== */
-
-    function showInstallButton() {
-
-        if (
-            !installButton
-        ) {
-
-            return;
-
-        }
-
-
-        installButton.hidden =
-            false;
-
-
-        installButton.style.display =
-            "inline-flex";
-
-
-        installButton.disabled =
-            false;
-
-
-        installButton.removeAttribute(
-            "aria-hidden"
-        );
-
-    }
-
-
-    /* =====================================================
-       HIDE INSTALL BUTTON
-       ===================================================== */
-
-    function hideInstallButton() {
-
-        if (
-            !installButton
-        ) {
-
-            return;
-
-        }
-
-
-        installButton.hidden =
-            true;
-
-
-        installButton.style.display =
-            "none";
-
-
-        installButton.setAttribute(
-            "aria-hidden",
-            "true"
-        );
-
-    }
-
-
-    /* =====================================================
-       INSTALL BUTTON READY
-       ===================================================== */
-
-    function setInstallButtonReady() {
-
-        if (
-            !installButton
-        ) {
-
-            return;
-
-        }
-
-
-        showInstallButton();
-
-
-        installButton.disabled =
-            false;
-
-
-        installButton.classList.add(
-            "pwa-install-ready"
-        );
-
-
-        installButton.setAttribute(
-            "aria-label",
-            "Install AFC Isiu Youth Portal"
-        );
-
-    }
-
-
-    /* =====================================================
-       INSTALL BUTTON WAITING
-       ===================================================== */
-
-    function setInstallButtonWaiting() {
-
-        if (
-            !installButton
-        ) {
-
-            return;
-
-        }
-
-
-        showInstallButton();
-
-
-        installButton.disabled =
-            false;
-
-
-        installButton.classList.remove(
-            "pwa-install-ready"
-        );
-
-    }
-
-
-    /* =====================================================
-       INSTALLING STATE
-       ===================================================== */
-
-    function setInstallingState() {
-
-        if (
-            !installButton
-        ) {
-
-            return;
-
-        }
-
-
-        installButton.disabled =
-            true;
-
-
-        installButton.classList.add(
-            "is-installing"
-        );
-
-
-        const icon =
-            installButton.querySelector(
-                "i"
-            );
-
-
-        if (
-            icon
-        ) {
-
-            icon.classList.remove(
-                "fa-download",
-                "fa-mobile-screen-button",
-                "fa-plus"
-            );
-
-
-            icon.classList.add(
-                "fa-spinner",
-                "fa-spin"
-            );
-
-        }
-
-
-        const text =
-            installButton.querySelector(
-                ".install-button-text"
-            );
-
-
-        if (
-            text
-        ) {
-
-            text.textContent =
-                "Installing...";
-
-        }
-
-    }
-
-
-    /* =====================================================
-       RESET INSTALL BUTTON
-       ===================================================== */
-
-    function resetInstallButton() {
-
-        if (
-            !installButton
-        ) {
-
-            return;
-
-        }
-
-
-        installButton.disabled =
-            false;
-
-
-        installButton.classList.remove(
-            "is-installing"
-        );
-
-
-        const icon =
-            installButton.querySelector(
-                "i"
-            );
-
-
-        if (
-            icon
-        ) {
-
-            icon.classList.remove(
-                "fa-spinner",
-                "fa-spin"
-            );
-
-
-            icon.classList.add(
-                "fa-download"
-            );
-
-        }
-
-
-        const text =
-            installButton.querySelector(
-                ".install-button-text"
-            );
-
-
-        if (
-            text
-        ) {
-
-            text.textContent =
-                "Install App";
-
-        }
-
-    }
-
-
-    /* =====================================================
-       OPEN INSTALL HELP
-       ===================================================== */
-
-    function openInstallHelp() {
-
-        const modal =
-            $("pwaInstallModal");
-
-
-        if (
-            !modal
-        ) {
+        if (window.console) {
 
             console.warn(
-                "[PWA] Install help modal not found."
+                "[AFC PWA]",
+                ...arguments
             );
 
-            return;
-
         }
-
-
-        modal.classList.add(
-            "show"
-        );
-
-
-        modal.setAttribute(
-            "aria-hidden",
-            "false"
-        );
-
-
-        document.body.classList.add(
-            "pwa-modal-open"
-        );
 
     }
 
 
-    /* =====================================================
-       CLOSE INSTALL HELP
-       ===================================================== */
+    function error() {
 
-    function closeInstallHelp() {
+        if (window.console) {
 
-        const modal =
-            $("pwaInstallModal");
-
-
-        if (
-            !modal
-        ) {
-
-            return;
+            console.error(
+                "[AFC PWA]",
+                ...arguments
+            );
 
         }
-
-
-        modal.classList.remove(
-            "show"
-        );
-
-
-        modal.setAttribute(
-            "aria-hidden",
-            "true"
-        );
-
-
-        document.body.classList.remove(
-            "pwa-modal-open"
-        );
 
     }
 
 
-    /* =====================================================
-       REGISTER SERVICE WORKER
-       ===================================================== */
+    /* ============================================================
+       SERVICE WORKER SUPPORT
+       ============================================================ */
+
+    function isServiceWorkerSupported() {
+
+        return (
+            "serviceWorker" in navigator
+        );
+
+    }
+
 
     async function registerServiceWorker() {
 
-        if (
-            !("serviceWorker" in navigator)
-        ) {
+        if (!isServiceWorkerSupported()) {
 
-            console.warn(
-                "[PWA] Service workers are not supported."
+            warn(
+                "Service workers are not supported by this browser."
             );
 
             return null;
@@ -578,25 +162,62 @@
                 );
 
 
-            console.log(
-                "[PWA] Service worker registered:",
+            log(
+                "Service worker registered:",
                 serviceWorkerRegistration.scope
             );
 
 
+            /*
+             * Wait until the current page is controlled where possible.
+             */
+            if (!navigator.serviceWorker.controller) {
+
+                await new Promise(function (resolve) {
+
+                    let finished = false;
+
+
+                    function complete() {
+
+                        if (finished) return;
+
+                        finished = true;
+
+                        navigator.serviceWorker.removeEventListener(
+                            "controllerchange",
+                            complete
+                        );
+
+                        resolve();
+
+                    }
+
+
+                    navigator.serviceWorker.addEventListener(
+                        "controllerchange",
+                        complete
+                    );
+
+
+                    setTimeout(
+                        complete,
+                        3000
+                    );
+
+                });
+
+            }
+
+
             return serviceWorkerRegistration;
 
-        }
+        } catch (err) {
 
-        catch (
-            error
-        ) {
-
-            console.error(
-                "[PWA] Service worker registration failed:",
-                error
+            error(
+                "Service worker registration failed:",
+                err
             );
-
 
             return null;
 
@@ -605,52 +226,322 @@
     }
 
 
-    /* =====================================================
-       PWA SUPPORT
-       ===================================================== */
+    async function getPushRegistration() {
 
-    function isPWASupported() {
+        if (!isServiceWorkerSupported()) {
+
+            throw new Error(
+                "This browser does not support service workers."
+            );
+
+        }
+
+
+        if (serviceWorkerRegistration) {
+
+            return serviceWorkerRegistration;
+
+        }
+
+
+        serviceWorkerRegistration =
+            await navigator.serviceWorker.getRegistration("/");
+
+
+        if (!serviceWorkerRegistration) {
+
+            serviceWorkerRegistration =
+                await registerServiceWorker();
+
+        }
+
+
+        if (!serviceWorkerRegistration) {
+
+            throw new Error(
+                "Unable to register the service worker."
+            );
+
+        }
+
+
+        return serviceWorkerRegistration;
+
+    }
+
+
+    /* ============================================================
+       PWA INSTALLATION
+       ============================================================ */
+
+    function isStandalone() {
 
         return (
-            "serviceWorker" in navigator
+            window.matchMedia &&
+            (
+                window.matchMedia(
+                    PWA_CONFIG.INSTALL_DISPLAY_MODE
+                ).matches ||
+                window.matchMedia(
+                    PWA_CONFIG.INSTALL_DISPLAY_MODE_FULLSCREEN
+                ).matches
+            )
         );
 
     }
 
 
-    /* =====================================================
-       PUSH SUPPORT
-       ===================================================== */
+    function isIOSStandalone() {
+
+        return (
+            window.navigator &&
+            window.navigator.standalone === true
+        );
+
+    }
+
+
+    function isPWAInstalled() {
+
+        return (
+            isStandalone() ||
+            isIOSStandalone()
+        );
+
+    }
+
+
+    function canInstallPWA() {
+
+        return (
+            deferredInstallPrompt !== null &&
+            !isPWAInstalled()
+        );
+
+    }
+
+
+    async function installPWA() {
+
+        if (isPWAInstalled()) {
+
+            return {
+                success: true,
+                installed: true,
+                message: "The app is already installed."
+            };
+
+        }
+
+
+        if (!deferredInstallPrompt) {
+
+            return {
+                success: false,
+                installed: false,
+                message:
+                    "The installation prompt is not available right now."
+            };
+
+        }
+
+
+        try {
+
+            deferredInstallPrompt.prompt();
+
+            const choice =
+                await deferredInstallPrompt.userChoice;
+
+
+            deferredInstallPrompt = null;
+
+
+            if (
+                choice &&
+                choice.outcome === "accepted"
+            ) {
+
+                log(
+                    "PWA installation accepted."
+                );
+
+
+                return {
+                    success: true,
+                    installed: true,
+                    outcome: "accepted"
+                };
+
+            }
+
+
+            log(
+                "PWA installation dismissed."
+            );
+
+
+            return {
+                success: false,
+                installed: false,
+                outcome: "dismissed"
+            };
+
+        } catch (err) {
+
+            error(
+                "PWA installation failed:",
+                err
+            );
+
+
+            deferredInstallPrompt = null;
+
+
+            return {
+                success: false,
+                installed: false,
+                error: err.message
+            };
+
+        }
+
+    }
+
+
+    function handleBeforeInstallPrompt(event) {
+
+        event.preventDefault();
+
+        deferredInstallPrompt = event;
+
+
+        log(
+            "PWA installation prompt is available."
+        );
+
+
+        window.dispatchEvent(
+            new CustomEvent(
+                "afc:pwa-install-available"
+            )
+        );
+
+    }
+
+
+    function handleAppInstalled() {
+
+        deferredInstallPrompt = null;
+
+
+        log(
+            "AFC Isiu Youth Portal was installed."
+        );
+
+
+        window.dispatchEvent(
+            new CustomEvent(
+                "afc:pwa-installed"
+            )
+        );
+
+    }
+
+
+    /* ============================================================
+       PUSH NOTIFICATION SUPPORT
+       ============================================================ */
 
     function isPushSupported() {
 
         return (
-
             "serviceWorker" in navigator &&
-
             "PushManager" in window &&
-
             "Notification" in window
-
         );
 
     }
 
 
-    /* =====================================================
-       BASE64 URL → UINT8 ARRAY
-       ===================================================== */
+    /*
+     * Returns:
+     *
+     * "granted"
+     * "denied"
+     * "default"
+     * "unsupported"
+     */
+    async function getPushPermissionState() {
 
-    function base64UrlToUint8Array(
-        base64UrlData
-    ) {
+        if (!isPushSupported()) {
+
+            return "unsupported";
+
+        }
+
+
+        return Notification.permission;
+
+    }
+
+
+    async function requestPushPermission() {
+
+        if (!isPushSupported()) {
+
+            throw new Error(
+                "Push notifications are not supported by this browser."
+            );
+
+        }
+
+
+        if (
+            Notification.permission === "granted"
+        ) {
+
+            return "granted";
+
+        }
+
+
+        if (
+            Notification.permission === "denied"
+        ) {
+
+            return "denied";
+
+        }
+
+
+        const permission =
+            await Notification.requestPermission();
+
+
+        return permission;
+
+    }
+
+
+    /* ============================================================
+       BASE64URL → UINT8ARRAY
+       ============================================================ */
+
+    function base64UrlToUint8Array(base64UrlData) {
+
+        if (!base64UrlData) {
+
+            throw new Error(
+                "No VAPID public key was supplied."
+            );
+
+        }
+
 
         const padding =
             "=".repeat(
-                (
-                    4 -
-                    base64UrlData.length % 4
-                ) % 4
+                (4 - (base64UrlData.length % 4)) % 4
             );
 
 
@@ -659,20 +550,12 @@
                 base64UrlData +
                 padding
             )
-            .replace(
-                /-/g,
-                "+"
-            )
-            .replace(
-                /_/g,
-                "/"
-            );
+                .replace(/-/g, "+")
+                .replace(/_/g, "/");
 
 
         const rawData =
-            window.atob(
-                base64
-            );
+            window.atob(base64);
 
 
         const outputArray =
@@ -684,13 +567,11 @@
         for (
             let i = 0;
             i < rawData.length;
-            ++i
+            i++
         ) {
 
             outputArray[i] =
-                rawData.charCodeAt(
-                    i
-                );
+                rawData.charCodeAt(i);
 
         }
 
@@ -700,152 +581,114 @@
     }
 
 
-    /* =====================================================
-       GET SERVICE WORKER REGISTRATION
-       ===================================================== */
-
-    async function getPushRegistration() {
-
-        if (
-            serviceWorkerRegistration
-        ) {
-
-            return serviceWorkerRegistration;
-
-        }
-
-
-        if (
-            !("serviceWorker" in navigator)
-        ) {
-
-            return null;
-
-        }
-
-
-        return registerServiceWorker();
-
-    }
-
-
-    /* =====================================================
-       GET VAPID PUBLIC KEY
-       ===================================================== */
+    /* ============================================================
+       FETCH VAPID PUBLIC KEY
+       ============================================================ */
 
     async function getVapidPublicKey() {
+
+        if (pushPublicKey) {
+
+            return pushPublicKey;
+
+        }
+
 
         const response =
             await fetch(
                 PWA_CONFIG.PUSH_CONFIG_URL,
                 {
                     method: "GET",
-
-                    cache: "no-store",
-
-                    headers: {
-                        "Accept":
-                            "application/json"
-                    }
+                    credentials: "same-origin",
+                    cache: "no-store"
                 }
             );
 
 
-        if (
-            !response.ok
-        ) {
+        if (!response.ok) {
 
             throw new Error(
-                "Push configuration returned HTTP " +
+                "Unable to load notification configuration. HTTP " +
                 response.status
             );
 
         }
 
 
-        const data =
-            await response.json();
+        let result;
 
 
-        const publicKey =
-            String(
-                data.publicKey ||
-                data.vapidPublicKey ||
-                ""
-            ).trim();
+        try {
 
+            result =
+                await response.json();
 
-        if (
-            !publicKey
-        ) {
+        } catch (err) {
 
             throw new Error(
-                "The push server did not provide a VAPID public key."
+                "The notification configuration returned an invalid response."
             );
 
         }
 
 
-        return publicKey;
-
-    }
-
-
-    /* =====================================================
-       GET CURRENT PUSH SUBSCRIPTION
-       ===================================================== */
-
-    async function getPushSubscription() {
-
         if (
-            !isPushSupported()
+            !result ||
+            !result.success ||
+            !result.publicKey
         ) {
 
-            return null;
+            throw new Error(
+                (
+                    result &&
+                    result.message
+                ) ||
+                "The VAPID public key is unavailable."
+            );
 
         }
 
 
-        const registration =
-            await getPushRegistration();
+        pushPublicKey =
+            result.publicKey;
 
 
-        if (
-            !registration
-        ) {
-
-            return null;
-
-        }
-
-
-        return registration
-            .pushManager
-            .getSubscription();
+        return pushPublicKey;
 
     }
 
 
-    /* =====================================================
-       POST TO PUSH API
-       
-       IMPORTANT:
-       -----------------------------------------------------
-       URLSearchParams creates an
-       application/x-www-form-urlencoded request.
-       
-       This avoids the CORS preflight that was causing:
-       
-       "No Access-Control-Allow-Origin header"
-       
-       and:
-       
-       "404 (Not Found)"
-       ===================================================== */
+    /* ============================================================
+       PUSH API REQUEST
+       ============================================================ */
 
-    async function postPushApi(
-        payload
-    ) {
+    /*
+     * IMPORTANT:
+     *
+     * Do NOT use:
+     *
+     * Content-Type: application/json
+     *
+     * here.
+     *
+     * Google Apps Script web apps can trigger a CORS preflight
+     * with application/json.
+     *
+     * URLSearchParams is intentionally used so the request can
+     * be sent as application/x-www-form-urlencoded without the
+     * browser requiring the problematic JSON preflight.
+     */
+
+    async function postPushApi(payload) {
+
+        if (!payload) {
+
+            throw new Error(
+                "No push API payload was supplied."
+            );
+
+        }
+
 
         const body =
             new URLSearchParams();
@@ -853,9 +696,7 @@
 
         body.set(
             "payload",
-            JSON.stringify(
-                payload
-            )
+            JSON.stringify(payload)
         );
 
 
@@ -863,18 +704,13 @@
             await fetch(
                 PWA_CONFIG.PUSH_API_URL,
                 {
-
                     method: "POST",
-
                     body: body
-
                 }
             );
 
 
-        if (
-            !response.ok
-        ) {
+        if (!response.ok) {
 
             throw new Error(
                 "Push API returned HTTP " +
@@ -892,11 +728,7 @@
             result =
                 await response.json();
 
-        }
-
-        catch (
-            error
-        ) {
+        } catch (err) {
 
             throw new Error(
                 "The Push API returned an invalid response."
@@ -911,14 +743,11 @@
         ) {
 
             throw new Error(
-
                 (
                     result &&
                     result.message
-                )
-                ||
+                ) ||
                 "The Push API request failed."
-
             );
 
         }
@@ -929,25 +758,24 @@
     }
 
 
-    /* =====================================================
+    /* ============================================================
        SAVE PUSH SUBSCRIPTION
-       
-       IMPORTANT:
-       -----------------------------------------------------
-       NO MEMBER ID.
-       NO LOGIN.
-       NO ACCOUNT.
-       
-       Any visitor can subscribe.
-       ===================================================== */
+       ============================================================ */
 
-    async function savePushSubscription(
-        subscription
-    ) {
+    /*
+     * Anonymous subscription.
+     *
+     * No login.
+     * No member ID.
+     * No member name required.
+     *
+     * Anyone who enables notifications becomes an active
+     * notification subscriber.
+     */
 
-        if (
-            !subscription
-        ) {
+    async function savePushSubscription(subscription) {
+
+        if (!subscription) {
 
             throw new Error(
                 "No push subscription is available."
@@ -972,144 +800,15 @@
     }
 
 
-    /* =====================================================
-       SUBSCRIBE TO PUSH
-       ===================================================== */
+    /* ============================================================
+       DELETE PUSH SUBSCRIPTION
+       ============================================================ */
 
-    async function subscribeToPush() {
-
-        if (
-            !isPushSupported()
-        ) {
-
-            throw new Error(
-                "Push notifications are not supported by this browser or app."
-            );
-
-        }
-
-
-        const registration =
-            await getPushRegistration();
-
-
-        if (
-            !registration
-        ) {
-
-            throw new Error(
-                "The AFC Isiu service worker is not ready."
-            );
-
-        }
-
-
-        let permission =
-            Notification.permission;
-
-
-        if (
-            permission === "default"
-        ) {
-
-            permission =
-                await Notification.requestPermission();
-
-        }
-
-
-        if (
-            permission !== "granted"
-        ) {
-
-            if (
-                permission === "denied"
-            ) {
-
-                throw new Error(
-                    "Notifications are blocked. Enable notifications for AFC Isiu in your browser settings."
-                );
-
-            }
-
-
-            throw new Error(
-                "Notification permission was not granted."
-            );
-
-        }
-
-
-        let subscription =
-            await registration
-                .pushManager
-                .getSubscription();
-
-
-        if (
-            !subscription
-        ) {
-
-            const publicKey =
-                await getVapidPublicKey();
-
-
-            subscription =
-                await registration
-                    .pushManager
-                    .subscribe({
-
-                        userVisibleOnly:
-                            true,
-
-                        applicationServerKey:
-                            base64UrlToUint8Array(
-                                publicKey
-                            )
-
-                    });
-
-        }
-
-
-        /*
-         * Do not report success until Apps Script
-         * confirms that the subscription was saved.
-         */
-
-        const saved =
-            await savePushSubscription(
-                subscription
-            );
-
-
-        return {
-
-            success:
-                true,
-
-            subscription:
-                subscription,
-
-            result:
-                saved
-
-        };
-
-    }
-
-
-    /* =====================================================
-       DELETE PUSH SUBSCRIPTION FROM SERVER
-       ===================================================== */
-
-    async function deletePushSubscriptionFromServer(
+    async function deletePushSubscription(
         subscription
     ) {
 
-        if (
-            !subscription
-        ) {
+        if (!subscription) {
 
             return {
                 success: true
@@ -1131,26 +830,152 @@
     }
 
 
-    /* =====================================================
+    /* ============================================================
+       SUBSCRIBE TO PUSH NOTIFICATIONS
+       ============================================================ */
+
+    async function subscribeToPush() {
+
+        if (!isPushSupported()) {
+
+            throw new Error(
+                "Push notifications are not supported on this device."
+            );
+
+        }
+
+
+        const registration =
+            await getPushRegistration();
+
+
+        /*
+         * Check existing permission.
+         */
+
+        let permission =
+            Notification.permission;
+
+
+        /*
+         * Request permission only when necessary.
+         */
+
+        if (
+            permission === "default"
+        ) {
+
+            permission =
+                await Notification.requestPermission();
+
+        }
+
+
+        if (
+            permission !== "granted"
+        ) {
+
+            if (
+                permission === "denied"
+            ) {
+
+                throw new Error(
+                    "Notification permission was denied. Please enable notifications in your browser settings."
+                );
+
+            }
+
+
+            throw new Error(
+                "Notification permission was not granted."
+            );
+
+        }
+
+
+        /*
+         * Reuse an existing subscription where possible.
+         */
+
+        let subscription =
+            await registration.pushManager.getSubscription();
+
+
+        /*
+         * Create a new subscription if none exists.
+         */
+
+        if (!subscription) {
+
+            const publicKey =
+                await getVapidPublicKey();
+
+
+            subscription =
+                await registration.pushManager.subscribe({
+
+                    userVisibleOnly:
+                        true,
+
+                    applicationServerKey:
+                        base64UrlToUint8Array(
+                            publicKey
+                        )
+
+                });
+
+        }
+
+
+        /*
+         * Save the subscription anonymously.
+         */
+
+        const saved =
+            await savePushSubscription(
+                subscription
+            );
+
+
+        log(
+            "Push subscription saved successfully."
+        );
+
+
+        return {
+
+            success:
+                true,
+
+            subscription:
+                subscription,
+
+            result:
+                saved
+
+        };
+
+    }
+
+
+    /* ============================================================
        UNSUBSCRIBE FROM PUSH
-       ===================================================== */
+       ============================================================ */
 
     async function unsubscribeFromPush() {
 
-        if (
-            !isPushSupported()
-        ) {
+        if (!isPushSupported()) {
 
             return {
 
                 success:
+                    true,
+
+                unsubscribed:
                     false,
 
                 supported:
-                    false,
-
-                message:
-                    "Push notifications are not supported."
+                    false
 
             };
 
@@ -1161,39 +986,18 @@
             await getPushRegistration();
 
 
-        if (
-            !registration
-        ) {
-
-            return {
-
-                success:
-                    false,
-
-                message:
-                    "The service worker is not available."
-
-            };
-
-        }
-
-
         const subscription =
-            await registration
-                .pushManager
-                .getSubscription();
+            await registration.pushManager.getSubscription();
 
 
-        if (
-            !subscription
-        ) {
+        if (!subscription) {
 
             return {
 
                 success:
                     true,
 
-                subscribed:
+                unsubscribed:
                     false
 
             };
@@ -1201,52 +1005,59 @@
         }
 
 
+        /*
+         * Tell Apps Script to remove the subscription first.
+         */
+
         try {
 
-            await deletePushSubscriptionFromServer(
+            await deletePushSubscription(
                 subscription
             );
 
-        }
+        } catch (err) {
 
-        catch (
-            error
-        ) {
-
-            console.warn(
-                "[Notifications] Could not remove subscription from server:",
-                error
+            warn(
+                "Unable to remove subscription from server:",
+                err
             );
 
         }
 
+
+        /*
+         * Then unsubscribe locally.
+         */
 
         const unsubscribed =
             await subscription.unsubscribe();
 
 
+        log(
+            "Push subscription removed locally."
+        );
+
+
         return {
 
             success:
-                unsubscribed,
+                true,
 
-            subscribed:
-                false
+            unsubscribed:
+                unsubscribed
 
         };
 
     }
 
 
-    /* =====================================================
-       CHECK PUSH STATUS
-       ===================================================== */
+    /* ============================================================
+       GET CURRENT PUSH STATUS
+       ============================================================ */
 
     async function getPushStatus() {
 
-        if (
-            !isPushSupported()
-        ) {
+        if (!isPushSupported()) {
 
             return {
 
@@ -1264,8 +1075,35 @@
         }
 
 
-        const subscription =
-            await getPushSubscription();
+        const permission =
+            Notification.permission;
+
+
+        let subscribed =
+            false;
+
+
+        try {
+
+            const registration =
+                await getPushRegistration();
+
+
+            const subscription =
+                await registration.pushManager.getSubscription();
+
+
+            subscribed =
+                !!subscription;
+
+        } catch (err) {
+
+            warn(
+                "Unable to inspect push subscription:",
+                err
+            );
+
+        }
 
 
         return {
@@ -1274,618 +1112,406 @@
                 true,
 
             permission:
-                Notification.permission,
+                permission,
 
             subscribed:
-                Boolean(
-                    subscription
-                ),
-
-            subscription:
-                subscription
+                subscribed
 
         };
 
     }
 
 
-    /* =====================================================
-       NATIVE INSTALL
-       ===================================================== */
+    /* ============================================================
+       TEST LOCAL NOTIFICATION
+       ============================================================ */
 
-    async function triggerNativeInstall() {
+    async function showLocalNotification(
+        title,
+        options
+    ) {
+
+        if (!isPushSupported()) {
+
+            throw new Error(
+                "Notifications are not supported by this browser."
+            );
+
+        }
+
 
         if (
-            !deferredInstallPrompt
+            Notification.permission !==
+            "granted"
         ) {
 
-            console.warn(
-                "[PWA] Native installation prompt is not available."
+            throw new Error(
+                "Notification permission has not been granted."
+            );
+
+        }
+
+
+        const registration =
+            await getPushRegistration();
+
+
+        const notificationOptions =
+            Object.assign(
+
+                {
+
+                    body:
+                        "AFC Isiu Youth Portal notification.",
+
+                    icon:
+                        "/images/logo.png",
+
+                    badge:
+                        "/images/logo.png",
+
+                    tag:
+                        "afc-isiu-test-notification",
+
+                    renotify:
+                        true,
+
+                    requireInteraction:
+                        false,
+
+                    data:
+                        {
+                            url:
+                                window.location.origin + "/"
+                        }
+
+                },
+
+                options || {}
+
             );
 
 
-            return false;
+        await registration.showNotification(
+
+            title ||
+            "AFC Isiu Youth Portal",
+
+            notificationOptions
+
+        );
+
+
+        return {
+
+            success:
+                true
+
+        };
+
+    }
+
+
+    /* ============================================================
+       NOTIFICATION CLICK HELPERS
+       ============================================================ */
+
+    function openNotificationSettings() {
+
+        /*
+         * Browsers do not provide a universal JavaScript API for
+         * opening the exact notification permission settings page.
+         *
+         * Returning the current state lets the UI tell the user
+         * what to do.
+         */
+
+        return getPushPermissionState();
+
+    }
+
+
+    /* ============================================================
+       ONLINE / OFFLINE STATE
+       ============================================================ */
+
+    function isOnline() {
+
+        return navigator.onLine;
+
+    }
+
+
+    function handleOnline() {
+
+        log(
+            "Internet connection restored."
+        );
+
+
+        window.dispatchEvent(
+            new CustomEvent(
+                "afc:pwa-online"
+            )
+        );
+
+    }
+
+
+    function handleOffline() {
+
+        warn(
+            "The device is offline."
+        );
+
+
+        window.dispatchEvent(
+            new CustomEvent(
+                "afc:pwa-offline"
+            )
+        );
+
+    }
+
+
+    /* ============================================================
+       SERVICE WORKER UPDATE CHECK
+       ============================================================ */
+
+    async function checkForServiceWorkerUpdate() {
+
+        if (
+            !serviceWorkerRegistration
+        ) {
+
+            try {
+
+                await getPushRegistration();
+
+            } catch (err) {
+
+                return {
+
+                    success:
+                        false,
+
+                    error:
+                        err.message
+
+                };
+
+            }
 
         }
 
 
         try {
 
-            console.log(
-                "[PWA] Starting native PWA installation."
+            await serviceWorkerRegistration.update();
+
+
+            return {
+
+                success:
+                    true
+
+            };
+
+        } catch (err) {
+
+            warn(
+                "Service worker update check failed:",
+                err
             );
 
 
-            setInstallingState();
+            return {
 
+                success:
+                    false,
 
-            deferredInstallPrompt.prompt();
+                error:
+                    err.message
 
-
-            const choice =
-                await deferredInstallPrompt.userChoice;
-
-
-            console.log(
-                "[PWA] Installation choice:",
-                choice.outcome
-            );
-
-
-            if (
-                choice.outcome ===
-                "accepted"
-            ) {
-
-                setStatus(
-                    "installed",
-                    "Installing AFC Isiu Youth Portal..."
-                );
-
-
-                return true;
-
-            }
-
-
-            setStatus(
-                "available",
-                "Installation was cancelled. Tap Install App to try again."
-            );
-
-
-            resetInstallButton();
-
-
-            return false;
-
-        }
-
-        catch (
-            error
-        ) {
-
-            console.error(
-                "[PWA] Native installation failed:",
-                error
-            );
-
-
-            setStatus(
-                "unavailable",
-                "The browser could not start the installation."
-            );
-
-
-            resetInstallButton();
-
-
-            return false;
-
-        }
-
-        finally {
-
-            deferredInstallPrompt =
-                null;
+            };
 
         }
 
     }
 
 
-    /* =====================================================
-       INSTALL BUTTON
-       ===================================================== */
+    /* ============================================================
+       APP INITIALIZATION
+       ============================================================ */
 
-    function bindInstallButton() {
+    async function initializePWA() {
 
-        if (
-            !installButton
-        ) {
-
-            console.warn(
-                "[PWA] #installAppBtn not found."
-            );
-
-
-            return;
-
-        }
-
-
-        installButton.addEventListener(
-            "click",
-            async event => {
-
-                event.preventDefault();
-
-
-                if (
-                    !deferredInstallPrompt
-                ) {
-
-                    console.warn(
-                        "[PWA] Native installation prompt is not available."
-                    );
-
-
-                    setStatus(
-                        "unavailable",
-                        "Native installation is not currently available in this browser session."
-                    );
-
-
-                    return;
-
-                }
-
-
-                await triggerNativeInstall();
-
-            }
+        log(
+            "Initializing AFC Isiu Youth Portal PWA..."
         );
 
-    }
+
+        /*
+         * Register service worker.
+         */
+
+        await registerServiceWorker();
 
 
-    /* =====================================================
-       HELP BUTTON
-       ===================================================== */
+        /*
+         * Notify application that PWA initialization is complete.
+         */
 
-    function bindHelpButton() {
+        window.dispatchEvent(
+            new CustomEvent(
+                "afc:pwa-ready",
+                {
+                    detail: {
 
-        if (
-            !helpButton
-        ) {
+                        installed:
+                            isPWAInstalled(),
 
-            return;
+                        installAvailable:
+                            canInstallPWA(),
 
-        }
+                        pushSupported:
+                            isPushSupported(),
 
-
-        helpButton.addEventListener(
-            "click",
-            event => {
-
-                event.preventDefault();
-
-
-                openInstallHelp();
-
-            }
-        );
-
-    }
-
-
-    /* =====================================================
-       MODAL CONTROLS
-       ===================================================== */
-
-    function bindModalControls() {
-
-        const modal =
-            $("pwaInstallModal");
-
-
-        const closeButton =
-            $("pwaModalClose");
-
-
-        const doneButton =
-            $("pwaModalDone");
-
-
-        if (
-            closeButton
-        ) {
-
-            closeButton.addEventListener(
-                "click",
-                event => {
-
-                    event.preventDefault();
-
-
-                    closeInstallHelp();
-
-                }
-            );
-
-        }
-
-
-        if (
-            doneButton
-        ) {
-
-            doneButton.addEventListener(
-                "click",
-                event => {
-
-                    event.preventDefault();
-
-
-                    closeInstallHelp();
-
-                }
-            );
-
-        }
-
-
-        if (
-            modal
-        ) {
-
-            modal.addEventListener(
-                "click",
-                event => {
-
-                    if (
-                        event.target ===
-                        modal
-                    ) {
-
-                        closeInstallHelp();
+                        online:
+                            isOnline()
 
                     }
 
                 }
-            );
+            )
+        );
 
-        }
 
-
-        document.addEventListener(
-            "keydown",
-            event => {
-
-                if (
-                    event.key ===
-                    "Escape"
-                ) {
-
-                    closeInstallHelp();
-
-                }
-
-            }
+        log(
+            "PWA initialization complete."
         );
 
     }
 
 
-    /* =====================================================
-       BEFORE INSTALL PROMPT
-       ===================================================== */
+    /* ============================================================
+       EVENT LISTENERS
+       ============================================================ */
 
     window.addEventListener(
         "beforeinstallprompt",
-        event => {
-
-            console.log(
-                "[PWA] beforeinstallprompt received."
-            );
-
-
-            event.preventDefault();
-
-
-            deferredInstallPrompt =
-                event;
-
-
-            setInstallButtonReady();
-
-
-            setStatus(
-                "available",
-                "AFC Isiu Youth Portal is ready to install."
-            );
-
-        }
+        handleBeforeInstallPrompt
     );
 
-
-    /* =====================================================
-       APP INSTALLED
-       ===================================================== */
 
     window.addEventListener(
         "appinstalled",
-        () => {
-
-            console.log(
-                "[PWA] AFC Isiu Youth Portal installed successfully."
-            );
-
-
-            deferredInstallPrompt =
-                null;
-
-
-            setStatus(
-                "installed",
-                "AFC Isiu Youth Portal is now installed."
-            );
-
-
-            hideInstallButton();
-
-
-            resetInstallButton();
-
-        }
+        handleAppInstalled
     );
 
 
-    /* =====================================================
-       DISPLAY MODE CHANGE
-       ===================================================== */
-
-    function monitorDisplayMode() {
-
-        if (
-            !window.matchMedia
-        ) {
-
-            return;
-
-        }
+    window.addEventListener(
+        "online",
+        handleOnline
+    );
 
 
-        const standaloneQuery =
-            window.matchMedia(
-                PWA_CONFIG.INSTALL_DISPLAY_MODE
-            );
+    window.addEventListener(
+        "offline",
+        handleOffline
+    );
 
 
-        const fullscreenQuery =
-            window.matchMedia(
-                PWA_CONFIG.INSTALL_DISPLAY_MODE_FULLSCREEN
-            );
+    /*
+     * Start once DOM is ready.
+     */
 
+    if (
+        document.readyState ===
+        "loading"
+    ) {
 
-        function checkMode() {
-
-            if (
-
-                standaloneQuery.matches ||
-
-                fullscreenQuery.matches ||
-
-                window.navigator.standalone ===
+        document.addEventListener(
+            "DOMContentLoaded",
+            initializePWA,
+            {
+                once:
                     true
-
-            ) {
-
-                setStatus(
-                    "installed",
-                    "AFC Isiu Youth Portal is installed and running as an app."
-                );
-
-
-                hideInstallButton();
-
             }
-
-        }
-
-
-        checkMode();
-
-
-        if (
-            standaloneQuery.addEventListener
-        ) {
-
-            standaloneQuery.addEventListener(
-                "change",
-                checkMode
-            );
-
-        }
-
-        else if (
-            standaloneQuery.addListener
-        ) {
-
-            standaloneQuery.addListener(
-                checkMode
-            );
-
-        }
-
-
-        if (
-            fullscreenQuery.addEventListener
-        ) {
-
-            fullscreenQuery.addEventListener(
-                "change",
-                checkMode
-            );
-
-        }
-
-        else if (
-            fullscreenQuery.addListener
-        ) {
-
-            fullscreenQuery.addListener(
-                checkMode
-            );
-
-        }
-
-    }
-
-
-    /* =====================================================
-       MANIFEST CHECK
-       ===================================================== */
-
-    async function verifyManifest() {
-
-        try {
-
-            const response =
-                await fetch(
-                    PWA_CONFIG.MANIFEST,
-                    {
-                        cache:
-                            "no-store"
-                    }
-                );
-
-
-            if (
-                !response.ok
-            ) {
-
-                console.warn(
-                    "[PWA] Manifest returned HTTP",
-                    response.status
-                );
-
-
-                return false;
-
-            }
-
-
-            const manifest =
-                await response.json();
-
-
-            console.log(
-                "[PWA] Manifest verified:",
-                manifest.name ||
-                manifest.short_name
-            );
-
-
-            return true;
-
-        }
-
-        catch (
-            error
-        ) {
-
-            console.warn(
-                "[PWA] Manifest verification failed:",
-                error
-            );
-
-
-            return false;
-
-        }
-
-    }
-
-
-    /* =====================================================
-       INITIALISE PWA
-       ===================================================== */
-
-    async function initialisePWA() {
-
-        cacheDOM();
-
-
-        if (
-            isAppInstalled()
-        ) {
-
-            setStatus(
-                "installed",
-                "AFC Isiu Youth Portal is installed and running as an app."
-            );
-
-
-            hideInstallButton();
-
-        }
-
-        else {
-
-            setInstallButtonWaiting();
-
-        }
-
-
-        bindInstallButton();
-
-        bindHelpButton();
-
-        bindModalControls();
-
-        monitorDisplayMode();
-
-
-        await verifyManifest();
-
-
-        if (
-            isPWASupported()
-        ) {
-
-            await registerServiceWorker();
-
-        }
-
-
-        console.log(
-            "[PWA] AFC Isiu Youth Portal PWA initialised."
         );
 
+    } else {
+
+        initializePWA();
+
     }
 
 
-    /* =====================================================
+    /* ============================================================
        PUBLIC API
-       ===================================================== */
+       ============================================================ */
 
     window.AFC_PWA = {
 
-        isAppInstalled:
-            isAppInstalled,
+        /*
+         * Configuration
+         */
 
-        isPWASupported:
-            isPWASupported,
+        config:
+            PWA_CONFIG,
+
+
+        /*
+         * PWA installation
+         */
+
+        isStandalone:
+            isStandalone,
+
+        isPWAInstalled:
+            isPWAInstalled,
+
+        canInstallPWA:
+            canInstallPWA,
+
+        installPWA:
+            installPWA,
+
+
+        /*
+         * Service worker
+         */
+
+        registerServiceWorker:
+            registerServiceWorker,
+
+        getPushRegistration:
+            getPushRegistration,
+
+        checkForServiceWorkerUpdate:
+            checkForServiceWorkerUpdate,
+
+
+        /*
+         * Push support
+         */
 
         isPushSupported:
             isPushSupported,
 
-        getPushSubscription:
-            getPushSubscription,
+        getPushPermissionState:
+            getPushPermissionState,
 
-        getPushStatus:
-            getPushStatus,
+        requestPushPermission:
+            requestPushPermission,
+
+        getVapidPublicKey:
+            getVapidPublicKey,
+
+
+        /*
+         * Push subscription
+         */
 
         subscribeToPush:
             subscribeToPush,
@@ -1896,47 +1522,53 @@
         savePushSubscription:
             savePushSubscription,
 
-        deletePushSubscriptionFromServer:
-            deletePushSubscriptionFromServer,
+        deletePushSubscription:
+            deletePushSubscription,
 
-        getVapidPublicKey:
-            getVapidPublicKey,
+        getPushStatus:
+            getPushStatus,
 
-        triggerNativeInstall:
-            triggerNativeInstall,
 
-        openInstallHelp:
-            openInstallHelp,
+        /*
+         * Notification
+         */
 
-        closeInstallHelp:
-            closeInstallHelp,
+        showLocalNotification:
+            showLocalNotification,
 
-        config:
-            PWA_CONFIG
+        openNotificationSettings:
+            openNotificationSettings,
+
+
+        /*
+         * Network
+         */
+
+        isOnline:
+            isOnline
 
     };
 
 
-    /* =====================================================
-       DOM READY
-       ===================================================== */
+    /* ============================================================
+       GLOBAL DEBUG ACCESS
+       ============================================================ */
 
-    if (
-        document.readyState ===
-        "loading"
-    ) {
+    log(
+        "AFC_PWA API loaded successfully."
+    );
 
-        document.addEventListener(
-            "DOMContentLoaded",
-            initialisePWA
-        );
 
-    }
+    log(
+        "Push supported:",
+        isPushSupported()
+    );
 
-    else {
 
-        initialisePWA();
+    log(
+        "PWA installed:",
+        isPWAInstalled()
+    );
 
-    }
 
 })();
