@@ -2,7 +2,7 @@
  * ============================================================
  * AFC ISIU YOUTH PORTAL V2
  * SERVICE WORKER
- * VERSION: 18
+ * VERSION: 19
  * ============================================================
  *
  * PURPOSE:
@@ -15,8 +15,9 @@
  *
  * IMPORTANT:
  * - API requests under /api/ bypass the service worker.
- * - Push notification data comes from /api/push/send.js.
- * - Existing working notification architecture is preserved.
+ * - API responses are NEVER cached.
+ * - Runtime caching is defensive so cache failures cannot
+ *   interfere with normal page/network responses.
  * ============================================================
  */
 
@@ -27,7 +28,7 @@
    VERSION
    ============================================================ */
 
-const VERSION = "18";
+const VERSION = "19";
 
 const CACHE_NAME = `afc-isiu-pwa-v${VERSION}`;
 
@@ -97,8 +98,8 @@ self.addEventListener("install", event => {
                 /*
                  * Cache files individually.
                  *
-                 * This prevents one missing optional asset
-                 * from breaking the entire service-worker install.
+                 * One missing file must never prevent the
+                 * service worker from installing.
                  */
 
                 for (const url of APP_SHELL) {
@@ -106,6 +107,11 @@ self.addEventListener("install", event => {
                     try {
 
                         await cache.add(url);
+
+                        console.log(
+                            "AFC Isiu PWA: Cached app shell:",
+                            url
+                        );
 
                     } catch (error) {
 
@@ -124,8 +130,7 @@ self.addEventListener("install", event => {
             .then(() => {
 
                 /*
-                 * Make the new service worker available
-                 * immediately.
+                 * Activate immediately.
                  */
 
                 return self.skipWaiting();
@@ -176,7 +181,7 @@ self.addEventListener("activate", event => {
 
                         }
 
-                        return null;
+                        return Promise.resolve();
 
                     })
 
@@ -187,7 +192,7 @@ self.addEventListener("activate", event => {
             .then(() => {
 
                 /*
-                 * Take control of all currently open pages.
+                 * Take control of existing pages.
                  */
 
                 return self.clients.claim();
@@ -235,11 +240,13 @@ self.addEventListener("message", event => {
             ? event.data.urls
             : [];
 
+
         if (!urls.length) {
 
             return;
 
         }
+
 
         event.waitUntil(
 
@@ -251,17 +258,78 @@ self.addEventListener("message", event => {
 
                         try {
 
-                            await cache.add(url);
+                            const response =
+                                await fetch(url);
 
-                            console.log(
-                                "AFC Isiu PWA: Cached audio:",
-                                url
-                            );
+
+                            if (
+                                !response ||
+                                !response.ok
+                            ) {
+
+                                console.warn(
+                                    "AFC Isiu PWA: Audio request failed:",
+                                    url
+                                );
+
+                                continue;
+
+                            }
+
+
+                            /*
+                             * Clone IMMEDIATELY.
+                             *
+                             * The clone is given to the cache.
+                             * The original response is not consumed.
+                             */
+
+                            let cacheResponse;
+
+                            try {
+
+                                cacheResponse =
+                                    response.clone();
+
+                            } catch (cloneError) {
+
+                                console.warn(
+                                    "AFC Isiu PWA: Could not clone audio response:",
+                                    url,
+                                    cloneError
+                                );
+
+                                continue;
+
+                            }
+
+
+                            try {
+
+                                await cache.put(
+                                    url,
+                                    cacheResponse
+                                );
+
+                                console.log(
+                                    "AFC Isiu PWA: Cached audio:",
+                                    url
+                                );
+
+                            } catch (cacheError) {
+
+                                console.warn(
+                                    "AFC Isiu PWA: Could not cache audio:",
+                                    url,
+                                    cacheError
+                                );
+
+                            }
 
                         } catch (error) {
 
                             console.warn(
-                                "AFC Isiu PWA: Could not cache audio:",
+                                "AFC Isiu PWA: Could not download audio:",
                                 url,
                                 error
                             );
@@ -295,11 +363,14 @@ function toBoolean(value, fallback = false) {
 
     }
 
+
     if (typeof value === "string") {
 
-        const normalized = value
-            .trim()
-            .toLowerCase();
+        const normalized =
+            value
+                .trim()
+                .toLowerCase();
+
 
         if (
             normalized === "true" ||
@@ -310,6 +381,7 @@ function toBoolean(value, fallback = false) {
             return true;
 
         }
+
 
         if (
             normalized === "false" ||
@@ -323,11 +395,13 @@ function toBoolean(value, fallback = false) {
 
     }
 
+
     if (typeof value === "number") {
 
         return value !== 0;
 
     }
+
 
     return fallback;
 
@@ -335,11 +409,12 @@ function toBoolean(value, fallback = false) {
 
 
 /**
- * Ensures a notification URL stays inside the AFC Isiu portal.
+ * Ensures notification URLs stay inside the AFC Isiu portal.
  */
 function getSafeNotificationUrl(value) {
 
     const fallback = "/";
+
 
     if (
         typeof value !== "string" ||
@@ -350,7 +425,9 @@ function getSafeNotificationUrl(value) {
 
     }
 
+
     const rawUrl = value.trim();
+
 
     try {
 
@@ -359,18 +436,26 @@ function getSafeNotificationUrl(value) {
             self.location.origin
         );
 
+
         /*
-         * Never allow push notifications to redirect
-         * users to an unrelated external website.
+         * Never allow a notification to redirect
+         * outside the AFC Isiu Youth Portal.
          */
 
-        if (url.origin !== self.location.origin) {
+        if (
+            url.origin !== self.location.origin
+        ) {
 
             return fallback;
 
         }
 
-        return `${url.pathname}${url.search}${url.hash}`;
+
+        return (
+            url.pathname +
+            url.search +
+            url.hash
+        );
 
     } catch (error) {
 
@@ -389,12 +474,13 @@ function getSafeNotificationUrl(value) {
 /**
  * Creates safe notification actions.
  */
-function getNotificationActions(data, defaultUrl) {
+function getNotificationActions(data) {
 
     let actions = data.actions;
 
+
     /*
-     * If actions arrive as JSON text, parse them.
+     * Actions may arrive as JSON text.
      */
 
     if (typeof actions === "string") {
@@ -411,11 +497,15 @@ function getNotificationActions(data, defaultUrl) {
 
     }
 
+
     /*
      * Use supplied actions when valid.
      */
 
-    if (Array.isArray(actions) && actions.length) {
+    if (
+        Array.isArray(actions) &&
+        actions.length
+    ) {
 
         return actions
 
@@ -423,21 +513,27 @@ function getNotificationActions(data, defaultUrl) {
 
             .map(action => {
 
-                if (!action || typeof action !== "object") {
+                if (
+                    !action ||
+                    typeof action !== "object"
+                ) {
 
                     return null;
 
                 }
+
 
                 const actionName =
                     typeof action.action === "string"
                         ? action.action.trim()
                         : "open";
 
+
                 const title =
                     typeof action.title === "string"
                         ? action.title.trim()
                         : "";
+
 
                 if (!title) {
 
@@ -445,17 +541,21 @@ function getNotificationActions(data, defaultUrl) {
 
                 }
 
+
                 return {
 
-                    action: actionName,
+                    action:
+                        actionName.substring(0, 40),
 
-                    title: title.substring(0, 40),
+                    title:
+                        title.substring(0, 40),
 
                     ...(action.icon
                         ? {
-                            icon: getSafeNotificationUrl(
-                                action.icon
-                            )
+                            icon:
+                                getSafeNotificationUrl(
+                                    action.icon
+                                )
                         }
                         : {})
 
@@ -469,14 +569,15 @@ function getNotificationActions(data, defaultUrl) {
 
 
     /*
-     * Otherwise create a sensible action automatically
-     * based on notification type.
+     * Automatic action based on notification type.
      */
 
     const type = String(
+
         data.type ||
         data.category ||
         ""
+
     )
         .trim()
         .toLowerCase();
@@ -525,44 +626,58 @@ function getNotificationActions(data, defaultUrl) {
  */
 async function openNotificationUrl(targetUrl) {
 
-    const safeUrl = getSafeNotificationUrl(targetUrl);
+    const safeUrl =
+        getSafeNotificationUrl(targetUrl);
 
-    const absoluteUrl = new URL(
-        safeUrl,
-        self.location.origin
-    ).href;
+
+    const absoluteUrl =
+        new URL(
+            safeUrl,
+            self.location.origin
+        ).href;
+
+
+    const clients =
+        await self.clients.matchAll({
+
+            type: "window",
+
+            includeUncontrolled: true
+
+        });
 
 
     /*
-     * First try to find an already-open AFC Isiu tab/window.
+     * First look for an already-open portal window.
      */
-
-    const clients = await self.clients.matchAll({
-
-        type: "window",
-
-        includeUncontrolled: true
-
-    });
-
 
     for (const client of clients) {
 
         try {
 
-            const clientUrl = new URL(client.url);
+            const clientUrl =
+                new URL(client.url);
+
 
             if (
-                clientUrl.origin === self.location.origin
+                clientUrl.origin ===
+                self.location.origin
             ) {
 
-                await client.navigate(absoluteUrl);
+                await client.navigate(
+                    absoluteUrl
+                );
 
-                if (typeof client.focus === "function") {
+
+                if (
+                    typeof client.focus ===
+                    "function"
+                ) {
 
                     await client.focus();
 
                 }
+
 
                 return;
 
@@ -581,12 +696,15 @@ async function openNotificationUrl(targetUrl) {
 
 
     /*
-     * If no AFC Isiu window exists, open a new one.
+     * No existing portal window.
+     * Open a new one.
      */
 
     if (self.clients.openWindow) {
 
-        await self.clients.openWindow(absoluteUrl);
+        await self.clients.openWindow(
+            absoluteUrl
+        );
 
     }
 
@@ -608,7 +726,7 @@ self.addEventListener("push", event => {
 
 
     /*
-     * Parse push payload safely.
+     * Safely parse push payload.
      */
 
     if (event.data) {
@@ -623,7 +741,8 @@ self.addEventListener("push", event => {
 
                 data = {
 
-                    body: event.data.text()
+                    body:
+                        event.data.text()
 
                 };
 
@@ -639,7 +758,7 @@ self.addEventListener("push", event => {
 
 
     /* --------------------------------------------------------
-       BASIC CONTENT
+       TYPE
        -------------------------------------------------------- */
 
     const type = String(
@@ -653,6 +772,10 @@ self.addEventListener("push", event => {
         .toLowerCase();
 
 
+    /* --------------------------------------------------------
+       TITLE
+       -------------------------------------------------------- */
+
     const title = String(
 
         data.title ||
@@ -661,6 +784,10 @@ self.addEventListener("push", event => {
 
     ).trim();
 
+
+    /* --------------------------------------------------------
+       BODY
+       -------------------------------------------------------- */
 
     const body = String(
 
@@ -677,63 +804,100 @@ self.addEventListener("push", event => {
        BRAND ASSETS
        -------------------------------------------------------- */
 
-    /*
-     * We are temporarily using the existing logo.
-     *
-     * Later, these can become:
-     *
-     * /images/notification-icon.png
-     * /images/notification-badge.png
-     *
-     * without changing the notification architecture.
-     */
+    const icon =
+        getSafeNotificationUrl(
 
-    const icon = getSafeNotificationUrl(
+            data.icon ||
+            "/images/logo.png"
 
-        data.icon ||
-
-        "/images/logo.png"
-
-    );
+        );
 
 
-    const badge = getSafeNotificationUrl(
+    const badge =
+        getSafeNotificationUrl(
 
-        data.badge ||
+            data.badge ||
+            "/images/logo.png"
 
-        "/images/logo.png"
-
-    );
+        );
 
 
     /* --------------------------------------------------------
        DEEP LINK
        -------------------------------------------------------- */
 
-    const targetUrl = getSafeNotificationUrl(
+    const targetUrl =
+        getSafeNotificationUrl(
 
-        data.url ||
+            data.url ||
+            "/"
 
-        "/"
-
-    );
+        );
 
 
     /* --------------------------------------------------------
-       TAG
+       UNIQUE TAG
        -------------------------------------------------------- */
 
-    const tag = String(
+    /*
+     * A notification should NOT accidentally replace
+     * another notification.
+     *
+     * If the backend deliberately supplies groupTag,
+     * use that tag for intentional grouping/replacement.
+     */
 
-        data.tag ||
+    let tag;
 
-        `afc-isiu-${type}`
 
-    )
+    if (
+        typeof data.groupTag === "string" &&
+        data.groupTag.trim()
+    ) {
 
-        .trim()
+        tag =
+            data.groupTag
+                .trim()
+                .substring(0, 100);
 
-        .substring(0, 100);
+    } else {
+
+        const suppliedTag =
+            typeof data.tag === "string" &&
+            data.tag.trim()
+                ? data.tag.trim()
+                : "";
+
+
+        /*
+         * Legacy tags such as:
+         *
+         * afc-isiu-notification
+         *
+         * are deliberately NOT reused.
+         */
+
+        if (
+            suppliedTag &&
+            suppliedTag !== "afc-isiu-notification" &&
+            suppliedTag !== "afc-isiu-notification-default"
+        ) {
+
+            tag =
+                suppliedTag
+                    .substring(0, 100);
+
+        } else {
+
+            tag =
+                `afc-isiu-${type}-${Date.now()}-${Math.random()
+                    .toString(36)
+                    .slice(2, 8)}`
+                    .substring(0, 100);
+
+        }
+
+    }
 
 
     /* --------------------------------------------------------
@@ -782,14 +946,15 @@ self.addEventListener("push", event => {
             notificationId:
                 data.notificationId ||
                 data.id ||
-                null
+                null,
+
+            actionUrls:
+                data.actionUrls || {}
 
         },
 
-        actions: getNotificationActions(
-            data,
-            targetUrl
-        )
+        actions:
+            getNotificationActions(data)
 
     };
 
@@ -799,8 +964,11 @@ self.addEventListener("push", event => {
        -------------------------------------------------------- */
 
     if (
+
         typeof data.image === "string" &&
+
         data.image.trim()
+
     ) {
 
         const safeImage =
@@ -808,9 +976,11 @@ self.addEventListener("push", event => {
                 data.image
             );
 
+
         if (safeImage !== "/") {
 
-            options.image = safeImage;
+            options.image =
+                safeImage;
 
         }
 
@@ -821,15 +991,18 @@ self.addEventListener("push", event => {
        OPTIONAL VIBRATION
        -------------------------------------------------------- */
 
-    if (Array.isArray(data.vibrate)) {
+    if (
+        Array.isArray(data.vibrate)
+    ) {
 
-        options.vibrate = data.vibrate;
+        options.vibrate =
+            data.vibrate;
 
     }
 
 
     /* --------------------------------------------------------
-       SHOW NOTIFICATION
+       DISPLAY
        -------------------------------------------------------- */
 
     event.waitUntil(
@@ -883,27 +1056,23 @@ self.addEventListener("notificationclick", event => {
         event.notification.data || {};
 
 
-    /*
-     * If an action has a custom URL, use it.
-     */
-
     let targetUrl =
         notificationData.url || "/";
 
 
     /*
-     * The backend can optionally provide:
-     *
-     * actionUrls: {
-     *     open: "/pages/lessons",
-     *     quiz: "/pages/quiz"
-     * }
+     * Custom action URL.
      */
 
     if (
+
         event.action &&
+
         notificationData.actionUrls &&
-        typeof notificationData.actionUrls === "object"
+
+        typeof notificationData.actionUrls ===
+        "object"
+
     ) {
 
         const actionUrl =
@@ -911,9 +1080,11 @@ self.addEventListener("notificationclick", event => {
                 event.action
             ];
 
+
         if (actionUrl) {
 
-            targetUrl = actionUrl;
+            targetUrl =
+                actionUrl;
 
         }
 
@@ -921,10 +1092,12 @@ self.addEventListener("notificationclick", event => {
 
 
     /*
-     * "dismiss" simply closes the notification.
+     * Dismiss action.
      */
 
-    if (event.action === "dismiss") {
+    if (
+        event.action === "dismiss"
+    ) {
 
         return;
 
@@ -933,7 +1106,9 @@ self.addEventListener("notificationclick", event => {
 
     event.waitUntil(
 
-        openNotificationUrl(targetUrl)
+        openNotificationUrl(
+            targetUrl
+        )
 
             .catch(error => {
 
@@ -953,13 +1128,16 @@ self.addEventListener("notificationclick", event => {
    NOTIFICATION CLOSE
    ============================================================ */
 
-self.addEventListener("notificationclose", event => {
+self.addEventListener(
+    "notificationclose",
+    event => {
 
-    console.log(
-        "AFC Isiu PWA: Notification dismissed."
-    );
+        console.log(
+            "AFC Isiu PWA: Notification dismissed."
+        );
 
-});
+    }
+);
 
 
 /* ============================================================
@@ -968,14 +1146,17 @@ self.addEventListener("notificationclose", event => {
 
 self.addEventListener("fetch", event => {
 
-    const request = event.request;
+    const request =
+        event.request;
 
 
     /* --------------------------------------------------------
-       ONLY HANDLE GET
+       ONLY GET REQUESTS
        -------------------------------------------------------- */
 
-    if (request.method !== "GET") {
+    if (
+        request.method !== "GET"
+    ) {
 
         return;
 
@@ -984,9 +1165,11 @@ self.addEventListener("fetch", event => {
 
     let url;
 
+
     try {
 
-        url = new URL(request.url);
+        url =
+            new URL(request.url);
 
     } catch (error) {
 
@@ -996,23 +1179,21 @@ self.addEventListener("fetch", event => {
 
 
     /* --------------------------------------------------------
-       IMPORTANT: BYPASS API REQUESTS
+       API BYPASS
        -------------------------------------------------------- */
 
     /*
-     * This prevents the service worker from turning
-     * /api/push/status
-     * /api/push/schedules
-     * /api/push/history
-     * /api/push/run
-     * /api/push/send
+     * THIS IS VERY IMPORTANT.
      *
-     * into "Offline" responses.
+     * Quiz requests, authentication requests, leaderboard
+     * requests, push APIs, Apps Script-related requests,
+     * etc. must not be cached by this service worker.
      */
 
     if (
 
-        url.origin === self.location.origin &&
+        url.origin ===
+        self.location.origin &&
 
         url.pathname.startsWith("/api/")
 
@@ -1033,7 +1214,8 @@ self.addEventListener("fetch", event => {
        -------------------------------------------------------- */
 
     if (
-        url.origin !== self.location.origin
+        url.origin !==
+        self.location.origin
     ) {
 
         return;
@@ -1060,24 +1242,88 @@ self.addEventListener("fetch", event => {
                         const networkResponse =
                             await fetch(request);
 
+
                         if (
                             networkResponse &&
                             networkResponse.ok
                         ) {
 
+                            /*
+                             * CRITICAL FIX:
+                             *
+                             * Clone immediately.
+                             *
+                             * Do NOT wait until after
+                             * asynchronous operations.
+                             */
+
+                            let responseForCache;
+
+
+                            try {
+
+                                responseForCache =
+                                    networkResponse.clone();
+
+                            } catch (cloneError) {
+
+                                console.warn(
+                                    "AFC Isiu PWA: Audio response could not be cloned:",
+                                    cloneError
+                                );
+
+                                /*
+                                 * Return the network response
+                                 * normally even if caching fails.
+                                 */
+
+                                return networkResponse;
+
+                            }
+
+
+                            /*
+                             * Cache asynchronously.
+                             *
+                             * Failure must never affect
+                             * the actual audio response.
+                             */
+
                             cache.put(
                                 request,
-                                networkResponse.clone()
-                            );
+                                responseForCache
+                            )
+                                .catch(cacheError => {
+
+                                    console.warn(
+                                        "AFC Isiu PWA: Audio cache failed:",
+                                        cacheError
+                                    );
+
+                                });
 
                         }
+
+
+                        /*
+                         * Return the original response.
+                         */
 
                         return networkResponse;
 
                     } catch (error) {
 
+                        console.warn(
+                            "AFC Isiu PWA: Audio network request failed:",
+                            error
+                        );
+
+
                         const cachedResponse =
-                            await cache.match(request);
+                            await cache.match(
+                                request
+                            );
+
 
                         if (cachedResponse) {
 
@@ -1085,12 +1331,20 @@ self.addEventListener("fetch", event => {
 
                         }
 
+
                         return new Response(
+
                             "",
+
                             {
+
                                 status: 503,
-                                statusText: "Offline"
+
+                                statusText:
+                                    "Offline"
+
                             }
+
                         );
 
                     }
@@ -1114,46 +1368,101 @@ self.addEventListener("fetch", event => {
 
         event.respondWith(
 
-            fetch(request)
+            (async () => {
 
-                .then(response => {
+                try {
+
+                    const networkResponse =
+                        await fetch(request);
+
 
                     /*
-                     * Save successful navigation response.
+                     * CRITICAL FIX:
+                     *
+                     * Clone immediately.
                      */
 
+                    let responseForCache = null;
+
+
                     if (
-                        response &&
-                        response.ok
+                        networkResponse &&
+                        networkResponse.ok
                     ) {
 
-                        const responseClone =
-                            response.clone();
+                        try {
+
+                            responseForCache =
+                                networkResponse.clone();
+
+                        } catch (cloneError) {
+
+                            console.warn(
+                                "AFC Isiu PWA: Navigation response could not be cloned:",
+                                cloneError
+                            );
+
+                        }
+
+                    }
+
+
+                    /*
+                     * Cache using the clone.
+                     *
+                     * This operation is deliberately
+                     * independent from the response returned
+                     * to the page.
+                     */
+
+                    if (responseForCache) {
 
                         caches.open(STATIC_CACHE)
+
                             .then(cache => {
 
-                                cache.put(
+                                return cache.put(
                                     request,
-                                    responseClone
+                                    responseForCache
+                                );
+
+                            })
+
+                            .catch(cacheError => {
+
+                                console.warn(
+                                    "AFC Isiu PWA: Navigation cache failed:",
+                                    cacheError
                                 );
 
                             });
 
                     }
 
-                    return response;
-
-                })
-
-                .catch(async () => {
 
                     /*
-                     * First try the exact request.
+                     * Return the ORIGINAL network response.
+                     */
+
+                    return networkResponse;
+
+                } catch (networkError) {
+
+                    console.warn(
+                        "AFC Isiu PWA: Navigation network request failed:",
+                        networkError
+                    );
+
+
+                    /*
+                     * Exact request first.
                      */
 
                     const cachedResponse =
-                        await caches.match(request);
+                        await caches.match(
+                            request
+                        );
+
 
                     if (cachedResponse) {
 
@@ -1163,7 +1472,7 @@ self.addEventListener("fetch", event => {
 
 
                     /*
-                     * Then check our clean URL map.
+                     * Clean URL mapping.
                      */
 
                     const mappedPath =
@@ -1171,12 +1480,14 @@ self.addEventListener("fetch", event => {
                             url.pathname
                         ];
 
+
                     if (mappedPath) {
 
                         const mappedResponse =
                             await caches.match(
                                 mappedPath
                             );
+
 
                         if (mappedResponse) {
 
@@ -1188,7 +1499,7 @@ self.addEventListener("fetch", event => {
 
 
                     /*
-                     * Finally fall back to index.
+                     * Finally fall back to index.html.
                      */
 
                     const indexResponse =
@@ -1196,12 +1507,17 @@ self.addEventListener("fetch", event => {
                             "/index.html"
                         );
 
+
                     if (indexResponse) {
 
                         return indexResponse;
 
                     }
 
+
+                    /*
+                     * Final offline response.
+                     */
 
                     return new Response(
 
@@ -1211,7 +1527,8 @@ self.addEventListener("fetch", event => {
 
                             status: 503,
 
-                            statusText: "Offline",
+                            statusText:
+                                "Offline",
 
                             headers: {
 
@@ -1224,7 +1541,9 @@ self.addEventListener("fetch", event => {
 
                     );
 
-                })
+                }
+
+            })()
 
         );
 
@@ -1239,35 +1558,95 @@ self.addEventListener("fetch", event => {
 
     event.respondWith(
 
-        fetch(request)
+        (async () => {
 
-            .then(response => {
+            try {
+
+                const networkResponse =
+                    await fetch(request);
+
+
+                /*
+                 * CRITICAL FIX:
+                 *
+                 * Clone immediately.
+                 */
+
+                let responseForCache = null;
+
 
                 if (
-                    response &&
-                    response.ok
+                    networkResponse &&
+                    networkResponse.ok
                 ) {
 
+                    try {
+
+                        responseForCache =
+                            networkResponse.clone();
+
+                    } catch (cloneError) {
+
+                        console.warn(
+                            "AFC Isiu PWA: Asset response could not be cloned:",
+                            request.url,
+                            cloneError
+                        );
+
+                    }
+
+                }
+
+
+                /*
+                 * Cache the clone independently.
+                 */
+
+                if (responseForCache) {
+
                     caches.open(STATIC_CACHE)
+
                         .then(cache => {
 
-                            cache.put(
+                            return cache.put(
                                 request,
-                                response.clone()
+                                responseForCache
+                            );
+
+                        })
+
+                        .catch(cacheError => {
+
+                            console.warn(
+                                "AFC Isiu PWA: Asset cache failed:",
+                                request.url,
+                                cacheError
                             );
 
                         });
 
                 }
 
-                return response;
 
-            })
+                /*
+                 * ALWAYS return the original network response.
+                 */
 
-            .catch(async () => {
+                return networkResponse;
+
+            } catch (networkError) {
+
+                console.warn(
+                    "AFC Isiu PWA: Asset network request failed:",
+                    request.url
+                );
+
 
                 const cachedResponse =
-                    await caches.match(request);
+                    await caches.match(
+                        request
+                    );
+
 
                 if (cachedResponse) {
 
@@ -1284,14 +1663,25 @@ self.addEventListener("fetch", event => {
 
                         status: 503,
 
-                        statusText: "Offline"
+                        statusText:
+                            "Offline",
+
+                        headers: {
+
+                            "Content-Type":
+                                "text/plain; charset=utf-8"
+
+                        }
 
                     }
 
                 );
 
-            })
+            }
+
+        })()
 
     );
 
 });
+ 
