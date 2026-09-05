@@ -7,10 +7,10 @@
 
     <meta
         name="viewport"
-        content="width=device-width, initial-scale=1.0"
+        content="width=device-width, initial-scale=1.0, viewport-fit=cover"
     >
 
-    <title>Weekly Lessons | AFC Isiu Youth Portal</title>
+    <title>AFC Isiu Youth Portal</title>
 
 
     <!-- =====================================================
@@ -44,23 +44,23 @@
 
     <meta
         name="apple-mobile-web-app-title"
-        content="AFC Isiwu"
+        content="AFC Isiu"
     >
 
 
     <!-- =====================================================
-         ICON
+         ICONS
     ====================================================== -->
 
     <link
         rel="icon"
         type="image/png"
-        href="../images/logo.png"
+        href="/images/logo.png"
     >
 
     <link
         rel="apple-touch-icon"
-        href="../images/logo.png"
+        href="/images/logo.png"
     >
 
 
@@ -86,13 +86,18 @@
 
 
     <!-- =====================================================
-         ICONS
+         FONT AWESOME
     ====================================================== -->
 
     <link
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
         rel="stylesheet"
     >
+
+
+    <!-- =====================================================
+         REMIX ICONS
+    ====================================================== -->
 
     <link
         href="https://cdn.jsdelivr.net/npm/remixicon@4.6.0/fonts/remixicon.css"
@@ -101,7 +106,25 @@
 
 
     <!-- =====================================================
-         GLOBAL CSS
+         LIBRARIES
+    ====================================================== -->
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/chart.js"
+    ></script>
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"
+    ></script>
+
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/aos@2.3.4/dist/aos.css"
+    >
+
+
+    <!-- =====================================================
+         MAIN CSS
     ====================================================== -->
 
     <link
@@ -116,13 +139,12 @@
 
 
     <!-- =====================================================
-         LESSONS CSS
+         NOTIFICATION PANEL CSS
+         
+         Kept here intentionally for now.
+         This guarantees the notification component remains
+         styled while the shared shell is being migrated.
     ====================================================== -->
-
-    <link
-        rel="stylesheet"
-        href="../css/lessons.css"
-    >
 
 </head>
 
@@ -130,284 +152,48 @@
 <body>
 
 
-<div class="app-layout">
-
-
     <!-- =====================================================
-         SIDEBAR OVERLAY
+         APPLICATION SHELL
     ====================================================== -->
 
-    <div
-        class="sidebar-overlay"
-        id="sidebarOverlay"
-    ></div>
-
-
-    <!-- =====================================================
-         SIDEBAR
-    ====================================================== -->
-
-    <aside
-        class="sidebar"
-        id="sidebar"
-    >
-
-        <div class="sidebar-top">
-
-            <div class="sidebar-logo">
-
-                <i class="fa-solid fa-shield-heart"></i>
-
-                <div>
-
-                    <h2>AFC Isiu</h2>
-
-                    <span>Youth Portal</span>
-
-                </div>
-
-            </div>
-
-
-            <nav class="sidebar-menu">
-
-                <div class="menu-title">
-                    Ministry
-                </div>
-
-
-                <a href="../">
-
-                    <i class="fa-solid fa-house"></i>
-
-                    <span>Dashboard</span>
-
-                </a>
-
-
-                <a
-                    href="pages/lessons"
-                    class="active"
-                >
-
-                    <i class="fa-solid fa-book-open"></i>
-
-                    <span>Sunday School Lesson</span>
-
-                </a>
-
-
-                <a
-                    href="pages/slcquiz"
-                    data-online-only
-                    data-feature="Weekly SLC Quiz"
-                >
-
-                    <i class="fa-solid fa-clipboard-question"></i>
-
-                    <span>Take SL Quiz</span>
-
-                </a>
-
-
-                <a
-                    href="pages/result"
-                    data-online-only
-                    data-feature="Growth Tracker"
-                >
-
-                    <i class="fa-solid fa-chart-line"></i>
-
-                    <span>Check SL Quiz Result</span>
-
-                </a>
-
-
-                <div class="menu-title">
-                    Community
-                </div>
-
-
-                <a
-                    href="pages/gallery"
-                    data-online-only
-                    data-feature="Gallery"
-                >
-
-                    <i class="fa-solid fa-images"></i>
-
-                    <span>Gallery</span>
-
-                </a>
-
-
-                <a
-                    href="pages/events"
-                    data-online-only
-                    data-feature="Youth Events"
-                >
-
-                    <i class="fa-solid fa-calendar-days"></i>
-
-                    <span>Youth Events</span>
-
-                </a>
-
-
-                <a
-                    href="pages/welfare"
-                    data-online-only
-                    data-feature="Welfare"
-                >
-
-                    <i class="fa-solid fa-hand-holding-heart"></i>
-
-                    <span>Welfare</span>
-
-                </a>
-
-
-                <a
-                    href="pages/prayer"
-                    data-online-only
-                    data-feature="Prayer Requests"
-                >
-
-                    <i class="fa-solid fa-hands-praying"></i>
-
-                    <span>Prayer Requests</span>
-
-                </a>
-
-
-                <a
-                    href="pages/program-report"
-                    data-online-only
-                    data-feature="Secretariat Reports"
-                >
-
-                    <i class="fa-solid fa-file-lines"></i>
-
-                    <span>Secretariat Reports</span>
-
-                </a>
-
-            </nav>
-
-        </div>
-
-
-        <div class="sidebar-bottom">
-
-            <div class="menu-title">
-                Account
-            </div>
-
-
-            <a href="pages/profile">
-
-                <i class="fa-solid fa-user"></i>
-
-                <span>Profile</span>
-
-            </a>
-
-
-            <a href="pages/settings">
-
-                <i class="fa-solid fa-gear"></i>
-
-                <span>Settings</span>
-
-            </a>
-
-        </div>
-
-    </aside>
-
-
-    <!-- =====================================================
-         MAIN AREA
-    ====================================================== -->
-
-    <div class="main-area">
+    <div class="app-layout">
 
 
         <!-- =================================================
-             TOPBAR
+             SIDEBAR
+             
+             Loaded from:
+             /components/sidebar.html
         ================================================== -->
 
-        <header class="topbar">
-
-            <div class="topbar-left">
-
-                <button
-                    class="mobile-menu-btn"
-                    id="mobileMenuBtn"
-                    type="button"
-                    aria-label="Open navigation menu"
-                    aria-expanded="false"
-                >
-
-                    <i class="fa-solid fa-bars"></i>
-
-                </button>
+        <div id="app-sidebar"></div>
 
 
-                <div class="portal-brand">
+        <!-- =================================================
+             MAIN AREA
+        ================================================== -->
 
-                    <img
-                        src="../images/logo.png"
-                        alt="AFC Logo"
-                        class="portal-logo"
-                    >
-
-                    <div>
-
-                        <h2>AFC Isiu Youth</h2>
-
-                        <p>
-                            Building young people for Christ
-                        </p>
-
-                    </div>
-
-                </div>
-
-            </div>
+        <div class="main-area">
 
 
-            <div class="topbar-right">
+            <!-- =================================================
+                 TOPBAR
+                 
+                 Loaded from:
+                 /components/topbar.html
+            ================================================== -->
 
-                <button
-                    class="header-icon"
-                    id="notificationBtn"
-                    type="button"
-                    aria-label="Notifications"
-                >
-
-                    <i class="fa-regular fa-bell"></i>
-
-                    <span class="notify-dot"></span>
-
-                </button>
+            <div id="app-topbar"></div>
 
 
-                <button
-                    class="header-icon"
-                    id="themeBtn"
-                    type="button"
-                    aria-label="Change theme"
-                >
-
-                    <i class="fa-solid fa-moon"></i>
-
-                </button>
-
-            </div>
-
-        </header>
-
+            <!-- =================================================
+                 DASHBOARD MAIN CONTENT
+                 
+                 IMPORTANT:
+                 This is the original homepage structure.
+                 Do NOT replace these classes unless the
+                 dashboard CSS is changed intentionally.
+            ================================================== -->
 
         <!-- =================================================
              LESSON PAGE
@@ -956,95 +742,76 @@
 
             </div>
 
-        </main>
+
+            </main>
+
+
+        </div>
+
+
+        <!-- =====================================================
+             MOBILE BOTTOM NAVIGATION
+
+             Loaded from:
+             /components/bottom-nav.html
+        ====================================================== -->
+
+        <div id="app-bottom-nav"></div>
+
 
     </div>
 
 
-    <!-- =====================================================
-         MOBILE BOTTOM NAVIGATION
-    ====================================================== -->
+    <!-- =========================================================
+         AOS
+    ========================================================= -->
 
-    <nav
-        class="bottom-nav"
-        aria-label="Mobile navigation"
-    >
-
-        <a href="../">
-
-            <i class="fa-solid fa-house"></i>
-
-            <span>Home</span>
-
-        </a>
+    <script
+        src="https://unpkg.com/aos@2.3.4/dist/aos.js"
+    ></script>
 
 
-        <a
-            href="pages/lessons"
-            class="active"
-        >
+    <!-- =========================================================
+         SHARED LAYOUT
+         
+         layout.js loads:
+         - sidebar
+         - topbar
+         - notification panel
+         - bottom navigation
+    ========================================================= -->
 
-            <i class="fa-solid fa-book-open"></i>
-
-            <span>Lessons</span>
-
-        </a>
-
-
-        <button
-            class="hub-button"
-            id="hubButton"
-            type="button"
-            aria-label="Open main navigation"
-            aria-expanded="false"
-        >
-
-            <i class="ri-apps-2-line"></i>
-
-        </button>
+    <script src="../js/layout.js"></script>
 
 
-        <a
-            href="pages/gallery"
-            data-online-only
-            data-feature="Gallery"
-        >
+    <!-- =========================================================
+         PWA
+         
+         PWA MUST LOAD BEFORE MAIN.JS
+    ========================================================= -->
 
-            <i class="fa-solid fa-images"></i>
-
-            <span>Gallery</span>
-
-        </a>
+    <script src="../js/pwa.js"></script>
 
 
-        <a href="pages/profile">
+    <!-- =========================================================
+         MAIN SHARED CONTROLLER
+    ========================================================= -->
 
-            <i class="fa-solid fa-user"></i>
-
-            <span>Profile</span>
-
-        </a>
-
-    </nav>
+    <script src="../js/main.js"></script>
 
 
-</div>
-
-
-<!-- =========================================================
-     JAVASCRIPT
-========================================================= -->
-
-<script
-    src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"
-></script>
-
-<script src="../js/main.js"></script>
-
-<script src="../js/lessons.js"></script>
-
-<script src="../js/pwa.js"></script>
+    <!-- =========================================================
+         NOTIFICATION FRONTEND CONTROLLER
+         
+         The notification HTML is loaded asynchronously by
+         layout.js, so this controller waits for:
+         
+             afc:layout-ready
+         
+         before attaching its listeners.
+    ========================================================= -->
 
 
 </body>
+
 </html>
