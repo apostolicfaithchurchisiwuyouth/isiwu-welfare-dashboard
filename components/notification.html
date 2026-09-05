@@ -103,3 +103,839 @@
     </div>
 
 </div>
+
+    <script>
+
+        (function () {
+
+            "use strict";
+
+
+            let notificationInitialized = false;
+
+
+            /* =================================================
+               ELEMENT HELPER
+            ================================================= */
+
+            function getElement(id) {
+
+                return document.getElementById(id);
+
+            }
+
+
+            /* =================================================
+               INITIALIZE NOTIFICATION UI
+            ================================================= */
+
+            function initNotificationUI() {
+
+                if (
+                    notificationInitialized
+                ) {
+
+                    return;
+
+                }
+
+
+                const button =
+                    getElement(
+                        "notificationBtn"
+                    );
+
+                const panel =
+                    getElement(
+                        "notificationPanel"
+                    );
+
+                const closeButton =
+                    getElement(
+                        "notificationPanelClose"
+                    );
+
+                const enableButton =
+                    getElement(
+                        "enableNotificationsBtn"
+                    );
+
+                const disableButton =
+                    getElement(
+                        "disableNotificationsBtn"
+                    );
+
+                const statusText =
+                    getElement(
+                        "notificationStatusText"
+                    );
+
+                const statusBox =
+                    getElement(
+                        "notificationStatus"
+                    );
+
+                const icon =
+                    getElement(
+                        "notificationIcon"
+                    );
+
+                const dot =
+                    getElement(
+                        "notifyDot"
+                    );
+
+
+                /*
+                 * The layout may still be loading.
+                 */
+
+                if (
+                    !button ||
+                    !panel ||
+                    !enableButton
+                ) {
+
+                    return;
+
+                }
+
+
+                notificationInitialized =
+                    true;
+
+
+                /* =================================================
+                   OPEN PANEL
+                ================================================== */
+
+                function openPanel() {
+
+                    panel.classList.add(
+                        "show"
+                    );
+
+                    panel.setAttribute(
+                        "aria-hidden",
+                        "false"
+                    );
+
+                    button.setAttribute(
+                        "aria-expanded",
+                        "true"
+                    );
+
+                    updateNotificationState();
+
+                }
+
+
+                /* =================================================
+                   CLOSE PANEL
+                ================================================== */
+
+                function closePanel() {
+
+                    panel.classList.remove(
+                        "show"
+                    );
+
+                    panel.setAttribute(
+                        "aria-hidden",
+                        "true"
+                    );
+
+                    button.setAttribute(
+                        "aria-expanded",
+                        "false"
+                    );
+
+                }
+
+
+                /* =================================================
+                   SET STATUS
+                ================================================== */
+
+                function setNotificationStatus(
+                    message,
+                    state
+                ) {
+
+                    if (statusText) {
+
+                        statusText.textContent =
+                            message;
+
+                    }
+
+
+                    if (statusBox) {
+
+                        statusBox.dataset.state =
+                            state || "";
+
+                    }
+
+                }
+
+
+                /* =================================================
+                   UPDATE BELL
+                ================================================== */
+
+                function updateBell(
+                    enabled
+                ) {
+
+                    if (icon) {
+
+                        icon.classList.toggle(
+                            "fa-regular",
+                            !enabled
+                        );
+
+                        icon.classList.toggle(
+                            "fa-solid",
+                            enabled
+                        );
+
+                    }
+
+
+                    if (dot) {
+
+                        dot.style.display =
+                            enabled
+                                ? "block"
+                                : "none";
+
+                    }
+
+                }
+
+
+                /* =================================================
+                   CHECK CURRENT STATE
+                ================================================== */
+
+                async function
+                updateNotificationState() {
+
+                    if (
+                        !window.AFC_PWA
+                    ) {
+
+                        setNotificationStatus(
+                            "The notification service is still loading. Please try again in a moment.",
+                            "loading"
+                        );
+
+                        return;
+
+                    }
+
+
+                    if (
+                        typeof AFC_PWA.isPushSupported !==
+                        "function"
+                    ) {
+
+                        setNotificationStatus(
+                            "Push notifications are not supported by this browser.",
+                            "unsupported"
+                        );
+
+                        enableButton.hidden =
+                            true;
+
+                        if (disableButton) {
+
+                            disableButton.hidden =
+                                true;
+
+                        }
+
+                        updateBell(false);
+
+                        return;
+
+                    }
+
+
+                    if (
+                        !AFC_PWA.isPushSupported()
+                    ) {
+
+                        setNotificationStatus(
+                            "Push notifications are not supported by this browser.",
+                            "unsupported"
+                        );
+
+                        enableButton.hidden =
+                            true;
+
+                        if (disableButton) {
+
+                            disableButton.hidden =
+                                true;
+
+                        }
+
+                        updateBell(false);
+
+                        return;
+
+                    }
+
+
+                    try {
+
+                        const permission =
+                            await AFC_PWA
+                                .getPushPermissionState();
+
+
+                        const subscription =
+                            await AFC_PWA
+                                .getPushSubscription();
+
+
+                        if (
+                            subscription &&
+                            permission ===
+                                "granted"
+                        ) {
+
+                            setNotificationStatus(
+                                "Notifications are enabled on this device. You will receive AFC Isiu Youth updates here.",
+                                "enabled"
+                            );
+
+                            enableButton.hidden =
+                                true;
+
+
+                            if (disableButton) {
+
+                                disableButton.hidden =
+                                    false;
+
+                            }
+
+
+                            updateBell(true);
+
+                            return;
+
+                        }
+
+
+                        if (
+                            permission ===
+                            "denied"
+                        ) {
+
+                            setNotificationStatus(
+                                "Notifications are blocked for this site. Please allow notifications in your browser settings.",
+                                "blocked"
+                            );
+
+                            enableButton.hidden =
+                                false;
+
+
+                            if (disableButton) {
+
+                                disableButton.hidden =
+                                    true;
+
+                            }
+
+
+                            updateBell(false);
+
+                            return;
+
+                        }
+
+
+                        setNotificationStatus(
+                            "Turn on notifications to receive important AFC Isiu Youth updates.",
+                            "default"
+                        );
+
+                        enableButton.hidden =
+                            false;
+
+
+                        if (disableButton) {
+
+                            disableButton.hidden =
+                                true;
+
+                        }
+
+
+                        updateBell(false);
+
+                    }
+                    catch (error) {
+
+                        console.error(
+                            "[Notifications] State check failed:",
+                            error
+                        );
+
+                        setNotificationStatus(
+                            "Unable to check notification status. Please try again.",
+                            "error"
+                        );
+
+                    }
+
+                }
+
+
+                /* =================================================
+                   ENABLE NOTIFICATIONS
+                ================================================== */
+
+                async function
+                enableNotifications() {
+
+                    if (
+                        !window.AFC_PWA ||
+                        typeof AFC_PWA
+                            .subscribeToPush !==
+                            "function"
+                    ) {
+
+                        setNotificationStatus(
+                            "The notification service is not ready yet. Please try again.",
+                            "error"
+                        );
+
+                        return;
+
+                    }
+
+
+                    enableButton.disabled =
+                        true;
+
+
+                    enableButton.innerHTML = `
+                        <i class="fa-solid fa-spinner fa-spin"></i>
+                        <span>
+                            Enabling Notifications...
+                        </span>
+                    `;
+
+
+                    setNotificationStatus(
+                        "Please allow notifications when your browser asks for permission.",
+                        "loading"
+                    );
+
+
+                    try {
+
+                        const result =
+                            await AFC_PWA
+                                .subscribeToPush();
+
+
+                        if (
+                            result &&
+                            result.success
+                        ) {
+
+                            setNotificationStatus(
+                                "Notifications are now enabled. You will receive AFC Isiu Youth updates on this device.",
+                                "enabled"
+                            );
+
+
+                            enableButton.hidden =
+                                true;
+
+
+                            if (disableButton) {
+
+                                disableButton.hidden =
+                                    false;
+
+                            }
+
+
+                            updateBell(true);
+
+
+                            console.log(
+                                "[Notifications] Successfully enabled.",
+                                result
+                            );
+
+                        }
+                        else {
+
+                            throw new Error(
+                                "The notification subscription could not be completed."
+                            );
+
+                        }
+
+                    }
+                    catch (error) {
+
+                        console.error(
+                            "[Notifications] Enable failed:",
+                            error
+                        );
+
+
+                        setNotificationStatus(
+                            error.message ||
+                            "Unable to enable notifications. Please try again.",
+                            "error"
+                        );
+
+
+                        updateBell(false);
+
+                    }
+                    finally {
+
+                        enableButton.disabled =
+                            false;
+
+
+                        enableButton.innerHTML = `
+                            <i class="fa-solid fa-bell"></i>
+                            <span>
+                                Enable Notifications
+                            </span>
+                        `;
+
+                    }
+
+                }
+
+
+                /* =================================================
+                   DISABLE NOTIFICATIONS
+                ================================================== */
+
+                async function
+                disableNotifications() {
+
+                    if (
+                        !window.AFC_PWA ||
+                        typeof AFC_PWA
+                            .unsubscribeFromPush !==
+                            "function"
+                    ) {
+
+                        return;
+
+                    }
+
+
+                    if (disableButton) {
+
+                        disableButton.disabled =
+                            true;
+
+                        disableButton.innerHTML = `
+                            <i class="fa-solid fa-spinner fa-spin"></i>
+                            <span>Disabling...</span>
+                        `;
+
+                    }
+
+
+                    try {
+
+                        await AFC_PWA
+                            .unsubscribeFromPush();
+
+
+                        setNotificationStatus(
+                            "Notifications have been disabled on this device.",
+                            "disabled"
+                        );
+
+
+                        enableButton.hidden =
+                            false;
+
+
+                        if (disableButton) {
+
+                            disableButton.hidden =
+                                true;
+
+                        }
+
+
+                        updateBell(false);
+
+                    }
+                    catch (error) {
+
+                        console.error(
+                            "[Notifications] Disable failed:",
+                            error
+                        );
+
+
+                        setNotificationStatus(
+                            error.message ||
+                            "Unable to disable notifications.",
+                            "error"
+                        );
+
+                    }
+                    finally {
+
+                        if (disableButton) {
+
+                            disableButton.disabled =
+                                false;
+
+                            disableButton.innerHTML = `
+                                <i class="fa-solid fa-bell-slash"></i>
+                                <span>
+                                    Disable Notifications
+                                </span>
+                            `;
+
+                        }
+
+                    }
+
+                }
+
+
+                /* =================================================
+                   BELL CLICK
+                ================================================== */
+
+                button.addEventListener(
+                    "click",
+                    function (event) {
+
+                        event.preventDefault();
+
+                        event.stopPropagation();
+
+
+                        const isOpen =
+                            panel.classList.contains(
+                                "show"
+                            );
+
+
+                        if (isOpen) {
+
+                            closePanel();
+
+                        }
+                        else {
+
+                            openPanel();
+
+                        }
+
+                    }
+                );
+
+
+                /* =================================================
+                   CLOSE BUTTON
+                ================================================== */
+
+                if (closeButton) {
+
+                    closeButton.addEventListener(
+                        "click",
+                        function (event) {
+
+                            event.preventDefault();
+
+                            closePanel();
+
+                        }
+                    );
+
+                }
+
+
+                /* =================================================
+                   ENABLE BUTTON
+                ================================================== */
+
+                enableButton.addEventListener(
+                    "click",
+                    function (event) {
+
+                        event.preventDefault();
+
+                        enableNotifications();
+
+                    }
+                );
+
+
+                /* =================================================
+                   DISABLE BUTTON
+                ================================================== */
+
+                if (disableButton) {
+
+                    disableButton.addEventListener(
+                        "click",
+                        function (event) {
+
+                            event.preventDefault();
+
+                            disableNotifications();
+
+                        }
+                    );
+
+                }
+
+
+                /* =================================================
+                   CLICK OUTSIDE
+                ================================================== */
+
+                document.addEventListener(
+                    "click",
+                    function (event) {
+
+                        if (
+                            !panel.classList.contains(
+                                "show"
+                            )
+                        ) {
+
+                            return;
+
+                        }
+
+
+                        const wrapper =
+                            getElement(
+                                "notificationWrapper"
+                            );
+
+
+                        if (
+                            wrapper &&
+                            !wrapper.contains(
+                                event.target
+                            )
+                        ) {
+
+                            closePanel();
+
+                        }
+
+                    }
+                );
+
+
+                /* =================================================
+                   ESCAPE
+                ================================================== */
+
+                document.addEventListener(
+                    "keydown",
+                    function (event) {
+
+                        if (
+                            event.key ===
+                            "Escape"
+                        ) {
+
+                            closePanel();
+
+                        }
+
+                    }
+                );
+
+
+                /* =================================================
+                   INITIAL CHECK
+                ================================================= */
+
+                updateNotificationState();
+
+            }
+
+
+            /* =================================================
+               LAYOUT READY
+               
+               layout.js dispatches this after all shared
+               components have been inserted.
+            ================================================== */
+
+            document.addEventListener(
+                "afc:layout-ready",
+                function () {
+
+                    initNotificationUI();
+
+                },
+                {
+                    once: true
+                }
+            );
+
+
+            /* =================================================
+               FALLBACK
+               
+               If layout.js has already completed before this
+               listener is registered.
+            ================================================== */
+
+            if (
+                document.readyState ===
+                "complete"
+            ) {
+
+                setTimeout(
+                    initNotificationUI,
+                    100
+                );
+
+            }
+            else {
+
+                window.addEventListener(
+                    "load",
+                    function () {
+
+                        setTimeout(
+                            initNotificationUI,
+                            100
+                        );
+
+                    },
+                    {
+                        once: true
+                    }
+                );
+
+            }
+
+        })();
+
+    </script>
+
