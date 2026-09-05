@@ -1,39 +1,543 @@
 /**
  * ============================================================
  * AFC ISIU YOUTH PORTAL
- * PUSH NOTIFICATION SENDER
+ * PREMIUM PUSH NOTIFICATION SENDER
  * FILE: api/push/send.js
+ * VERSION: 18
+ * ============================================================
+ *
+ * PURPOSE:
+ * - Authenticate admin push requests
+ * - Retrieve active subscriptions from Google Apps Script
+ * - Send Web Push notifications
+ * - Support branded notification metadata
+ * - Support notification types/categories
+ * - Support deep links
+ * - Support notification actions
+ * - Support optional large notification images
+ *
+ * IMPORTANT:
+ * - Existing Google Apps Script architecture is preserved.
+ * - Existing VAPID environment variables are preserved.
+ * - Existing PUSH_ADMIN_SECRET is preserved.
  * ============================================================
  */
 
 import webpush from "web-push";
 
 
-export default async function handler(req, res) {
+/* ============================================================
+   CONSTANTS
+   ============================================================ */
 
-    /* ========================================================
-       ONLY ALLOW POST
-       ======================================================== */
+const PORTAL_ORIGIN =
+    "https://afcisiuyouth.vercel.app";
 
-    if (req.method !== "POST") {
+const DEFAULT_ICON =
+    "/images/logo.png";
 
-        return res.status(405).json({
-            success: false,
-            message: "Method not allowed."
-        });
+const DEFAULT_BADGE =
+    "/images/logo.png";
+
+const DEFAULT_TAG =
+    "afc-isiu-notification";
+
+
+/* ============================================================
+   RESPONSE HELPERS
+   ============================================================ */
+
+function jsonResponse(res, status, data) {
+
+    return res
+        .status(status)
+        .json(data);
+
+}
+
+
+/* ============================================================
+   BOOLEAN HELPER
+   ============================================================ */
+
+function toBoolean(value, fallback = false) {
+
+    if (typeof value === "boolean") {
+
+        return value;
+
+    }
+
+    if (typeof value === "string") {
+
+        const normalized =
+            value
+                .trim()
+                .toLowerCase();
+
+        if (
+            normalized === "true" ||
+            normalized === "1" ||
+            normalized === "yes"
+        ) {
+
+            return true;
+
+        }
+
+        if (
+            normalized === "false" ||
+            normalized === "0" ||
+            normalized === "no"
+        ) {
+
+            return false;
+
+        }
+
+    }
+
+    if (typeof value === "number") {
+
+        return value !== 0;
+
+    }
+
+    return fallback;
+
+}
+
+
+/* ============================================================
+   URL HELPER
+   ============================================================ */
+
+/**
+ * Only allows internal portal URLs.
+ *
+ * Relative URLs are preferred:
+ *
+ * /pages/lessons
+ * /pages/quiz
+ * /
+ *
+ * External URLs are rejected.
+ */
+function normalizePortalUrl(value) {
+
+    if (
+        typeof value !== "string" ||
+        !value.trim()
+    ) {
+
+        return "/";
+
+    }
+
+    const rawUrl =
+        value.trim();
+
+
+    try {
+
+        const parsed =
+            new URL(
+                rawUrl,
+                PORTAL_ORIGIN
+            );
+
+
+        if (
+            parsed.origin !==
+            PORTAL_ORIGIN
+        ) {
+
+            return "/";
+
+        }
+
+
+        return (
+            parsed.pathname +
+            parsed.search +
+            parsed.hash
+        );
+
+    } catch (error) {
+
+        return "/";
+
+    }
+
+}
+
+
+/* ============================================================
+   TYPE NORMALIZATION
+   ============================================================ */
+
+function normalizeNotificationType(value) {
+
+    const raw =
+        String(
+            value ||
+            "announcement"
+        )
+            .trim()
+            .toLowerCase();
+
+
+    const aliases = {
+
+        "newlesson": "lesson",
+
+        "new_lesson": "lesson",
+
+        "new-lesson": "lesson",
+
+        "lesson": "lesson",
+
+        "newquiz": "quiz",
+
+        "new_quiz": "quiz",
+
+        "new-quiz": "quiz",
+
+        "quiz": "quiz",
+
+        "program": "programme",
+
+        "programmes": "programme",
+
+        "programme": "programme",
+
+        "weekly": "weekly",
+
+        "birthday": "birthday",
+
+        "announcement": "announcement",
+
+        "once": "once"
+
+    };
+
+
+    return aliases[raw] || raw;
+
+}
+
+
+/* ============================================================
+   DEFAULT ACTIONS
+   ============================================================ */
+
+function getDefaultActions(type) {
+
+    switch (type) {
+
+        case "lesson":
+
+            return [
+
+                {
+
+                    action: "open",
+
+                    title: "Read Lesson"
+
+                }
+
+            ];
+
+
+        case "quiz":
+
+            return [
+
+                {
+
+                    action: "open",
+
+                    title: "Take Quiz"
+
+                }
+
+            ];
+
+
+        case "programme":
+
+        case "weekly":
+
+            return [
+
+                {
+
+                    action: "open",
+
+                    title: "View Programme"
+
+                }
+
+            ];
+
+
+        case "birthday":
+
+            return [
+
+                {
+
+                    action: "open",
+
+                    title: "Open Portal"
+
+                }
+
+            ];
+
+
+        case "announcement":
+
+        case "once":
+
+        default:
+
+            return [
+
+                {
+
+                    action: "open",
+
+                    title: "Open"
+
+                }
+
+            ];
+
+    }
+
+}
+
+
+/* ============================================================
+   ACTION SANITIZER
+   ============================================================ */
+
+function sanitizeActions(actions, type) {
+
+    /*
+     * If actions arrive as a JSON string,
+     * attempt to parse them.
+     */
+
+    if (typeof actions === "string") {
+
+        try {
+
+            actions =
+                JSON.parse(actions);
+
+        } catch (error) {
+
+            actions = null;
+
+        }
 
     }
 
 
-    /* ========================================================
-       CHECK REQUIRED ENVIRONMENT VARIABLES
-       ======================================================== */
+    /*
+     * If valid actions were supplied,
+     * use at most two.
+     */
 
-    const vapidPublicKey = process.env.VAPID_PUBLIC_KEY;
-    const vapidPrivateKey = process.env.VAPID_PRIVATE_KEY;
-    const vapidSubject = process.env.VAPID_SUBJECT;
-    const adminSecret = process.env.PUSH_ADMIN_SECRET;
-    const appsScriptUrl = process.env.GOOGLE_APPS_SCRIPT_URL;
+    if (
+        Array.isArray(actions) &&
+        actions.length
+    ) {
+
+        return actions
+
+            .slice(0, 2)
+
+            .map(action => {
+
+                if (
+                    !action ||
+                    typeof action !== "object"
+                ) {
+
+                    return null;
+
+                }
+
+
+                const actionName =
+                    typeof action.action === "string"
+                        ? action.action.trim()
+                        : "open";
+
+
+                const title =
+                    typeof action.title === "string"
+                        ? action.title.trim()
+                        : "";
+
+
+                if (!title) {
+
+                    return null;
+
+                }
+
+
+                const cleaned = {
+
+                    action:
+                        actionName
+                            .substring(0, 40),
+
+                    title:
+                        title
+                            .substring(0, 40)
+
+                };
+
+
+                /*
+                 * Action icons are optional.
+                 */
+
+                if (
+                    typeof action.icon === "string" &&
+                    action.icon.trim()
+                ) {
+
+                    cleaned.icon =
+                        normalizePortalUrl(
+                            action.icon
+                        );
+
+                }
+
+
+                return cleaned;
+
+            })
+
+            .filter(Boolean);
+
+    }
+
+
+    /*
+     * Otherwise automatically select
+     * an appropriate action.
+     */
+
+    return getDefaultActions(type);
+
+}
+
+
+/* ============================================================
+   REQUEST BODY PARSER
+   ============================================================ */
+
+function parseRequestBody(req) {
+
+    if (!req.body) {
+
+        return {};
+
+    }
+
+
+    if (
+        typeof req.body === "object"
+    ) {
+
+        return req.body;
+
+    }
+
+
+    if (
+        typeof req.body === "string"
+    ) {
+
+        try {
+
+            return JSON.parse(
+                req.body
+            );
+
+        } catch (error) {
+
+            return null;
+
+        }
+
+    }
+
+
+    return {};
+
+}
+
+
+/* ============================================================
+   MAIN HANDLER
+   ============================================================ */
+
+export default async function handler(
+    req,
+    res
+) {
+
+    /* --------------------------------------------------------
+       METHOD
+       -------------------------------------------------------- */
+
+    if (
+        req.method !== "POST"
+    ) {
+
+        return jsonResponse(
+            res,
+            405,
+            {
+
+                success: false,
+
+                message:
+                    "Method not allowed."
+
+            }
+        );
+
+    }
+
+
+    /* --------------------------------------------------------
+       ENVIRONMENT
+       -------------------------------------------------------- */
+
+    const vapidPublicKey =
+        process.env.VAPID_PUBLIC_KEY;
+
+    const vapidPrivateKey =
+        process.env.VAPID_PRIVATE_KEY;
+
+    const vapidSubject =
+        process.env.VAPID_SUBJECT;
+
+    const adminSecret =
+        process.env.PUSH_ADMIN_SECRET;
+
+    const appsScriptUrl =
+        process.env.GOOGLE_APPS_SCRIPT_URL;
 
 
     if (
@@ -44,114 +548,421 @@ export default async function handler(req, res) {
         !appsScriptUrl
     ) {
 
-        return res.status(500).json({
-            success: false,
-            message: "Push notification server is not fully configured."
-        });
+        console.error(
+            "Push server configuration is incomplete."
+        );
+
+        return jsonResponse(
+            res,
+            500,
+            {
+
+                success: false,
+
+                message:
+                    "Push notification server is not fully configured."
+
+            }
+        );
 
     }
 
 
-    /* ========================================================
-       CHECK ADMIN AUTHORIZATION
-       ======================================================== */
+    /* --------------------------------------------------------
+       AUTHENTICATION
+       -------------------------------------------------------- */
 
-    const authorization = req.headers.authorization || "";
+    const authorization =
+        req.headers.authorization ||
+        "";
 
-    const expectedAuthorization = `Bearer ${adminSecret}`;
-
-
-    if (authorization !== expectedAuthorization) {
-
-        return res.status(401).json({
-            success: false,
-            message: "Unauthorized."
-        });
-
-    }
+    const expectedAuthorization =
+        `Bearer ${adminSecret}`;
 
 
-    /* ========================================================
-       READ REQUEST BODY
-       ======================================================== */
+    if (
+        authorization !==
+        expectedAuthorization
+    ) {
 
-    let body;
+        return jsonResponse(
+            res,
+            401,
+            {
 
-    try {
+                success: false,
 
-        body = typeof req.body === "string"
-            ? JSON.parse(req.body)
-            : req.body;
+                message:
+                    "Unauthorized."
 
-    } catch (error) {
-
-        return res.status(400).json({
-            success: false,
-            message: "Invalid JSON request."
-        });
+            }
+        );
 
     }
 
 
-    body = body || {};
+    /* --------------------------------------------------------
+       REQUEST BODY
+       -------------------------------------------------------- */
+
+    const body =
+        parseRequestBody(req);
 
 
-    /* ========================================================
-       NOTIFICATION DETAILS
-       ======================================================== */
+    if (body === null) {
+
+        return jsonResponse(
+            res,
+            400,
+            {
+
+                success: false,
+
+                message:
+                    "Invalid JSON request."
+
+            }
+        );
+
+    }
+
+
+    /* --------------------------------------------------------
+       NOTIFICATION TYPE
+       -------------------------------------------------------- */
+
+    const type =
+        normalizeNotificationType(
+
+            body.type ||
+
+            body.category ||
+
+            body.notificationType
+
+        );
+
+
+    /* --------------------------------------------------------
+       TITLE
+       -------------------------------------------------------- */
+
+    const defaultTitles = {
+
+        lesson:
+            "New Lesson Available",
+
+        quiz:
+            "New Quiz Available",
+
+        programme:
+            "Youth Programme",
+
+        weekly:
+            "AFC Isiu Youth",
+
+        birthday:
+            "Birthday Celebration 🎉",
+
+        announcement:
+            "AFC Isiu Youth",
+
+        once:
+            "AFC Isiu Youth"
+
+    };
+
 
     const title =
-        String(body.title || "AFC Isiu Youth Portal").trim();
+        String(
+
+            body.title ||
+
+            defaultTitles[type] ||
+
+            "AFC Isiu Youth"
+
+        )
+            .trim()
+            .substring(0, 120);
+
+
+    /* --------------------------------------------------------
+       MESSAGE
+       -------------------------------------------------------- */
 
     const message =
         String(
+
             body.body ||
+
             body.message ||
+
             "You have a new notification."
-        ).trim();
+
+        )
+            .trim()
+            .substring(0, 500);
+
+
+    /* --------------------------------------------------------
+       DEEP LINK
+       -------------------------------------------------------- */
 
     const url =
-        typeof body.url === "string" && body.url.trim()
-            ? body.url.trim()
-            : "/";
+        normalizePortalUrl(
+            body.url || "/"
+        );
+
+
+    /* --------------------------------------------------------
+       TAG
+       -------------------------------------------------------- */
+
+    const suppliedTag =
+        typeof body.tag === "string" &&
+        body.tag.trim()
+            ? body.tag.trim()
+            : "";
+
 
     const tag =
-        typeof body.tag === "string" && body.tag.trim()
-            ? body.tag.trim()
-            : "afc-isiu-notification";
+        (
+            suppliedTag ||
+
+            `afc-isiu-${type}` ||
+
+            DEFAULT_TAG
+
+        )
+            .substring(0, 100);
+
+
+    /* --------------------------------------------------------
+       BRAND ICON
+       -------------------------------------------------------- */
+
+    /*
+     * Current temporary asset:
+     *
+     * /images/logo.png
+     *
+     * Later we can change this to:
+     *
+     * /images/notification-icon.png
+     */
+
+    const icon =
+        normalizePortalUrl(
+
+            body.icon ||
+
+            DEFAULT_ICON
+
+        );
+
+
+    /* --------------------------------------------------------
+       BADGE
+       -------------------------------------------------------- */
+
+    /*
+     * Current temporary asset:
+     *
+     * /images/logo.png
+     *
+     * Later we can change this to:
+     *
+     * /images/notification-badge.png
+     */
+
+    const badge =
+        normalizePortalUrl(
+
+            body.badge ||
+
+            DEFAULT_BADGE
+
+        );
+
+
+    /* --------------------------------------------------------
+       OPTIONAL LARGE IMAGE
+       -------------------------------------------------------- */
+
+    let image = null;
+
+
+    if (
+        typeof body.image === "string" &&
+        body.image.trim()
+    ) {
+
+        image =
+            normalizePortalUrl(
+                body.image
+            );
+
+        if (image === "/") {
+
+            image = null;
+
+        }
+
+    }
+
+
+    /* --------------------------------------------------------
+       NOTIFICATION BEHAVIOR
+       -------------------------------------------------------- */
+
+    const renotify =
+        toBoolean(
+            body.renotify,
+            false
+        );
+
+
+    const requireInteraction =
+        toBoolean(
+            body.requireInteraction,
+            false
+        );
+
+
+    const silent =
+        toBoolean(
+            body.silent,
+            false
+        );
+
+
+    /* --------------------------------------------------------
+       ACTIONS
+       -------------------------------------------------------- */
+
+    const actions =
+        sanitizeActions(
+            body.actions,
+            type
+        );
+
+
+    /* --------------------------------------------------------
+       ACTION URLS
+       -------------------------------------------------------- */
+
+    let actionUrls = {};
+
+
+    if (
+        body.actionUrls &&
+        typeof body.actionUrls === "object"
+    ) {
+
+        for (
+            const [action, actionUrl]
+            of Object.entries(
+                body.actionUrls
+            )
+        ) {
+
+            if (
+                typeof actionUrl === "string"
+            ) {
+
+                actionUrls[action] =
+                    normalizePortalUrl(
+                        actionUrl
+                    );
+
+            }
+
+        }
+
+    }
+
+
+    /*
+     * For the normal "open" action,
+     * always make sure the main notification
+     * destination is available.
+     */
+
+    if (!actionUrls.open) {
+
+        actionUrls.open =
+            url;
+
+    }
 
 
     /* ========================================================
-       PREPARE PUSH PAYLOAD
+       FINAL WEB PUSH PAYLOAD
        ======================================================== */
 
-    const payload = JSON.stringify({
+    const notificationPayload = {
 
-        title: title,
+        title,
 
         body: message,
 
-        icon: "/images/logo.png",
+        icon,
 
-        badge: "/images/logo.png",
+        badge,
 
-        tag: tag,
+        tag,
 
-        url: url
+        url,
 
-    });
+        type,
+
+        category: type,
+
+        renotify,
+
+        requireInteraction,
+
+        silent,
+
+        actions,
+
+        actionUrls,
+
+        timestamp:
+            Date.now()
+
+    };
+
+
+    if (image) {
+
+        notificationPayload.image =
+            image;
+
+    }
+
+
+    const payload =
+        JSON.stringify(
+            notificationPayload
+        );
 
 
     /* ========================================================
-       CONFIGURE WEB PUSH
+       VAPID CONFIGURATION
        ======================================================== */
 
     try {
 
         webpush.setVapidDetails(
+
             vapidSubject,
+
             vapidPublicKey,
+
             vapidPrivateKey
+
         );
 
     } catch (error) {
@@ -161,16 +972,24 @@ export default async function handler(req, res) {
             error
         );
 
-        return res.status(500).json({
-            success: false,
-            message: "Invalid VAPID configuration."
-        });
+        return jsonResponse(
+            res,
+            500,
+            {
+
+                success: false,
+
+                message:
+                    "Invalid VAPID configuration."
+
+            }
+        );
 
     }
 
 
     /* ========================================================
-       GET ACTIVE SUBSCRIPTIONS FROM GOOGLE APPS SCRIPT
+       GET ACTIVE SUBSCRIPTIONS
        ======================================================== */
 
     let subscriptions;
@@ -178,50 +997,69 @@ export default async function handler(req, res) {
 
     try {
 
-        const response = await fetch(appsScriptUrl, {
+        const response =
+            await fetch(
+                appsScriptUrl,
+                {
 
-            method: "POST",
+                    method: "POST",
 
-            headers: {
-                "Content-Type": "text/plain;charset=utf-8"
-            },
+                    headers: {
 
-            body: JSON.stringify({
+                        "Content-Type":
+                            "text/plain;charset=utf-8"
 
-                action: "getPushSubscriptions",
+                    },
 
-                adminSecret: adminSecret
+                    body:
+                        JSON.stringify({
 
-            })
+                            action:
+                                "getPushSubscriptions",
 
-        });
+                            adminSecret:
+                                adminSecret
+
+                        })
+
+                }
+            );
 
 
         if (!response.ok) {
 
             throw new Error(
+
                 `Google Apps Script returned ${response.status}`
+
             );
 
         }
 
 
-        const result = await response.json();
+        const result =
+            await response.json();
 
 
         if (!result.success) {
 
             throw new Error(
+
                 result.message ||
+
                 "Unable to retrieve push subscriptions."
+
             );
 
         }
 
 
-        subscriptions = Array.isArray(result.subscriptions)
-            ? result.subscriptions
-            : [];
+        subscriptions =
+            Array.isArray(
+                result.subscriptions
+            )
+                ? result.subscriptions
+                : [];
 
 
     } catch (error) {
@@ -231,17 +1069,21 @@ export default async function handler(req, res) {
             error
         );
 
-        return res.status(502).json({
+        return jsonResponse(
+            res,
+            502,
+            {
 
-            success: false,
+                success: false,
 
-            message:
-                "Unable to retrieve push subscriptions.",
+                message:
+                    "Unable to retrieve push subscriptions.",
 
-            error:
-                error.message
+                error:
+                    error.message
 
-        });
+            }
+        );
 
     }
 
@@ -250,39 +1092,63 @@ export default async function handler(req, res) {
        NO SUBSCRIBERS
        ======================================================== */
 
-    if (subscriptions.length === 0) {
+    if (
+        subscriptions.length === 0
+    ) {
 
-        return res.status(200).json({
+        return jsonResponse(
+            res,
+            200,
+            {
 
-            success: true,
+                success: true,
 
-            message:
-                "There are no active push subscriptions.",
+                message:
+                    "There are no active push subscriptions.",
 
-            sent: 0,
+                total: 0,
 
-            failed: 0,
+                sent: 0,
 
-            total: 0
+                failed: 0,
 
-        });
+                notification: {
+
+                    title,
+
+                    type,
+
+                    url
+
+                }
+
+            }
+        );
 
     }
 
 
     /* ========================================================
-       SEND NOTIFICATION
+       SEND NOTIFICATIONS
        ======================================================== */
 
     let sent = 0;
+
     let failed = 0;
 
     const failures = [];
 
 
-    for (const subscription of subscriptions) {
+    for (
+        const subscription
+        of subscriptions
+    ) {
 
         try {
+
+            /* ------------------------------------------------
+               VALIDATE SUBSCRIPTION
+               ------------------------------------------------ */
 
             if (
                 !subscription ||
@@ -297,7 +1163,8 @@ export default async function handler(req, res) {
                 failures.push({
 
                     endpoint:
-                        subscription?.endpoint || null,
+                        subscription?.endpoint ||
+                        null,
 
                     message:
                         "Invalid push subscription."
@@ -308,6 +1175,10 @@ export default async function handler(req, res) {
 
             }
 
+
+            /* ------------------------------------------------
+               BUILD WEB PUSH SUBSCRIPTION
+               ------------------------------------------------ */
 
             const pushSubscription = {
 
@@ -327,9 +1198,16 @@ export default async function handler(req, res) {
             };
 
 
+            /* ------------------------------------------------
+               SEND
+               ------------------------------------------------ */
+
             await webpush.sendNotification(
+
                 pushSubscription,
+
                 payload
+
             );
 
 
@@ -341,23 +1219,43 @@ export default async function handler(req, res) {
             failed++;
 
 
+            const statusCode =
+                error.statusCode ||
+                null;
+
+
+            const endpoint =
+                subscription.endpoint;
+
+
             failures.push({
 
-                endpoint:
-                    subscription.endpoint,
+                endpoint,
 
-                statusCode:
-                    error.statusCode || null,
+                statusCode,
 
                 message:
-                    error.message || "Push failed."
+                    error.message ||
+                    "Push failed."
 
             });
 
 
             console.error(
+
                 "Push notification failed:",
-                error
+
+                {
+
+                    endpoint,
+
+                    statusCode,
+
+                    message:
+                        error.message
+
+                }
+
             );
 
         }
@@ -366,28 +1264,51 @@ export default async function handler(req, res) {
 
 
     /* ========================================================
-       RETURN RESULT
+       RESULT
        ======================================================== */
 
-    return res.status(200).json({
+    return jsonResponse(
+        res,
+        200,
+        {
 
-        success: true,
+            success: true,
 
-        message:
-            "Push notification process completed.",
+            message:
+                "Premium push notification process completed.",
 
-        total:
-            subscriptions.length,
+            total:
+                subscriptions.length,
 
-        sent:
             sent,
 
-        failed:
             failed,
 
-        failures:
+            notification: {
+
+                title,
+
+                type,
+
+                category: type,
+
+                url,
+
+                tag,
+
+                icon,
+
+                badge,
+
+                actions,
+
+                image
+
+            },
+
             failures
 
-    });
+        }
+    );
 
 }
