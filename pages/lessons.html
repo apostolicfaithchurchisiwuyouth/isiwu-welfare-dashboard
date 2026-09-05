@@ -186,39 +186,39 @@
 
 
                 <a
-                    href="lessons"
+                    href="pages/lessons"
                     class="active"
                 >
 
                     <i class="fa-solid fa-book-open"></i>
 
-                    <span>Sunday School Lessons</span>
+                    <span>Sunday School Lesson</span>
 
                 </a>
 
 
                 <a
-                    href="slcquiz"
+                    href="pages/slcquiz"
                     data-online-only
                     data-feature="Weekly SLC Quiz"
                 >
 
                     <i class="fa-solid fa-clipboard-question"></i>
 
-                    <span>Take SLC Quiz</span>
+                    <span>Take SL Quiz</span>
 
                 </a>
 
 
                 <a
-                    href="results"
+                    href="pages/result"
                     data-online-only
                     data-feature="Growth Tracker"
                 >
 
                     <i class="fa-solid fa-chart-line"></i>
 
-                    <span>Check SLC Quiz Result</span>
+                    <span>Check SL Quiz Result</span>
 
                 </a>
 
@@ -229,20 +229,7 @@
 
 
                 <a
-                    href="academichelp"
-                    data-online-only
-                    data-feature="Academic"
-                >
-
-                    <i class="fa-solid fa-graduation-cap"></i>
-
-                    <span>Academic Help</span>
-
-                </a>
-
-
-                <a
-                    href="gallery"
+                    href="pages/gallery"
                     data-online-only
                     data-feature="Gallery"
                 >
@@ -255,7 +242,7 @@
 
 
                 <a
-                    href="events"
+                    href="pages/events"
                     data-online-only
                     data-feature="Youth Events"
                 >
@@ -268,7 +255,7 @@
 
 
                 <a
-                    href="request-welfare"
+                    href="pages/welfare"
                     data-online-only
                     data-feature="Welfare"
                 >
@@ -281,7 +268,7 @@
 
 
                 <a
-                    href="prayer"
+                    href="pages/prayer"
                     data-online-only
                     data-feature="Prayer Requests"
                 >
@@ -294,7 +281,7 @@
 
 
                 <a
-                    href="program-report"
+                    href="pages/program-report"
                     data-online-only
                     data-feature="Secretariat Reports"
                 >
@@ -317,11 +304,7 @@
             </div>
 
 
-            <a
-                href="profile"
-                data-online-only
-                data-feature="Profile"
-            >
+            <a href="pages/profile">
 
                 <i class="fa-solid fa-user"></i>
 
@@ -330,11 +313,7 @@
             </a>
 
 
-            <a
-                href="settings"
-                data-online-only
-                data-feature="Settings"
-            >
+            <a href="pages/settings">
 
                 <i class="fa-solid fa-gear"></i>
 
@@ -400,148 +379,19 @@
 
             <div class="topbar-right">
 
+                <button
+                    class="header-icon"
+                    id="notificationBtn"
+                    type="button"
+                    aria-label="Notifications"
+                >
 
-                <!-- =================================================
-                     NOTIFICATION
-                ================================================== -->
+                    <i class="fa-regular fa-bell"></i>
 
-                <div class="notification-wrapper">
+                    <span class="notify-dot"></span>
 
-                    <button
-                        class="header-icon"
-                        id="notificationBtn"
-                        type="button"
-                        aria-label="Notifications"
-                        aria-expanded="false"
-                    >
+                </button>
 
-                        <i
-                            class="fa-regular fa-bell"
-                            id="notificationIcon"
-                        ></i>
-
-                        <span
-                            class="notify-dot"
-                            id="notifyDot"
-                        ></span>
-
-                    </button>
-
-
-                    <div
-                        class="notification-panel"
-                        id="notificationPanel"
-                        aria-hidden="true"
-                    >
-
-                        <div class="notification-panel-header">
-
-                            <div>
-
-                                <div class="notification-panel-icon">
-
-                                    <i class="fa-solid fa-bell"></i>
-
-                                </div>
-
-                                <div>
-
-                                    <h3>
-                                        Notifications
-                                    </h3>
-
-                                    <p>
-                                        Stay updated with AFC Isiu Youth
-                                    </p>
-
-                                </div>
-
-                            </div>
-
-
-                            <button
-                                type="button"
-                                class="notification-close"
-                                id="notificationPanelClose"
-                                aria-label="Close notifications"
-                            >
-
-                                <i class="fa-solid fa-xmark"></i>
-
-                            </button>
-
-                        </div>
-
-
-                        <div
-                            class="notification-status"
-                            id="notificationStatus"
-                        >
-
-                            <div class="notification-status-icon">
-
-                                <i
-                                    class="fa-solid fa-bell-slash"
-                                    id="notificationStatusIcon"
-                                ></i>
-
-                            </div>
-
-
-                            <div>
-
-                                <strong id="notificationStatusText">
-                                    Notifications are off
-                                </strong>
-
-                                <span>
-                                    Enable notifications to receive
-                                    important youth updates.
-                                </span>
-
-                            </div>
-
-                        </div>
-
-
-                        <button
-                            type="button"
-                            class="notification-enable-btn"
-                            id="enableNotificationsBtn"
-                        >
-
-                            <i class="fa-solid fa-bell"></i>
-
-                            <span>
-                                Enable Notifications
-                            </span>
-
-                        </button>
-
-
-                        <button
-                            type="button"
-                            class="notification-disable-btn"
-                            id="disableNotificationsBtn"
-                            hidden
-                        >
-
-                            <i class="fa-solid fa-bell-slash"></i>
-
-                            <span>
-                                Disable Notifications
-                            </span>
-
-                        </button>
-
-                    </div>
-
-                </div>
-
-
-                <!-- =================================================
-                     THEME
-                ================================================== -->
 
                 <button
                     class="header-icon"
@@ -650,7 +500,7 @@
                             <i class="fa-solid fa-book-open"></i>
 
                             <span>
-                                Topic Of The Lesson
+                               Topic Of The Lesson
                             </span>
 
                         </div>
@@ -694,6 +544,7 @@
                             </div>
 
                         </div>
+                      
 
                     </section>
 
@@ -821,7 +672,7 @@
                                     <div>
 
                                         <span>
-                                            Study the combined lesson notes
+                                          Study the combined lesson notes  
                                         </span>
 
                                         <h3>
@@ -1129,7 +980,7 @@
 
 
         <a
-            href="lessons"
+            href="pages/lessons"
             class="active"
         >
 
@@ -1154,7 +1005,7 @@
 
 
         <a
-            href="gallery"
+            href="pages/gallery"
             data-online-only
             data-feature="Gallery"
         >
@@ -1166,11 +1017,7 @@
         </a>
 
 
-        <a
-            href="profile"
-            data-online-only
-            data-feature="Profile"
-        >
+        <a href="pages/profile">
 
             <i class="fa-solid fa-user"></i>
 
@@ -1197,511 +1044,6 @@
 <script src="../js/lessons.js"></script>
 
 <script src="../js/pwa.js"></script>
-
-
-<!-- =========================================================
-     NOTIFICATION UI
-========================================================= -->
-
-<script>
-
-(function () {
-
-    "use strict";
-
-
-    function initNotificationUI() {
-
-        const notificationBtn =
-            document.getElementById("notificationBtn");
-
-        const notificationPanel =
-            document.getElementById("notificationPanel");
-
-        const notificationPanelClose =
-            document.getElementById("notificationPanelClose");
-
-        const notificationIcon =
-            document.getElementById("notificationIcon");
-
-        const notifyDot =
-            document.getElementById("notifyDot");
-
-        const notificationStatus =
-            document.getElementById("notificationStatus");
-
-        const notificationStatusIcon =
-            document.getElementById("notificationStatusIcon");
-
-        const notificationStatusText =
-            document.getElementById("notificationStatusText");
-
-        const enableNotificationsBtn =
-            document.getElementById("enableNotificationsBtn");
-
-        const disableNotificationsBtn =
-            document.getElementById("disableNotificationsBtn");
-
-
-        if (!notificationBtn || !notificationPanel) {
-            return;
-        }
-
-
-        function openPanel() {
-
-            notificationPanel.classList.add("show");
-
-            notificationPanel.setAttribute(
-                "aria-hidden",
-                "false"
-            );
-
-            notificationBtn.setAttribute(
-                "aria-expanded",
-                "true"
-            );
-
-        }
-
-
-        function closePanel() {
-
-            notificationPanel.classList.remove("show");
-
-            notificationPanel.setAttribute(
-                "aria-hidden",
-                "true"
-            );
-
-            notificationBtn.setAttribute(
-                "aria-expanded",
-                "false"
-            );
-
-        }
-
-
-        function setNotificationStatus(
-            type,
-            text
-        ) {
-
-            if (!notificationStatusText) {
-                return;
-            }
-
-
-            notificationStatusText.textContent =
-                text;
-
-
-            if (
-                notificationStatus
-            ) {
-
-                notificationStatus.dataset.status =
-                    type || "";
-
-            }
-
-
-            if (
-                notificationStatusIcon
-            ) {
-
-                notificationStatusIcon.className =
-                    type === "enabled"
-                        ? "fa-solid fa-bell"
-                        : "fa-solid fa-bell-slash";
-
-            }
-
-        }
-
-
-        function updateBell(
-            enabled
-        ) {
-
-            if (notificationIcon) {
-
-                notificationIcon.className =
-                    enabled
-                        ? "fa-solid fa-bell"
-                        : "fa-regular fa-bell";
-
-            }
-
-
-            if (notifyDot) {
-
-                notifyDot.style.display =
-                    enabled
-                        ? "block"
-                        : "none";
-
-            }
-
-        }
-
-
-        async function updateNotificationState() {
-
-            const pwa =
-                window.AFC_PWA;
-
-
-            if (
-                !pwa ||
-                !pwa.isPushSupported
-            ) {
-
-                if (enableNotificationsBtn) {
-                    enableNotificationsBtn.hidden = true;
-                }
-
-                if (disableNotificationsBtn) {
-                    disableNotificationsBtn.hidden = true;
-                }
-
-                updateBell(false);
-
-                setNotificationStatus(
-                    "unsupported",
-                    "Notifications are not supported on this device"
-                );
-
-                return;
-
-            }
-
-
-            try {
-
-                let subscription = null;
-
-
-                if (
-                    typeof pwa.getPushSubscription ===
-                    "function"
-                ) {
-
-                    subscription =
-                        await pwa.getPushSubscription();
-
-                }
-
-
-                const permission =
-                    "Notification" in window
-                        ? Notification.permission
-                        : "default";
-
-
-                const enabled =
-                    !!subscription &&
-                    permission === "granted";
-
-
-                if (enabled) {
-
-                    if (enableNotificationsBtn) {
-                        enableNotificationsBtn.hidden = true;
-                    }
-
-                    if (disableNotificationsBtn) {
-                        disableNotificationsBtn.hidden = false;
-                    }
-
-                    updateBell(true);
-
-                    setNotificationStatus(
-                        "enabled",
-                        "Notifications are enabled"
-                    );
-
-                } else {
-
-                    if (enableNotificationsBtn) {
-                        enableNotificationsBtn.hidden = false;
-                    }
-
-                    if (disableNotificationsBtn) {
-                        disableNotificationsBtn.hidden = true;
-                    }
-
-                    updateBell(false);
-
-                    setNotificationStatus(
-                        "disabled",
-                        "Notifications are off"
-                    );
-
-                }
-
-            } catch (error) {
-
-                console.error(
-                    "[Notification UI]",
-                    error
-                );
-
-                updateBell(false);
-
-            }
-
-        }
-
-
-        async function enableNotifications() {
-
-            const pwa =
-                window.AFC_PWA;
-
-
-            if (
-                !pwa ||
-                typeof pwa.subscribeToPush !==
-                "function"
-            ) {
-
-                setNotificationStatus(
-                    "unsupported",
-                    "Notification service is unavailable"
-                );
-
-                return;
-
-            }
-
-
-            if (enableNotificationsBtn) {
-
-                enableNotificationsBtn.disabled =
-                    true;
-
-                enableNotificationsBtn.innerHTML =
-                    '<i class="fa-solid fa-spinner fa-spin"></i>' +
-                    '<span>Enabling...</span>';
-
-            }
-
-
-            try {
-
-                await pwa.subscribeToPush();
-
-                await updateNotificationState();
-
-            } catch (error) {
-
-                console.error(
-                    "[Notification UI]",
-                    error
-                );
-
-                setNotificationStatus(
-                    "error",
-                    error.message ||
-                    "Unable to enable notifications"
-                );
-
-            } finally {
-
-                if (enableNotificationsBtn) {
-
-                    enableNotificationsBtn.disabled =
-                        false;
-
-                    enableNotificationsBtn.innerHTML =
-                        '<i class="fa-solid fa-bell"></i>' +
-                        '<span>Enable Notifications</span>';
-
-                }
-
-            }
-
-        }
-
-
-        async function disableNotifications() {
-
-            const pwa =
-                window.AFC_PWA;
-
-
-            if (
-                !pwa ||
-                typeof pwa.unsubscribeFromPush !==
-                "function"
-            ) {
-
-                return;
-
-            }
-
-
-            if (disableNotificationsBtn) {
-
-                disableNotificationsBtn.disabled =
-                    true;
-
-                disableNotificationsBtn.innerHTML =
-                    '<i class="fa-solid fa-spinner fa-spin"></i>' +
-                    '<span>Disabling...</span>';
-
-            }
-
-
-            try {
-
-                await pwa.unsubscribeFromPush();
-
-                await updateNotificationState();
-
-            } catch (error) {
-
-                console.error(
-                    "[Notification UI]",
-                    error
-                );
-
-            } finally {
-
-                if (disableNotificationsBtn) {
-
-                    disableNotificationsBtn.disabled =
-                        false;
-
-                    disableNotificationsBtn.innerHTML =
-                        '<i class="fa-solid fa-bell-slash"></i>' +
-                        '<span>Disable Notifications</span>';
-
-                }
-
-            }
-
-        }
-
-
-        notificationBtn.addEventListener(
-            "click",
-            function (event) {
-
-                event.stopPropagation();
-
-                if (
-                    notificationPanel.classList.contains(
-                        "show"
-                    )
-                ) {
-
-                    closePanel();
-
-                } else {
-
-                    openPanel();
-
-                    updateNotificationState();
-
-                }
-
-            }
-        );
-
-
-        if (notificationPanelClose) {
-
-            notificationPanelClose.addEventListener(
-                "click",
-                function () {
-
-                    closePanel();
-
-                }
-            );
-
-        }
-
-
-        if (enableNotificationsBtn) {
-
-            enableNotificationsBtn.addEventListener(
-                "click",
-                enableNotifications
-            );
-
-        }
-
-
-        if (disableNotificationsBtn) {
-
-            disableNotificationsBtn.addEventListener(
-                "click",
-                disableNotifications
-            );
-
-        }
-
-
-        document.addEventListener(
-            "click",
-            function (event) {
-
-                if (
-                    !notificationPanel.contains(event.target) &&
-                    !notificationBtn.contains(event.target)
-                ) {
-
-                    closePanel();
-
-                }
-
-            }
-        );
-
-
-        document.addEventListener(
-            "keydown",
-            function (event) {
-
-                if (
-                    event.key === "Escape"
-                ) {
-
-                    closePanel();
-
-                }
-
-            }
-        );
-
-
-        updateNotificationState();
-
-    }
-
-
-    if (
-        document.readyState ===
-        "loading"
-    ) {
-
-        document.addEventListener(
-            "DOMContentLoaded",
-            initNotificationUI
-        );
-
-    } else {
-
-        initNotificationUI();
-
-    }
-
-})();
-
-</script>
 
 
 </body>
