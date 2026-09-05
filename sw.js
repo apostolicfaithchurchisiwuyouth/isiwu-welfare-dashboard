@@ -55,6 +55,8 @@ const APP_SHELL = [
 
     "/css/lessons.css",
 
+   "/css/academichelp.css",
+
     "/js/main.js",
 
     "/js/pwa.js",
