@@ -2,7 +2,7 @@
    AFC ISIU YOUTH PORTAL V2
    FILE: sw.js
    PURPOSE: PWA SERVICE WORKER
-   VERSION: 16
+   VERSION: 17
    ============================================================ */
 
 "use strict";
@@ -13,7 +13,7 @@
    ============================================================ */
 
 const CACHE_VERSION =
-    "afc-isiu-pwa-v16";
+    "afc-isiu-pwa-v17";
 
 const STATIC_CACHE =
     `${CACHE_VERSION}-static`;
@@ -62,23 +62,6 @@ const APP_SHELL = [
    OFFLINE PAGE ROUTES
    ============================================================ */
 
-/*
- * These are clean URLs used by the application.
- *
- * Vercel normally resolves:
- *
- *      /pages/lessons
- *
- * to:
- *
- *      /pages/lessons.html
- *
- * while online.
- *
- * The service worker must perform the same mapping
- * while offline.
- */
-
 const CLEAN_PAGE_MAP = {
 
     "/pages/lessons":
@@ -116,9 +99,6 @@ self.addEventListener(
                     /*
                      * Cache application shell
                      * one file at a time.
-                     *
-                     * One missing file must NOT
-                     * stop installation.
                      */
 
                     for (
@@ -174,11 +154,6 @@ self.addEventListener(
                      * ------------------------------------------------
                      * CACHE CLEAN LESSON URL
                      * ------------------------------------------------
-                     *
-                     * Store /pages/lessons using the same response
-                     * as /pages/lessons.html.
-                     *
-                     * This makes the clean URL available offline.
                      */
 
                     try {
@@ -371,9 +346,6 @@ self.addEventListener(
 
         /*
          * LESSON AUDIO CACHE REQUEST
-         *
-         * lessons.js sends every audio URL
-         * found in the Google Sheet here.
          */
 
         if (
@@ -441,7 +413,7 @@ self.addEventListener(
 
 
             /*
-             * Fallback for a plain-text payload.
+             * Fallback for plain text.
              */
 
             try {
@@ -638,8 +610,7 @@ self.addEventListener(
 
 
             /*
-             * Only navigate to our own
-             * website.
+             * Only navigate to our own website.
              */
 
             if (
@@ -685,8 +656,8 @@ self.addEventListener(
 
 
                 /*
-                 * If the portal is already open,
-                 * navigate/focus that window.
+                 * If portal is already open,
+                 * navigate/focus it.
                  */
 
                 for (
@@ -770,7 +741,73 @@ self.addEventListener(
 
 
         /*
-         * Only GET requests.
+         * ========================================================
+         * IMPORTANT:
+         * NEVER INTERCEPT API REQUESTS
+         * ========================================================
+         *
+         * Vercel API routes such as:
+         *
+         *   /api/push/config
+         *   /api/push/send
+         *   /api/push/status
+         *   /api/push/schedules
+         *   /api/push/history
+         *   /api/push/run
+         *
+         * must always go directly to the network.
+         *
+         * We deliberately do NOT call event.respondWith()
+         * for these requests.
+         *
+         * This prevents the generic offline asset handler
+         * from turning API failures into:
+         *
+         *   503 Offline
+         *
+         * ========================================================
+         */
+
+        let url;
+
+        try {
+
+            url =
+                new URL(
+                    request.url
+                );
+
+        }
+
+        catch (error) {
+
+            return;
+
+        }
+
+
+        if (
+            url.origin ===
+                self.location.origin &&
+
+            url.pathname.startsWith(
+                "/api/"
+            )
+        ) {
+
+            console.log(
+                "AFC Isiu PWA: API request bypassing service worker:",
+                url.pathname
+            );
+
+
+            return;
+
+        }
+
+
+        /*
+         * Only GET requests below this point.
          */
 
         if (
@@ -782,24 +819,15 @@ self.addEventListener(
         }
 
 
-        const url =
-            new URL(
-                request.url
-            );
-
-
-        /* ====================================================
+        /* ========================================================
            EXTERNAL ORIGINS
-        ==================================================== */
+        ======================================================== */
 
         /*
          * Google Sheets, Google Fonts,
          * Font Awesome, jsDelivr, etc.
          *
          * These are intentionally not intercepted.
-         *
-         * lessons.js stores the Google Sheet data
-         * locally instead.
          */
 
         if (
@@ -812,16 +840,9 @@ self.addEventListener(
         }
 
 
-        /* ====================================================
+        /* ========================================================
            AUDIO
-        ==================================================== */
-
-        /*
-         * Audio is CACHEABLE.
-         *
-         * Network first when online.
-         * Cached audio when offline.
-         */
+        ======================================================== */
 
         if (
             url.pathname.startsWith(
@@ -842,9 +863,9 @@ self.addEventListener(
         }
 
 
-        /* ====================================================
+        /* ========================================================
            NAVIGATION
-        ==================================================== */
+        ======================================================== */
 
         if (
             request.mode ===
@@ -864,9 +885,9 @@ self.addEventListener(
         }
 
 
-        /* ====================================================
+        /* ========================================================
            OTHER ASSETS
-        ==================================================== */
+        ======================================================== */
 
         event.respondWith(
 
@@ -965,7 +986,7 @@ async function cacheLessonAudio(
 
 
             /*
-             * Fetch the audio from the network.
+             * Fetch audio from network.
              */
 
             const response =
@@ -1014,7 +1035,7 @@ async function cacheLessonAudio(
 
             /*
              * One bad audio file must NEVER
-             * stop the remaining audio files.
+             * stop remaining audio files.
              */
 
             console.warn(
@@ -1051,9 +1072,6 @@ async function handleAudio(
 
     /*
      * NETWORK FIRST
-     *
-     * If internet is available, obtain the
-     * newest audio file and update the cache.
      */
 
     try {
@@ -1121,8 +1139,7 @@ async function handleAudio(
 
 
     /*
-     * Also search every cache in case the
-     * audio was cached by another handler.
+     * Also search every cache.
      */
 
     const anyCachedAudio =
@@ -1195,8 +1212,7 @@ async function handleNavigation(
 
 
         /*
-         * Never replace a genuine 404
-         * with the offline page.
+         * Never replace genuine 404/410.
          */
 
         if (
@@ -1227,8 +1243,7 @@ async function handleNavigation(
 
 
             /*
-             * If this is the clean lesson URL,
-             * also store it explicitly in the page cache.
+             * Clean lesson URL.
              */
 
             if (
@@ -1241,11 +1256,6 @@ async function handleNavigation(
                     networkResponse.clone()
                 );
 
-
-                /*
-                 * Also keep the actual .html URL
-                 * available.
-                 */
 
                 await pageCache.put(
                     "/pages/lessons.html",
@@ -1316,7 +1326,7 @@ async function handleNavigation(
     ) {
 
         /*
-         * First search the page cache.
+         * First search page cache.
          */
 
         const mappedFromPageCache =
@@ -1424,8 +1434,6 @@ async function handleAsset(
 
     /*
      * NETWORK FIRST.
-     *
-     * This keeps deployed files fresh.
      */
 
     try {
