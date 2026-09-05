@@ -1,45 +1,21 @@
 /* ============================================================
    AFC ISIU YOUTH PORTAL V2
-   ACADEMIC HELP PAGE
    FILE: academichelp.css
-
-   Designed specifically for:
-   /pages/academichelp.html
-
-   Fonts:
-   - Bricolage Grotesque → headings / major UI text
-   - DM Sans → body / forms / supporting text
-
-   IMPORTANT:
-   - No fixed page height
-   - Normal page scrolling preserved
-   - Main surfaces use width: calc(100% - 20px)
-   - No large purple hero
-   - White / off-white layered visual system
+   PURPOSE: ACADEMIC HELP PAGE
+   DESIGN SYSTEM: SLC QUIZ / PORTAL V2
    ============================================================ */
 
 
 /* ============================================================
-   1. PAGE FOUNDATION
+   PAGE FOUNDATION
    ============================================================ */
 
 .academic-page {
     width: 100%;
-    min-height: 100%;
-
-    background:
-        linear-gradient(
-            180deg,
-            #faf9fb 0%,
-            #f7f5f8 48%,
-            #fbfafc 100%
-        );
-
-    color: #27212a;
-
-    font-family: "DM Sans", sans-serif;
-
-    padding-bottom: 48px;
+    max-width: none;
+    padding-left: 0;
+    padding-right: 0;
+    box-sizing: border-box;
 }
 
 .academic-page *,
@@ -52,1559 +28,2312 @@
 .academic-page h2,
 .academic-page h3,
 .academic-page h4,
-.academic-page strong {
-    font-family: "Bricolage Grotesque", sans-serif;
-}
-
+.academic-page h5,
 .academic-page button,
+.academic-page label,
+.academic-page strong,
+.academic-page .section-heading span,
+.academic-page .academic-hero-kicker,
+.academic-page .academic-hero-label,
+.academic-page .academic-hero-status,
+.academic-page .ask-intro-label,
+.academic-page .form-card-heading span,
+.academic-page .form-required-note,
+.academic-page .published-answer-category,
+.academic-page .published-answer-title {
+    font-family:
+        "Bricolage Grotesque",
+        sans-serif;
+}
+
+.academic-page p,
 .academic-page input,
+.academic-page textarea,
 .academic-page select,
-.academic-page textarea {
-    font-family: "DM Sans", sans-serif;
-}
-
-.academic-page button {
-    cursor: pointer;
-}
-
-.academic-page a {
-    text-decoration: none;
+.academic-page small,
+.academic-page .category-copy,
+.academic-page .consent-text,
+.academic-page .response-note,
+.academic-page .published-answer-copy {
+    font-family:
+        "DM Sans",
+        sans-serif;
 }
 
 
 /* ============================================================
-   2. HERO
+   PAGE CONTAINER
+   MATCHES SLC QUIZ WIDTH SYSTEM
+   ============================================================ */
+
+.academic-container {
+    width: min(
+        calc(100% - 32px),
+        1500px
+    );
+
+    max-width: 1500px;
+
+    margin-left: auto;
+    margin-right: auto;
+
+    padding-left: 0;
+    padding-right: 0;
+}
+
+
+/* ============================================================
+   GENERAL
+   ============================================================ */
+
+.academic-page button,
+.academic-page input,
+.academic-page textarea,
+.academic-page select,
+.academic-page a {
+    -webkit-tap-highlight-color: transparent;
+}
+
+.academic-page button {
+    -webkit-appearance: none;
+}
+
+.academic-page button:focus {
+    outline: none;
+}
+
+.academic-page button:focus-visible {
+    outline: none;
+}
+
+.academic-page input,
+.academic-page textarea,
+.academic-page select {
+    outline: none;
+}
+
+.academic-page ::selection {
+    background: rgba(74, 7, 84, .15);
+    color: #111827;
+}
+
+
+/* ============================================================
+   SECTION SYSTEM
+   ============================================================ */
+
+.academic-section {
+    width: 100%;
+    margin-bottom: 24px;
+}
+
+
+/* ============================================================
+   HERO
    ============================================================ */
 
 .academic-hero {
+
     position: relative;
 
-    width: calc(100% - 20px);
-    max-width: none;
+    width: 100%;
 
-    min-height: 390px;
+    margin-bottom: 24px;
 
-    margin: 20px auto 0;
-
-    display: grid;
-    grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.65fr);
-
-    align-items: center;
+    padding:
+        28px
+        30px
+        22px;
 
     overflow: hidden;
+
+    border-radius: 28px;
 
     background:
         linear-gradient(
             135deg,
             #ffffff 0%,
-            #fdfbfd 58%,
-            #f5eef7 100%
+            #fcf9fd 52%,
+            #f7f1f9 100%
         );
 
-    border: 1px solid #e7e1e9;
-    border-radius: 24px;
+    border:
+        1px solid
+        rgba(74, 7, 84, .09);
 
     box-shadow:
-        0 10px 32px rgba(45, 20, 51, 0.045);
-
-    padding: 44px 48px;
+        0 18px 55px
+        rgba(15, 23, 42, .055);
 }
 
 
-/* Subtle decorative layers */
+/* Decorative glow */
 
 .academic-hero::before {
+
     content: "";
 
     position: absolute;
 
-    width: 360px;
-    height: 360px;
+    width: 300px;
+    height: 300px;
 
-    right: -170px;
-    top: -190px;
+    top: -180px;
+    right: -90px;
 
     border-radius: 50%;
 
     background:
         radial-gradient(
             circle,
-            rgba(74, 7, 84, 0.075) 0%,
-            rgba(74, 7, 84, 0.025) 48%,
-            transparent 70%
+            rgba(74, 7, 84, .11),
+            rgba(74, 7, 84, 0)
         );
 
     pointer-events: none;
 }
 
 .academic-hero::after {
+
     content: "";
 
     position: absolute;
 
-    width: 230px;
-    height: 230px;
+    width: 260px;
+    height: 260px;
 
-    right: 70px;
-    bottom: -160px;
-
-    border: 1px solid rgba(74, 7, 84, 0.07);
+    bottom: -190px;
+    left: 18%;
 
     border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(234, 88, 12, .08),
+            rgba(234, 88, 12, 0)
+        );
 
     pointer-events: none;
 }
 
 
 /* ============================================================
-   3. HERO CONTENT
+   HERO TOP
    ============================================================ */
 
-.academic-hero-content {
+.academic-hero-top {
+
     position: relative;
+
     z-index: 2;
 
-    max-width: 760px;
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 16px;
+
+    margin-bottom: 18px;
 }
 
-.academic-eyebrow {
+.academic-hero-label {
+
     display: inline-flex;
+
     align-items: center;
+
     gap: 9px;
 
-    margin-bottom: 15px;
+    color: #4a0754;
 
-    color: #64336d;
+    font-size: .72rem;
 
-    font-size: 0.72rem;
     font-weight: 800;
 
-    letter-spacing: 0.1em;
+    letter-spacing: .055em;
+
     text-transform: uppercase;
 }
 
-.academic-eyebrow i {
-    color: #6d247e;
-    font-size: 0.82rem;
-}
+.academic-hero-icon {
 
-.academic-hero h1 {
-    margin: 0;
-
-    max-width: 760px;
-
-    color: #171219;
-
-    font-size: clamp(2.65rem, 5.2vw, 5rem);
-    line-height: 0.98;
-
-    font-weight: 800;
-
-    letter-spacing: -0.045em;
-}
-
-.academic-hero h1 span {
-    display: inline;
-
-    color: #5b1468;
-
-    font-family: "Bricolage Grotesque", sans-serif;
-}
-
-.academic-hero-content > p {
-    max-width: 670px;
-
-    margin: 21px 0 0;
-
-    color: #69626c;
-
-    font-size: 0.95rem;
-    line-height: 1.72;
-}
-
-
-/* ============================================================
-   4. HERO BUTTONS
-   ============================================================ */
-
-.academic-hero-actions {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-
-    gap: 10px;
-
-    margin-top: 27px;
-}
-
-.academic-primary-btn,
-.academic-secondary-btn {
-    min-height: 46px;
-
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-
-    gap: 9px;
-
-    padding: 0 18px;
-
-    border-radius: 10px;
-
-    font-size: 0.76rem;
-    font-weight: 750;
-
-    transition:
-        transform 180ms ease,
-        background 180ms ease,
-        border-color 180ms ease,
-        box-shadow 180ms ease;
-}
-
-.academic-primary-btn {
-    color: #ffffff;
-
-    background: #4a0754;
-
-    border: 1px solid #4a0754;
-
-    box-shadow:
-        0 6px 16px rgba(74, 7, 84, 0.14);
-}
-
-.academic-primary-btn:hover {
-    transform: translateY(-2px);
-
-    background: #39053f;
-
-    box-shadow:
-        0 9px 20px rgba(74, 7, 84, 0.18);
-}
-
-.academic-secondary-btn {
-    color: #4a0754;
-
-    background: #ffffff;
-
-    border: 1px solid #ddd5df;
-}
-
-.academic-secondary-btn:hover {
-    transform: translateY(-2px);
-
-    background: #fbf8fc;
-
-    border-color: #cdb9d1;
-}
-
-
-/* ============================================================
-   5. HERO VISUAL
-   ============================================================ */
-
-.academic-hero-visual {
-    position: relative;
-
-    min-height: 280px;
+    width: 38px;
+    height: 38px;
 
     display: flex;
+
     align-items: center;
-    justify-content: center;
-}
 
-
-/* Orbit circles */
-
-.academic-orbit {
-    position: absolute;
-
-    border: 1px solid rgba(74, 7, 84, 0.1);
-
-    border-radius: 50%;
-
-    pointer-events: none;
-}
-
-.orbit-one {
-    width: 245px;
-    height: 245px;
-}
-
-.orbit-two {
-    width: 175px;
-    height: 175px;
-}
-
-
-/* Main book icon */
-
-.academic-book-icon {
-    position: relative;
-    z-index: 3;
-
-    width: 92px;
-    height: 92px;
-
-    display: flex;
-    align-items: center;
     justify-content: center;
 
-    color: #4a0754;
+    flex: 0 0 auto;
+
+    border-radius: 13px;
 
     background:
         linear-gradient(
-            145deg,
-            #ffffff,
-            #f3e9f5
+            135deg,
+            #4a0754,
+            #7c3aed
         );
 
-    border: 1px solid #ded2e1;
+    color: #ffffff;
 
-    border-radius: 24px;
+    font-size: .86rem;
 
     box-shadow:
-        0 16px 32px rgba(52, 23, 59, 0.1);
-
-    font-size: 2rem;
+        0 8px 20px
+        rgba(74, 7, 84, .14);
 }
 
+.academic-hero-status {
 
-/* ============================================================
-   6. FLOATING HERO CARDS
-   ============================================================ */
+    display: inline-flex;
 
-.academic-floating-card {
-    position: absolute;
-    z-index: 4;
-
-    min-width: 92px;
-
-    display: flex;
     align-items: center;
-    gap: 8px;
 
-    padding: 9px 12px;
+    gap: 7px;
 
-    color: #49354d;
+    padding:
+        8px
+        12px;
 
-    background: rgba(255, 255, 255, 0.94);
+    border-radius: 999px;
 
-    border: 1px solid #e2dbe4;
+    background: #f0fdf4;
 
-    border-radius: 10px;
+    border:
+        1px solid
+        #bbf7d0;
 
-    box-shadow:
-        0 9px 22px rgba(42, 20, 47, 0.08);
+    color: #15803d;
 
-    font-size: 0.7rem;
-    font-weight: 750;
+    font-size: .68rem;
+
+    font-weight: 700;
 }
 
-.academic-floating-card i {
-    color: #6b2678;
-}
-
-.card-top {
-    top: 28px;
-    right: 18px;
-}
-
-.card-bottom {
-    left: 14px;
-    bottom: 27px;
+.academic-hero-status i {
+    font-size: .62rem;
 }
 
 
 /* ============================================================
-   7. COMMON SECTION HEADING
+   HERO MAIN
    ============================================================ */
 
-.section-heading {
-    width: calc(100% - 20px);
-    max-width: none;
+.academic-hero-main {
 
-    margin: 0 auto 18px;
+    position: relative;
 
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
+    z-index: 2;
 
-    gap: 25px;
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1.35fr)
+        minmax(280px, .65fr);
+
+    gap: 42px;
+
+    align-items: center;
 }
 
-.section-heading > div {
+
+/* ============================================================
+   HERO CONTENT
+   ============================================================ */
+
+.academic-hero-content {
     min-width: 0;
 }
 
-.section-kicker {
+.academic-hero-kicker {
+
     display: block;
 
     margin-bottom: 7px;
 
-    color: #71447a;
+    color: #ea580c;
 
-    font-size: 0.68rem;
+    font-size: .67rem;
+
     font-weight: 800;
 
-    letter-spacing: 0.11em;
-
-    text-transform: uppercase;
+    letter-spacing: .10em;
 }
 
-.section-heading h2 {
+.academic-hero h1 {
+
     margin: 0;
 
-    color: #1b151d;
+    color: #111827;
 
-    font-size: clamp(1.65rem, 3vw, 2.45rem);
-    line-height: 1.05;
+    font-size:
+        clamp(
+            1.8rem,
+            3.7vw,
+            2.65rem
+        );
 
-    font-weight: 800;
-
-    letter-spacing: -0.035em;
-}
-
-.section-heading p {
-    max-width: 700px;
-
-    margin: 9px 0 0;
-
-    color: #746d76;
-
-    font-size: 0.8rem;
-    line-height: 1.65;
-}
-
-
-/* ============================================================
-   8. CATEGORIES SECTION
-   ============================================================ */
-
-.academic-categories-section {
-    width: 100%;
-
-    margin-top: 40px;
-}
-
-
-/* ============================================================
-   9. CATEGORY GRID
-   ============================================================ */
-
-.academic-category-grid {
-    width: calc(100% - 20px);
-    max-width: none;
-
-    margin: 0 auto;
-
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-
-    gap: 11px;
-}
-
-
-/* ============================================================
-   10. CATEGORY CARD
-   ============================================================ */
-
-.academic-category-card {
-    position: relative;
-
-    min-height: 122px;
-
-    display: flex;
-    align-items: center;
-
-    gap: 14px;
-
-    padding: 18px;
-
-    color: #29232c;
-
-    background: #ffffff;
-
-    border: 1px solid #e5dfe7;
-    border-radius: 15px;
-
-    text-align: left;
-
-    box-shadow:
-        0 5px 18px rgba(37, 17, 43, 0.025);
-
-    transition:
-        transform 180ms ease,
-        border-color 180ms ease,
-        box-shadow 180ms ease,
-        background 180ms ease;
-}
-
-.academic-category-card:hover {
-    transform: translateY(-3px);
-
-    background: #fefcff;
-
-    border-color: #cdb8d1;
-
-    box-shadow:
-        0 10px 24px rgba(42, 19, 48, 0.065);
-}
-
-.academic-category-card:active {
-    transform: translateY(-1px);
-}
-
-
-/* ============================================================
-   11. CATEGORY ICON
-   ============================================================ */
-
-.category-icon {
-    width: 47px;
-    height: 47px;
-
-    flex: 0 0 47px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    color: #4a0754;
-
-    background: #f5edf6;
-
-    border: 1px solid #e7dbe9;
-
-    border-radius: 13px;
-
-    font-size: 0.98rem;
-}
-
-.academic-category-card:hover .category-icon {
-    background: #f1e5f3;
-}
-
-
-/* ============================================================
-   12. CATEGORY COPY
-   ============================================================ */
-
-.category-copy {
-    min-width: 0;
-
-    display: flex;
-    flex-direction: column;
-
-    gap: 5px;
-
-    padding-right: 28px;
-}
-
-.category-copy strong {
-    display: block;
-
-    color: #29222b;
-
-    font-size: 0.9rem;
-    line-height: 1.2;
+    line-height: 1.06;
 
     font-weight: 800;
+
+    letter-spacing: -.04em;
 }
 
-.category-copy small {
-    display: block;
+.academic-hero h1 span {
 
-    color: #817982;
-
-    font-size: 0.68rem;
-    line-height: 1.4;
-}
-
-
-/* ============================================================
-   13. CATEGORY ARROW
-   ============================================================ */
-
-.category-arrow {
-    position: absolute;
-
-    right: 16px;
-
-    color: #85648b;
-
-    font-size: 0.7rem;
-
-    transition:
-        transform 180ms ease,
-        color 180ms ease;
-}
-
-.academic-category-card:hover .category-arrow {
     color: #4a0754;
 
-    transform: translateX(3px);
+    font-family:
+        "Bricolage Grotesque",
+        sans-serif;
+}
+
+.academic-hero-content > p {
+
+    max-width: 650px;
+
+    margin:
+        13px 0
+        0;
+
+    color: #6b7280;
+
+    font-size: .82rem;
+
+    line-height: 1.52;
 }
 
 
 /* ============================================================
-   14. SEARCH SECTION
+   HERO ACTIONS
    ============================================================ */
 
-.academic-search-section {
-    width: calc(100% - 20px);
-    max-width: none;
-
-    margin: 28px auto 0;
-}
-
-
-/* ============================================================
-   15. SEARCH BOX
-   ============================================================ */
-
-.academic-search-box {
-    position: relative;
-
-    width: 100%;
-
-    min-height: 58px;
+.academic-hero-actions {
 
     display: flex;
+
     align-items: center;
 
-    background: #ffffff;
+    flex-wrap: wrap;
 
-    border: 1px solid #e1dbe3;
+    gap: 10px;
 
-    border-radius: 15px;
-
-    box-shadow:
-        0 7px 22px rgba(37, 18, 43, 0.035);
-
-    transition:
-        border-color 180ms ease,
-        box-shadow 180ms ease;
-}
-
-.academic-search-box:focus-within {
-    border-color: #a78aad;
-
-    box-shadow:
-        0 0 0 3px rgba(74, 7, 84, 0.055),
-        0 8px 24px rgba(37, 18, 43, 0.04);
+    margin-top: 19px;
 }
 
 
 /* ============================================================
-   16. SEARCH ICON
+   BUTTON SYSTEM
    ============================================================ */
 
-.academic-search-icon {
-    width: 52px;
-
-    flex: 0 0 52px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    color: #76517e;
-
-    font-size: 0.9rem;
-}
-
-
-/* ============================================================
-   17. SEARCH INPUT
-   ============================================================ */
-
-.academic-search-box input {
-    width: 100%;
-    height: 56px;
-
-    padding: 0 48px 0 0;
-
-    color: #29232b;
-
-    background: transparent;
-
-    border: 0;
-    outline: 0;
-
-    font-size: 0.82rem;
-}
-
-.academic-search-box input::placeholder {
-    color: #99919b;
-}
-
-
-/* ============================================================
-   18. SEARCH CLEAR BUTTON
-   ============================================================ */
-
-.academic-search-clear {
-    position: absolute;
-
-    right: 12px;
-
-    width: 31px;
-    height: 31px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    color: #746c76;
-
-    background: #f7f4f8;
-
-    border: 1px solid #e8e1e9;
-
-    border-radius: 50%;
-
-    font-size: 0.67rem;
-}
-
-.academic-search-clear:hover {
-    color: #4a0754;
-
-    background: #f0e7f2;
-}
-
-
-/* ============================================================
-   19. FAQ SECTION
-   ============================================================ */
-
-.academic-faq-section {
-    width: 100%;
-
-    margin-top: 42px;
-}
-
-
-/* ============================================================
-   20. FAQ HEADING
-   ============================================================ */
-
-.faq-heading {
-    align-items: flex-end;
-}
-
-
-/* ============================================================
-   21. VIEW ALL BUTTON
-   ============================================================ */
-
-.view-all-btn {
-    flex: 0 0 auto;
-
-    min-height: 39px;
+.academic-primary-btn,
+.academic-secondary-btn {
 
     display: inline-flex;
+
     align-items: center;
+
     justify-content: center;
 
     gap: 8px;
 
-    padding: 0 14px;
+    min-height: 45px;
 
-    color: #4a0754;
+    padding:
+        11px
+        18px;
 
-    background: #ffffff;
+    border-radius: 999px;
 
-    border: 1px solid #ddd4df;
+    font-family:
+        "Bricolage Grotesque",
+        sans-serif;
 
-    border-radius: 9px;
+    font-size: .76rem;
 
-    font-size: 0.7rem;
     font-weight: 750;
 
-    transition:
-        transform 160ms ease,
-        background 160ms ease,
-        border-color 160ms ease;
-}
-
-.view-all-btn:hover {
-    transform: translateY(-1px);
-
-    background: #faf6fb;
-
-    border-color: #cbb5cf;
-}
-
-.view-all-btn i {
-    font-size: 0.62rem;
-
-    transition: transform 160ms ease;
-}
-
-.view-all-btn:hover i {
-    transform: translateX(3px);
-}
-
-
-/* ============================================================
-   22. FAQ FILTERS
-   ============================================================ */
-
-.academic-filter-row {
-    width: calc(100% - 20px);
-    max-width: none;
-
-    margin: 0 auto 17px;
-
-    display: flex;
-    flex-wrap: wrap;
-
-    gap: 7px;
-}
-
-.academic-filter {
-    min-height: 34px;
-
-    padding: 0 12px;
-
-    color: #6c646e;
-
-    background: #ffffff;
-
-    border: 1px solid #e1dbe3;
-
-    border-radius: 8px;
-
-    font-size: 0.67rem;
-    font-weight: 700;
+    cursor: pointer;
 
     transition:
-        color 160ms ease,
-        background 160ms ease,
-        border-color 160ms ease;
+        transform .2s ease,
+        box-shadow .2s ease,
+        background .2s ease,
+        border-color .2s ease;
 }
 
-.academic-filter:hover {
-    color: #4a0754;
+.academic-primary-btn {
 
-    border-color: #cdb8d1;
-}
+    border: 0;
 
-.academic-filter.active {
+    background:
+        linear-gradient(
+            135deg,
+            #4a0754,
+            #7c3aed
+        );
+
     color: #ffffff;
 
-    background: #4a0754;
-
-    border-color: #4a0754;
+    box-shadow:
+        0 10px 25px
+        rgba(74, 7, 84, .16);
 }
 
+.academic-primary-btn:hover {
 
-/* ============================================================
-   23. FAQ LIST
-   ============================================================ */
+    transform: translateY(-2px);
 
-.academic-faq-list {
-    width: calc(100% - 20px);
-    max-width: none;
-
-    margin: 0 auto;
-
-    display: grid;
-
-    gap: 9px;
+    box-shadow:
+        0 14px 32px
+        rgba(74, 7, 84, .21);
 }
 
+.academic-secondary-btn {
 
-/* ============================================================
-   24. FAQ ITEM
-
-   Supports common JS patterns:
-   - .open
-   - .active
-   - aria-expanded
-   ============================================================ */
-
-.academic-faq-item {
-    overflow: hidden;
+    border:
+        1px solid
+        #e2e5ea;
 
     background: #ffffff;
 
-    border: 1px solid #e5dfe7;
-
-    border-radius: 14px;
-
-    box-shadow:
-        0 4px 16px rgba(38, 18, 44, 0.02);
-
-    transition:
-        border-color 180ms ease,
-        box-shadow 180ms ease;
+    color: #374151;
 }
 
-.academic-faq-item:hover,
-.academic-faq-item.open,
-.academic-faq-item.active {
-    border-color: #d2c3d5;
+.academic-secondary-btn:hover {
+
+    transform: translateY(-2px);
+
+    border-color:
+        rgba(74, 7, 84, .20);
+
+    color: #4a0754;
 
     box-shadow:
-        0 7px 21px rgba(38, 18, 44, 0.045);
+        0 10px 25px
+        rgba(15, 23, 42, .055);
 }
 
 
 /* ============================================================
-   25. FAQ QUESTION
+   HERO SUMMARY
    ============================================================ */
 
-.academic-faq-question {
-    width: 100%;
-
-    min-height: 66px;
+.academic-hero-summary {
 
     display: grid;
-    grid-template-columns: 35px minmax(0, 1fr) 28px;
+
+    gap: 10px;
+
+    min-width: 0;
+}
+
+.hero-summary-card {
+
+    display: flex;
 
     align-items: center;
 
     gap: 12px;
 
-    padding: 13px 17px;
+    min-height: 64px;
 
-    color: #29232c;
+    padding:
+        12px
+        14px;
 
-    background: transparent;
+    border-radius: 17px;
 
-    border: 0;
+    background:
+        rgba(255, 255, 255, .84);
 
-    text-align: left;
+    border:
+        1px solid
+        rgba(15, 23, 42, .06);
+
+    box-shadow:
+        0 7px 22px
+        rgba(15, 23, 42, .035);
 }
 
+.hero-summary-icon {
 
-/* ============================================================
-   26. FAQ NUMBER
-   ============================================================ */
-
-.academic-faq-number {
-    width: 31px;
-    height: 31px;
+    width: 39px;
+    height: 39px;
 
     display: flex;
+
     align-items: center;
+
     justify-content: center;
 
-    color: #704477;
+    flex: 0 0 auto;
 
-    background: #f5edf6;
+    border-radius: 13px;
 
-    border: 1px solid #e8dce9;
+    background:
+        rgba(74, 7, 84, .08);
 
-    border-radius: 9px;
+    color: #4a0754;
 
-    font-family: "Bricolage Grotesque", sans-serif;
+    font-size: .82rem;
+}
 
-    font-size: 0.66rem;
-    font-weight: 800;
+.hero-summary-icon.orange {
+
+    background:
+        rgba(234, 88, 12, .09);
+
+    color: #ea580c;
+}
+
+.hero-summary-icon.green {
+
+    background:
+        rgba(5, 150, 105, .09);
+
+    color: #059669;
+}
+
+.hero-summary-card span {
+
+    display: block;
+
+    margin-bottom: 3px;
+
+    color: #9ca3af;
+
+    font-family:
+        "DM Sans",
+        sans-serif;
+
+    font-size: .63rem;
+
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    letter-spacing: .06em;
+}
+
+.hero-summary-card strong {
+
+    display: block;
+
+    color: #1f2937;
+
+    font-size: .76rem;
+
+    line-height: 1.25;
 }
 
 
 /* ============================================================
-   27. FAQ QUESTION TEXT
+   HERO FOOTER
    ============================================================ */
 
-.academic-faq-question-text {
+.academic-hero-footer {
+
+    position: relative;
+
+    z-index: 2;
+
+    display: flex;
+
+    align-items: center;
+
+    flex-wrap: wrap;
+
+    gap: 9px;
+
+    margin-top: 21px;
+
+    padding-top: 16px;
+
+    border-top:
+        1px solid
+        rgba(15, 23, 42, .065);
+}
+
+.hero-footer-item {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    min-height: 32px;
+
+    padding:
+        7px
+        11px;
+
+    border-radius: 999px;
+
+    background: #f8fafc;
+
+    border:
+        1px solid
+        #eef1f5;
+
+    color: #6b7280;
+
+    font-family:
+        "DM Sans",
+        sans-serif;
+
+    font-size: .67rem;
+
+    font-weight: 600;
+}
+
+.hero-footer-item i {
+
+    color: #4a0754;
+
+    font-size: .65rem;
+}
+
+
+/* ============================================================
+   SECTION HEADING
+   ============================================================ */
+
+.section-heading {
+
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 15px;
+
+    margin-bottom: 21px;
+}
+
+.section-heading-icon {
+
+    width: 48px;
+    height: 48px;
+
+    flex: 0 0 auto;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 16px;
+
+    background:
+        rgba(234, 88, 12, .09);
+
+    color: #ea580c;
+
+    font-size: .95rem;
+}
+
+.section-heading-icon.purple {
+
+    background:
+        rgba(74, 7, 84, .08);
+
+    color: #4a0754;
+}
+
+.section-heading-icon.orange {
+
+    background:
+        rgba(234, 88, 12, .09);
+
+    color: #ea580c;
+}
+
+.section-heading-icon.green {
+
+    background:
+        rgba(5, 150, 105, .09);
+
+    color: #059669;
+}
+
+.section-heading > div:last-child {
+
     min-width: 0;
 
-    color: #29232b;
+    flex: 1;
+}
 
-    font-family: "Bricolage Grotesque", sans-serif;
+.section-heading > div:last-child > span {
 
-    font-size: 0.88rem;
-    line-height: 1.4;
+    display: block;
+
+    margin-bottom: 5px;
+
+    color: #ea580c;
+
+    font-size: .68rem;
+
+    font-weight: 800;
+
+    letter-spacing: .085em;
+}
+
+.section-heading h2 {
+
+    margin: 0 0 5px;
+
+    color: #111827;
+
+    font-size: 1.35rem;
+
+    line-height: 1.17;
+
+    font-weight: 800;
+
+    letter-spacing: -.025em;
+}
+
+.section-heading p {
+
+    margin: 0;
+
+    max-width: 700px;
+
+    color: #6b7280;
+
+    font-size: .79rem;
+
+    line-height: 1.45;
+}
+
+
+/* ============================================================
+   CATEGORY SECTION
+   ============================================================ */
+
+.academic-categories-section {
+
+    padding:
+        27px
+        30px;
+
+    background: #ffffff;
+
+    border:
+        1px solid
+        rgba(15, 23, 42, .06);
+
+    border-radius: 28px;
+
+    box-shadow:
+        0 16px 45px
+        rgba(15, 23, 42, .045);
+}
+
+.academic-category-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            3,
+            minmax(0, 1fr)
+        );
+
+    gap: 12px;
+}
+
+.academic-category-card {
+
+    position: relative;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    width: 100%;
+
+    min-height: 76px;
+
+    padding:
+        13px
+        14px;
+
+    border:
+        1px solid
+        #e8ebef;
+
+    border-radius: 18px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #ffffff,
+            #fbfafc
+        );
+
+    text-align: left;
+
+    cursor: pointer;
+
+    transition:
+        transform .2s ease,
+        border-color .2s ease,
+        box-shadow .2s ease,
+        background .2s ease;
+}
+
+.academic-category-card:hover {
+
+    transform: translateY(-2px);
+
+    border-color:
+        rgba(74, 7, 84, .18);
+
+    background:
+        linear-gradient(
+            135deg,
+            #ffffff,
+            #faf6fc
+        );
+
+    box-shadow:
+        0 10px 28px
+        rgba(15, 23, 42, .055);
+}
+
+.category-icon {
+
+    width: 43px;
+    height: 43px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    flex: 0 0 auto;
+
+    border-radius: 14px;
+
+    background:
+        rgba(74, 7, 84, .08);
+
+    color: #4a0754;
+
+    font-size: .85rem;
+}
+
+.academic-category-card:nth-child(2)
+.category-icon {
+
+    background:
+        rgba(234, 88, 12, .09);
+
+    color: #ea580c;
+}
+
+.academic-category-card:nth-child(3)
+.category-icon {
+
+    background:
+        rgba(8, 145, 178, .09);
+
+    color: #0891b2;
+}
+
+.academic-category-card:nth-child(4)
+.category-icon {
+
+    background:
+        rgba(5, 150, 105, .09);
+
+    color: #059669;
+}
+
+.academic-category-card:nth-child(5)
+.category-icon {
+
+    background:
+        rgba(124, 58, 237, .09);
+
+    color: #7c3aed;
+}
+
+.academic-category-card:nth-child(6)
+.category-icon {
+
+    background:
+        rgba(37, 99, 235, .09);
+
+    color: #2563eb;
+}
+
+.category-copy {
+
+    min-width: 0;
+
+    flex: 1;
+}
+
+.category-copy strong {
+
+    display: block;
+
+    margin-bottom: 3px;
+
+    color: #1f2937;
+
+    font-size: .78rem;
+
+    line-height: 1.25;
 
     font-weight: 750;
 }
 
+.category-copy small {
 
-/* ============================================================
-   28. FAQ CHEVRON
-   ============================================================ */
+    display: block;
 
-.academic-faq-chevron {
-    width: 27px;
-    height: 27px;
+    color: #8a929d;
+
+    font-size: .67rem;
+
+    line-height: 1.3;
+}
+
+.category-arrow {
+
+    width: 29px;
+    height: 29px;
 
     display: flex;
+
     align-items: center;
+
     justify-content: center;
 
-    color: #756d77;
+    flex: 0 0 auto;
 
-    background: #faf8fb;
+    border-radius: 10px;
 
-    border: 1px solid #ebe5ec;
+    background: #f5f6f8;
 
-    border-radius: 50%;
+    color: #7b8490;
 
-    font-size: 0.6rem;
+    font-size: .63rem;
 
     transition:
-        transform 180ms ease,
-        color 180ms ease,
-        background 180ms ease;
+        background .2s ease,
+        color .2s ease,
+        transform .2s ease;
 }
 
-.academic-faq-item.open .academic-faq-chevron,
-.academic-faq-item.active .academic-faq-chevron {
-    color: #4a0754;
+.academic-category-card:hover
+.category-arrow {
 
-    background: #f4ebf5;
+    background: #4a0754;
 
-    transform: rotate(180deg);
-}
+    color: #ffffff;
 
-
-/* ============================================================
-   29. FAQ ANSWER
-   ============================================================ */
-
-.academic-faq-answer {
-    display: none;
-
-    padding: 0 17px 19px 64px;
-}
-
-.academic-faq-item.open .academic-faq-answer,
-.academic-faq-item.active .academic-faq-answer {
-    display: block;
-}
-
-.academic-faq-answer p {
-    margin: 0;
-
-    color: #68616a;
-
-    font-size: 0.76rem;
-    line-height: 1.72;
+    transform: translateX(2px);
 }
 
 
 /* ============================================================
-   30. FAQ EMPTY STATE
+   SEARCH
    ============================================================ */
 
-.academic-empty-state {
-    width: calc(100% - 20px);
-    max-width: none;
+.academic-search-section {
 
-    margin: 17px auto 0;
+    width: 100%;
 
-    padding: 40px 22px;
+    margin-bottom: 24px;
+}
 
-    text-align: center;
+.academic-search-box {
+
+    display: flex;
+
+    align-items: center;
+
+    width: 100%;
+
+    min-height: 57px;
+
+    padding:
+        7px
+        8px
+        7px
+        16px;
+
+    border:
+        1px solid
+        #e1e5ea;
+
+    border-radius: 18px;
 
     background: #ffffff;
 
-    border: 1px dashed #d7cdd9;
+    box-shadow:
+        0 10px 30px
+        rgba(15, 23, 42, .035);
 
-    border-radius: 16px;
+    transition:
+        border-color .2s ease,
+        box-shadow .2s ease;
 }
 
-.academic-empty-state[hidden] {
-    display: none !important;
+.academic-search-box:focus-within {
+
+    border-color: #4a0754;
+
+    box-shadow:
+        0 0 0 4px
+        rgba(74, 7, 84, .06),
+        0 10px 30px
+        rgba(15, 23, 42, .035);
 }
 
-.empty-icon {
-    width: 49px;
-    height: 49px;
+.academic-search-icon {
+
+    width: 33px;
+    height: 33px;
 
     display: flex;
+
     align-items: center;
+
     justify-content: center;
 
-    margin: 0 auto 13px;
+    flex: 0 0 auto;
 
-    color: #704477;
+    color: #4a0754;
 
-    background: #f5edf6;
-
-    border: 1px solid #e5d8e7;
-
-    border-radius: 14px;
+    font-size: .82rem;
 }
 
-.academic-empty-state h3 {
-    margin: 0 0 6px;
+.academic-search-box input {
 
-    color: #29222b;
-
-    font-size: 1rem;
-    font-weight: 800;
-}
-
-.academic-empty-state p {
-    max-width: 470px;
-
-    margin: 0 auto 17px;
-
-    color: #777079;
-
-    font-size: 0.73rem;
-    line-height: 1.6;
-}
-
-
-/* ============================================================
-   31. ASK QUESTION SECTION
-   ============================================================ */
-
-.ask-question-section {
     width: 100%;
 
-    margin-top: 48px;
-}
+    min-width: 0;
 
+    height: 42px;
 
-/* ============================================================
-   32. ASK QUESTION MAIN CARD
-
-   IMPORTANT:
-   Intro and form remain inside the same overall section,
-   but are visually separated into two distinct surfaces.
-   ============================================================ */
-
-.ask-question-card {
-    width: calc(100% - 20px);
-    max-width: none;
-
-    margin: 0 auto;
-
-    display: grid;
-    grid-template-columns: minmax(270px, 0.72fr) minmax(0, 1.28fr);
+    border: none;
 
     background: transparent;
 
-    gap: 14px;
+    color: #111827;
+
+    font-family:
+        "DM Sans",
+        sans-serif;
+
+    font-size: .82rem;
+}
+
+.academic-search-box input::placeholder {
+
+    color: #9ca3af;
+}
+
+.academic-search-clear {
+
+    width: 35px;
+    height: 35px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    flex: 0 0 auto;
+
+    border: none;
+
+    border-radius: 11px;
+
+    background: #f3f4f6;
+
+    color: #6b7280;
+
+    cursor: pointer;
+}
+
+.academic-search-clear:hover {
+
+    background: #e5e7eb;
+
+    color: #111827;
 }
 
 
 /* ============================================================
-   33. ASK QUESTION INTRO CARD
+   FAQ SECTION
    ============================================================ */
 
-.ask-question-intro {
-    position: relative;
+.academic-faq-section {
 
-    min-height: 100%;
+    padding:
+        28px
+        30px;
 
-    padding: 27px 26px;
+    background: #ffffff;
+
+    border:
+        1px solid
+        rgba(15, 23, 42, .06);
+
+    border-radius: 28px;
+
+    box-shadow:
+        0 16px 45px
+        rgba(15, 23, 42, .045);
+}
+
+.faq-heading {
+
+    align-items: flex-start;
+}
+
+.faq-heading .view-all-btn {
+
+    flex: 0 0 auto;
+
+    margin-left: auto;
+}
+
+
+/* ============================================================
+   VIEW ALL
+   ============================================================ */
+
+.view-all-btn {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    min-height: 38px;
+
+    padding:
+        9px
+        13px;
+
+    border:
+        1px solid
+        #e5e7eb;
+
+    border-radius: 999px;
+
+    background: #ffffff;
+
+    color: #4a0754;
+
+    font-family:
+        "Bricolage Grotesque",
+        sans-serif;
+
+    font-size: .69rem;
+
+    font-weight: 750;
+
+    cursor: pointer;
+
+    transition:
+        transform .2s ease,
+        background .2s ease,
+        border-color .2s ease;
+}
+
+.view-all-btn:hover {
+
+    transform: translateY(-1px);
+
+    background: #faf5ff;
+
+    border-color:
+        rgba(74, 7, 84, .18);
+}
+
+.view-all-btn i {
+
+    font-size: .62rem;
+}
+
+
+/* ============================================================
+   FILTERS
+   ============================================================ */
+
+.academic-filter-row {
 
     display: flex;
-    flex-direction: column;
-    align-items: flex-start;
 
-    background:
-        linear-gradient(
-            145deg,
-            #ffffff,
-            #f8f2fa
-        );
+    align-items: center;
 
-    border: 1px solid #e5dde7;
+    flex-wrap: wrap;
 
-    border-radius: 18px;
+    gap: 7px;
+
+    margin-bottom: 20px;
+
+    padding-bottom: 17px;
+
+    border-bottom:
+        1px solid
+        #eef0f3;
+}
+
+.academic-filter {
+
+    min-height: 34px;
+
+    padding:
+        7px
+        12px;
+
+    border:
+        1px solid
+        #e5e7eb;
+
+    border-radius: 999px;
+
+    background: #ffffff;
+
+    color: #6b7280;
+
+    font-family:
+        "DM Sans",
+        sans-serif;
+
+    font-size: .67rem;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        background .2s ease,
+        color .2s ease,
+        border-color .2s ease;
+}
+
+.academic-filter:hover {
+
+    border-color:
+        rgba(74, 7, 84, .18);
+
+    color: #4a0754;
+}
+
+.academic-filter.active {
+
+    border-color: #4a0754;
+
+    background: #4a0754;
+
+    color: #ffffff;
+}
+
+
+/* ============================================================
+   FAQ LIST
+   ============================================================ */
+
+.academic-faq-list {
+
+    display: grid;
+
+    gap: 10px;
+}
+
+
+/* ============================================================
+   FAQ ITEM
+   ============================================================ */
+
+.academic-faq-item {
+
+    overflow: hidden;
+
+    border:
+        1px solid
+        #e7e9ed;
+
+    border-radius: 17px;
+
+    background: #ffffff;
+
+    transition:
+        border-color .2s ease,
+        box-shadow .2s ease;
+}
+
+.academic-faq-item:hover {
+
+    border-color:
+        rgba(74, 7, 84, .15);
+
+    box-shadow:
+        0 8px 25px
+        rgba(15, 23, 42, .035);
+}
+
+.academic-faq-item.open {
+
+    border-color:
+        rgba(74, 7, 84, .20);
+
+    box-shadow:
+        0 10px 28px
+        rgba(15, 23, 42, .045);
+}
+
+
+/* ============================================================
+   FAQ QUESTION
+   ============================================================ */
+
+.academic-faq-question {
+
+    display: flex;
+
+    align-items: center;
+
+    width: 100%;
+
+    gap: 12px;
+
+    padding:
+        14px
+        16px;
+
+    border: none;
+
+    background: transparent;
+
+    color: #1f2937;
+
+    text-align: left;
+
+    cursor: pointer;
+}
+
+.academic-faq-number {
+
+    width: 32px;
+    height: 32px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    flex: 0 0 auto;
+
+    border-radius: 11px;
+
+    background: #f6f3f8;
+
+    color: #4a0754;
+
+    font-family:
+        "Bricolage Grotesque",
+        sans-serif;
+
+    font-size: .65rem;
+
+    font-weight: 800;
+}
+
+.academic-faq-question-text {
+
+    min-width: 0;
+
+    flex: 1;
+
+    color: #1f2937;
+
+    font-family:
+        "Bricolage Grotesque",
+        sans-serif;
+
+    font-size: .78rem;
+
+    line-height: 1.4;
+
+    font-weight: 700;
+}
+
+.academic-faq-chevron {
+
+    width: 29px;
+    height: 29px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    flex: 0 0 auto;
+
+    border-radius: 10px;
+
+    background: #f5f6f8;
+
+    color: #6b7280;
+
+    font-size: .63rem;
+
+    transition:
+        transform .25s ease,
+        background .2s ease,
+        color .2s ease;
+}
+
+.academic-faq-item.open
+.academic-faq-chevron {
+
+    transform: rotate(180deg);
+
+    background: #4a0754;
+
+    color: #ffffff;
+}
+
+
+/* ============================================================
+   FAQ ANSWER
+   ============================================================ */
+
+.academic-faq-answer {
+
+    display: grid;
+
+    grid-template-rows: 0fr;
+
+    transition:
+        grid-template-rows .25s ease;
+}
+
+.academic-faq-item.open
+.academic-faq-answer {
+
+    grid-template-rows: 1fr;
+}
+
+.academic-faq-answer-inner {
+
+    min-height: 0;
 
     overflow: hidden;
 }
 
-.ask-question-intro::after {
-    content: "";
+.academic-faq-answer-content {
 
-    position: absolute;
+    padding:
+        0
+        16px
+        17px
+        60px;
 
-    width: 170px;
-    height: 170px;
+    color: #626b76;
 
-    right: -85px;
-    bottom: -95px;
+    font-family:
+        "DM Sans",
+        sans-serif;
 
-    border: 1px solid rgba(74, 7, 84, 0.07);
+    font-size: .77rem;
 
-    border-radius: 50%;
+    line-height: 1.55;
 }
 
-
-/* ============================================================
-   34. ASK QUESTION ICON
-   ============================================================ */
-
-.ask-question-icon {
-    width: 50px;
-    height: 50px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    margin-bottom: 19px;
-
-    color: #4a0754;
-
-    background: #f0e6f2;
-
-    border: 1px solid #dfd1e2;
-
-    border-radius: 14px;
-
-    font-size: 1rem;
-}
-
-
-/* ============================================================
-   35. ASK QUESTION INTRO TEXT
-   ============================================================ */
-
-.ask-question-intro .section-kicker {
-    margin-bottom: 8px;
-}
-
-.ask-question-intro h2 {
-    position: relative;
-    z-index: 2;
+.academic-faq-answer-content p {
 
     margin: 0;
-
-    color: #1d1720;
-
-    font-size: clamp(1.55rem, 3vw, 2.25rem);
-    line-height: 1.03;
-
-    font-weight: 800;
-
-    letter-spacing: -0.035em;
 }
 
-.ask-question-intro > p {
-    position: relative;
-    z-index: 2;
-
-    margin: 13px 0 0;
-
-    color: #6d6670;
-
-    font-size: 0.77rem;
-    line-height: 1.68;
-}
-
-
-/* ============================================================
-   36. RESPONSE NOTE
-   ============================================================ */
-
-.response-note {
-    position: relative;
-    z-index: 2;
-
-    margin-top: auto;
-    padding-top: 23px;
+.academic-faq-meta {
 
     display: flex;
-    align-items: flex-start;
 
-    gap: 8px;
+    align-items: center;
 
-    color: #66516b;
+    gap: 7px;
 
-    font-size: 0.67rem;
-    line-height: 1.5;
+    margin-top: 11px;
+
+    color: #9ca3af;
+
+    font-size: .63rem;
 }
 
-.response-note i {
-    margin-top: 2px;
+.academic-faq-meta i {
 
-    color: #704477;
+    color: #059669;
 }
 
 
 /* ============================================================
-   37. FORM CARD
-
-   This creates the separate wide form surface requested.
+   EMPTY STATE
    ============================================================ */
 
-.academic-question-form {
-    width: 100%;
+.academic-empty-state {
 
-    padding: 28px;
+    padding:
+        35px
+        20px;
 
-    background: #ffffff;
+    text-align: center;
 
-    border: 1px solid #e4dee6;
+    border:
+        1px dashed
+        #dfe3e8;
 
     border-radius: 18px;
 
-    box-shadow:
-        0 8px 25px rgba(37, 18, 43, 0.035);
+    background: #fafbfc;
+}
+
+.empty-icon {
+
+    width: 48px;
+    height: 48px;
+
+    margin:
+        0 auto
+        12px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 16px;
+
+    background: #f1f3f5;
+
+    color: #7b8490;
+}
+
+.academic-empty-state h3 {
+
+    margin: 0 0 6px;
+
+    color: #1f2937;
+
+    font-size: 1rem;
+
+    font-weight: 800;
+}
+
+.academic-empty-state p {
+
+    max-width: 450px;
+
+    margin:
+        0 auto
+        16px;
+
+    color: #7b8490;
+
+    font-size: .75rem;
+
+    line-height: 1.5;
 }
 
 
 /* ============================================================
-   38. FORM ROW
+   ASK QUESTION SECTION
+   ============================================================ */
+
+.ask-question-section {
+
+    width: 100%;
+}
+
+
+/* ============================================================
+   ASK HEADER
+   ============================================================ */
+
+.ask-question-header {
+
+    margin-bottom: 0;
+}
+
+
+/* ============================================================
+   ASK LAYOUT
+   ============================================================ */
+
+.ask-question-layout {
+
+    display: grid;
+
+    grid-template-columns:
+        minmax(260px, .65fr)
+        minmax(0, 1.35fr);
+
+    gap: 18px;
+
+    align-items: stretch;
+}
+
+
+/* ============================================================
+   ASK INTRO CARD
+   SEPARATE FROM FORM CARD
+   ============================================================ */
+
+.ask-question-intro {
+
+    width: 100%;
+
+    padding:
+        27px
+        25px;
+
+    border:
+        1px solid
+        rgba(74, 7, 84, .09);
+
+    border-radius: 27px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #4a0754,
+            #24032b
+        );
+
+    color: #ffffff;
+
+    box-shadow:
+        0 16px 45px
+        rgba(74, 7, 84, .13);
+}
+
+.ask-intro-top {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin-bottom: 17px;
+}
+
+.ask-question-icon {
+
+    width: 46px;
+    height: 46px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    flex: 0 0 auto;
+
+    border-radius: 15px;
+
+    background:
+        rgba(255, 255, 255, .11);
+
+    color: #ffffff;
+
+    font-size: .95rem;
+}
+
+.ask-intro-label {
+
+    color:
+        rgba(255, 255, 255, .72);
+
+    font-size: .66rem;
+
+    font-weight: 800;
+
+    letter-spacing: .09em;
+}
+
+.ask-question-intro h3 {
+
+    margin:
+        0
+        0
+        9px;
+
+    color: #ffffff;
+
+    font-size: 1.28rem;
+
+    line-height: 1.16;
+
+    font-weight: 800;
+
+    letter-spacing: -.025em;
+}
+
+.ask-question-intro > p {
+
+    margin: 0;
+
+    color:
+        rgba(255, 255, 255, .73);
+
+    font-size: .77rem;
+
+    line-height: 1.55;
+}
+
+
+/* ============================================================
+   RESPONSE NOTE
+   ============================================================ */
+
+.response-note {
+
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 9px;
+
+    margin-top: 18px;
+
+    padding:
+        12px
+        13px;
+
+    border-radius: 14px;
+
+    background:
+        rgba(255, 255, 255, .075);
+
+    color:
+        rgba(255, 255, 255, .78);
+
+    font-size: .67rem;
+
+    line-height: 1.45;
+}
+
+.response-note i {
+
+    margin-top: 2px;
+
+    color: #f9a8d4;
+
+    font-size: .72rem;
+}
+
+
+/* ============================================================
+   ASK PROCESS
+   ============================================================ */
+
+.ask-process {
+
+    display: grid;
+
+    gap: 10px;
+
+    margin-top: 20px;
+
+    padding-top: 17px;
+
+    border-top:
+        1px solid
+        rgba(255, 255, 255, .10);
+}
+
+.ask-process-item {
+
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 10px;
+}
+
+.ask-process-item > span {
+
+    width: 27px;
+    height: 27px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    flex: 0 0 auto;
+
+    border-radius: 9px;
+
+    background:
+        rgba(255, 255, 255, .10);
+
+    color:
+        rgba(255, 255, 255, .82);
+
+    font-family:
+        "Bricolage Grotesque",
+        sans-serif;
+
+    font-size: .62rem;
+
+    font-weight: 800;
+}
+
+.ask-process-item strong {
+
+    display: block;
+
+    margin-bottom: 2px;
+
+    color: #ffffff;
+
+    font-size: .7rem;
+
+    font-weight: 700;
+}
+
+.ask-process-item small {
+
+    display: block;
+
+    color:
+        rgba(255, 255, 255, .56);
+
+    font-size: .62rem;
+
+    line-height: 1.35;
+}
+
+
+/* ============================================================
+   FORM CARD
+   ============================================================ */
+
+.academic-question-form-card {
+
+    width: 100%;
+
+    padding:
+        28px
+        30px;
+
+    border:
+        1px solid
+        rgba(15, 23, 42, .07);
+
+    border-radius: 27px;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 16px 45px
+        rgba(15, 23, 42, .05);
+}
+
+.academic-question-form {
+
+    width: 100%;
+}
+
+
+/* ============================================================
+   FORM HEADER
+   ============================================================ */
+
+.form-card-heading {
+
+    display: flex;
+
+    align-items: flex-start;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    margin-bottom: 22px;
+
+    padding-bottom: 17px;
+
+    border-bottom:
+        1px solid
+        #eef0f3;
+}
+
+.form-card-heading span {
+
+    display: block;
+
+    margin-bottom: 5px;
+
+    color: #ea580c;
+
+    font-size: .67rem;
+
+    font-weight: 800;
+
+    letter-spacing: .08em;
+}
+
+.form-card-heading h3 {
+
+    margin: 0;
+
+    color: #111827;
+
+    font-size: 1.22rem;
+
+    line-height: 1.18;
+
+    font-weight: 800;
+}
+
+.form-required-note {
+
+    flex: 0 0 auto;
+
+    color: #9ca3af;
+
+    font-size: .64rem;
+
+    font-weight: 600;
+}
+
+
+/* ============================================================
+   FORM ROW
    ============================================================ */
 
 .form-row {
+
     display: grid;
 
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(0, 1fr)
+        );
 
-    gap: 15px;
+    gap: 13px;
 
     margin-bottom: 15px;
 }
 
-
-/* ============================================================
-   39. FORM FIELD
-   ============================================================ */
-
 .form-field {
+
     min-width: 0;
 
     margin-bottom: 15px;
 }
 
 .form-row .form-field {
+
     margin-bottom: 0;
 }
 
-
-/* ============================================================
-   40. FORM LABEL
-   ============================================================ */
-
 .form-field label {
+
     display: block;
 
     margin-bottom: 7px;
 
-    color: #39323b;
+    color: #374151;
 
-    font-size: 0.69rem;
+    font-size: .72rem;
+
     font-weight: 750;
 }
 
-.form-field label > span {
-    color: #8b3b96;
+.form-field label span {
+
+    color: #ea580c;
 }
 
 
 /* ============================================================
-   41. INPUT WRAPPER
+   INPUTS
    ============================================================ */
 
 .input-wrapper,
-.select-wrapper,
-.textarea-wrapper {
+.select-wrapper {
+
     position: relative;
 }
 
-
-/* ============================================================
-   42. FORM INPUTS
-   ============================================================ */
-
-.input-wrapper input,
-.select-wrapper select,
-.textarea-wrapper textarea {
-    width: 100%;
-
-    color: #2d2730;
-
-    background: #fbfafc;
-
-    border: 1px solid #ddd7df;
-
-    outline: none;
-
-    transition:
-        border-color 160ms ease,
-        background 160ms ease,
-        box-shadow 160ms ease;
-}
-
-.input-wrapper input,
-.select-wrapper select {
-    height: 45px;
-
-    padding: 0 13px 0 40px;
-
-    border-radius: 10px;
-
-    font-size: 0.75rem;
-}
-
-.textarea-wrapper textarea {
-    min-height: 142px;
-
-    padding: 13px;
-
-    resize: vertical;
-
-    border-radius: 10px;
-
-    font-size: 0.76rem;
-    line-height: 1.65;
-}
-
-.input-wrapper input::placeholder,
-.textarea-wrapper textarea::placeholder {
-    color: #9a939c;
-}
-
-.input-wrapper input:focus,
-.select-wrapper select:focus,
-.textarea-wrapper textarea:focus {
-    background: #ffffff;
-
-    border-color: #a27daa;
-
-    box-shadow:
-        0 0 0 3px rgba(74, 7, 84, 0.055);
-}
-
-
-/* ============================================================
-   43. INPUT ICONS
-   ============================================================ */
-
 .input-wrapper > i,
 .select-wrapper > i {
+
     position: absolute;
 
     left: 14px;
+
     top: 50%;
 
-    color: #816487;
+    transform:
+        translateY(-50%);
 
-    font-size: 0.72rem;
+    color: #8c96a3;
 
-    transform: translateY(-50%);
+    font-size: .75rem;
 
     pointer-events: none;
 
     z-index: 2;
 }
 
-
-/* ============================================================
-   44. SELECT
-   ============================================================ */
-
+.input-wrapper input,
 .select-wrapper select {
-    appearance: none;
-    -webkit-appearance: none;
 
-    padding-right: 35px;
+    width: 100%;
 
-    cursor: pointer;
+    min-height: 50px;
+
+    padding:
+        0
+        15px
+        0
+        39px;
+
+    border:
+        1px solid
+        #e1e6ec;
+
+    border-radius: 15px;
+
+    background: #ffffff;
+
+    color: #111827;
+
+    font-family:
+        "DM Sans",
+        sans-serif;
+
+    font-size: .76rem;
+
+    transition:
+        border-color .2s ease,
+        box-shadow .2s ease;
 }
 
+.input-wrapper input::placeholder {
 
-/* ============================================================
-   45. SELECT ARROW
-   ============================================================ */
+    color: #a0a7b0;
+}
+
+.input-wrapper input:focus,
+.select-wrapper select:focus,
+.textarea-wrapper textarea:focus {
+
+    border-color: #4a0754;
+
+    box-shadow:
+        0 0 0 4px
+        rgba(74, 7, 84, .06);
+}
+
+.select-wrapper select {
+
+    appearance: none;
+
+    -webkit-appearance: none;
+
+    cursor: pointer;
+
+    padding-right: 35px;
+}
 
 .select-wrapper::after {
-    content: "\f078";
+
+    content: "\f107";
 
     position: absolute;
 
-    right: 13px;
+    right: 14px;
+
     top: 50%;
 
-    color: #807580;
+    transform:
+        translateY(-50%);
 
-    font-family: "Font Awesome 6 Free";
+    font-family:
+        "Font Awesome 6 Free";
+
     font-weight: 900;
 
-    font-size: 0.55rem;
+    color: #8c96a3;
 
-    transform: translateY(-50%);
+    font-size: .68rem;
 
     pointer-events: none;
 }
 
 
 /* ============================================================
-   46. FIELD ERROR
+   TEXTAREA
+   ============================================================ */
+
+.textarea-wrapper {
+
+    position: relative;
+}
+
+.textarea-wrapper textarea {
+
+    display: block;
+
+    width: 100%;
+
+    min-height: 145px;
+
+    resize: vertical;
+
+    padding:
+        14px
+        15px;
+
+    border:
+        1px solid
+        #e1e6ec;
+
+    border-radius: 16px;
+
+    background: #ffffff;
+
+    color: #111827;
+
+    font-family:
+        "DM Sans",
+        sans-serif;
+
+    font-size: .76rem;
+
+    line-height: 1.5;
+
+    transition:
+        border-color .2s ease,
+        box-shadow .2s ease;
+}
+
+.textarea-wrapper textarea::placeholder {
+
+    color: #a0a7b0;
+}
+
+.character-count {
+
+    position: absolute;
+
+    right: 12px;
+
+    bottom: 10px;
+
+    padding:
+        4px
+        7px;
+
+    border-radius: 7px;
+
+    background:
+        rgba(255, 255, 255, .92);
+
+    color: #9ca3af;
+
+    font-family:
+        "DM Sans",
+        sans-serif;
+
+    font-size: .59rem;
+
+    pointer-events: none;
+}
+
+
+/* ============================================================
+   FIELD ERRORS
    ============================================================ */
 
 .field-error {
+
     display: block;
 
     min-height: 0;
 
     margin-top: 5px;
 
-    color: #a23d48;
+    color: #dc2626;
 
-    font-size: 0.63rem;
-    line-height: 1.4;
+    font-size: .62rem;
+
+    line-height: 1.35;
 }
 
-.form-field.has-error input,
-.form-field.has-error select,
-.form-field.has-error textarea {
-    border-color: #c76a73;
+.form-field.has-error
+input,
+.form-field.has-error
+select,
+.form-field.has-error
+textarea {
 
-    background: #fffafb;
-}
+    border-color: #ef4444;
 
-
-/* ============================================================
-   47. CHARACTER COUNT
-   ============================================================ */
-
-.character-count {
-    position: absolute;
-
-    right: 12px;
-    bottom: 9px;
-
-    padding: 3px 6px;
-
-    color: #918991;
-
-    background: rgba(255, 255, 255, 0.88);
-
-    border-radius: 5px;
-
-    font-size: 0.6rem;
-
-    pointer-events: none;
+    background: #fffafa;
 }
 
 
 /* ============================================================
-   48. CONTACT CONSENT
+   CONSENT
    ============================================================ */
 
 .contact-consent {
-    position: relative;
 
     display: flex;
+
     align-items: flex-start;
 
     gap: 10px;
 
-    margin-top: 4px;
+    margin:
+        2px
+        0
+        17px;
 
     cursor: pointer;
 }
 
 .contact-consent input {
-    position: absolute;
 
-    width: 1px;
-    height: 1px;
+    position: absolute;
 
     opacity: 0;
 
@@ -1612,115 +2341,135 @@
 }
 
 .custom-checkbox {
-    width: 18px;
-    height: 18px;
 
-    flex: 0 0 18px;
+    width: 20px;
+    height: 20px;
 
     display: flex;
+
     align-items: center;
+
     justify-content: center;
+
+    flex: 0 0 auto;
 
     margin-top: 1px;
 
-    color: transparent;
+    border:
+        1px solid
+        #d7dce2;
+
+    border-radius: 6px;
 
     background: #ffffff;
 
-    border: 1px solid #cfc6d1;
+    color: transparent;
 
-    border-radius: 5px;
+    font-size: .62rem;
 
     transition:
-        background 160ms ease,
-        border-color 160ms ease,
-        color 160ms ease;
+        background .2s ease,
+        border-color .2s ease;
 }
 
-.custom-checkbox i {
-    font-size: 0.55rem;
-}
+.contact-consent input:checked
++ .custom-checkbox {
 
-.contact-consent input:checked + .custom-checkbox {
-    color: #ffffff;
+    border-color: #4a0754;
 
     background: #4a0754;
 
-    border-color: #4a0754;
-}
-
-.contact-consent:focus-within .custom-checkbox {
-    box-shadow:
-        0 0 0 3px rgba(74, 7, 84, 0.08);
+    color: #ffffff;
 }
 
 .consent-text {
-    color: #736c75;
 
-    font-size: 0.67rem;
-    line-height: 1.55;
+    color: #6b7280;
+
+    font-size: .67rem;
+
+    line-height: 1.45;
 }
 
 
 /* ============================================================
-   49. SUBMIT BUTTON
+   SUBMIT
    ============================================================ */
 
 .submit-question-btn {
-    width: 100%;
-
-    min-height: 47px;
 
     display: flex;
+
     align-items: center;
+
     justify-content: center;
 
-    margin-top: 19px;
+    width: 100%;
 
-    padding: 0 18px;
+    min-height: 51px;
+
+    padding:
+        12px
+        18px;
+
+    border: none;
+
+    border-radius: 999px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #ea580c,
+            #f97316
+        );
 
     color: #ffffff;
 
-    background: #4a0754;
+    font-family:
+        "Bricolage Grotesque",
+        sans-serif;
 
-    border: 1px solid #4a0754;
+    font-size: .78rem;
 
-    border-radius: 10px;
-
-    font-size: 0.75rem;
     font-weight: 750;
 
+    cursor: pointer;
+
     box-shadow:
-        0 6px 16px rgba(74, 7, 84, 0.13);
+        0 11px 25px
+        rgba(234, 88, 12, .15);
 
     transition:
-        transform 160ms ease,
-        background 160ms ease,
-        box-shadow 160ms ease;
+        transform .2s ease,
+        box-shadow .2s ease,
+        opacity .2s ease;
 }
 
-.submit-question-btn:hover {
-    transform: translateY(-1px);
+.submit-question-btn:hover:not(:disabled) {
 
-    background: #39053f;
+    transform: translateY(-2px);
 
     box-shadow:
-        0 8px 19px rgba(74, 7, 84, 0.17);
+        0 15px 32px
+        rgba(234, 88, 12, .20);
 }
 
 .submit-question-btn:disabled {
-    cursor: not-allowed;
 
-    opacity: 0.62;
+    opacity: .58;
+
+    cursor: wait;
 
     transform: none;
 }
 
 .btn-label,
 .btn-loading {
+
     display: inline-flex;
 
     align-items: center;
+
     justify-content: center;
 
     gap: 8px;
@@ -1728,678 +2477,894 @@
 
 
 /* ============================================================
-   50. FORM STATUS
+   FORM STATUS
    ============================================================ */
 
 .form-status {
+
     display: none;
 
-    margin-top: 13px;
+    margin-top: 12px;
 
-    padding: 11px 13px;
+    padding:
+        12px
+        14px;
 
-    border-radius: 9px;
+    border-radius: 13px;
 
-    font-size: 0.68rem;
-    line-height: 1.5;
+    font-family:
+        "DM Sans",
+        sans-serif;
+
+    font-size: .68rem;
+
+    line-height: 1.45;
 }
 
 .form-status.show {
+
     display: block;
 }
 
 .form-status.success {
-    color: #285c3c;
 
-    background: #edf8f1;
+    background: #ecfdf5;
 
-    border: 1px solid #cee8d6;
+    border:
+        1px solid
+        #a7f3d0;
+
+    color: #047857;
 }
 
 .form-status.error {
-    color: #7b3039;
 
-    background: #fff1f2;
+    background: #fef2f2;
 
-    border: 1px solid #efd0d4;
+    border:
+        1px solid
+        #fecaca;
+
+    color: #b91c1c;
 }
 
 .form-status.info {
-    color: #564268;
 
-    background: #f5f0f8;
+    background: #eff6ff;
 
-    border: 1px solid #e1d6e7;
+    border:
+        1px solid
+        #bfdbfe;
+
+    color: #1d4ed8;
 }
 
 
 /* ============================================================
-   51. PUBLISHED ANSWERS SECTION
+   PUBLISHED ANSWERS
    ============================================================ */
 
 .published-answers-section {
-    width: 100%;
 
-    margin-top: 49px;
-}
-
-
-/* ============================================================
-   52. PUBLISHED ANSWER GRID
-   ============================================================ */
-
-.published-answer-grid {
-    width: calc(100% - 20px);
-    max-width: none;
-
-    margin: 0 auto;
-
-    display: grid;
-
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-
-    gap: 13px;
-}
-
-
-/* ============================================================
-   53. PUBLISHED ANSWER CARD
-
-   Supports cards dynamically generated by academichelp.js.
-   ============================================================ */
-
-.published-answer-card {
-    min-height: 225px;
-
-    display: flex;
-    flex-direction: column;
-
-    padding: 20px;
-
-    background: #ffffff;
-
-    border: 1px solid #e5dfe7;
-
-    border-radius: 15px;
-
-    box-shadow:
-        0 5px 18px rgba(37, 17, 43, 0.025);
-
-    transition:
-        transform 180ms ease,
-        border-color 180ms ease,
-        box-shadow 180ms ease;
-}
-
-.published-answer-card:hover {
-    transform: translateY(-3px);
-
-    border-color: #d1c1d4;
-
-    box-shadow:
-        0 10px 24px rgba(39, 18, 44, 0.055);
-}
-
-.published-answer-category {
-    align-self: flex-start;
-
-    display: inline-flex;
-
-    padding: 5px 8px;
-
-    color: #61366a;
-
-    background: #f5edf6;
-
-    border: 1px solid #e7dbe9;
-
-    border-radius: 6px;
-
-    font-size: 0.59rem;
-    font-weight: 800;
-
-    letter-spacing: 0.04em;
-
-    text-transform: uppercase;
-}
-
-.published-answer-card h3 {
-    margin: 13px 0 7px;
-
-    color: #29222b;
-
-    font-size: 0.96rem;
-    line-height: 1.35;
-
-    font-weight: 800;
-}
-
-.published-answer-question {
-    color: #7a727c;
-
-    font-size: 0.69rem;
-    line-height: 1.55;
-}
-
-.published-answer-text {
-    margin: 12px 0 0;
-
-    color: #5d565f;
-
-    font-size: 0.73rem;
-    line-height: 1.67;
-}
-
-.published-answer-footer {
-    margin-top: auto;
-    padding-top: 17px;
-
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    gap: 10px;
-}
-
-.published-answer-author {
-    color: #706973;
-
-    font-size: 0.62rem;
-    font-weight: 650;
-}
-
-.published-answer-date {
-    color: #9a929b;
-
-    font-size: 0.59rem;
-}
-
-
-/* ============================================================
-   54. PUBLISHED LOADING
-   ============================================================ */
-
-.published-loading {
-    min-height: 130px;
-
-    grid-column: 1 / -1;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    gap: 9px;
-
-    color: #7d757e;
-
-    background: #ffffff;
-
-    border: 1px dashed #d9d1db;
-
-    border-radius: 15px;
-
-    font-size: 0.72rem;
-}
-
-.published-loading i {
-    color: #6b3b73;
-}
-
-
-/* ============================================================
-   55. FINAL CTA
-   ============================================================ */
-
-.academic-final-cta {
-    width: calc(100% - 20px);
-    max-width: none;
-
-    margin: 50px auto 0;
-
-    min-height: 118px;
-
-    display: grid;
-
-    grid-template-columns: 54px minmax(0, 1fr) auto;
-
-    align-items: center;
-
-    gap: 18px;
-
-    padding: 24px 27px;
+    padding:
+        28px
+        30px;
 
     background:
         linear-gradient(
             135deg,
             #ffffff,
-            #f7f0f8
+            #fbfafc
         );
 
-    border: 1px solid #e4dce6;
+    border:
+        1px solid
+        rgba(15, 23, 42, .06);
 
-    border-radius: 18px;
+    border-radius: 28px;
+
+    box-shadow:
+        0 16px 45px
+        rgba(15, 23, 42, .045);
+}
+
+.published-answer-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(0, 1fr)
+        );
+
+    gap: 12px;
+}
+
+.published-loading {
+
+    grid-column: 1 / -1;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 9px;
+
+    min-height: 100px;
+
+    color: #8b929c;
+
+    font-family:
+        "DM Sans",
+        sans-serif;
+
+    font-size: .72rem;
 }
 
 
 /* ============================================================
-   56. FINAL CTA ICON
+   PUBLISHED ANSWER CARD
    ============================================================ */
 
+.published-answer-card {
+
+    position: relative;
+
+    width: 100%;
+
+    padding:
+        20px;
+
+    border:
+        1px solid
+        #e8ebef;
+
+    border-radius: 19px;
+
+    background: #ffffff;
+
+    transition:
+        transform .2s ease,
+        box-shadow .2s ease,
+        border-color .2s ease;
+}
+
+.published-answer-card:hover {
+
+    transform: translateY(-2px);
+
+    border-color:
+        rgba(74, 7, 84, .14);
+
+    box-shadow:
+        0 10px 30px
+        rgba(15, 23, 42, .05);
+}
+
+.published-answer-top {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 10px;
+
+    margin-bottom: 11px;
+}
+
+.published-answer-category {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    min-height: 27px;
+
+    padding:
+        6px
+        9px;
+
+    border-radius: 999px;
+
+    background: #f5f3f7;
+
+    color: #4a0754;
+
+    font-size: .59rem;
+
+    font-weight: 800;
+
+    letter-spacing: .04em;
+}
+
+.published-answer-date {
+
+    color: #a0a7b0;
+
+    font-family:
+        "DM Sans",
+        sans-serif;
+
+    font-size: .59rem;
+}
+
+.published-answer-title {
+
+    margin:
+        0
+        0
+        8px;
+
+    color: #1f2937;
+
+    font-size: .88rem;
+
+    line-height: 1.35;
+
+    font-weight: 750;
+}
+
+.published-answer-copy {
+
+    margin: 0;
+
+    color: #69727d;
+
+    font-size: .72rem;
+
+    line-height: 1.52;
+
+    display: -webkit-box;
+
+    -webkit-line-clamp: 4;
+
+    -webkit-box-orient: vertical;
+
+    overflow: hidden;
+}
+
+.published-answer-footer {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    margin-top: 14px;
+
+    padding-top: 11px;
+
+    border-top:
+        1px solid
+        #f0f1f3;
+
+    color: #7d8691;
+
+    font-family:
+        "DM Sans",
+        sans-serif;
+
+    font-size: .61rem;
+}
+
+.published-answer-footer i {
+
+    color: #059669;
+}
+
+
+/* ============================================================
+   FINAL CTA
+   ============================================================ */
+
+.academic-final-cta {
+
+    display: grid;
+
+    grid-template-columns:
+        auto
+        minmax(0, 1fr)
+        auto;
+
+    align-items: center;
+
+    gap: 17px;
+
+    width: 100%;
+
+    margin-bottom: 24px;
+
+    padding:
+        22px
+        25px;
+
+    border:
+        1px solid
+        rgba(74, 7, 84, .09);
+
+    border-radius: 25px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #faf5ff,
+            #ffffff
+        );
+
+    box-shadow:
+        0 14px 40px
+        rgba(15, 23, 42, .04);
+}
+
 .final-cta-icon {
+
     width: 52px;
     height: 52px;
 
     display: flex;
+
     align-items: center;
+
     justify-content: center;
 
-    color: #4a0754;
+    flex: 0 0 auto;
 
-    background: #f0e6f2;
+    border-radius: 17px;
 
-    border: 1px solid #dfd1e2;
+    background:
+        linear-gradient(
+            135deg,
+            #4a0754,
+            #7c3aed
+        );
 
-    border-radius: 14px;
+    color: #ffffff;
 
     font-size: 1rem;
+
+    box-shadow:
+        0 9px 22px
+        rgba(74, 7, 84, .15);
 }
 
+.final-cta-copy {
 
-/* ============================================================
-   57. FINAL CTA COPY
-   ============================================================ */
+    min-width: 0;
+}
+
+.final-cta-copy > span {
+
+    display: block;
+
+    margin-bottom: 4px;
+
+    color: #ea580c;
+
+    font-family:
+        "Bricolage Grotesque",
+        sans-serif;
+
+    font-size: .62rem;
+
+    font-weight: 800;
+
+    letter-spacing: .09em;
+}
 
 .final-cta-copy h2 {
-    margin: 0 0 6px;
 
-    color: #1d1720;
+    margin:
+        0
+        0
+        4px;
 
-    font-size: clamp(1.3rem, 2.5vw, 1.75rem);
-    line-height: 1.1;
+    color: #111827;
+
+    font-size: 1.15rem;
+
+    line-height: 1.2;
 
     font-weight: 800;
 }
 
 .final-cta-copy p {
+
     margin: 0;
 
-    color: #706971;
+    color: #6b7280;
 
-    font-size: 0.72rem;
-    line-height: 1.55;
+    font-size: .71rem;
+
+    line-height: 1.4;
+}
+
+.academic-final-cta
+.academic-primary-btn {
+
+    flex: 0 0 auto;
 }
 
 
 /* ============================================================
-   58. ACCESSIBILITY / FOCUS
+   TABLET
    ============================================================ */
 
-.academic-page button:focus-visible,
-.academic-page input:focus-visible,
-.academic-page select:focus-visible,
-.academic-page textarea:focus-visible {
-    outline: 2px solid rgba(74, 7, 84, 0.35);
+@media (max-width: 1100px) {
 
-    outline-offset: 2px;
-}
+    .academic-container {
 
+        width:
+            calc(100% - 28px);
 
-/* ============================================================
-   59. TABLET
-   ============================================================ */
-
-@media (max-width: 1050px) {
-
-    .academic-hero {
-        grid-template-columns: minmax(0, 1.2fr) minmax(230px, 0.8fr);
-
-        padding: 38px 34px;
+        max-width: none;
     }
 
-    .academic-hero h1 {
-        font-size: clamp(2.5rem, 5.5vw, 4rem);
+    .academic-hero-main {
+
+        grid-template-columns:
+            minmax(0, 1fr)
+            minmax(240px, .62fr);
+
+        gap: 25px;
     }
 
     .academic-category-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+
+        grid-template-columns:
+            repeat(
+                2,
+                minmax(0, 1fr)
+            );
     }
 
-    .published-answer-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+    .ask-question-layout {
+
+        grid-template-columns:
+            1fr;
     }
 
-    .ask-question-card {
-        grid-template-columns: minmax(230px, 0.68fr) minmax(0, 1.32fr);
+    .ask-question-intro {
+
+        display: grid;
+
+        grid-template-columns:
+            minmax(0, 1fr)
+            minmax(0, .9fr);
+
+        gap: 25px;
     }
 
+    .ask-intro-top {
+
+        margin-bottom: 12px;
+    }
+
+    .ask-process {
+
+        margin-top: 0;
+
+        padding-top: 0;
+
+        border-top: none;
+    }
 }
 
 
 /* ============================================================
-   60. MOBILE
+   TABLET / SMALL DESKTOP
+   ============================================================ */
+
+@media (max-width: 900px) {
+
+    .academic-hero-main {
+
+        grid-template-columns: 1fr;
+    }
+
+    .academic-hero-summary {
+
+        grid-template-columns:
+            repeat(
+                3,
+                minmax(0, 1fr)
+            );
+    }
+
+    .hero-summary-card {
+
+        min-height: 62px;
+    }
+
+    .published-answer-grid {
+
+        grid-template-columns: 1fr;
+    }
+}
+
+
+/* ============================================================
+   MOBILE
    ============================================================ */
 
 @media (max-width: 768px) {
 
-    .academic-page {
-        padding-bottom: 35px;
+    .academic-container {
+
+        width:
+            calc(100% - 28px);
+
+        max-width: none;
     }
 
 
     /* HERO */
 
     .academic-hero {
-        width: calc(100% - 20px);
 
-        min-height: auto;
+        margin-bottom: 20px;
 
-        margin-top: 14px;
+        padding:
+            22px;
 
-        grid-template-columns: 1fr;
-
-        gap: 30px;
-
-        padding: 28px 22px;
-
-        border-radius: 20px;
+        border-radius: 24px;
     }
 
-    .academic-hero h1 {
-        font-size: clamp(2.35rem, 10.5vw, 3.35rem);
-    }
-
-    .academic-hero-content > p {
-        margin-top: 17px;
-
-        font-size: 0.83rem;
-        line-height: 1.65;
-    }
-
-    .academic-hero-actions {
-        margin-top: 21px;
-    }
-
-    .academic-primary-btn,
-    .academic-secondary-btn {
-        min-height: 44px;
-
-        padding: 0 15px;
-
-        font-size: 0.72rem;
-    }
-
-
-    /* HERO VISUAL */
-
-    .academic-hero-visual {
-        min-height: 215px;
-    }
-
-    .academic-book-icon {
-        width: 76px;
-        height: 76px;
-
-        border-radius: 20px;
-
-        font-size: 1.6rem;
-    }
-
-    .orbit-one {
-        width: 205px;
-        height: 205px;
-    }
-
-    .orbit-two {
-        width: 145px;
-        height: 145px;
-    }
-
-    .card-top {
-        top: 15px;
-        right: 6px;
-    }
-
-    .card-bottom {
-        left: 5px;
-        bottom: 15px;
-    }
-
-
-    /* HEADINGS */
-
-    .section-heading {
-        width: calc(100% - 20px);
-
-        display: block;
+    .academic-hero-top {
 
         margin-bottom: 15px;
     }
 
-    .section-heading h2 {
-        font-size: 1.72rem;
+    .academic-hero-label {
+
+        font-size: .67rem;
     }
 
-    .section-heading p {
-        font-size: 0.75rem;
+    .academic-hero-icon {
+
+        width: 36px;
+        height: 36px;
+
+        border-radius: 12px;
     }
 
+    .academic-hero-status {
 
-    /* CATEGORIES */
+        padding:
+            7px
+            10px;
 
-    .academic-categories-section {
-        margin-top: 33px;
+        font-size: .62rem;
     }
 
-    .academic-category-grid {
-        width: calc(100% - 20px);
+    .academic-hero-main {
+
+        grid-template-columns: 1fr;
+
+        gap: 18px;
+    }
+
+    .academic-hero h1 {
+
+        font-size:
+            clamp(
+                1.55rem,
+                7vw,
+                2.05rem
+            );
+
+        line-height: 1.07;
+    }
+
+    .academic-hero-content > p {
+
+        font-size: .76rem;
+
+        line-height: 1.5;
+    }
+
+    .academic-hero-actions {
+
+        margin-top: 16px;
+    }
+
+    .academic-primary-btn,
+    .academic-secondary-btn {
+
+        min-height: 45px;
+
+        font-size: .73rem;
+    }
+
+    .academic-hero-summary {
 
         grid-template-columns: 1fr;
 
         gap: 8px;
     }
 
-    .academic-category-card {
-        min-height: 91px;
+    .hero-summary-card {
 
-        padding: 14px;
+        min-height: 57px;
+
+        padding:
+            10px
+            12px;
     }
 
-    .category-icon {
-        width: 42px;
-        height: 42px;
+    .hero-summary-icon {
 
-        flex-basis: 42px;
+        width: 36px;
+        height: 36px;
+
+        border-radius: 12px;
+    }
+
+    .hero-summary-card strong {
+
+        font-size: .72rem;
+    }
+
+    .academic-hero-footer {
+
+        gap: 7px;
+
+        margin-top: 17px;
+
+        padding-top: 13px;
+    }
+
+    .hero-footer-item {
+
+        min-height: 29px;
+
+        padding:
+            6px
+            9px;
+
+        font-size: .61rem;
+    }
+
+
+    /* SECTIONS */
+
+    .academic-categories-section,
+    .academic-faq-section,
+    .published-answers-section {
+
+        padding:
+            23px
+            21px;
+
+        border-radius: 23px;
+    }
+
+    .section-heading {
+
+        gap: 12px;
+
+        margin-bottom: 18px;
+    }
+
+    .section-heading-icon {
+
+        width: 43px;
+        height: 43px;
+
+        border-radius: 14px;
+    }
+
+    .section-heading h2 {
+
+        font-size: 1.15rem;
+    }
+
+    .section-heading p {
+
+        font-size: .74rem;
+    }
+
+    .section-heading > div:last-child > span {
+
+        font-size: .64rem;
+    }
+
+
+    /* CATEGORIES */
+
+    .academic-category-grid {
+
+        grid-template-columns: 1fr;
+
+        gap: 9px;
+    }
+
+    .academic-category-card {
+
+        min-height: 69px;
+
+        border-radius: 16px;
     }
 
 
     /* SEARCH */
 
-    .academic-search-section {
-        width: calc(100% - 20px);
-
-        margin-top: 19px;
-    }
-
     .academic-search-box {
-        min-height: 53px;
+
+        min-height: 54px;
+
+        border-radius: 16px;
     }
 
     .academic-search-box input {
-        height: 51px;
 
-        font-size: 0.75rem;
-    }
-
-    .academic-search-icon {
-        width: 45px;
-
-        flex-basis: 45px;
+        font-size: .77rem;
     }
 
 
     /* FAQ */
 
-    .academic-faq-section {
-        margin-top: 35px;
-    }
-
     .faq-heading {
-        display: block;
+
+        flex-wrap: wrap;
     }
 
-    .view-all-btn {
-        margin-top: 14px;
+    .faq-heading .view-all-btn {
+
+        margin-left: 55px;
+
+        margin-top: -5px;
     }
 
     .academic-filter-row {
-        width: calc(100% - 20px);
-
-        flex-wrap: nowrap;
 
         overflow-x: auto;
 
-        padding-bottom: 3px;
+        flex-wrap: nowrap;
+
+        padding-bottom: 13px;
 
         scrollbar-width: none;
     }
 
     .academic-filter-row::-webkit-scrollbar {
+
         display: none;
     }
 
     .academic-filter {
-        flex: 0 0 auto;
-    }
 
-    .academic-faq-list {
-        width: calc(100% - 20px);
+        flex: 0 0 auto;
+
+        white-space: nowrap;
     }
 
     .academic-faq-question {
-        grid-template-columns: 30px minmax(0, 1fr) 26px;
 
-        gap: 9px;
-
-        min-height: 61px;
-
-        padding: 12px;
-    }
-
-    .academic-faq-number {
-        width: 28px;
-        height: 28px;
+        padding:
+            13px;
     }
 
     .academic-faq-question-text {
-        font-size: 0.79rem;
+
+        font-size: .73rem;
     }
 
-    .academic-faq-answer {
-        padding: 0 12px 17px 51px;
+    .academic-faq-answer-content {
+
+        padding:
+            0
+            13px
+            15px
+            57px;
+
+        font-size: .72rem;
     }
 
-    .academic-faq-answer p {
-        font-size: 0.73rem;
-    }
 
+    /* ASK */
 
-    /* ASK QUESTION */
-
-    .ask-question-section {
-        margin-top: 38px;
-    }
-
-    .ask-question-card {
-        width: calc(100% - 20px);
+    .ask-question-layout {
 
         grid-template-columns: 1fr;
 
-        gap: 10px;
+        gap: 13px;
     }
 
     .ask-question-intro {
-        min-height: auto;
 
-        padding: 23px 20px;
+        display: block;
+
+        padding:
+            22px;
+
+        border-radius: 23px;
     }
 
-    .ask-question-intro h2 {
-        font-size: 1.7rem;
+    .ask-process {
+
+        margin-top: 18px;
+
+        padding-top: 15px;
+
+        border-top:
+            1px solid
+            rgba(255, 255, 255, .10);
     }
 
-    .response-note {
-        margin-top: 20px;
-        padding-top: 17px;
+    .academic-question-form-card {
+
+        padding:
+            23px
+            21px;
+
+        border-radius: 23px;
     }
 
-    .academic-question-form {
-        padding: 20px 18px;
+    .form-card-heading {
 
-        border-radius: 16px;
+        margin-bottom: 18px;
+    }
+
+    .form-card-heading h3 {
+
+        font-size: 1.08rem;
     }
 
     .form-row {
+
         grid-template-columns: 1fr;
 
         gap: 0;
-
-        margin-bottom: 0;
     }
 
     .form-row .form-field {
+
         margin-bottom: 15px;
+    }
+
+    .input-wrapper input,
+    .select-wrapper select {
+
+        min-height: 51px;
+    }
+
+    .textarea-wrapper textarea {
+
+        min-height: 140px;
     }
 
 
     /* PUBLISHED */
 
-    .published-answers-section {
-        margin-top: 39px;
-    }
-
     .published-answer-grid {
-        width: calc(100% - 20px);
 
         grid-template-columns: 1fr;
-
-        gap: 9px;
-    }
-
-    .published-answer-card {
-        min-height: 0;
     }
 
 
-    /* FINAL CTA */
+    /* CTA */
 
     .academic-final-cta {
-        width: calc(100% - 20px);
 
-        grid-template-columns: 47px minmax(0, 1fr);
+        grid-template-columns:
+            auto
+            minmax(0, 1fr);
 
-        gap: 13px;
+        padding:
+            19px;
 
-        padding: 20px;
-
-        min-height: auto;
+        border-radius: 21px;
     }
 
-    .final-cta-icon {
-        width: 46px;
-        height: 46px;
+    .academic-final-cta
+    .academic-primary-btn {
 
-        border-radius: 12px;
-    }
-
-    .final-cta-copy h2 {
-        font-size: 1.25rem;
-    }
-
-    .final-cta-copy p {
-        font-size: 0.68rem;
-    }
-
-    .academic-final-cta .academic-primary-btn {
         grid-column: 1 / -1;
 
         width: 100%;
@@ -2409,71 +3374,417 @@
 
 
 /* ============================================================
-   61. SMALL MOBILE
+   SMALL PHONES
    ============================================================ */
 
-@media (max-width: 480px) {
+@media (max-width: 600px) {
+
+    .academic-container {
+
+        width:
+            calc(100% - 20px);
+
+        max-width: none;
+    }
+
+    .academic-page {
+
+        padding-left: 0;
+
+        padding-right: 0;
+    }
 
     .academic-hero {
-        padding: 25px 18px;
+
+        padding:
+            19px;
+
+        border-radius: 21px;
     }
 
     .academic-hero h1 {
-        font-size: 2.25rem;
+
+        font-size: 1.45rem;
+    }
+
+    .academic-hero-content > p {
+
+        font-size: .73rem;
     }
 
     .academic-hero-actions {
+
         display: grid;
 
         grid-template-columns: 1fr;
+
+        width: 100%;
     }
 
     .academic-primary-btn,
     .academic-secondary-btn {
+
         width: 100%;
     }
 
-    .academic-floating-card {
-        min-width: 82px;
+    .academic-hero-status {
 
-        padding: 8px 9px;
+        display: none;
+    }
 
-        font-size: 0.64rem;
+    .academic-categories-section,
+    .academic-faq-section,
+    .published-answers-section {
+
+        padding:
+            20px
+            17px;
+
+        border-radius: 21px;
+    }
+
+    .section-heading-icon {
+
+        width: 40px;
+        height: 40px;
+
+        border-radius: 13px;
     }
 
     .section-heading h2 {
-        font-size: 1.55rem;
+
+        font-size: .95rem;
+    }
+
+    .section-heading p {
+
+        font-size: .70rem;
+    }
+
+    .section-heading > div:last-child > span {
+
+        font-size: .60rem;
     }
 
     .academic-category-card {
-        min-height: 87px;
+
+        min-height: 65px;
+
+        padding:
+            11px;
+
+        border-radius: 15px;
     }
 
-    .academic-category-card .category-copy strong {
-        font-size: 0.82rem;
+    .category-icon {
+
+        width: 39px;
+        height: 39px;
+
+        border-radius: 12px;
     }
 
-    .academic-category-card .category-copy small {
-        font-size: 0.64rem;
+    .category-copy strong {
+
+        font-size: .72rem;
     }
 
-    .academic-question-form {
-        padding: 18px 15px;
+    .category-copy small {
+
+        font-size: .61rem;
     }
 
-    .ask-question-intro {
-        padding: 21px 18px;
+    .category-arrow {
+
+        width: 27px;
+        height: 27px;
     }
 
-    .ask-question-intro h2 {
-        font-size: 1.55rem;
+    .academic-search-box {
+
+        padding-left: 11px;
+    }
+
+    .academic-faq-question {
+
+        gap: 9px;
+
+        padding:
+            12px;
+    }
+
+    .academic-faq-number {
+
+        width: 29px;
+        height: 29px;
+
+        border-radius: 10px;
+
+        font-size: .59rem;
+    }
+
+    .academic-faq-question-text {
+
+        font-size: .69rem;
+    }
+
+    .academic-faq-chevron {
+
+        width: 26px;
+        height: 26px;
+    }
+
+    .academic-faq-answer-content {
+
+        padding-left: 50px;
+
+        font-size: .68rem;
+    }
+
+    .faq-heading .view-all-btn {
+
+        margin-left: 51px;
+    }
+
+    .academic-question-form-card {
+
+        padding:
+            20px
+            17px;
+
+        border-radius: 21px;
+    }
+
+    .form-card-heading {
+
+        align-items: flex-start;
+
+        flex-direction: column;
+
+        gap: 5px;
+    }
+
+    .form-card-heading h3 {
+
+        font-size: .98rem;
+    }
+
+    .form-required-note {
+
+        font-size: .59rem;
+    }
+
+    .form-field label {
+
+        font-size: .68rem;
+    }
+
+    .input-wrapper input,
+    .select-wrapper select,
+    .textarea-wrapper textarea {
+
+        font-size: .71rem;
+    }
+
+    .consent-text {
+
+        font-size: .62rem;
+    }
+
+    .ask-question-intro h3 {
+
+        font-size: 1.1rem;
+    }
+
+    .ask-question-intro > p {
+
+        font-size: .71rem;
+    }
+
+    .published-answer-card {
+
+        padding:
+            17px;
+    }
+
+    .published-answer-title {
+
+        font-size: .79rem;
+    }
+
+    .published-answer-copy {
+
+        font-size: .68rem;
+    }
+
+    .academic-final-cta {
+
+        padding:
+            17px;
+    }
+
+    .final-cta-icon {
+
+        width: 44px;
+        height: 44px;
+
+        border-radius: 14px;
+    }
+
+    .final-cta-copy h2 {
+
+        font-size: .95rem;
+    }
+
+    .final-cta-copy p {
+
+        font-size: .66rem;
     }
 
 }
 
 
 /* ============================================================
-   62. REDUCED MOTION
+   VERY SMALL PHONES
+   ============================================================ */
+
+@media (max-width: 400px) {
+
+    .academic-container {
+
+        width:
+            calc(100% - 18px);
+    }
+
+    .academic-hero {
+
+        padding:
+            17px;
+    }
+
+    .academic-hero h1 {
+
+        font-size: 1.3rem;
+    }
+
+    .academic-hero-content > p {
+
+        font-size: .69rem;
+    }
+
+    .academic-hero-footer {
+
+        display: grid;
+
+        grid-template-columns:
+            repeat(
+                2,
+                minmax(0, 1fr)
+            );
+    }
+
+    .hero-footer-item {
+
+        justify-content: center;
+
+        width: 100%;
+    }
+
+    .academic-categories-section,
+    .academic-faq-section,
+    .published-answers-section {
+
+        padding:
+            18px
+            14px;
+    }
+
+    .section-heading h2 {
+
+        font-size: .88rem;
+    }
+
+    .academic-question-form-card {
+
+        padding:
+            18px
+            14px;
+    }
+
+}
+
+
+/* ============================================================
+   DARK THEME COMPATIBILITY
+   ============================================================ */
+
+[data-theme="dark"] .academic-hero,
+[data-theme="dark"] .academic-categories-section,
+[data-theme="dark"] .academic-faq-section,
+[data-theme="dark"] .academic-question-form-card,
+[data-theme="dark"] .published-answers-section,
+[data-theme="dark"] .academic-search-box,
+[data-theme="dark"] .academic-final-cta {
+
+    background:
+        linear-gradient(
+            135deg,
+            #17131b,
+            #211925
+        );
+
+    border-color:
+        rgba(255, 255, 255, .08);
+}
+
+[data-theme="dark"] .academic-hero h1,
+[data-theme="dark"] .section-heading h2,
+[data-theme="dark"] .category-copy strong,
+[data-theme="dark"] .academic-faq-question-text,
+[data-theme="dark"] .form-card-heading h3,
+[data-theme="dark"] .published-answer-title,
+[data-theme="dark"] .final-cta-copy h2 {
+
+    color: #f5f5f5;
+}
+
+[data-theme="dark"] .academic-hero-content > p,
+[data-theme="dark"] .section-heading p,
+[data-theme="dark"] .category-copy small,
+[data-theme="dark"] .academic-faq-answer-content,
+[data-theme="dark"] .published-answer-copy,
+[data-theme="dark"] .final-cta-copy p,
+[data-theme="dark"] .consent-text {
+
+    color: #aaa3b1;
+}
+
+[data-theme="dark"] .academic-category-card,
+[data-theme="dark"] .academic-faq-item,
+[data-theme="dark"] .published-answer-card {
+
+    background: #1c1820;
+
+    border-color:
+        rgba(255, 255, 255, .08);
+}
+
+[data-theme="dark"] .academic-search-box input,
+[data-theme="dark"] .input-wrapper input,
+[data-theme="dark"] .select-wrapper select,
+[data-theme="dark"] .textarea-wrapper textarea {
+
+    background: #1c1820;
+
+    color: #f5f5f5;
+
+    border-color:
+        rgba(255, 255, 255, .10);
+}
+
+
+/* ============================================================
+   REDUCED MOTION
    ============================================================ */
 
 @media (prefers-reduced-motion: reduce) {
@@ -2481,9 +3792,11 @@
     .academic-page *,
     .academic-page *::before,
     .academic-page *::after {
-        transition-duration: 0.01ms !important;
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-    }
 
+        animation: none !important;
+
+        transition: none !important;
+
+        scroll-behavior: auto !important;
+    }
 }
