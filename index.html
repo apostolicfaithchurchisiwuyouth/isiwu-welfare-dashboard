@@ -10,16 +10,6 @@
         content="width=device-width, initial-scale=1.0, viewport-fit=cover"
     >
 
-    <meta
-        name="theme-color"
-        content="#ea580c"
-    >
-
-    <meta
-        name="description"
-        content="AFC Isiu Youth Portal — Learn, connect, grow and stay informed."
-    >
-
     <title>AFC Isiu Youth Portal</title>
 
 
@@ -30,6 +20,11 @@
     <link
         rel="manifest"
         href="/manifest.json"
+    >
+
+    <meta
+        name="theme-color"
+        content="#ea580c"
     >
 
     <meta
@@ -65,7 +60,7 @@
 
     <link
         rel="apple-touch-icon"
-        href="/images/pwa-icon-192.png"
+        href="/images/logo.png"
     >
 
 
@@ -111,7 +106,25 @@
 
 
     <!-- =====================================================
-         GLOBAL CSS
+         LIBRARIES
+    ====================================================== -->
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/chart.js"
+    ></script>
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"
+    ></script>
+
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/aos@2.3.4/dist/aos.css"
+    >
+
+
+    <!-- =====================================================
+         MAIN CSS
     ====================================================== -->
 
     <link
@@ -124,21 +137,578 @@
         href="/css/layout.css"
     >
 
-    <!-- Homepage-specific styles -->
-    <link
-        rel="stylesheet"
-        href="/css/home.css"
-    >
-
 
     <!-- =====================================================
-         AOS
+         NOTIFICATION PANEL CSS
+         
+         Kept here intentionally for now.
+         This guarantees the notification component remains
+         styled while the shared shell is being migrated.
     ====================================================== -->
 
-    <link
-        href="https://unpkg.com/aos@2.3.4/dist/aos.css"
-        rel="stylesheet"
-    >
+    <style>
+
+        /* =====================================================
+           NOTIFICATION WRAPPER
+        ====================================================== */
+
+        .notification-wrapper {
+
+            position: relative;
+
+        }
+
+
+        /* =====================================================
+           NOTIFICATION PANEL
+        ====================================================== */
+
+        .notification-panel {
+
+            position: absolute;
+
+            top: calc(100% + 14px);
+
+            right: 0;
+
+            width: min(
+                350px,
+                calc(100vw - 30px)
+            );
+
+            background:
+                var(--card-bg, #ffffff);
+
+            border: 1px solid
+                var(
+                    --border-color,
+                    rgba(15, 23, 42, 0.08)
+                );
+
+            border-radius: 20px;
+
+            padding: 20px;
+
+            box-shadow:
+                0 20px 50px
+                rgba(0, 0, 0, 0.15);
+
+            z-index: 1000;
+
+            opacity: 0;
+
+            visibility: hidden;
+
+            transform:
+                translateY(-8px)
+                scale(0.98);
+
+            transition:
+                opacity 0.2s ease,
+                visibility 0.2s ease,
+                transform 0.2s ease;
+
+        }
+
+
+        .notification-panel.show {
+
+            opacity: 1;
+
+            visibility: visible;
+
+            transform:
+                translateY(0)
+                scale(1);
+
+        }
+
+
+        /* =====================================================
+           PANEL HEADER
+        ====================================================== */
+
+        .notification-panel-header {
+
+            display: flex;
+
+            align-items: flex-start;
+
+            justify-content: space-between;
+
+            gap: 14px;
+
+            margin-bottom: 16px;
+
+        }
+
+
+        .notification-panel-heading {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+        }
+
+
+        .notification-panel-icon {
+
+            width: 42px;
+
+            height: 42px;
+
+            flex-shrink: 0;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            border-radius: 13px;
+
+            background:
+                rgba(234, 88, 12, 0.10);
+
+            color: #ea580c;
+
+            font-size: 17px;
+
+        }
+
+
+        .notification-panel-title {
+
+            margin: 0;
+
+            font-family:
+                "Bricolage Grotesque",
+                sans-serif;
+
+            font-size: 1rem;
+
+            font-weight: 700;
+
+            color:
+                var(
+                    --text-primary,
+                    #171717
+                );
+
+        }
+
+
+        .notification-panel-subtitle {
+
+            margin: 3px 0 0;
+
+            font-family:
+                "DM Sans",
+                sans-serif;
+
+            font-size: 0.78rem;
+
+            line-height: 1.4;
+
+            color:
+                var(
+                    --text-secondary,
+                    #737373
+                );
+
+        }
+
+
+        /* =====================================================
+           CLOSE BUTTON
+        ====================================================== */
+
+        .notification-panel-close {
+
+            width: 32px;
+
+            height: 32px;
+
+            border: 0;
+
+            border-radius: 10px;
+
+            background:
+                var(
+                    --surface-bg,
+                    #f5f5f5
+                );
+
+            color:
+                var(
+                    --text-secondary,
+                    #737373
+                );
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            cursor: pointer;
+
+            transition:
+                background 0.2s ease,
+                color 0.2s ease;
+
+        }
+
+
+        .notification-panel-close:hover {
+
+            background: #eeeeee;
+
+            color: #171717;
+
+        }
+
+
+        /* =====================================================
+           NOTIFICATION STATUS
+        ====================================================== */
+
+        .notification-status {
+
+            display: flex;
+
+            align-items: flex-start;
+
+            gap: 10px;
+
+            padding: 13px 14px;
+
+            border-radius: 14px;
+
+            background:
+                var(
+                    --surface-bg,
+                    #f7f7f7
+                );
+
+            margin-bottom: 14px;
+
+        }
+
+
+        .notification-status i {
+
+            margin-top: 2px;
+
+            font-size: 14px;
+
+            color: #737373;
+
+        }
+
+
+        .notification-status-text {
+
+            font-family:
+                "DM Sans",
+                sans-serif;
+
+            font-size: 0.78rem;
+
+            line-height: 1.45;
+
+            color:
+                var(
+                    --text-secondary,
+                    #525252
+                );
+
+        }
+
+
+        /* =====================================================
+           ENABLE BUTTON
+        ====================================================== */
+
+        .notification-enable-btn {
+
+            width: 100%;
+
+            min-height: 46px;
+
+            border: 0;
+
+            border-radius: 13px;
+
+            padding: 11px 16px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            gap: 9px;
+
+            background: #ea580c;
+
+            color: #ffffff;
+
+            font-family:
+                "DM Sans",
+                sans-serif;
+
+            font-size: 0.84rem;
+
+            font-weight: 700;
+
+            cursor: pointer;
+
+            transition:
+                transform 0.2s ease,
+                opacity 0.2s ease,
+                background 0.2s ease;
+
+        }
+
+
+        .notification-enable-btn:hover {
+
+            transform:
+                translateY(-1px);
+
+            background: #c2410c;
+
+        }
+
+
+        .notification-enable-btn:active {
+
+            transform:
+                translateY(0);
+
+        }
+
+
+        .notification-enable-btn:disabled {
+
+            opacity: 0.65;
+
+            cursor: wait;
+
+            transform: none;
+
+        }
+
+
+        /* =====================================================
+           DISABLE BUTTON
+        ====================================================== */
+
+        .notification-disable-btn {
+
+            width: 100%;
+
+            min-height: 42px;
+
+            margin-top: 9px;
+
+            border: 1px solid
+                var(
+                    --border-color,
+                    #e5e5e5
+                );
+
+            border-radius: 12px;
+
+            padding: 10px 16px;
+
+            background: transparent;
+
+            color:
+                var(
+                    --text-secondary,
+                    #525252
+                );
+
+            font-family:
+                "DM Sans",
+                sans-serif;
+
+            font-size: 0.8rem;
+
+            font-weight: 600;
+
+            cursor: pointer;
+
+            transition:
+                background 0.2s ease,
+                color 0.2s ease;
+
+        }
+
+
+        .notification-disable-btn:hover {
+
+            background:
+                var(
+                    --surface-bg,
+                    #f5f5f5
+                );
+
+            color:
+                var(
+                    --text-primary,
+                    #171717
+                );
+
+        }
+
+
+        /* =====================================================
+           HIDDEN
+        ====================================================== */
+
+        .notification-panel [hidden] {
+
+            display: none !important;
+
+        }
+
+
+        /* =====================================================
+           MOBILE
+        ====================================================== */
+
+        @media (max-width: 600px) {
+
+            .notification-panel {
+
+                position: fixed;
+
+                top: 74px;
+
+                right: 15px;
+
+                left: 15px;
+
+                width: auto;
+
+                max-width: none;
+
+            }
+
+        }
+
+
+        /* =====================================================
+           DARK MODE
+        ====================================================== */
+
+        [data-theme="dark"]
+        .notification-panel {
+
+            background: #171020;
+
+            border-color:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.08
+                );
+
+            box-shadow:
+                0 20px 50px
+                rgba(0, 0, 0, 0.45);
+
+        }
+
+
+        [data-theme="dark"]
+        .notification-panel-title {
+
+            color: #ffffff;
+
+        }
+
+
+        [data-theme="dark"]
+        .notification-panel-subtitle,
+
+        [data-theme="dark"]
+        .notification-status-text {
+
+            color: #b8b1c2;
+
+        }
+
+
+        [data-theme="dark"]
+        .notification-status {
+
+            background:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.05
+                );
+
+        }
+
+
+        [data-theme="dark"]
+        .notification-panel-close {
+
+            background:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.06
+                );
+
+            color: #b8b1c2;
+
+        }
+
+
+        [data-theme="dark"]
+        .notification-panel-close:hover {
+
+            background:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.10
+                );
+
+            color: #ffffff;
+
+        }
+
+
+        [data-theme="dark"]
+        .notification-disable-btn {
+
+            border-color:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.12
+                );
+
+            color: #b8b1c2;
+
+        }
+
+    </style>
 
 </head>
 
@@ -147,24 +717,17 @@
 
 
     <!-- =====================================================
-         APPLICATION LAYOUT
-         
-         IMPORTANT:
-         The shared shell is now loaded dynamically.
-         
-         sidebar.html
-         topbar.html
-         notification.html
-         bottom-nav.html
-         
-         are injected by layout.js.
+         APPLICATION SHELL
     ====================================================== -->
 
     <div class="app-layout">
 
 
         <!-- =================================================
-             SHARED SIDEBAR
+             SIDEBAR
+             
+             Loaded from:
+             /components/sidebar.html
         ================================================== -->
 
         <div id="app-sidebar"></div>
@@ -178,578 +741,329 @@
 
 
             <!-- =================================================
-                 SHARED TOPBAR
+                 TOPBAR
+                 
+                 Loaded from:
+                 /components/topbar.html
             ================================================== -->
 
             <div id="app-topbar"></div>
 
 
             <!-- =================================================
-                 HOMEPAGE CONTENT
+                 DASHBOARD MAIN CONTENT
                  
                  IMPORTANT:
-                 Everything inside this section belongs to
-                 the homepage. It is NOT part of the shared shell.
+                 This is the original homepage structure.
+                 Do NOT replace these classes unless the
+                 dashboard CSS is changed intentionally.
             ================================================== -->
 
-            <main class="dashboard-content home-page">
+            <main class="dashboard-main">
 
-
-                <!-- =================================================
-                     HERO / WELCOME
-                ================================================== -->
 
                 <section
-                    class="home-hero"
-                    id="homeHero"
+                    class="hub"
+                    data-aos="fade-up"
                 >
 
-                    <div class="home-hero-content">
+
+                    <div class="hub-grid">
 
 
-                        <!-- =================================================
-                             GUEST HERO
-                        ================================================== -->
-
-                        <div
-                            id="guestHero"
-                            class="hero-state"
-                        >
-
-                            <span class="section-label">
-                                Welcome to AFC Isiu Youth
-                            </span>
-
-
-                            <h1>
-                                Learn.
-                                <span>Grow.</span>
-                                Connect.
-                            </h1>
-
-
-                            <p>
-                                Your digital space for Bible lessons,
-                                quizzes, youth activities, memories
-                                and staying connected with the church.
-                            </p>
-
-
-                            <div class="hero-actions">
-
-                                <a
-                                    href="/login#register"
-                                    class="primary-action-button"
-                                >
-
-                                    <i class="fa-solid fa-user-plus"></i>
-
-                                    <span>
-                                        Create Account
-                                    </span>
-
-                                    <i class="fa-solid fa-arrow-right"></i>
-
-                                </a>
-
-
-                                <a
-                                    href="/login"
-                                    class="secondary-action-button"
-                                >
-
-                                    <i class="fa-solid fa-right-to-bracket"></i>
-
-                                    <span>
-                                        Login
-                                    </span>
-
-                                </a>
-
-                            </div>
-
-                        </div>
-
-
-                        <!-- =================================================
-                             MEMBER HERO
-                             
-                             This remains available for the existing
-                             authentication/home controller.
-                        ================================================== -->
-
-                        <div
-                            id="memberHero"
-                            class="hero-state"
-                            hidden
-                        >
-
-                            <span class="section-label">
-                                Welcome back
-                            </span>
-
-
-                            <h1>
-                                <span id="memberGreeting">
-                                    Welcome back.
-                                </span>
-                            </h1>
-
-
-                            <p>
-                                Continue your journey of learning,
-                                growing and staying connected with
-                                AFC Isiu Youth.
-                            </p>
-
-
-                            <div class="hero-actions">
-
-                                <a
-                                    href="/pages/lessons"
-                                    class="primary-action-button"
-                                >
-
-                                    <i class="fa-solid fa-book-open"></i>
-
-                                    <span>
-                                        Continue Learning
-                                    </span>
-
-                                    <i class="fa-solid fa-arrow-right"></i>
-
-                                </a>
-
-
-                                <a
-                                    href="/pages/profile"
-                                    class="secondary-action-button"
-                                >
-
-                                    <i class="fa-solid fa-user"></i>
-
-                                    <span>
-                                        My Profile
-                                    </span>
-
-                                </a>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </section>
-
-
-                <!-- =================================================
-                     QUICK ACCESS
-                ================================================== -->
-
-                <section class="dashboard-section">
-
-                    <div class="section-heading">
-
-                        <div>
-
-                            <span class="section-label">
-                                Explore
-                            </span>
-
-                            <h2>
-                                What would you like to do?
-                            </h2>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="quick-access-grid">
-
-
-                        <!-- LESSONS -->
+                        <!-- =====================================
+                             SUNDAY SCHOOL
+                        ====================================== -->
 
                         <a
                             href="/pages/lessons"
-                            class="quick-access-card"
+                            class="hub-item featured"
                         >
 
-                            <div class="quick-access-icon">
-                                <i class="fa-solid fa-book-open"></i>
+                            <div class="hub-badge">
+                                UPDATED
                             </div>
 
-                            <div class="quick-access-copy">
 
-                                <h3>
-                                    Sunday School Lessons
-                                </h3>
+                            <div class="hub-header">
 
-                                <p>
-                                    Read this week's lesson and
-                                    grow in God's Word.
-                                </p>
+                                <div
+                                    class="hub-icon lesson-icon"
+                                >
+
+                                    <i
+                                        class="fa-solid fa-book"
+                                    ></i>
+
+                                </div>
+
+
+                                <span class="hub-count">
+                                    Every Week!
+                                </span>
 
                             </div>
 
-                            <i class="fa-solid fa-arrow-right quick-access-arrow"></i>
+
+                            <h4>
+                                Sunday School Lesson
+                            </h4>
+
+
+                            <p>
+                                Study the current Sunday school lesson
+                                and grow spiritually.
+                            </p>
 
                         </a>
 
 
-                        <!-- SLC QUIZ -->
+                        <!-- =====================================
+                             QUIZ
+                        ====================================== -->
 
                         <a
                             href="/pages/slcquiz"
-                            class="quick-access-card"
+                            class="hub-item"
                             data-online-only
                             data-feature="Weekly SLC Quiz"
                         >
 
-                            <div class="quick-access-icon">
-                                <i class="fa-solid fa-clipboard-question"></i>
-                            </div>
+                            <div class="hub-header">
 
-                            <div class="quick-access-copy">
+                                <div
+                                    class="hub-icon quiz-icon"
+                                >
 
-                                <h3>
-                                    Take SLC Quiz
-                                </h3>
+                                    <i
+                                        class="fa-solid fa-clipboard-question"
+                                    ></i>
 
-                                <p>
-                                    Test what you learned from
-                                    this week's Sunday School lesson.
-                                </p>
+                                </div>
 
                             </div>
 
-                            <i class="fa-solid fa-arrow-right quick-access-arrow"></i>
+
+                            <h4>
+                                Take SLC Quiz
+                            </h4>
+
+
+                            <p>
+                                Answer questions from our weekly
+                                Sunday school lessons.
+                            </p>
 
                         </a>
 
 
-                        <!-- RESULTS -->
-
-                        <a
-                            href="/pages/results"
-                            class="quick-access-card"
-                            data-online-only
-                            data-feature="Growth Tracker"
-                        >
-
-                            <div class="quick-access-icon">
-                                <i class="fa-solid fa-chart-line"></i>
-                            </div>
-
-                            <div class="quick-access-copy">
-
-                                <h3>
-                                    Check Quiz Result
-                                </h3>
-
-                                <p>
-                                    Review your quiz performance
-                                    and track your growth.
-                                </p>
-
-                            </div>
-
-                            <i class="fa-solid fa-arrow-right quick-access-arrow"></i>
-
-                        </a>
-
-
-                        <!-- ACADEMIC HELP -->
-
-                        <a
-                            href="/pages/academichelp"
-                            class="quick-access-card"
-                            data-online-only
-                            data-feature="Academic"
-                        >
-
-                            <div class="quick-access-icon">
-                                <i class="fa-solid fa-graduation-cap"></i>
-                            </div>
-
-                            <div class="quick-access-copy">
-
-                                <h3>
-                                    Academic Help
-                                </h3>
-
-                                <p>
-                                    Find guidance and helpful resources
-                                    for your academic journey.
-                                </p>
-
-                            </div>
-
-                            <i class="fa-solid fa-arrow-right quick-access-arrow"></i>
-
-                        </a>
-
-
-                        <!-- GALLERY -->
-
-                        <a
-                            href="/pages/gallery"
-                            class="quick-access-card"
-                            data-online-only
-                            data-feature="Gallery"
-                        >
-
-                            <div class="quick-access-icon">
-                                <i class="fa-solid fa-images"></i>
-                            </div>
-
-                            <div class="quick-access-copy">
-
-                                <h3>
-                                    Youth Gallery
-                                </h3>
-
-                                <p>
-                                    Relive moments and memories
-                                    from AFC Isiu Youth activities.
-                                </p>
-
-                            </div>
-
-                            <i class="fa-solid fa-arrow-right quick-access-arrow"></i>
-
-                        </a>
-
-
-                        <!-- EVENTS -->
+                        <!-- =====================================
+                             EVENTS
+                        ====================================== -->
 
                         <a
                             href="/pages/events"
-                            class="quick-access-card"
+                            class="hub-item"
                             data-online-only
                             data-feature="Youth Events"
                         >
 
-                            <div class="quick-access-icon">
-                                <i class="fa-solid fa-calendar-days"></i>
-                            </div>
+                            <div class="hub-header">
 
-                            <div class="quick-access-copy">
+                                <div
+                                    class="hub-icon event-icon"
+                                >
 
-                                <h3>
-                                    Youth Events
-                                </h3>
+                                    <i
+                                        class="fa-solid fa-calendar-days"
+                                    ></i>
 
-                                <p>
-                                    Stay informed about upcoming
-                                    youth activities and programs.
-                                </p>
+                                </div>
 
                             </div>
 
-                            <i class="fa-solid fa-arrow-right quick-access-arrow"></i>
+
+                            <h4>
+                                Youth Events
+                            </h4>
+
+
+                            <p>
+                                Upcoming programmes and youth activities.
+                            </p>
 
                         </a>
 
 
-                    </div>
-
-                </section>
-
-
-                <!-- =================================================
-                     COMMUNITY / SUPPORT
-                ================================================== -->
-
-                <section class="dashboard-section">
-
-                    <div class="section-heading">
-
-                        <div>
-
-                            <span class="section-label">
-                                Community
-                            </span>
-
-                            <h2>
-                                Stay connected
-                            </h2>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="community-grid">
-
-
-                        <!-- WELFARE -->
+                        <!-- =====================================
+                             WELFARE
+                        ====================================== -->
 
                         <a
                             href="/pages/request-welfare"
-                            class="community-card"
+                            class="hub-item"
                             data-online-only
                             data-feature="Welfare"
                         >
 
-                            <div class="community-card-icon">
-                                <i class="fa-solid fa-hand-holding-heart"></i>
-                            </div>
+                            <div class="hub-header">
 
-                            <div>
+                                <div
+                                    class="hub-icon welfare-icon"
+                                >
 
-                                <h3>
-                                    Welfare
-                                </h3>
+                                    <i
+                                        class="fa-solid fa-hand-holding-heart"
+                                    ></i>
 
-                                <p>
-                                    Access welfare support when you need it.
-                                </p>
+                                </div>
 
                             </div>
 
-                            <i class="fa-solid fa-arrow-right"></i>
+
+                            <h4>
+                                Welfare
+                            </h4>
+
+
+                            <p>
+                                Request support and welfare assistance.
+                            </p>
 
                         </a>
 
 
-                        <!-- PRAYER -->
+                        <!-- =====================================
+                             PRAYER
+                        ====================================== -->
 
                         <a
                             href="/pages/prayer"
-                            class="community-card"
+                            class="hub-item"
                             data-online-only
                             data-feature="Prayer Requests"
                         >
 
-                            <div class="community-card-icon">
-                                <i class="fa-solid fa-hands-praying"></i>
-                            </div>
+                            <div class="hub-header">
 
-                            <div>
+                                <div
+                                    class="hub-icon prayer-icon"
+                                >
 
-                                <h3>
-                                    Prayer Requests
-                                </h3>
+                                    <i
+                                        class="fa-solid fa-hands-praying"
+                                    ></i>
 
-                                <p>
-                                    Share a prayer request with the youth family.
-                                </p>
+                                </div>
 
                             </div>
 
-                            <i class="fa-solid fa-arrow-right"></i>
 
-                        </a>
+                            <h4>
+                                Prayer Request
+                            </h4>
 
-
-                        <!-- SECRETARIAT -->
-
-                        <a
-                            href="/pages/program-report"
-                            class="community-card"
-                            data-online-only
-                            data-feature="Secretariat Reports"
-                        >
-
-                            <div class="community-card-icon">
-                                <i class="fa-solid fa-file-lines"></i>
-                            </div>
-
-                            <div>
-
-                                <h3>
-                                    Secretariat Reports
-                                </h3>
-
-                                <p>
-                                    Stay informed about youth programs
-                                    and ministry activities.
-                                </p>
-
-                            </div>
-
-                            <i class="fa-solid fa-arrow-right"></i>
-
-                        </a>
-
-                    </div>
-
-                </section>
-
-
-                <!-- =================================================
-                     INSTALL / PWA INFORMATION
-                ================================================== -->
-
-                <section
-                    class="dashboard-section install-promo"
-                    id="installPromo"
-                >
-
-                    <div class="install-promo-content">
-
-                        <div class="install-promo-icon">
-                            <i class="fa-solid fa-mobile-screen-button"></i>
-                        </div>
-
-                        <div class="install-promo-copy">
-
-                            <span class="section-label">
-                                Use it like an app
-                            </span>
-
-                            <h2>
-                                Install AFC Isiu Youth Portal
-                            </h2>
 
                             <p>
-                                Add the portal to your phone's home screen
-                                for quick and easy access.
+                                Send prayer requests and testimonies.
                             </p>
 
-                        </div>
+                        </a>
 
+
+                        <!-- =====================================
+                             GALLERY
+                        ====================================== -->
 
                         <a
-                            href="/pages/settings"
-                            class="secondary-action-button"
+                            href="/pages/gallery"
+                            class="hub-item"
+                            data-online-only
+                            data-feature="Gallery"
                         >
 
-                            <i class="fa-solid fa-download"></i>
+                            <div class="hub-header">
 
-                            <span>
-                                Install App
-                            </span>
+                                <div
+                                    class="hub-icon gallery-icon"
+                                >
+
+                                    <i
+                                        class="fa-solid fa-images"
+                                    ></i>
+
+                                </div>
+
+                            </div>
+
+
+                            <h4>
+                                Gallery
+                            </h4>
+
+
+                            <p>
+                                Moments from previous programmes.
+                            </p>
 
                         </a>
+
+
+                        <!-- =====================================
+                             ACADEMIC HELP
+                        ====================================== -->
+
+                        <a
+                            href="/pages/academichelp"
+                            class="hub-item"
+                            data-online-only
+                            data-feature="Academic"
+                        >
+
+                            <div class="hub-header">
+
+                                <div
+                                    class="hub-icon academic-icon"
+                                >
+
+                                    <i
+                                        class="fa-solid fa-graduation-cap"
+                                    ></i>
+
+                                </div>
+
+                            </div>
+
+
+                            <h4>
+                                Academic Help
+                            </h4>
+
+
+                            <p>
+                                Resources and practical support
+                                for your academic journey.
+                            </p>
+
+                        </a>
+
 
                     </div>
 
                 </section>
-
-
-                <!-- =================================================
-                     APP VERSION
-                ================================================== -->
-
-                <div class="app-version">
-
-                    AFC Isiu Youth Portal
-                    &nbsp;•&nbsp;
-                    Version 2.0.0
-
-                </div>
 
 
             </main>
+
 
         </div>
 
 
         <!-- =====================================================
-             SHARED MOBILE BOTTOM NAVIGATION
+             MOBILE BOTTOM NAVIGATION
+
+             Loaded from:
+             /components/bottom-nav.html
         ====================================================== -->
 
         <div id="app-bottom-nav"></div>
@@ -760,7 +1074,7 @@
 
     <!-- =========================================================
          AOS
-    ========================================================== -->
+    ========================================================= -->
 
     <script
         src="https://unpkg.com/aos@2.3.4/dist/aos.js"
@@ -768,33 +1082,44 @@
 
 
     <!-- =========================================================
-         SHARED LAYOUT LOADER
+         SHARED LAYOUT
          
-         MUST LOAD BEFORE main.js
-    ========================================================== -->
+         layout.js loads:
+         - sidebar
+         - topbar
+         - notification panel
+         - bottom navigation
+    ========================================================= -->
 
     <script src="/js/layout.js"></script>
 
 
     <!-- =========================================================
-         PWA CONTROLLER
-    ========================================================== -->
+         PWA
+         
+         PWA MUST LOAD BEFORE MAIN.JS
+    ========================================================= -->
 
     <script src="/js/pwa.js"></script>
 
 
     <!-- =========================================================
-         GLOBAL PORTAL CONTROLLER
-    ========================================================== -->
+         MAIN SHARED CONTROLLER
+    ========================================================= -->
 
     <script src="/js/main.js"></script>
 
 
     <!-- =========================================================
-         HOMEPAGE CONTROLLER
-    ========================================================== -->
-
-    <script src="/js/home.js"></script>
+         NOTIFICATION FRONTEND CONTROLLER
+         
+         The notification HTML is loaded asynchronously by
+         layout.js, so this controller waits for:
+         
+             afc:layout-ready
+         
+         before attaching its listeners.
+    ========================================================= -->
 
 
 </body>
