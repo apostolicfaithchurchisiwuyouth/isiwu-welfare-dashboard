@@ -34,6 +34,7 @@ const APP_SHELL = [
     "/",
     "/index.html",
     "/manifest.json",
+    "/favicon.ico",
 
     /* Global CSS */
     "/css/main.css",
