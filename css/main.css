@@ -693,6 +693,14 @@ header {
         );
 }
 
+.academic-icon {
+    background: linear-gradient(
+        135deg,
+        #6d28d9,
+        #ec4899
+    );
+}
+
 
 /* =========================================================
    BADGE
