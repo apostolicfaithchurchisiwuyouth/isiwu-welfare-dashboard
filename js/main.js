@@ -2,7 +2,7 @@
    AFC ISIU YOUTH PORTAL V2
    FILE: main.js
    PURPOSE: MAIN APPLICATION CONTROLLER
-   VERSION: 2.5
+   VERSION: 2.5.1
 
    RESPONSIBILITIES:
    - AOS
@@ -33,7 +33,7 @@
 
     const AFC_MAIN_CONFIG = {
 
-        VERSION: "2.5",
+        VERSION: "2.5.1",
 
         MOBILE_BREAKPOINT: 768,
 
@@ -132,241 +132,85 @@
     }
 
 
-/* ============================================================
-   AFC ISIU YOUTH PORTAL V2
-   OFFLINE CONNECTION STATUS
-   ============================================================
- *
- * PURPOSE:
- * - Show a polished offline banner only when the browser
- *   reports that the device has no network connection.
- * - Keep the banner fixed at the very top of the screen.
- * - Create enough space so it never covers the portal header.
- * - Remove the banner immediately when the connection returns.
- *
- * IMPORTANT:
- * - This section does NOT control the sidebar.
- * - This section does NOT control notifications.
- * - This section does NOT control the PWA service worker.
- * - This section does NOT change page content.
- * ============================================================ */
+    /* ============================================================
+       OFFLINE CONNECTION STATUS
+       ============================================================
 
-(function initializeOfflineBanner() {
+       PURPOSE:
+       - Show a polished offline banner only when the browser
+         reports that the device has no network connection.
+       - Keep the banner fixed at the very top of the screen.
+       - Create enough space so it never covers the portal header.
+       - Remove the banner immediately when the connection returns.
 
-    "use strict";
+       IMPORTANT:
+       - This section does NOT control the sidebar.
+       - This section does NOT control notifications.
+       - This section does NOT control the PWA service worker.
+       - This section does NOT change page content.
+       ============================================================ */
 
+    (function initializeOfflineBanner() {
 
-    /* ========================================================
-       CONSTANTS
-    ======================================================== */
-
-    const BANNER_ID =
-        "afcOfflineBanner";
-
-    const ROOT_VARIABLE =
-        "--afc-offline-banner-height";
-
-    const ACTIVE_CLASS =
-        "offline-active";
+        "use strict";
 
 
-    /* ========================================================
-       CREATE BANNER
-    ======================================================== */
+        /* ========================================================
+           CONSTANTS
+           ======================================================== */
 
-    function createOfflineBanner() {
+        const BANNER_ID =
+            "afcOfflineBanner";
 
-        let banner =
-            document.getElementById(
-                BANNER_ID
-            );
+        const ROOT_VARIABLE =
+            "--afc-offline-banner-height";
 
-
-        /*
-         * Prevent duplicate banners.
-         */
-
-        if (banner) {
-            return banner;
-        }
+        const ACTIVE_CLASS =
+            "offline-active";
 
 
-        banner =
-            document.createElement("div");
+        /* ========================================================
+           CREATE BANNER
+           ======================================================== */
+
+        function createOfflineBanner() {
+
+            let banner =
+                document.getElementById(
+                    BANNER_ID
+                );
 
 
-        banner.id =
-            BANNER_ID;
+            /*
+             * Prevent duplicate banners.
+             */
+
+            if (banner) {
+                return banner;
+            }
 
 
-        banner.className =
-            "offline-banner";
+            banner =
+                document.createElement("div");
 
 
-        banner.setAttribute(
-            "role",
-            "status"
-        );
+            banner.id =
+                BANNER_ID;
 
 
-        banner.setAttribute(
-            "aria-live",
-            "polite"
-        );
+            banner.className =
+                "offline-banner";
 
 
-        banner.setAttribute(
-            "aria-hidden",
-            "true"
-        );
-
-
-        banner.innerHTML = `
-            <div class="offline-banner-inner">
-
-                <div class="offline-banner-icon">
-                    <i
-                        class="fa-solid fa-wifi"
-                        aria-hidden="true"
-                    ></i>
-                </div>
-
-                <div class="offline-banner-copy">
-
-                    <strong>
-                        You're offline
-                    </strong>
-
-                    <span>
-                        Some features may be unavailable
-                        until you reconnect.
-                    </span>
-
-                </div>
-
-            </div>
-        `;
-
-
-        /*
-         * Put the banner at the very beginning
-         * of the document so it sits above the portal.
-         */
-
-        document.body.prepend(
-            banner
-        );
-
-
-        return banner;
-    }
-
-
-    /* ========================================================
-       UPDATE BANNER HEIGHT
-    ======================================================== */
-
-    function updateOfflineBannerHeight(
-        banner
-    ) {
-
-        if (!banner) {
-            return;
-        }
-
-
-        if (
-            !banner.classList.contains(
-                "show"
-            )
-        ) {
-
-            document.documentElement.style.setProperty(
-                ROOT_VARIABLE,
-                "0px"
-            );
-
-            return;
-        }
-
-
-        /*
-         * Measure the real rendered height.
-         *
-         * This is important on mobile because the text can
-         * wrap differently depending on screen width.
-         */
-
-        const height =
-            banner.getBoundingClientRect()
-                .height;
-
-
-        document.documentElement.style.setProperty(
-            ROOT_VARIABLE,
-            `${Math.ceil(height)}px`
-        );
-    }
-
-
-    /* ========================================================
-       SET OFFLINE STATE
-    ======================================================== */
-
-    function setOfflineState(
-        isOffline
-    ) {
-
-        const banner =
-            document.getElementById(
-                BANNER_ID
-            );
-
-
-        if (!banner) {
-            return;
-        }
-
-
-        if (isOffline) {
-
-            banner.classList.add(
-                "show"
+            banner.setAttribute(
+                "role",
+                "status"
             );
 
 
             banner.setAttribute(
-                "aria-hidden",
-                "false"
-            );
-
-
-            document.body.classList.add(
-                ACTIVE_CLASS
-            );
-
-
-            /*
-             * Wait one frame so the browser has
-             * calculated the banner's actual height.
-             */
-
-            requestAnimationFrame(
-                () => {
-
-                    updateOfflineBannerHeight(
-                        banner
-                    );
-
-                }
-            );
-
-        }
-
-        else {
-
-            banner.classList.remove(
-                "show"
+                "aria-live",
+                "polite"
             );
 
 
@@ -376,170 +220,325 @@
             );
 
 
-            document.body.classList.remove(
-                ACTIVE_CLASS
+            banner.innerHTML = `
+                <div class="offline-banner-inner">
+
+                    <div class="offline-banner-icon">
+                        <i
+                            class="fa-solid fa-wifi"
+                            aria-hidden="true"
+                        ></i>
+                    </div>
+
+                    <div class="offline-banner-copy">
+
+                        <strong>
+                            You're offline
+                        </strong>
+
+                        <span>
+                            Some features may be unavailable
+                            until you reconnect.
+                        </span>
+
+                    </div>
+
+                </div>
+            `;
+
+
+            /*
+             * Put the banner at the very beginning
+             * of the document so it sits above the portal.
+             */
+
+            document.body.prepend(
+                banner
             );
+
+
+            return banner;
+        }
+
+
+        /* ========================================================
+           UPDATE BANNER HEIGHT
+           ======================================================== */
+
+        function updateOfflineBannerHeight(
+            banner
+        ) {
+
+            if (!banner) {
+                return;
+            }
+
+
+            if (
+                !banner.classList.contains(
+                    "show"
+                )
+            ) {
+
+                document.documentElement.style.setProperty(
+                    ROOT_VARIABLE,
+                    "0px"
+                );
+
+                return;
+            }
+
+
+            /*
+             * Measure the real rendered height.
+             *
+             * This is important on mobile because the text can
+             * wrap differently depending on screen width.
+             */
+
+            const height =
+                banner.getBoundingClientRect()
+                    .height;
 
 
             document.documentElement.style.setProperty(
                 ROOT_VARIABLE,
-                "0px"
+                `${Math.ceil(height)}px`
             );
         }
-    }
 
 
-    /* ========================================================
-       CHECK CONNECTION
-    ======================================================== */
+        /* ========================================================
+           SET OFFLINE STATE
+           ======================================================== */
 
-    function updateConnectionState() {
-
-        /*
-         * navigator.onLine is the browser's current
-         * online/offline state.
-         */
-
-        const isOffline =
-            navigator.onLine === false;
-
-
-        setOfflineState(
+        function setOfflineState(
             isOffline
-        );
-    }
+        ) {
+
+            const banner =
+                document.getElementById(
+                    BANNER_ID
+                );
 
 
-    /* ========================================================
-       INITIALIZE
-    ======================================================== */
+            if (!banner) {
+                return;
+            }
 
-    function initialize() {
 
-        /*
-         * Make sure the DOM exists.
-         */
+            if (isOffline) {
 
-        if (!document.body) {
-            return;
+                banner.classList.add(
+                    "show"
+                );
+
+
+                banner.setAttribute(
+                    "aria-hidden",
+                    "false"
+                );
+
+
+                document.body.classList.add(
+                    ACTIVE_CLASS
+                );
+
+
+                /*
+                 * Wait one frame so the browser has
+                 * calculated the banner's actual height.
+                 */
+
+                requestAnimationFrame(
+                    () => {
+
+                        updateOfflineBannerHeight(
+                            banner
+                        );
+
+                    }
+                );
+
+            }
+
+            else {
+
+                banner.classList.remove(
+                    "show"
+                );
+
+
+                banner.setAttribute(
+                    "aria-hidden",
+                    "true"
+                );
+
+
+                document.body.classList.remove(
+                    ACTIVE_CLASS
+                );
+
+
+                document.documentElement.style.setProperty(
+                    ROOT_VARIABLE,
+                    "0px"
+                );
+            }
         }
 
 
-        createOfflineBanner();
+        /* ========================================================
+           CHECK CONNECTION
+           ======================================================== */
+
+        function updateConnectionState() {
+
+            /*
+             * navigator.onLine is the browser's current
+             * online/offline state.
+             */
+
+            const isOffline =
+                navigator.onLine === false;
 
 
-        /*
-         * Check immediately.
-         */
-
-        updateConnectionState();
-
-
-        /*
-         * Listen for connection changes.
-         */
-
-        window.addEventListener(
-            "online",
-            updateConnectionState
-        );
+            setOfflineState(
+                isOffline
+            );
+        }
 
 
-        window.addEventListener(
-            "offline",
-            updateConnectionState
-        );
+        /* ========================================================
+           INITIALIZE
+           ======================================================== */
+
+        function initialize() {
+
+            /*
+             * Make sure the DOM exists.
+             */
+
+            if (!document.body) {
+                return;
+            }
 
 
-        /*
-         * Recalculate the banner height when
-         * the device orientation or viewport changes.
-         */
-
-        window.addEventListener(
-            "resize",
-            () => {
-
-                const banner =
-                    document.getElementById(
-                        BANNER_ID
-                    );
+            createOfflineBanner();
 
 
-                if (
-                    banner &&
-                    banner.classList.contains(
-                        "show"
-                    )
-                ) {
+            /*
+             * Check immediately.
+             */
 
-                    updateOfflineBannerHeight(
-                        banner
+            updateConnectionState();
+
+
+            /*
+             * Listen for connection changes.
+             */
+
+            window.addEventListener(
+                "online",
+                updateConnectionState
+            );
+
+
+            window.addEventListener(
+                "offline",
+                updateConnectionState
+            );
+
+
+            /*
+             * Recalculate the banner height when
+             * the device orientation or viewport changes.
+             */
+
+            window.addEventListener(
+                "resize",
+                () => {
+
+                    const banner =
+                        document.getElementById(
+                            BANNER_ID
+                        );
+
+
+                    if (
+                        banner &&
+                        banner.classList.contains(
+                            "show"
+                        )
+                    ) {
+
+                        updateOfflineBannerHeight(
+                            banner
+                        );
+                    }
+                }
+            );
+
+
+            window.addEventListener(
+                "orientationchange",
+                () => {
+
+                    setTimeout(
+                        () => {
+
+                            const banner =
+                                document.getElementById(
+                                    BANNER_ID
+                                );
+
+
+                            if (
+                                banner &&
+                                banner.classList.contains(
+                                    "show"
+                                )
+                            ) {
+
+                                updateOfflineBannerHeight(
+                                    banner
+                                );
+                            }
+
+                        },
+                        100
                     );
                 }
-            }
-        );
+            );
+        }
 
 
-        window.addEventListener(
-            "orientationchange",
-            () => {
+        /* ========================================================
+           START
+           ======================================================== */
 
-                setTimeout(
-                    () => {
+        if (
+            document.readyState ===
+            "loading"
+        ) {
 
-                        const banner =
-                            document.getElementById(
-                                BANNER_ID
-                            );
+            document.addEventListener(
+                "DOMContentLoaded",
+                initialize,
+                {
+                    once: true
+                }
+            );
 
+        }
 
-                        if (
-                            banner &&
-                            banner.classList.contains(
-                                "show"
-                            )
-                        ) {
+        else {
 
-                            updateOfflineBannerHeight(
-                                banner
-                            );
-                        }
+            initialize();
 
-                    },
-                    100
-                );
-            }
-        );
-    }
+        }
 
-
-    /* ========================================================
-       START
-    ======================================================== */
-
-    if (
-        document.readyState ===
-        "loading"
-    ) {
-
-        document.addEventListener(
-            "DOMContentLoaded",
-            initialize,
-            {
-                once: true
-            }
-        );
-
-    }
-
-    else {
-
-        initialize();
-
-    }
-
-})(); 
+    })();
 
 
     /* ========================================================
@@ -567,26 +566,46 @@
             return;
         }
 
-        navigationInitialized = true;
 
+        /*
+         * IMPORTANT:
+         *
+         * The sidebar, overlay and buttons are injected by
+         * layout.js. Therefore we MUST find them before
+         * marking navigation as initialized.
+         */
 
         const sidebar =
-            document.getElementById("sidebar");
+            document.getElementById(
+                "sidebar"
+            );
 
         const sidebarOverlay =
-            document.getElementById("sidebarOverlay");
+            document.getElementById(
+                "sidebarOverlay"
+            );
 
         const mobileMenuBtn =
-            document.getElementById("mobileMenuBtn");
+            document.getElementById(
+                "mobileMenuBtn"
+            );
 
         const hubButton =
-            document.getElementById("hubButton");
+            document.getElementById(
+                "hubButton"
+            );
 
+
+        /*
+         * If the dynamically loaded shell has not arrived yet,
+         * leave navigationInitialized as false so it can safely
+         * initialize when afc:layout-ready fires.
+         */
 
         if (!sidebar) {
 
             console.warn(
-                "[AFC Main] Sidebar not found."
+                "[AFC Main] Sidebar not found. Navigation initialization will be retried."
             );
 
             return;
@@ -594,10 +613,16 @@
 
 
         /*
-         * The overlay and buttons are optional so that
-         * a page can still operate if one is unavailable.
+         * Only mark navigation as initialized AFTER the
+         * sidebar has actually been found.
          */
 
+        navigationInitialized = true;
+
+
+        /* ====================================================
+           MOBILE CHECK
+           ==================================================== */
 
         function isMobile() {
 
@@ -608,12 +633,16 @@
         }
 
 
+        /* ====================================================
+           SCROLL LOCK
+           ==================================================== */
+
         function lockPageScroll() {
 
             /*
              * Use a class rather than directly changing
              * body.style.overflow.
-
+             *
              * This prevents JS from fighting with the
              * site's CSS/layout scrolling rules.
              */
@@ -632,13 +661,26 @@
         }
 
 
+        /* ====================================================
+           OPEN SIDEBAR
+           ==================================================== */
+
         function openSidebar() {
+
+            /*
+             * The mobile drawer is only opened on mobile.
+             * Desktop sidebar remains visible through CSS.
+             */
 
             if (!isMobile()) {
                 return;
             }
 
-            sidebar.classList.add("show");
+
+            sidebar.classList.add(
+                "show"
+            );
+
 
             if (sidebarOverlay) {
 
@@ -647,6 +689,7 @@
                 );
             }
 
+
             if (mobileMenuBtn) {
 
                 mobileMenuBtn.setAttribute(
@@ -654,6 +697,7 @@
                     "true"
                 );
             }
+
 
             if (hubButton) {
 
@@ -663,13 +707,21 @@
                 );
             }
 
+
             lockPageScroll();
         }
 
 
+        /* ====================================================
+           CLOSE SIDEBAR
+           ==================================================== */
+
         function closeSidebar() {
 
-            sidebar.classList.remove("show");
+            sidebar.classList.remove(
+                "show"
+            );
+
 
             if (sidebarOverlay) {
 
@@ -678,6 +730,7 @@
                 );
             }
 
+
             if (mobileMenuBtn) {
 
                 mobileMenuBtn.setAttribute(
@@ -685,6 +738,7 @@
                     "false"
                 );
             }
+
 
             if (hubButton) {
 
@@ -694,14 +748,21 @@
                 );
             }
 
+
             unlockPageScroll();
         }
 
 
+        /* ====================================================
+           TOGGLE SIDEBAR
+           ==================================================== */
+
         function toggleSidebar() {
 
             if (
-                sidebar.classList.contains("show")
+                sidebar.classList.contains(
+                    "show"
+                )
             ) {
 
                 closeSidebar();
@@ -713,16 +774,16 @@
         }
 
 
-        /* ----------------------------------------------------
+        /* ====================================================
            INITIAL STATE
-           ---------------------------------------------------- */
+           ==================================================== */
 
         closeSidebar();
 
 
-        /* ----------------------------------------------------
+        /* ====================================================
            MOBILE MENU BUTTON
-           ---------------------------------------------------- */
+           ==================================================== */
 
         if (mobileMenuBtn) {
 
@@ -732,15 +793,23 @@
 
                     event.preventDefault();
 
+                    event.stopPropagation();
+
                     toggleSidebar();
                 }
+            );
+
+        } else {
+
+            console.warn(
+                "[AFC Main] Mobile menu button not found."
             );
         }
 
 
-        /* ----------------------------------------------------
+        /* ====================================================
            HUB BUTTON
-           ---------------------------------------------------- */
+           ==================================================== */
 
         if (hubButton) {
 
@@ -750,21 +819,31 @@
 
                     event.preventDefault();
 
+                    event.stopPropagation();
+
                     toggleSidebar();
                 }
+            );
+
+        } else {
+
+            console.warn(
+                "[AFC Main] Hub button not found."
             );
         }
 
 
-        /* ----------------------------------------------------
+        /* ====================================================
            OVERLAY
-           ---------------------------------------------------- */
+           ==================================================== */
 
         if (sidebarOverlay) {
 
             sidebarOverlay.addEventListener(
                 "click",
-                function () {
+                function (event) {
+
+                    event.preventDefault();
 
                     closeSidebar();
                 }
@@ -772,9 +851,9 @@
         }
 
 
-        /* ----------------------------------------------------
+        /* ====================================================
            SIDEBAR LINKS
-           ---------------------------------------------------- */
+           ==================================================== */
 
         sidebar.addEventListener(
             "click",
@@ -785,9 +864,11 @@
                         "a"
                     );
 
+
                 if (!link) {
                     return;
                 }
+
 
                 /*
                  * Let normal navigation happen.
@@ -802,9 +883,9 @@
         );
 
 
-        /* ----------------------------------------------------
+        /* ====================================================
            ESCAPE KEY
-           ---------------------------------------------------- */
+           ==================================================== */
 
         document.addEventListener(
             "keydown",
@@ -821,34 +902,41 @@
         );
 
 
-        /* ----------------------------------------------------
+        /* ====================================================
            RESIZE
-           ---------------------------------------------------- */
+           ==================================================== */
 
         let resizeTimer = null;
+
 
         window.addEventListener(
             "resize",
             function () {
 
-                clearTimeout(resizeTimer);
+                clearTimeout(
+                    resizeTimer
+                );
+
 
                 resizeTimer =
-                    setTimeout(function () {
+                    setTimeout(
+                        function () {
 
-                        if (!isMobile()) {
+                            if (!isMobile()) {
 
-                            closeSidebar();
-                        }
+                                closeSidebar();
+                            }
 
-                    }, 100);
+                        },
+                        100
+                    );
             }
         );
 
 
-        /* ----------------------------------------------------
+        /* ====================================================
            PAGE SHOW
-           ---------------------------------------------------- */
+           ==================================================== */
 
         window.addEventListener(
             "pageshow",
@@ -862,9 +950,11 @@
         );
 
 
+        /* ====================================================
+           SAFETY CLEANUP
+           ==================================================== */
+
         /*
-         * Safety cleanup.
-         *
          * If another script previously left the old
          * inline overflow lock behind, remove only that
          * stale value when the page starts.
@@ -873,6 +963,7 @@
         document.body.style.removeProperty(
             "overflow"
         );
+
 
         document.body.classList.remove(
             "sidebar-open"
@@ -900,9 +991,13 @@
                     AFC_MAIN_CONFIG.MEMBER_STORAGE_KEY
                 );
 
+
             if (stored) {
 
-                member = JSON.parse(stored);
+                member =
+                    JSON.parse(
+                        stored
+                    );
             }
 
         } catch (error) {
@@ -927,9 +1022,13 @@
                         AFC_MAIN_CONFIG.SESSION_STORAGE_KEY
                     );
 
+
                 if (session) {
 
-                    member = JSON.parse(session);
+                    member =
+                        JSON.parse(
+                            session
+                        );
                 }
 
             } catch (error) {
@@ -956,6 +1055,7 @@
             return "";
         }
 
+
         return String(
             member.memberId ||
             member.memberID ||
@@ -977,6 +1077,7 @@
             return "";
         }
 
+
         return String(
             member.memberName ||
             member.name ||
@@ -997,8 +1098,6 @@
         if (notificationInitialized) {
             return;
         }
-
-        notificationInitialized = true;
 
 
         const notificationBtn =
@@ -1057,9 +1156,17 @@
         }
 
 
-        /* ----------------------------------------------------
+        /*
+         * Only mark initialized after the notification
+         * button has actually been found.
+         */
+
+        notificationInitialized = true;
+
+
+        /* ====================================================
            PANEL OPEN / CLOSE
-           ---------------------------------------------------- */
+           ==================================================== */
 
         function openPanel() {
 
@@ -1067,19 +1174,23 @@
                 return;
             }
 
+
             notificationPanel.classList.add(
                 "show"
             );
+
 
             notificationPanel.setAttribute(
                 "aria-hidden",
                 "false"
             );
 
+
             notificationBtn.setAttribute(
                 "aria-expanded",
                 "true"
             );
+
 
             updateNotificationState();
         }
@@ -1091,14 +1202,17 @@
                 return;
             }
 
+
             notificationPanel.classList.remove(
                 "show"
             );
+
 
             notificationPanel.setAttribute(
                 "aria-hidden",
                 "true"
             );
+
 
             notificationBtn.setAttribute(
                 "aria-expanded",
@@ -1125,9 +1239,9 @@
         }
 
 
-        /* ----------------------------------------------------
+        /* ====================================================
            STATUS
-           ---------------------------------------------------- */
+           ==================================================== */
 
         function setNotificationStatus(
             type,
@@ -1143,6 +1257,7 @@
                     "loading",
                     "error"
                 );
+
 
                 if (type) {
 
@@ -1161,9 +1276,9 @@
         }
 
 
-        /* ----------------------------------------------------
+        /* ====================================================
            BELL
-           ---------------------------------------------------- */
+           ==================================================== */
 
         function updateBell(
             enabled
@@ -1175,6 +1290,7 @@
                     "fa-regular",
                     !enabled
                 );
+
 
                 notificationIcon.classList.toggle(
                     "fa-solid",
@@ -1193,9 +1309,9 @@
         }
 
 
-        /* ----------------------------------------------------
+        /* ====================================================
            BUTTON VISIBILITY
-           ---------------------------------------------------- */
+           ==================================================== */
 
         function showEnableButton() {
 
@@ -1204,6 +1320,7 @@
                 enableNotificationsBtn.hidden =
                     false;
             }
+
 
             if (disableNotificationsBtn) {
 
@@ -1221,6 +1338,7 @@
                     true;
             }
 
+
             if (disableNotificationsBtn) {
 
                 disableNotificationsBtn.hidden =
@@ -1229,9 +1347,9 @@
         }
 
 
-        /* ----------------------------------------------------
+        /* ====================================================
            SAFE DEFAULT
-           ---------------------------------------------------- */
+           ==================================================== */
 
         function setSafeDefault() {
 
@@ -1246,9 +1364,9 @@
         }
 
 
-        /* ----------------------------------------------------
+        /* ====================================================
            UPDATE STATE
-           ---------------------------------------------------- */
+           ==================================================== */
 
         async function updateNotificationState() {
 
@@ -1279,6 +1397,7 @@
              */
 
             let supported = false;
+
 
             try {
 
@@ -1315,6 +1434,7 @@
                     "Push notifications are not supported on this device or browser."
                 );
 
+
                 updateBell(false);
 
                 return;
@@ -1325,7 +1445,9 @@
              * Permission state.
              */
 
-            let permission = "default";
+            let permission =
+                "default";
+
 
             try {
 
@@ -1345,9 +1467,13 @@
                     error
                 );
 
+
                 permission =
-                    typeof Notification !== "undefined"
+                    typeof Notification !==
+                    "undefined"
+
                         ? Notification.permission
+
                         : "default";
             }
 
@@ -1356,7 +1482,9 @@
              * Existing subscription.
              */
 
-            let subscription = null;
+            let subscription =
+                null;
+
 
             try {
 
@@ -1392,6 +1520,7 @@
                     "Notifications are enabled on this device."
                 );
 
+
                 showDisableButton();
 
                 updateBell(true);
@@ -1413,6 +1542,7 @@
                     "Notifications are blocked in your browser settings."
                 );
 
+
                 showEnableButton();
 
                 updateBell(false);
@@ -1430,15 +1560,16 @@
                 "Notifications are currently disabled."
             );
 
+
             showEnableButton();
 
             updateBell(false);
         }
 
 
-        /* ----------------------------------------------------
+        /* ====================================================
            ENABLE NOTIFICATIONS
-           ---------------------------------------------------- */
+           ==================================================== */
 
         async function enableNotifications() {
 
@@ -1477,11 +1608,17 @@
             const member =
                 getStoredMember();
 
+
             const memberId =
-                getMemberId(member);
+                getMemberId(
+                    member
+                );
+
 
             const memberName =
-                getMemberName(member);
+                getMemberName(
+                    member
+                );
 
 
             /*
@@ -1508,8 +1645,10 @@
                 enableNotificationsBtn.dataset.loading =
                     "true";
 
+
                 enableNotificationsBtn.disabled =
                     true;
+
 
                 enableNotificationsBtn.innerHTML = `
                     <i class="fa-solid fa-spinner fa-spin"></i>
@@ -1567,21 +1706,24 @@
                 enableNotificationsBtn.innerHTML =
                     originalHTML;
 
+
                 enableNotificationsBtn.disabled =
                     false;
+
 
                 showEnableButton();
 
                 updateBell(false);
-
 
             } finally {
 
                 enableNotificationsBtn.dataset.loading =
                     "false";
 
+
                 enableNotificationsBtn.disabled =
                     false;
+
 
                 /*
                  * Always refresh state after the operation.
@@ -1592,9 +1734,9 @@
         }
 
 
-        /* ----------------------------------------------------
+        /* ====================================================
            DISABLE NOTIFICATIONS
-           ---------------------------------------------------- */
+           ==================================================== */
 
         async function disableNotifications() {
 
@@ -1639,8 +1781,10 @@
                 disableNotificationsBtn.dataset.loading =
                     "true";
 
+
                 disableNotificationsBtn.disabled =
                     true;
+
 
                 disableNotificationsBtn.innerHTML = `
                     <i class="fa-solid fa-spinner fa-spin"></i>
@@ -1684,8 +1828,10 @@
                 disableNotificationsBtn.innerHTML =
                     originalHTML;
 
+
                 disableNotificationsBtn.disabled =
                     false;
+
 
                 showDisableButton();
 
@@ -1698,23 +1844,24 @@
                     "Unable to disable notifications. Please try again."
                 );
 
-
             } finally {
 
                 disableNotificationsBtn.dataset.loading =
                     "false";
 
+
                 disableNotificationsBtn.disabled =
                     false;
+
 
                 await updateNotificationState();
             }
         }
 
 
-        /* ----------------------------------------------------
+        /* ====================================================
            BUTTON EVENTS
-           ---------------------------------------------------- */
+           ==================================================== */
 
         notificationBtn.addEventListener(
             "click",
@@ -1771,9 +1918,9 @@
         }
 
 
-        /* ----------------------------------------------------
+        /* ====================================================
            OUTSIDE CLICK
-           ---------------------------------------------------- */
+           ==================================================== */
 
         document.addEventListener(
             "click",
@@ -1782,6 +1929,7 @@
                 if (!notificationPanel) {
                     return;
                 }
+
 
                 if (
                     !notificationPanel.classList.contains(
@@ -1800,7 +1948,9 @@
 
                 if (
                     wrapper &&
-                    !wrapper.contains(event.target)
+                    !wrapper.contains(
+                        event.target
+                    )
                 ) {
 
                     closePanel();
@@ -1809,9 +1959,9 @@
         );
 
 
-        /* ----------------------------------------------------
+        /* ====================================================
            ESCAPE
-           ---------------------------------------------------- */
+           ==================================================== */
 
         document.addEventListener(
             "keydown",
@@ -1828,9 +1978,9 @@
         );
 
 
-        /* ----------------------------------------------------
+        /* ====================================================
            INITIAL STATE
-           ---------------------------------------------------- */
+           ==================================================== */
 
         if (notificationPanel) {
 
@@ -1838,11 +1988,13 @@
                 "show"
             );
 
+
             notificationPanel.setAttribute(
                 "aria-hidden",
                 "true"
             );
         }
+
 
         notificationBtn.setAttribute(
             "aria-expanded",
@@ -1851,6 +2003,7 @@
 
 
         setSafeDefault();
+
 
         /*
          * Do not block the rest of page initialization.
@@ -1877,13 +2030,19 @@
             return;
         }
 
-        onlineLinksInitialized = true;
-
 
         const links =
             document.querySelectorAll(
                 "[data-online-only]"
             );
+
+
+        /*
+         * It is okay for a page to have no online-only links.
+         * Mark initialization complete after scanning the DOM.
+         */
+
+        onlineLinksInitialized = true;
 
 
         links.forEach(function (link) {
@@ -1910,6 +2069,7 @@
 
 
                     event.preventDefault();
+
 
                     const feature =
                         link.dataset.feature ||
@@ -1946,19 +2106,24 @@
 
 
         const element =
-            document.createElement("div");
+            document.createElement(
+                "div"
+            );
 
 
         element.id =
             "afcOfflineMessage";
 
+
         element.className =
             "offline-toast";
+
 
         element.setAttribute(
             "role",
             "alert"
         );
+
 
         element.innerHTML = `
             <i class="fa-solid fa-wifi"></i>
@@ -1971,27 +2136,36 @@
         );
 
 
-        requestAnimationFrame(function () {
+        requestAnimationFrame(
+            function () {
 
-            element.classList.add(
-                "show"
-            );
-        });
+                element.classList.add(
+                    "show"
+                );
+            }
+        );
 
 
-        setTimeout(function () {
+        setTimeout(
+            function () {
 
-            element.classList.remove(
-                "show"
-            );
+                element.classList.remove(
+                    "show"
+                );
 
-            setTimeout(function () {
 
-                element.remove();
+                setTimeout(
+                    function () {
 
-            }, 300);
+                        element.remove();
 
-        }, 3500);
+                    },
+                    300
+                );
+
+            },
+            3500
+        );
     }
 
 
@@ -2005,13 +2179,12 @@
             return;
         }
 
-        themeInitialized = true;
-
 
         const themeBtn =
             document.getElementById(
                 "themeBtn"
             );
+
 
         const themeIcon =
             document.getElementById(
@@ -2029,6 +2202,13 @@
         }
 
 
+        themeInitialized = true;
+
+
+        /* ====================================================
+           SYSTEM THEME
+           ==================================================== */
+
         function getSystemTheme() {
 
             if (
@@ -2041,9 +2221,14 @@
                 return "dark";
             }
 
+
             return "light";
         }
 
+
+        /* ====================================================
+           APPLY THEME
+           ==================================================== */
 
         function applyTheme(
             theme,
@@ -2064,10 +2249,20 @@
 
             if (save) {
 
-                localStorage.setItem(
-                    AFC_MAIN_CONFIG.THEME_STORAGE_KEY,
-                    finalTheme
-                );
+                try {
+
+                    localStorage.setItem(
+                        AFC_MAIN_CONFIG.THEME_STORAGE_KEY,
+                        finalTheme
+                    );
+
+                } catch (error) {
+
+                    console.warn(
+                        "[AFC Main] Could not save theme.",
+                        error
+                    );
+                }
             }
 
 
@@ -2077,6 +2272,7 @@
                     "fa-moon",
                     finalTheme === "light"
                 );
+
 
                 themeIcon.classList.toggle(
                     "fa-sun",
@@ -2102,7 +2298,12 @@
         }
 
 
-        let savedTheme = null;
+        /* ====================================================
+           SAVED THEME
+           ==================================================== */
+
+        let savedTheme =
+            null;
 
 
         try {
@@ -2124,7 +2325,9 @@
         const initialTheme =
             savedTheme === "dark" ||
             savedTheme === "light"
+
                 ? savedTheme
+
                 : getSystemTheme();
 
 
@@ -2134,17 +2337,23 @@
         );
 
 
+        /* ====================================================
+           THEME BUTTON
+           ==================================================== */
+
         themeBtn.addEventListener(
             "click",
             function (event) {
 
                 event.preventDefault();
 
+
                 const currentTheme =
                     document.documentElement
                         .getAttribute(
                             "data-theme"
-                        ) || "light";
+                        ) ||
+                    "light";
 
 
                 const nextTheme =
@@ -2161,10 +2370,9 @@
         );
 
 
-        /*
-         * Follow system theme only when the user has not
-         * manually selected a theme.
-         */
+        /* ====================================================
+           SYSTEM THEME CHANGES
+           ==================================================== */
 
         if (
             window.matchMedia
@@ -2179,7 +2387,8 @@
             const handleSystemThemeChange =
                 function (event) {
 
-                    let manuallySelected = null;
+                    let manuallySelected =
+                        null;
 
 
                     try {
@@ -2190,7 +2399,9 @@
                             );
 
                     } catch (error) {
-                        manuallySelected = null;
+
+                        manuallySelected =
+                            null;
                     }
 
 
@@ -2260,15 +2471,18 @@
 
         if (hour < 12) {
 
-            greeting = "Good morning";
+            greeting =
+                "Good morning";
 
         } else if (hour < 17) {
 
-            greeting = "Good afternoon";
+            greeting =
+                "Good afternoon";
 
         } else {
 
-            greeting = "Good evening";
+            greeting =
+                "Good evening";
         }
 
 
@@ -2305,8 +2519,6 @@
             return;
         }
 
-        headerSafetyInitialized = true;
-
 
         const buttons =
             document.querySelectorAll(
@@ -2321,6 +2533,9 @@
                 "button"
             );
         });
+
+
+        headerSafetyInitialized = true;
     }
 
 
@@ -2371,6 +2586,7 @@
                     "sidebar-open"
                 );
 
+
                 /*
                  * Remove any legacy inline scroll lock
                  * that might have been left by an older
@@ -2395,6 +2611,7 @@
             return;
         }
 
+
         applicationInitialized = true;
 
 
@@ -2405,7 +2622,20 @@
 
         initializeAOS();
 
-        initializeOfflineState();
+
+        /*
+         * IMPORTANT:
+         *
+         * The offline banner initializes itself in the
+         * dedicated IIFE above.
+         *
+         * There is intentionally NO call to:
+         *
+         * initializeOfflineState();
+         *
+         * because that function does not exist.
+         */
+
 
         initializeGlobalErrorHandling();
 
@@ -2416,6 +2646,7 @@
 
         /*
          * The shared shell may not exist yet.
+         *
          * Navigation, notifications, theme and online-only
          * links are initialized when layout.js announces
          * afc:layout-ready.
