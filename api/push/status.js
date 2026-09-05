@@ -1,209 +1,169 @@
-/* ============================================================
-   AFC ISIU YOUTH PORTAL V2
-   FILE: api/push/status.js
-
-   PURPOSE:
-   Secure admin status endpoint for push notifications.
-
-   IMPORTANT:
-   PUSH_ADMIN_SECRET is NEVER exposed to frontend source.
-   ============================================================ */
+/**
+ * AFC ISIU YOUTH PORTAL
+ * FILE: /api/push/status.js
+ *
+ * PURPOSE:
+ * Secure server-side status endpoint for the notification admin.
+ *
+ * IMPORTANT:
+ * - Admin secret is never exposed in frontend source.
+ * - Vercel calls Google Apps Script server-to-server.
+ * - Apps Script status action is called with POST.
+ */
 
 export default async function handler(req, res) {
-
     if (req.method !== "GET") {
-
         return res.status(405).json({
             success: false,
             message: "Method not allowed."
         });
-
     }
-
-
-    const adminSecret =
-        process.env.PUSH_ADMIN_SECRET;
-
-
-    const appsScriptUrl =
-        process.env.GOOGLE_APPS_SCRIPT_URL;
-
-
-    if (!adminSecret) {
-
-        return res.status(500).json({
-            success: false,
-            message:
-                "PUSH_ADMIN_SECRET is not configured."
-        });
-
-    }
-
-
-    if (!appsScriptUrl) {
-
-        return res.status(500).json({
-            success: false,
-            message:
-                "GOOGLE_APPS_SCRIPT_URL is not configured."
-        });
-
-    }
-
-
-    const authorization =
-        req.headers.authorization || "";
-
-
-    const expected =
-        `Bearer ${adminSecret}`;
-
-
-    if (authorization !== expected) {
-
-        return res.status(401).json({
-            success: false,
-            message:
-                "Unauthorized."
-        });
-
-    }
-
 
     try {
+        const adminSecret = process.env.PUSH_ADMIN_SECRET;
+        const appsScriptUrl = process.env.GOOGLE_APPS_SCRIPT_URL;
+
+        if (!adminSecret) {
+            console.error("[Push Status] PUSH_ADMIN_SECRET is missing.");
+
+            return res.status(500).json({
+                success: false,
+                message: "Push admin secret is not configured."
+            });
+        }
+
+        if (!appsScriptUrl) {
+            console.error("[Push Status] GOOGLE_APPS_SCRIPT_URL is missing.");
+
+            return res.status(500).json({
+                success: false,
+                message: "Google Apps Script URL is not configured."
+            });
+        }
+
+        const authorization = req.headers.authorization || "";
+
+        if (authorization !== `Bearer ${adminSecret}`) {
+            return res.status(401).json({
+                success: false,
+                message: "Unauthorized."
+            });
+        }
 
         /*
-         * Ask Google Apps Script for the
-         * notification system status.
+         * Apps Script expects POST for getPushSystemStatus.
+         *
+         * application/x-www-form-urlencoded avoids the browser CORS
+         * problem because this request happens server-to-server.
          */
+        const response = await fetch(appsScriptUrl, {
+            method: "POST",
+            headers: {
+                "Content-Type":
+                    "application/x-www-form-urlencoded;charset=UTF-8",
+                "Accept": "application/json"
+            },
+            body: new URLSearchParams({
+                action: "getPushSystemStatus",
+                adminSecret: adminSecret
+            }).toString()
+        });
 
-        const url =
-            new URL(
-                appsScriptUrl
-            );
+        const rawText = await response.text();
 
-
-        url.searchParams.set(
-            "action",
-            "getPushSystemStatus"
+        console.log(
+            "[Push Status] Apps Script response:",
+            response.status,
+            rawText
         );
-
-
-        url.searchParams.set(
-            "adminSecret",
-            adminSecret
-        );
-
-
-        const response =
-            await fetch(
-                url.toString(),
-                {
-                    method:
-                        "GET",
-
-                    headers: {
-                        "Accept":
-                            "application/json"
-                    },
-
-                    cache:
-                        "no-store"
-                }
-            );
-
 
         if (!response.ok) {
+            return res.status(502).json({
+                success: false,
+                message: "Google Apps Script returned an error.",
+                upstreamStatus: response.status
+            });
+        }
+
+        let data;
+
+        try {
+            data = JSON.parse(rawText);
+        } catch (parseError) {
+            console.error(
+                "[Push Status] Invalid Apps Script JSON:",
+                rawText
+            );
 
             return res.status(502).json({
                 success: false,
-                message:
-                    "Google Apps Script returned HTTP " +
-                    response.status
+                message: "Google Apps Script returned an invalid response."
             });
-
         }
 
-
-        const data =
-            await response.json();
-
-
-        if (
-            data &&
-            data.success === false
-        ) {
-
+        if (!data || data.success !== true) {
             return res.status(502).json({
                 success: false,
                 message:
-                    data.message ||
-                    "Unable to retrieve push status."
+                    data?.message ||
+                    "Unable to retrieve push notification status."
             });
-
         }
-
 
         /*
-         * Normalize the response so the frontend
-         * does not need to know the internal
-         * Google Apps Script structure.
+         * Normalize the response so the admin frontend gets
+         * predictable field names.
          */
+        const source = data.data || data.result || data;
 
         const activeSubscriptions =
             Number(
-                data.activeSubscriptions ??
-                data.subscribers ??
-                data.activeSubscriberCount ??
-                data.count ??
+                source.activeSubscriptions ??
+                source.activeSubscriptionCount ??
+                source.subscriptionCount ??
                 0
-            );
+            ) || 0;
 
+        const scheduledNotifications =
+            Number(
+                source.scheduledNotifications ??
+                source.scheduledNotificationCount ??
+                0
+            ) || 0;
 
         return res.status(200).json({
+            success: true,
 
-            success:
-                true,
+            activeSubscriptions,
 
-            activeSubscriptions:
-                activeSubscriptions,
+            scheduledNotifications,
 
             timezone:
-                data.timezone ||
+                source.timezone ||
+                source.timeZone ||
                 "Africa/Lagos",
 
             vapidConfigured:
-                data.vapidConfigured !== false,
+                source.vapidConfigured ??
+                Boolean(process.env.VAPID_PUBLIC_KEY),
 
             senderConfigured:
-                true
+                source.senderConfigured ??
+                Boolean(
+                    process.env.VAPID_PUBLIC_KEY &&
+                    process.env.VAPID_PRIVATE_KEY &&
+                    process.env.VAPID_SUBJECT
+                ),
 
+            timestamp: new Date().toISOString()
         });
 
-    }
-    catch (error) {
+    } catch (error) {
+        console.error("[Push Status] Server error:", error);
 
-        console.error(
-            "[Push Status]",
-            error
-        );
-
-
-        return res.status(500).json({
-
-            success:
-                false,
-
-            message:
-                "Unable to retrieve notification status.",
-
-            error:
-                process.env.NODE_ENV === "development"
-                    ? error.message
-                    : undefined
-
+        return res.status(503).json({
+            success: false,
+            message: "Push status service is temporarily unavailable."
         });
-
     }
-
 }
