@@ -1,954 +1,359 @@
 /* ============================================================
    AFC ISIU YOUTH PORTAL V2
    FILE: layout.js
+   PURPOSE: SHARED LAYOUT LOADER
+   VERSION: 2.5
 
-   PURPOSE:
-   Shared portal shell loader.
+   RESPONSIBILITY:
+   - Load shared HTML components
+   - Set active navigation item
+   - Notify main.js when layout is ready
 
-   LOADS:
-   - Sidebar
-   - Topbar
-   - Notification panel
-   - Mobile bottom navigation
+   IMPORTANT:
+   - NO sidebar behavior here
+   - NO notification behavior here
+   - NO theme behavior here
+   - NO scroll locking here
+   - NO push subscription logic here
 
-   ALSO HANDLES:
-   - Active navigation
-   - Mobile sidebar
-   - Hub button
-   - Notification panel
-   - Theme button
-   - Online-only navigation
-============================================================ */
+   main.js owns all UI behavior.
+   ============================================================ */
 
 (function () {
 
     "use strict";
 
 
-    /* =========================================================
-       CONFIG
-    ========================================================= */
+    /* ========================================================
+       CONFIGURATION
+       ======================================================== */
 
     const COMPONENTS = {
-
-        sidebar:
-            "/components/sidebar.html",
-
-        topbar:
-            "/components/topbar.html",
-
-        notification:
-            "/components/notification.html",
-
-        bottomNav:
-            "/components/bottom-nav.html"
-
+        sidebar: "/components/sidebar.html",
+        topbar: "/components/topbar.html",
+        notification: "/components/notification.html",
+        bottomNav: "/components/bottom-nav.html"
     };
 
 
-    /* =========================================================
-       HELPERS
-    ========================================================= */
+    /* ========================================================
+       DOM HELPER
+       ======================================================== */
 
-    function $(id) {
-
-        return document.getElementById(id);
-
+    function $(selector) {
+        return document.querySelector(selector);
     }
 
+
+    /* ========================================================
+       LOAD COMPONENT
+       ======================================================== */
 
     async function loadComponent(url) {
 
-        const response =
-            await fetch(url, {
-                cache: "no-cache"
-            });
+        const response = await fetch(url, {
+            method: "GET",
+            cache: "no-cache",
+            credentials: "same-origin"
+        });
 
         if (!response.ok) {
-
             throw new Error(
-                `Unable to load component: ${url}`
+                `Failed to load component: ${url} (${response.status})`
             );
-
         }
 
         return response.text();
-
     }
 
 
-    async function injectComponent(
-        selector,
-        url
-    ) {
+    /* ========================================================
+       INJECT COMPONENT
+       ======================================================== */
 
-        const element =
-            document.querySelector(selector);
+    async function injectComponent(container, url) {
+
+        const element = $(container);
 
         if (!element) {
-
-            return;
-
+            console.warn(
+                `[AFC Layout] Container not found: ${container}`
+            );
+            return false;
         }
 
-        element.innerHTML =
-            await loadComponent(url);
+        try {
 
+            const html = await loadComponent(url);
+
+            element.innerHTML = html;
+
+            return true;
+
+        } catch (error) {
+
+            console.error(
+                `[AFC Layout] Could not load ${url}`,
+                error
+            );
+
+            element.innerHTML = "";
+
+            return false;
+        }
     }
 
 
-    /* =========================================================
-       DETERMINE CURRENT ROUTE
-    ========================================================= */
+    /* ========================================================
+       GET CURRENT ROUTE
+       ======================================================== */
 
     function getCurrentRoute() {
 
-        let path =
-            window.location.pathname;
+        let path = window.location.pathname || "/";
 
-        path =
-            path.replace(
-                /\/index\.html$/,
-                "/"
-            );
+        /*
+         * Convert index.html to /
+         */
+        if (
+            path === "/index.html" ||
+            path === "index.html"
+        ) {
+            path = "/";
+        }
 
-        path =
-            path.replace(
-                /\.html$/,
-                ""
-            );
+        /*
+         * Remove .html from routes
+         */
+        if (path.endsWith(".html")) {
+            path = path.slice(0, -5);
+        }
 
+        /*
+         * Normalize trailing slash.
+         */
         if (
             path.length > 1 &&
             path.endsWith("/")
         ) {
-
-            path =
-                path.slice(
-                    0,
-                    -1
-                );
-
+            path = path.slice(0, -1);
         }
 
         return path || "/";
-
     }
 
 
-    /* =========================================================
-       ACTIVE NAVIGATION
-    ========================================================= */
+    /* ========================================================
+       SET ACTIVE NAVIGATION
+       ======================================================== */
 
     function setActiveNavigation() {
 
-        const currentRoute =
-            getCurrentRoute();
+        const currentRoute = getCurrentRoute();
 
+        const navigationItems =
+            document.querySelectorAll("[data-route]");
 
-        document
-            .querySelectorAll(
-                "[data-route]"
-            )
-            .forEach(
-                link => {
+        navigationItems.forEach(function (item) {
 
-                    const route =
-                        link.dataset.route;
+            const route = item.getAttribute("data-route");
 
-
-                    link.classList.remove(
-                        "active"
-                    );
-
-
-                    if (
-                        route === currentRoute
-                    ) {
-
-                        link.classList.add(
-                            "active"
-                        );
-
-                    }
-
-                }
-            );
-
-    }
-
-
-    /* =========================================================
-       SIDEBAR
-    ========================================================= */
-
-    function initializeSidebar() {
-
-        const sidebar =
-            $("sidebar");
-
-        const overlay =
-            $("sidebarOverlay");
-
-        const menuButton =
-            $("mobileMenuBtn");
-
-        const hubButton =
-            $("hubButton");
-
-
-        if (
-            !sidebar ||
-            !overlay
-        ) {
-
-            return;
-
-        }
-
-
-        function openSidebar() {
-
-            sidebar.classList.add(
-                "show"
-            );
-
-            overlay.classList.add(
-                "show"
-            );
-
-            document.body.style.overflow =
-                "hidden";
-
-
-            if (menuButton) {
-
-                menuButton.setAttribute(
-                    "aria-expanded",
-                    "true"
-                );
-
+            if (!route) {
+                return;
             }
 
-
-            if (hubButton) {
-
-                hubButton.setAttribute(
-                    "aria-expanded",
-                    "true"
-                );
-
-            }
-
-        }
-
-
-        function closeSidebar() {
-
-            sidebar.classList.remove(
-                "show"
-            );
-
-            overlay.classList.remove(
-                "show"
-            );
-
-            document.body.style.overflow =
-                "";
-
-
-            if (menuButton) {
-
-                menuButton.setAttribute(
-                    "aria-expanded",
-                    "false"
-                );
-
-            }
-
-
-            if (hubButton) {
-
-                hubButton.setAttribute(
-                    "aria-expanded",
-                    "false"
-                );
-
-            }
-
-        }
-
-
-        if (menuButton) {
-
-            menuButton.addEventListener(
-                "click",
-                openSidebar
-            );
-
-        }
-
-
-        if (hubButton) {
-
-            hubButton.addEventListener(
-                "click",
-                openSidebar
-            );
-
-        }
-
-
-        overlay.addEventListener(
-            "click",
-            closeSidebar
-        );
-
-
-        sidebar
-            .querySelectorAll("a")
-            .forEach(
-                link => {
-
-                    link.addEventListener(
-                        "click",
-                        () => {
-
-                            if (
-                                window.innerWidth <= 768
-                            ) {
-
-                                closeSidebar();
-
-                            }
-
-                        }
-                    );
-
-                }
-            );
-
-
-        document.addEventListener(
-            "keydown",
-            event => {
-
-                if (
-                    event.key === "Escape"
-                ) {
-
-                    closeSidebar();
-
-                }
-
-            }
-        );
-
-
-        window.addEventListener(
-            "resize",
-            () => {
-
-                if (
-                    window.innerWidth > 768
-                ) {
-
-                    closeSidebar();
-
-                }
-
-            }
-        );
-
-    }
-
-
-    /* =========================================================
-       NOTIFICATIONS
-    ========================================================= */
-
-    function initializeNotifications() {
-
-        const button =
-            $("notificationBtn");
-
-        const panel =
-            $("notificationPanel");
-
-        const closeButton =
-            $("notificationPanelClose");
-
-        const enableButton =
-            $("enableNotificationsBtn");
-
-        const disableButton =
-            $("disableNotificationsBtn");
-
-        const statusText =
-            $("notificationStatusText");
-
-        const icon =
-            $("notificationIcon");
-
-        const dot =
-            $("notifyDot");
-
-
-        if (!button || !panel) {
-
-            return;
-
-        }
-
-
-        function openPanel() {
-
-            panel.classList.add(
-                "show"
-            );
-
-            panel.setAttribute(
-                "aria-hidden",
-                "false"
-            );
-
-            button.setAttribute(
-                "aria-expanded",
-                "true"
-            );
-
-        }
-
-
-        function closePanel() {
-
-            panel.classList.remove(
-                "show"
-            );
-
-            panel.setAttribute(
-                "aria-hidden",
-                "true"
-            );
-
-            button.setAttribute(
-                "aria-expanded",
-                "false"
-            );
-
-        }
-
-
-        function setStatus(
-            message,
-            enabled
-        ) {
-
-            if (statusText) {
-
-                statusText.textContent =
-                    message;
-
-            }
-
-
-            if (icon) {
-
-                icon.className =
-                    enabled
-                        ? "fa-solid fa-bell"
-                        : "fa-regular fa-bell";
-
-            }
-
-
-            if (dot) {
-
-                dot.classList.toggle(
-                    "active",
-                    Boolean(enabled)
-                );
-
-            }
-
-        }
-
-
-        button.addEventListener(
-            "click",
-            event => {
-
-                event.stopPropagation();
-
-                if (
-                    panel.classList.contains(
-                        "show"
-                    )
-                ) {
-
-                    closePanel();
-
-                } else {
-
-                    openPanel();
-
-                }
-
-            }
-        );
-
-
-        if (closeButton) {
-
-            closeButton.addEventListener(
-                "click",
-                closePanel
-            );
-
-        }
-
-
-        document.addEventListener(
-            "click",
-            event => {
-
-                const wrapper =
-                    $("notificationWrapper");
-
-                if (
-                    wrapper &&
-                    !wrapper.contains(event.target)
-                ) {
-
-                    closePanel();
-
-                }
-
-            }
-        );
-
-
-        document.addEventListener(
-            "keydown",
-            event => {
-
-                if (
-                    event.key === "Escape"
-                ) {
-
-                    closePanel();
-
-                }
-
-            }
-        );
-
-
-        /* -------------------------------------------------------
-           ENABLE
-        ------------------------------------------------------- */
-
-        if (enableButton) {
-
-            enableButton.addEventListener(
-                "click",
-                async () => {
-
-                    if (
-                        !window.AFC_PWA ||
-                        typeof window.AFC_PWA.subscribeToPush !==
-                        "function"
-                    ) {
-
-                        setStatus(
-                            "Notification service is not available yet.",
-                            false
-                        );
-
-                        return;
-
-                    }
-
-
-                    enableButton.disabled =
-                        true;
-
-
-                    try {
-
-                        const result =
-                            await window.AFC_PWA
-                                .subscribeToPush();
-
-
-                        if (
-                            result &&
-                            result.success
-                        ) {
-
-                            setStatus(
-                                "Notifications are enabled on this device.",
-                                true
-                            );
-
-                        } else {
-
-                            setStatus(
-                                result?.message ||
-                                "Unable to enable notifications.",
-                                false
-                            );
-
-                        }
-
-                    }
-                    catch (error) {
-
-                        console.error(
-                            "Notification enable error:",
-                            error
-                        );
-
-
-                        setStatus(
-                            "Unable to enable notifications.",
-                            false
-                        );
-
-                    }
-                    finally {
-
-                        enableButton.disabled =
-                            false;
-
-                    }
-
-                }
-            );
-
-        }
-
-
-        /* -------------------------------------------------------
-           DISABLE
-        ------------------------------------------------------- */
-
-        if (disableButton) {
-
-            disableButton.addEventListener(
-                "click",
-                async () => {
-
-                    if (
-                        !window.AFC_PWA ||
-                        typeof window.AFC_PWA.unsubscribeFromPush !==
-                        "function"
-                    ) {
-
-                        setStatus(
-                            "Notification service is not available yet.",
-                            true
-                        );
-
-                        return;
-
-                    }
-
-
-                    disableButton.disabled =
-                        true;
-
-
-                    try {
-
-                        const result =
-                            await window.AFC_PWA
-                                .unsubscribeFromPush();
-
-
-                        if (
-                            result &&
-                            result.success
-                        ) {
-
-                            setStatus(
-                                "Notifications have been disabled.",
-                                false
-                            );
-
-                        } else {
-
-                            setStatus(
-                                result?.message ||
-                                "Unable to disable notifications.",
-                                true
-                            );
-
-                        }
-
-                    }
-                    catch (error) {
-
-                        console.error(
-                            "Notification disable error:",
-                            error
-                        );
-
-
-                        setStatus(
-                            "Unable to disable notifications.",
-                            true
-                        );
-
-                    }
-                    finally {
-
-                        disableButton.disabled =
-                            false;
-
-                    }
-
-                }
-            );
-
-        }
-
-
-        /* -------------------------------------------------------
-           INITIAL STATE
-        ------------------------------------------------------- */
-
-        if (
-            "Notification" in window
-        ) {
+            let normalizedRoute = route;
 
             if (
-                Notification.permission ===
-                "granted"
+                normalizedRoute !== "/" &&
+                normalizedRoute.endsWith("/")
             ) {
-
-                setStatus(
-                    "Notifications are enabled on this device.",
-                    true
-                );
-
-            }
-            else {
-
-                setStatus(
-                    "Notifications are currently disabled.",
-                    false
-                );
-
+                normalizedRoute =
+                    normalizedRoute.slice(0, -1);
             }
 
-        }
+            if (
+                normalizedRoute === "/index.html"
+            ) {
+                normalizedRoute = "/";
+            }
 
+            if (
+                normalizedRoute.endsWith(".html")
+            ) {
+                normalizedRoute =
+                    normalizedRoute.slice(0, -5);
+            }
+
+            const isActive =
+                normalizedRoute === currentRoute;
+
+            item.classList.toggle(
+                "active",
+                isActive
+            );
+
+            if (isActive) {
+
+                item.setAttribute(
+                    "aria-current",
+                    "page"
+                );
+
+            } else {
+
+                item.removeAttribute(
+                    "aria-current"
+                );
+            }
+        });
     }
 
 
-    /* =========================================================
-       THEME
-    ========================================================= */
+    /* ========================================================
+       DISPATCH LAYOUT READY EVENT
+       ======================================================== */
 
-    function initializeTheme() {
+    function dispatchLayoutReady() {
 
-        const button =
-            $("themeBtn");
+        /*
+         * Mark the layout as ready as well as dispatching
+         * the event. This gives other scripts a reliable
+         * way to know that the shared shell exists.
+         */
 
-        const icon =
-            $("themeIcon");
+        window.AFC_LAYOUT_READY = true;
 
-
-        if (!button) {
-
-            return;
-
-        }
-
-
-        function applyTheme(
-            theme
-        ) {
-
-            document.documentElement
-                .setAttribute(
-                    "data-theme",
-                    theme
-                );
-
-
-            localStorage.setItem(
-                "afcTheme",
-                theme
-            );
-
-
-            if (icon) {
-
-                icon.className =
-                    theme === "dark"
-                        ? "fa-solid fa-sun"
-                        : "fa-solid fa-moon";
-
-            }
-
-        }
-
-
-        let savedTheme =
-            localStorage.getItem(
-                "afcTheme"
-            );
-
-
-        if (
-            savedTheme !== "dark" &&
-            savedTheme !== "light"
-        ) {
-
-            savedTheme =
-                window.matchMedia(
-                    "(prefers-color-scheme: dark)"
-                ).matches
-                    ? "dark"
-                    : "light";
-
-        }
-
-
-        applyTheme(
-            savedTheme
+        document.dispatchEvent(
+            new CustomEvent("afc:layout-ready")
         );
 
-
-        button.addEventListener(
-            "click",
-            () => {
-
-                const current =
-                    document.documentElement
-                        .getAttribute(
-                            "data-theme"
-                        );
-
-
-                applyTheme(
-                    current === "dark"
-                        ? "light"
-                        : "dark"
-                );
-
-            }
+        console.log(
+            "[AFC Layout] Shared layout ready."
         );
-
     }
 
 
-    /* =========================================================
-       LOAD EVERYTHING
-    ========================================================= */
+    /* ========================================================
+       INITIALIZE LAYOUT
+       ======================================================== */
 
     async function initializeLayout() {
 
-        try {
+        console.log(
+            "[AFC Layout] Loading shared components..."
+        );
 
-            /*
-             * The page contains empty placeholders:
-             *
-             * #app-sidebar
-             * #app-topbar
-             * #app-bottom-nav
-             */
+        const results = await Promise.all([
+            injectComponent(
+                "#app-sidebar",
+                COMPONENTS.sidebar
+            ),
 
-            await Promise.all([
+            injectComponent(
+                "#app-topbar",
+                COMPONENTS.topbar
+            ),
 
-                injectComponent(
-                    "#app-sidebar",
-                    COMPONENTS.sidebar
-                ),
-
-                injectComponent(
-                    "#app-topbar",
-                    COMPONENTS.topbar
-                ),
-
-                injectComponent(
-                    "#app-bottom-nav",
-                    COMPONENTS.bottomNav
-                )
-
-            ]);
+            injectComponent(
+                "#app-bottom-nav",
+                COMPONENTS.bottomNav
+            )
+        ]);
 
 
-            /*
-             * Notification is loaded into
-             * the topbar notification container.
-             */
+        /*
+         * Notification panel is intentionally loaded
+         * after the topbar because the topbar contains
+         * #notificationPanelContainer.
+         */
 
+        const notificationLoaded =
             await injectComponent(
                 "#notificationPanelContainer",
                 COMPONENTS.notification
             );
 
 
-            setActiveNavigation();
+        /*
+         * Update active navigation only after all
+         * shared navigation components exist.
+         */
 
-            initializeSidebar();
-
-            initializeNotifications();
-
-            initializeTheme();
+        setActiveNavigation();
 
 
-            /*
-             * Tell other portal scripts that
-             * the shared shell is ready.
-             */
+        /*
+         * Report any failed component loads.
+         */
 
-            window.dispatchEvent(
-                new CustomEvent(
-                    "afc:layout-ready"
-                )
+        if (
+            results.includes(false) ||
+            notificationLoaded === false
+        ) {
+
+            console.warn(
+                "[AFC Layout] One or more shared components failed to load."
             );
-
-
-            console.log(
-                "AFC shared layout loaded successfully."
-            );
-
-        }
-        catch (error) {
-
-            console.error(
-                "AFC layout initialization failed:",
-                error
-            );
-
         }
 
+
+        /*
+         * Give main.js control from this point onward.
+         */
+
+        dispatchLayoutReady();
     }
 
 
-    /* =========================================================
+    /* ========================================================
        START
-    ========================================================= */
+       ======================================================== */
+
+    function start() {
+
+        initializeLayout()
+            .catch(function (error) {
+
+                console.error(
+                    "[AFC Layout] Fatal layout initialization error:",
+                    error
+                );
+
+                /*
+                 * Even if something goes wrong, notify the
+                 * application that layout initialization
+                 * has finished attempting to run.
+                 */
+
+                window.AFC_LAYOUT_READY = true;
+
+                document.dispatchEvent(
+                    new CustomEvent("afc:layout-ready")
+                );
+            });
+    }
+
+
+    /* ========================================================
+       DOM READY
+       ======================================================== */
 
     if (
-        document.readyState ===
-        "loading"
+        document.readyState === "loading"
     ) {
 
         document.addEventListener(
             "DOMContentLoaded",
-            initializeLayout
+            start,
+            {
+                once: true
+            }
         );
 
-    }
-    else {
+    } else {
 
-        initializeLayout();
-
+        start();
     }
 
 
