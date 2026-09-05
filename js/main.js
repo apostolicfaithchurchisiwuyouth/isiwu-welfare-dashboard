@@ -132,90 +132,414 @@
     }
 
 
+/* ============================================================
+   AFC ISIU YOUTH PORTAL V2
+   OFFLINE CONNECTION STATUS
+   ============================================================
+ *
+ * PURPOSE:
+ * - Show a polished offline banner only when the browser
+ *   reports that the device has no network connection.
+ * - Keep the banner fixed at the very top of the screen.
+ * - Create enough space so it never covers the portal header.
+ * - Remove the banner immediately when the connection returns.
+ *
+ * IMPORTANT:
+ * - This section does NOT control the sidebar.
+ * - This section does NOT control notifications.
+ * - This section does NOT control the PWA service worker.
+ * - This section does NOT change page content.
+ * ============================================================ */
+
+(function initializeOfflineBanner() {
+
+    "use strict";
+
+
     /* ========================================================
-       OFFLINE BANNER
-       ======================================================== */
+       CONSTANTS
+    ======================================================== */
+
+    const BANNER_ID =
+        "afcOfflineBanner";
+
+    const ROOT_VARIABLE =
+        "--afc-offline-banner-height";
+
+    const ACTIVE_CLASS =
+        "offline-active";
+
+
+    /* ========================================================
+       CREATE BANNER
+    ======================================================== */
 
     function createOfflineBanner() {
 
         let banner =
             document.getElementById(
-                AFC_MAIN_CONFIG.OFFLINE_BANNER_ID
+                BANNER_ID
             );
+
+
+        /*
+         * Prevent duplicate banners.
+         */
 
         if (banner) {
             return banner;
         }
 
-        banner = document.createElement("div");
+
+        banner =
+            document.createElement("div");
+
 
         banner.id =
-            AFC_MAIN_CONFIG.OFFLINE_BANNER_ID;
+            BANNER_ID;
+
 
         banner.className =
             "offline-banner";
+
 
         banner.setAttribute(
             "role",
             "status"
         );
 
+
         banner.setAttribute(
             "aria-live",
             "polite"
         );
 
+
+        banner.setAttribute(
+            "aria-hidden",
+            "true"
+        );
+
+
         banner.innerHTML = `
             <div class="offline-banner-inner">
-                <i class="fa-solid fa-wifi"></i>
-                <span>
-                    You are currently offline. Some features may be unavailable.
-                </span>
+
+                <div class="offline-banner-icon">
+                    <i
+                        class="fa-solid fa-wifi"
+                        aria-hidden="true"
+                    ></i>
+                </div>
+
+                <div class="offline-banner-copy">
+
+                    <strong>
+                        You're offline
+                    </strong>
+
+                    <span>
+                        Some features may be unavailable
+                        until you reconnect.
+                    </span>
+
+                </div>
+
             </div>
         `;
 
-        document.body.appendChild(banner);
+
+        /*
+         * Put the banner at the very beginning
+         * of the document so it sits above the portal.
+         */
+
+        document.body.prepend(
+            banner
+        );
+
 
         return banner;
     }
 
 
-    function updateOfflineState() {
+    /* ========================================================
+       UPDATE BANNER HEIGHT
+    ======================================================== */
+
+    function updateOfflineBannerHeight(
+        banner
+    ) {
+
+        if (!banner) {
+            return;
+        }
+
+
+        if (
+            !banner.classList.contains(
+                "show"
+            )
+        ) {
+
+            document.documentElement.style.setProperty(
+                ROOT_VARIABLE,
+                "0px"
+            );
+
+            return;
+        }
+
+
+        /*
+         * Measure the real rendered height.
+         *
+         * This is important on mobile because the text can
+         * wrap differently depending on screen width.
+         */
+
+        const height =
+            banner.getBoundingClientRect()
+                .height;
+
+
+        document.documentElement.style.setProperty(
+            ROOT_VARIABLE,
+            `${Math.ceil(height)}px`
+        );
+    }
+
+
+    /* ========================================================
+       SET OFFLINE STATE
+    ======================================================== */
+
+    function setOfflineState(
+        isOffline
+    ) {
 
         const banner =
-            createOfflineBanner();
+            document.getElementById(
+                BANNER_ID
+            );
 
-        if (navigator.onLine) {
 
-            banner.classList.remove("show");
+        if (!banner) {
+            return;
+        }
 
-            document.documentElement
-                .classList.remove("is-offline");
 
-        } else {
+        if (isOffline) {
 
-            banner.classList.add("show");
+            banner.classList.add(
+                "show"
+            );
 
-            document.documentElement
-                .classList.add("is-offline");
+
+            banner.setAttribute(
+                "aria-hidden",
+                "false"
+            );
+
+
+            document.body.classList.add(
+                ACTIVE_CLASS
+            );
+
+
+            /*
+             * Wait one frame so the browser has
+             * calculated the banner's actual height.
+             */
+
+            requestAnimationFrame(
+                () => {
+
+                    updateOfflineBannerHeight(
+                        banner
+                    );
+
+                }
+            );
+
+        }
+
+        else {
+
+            banner.classList.remove(
+                "show"
+            );
+
+
+            banner.setAttribute(
+                "aria-hidden",
+                "true"
+            );
+
+
+            document.body.classList.remove(
+                ACTIVE_CLASS
+            );
+
+
+            document.documentElement.style.setProperty(
+                ROOT_VARIABLE,
+                "0px"
+            );
         }
     }
 
 
-    function initializeOfflineState() {
+    /* ========================================================
+       CHECK CONNECTION
+    ======================================================== */
 
-        updateOfflineState();
+    function updateConnectionState() {
+
+        /*
+         * navigator.onLine is the browser's current
+         * online/offline state.
+         */
+
+        const isOffline =
+            navigator.onLine === false;
+
+
+        setOfflineState(
+            isOffline
+        );
+    }
+
+
+    /* ========================================================
+       INITIALIZE
+    ======================================================== */
+
+    function initialize() {
+
+        /*
+         * Make sure the DOM exists.
+         */
+
+        if (!document.body) {
+            return;
+        }
+
+
+        createOfflineBanner();
+
+
+        /*
+         * Check immediately.
+         */
+
+        updateConnectionState();
+
+
+        /*
+         * Listen for connection changes.
+         */
 
         window.addEventListener(
             "online",
-            updateOfflineState
+            updateConnectionState
         );
+
 
         window.addEventListener(
             "offline",
-            updateOfflineState
+            updateConnectionState
+        );
+
+
+        /*
+         * Recalculate the banner height when
+         * the device orientation or viewport changes.
+         */
+
+        window.addEventListener(
+            "resize",
+            () => {
+
+                const banner =
+                    document.getElementById(
+                        BANNER_ID
+                    );
+
+
+                if (
+                    banner &&
+                    banner.classList.contains(
+                        "show"
+                    )
+                ) {
+
+                    updateOfflineBannerHeight(
+                        banner
+                    );
+                }
+            }
+        );
+
+
+        window.addEventListener(
+            "orientationchange",
+            () => {
+
+                setTimeout(
+                    () => {
+
+                        const banner =
+                            document.getElementById(
+                                BANNER_ID
+                            );
+
+
+                        if (
+                            banner &&
+                            banner.classList.contains(
+                                "show"
+                            )
+                        ) {
+
+                            updateOfflineBannerHeight(
+                                banner
+                            );
+                        }
+
+                    },
+                    100
+                );
+            }
         );
     }
+
+
+    /* ========================================================
+       START
+    ======================================================== */
+
+    if (
+        document.readyState ===
+        "loading"
+    ) {
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            initialize,
+            {
+                once: true
+            }
+        );
+
+    }
+
+    else {
+
+        initialize();
+
+    }
+
+})(); 
 
 
     /* ========================================================
