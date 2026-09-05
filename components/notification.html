@@ -2,142 +2,107 @@
      AFC ISIU YOUTH PORTAL
      SHARED NOTIFICATION PANEL
 ============================================================ -->
-    <style>
+     <style>
 
-        /* =====================================================
+        / * =====================================================
            NOTIFICATION WRAPPER
-        ====================================================== */
+         ======================================================  */
 
         .notification-wrapper {
-
             position: relative;
-
         }
 
 
-        /* =====================================================
+
+        / * =====================================================
            NOTIFICATION PANEL
-        ====================================================== */
+         ======================================================  */
 
         .notification-panel {
-
             position: absolute;
-
             top: calc(100% + 14px);
-
             right: 0;
+            width: min(350px, calc(100vw - 30px));
 
-            width: min(
-                350px,
-                calc(100vw - 30px)
-            );
-
-            background:
-                var(--card-bg, #ffffff);
+            background: var(--card-bg, #ffffff);
 
             border: 1px solid
-                var(
-                    --border-color,
-                    rgba(15, 23, 42, 0.08)
-                );
+                var(--border-color, rgba(15, 23, 42, 0.08));
 
             border-radius: 20px;
 
             padding: 20px;
 
             box-shadow:
-                0 20px 50px
-                rgba(0, 0, 0, 0.15);
+                0 20px 50px rgba(0, 0, 0, 0.15);
 
             z-index: 1000;
 
             opacity: 0;
-
             visibility: hidden;
-
-            transform:
-                translateY(-8px)
-                scale(0.98);
+            transform: translateY(-8px) scale(0.98);
 
             transition:
                 opacity 0.2s ease,
                 visibility 0.2s ease,
                 transform 0.2s ease;
-
         }
+
 
 
         .notification-panel.show {
-
             opacity: 1;
-
             visibility: visible;
-
-            transform:
-                translateY(0)
-                scale(1);
-
+            transform: translateY(0) scale(1);
         }
 
 
-        /* =====================================================
+
+        / * =====================================================
            PANEL HEADER
-        ====================================================== */
+         ======================================================  */
 
         .notification-panel-header {
-
             display: flex;
-
             align-items: flex-start;
-
             justify-content: space-between;
-
             gap: 14px;
 
             margin-bottom: 16px;
-
         }
+
 
 
         .notification-panel-heading {
-
             display: flex;
-
             align-items: center;
-
             gap: 12px;
-
         }
 
 
+
         .notification-panel-icon {
-
             width: 42px;
-
             height: 42px;
 
             flex-shrink: 0;
 
             display: flex;
-
             align-items: center;
-
             justify-content: center;
 
             border-radius: 13px;
 
-            background:
-                rgba(234, 88, 12, 0.10);
+            background: rgba(234, 88, 12, 0.10);
 
             color: #ea580c;
 
             font-size: 17px;
-
         }
 
 
-        .notification-panel-title {
 
+        .notification-panel-title {
             margin: 0;
 
             font-family:
@@ -149,16 +114,12 @@
             font-weight: 700;
 
             color:
-                var(
-                    --text-primary,
-                    #171717
-                );
-
+                var(--text-primary, #171717);
         }
 
 
-        .notification-panel-subtitle {
 
+        .notification-panel-subtitle {
             margin: 3px 0 0;
 
             font-family:
@@ -170,22 +131,17 @@
             line-height: 1.4;
 
             color:
-                var(
-                    --text-secondary,
-                    #737373
-                );
-
+                var(--text-secondary, #737373);
         }
 
 
-        /* =====================================================
+
+        / * =====================================================
            CLOSE BUTTON
-        ====================================================== */
+         ======================================================  */
 
         .notification-panel-close {
-
             width: 32px;
-
             height: 32px;
 
             border: 0;
@@ -193,21 +149,13 @@
             border-radius: 10px;
 
             background:
-                var(
-                    --surface-bg,
-                    #f5f5f5
-                );
+                var(--surface-bg, #f5f5f5);
 
             color:
-                var(
-                    --text-secondary,
-                    #737373
-                );
+                var(--text-secondary, #737373);
 
             display: flex;
-
             align-items: center;
-
             justify-content: center;
 
             cursor: pointer;
@@ -215,29 +163,24 @@
             transition:
                 background 0.2s ease,
                 color 0.2s ease;
-
         }
 
 
-        .notification-panel-close:hover {
 
+        .notification-panel-close :hover {
             background: #eeeeee;
-
             color: #171717;
-
         }
 
 
-        /* =====================================================
+
+        / * =====================================================
            NOTIFICATION STATUS
-        ====================================================== */
+         ======================================================  */
 
         .notification-status {
-
             display: flex;
-
             align-items: flex-start;
-
             gap: 10px;
 
             padding: 13px 14px;
@@ -245,29 +188,24 @@
             border-radius: 14px;
 
             background:
-                var(
-                    --surface-bg,
-                    #f7f7f7
-                );
+                var(--surface-bg, #f7f7f7);
 
             margin-bottom: 14px;
-
         }
 
 
-        .notification-status i {
 
+        .notification-status i {
             margin-top: 2px;
 
             font-size: 14px;
 
             color: #737373;
-
         }
 
 
-        .notification-status-text {
 
+        .notification-status-text {
             font-family:
                 "DM Sans",
                 sans-serif;
@@ -277,20 +215,16 @@
             line-height: 1.45;
 
             color:
-                var(
-                    --text-secondary,
-                    #525252
-                );
-
+                var(--text-secondary, #525252);
         }
 
 
-        /* =====================================================
+
+        / * =====================================================
            ENABLE BUTTON
-        ====================================================== */
+         ======================================================  */
 
         .notification-enable-btn {
-
             width: 100%;
 
             min-height: 46px;
@@ -302,9 +236,7 @@
             padding: 11px 16px;
 
             display: flex;
-
             align-items: center;
-
             justify-content: center;
 
             gap: 9px;
@@ -327,45 +259,36 @@
                 transform 0.2s ease,
                 opacity 0.2s ease,
                 background 0.2s ease;
-
         }
 
 
-        .notification-enable-btn:hover {
 
-            transform:
-                translateY(-1px);
-
+        .notification-enable-btn :hover {
+            transform: translateY(-1px);
             background: #c2410c;
-
         }
 
 
-        .notification-enable-btn:active {
 
-            transform:
-                translateY(0);
-
+        .notification-enable-btn :active {
+            transform: translateY(0);
         }
 
 
-        .notification-enable-btn:disabled {
 
+        .notification-enable-btn :disabled {
             opacity: 0.65;
-
             cursor: wait;
-
             transform: none;
-
         }
 
 
-        /* =====================================================
+
+        / * =====================================================
            DISABLE BUTTON
-        ====================================================== */
+         ======================================================  */
 
         .notification-disable-btn {
-
             width: 100%;
 
             min-height: 42px;
@@ -373,22 +296,14 @@
             margin-top: 9px;
 
             border: 1px solid
-                var(
-                    --border-color,
-                    #e5e5e5
-                );
+                var(--border-color, #e5e5e5);
 
             border-radius: 12px;
-
-            padding: 10px 16px;
 
             background: transparent;
 
             color:
-                var(
-                    --text-secondary,
-                    #525252
-                );
+                var(--text-secondary, #525252);
 
             font-family:
                 "DM Sans",
@@ -403,168 +318,119 @@
             transition:
                 background 0.2s ease,
                 color 0.2s ease;
-
         }
 
 
-        .notification-disable-btn:hover {
 
+        .notification-disable-btn :hover {
             background:
-                var(
-                    --surface-bg,
-                    #f5f5f5
-                );
+                var(--surface-bg, #f5f5f5);
 
             color:
-                var(
-                    --text-primary,
-                    #171717
-                );
-
+                var(--text-primary, #171717);
         }
 
 
-        /* =====================================================
-           HIDDEN
-        ====================================================== */
+
+        / * =====================================================
+           HIDDEN STATE
+         ======================================================  */
 
         .notification-panel [hidden] {
-
             display: none !important;
-
         }
 
 
-        /* =====================================================
+
+        / * =====================================================
            MOBILE
-        ====================================================== */
+         ======================================================  */
 
         @media (max-width: 600px) {
 
             .notification-panel {
-
                 position: fixed;
 
                 top: 74px;
 
                 right: 15px;
-
                 left: 15px;
 
                 width: auto;
 
                 max-width: none;
-
             }
 
         }
 
 
-        /* =====================================================
+
+        / * =====================================================
            DARK MODE
-        ====================================================== */
+         ======================================================  */
 
-        [data-theme="dark"]
-        .notification-panel {
-
+        [data-theme="dark"] .notification-panel {
             background: #171020;
 
             border-color:
-                rgba(
-                    255,
-                    255,
-                    255,
-                    0.08
-                );
+                rgba(255, 255, 255, 0.08);
 
             box-shadow:
-                0 20px 50px
-                rgba(0, 0, 0, 0.45);
-
+                0 20px 50px rgba(0, 0, 0, 0.45);
         }
+
 
 
         [data-theme="dark"]
         .notification-panel-title {
-
             color: #ffffff;
-
         }
+
 
 
         [data-theme="dark"]
         .notification-panel-subtitle,
-
         [data-theme="dark"]
         .notification-status-text {
-
             color: #b8b1c2;
-
         }
+
 
 
         [data-theme="dark"]
         .notification-status {
-
-            background:
-                rgba(
-                    255,
-                    255,
-                    255,
-                    0.05
-                );
-
+            background: rgba(255, 255, 255, 0.05);
         }
+
 
 
         [data-theme="dark"]
         .notification-panel-close {
-
-            background:
-                rgba(
-                    255,
-                    255,
-                    255,
-                    0.06
-                );
-
+            background: rgba(255, 255, 255, 0.06);
             color: #b8b1c2;
-
         }
+
 
 
         [data-theme="dark"]
-        .notification-panel-close:hover {
-
-            background:
-                rgba(
-                    255,
-                    255,
-                    255,
-                    0.10
-                );
-
+        .notification-panel-close :hover {
+            background: rgba(255, 255, 255, 0.10);
             color: #ffffff;
-
         }
+
 
 
         [data-theme="dark"]
         .notification-disable-btn {
-
             border-color:
-                rgba(
-                    255,
-                    255,
-                    255,
-                    0.12
-                );
+                rgba(255, 255, 255, 0.12);
 
             color: #b8b1c2;
-
         }
 
-    </style>
+
+
+     </style>
 
 <div
     class="notification-panel"
@@ -667,838 +533,821 @@
 
 </div>
 
-    <script>
+ <!-- =========================================================
+     SCRIPTS
+ ========================================================= -->
 
-        (function () {
-
-            "use strict";
-
-
-            let notificationInitialized = false;
+ <script
+    src="[https://unpkg.com/aos@2.3.4/dist/aos.js](https://unpkg.com/aos@2.3.4/dist/aos.js)"
+ > </script>
 
 
-            /* =================================================
-               ELEMENT HELPER
-            ================================================= */
 
-            function getElement(id) {
+ <!-- PWA MUST LOAD BEFORE MAIN.JS -->
 
-                return document.getElementById(id);
+ <script src="js/pwa.js"> </script>
+
+ <script src="js/main.js"> </script>
+
+
+
+ <!-- =========================================================
+     NOTIFICATION FRONTEND CONTROLLER
+ ========================================================= -->
+
+ <script>
+
+(function () {
+
+    "use strict";
+
+
+
+    function initNotificationUI() {
+
+        const button =
+            document.getElementById(
+                "notificationBtn"
+            );
+
+        const panel =
+            document.getElementById(
+                "notificationPanel"
+            );
+
+        const closeButton =
+            document.getElementById(
+                "notificationPanelClose"
+            );
+
+        const enableButton =
+            document.getElementById(
+                "enableNotificationsBtn"
+            );
+
+        const disableButton =
+            document.getElementById(
+                "disableNotificationsBtn"
+            );
+
+        const statusText =
+            document.getElementById(
+                "notificationStatusText"
+            );
+
+        const statusBox =
+            document.getElementById(
+                "notificationStatus"
+            );
+
+        const icon =
+            document.getElementById(
+                "notificationIcon"
+            );
+
+        const dot =
+            document.getElementById(
+                "notifyDot"
+            );
+
+
+
+        if (
+            !button ||
+            !panel ||
+            !enableButton
+        ) {
+
+            return;
+
+        }
+
+
+
+        / * =================================================
+           OPEN PANEL
+         =================================================  */
+
+        function openPanel() {
+
+            panel.classList.add("show");
+
+            panel.setAttribute(
+                "aria-hidden",
+                "false"
+            );
+
+            button.setAttribute(
+                "aria-expanded",
+                "true"
+            );
+
+            updateNotificationState();
+
+        }
+
+
+
+        / * =================================================
+           CLOSE PANEL
+         =================================================  */
+
+        function closePanel() {
+
+            panel.classList.remove("show");
+
+            panel.setAttribute(
+                "aria-hidden",
+                "true"
+            );
+
+            button.setAttribute(
+                "aria-expanded",
+                "false"
+            );
+
+        }
+
+
+
+        / * =================================================
+           SET STATUS
+         =================================================  */
+
+        function setNotificationStatus(
+            message,
+            state
+        ) {
+
+            if (statusText) {
+
+                statusText.textContent =
+                    message;
 
             }
 
 
-            /* =================================================
-               INITIALIZE NOTIFICATION UI
-            ================================================= */
 
-            function initNotificationUI() {
+            if (statusBox) {
 
-                if (
-                    notificationInitialized
-                ) {
+                statusBox.dataset.state =
+                    state || "";
 
-                    return;
+            }
 
-                }
+        }
 
 
-                const button =
-                    getElement(
-                        "notificationBtn"
-                    );
 
-                const panel =
-                    getElement(
-                        "notificationPanel"
-                    );
+        / * =================================================
+           UPDATE BELL
+         =================================================  */
 
-                const closeButton =
-                    getElement(
-                        "notificationPanelClose"
-                    );
+        function updateBell(
+            enabled
+        ) {
 
-                const enableButton =
-                    getElement(
-                        "enableNotificationsBtn"
-                    );
+            if (icon) {
 
-                const disableButton =
-                    getElement(
-                        "disableNotificationsBtn"
-                    );
+                icon.classList.toggle(
+                    "fa-regular",
+                    !enabled
+                );
 
-                const statusText =
-                    getElement(
-                        "notificationStatusText"
-                    );
-
-                const statusBox =
-                    getElement(
-                        "notificationStatus"
-                    );
-
-                const icon =
-                    getElement(
-                        "notificationIcon"
-                    );
-
-                const dot =
-                    getElement(
-                        "notifyDot"
-                    );
-
-
-                /*
-                 * The layout may still be loading.
-                 */
-
-                if (
-                    !button ||
-                    !panel ||
-                    !enableButton
-                ) {
-
-                    return;
-
-                }
-
-
-                notificationInitialized =
-                    true;
-
-
-                /* =================================================
-                   OPEN PANEL
-                ================================================== */
-
-                function openPanel() {
-
-                    panel.classList.add(
-                        "show"
-                    );
-
-                    panel.setAttribute(
-                        "aria-hidden",
-                        "false"
-                    );
-
-                    button.setAttribute(
-                        "aria-expanded",
-                        "true"
-                    );
-
-                    updateNotificationState();
-
-                }
-
-
-                /* =================================================
-                   CLOSE PANEL
-                ================================================== */
-
-                function closePanel() {
-
-                    panel.classList.remove(
-                        "show"
-                    );
-
-                    panel.setAttribute(
-                        "aria-hidden",
-                        "true"
-                    );
-
-                    button.setAttribute(
-                        "aria-expanded",
-                        "false"
-                    );
-
-                }
-
-
-                /* =================================================
-                   SET STATUS
-                ================================================== */
-
-                function setNotificationStatus(
-                    message,
-                    state
-                ) {
-
-                    if (statusText) {
-
-                        statusText.textContent =
-                            message;
-
-                    }
-
-
-                    if (statusBox) {
-
-                        statusBox.dataset.state =
-                            state || "";
-
-                    }
-
-                }
-
-
-                /* =================================================
-                   UPDATE BELL
-                ================================================== */
-
-                function updateBell(
+                icon.classList.toggle(
+                    "fa-solid",
                     enabled
+                );
+
+            }
+
+
+
+            if (dot) {
+
+                dot.style.display =
+                    enabled
+                        ? "block"
+                        : "none";
+
+            }
+
+        }
+
+
+
+        / * =================================================
+           CHECK CURRENT STATE
+         =================================================  */
+
+        async function updateNotificationState() {
+
+            if (
+                !window .AFC _PWA
+            ) {
+
+                setNotificationStatus(
+                    "The notification service is still loading. Please try again in a moment.",
+                    "loading"
+                );
+
+                return;
+
+            }
+
+
+
+            if (
+                typeof AFC _PWA.isPushSupported !==
+                "function"
+            ) {
+
+                setNotificationStatus(
+                    "Push notifications are not supported by this browser.",
+                    "unsupported"
+                );
+
+                enableButton.hidden = true;
+
+                updateBell(false);
+
+                return;
+
+            }
+
+
+
+            if (
+                !AFC _PWA.isPushSupported()
+            ) {
+
+                setNotificationStatus(
+                    "Push notifications are not supported by this browser.",
+                    "unsupported"
+                );
+
+                enableButton.hidden = true;
+
+                updateBell(false);
+
+                return;
+
+            }
+
+
+
+            try {
+
+                const permission =
+                    await AFC _PWA.getPushPermissionState();
+
+
+
+                const subscription =
+                    await AFC _PWA.getPushSubscription();
+
+
+
+                if (
+                    subscription &&
+                    permission === "granted"
                 ) {
-
-                    if (icon) {
-
-                        icon.classList.toggle(
-                            "fa-regular",
-                            !enabled
-                        );
-
-                        icon.classList.toggle(
-                            "fa-solid",
-                            enabled
-                        );
-
-                    }
-
-
-                    if (dot) {
-
-                        dot.style.display =
-                            enabled
-                                ? "block"
-                                : "none";
-
-                    }
-
-                }
-
-
-                /* =================================================
-                   CHECK CURRENT STATE
-                ================================================== */
-
-                async function
-                updateNotificationState() {
-
-                    if (
-                        !window.AFC_PWA
-                    ) {
-
-                        setNotificationStatus(
-                            "The notification service is still loading. Please try again in a moment.",
-                            "loading"
-                        );
-
-                        return;
-
-                    }
-
-
-                    if (
-                        typeof AFC_PWA.isPushSupported !==
-                        "function"
-                    ) {
-
-                        setNotificationStatus(
-                            "Push notifications are not supported by this browser.",
-                            "unsupported"
-                        );
-
-                        enableButton.hidden =
-                            true;
-
-                        if (disableButton) {
-
-                            disableButton.hidden =
-                                true;
-
-                        }
-
-                        updateBell(false);
-
-                        return;
-
-                    }
-
-
-                    if (
-                        !AFC_PWA.isPushSupported()
-                    ) {
-
-                        setNotificationStatus(
-                            "Push notifications are not supported by this browser.",
-                            "unsupported"
-                        );
-
-                        enableButton.hidden =
-                            true;
-
-                        if (disableButton) {
-
-                            disableButton.hidden =
-                                true;
-
-                        }
-
-                        updateBell(false);
-
-                        return;
-
-                    }
-
-
-                    try {
-
-                        const permission =
-                            await AFC_PWA
-                                .getPushPermissionState();
-
-
-                        const subscription =
-                            await AFC_PWA
-                                .getPushSubscription();
-
-
-                        if (
-                            subscription &&
-                            permission ===
-                                "granted"
-                        ) {
-
-                            setNotificationStatus(
-                                "Notifications are enabled on this device. You will receive AFC Isiu Youth updates here.",
-                                "enabled"
-                            );
-
-                            enableButton.hidden =
-                                true;
-
-
-                            if (disableButton) {
-
-                                disableButton.hidden =
-                                    false;
-
-                            }
-
-
-                            updateBell(true);
-
-                            return;
-
-                        }
-
-
-                        if (
-                            permission ===
-                            "denied"
-                        ) {
-
-                            setNotificationStatus(
-                                "Notifications are blocked for this site. Please allow notifications in your browser settings.",
-                                "blocked"
-                            );
-
-                            enableButton.hidden =
-                                false;
-
-
-                            if (disableButton) {
-
-                                disableButton.hidden =
-                                    true;
-
-                            }
-
-
-                            updateBell(false);
-
-                            return;
-
-                        }
-
-
-                        setNotificationStatus(
-                            "Turn on notifications to receive important AFC Isiu Youth updates.",
-                            "default"
-                        );
-
-                        enableButton.hidden =
-                            false;
-
-
-                        if (disableButton) {
-
-                            disableButton.hidden =
-                                true;
-
-                        }
-
-
-                        updateBell(false);
-
-                    }
-                    catch (error) {
-
-                        console.error(
-                            "[Notifications] State check failed:",
-                            error
-                        );
-
-                        setNotificationStatus(
-                            "Unable to check notification status. Please try again.",
-                            "error"
-                        );
-
-                    }
-
-                }
-
-
-                /* =================================================
-                   ENABLE NOTIFICATIONS
-                ================================================== */
-
-                async function
-                enableNotifications() {
-
-                    if (
-                        !window.AFC_PWA ||
-                        typeof AFC_PWA
-                            .subscribeToPush !==
-                            "function"
-                    ) {
-
-                        setNotificationStatus(
-                            "The notification service is not ready yet. Please try again.",
-                            "error"
-                        );
-
-                        return;
-
-                    }
-
-
-                    enableButton.disabled =
-                        true;
-
-
-                    enableButton.innerHTML = `
-                        <i class="fa-solid fa-spinner fa-spin"></i>
-                        <span>
-                            Enabling Notifications...
-                        </span>
-                    `;
-
 
                     setNotificationStatus(
-                        "Please allow notifications when your browser asks for permission.",
-                        "loading"
+                        "Notifications are enabled on this device. You will receive AFC Isiu Youth updates here.",
+                        "enabled"
                     );
 
 
-                    try {
 
-                        const result =
-                            await AFC_PWA
-                                .subscribeToPush();
+                    enableButton.hidden =
+                        true;
 
-
-                        if (
-                            result &&
-                            result.success
-                        ) {
-
-                            setNotificationStatus(
-                                "Notifications are now enabled. You will receive AFC Isiu Youth updates on this device.",
-                                "enabled"
-                            );
-
-
-                            enableButton.hidden =
-                                true;
-
-
-                            if (disableButton) {
-
-                                disableButton.hidden =
-                                    false;
-
-                            }
-
-
-                            updateBell(true);
-
-
-                            console.log(
-                                "[Notifications] Successfully enabled.",
-                                result
-                            );
-
-                        }
-                        else {
-
-                            throw new Error(
-                                "The notification subscription could not be completed."
-                            );
-
-                        }
-
-                    }
-                    catch (error) {
-
-                        console.error(
-                            "[Notifications] Enable failed:",
-                            error
-                        );
-
-
-                        setNotificationStatus(
-                            error.message ||
-                            "Unable to enable notifications. Please try again.",
-                            "error"
-                        );
-
-
-                        updateBell(false);
-
-                    }
-                    finally {
-
-                        enableButton.disabled =
-                            false;
-
-
-                        enableButton.innerHTML = `
-                            <i class="fa-solid fa-bell"></i>
-                            <span>
-                                Enable Notifications
-                            </span>
-                        `;
-
-                    }
-
-                }
-
-
-                /* =================================================
-                   DISABLE NOTIFICATIONS
-                ================================================== */
-
-                async function
-                disableNotifications() {
-
-                    if (
-                        !window.AFC_PWA ||
-                        typeof AFC_PWA
-                            .unsubscribeFromPush !==
-                            "function"
-                    ) {
-
-                        return;
-
-                    }
 
 
                     if (disableButton) {
 
-                        disableButton.disabled =
-                            true;
-
-                        disableButton.innerHTML = `
-                            <i class="fa-solid fa-spinner fa-spin"></i>
-                            <span>Disabling...</span>
-                        `;
-
-                    }
-
-
-                    try {
-
-                        await AFC_PWA
-                            .unsubscribeFromPush();
-
-
-                        setNotificationStatus(
-                            "Notifications have been disabled on this device.",
-                            "disabled"
-                        );
-
-
-                        enableButton.hidden =
+                        disableButton.hidden =
                             false;
 
-
-                        if (disableButton) {
-
-                            disableButton.hidden =
-                                true;
-
-                        }
-
-
-                        updateBell(false);
-
                     }
-                    catch (error) {
-
-                        console.error(
-                            "[Notifications] Disable failed:",
-                            error
-                        );
 
 
-                        setNotificationStatus(
-                            error.message ||
-                            "Unable to disable notifications.",
-                            "error"
-                        );
 
-                    }
-                    finally {
+                    updateBell(true);
 
-                        if (disableButton) {
-
-                            disableButton.disabled =
-                                false;
-
-                            disableButton.innerHTML = `
-                                <i class="fa-solid fa-bell-slash"></i>
-                                <span>
-                                    Disable Notifications
-                                </span>
-                            `;
-
-                        }
-
-                    }
+                    return;
 
                 }
 
 
-                /* =================================================
-                   BELL CLICK
-                ================================================== */
 
-                button.addEventListener(
-                    "click",
-                    function (event) {
+                if (
+                    permission === "denied"
+                ) {
 
-                        event.preventDefault();
-
-                        event.stopPropagation();
-
-
-                        const isOpen =
-                            panel.classList.contains(
-                                "show"
-                            );
-
-
-                        if (isOpen) {
-
-                            closePanel();
-
-                        }
-                        else {
-
-                            openPanel();
-
-                        }
-
-                    }
-                );
-
-
-                /* =================================================
-                   CLOSE BUTTON
-                ================================================== */
-
-                if (closeButton) {
-
-                    closeButton.addEventListener(
-                        "click",
-                        function (event) {
-
-                            event.preventDefault();
-
-                            closePanel();
-
-                        }
+                    setNotificationStatus(
+                        "Notifications are blocked for this site. Please allow notifications in your browser settings.",
+                        "blocked"
                     );
 
+
+
+                    enableButton.hidden =
+                        false;
+
+
+
+                    if (disableButton) {
+
+                        disableButton.hidden =
+                            true;
+
+                    }
+
+
+
+                    updateBell(false);
+
+                    return;
+
                 }
 
 
-                /* =================================================
-                   ENABLE BUTTON
-                ================================================== */
 
-                enableButton.addEventListener(
-                    "click",
-                    function (event) {
-
-                        event.preventDefault();
-
-                        enableNotifications();
-
-                    }
+                setNotificationStatus(
+                    "Turn on notifications to receive important AFC Isiu Youth updates.",
+                    "default"
                 );
 
 
-                /* =================================================
-                   DISABLE BUTTON
-                ================================================== */
+
+                enableButton.hidden =
+                    false;
+
+
 
                 if (disableButton) {
 
-                    disableButton.addEventListener(
-                        "click",
-                        function (event) {
+                    disableButton.hidden =
+                        true;
 
-                            event.preventDefault();
+                }
 
-                            disableNotifications();
 
-                        }
+
+                updateBell(false);
+
+            }
+            catch (error) {
+
+                console.error(
+                    "[Notifications] State check failed:",
+                    error
+                );
+
+                setNotificationStatus(
+                    "Unable to check notification status. Please try again.",
+                    "error"
+                );
+
+            }
+
+        }
+
+
+
+        / * =================================================
+           ENABLE NOTIFICATIONS
+         =================================================  */
+
+        async function enableNotifications() {
+
+            if (
+                !window .AFC _PWA ||
+                typeof AFC _PWA.subscribeToPush !==
+                "function"
+            ) {
+
+                setNotificationStatus(
+                    "The notification service is not ready yet. Please try again.",
+                    "error"
+                );
+
+                return;
+
+            }
+
+
+
+            enableButton.disabled =
+                true;
+
+
+
+            enableButton.innerHTML =  `
+
+                 <i class="fa-solid fa-spinner fa-spin"> </i>
+
+                 <span>
+                    Enabling Notifications...
+                 </span>
+
+             `;
+
+
+
+            setNotificationStatus(
+                "Please allow notifications when your browser asks for permission.",
+                "loading"
+            );
+
+
+
+            try {
+
+                const result =
+                    await AFC _PWA.subscribeToPush();
+
+
+
+                if (
+                    result &&
+                    result.success
+                ) {
+
+                    setNotificationStatus(
+                        "Notifications are now enabled. You will receive AFC Isiu Youth updates on this device.",
+                        "enabled"
+                    );
+
+
+
+                    enableButton.hidden =
+                        true;
+
+
+
+                    if (disableButton) {
+
+                        disableButton.hidden =
+                            false;
+
+                    }
+
+
+
+                    updateBell(true);
+
+
+
+                    console.log(
+                        "[Notifications] Successfully enabled.",
+                        result
+                    );
+
+                }
+                else {
+
+                    throw new Error(
+                        "The notification subscription could not be completed."
                     );
 
                 }
 
+            }
+            catch (error) {
 
-                /* =================================================
-                   CLICK OUTSIDE
-                ================================================== */
-
-                document.addEventListener(
-                    "click",
-                    function (event) {
-
-                        if (
-                            !panel.classList.contains(
-                                "show"
-                            )
-                        ) {
-
-                            return;
-
-                        }
-
-
-                        const wrapper =
-                            getElement(
-                                "notificationWrapper"
-                            );
-
-
-                        if (
-                            wrapper &&
-                            !wrapper.contains(
-                                event.target
-                            )
-                        ) {
-
-                            closePanel();
-
-                        }
-
-                    }
+                console.error(
+                    "[Notifications] Enable failed:",
+                    error
                 );
 
 
-                /* =================================================
-                   ESCAPE
-                ================================================== */
 
-                document.addEventListener(
-                    "keydown",
-                    function (event) {
-
-                        if (
-                            event.key ===
-                            "Escape"
-                        ) {
-
-                            closePanel();
-
-                        }
-
-                    }
+                setNotificationStatus(
+                    error.message ||
+                    "Unable to enable notifications. Please try again.",
+                    "error"
                 );
 
 
-                /* =================================================
-                   INITIAL CHECK
-                ================================================= */
 
-                updateNotificationState();
+                updateBell(false);
+
+            }
+            finally {
+
+                enableButton.disabled =
+                    false;
+
+
+
+                enableButton.innerHTML =  `
+
+                     <i class="fa-solid fa-bell"> </i>
+
+                     <span>
+                        Enable Notifications
+                     </span>
+
+                 `;
+
+            }
+
+        }
+
+
+
+        / * =================================================
+           DISABLE NOTIFICATIONS
+         =================================================  */
+
+        async function disableNotifications() {
+
+            if (
+                !window .AFC _PWA ||
+                typeof AFC _PWA.unsubscribeFromPush !==
+                "function"
+            ) {
+
+                return;
 
             }
 
 
-            /* =================================================
-               LAYOUT READY
-               
-               layout.js dispatches this after all shared
-               components have been inserted.
-            ================================================== */
 
-            document.addEventListener(
-                "afc:layout-ready",
-                function () {
+            if (disableButton) {
 
-                    initNotificationUI();
+                disableButton.disabled =
+                    true;
 
-                },
-                {
-                    once: true
+                disableButton.textContent =
+                    "Disabling...";
+
+            }
+
+
+
+            try {
+
+                await AFC _PWA.unsubscribeFromPush();
+
+
+
+                setNotificationStatus(
+                    "Notifications have been disabled on this device.",
+                    "disabled"
+                );
+
+
+
+                enableButton.hidden =
+                    false;
+
+
+
+                if (disableButton) {
+
+                    disableButton.hidden =
+                        true;
+
+                }
+
+
+
+                updateBell(false);
+
+            }
+            catch (error) {
+
+                console.error(
+                    "[Notifications] Disable failed:",
+                    error
+                );
+
+
+
+                setNotificationStatus(
+                    error.message ||
+                    "Unable to disable notifications.",
+                    "error"
+                );
+
+            }
+            finally {
+
+                if (disableButton) {
+
+                    disableButton.disabled =
+                        false;
+
+                    disableButton.textContent =
+                        "Disable Notifications";
+
+                }
+
+            }
+
+        }
+
+
+
+        / * =================================================
+           BELL CLICK
+         =================================================  */
+
+        button.addEventListener(
+            "click",
+            function (event) {
+
+                event.preventDefault();
+
+                event.stopPropagation();
+
+
+
+                const isOpen =
+                    panel.classList.contains(
+                        "show"
+                    );
+
+
+
+                if (isOpen) {
+
+                    closePanel();
+
+                }
+                else {
+
+                    openPanel();
+
+                }
+
+            }
+        );
+
+
+
+        / * =================================================
+           CLOSE BUTTON
+         =================================================  */
+
+        if (closeButton) {
+
+            closeButton.addEventListener(
+                "click",
+                function (event) {
+
+                    event.preventDefault();
+
+                    closePanel();
+
                 }
             );
 
+        }
 
-            /* =================================================
-               FALLBACK
-               
-               If layout.js has already completed before this
-               listener is registered.
-            ================================================== */
 
-            if (
-                document.readyState ===
-                "complete"
-            ) {
 
-                setTimeout(
-                    initNotificationUI,
-                    100
-                );
+        / * =================================================
+           ENABLE BUTTON
+         =================================================  */
+
+        enableButton.addEventListener(
+            "click",
+            function (event) {
+
+                event.preventDefault();
+
+                enableNotifications();
 
             }
-            else {
+        );
 
-                window.addEventListener(
-                    "load",
-                    function () {
 
-                        setTimeout(
-                            initNotificationUI,
-                            100
-                        );
 
-                    },
-                    {
-                        once: true
-                    }
-                );
+        / * =================================================
+           DISABLE BUTTON
+         =================================================  */
+
+        if (disableButton) {
+
+            disableButton.addEventListener(
+                "click",
+                function (event) {
+
+                    event.preventDefault();
+
+                    disableNotifications();
+
+                }
+            );
+
+        }
+
+
+
+        / * =================================================
+           CLICK OUTSIDE
+         =================================================  */
+
+        document.addEventListener(
+            "click",
+            function (event) {
+
+                if (
+                    !panel.classList.contains(
+                        "show"
+                    )
+                ) {
+
+                    return;
+
+                }
+
+
+
+                const wrapper =
+                    document.getElementById(
+                        "notificationWrapper"
+                    );
+
+
+
+                if (
+                    wrapper &&
+                    !wrapper.contains(
+                        event.target
+                    )
+                ) {
+
+                    closePanel();
+
+                }
 
             }
+        );
 
-        })();
 
-    </script>
+
+        / * =================================================
+           ESCAPE
+         =================================================  */
+
+        document.addEventListener(
+            "keydown",
+            function (event) {
+
+                if (
+                    event.key === "Escape"
+                ) {
+
+                    closePanel();
+
+                }
+
+            }
+        );
+
+
+
+        / * =================================================
+           INITIAL CHECK
+         =================================================  */
+
+        updateNotificationState();
+
+    }
+
+
+
+    /* =====================================================
+       START
+     ======================================================  */
+
+    if (
+        document.readyState ===
+        "loading"
+    ) {
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            initNotificationUI,
+            {
+                once: true
+            }
+        );
+
+    }
+    else {
+
+        initNotificationUI();
+
+    }
+
+})();
+
+</script>
 
