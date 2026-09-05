@@ -28,7 +28,7 @@
    VERSION
    ============================================================ */
 
-const VERSION = "19";
+const VERSION = "20";
 
 const CACHE_NAME = `afc-isiu-pwa-v${VERSION}`;
 
