@@ -1,214 +1,270 @@
-/**
- * AFC ISIU YOUTH PORTAL
- * VERCEL API
- * FILE: api/push/schedules.js
- *
- * Purpose:
- * Secure middleman between the admin notification dashboard
- * and Google Apps Script notification schedule API.
- */
+export default async function handler(req, res) {
+    /*
+     * ============================================================
+     * AFC ISIU YOUTH PORTAL
+     * VERCEL API — PUSH NOTIFICATION SCHEDULES
+     *
+     * GET:
+     *   Load notification schedules
+     *
+     * POST:
+     *   Create / update / delete / toggle schedules
+     *
+     * Architecture:
+     *
+     * Admin Dashboard
+     *       ↓
+     * Vercel /api/push/schedules
+     *       ↓
+     * Google Apps Script
+     *       ↓
+     * Google Sheets
+     * ============================================================
+     */
 
-const GOOGLE_APPS_SCRIPT_URL =
-    process.env.GOOGLE_APPS_SCRIPT_URL;
+    /* ============================================================
+       CORS
+       ============================================================ */
 
-const PUSH_ADMIN_SECRET =
-    process.env.PUSH_ADMIN_SECRET;
+    res.setHeader(
+        "Access-Control-Allow-Origin",
+        "https://afcisiuyouth.vercel.app"
+    );
 
+    res.setHeader(
+        "Access-Control-Allow-Methods",
+        "GET, POST, OPTIONS"
+    );
 
-/* ============================================================
-   APPS SCRIPT REQUEST
-   ============================================================ */
+    res.setHeader(
+        "Access-Control-Allow-Headers",
+        "Content-Type, Authorization"
+    );
 
-async function callAppsScript(action, data = {}) {
-
-    if (!GOOGLE_APPS_SCRIPT_URL) {
-
-        throw new Error(
-            "GOOGLE_APPS_SCRIPT_URL is not configured."
-        );
-
-    }
-
-    if (!PUSH_ADMIN_SECRET) {
-
-        throw new Error(
-            "PUSH_ADMIN_SECRET is not configured."
-        );
-
-    }
-
-
-    const payload = {
-
-        action:
-            action,
-
-        adminSecret:
-            PUSH_ADMIN_SECRET,
-
-        ...data
-
-    };
+    res.setHeader(
+        "Cache-Control",
+        "no-store, no-cache, must-revalidate"
+    );
 
 
-    const response =
-        await fetch(
-            GOOGLE_APPS_SCRIPT_URL,
-            {
+    /* ============================================================
+       PREFLIGHT
+       ============================================================ */
 
-                method:
-                    "POST",
-
-                headers: {
-
-                    "Content-Type":
-                        "application/x-www-form-urlencoded;charset=UTF-8"
-
-                },
-
-                body:
-                    new URLSearchParams({
-
-                        payload:
-                            JSON.stringify(
-                                payload
-                            )
-
-                    }).toString()
-
-            }
-        );
-
-
-    const text =
-        await response.text();
-
-
-    let result;
-
-
-    try {
-
-        result =
-            JSON.parse(
-                text
-            );
-
-    }
-
-    catch (error) {
-
-        throw new Error(
-            "Invalid response from Google Apps Script."
-        );
-
+    if (req.method === "OPTIONS") {
+        return res.status(204).end();
     }
 
 
-    if (
-        !response.ok
-    ) {
+    /* ============================================================
+       ENVIRONMENT
+       ============================================================ */
 
-        throw new Error(
-            result.message ||
-            "Google Apps Script request failed."
+    const appsScriptUrl =
+        String(
+            process.env.GOOGLE_APPS_SCRIPT_URL || ""
+        ).trim();
+
+    const adminSecret =
+        String(
+            process.env.PUSH_ADMIN_SECRET || ""
+        ).trim();
+
+
+    if (!appsScriptUrl) {
+
+        console.error(
+            "[Push Schedules] GOOGLE_APPS_SCRIPT_URL is missing."
         );
-
-    }
-
-
-    return result;
-
-}
-
-
-/* ============================================================
-   GET
-   ============================================================ */
-
-export default async function handler(
-    req,
-    res
-) {
-
-    if (
-        !PUSH_ADMIN_SECRET
-    ) {
 
         return res.status(500).json({
-
             success: false,
-
             message:
-                "Push admin secret is not configured."
-
+                "Google Apps Script URL is not configured."
         });
 
     }
 
 
+    if (!adminSecret) {
+
+        console.error(
+            "[Push Schedules] PUSH_ADMIN_SECRET is missing."
+        );
+
+        return res.status(500).json({
+            success: false,
+            message:
+                "Push admin secret is not configured."
+        });
+
+    }
+
+
+    /* ============================================================
+       AUTHORISATION
+       ============================================================ */
+
     const authorization =
         String(
-            req.headers.authorization ||
-            ""
-        );
+            req.headers.authorization || ""
+        ).trim();
+
+    const expectedAuthorization =
+        `Bearer ${adminSecret}`;
 
 
     if (
         authorization !==
-        `Bearer ${PUSH_ADMIN_SECRET}`
+        expectedAuthorization
     ) {
 
+        console.warn(
+            "[Push Schedules] Unauthorized request."
+        );
+
         return res.status(401).json({
-
             success: false,
-
             message:
                 "Unauthorized."
-
         });
 
     }
 
 
-    try {
+    /* ============================================================
+       GET — LOAD SCHEDULES
+       ============================================================ */
 
-        /* ======================================================
-           GET SCHEDULES
-           ====================================================== */
+    if (req.method === "GET") {
 
-        if (
-            req.method === "GET"
-        ) {
+        try {
 
-            const result =
-                await callAppsScript(
-                    "getNotificationSchedules"
+            const url =
+                new URL(
+                    appsScriptUrl
+                );
+
+            url.searchParams.set(
+                "action",
+                "getNotificationSchedules"
+            );
+
+            url.searchParams.set(
+                "adminSecret",
+                adminSecret
+            );
+
+
+            console.log(
+                "[Push Schedules] Loading schedules..."
+            );
+
+
+            const response =
+                await fetch(
+                    url.toString(),
+                    {
+                        method: "GET",
+                        redirect: "follow",
+                        cache: "no-store"
+                    }
                 );
 
 
-            return res.status(
-                result.success === false
-                    ? 400
-                    : 200
-            ).json(
-                result
+            const text =
+                await response.text();
+
+
+            console.log(
+                "[Push Schedules] Apps Script HTTP:",
+                response.status
             );
+
+
+            if (!response.ok) {
+
+                console.error(
+                    "[Push Schedules] Apps Script error:",
+                    text
+                );
+
+                return res.status(502).json({
+                    success: false,
+                    message:
+                        "Google Apps Script returned HTTP " +
+                        response.status + ".",
+                    details:
+                        text.slice(0, 1000)
+                });
+
+            }
+
+
+            let data;
+
+            try {
+
+                data =
+                    JSON.parse(text);
+
+            } catch (error) {
+
+                console.error(
+                    "[Push Schedules] Invalid Apps Script JSON:",
+                    text
+                );
+
+                return res.status(502).json({
+                    success: false,
+                    message:
+                        "Google Apps Script returned invalid JSON.",
+                    details:
+                        text.slice(0, 1000)
+                });
+
+            }
+
+
+            return res.status(200).json(
+                data
+            );
+
+        } catch (error) {
+
+            console.error(
+                "[Push Schedules] GET failed:",
+                error
+            );
+
+            return res.status(500).json({
+                success: false,
+                message:
+                    error.message ||
+                    "Unable to load notification schedules."
+            });
 
         }
 
+    }
 
-        /* ======================================================
-           POST SCHEDULE ACTION
-           ====================================================== */
 
-        if (
-            req.method === "POST"
-        ) {
+    /* ============================================================
+       POST — SCHEDULE MANAGEMENT
+       ============================================================ */
+
+    if (req.method === "POST") {
+
+        try {
 
             let body =
-                req.body;
+                req.body || {};
 
+
+            /*
+             * Vercel normally parses JSON automatically,
+             * but this also supports string bodies.
+             */
 
             if (
                 typeof body === "string"
@@ -217,108 +273,192 @@ export default async function handler(
                 try {
 
                     body =
-                        JSON.parse(
-                            body
-                        );
+                        JSON.parse(body);
 
-                }
+                } catch (error) {
 
-                catch (error) {
-
-                    body = {};
+                    return res.status(400).json({
+                        success: false,
+                        message:
+                            "Invalid JSON request body."
+                    });
 
                 }
 
             }
 
 
-            body =
-                body ||
-                {};
-
-
             const action =
                 String(
-                    body.action ||
-                    ""
+                    body.action || ""
                 ).trim();
 
 
             const allowedActions = [
-
                 "createNotification",
                 "updateNotification",
                 "deleteNotification",
                 "toggleNotification"
-
             ];
 
 
             if (
-                allowedActions.indexOf(
+                !allowedActions.includes(
                     action
-                ) === -1
+                )
             ) {
 
                 return res.status(400).json({
-
                     success: false,
-
                     message:
-                        "Invalid schedule action."
-
+                        "Invalid notification schedule action."
                 });
 
             }
 
 
-            const result =
-                await callAppsScript(
+            /*
+             * Remove browser-supplied secret.
+             *
+             * Vercel always inserts the trusted
+             * environment-variable secret.
+             */
+
+            const payload = {
+                ...body,
+                action:
                     action,
-                    body
+                adminSecret:
+                    adminSecret
+            };
+
+
+            const form =
+                new URLSearchParams();
+
+            form.set(
+                "payload",
+                JSON.stringify(
+                    payload
+                )
+            );
+
+
+            console.log(
+                "[Push Schedules] Sending action:",
+                action
+            );
+
+
+            const response =
+                await fetch(
+                    appsScriptUrl,
+                    {
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type":
+                                "application/x-www-form-urlencoded;charset=UTF-8"
+                        },
+
+                        body:
+                            form.toString(),
+
+                        redirect:
+                            "follow",
+
+                        cache:
+                            "no-store"
+                    }
                 );
 
 
-            return res.status(
-                result.success === false
-                    ? 400
-                    : 200
-            ).json(
-                result
+            const text =
+                await response.text();
+
+
+            console.log(
+                "[Push Schedules] Apps Script POST HTTP:",
+                response.status
             );
+
+
+            if (!response.ok) {
+
+                console.error(
+                    "[Push Schedules] Apps Script POST error:",
+                    text
+                );
+
+                return res.status(502).json({
+                    success: false,
+                    message:
+                        "Google Apps Script returned HTTP " +
+                        response.status + ".",
+                    details:
+                        text.slice(0, 1000)
+                });
+
+            }
+
+
+            let data;
+
+            try {
+
+                data =
+                    JSON.parse(text);
+
+            } catch (error) {
+
+                console.error(
+                    "[Push Schedules] Invalid POST JSON:",
+                    text
+                );
+
+                return res.status(502).json({
+                    success: false,
+                    message:
+                        "Google Apps Script returned invalid JSON.",
+                    details:
+                        text.slice(0, 1000)
+                });
+
+            }
+
+
+            return res.status(200).json(
+                data
+            );
+
+
+        } catch (error) {
+
+            console.error(
+                "[Push Schedules] POST failed:",
+                error
+            );
+
+            return res.status(500).json({
+                success: false,
+                message:
+                    error.message ||
+                    "Unable to manage notification schedule."
+            });
 
         }
 
-
-        return res.status(405).json({
-
-            success: false,
-
-            message:
-                "Method not allowed."
-
-        });
-
     }
 
-    catch (error) {
 
-        console.error(
-            "Push schedules error:",
-            error
-        );
+    /* ============================================================
+       METHOD NOT ALLOWED
+       ============================================================ */
 
-
-        return res.status(500).json({
-
-            success: false,
-
-            message:
-                error.message ||
-                "Unable to process schedule request."
-
-        });
-
-    }
+    return res.status(405).json({
+        success: false,
+        message:
+            "Method not allowed."
+    });
 
 }
