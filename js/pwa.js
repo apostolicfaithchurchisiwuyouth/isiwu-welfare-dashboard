@@ -1051,6 +1051,32 @@
     }
 
 
+   async function getPushSubscription() {
+
+    if (!isPushSupported()) {
+        return null;
+    }
+
+    try {
+
+        const registration =
+            await getPushRegistration();
+
+        return await registration.pushManager.getSubscription();
+
+    } catch (err) {
+
+        warn(
+            "Unable to get push subscription:",
+            err
+        );
+
+        return null;
+
+    }
+}
+
+
     /* ============================================================
        GET CURRENT PUSH STATUS
        ============================================================ */
@@ -1524,6 +1550,9 @@
 
         deletePushSubscription:
             deletePushSubscription,
+
+       getPushSubscription:
+    getPushSubscription,
 
         getPushStatus:
             getPushStatus,
