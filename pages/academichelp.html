@@ -7,7 +7,7 @@
 
     <meta
         name="viewport"
-        content="width=device-width, initial-scale=1.0"
+        content="width=device-width, initial-scale=1.0, viewport-fit=cover"
     >
 
     <meta
@@ -15,17 +15,9 @@
         content="#0a0016"
     >
 
-    <meta
-        name="description"
-        content="Academic Help for young people at AFC Isiu Youth Portal."
-    >
-
-    <title>Academic Help | AFC Isiu Youth Portal</title>
-
-
-    <!-- =========================================================
-         PWA
-    ========================================================== -->
+    <title>
+        Academic Help | AFC Isiu Youth Portal
+    </title>
 
     <link
         rel="manifest"
@@ -37,10 +29,9 @@
         href="/images/logo.png"
     >
 
-
-    <!-- =========================================================
+    <!-- ========================================================
          FONTS
-    ========================================================== -->
+    ========================================================= -->
 
     <link
         rel="preconnect"
@@ -58,10 +49,9 @@
         rel="stylesheet"
     >
 
-
-    <!-- =========================================================
+    <!-- ========================================================
          ICONS
-    ========================================================== -->
+    ========================================================= -->
 
     <link
         rel="stylesheet"
@@ -73,20 +63,9 @@
         href="https://cdn.jsdelivr.net/npm/remixicon@4.6.0/fonts/remixicon.css"
     >
 
-
-    <!-- =========================================================
-         AOS
-    ========================================================== -->
-
-    <link
-        rel="stylesheet"
-        href="https://unpkg.com/aos@2.3.4/dist/aos.css"
-    >
-
-
-    <!-- =========================================================
+    <!-- ========================================================
          PORTAL CSS
-    ========================================================== -->
+    ========================================================= -->
 
     <link
         rel="stylesheet"
@@ -98,11 +77,6 @@
         href="../css/layout.css"
     >
 
-
-    <!-- =========================================================
-         PAGE CSS
-    ========================================================== -->
-
     <link
         rel="stylesheet"
         href="../css/academichelp.css"
@@ -113,69 +87,66 @@
 
 <body>
 
-
 <div class="app-layout">
 
-
-    <!-- =========================================================
+    <!-- ======================================================
          SIDEBAR
-    ========================================================== -->
+    ======================================================= -->
 
     <div id="app-sidebar"></div>
 
 
-    <!-- =========================================================
+    <!-- ======================================================
          MAIN AREA
-    ========================================================== -->
+    ======================================================= -->
 
     <div class="main-area">
 
-
-        <!-- =====================================================
-             TOPBAR
-        ====================================================== -->
+        <!-- TOPBAR -->
 
         <div id="app-topbar"></div>
 
 
-        <!-- =====================================================
-             PAGE
-        ====================================================== -->
+        <!-- ==================================================
+             PAGE CONTENT
+        =================================================== -->
 
         <main class="dashboard-content academic-page">
 
-
-            <!-- =================================================
+            <!-- ==================================================
                  HERO
-            ================================================== -->
+            =================================================== -->
 
-            <section
-                class="academic-hero"
-                data-aos="fade-up"
-            >
+            <section class="academic-hero">
 
-                <div class="academic-hero-copy">
+                <div class="academic-hero-content">
 
                     <div class="academic-eyebrow">
 
-                        <span class="academic-eyebrow-icon">
-                            <i class="fa-solid fa-graduation-cap"></i>
-                        </span>
+                        <i class="fa-solid fa-graduation-cap"></i>
 
-                        Academic Help
+                        Academic Support
 
                     </div>
 
 
                     <h1>
-                        Need help with school?
-                        <span>Start here.</span>
+
+                        Need academic help?
+
+                        <span>
+                            Ask us.
+                        </span>
+
                     </h1>
 
 
                     <p>
-                        Find answers to common academic questions or send us
-                        your question directly.
+
+                        Get practical guidance on school,
+                        examinations, university, scholarships
+                        and your academic journey.
+
                     </p>
 
 
@@ -184,20 +155,26 @@
                         <button
                             type="button"
                             class="academic-primary-btn"
-                            data-scroll-to="academicFaqSection"
+                            data-scroll-to="askQuestionSection"
                         >
-                            <i class="fa-solid fa-magnifying-glass"></i>
-                            Find an Answer
+
+                            <i class="fa-solid fa-circle-question"></i>
+
+                            Ask a Question
+
                         </button>
 
 
                         <button
                             type="button"
                             class="academic-text-btn"
-                            data-scroll-to="askQuestionSection"
+                            data-scroll-to="faqSection"
                         >
-                            Ask a Question
+
+                            Browse answers
+
                             <i class="fa-solid fa-arrow-right"></i>
+
                         </button>
 
                     </div>
@@ -205,39 +182,72 @@
                 </div>
 
 
-                <div class="academic-hero-mark">
+                <div class="academic-hero-visual">
 
-                    <div class="hero-mark-circle">
+                    <div class="academic-book-icon">
 
-                        <i class="fa-solid fa-graduation-cap"></i>
+                        <i class="fa-solid fa-book-open-reader"></i>
 
                     </div>
-
-                    <span>
-                        Learn · Grow · Excel
-                    </span>
 
                 </div>
 
             </section>
 
 
+            <!-- ==================================================
+                 SEARCH
+            =================================================== -->
 
-            <!-- =================================================
-                 QUICK CATEGORIES
-            ================================================== -->
+            <section class="academic-search-section">
 
-            <section
-                class="academic-categories-section"
-                data-aos="fade-up"
-            >
+                <div class="academic-search-box">
+
+                    <div class="academic-search-icon">
+
+                        <i class="fa-solid fa-magnifying-glass"></i>
+
+                    </div>
+
+
+                    <input
+                        type="search"
+                        id="academicSearch"
+                        placeholder="Search questions..."
+                        autocomplete="off"
+                        aria-label="Search academic questions"
+                    >
+
+
+                    <button
+                        type="button"
+                        id="clearAcademicSearch"
+                        class="academic-search-clear"
+                        aria-label="Clear search"
+                        hidden
+                    >
+
+                        <i class="fa-solid fa-xmark"></i>
+
+                    </button>
+
+                </div>
+
+            </section>
+
+
+            <!-- ==================================================
+                 CATEGORIES
+            =================================================== -->
+
+            <section class="academic-categories-section">
 
                 <div class="academic-section-heading">
 
                     <div>
 
                         <span class="academic-section-kicker">
-                            Quick Start
+                            Explore
                         </span>
 
                         <h2>
@@ -251,7 +261,6 @@
 
                 <div class="academic-category-grid">
 
-
                     <button
                         type="button"
                         class="academic-category-card"
@@ -259,8 +268,11 @@
                     >
 
                         <span class="category-icon">
+
                             <i class="fa-solid fa-school"></i>
+
                         </span>
+
 
                         <span class="category-copy">
 
@@ -274,10 +286,10 @@
 
                         </span>
 
+
                         <i class="fa-solid fa-arrow-right category-arrow"></i>
 
                     </button>
-
 
 
                     <button
@@ -287,8 +299,11 @@
                     >
 
                         <span class="category-icon">
+
                             <i class="fa-solid fa-pen-to-square"></i>
+
                         </span>
+
 
                         <span class="category-copy">
 
@@ -297,15 +312,15 @@
                             </strong>
 
                             <small>
-                                Admission & preparation
+                                Preparation & admission
                             </small>
 
                         </span>
 
+
                         <i class="fa-solid fa-arrow-right category-arrow"></i>
 
                     </button>
-
 
 
                     <button
@@ -315,8 +330,11 @@
                     >
 
                         <span class="category-icon">
+
                             <i class="fa-solid fa-building-columns"></i>
+
                         </span>
+
 
                         <span class="category-copy">
 
@@ -325,15 +343,77 @@
                             </strong>
 
                             <small>
-                                School & campus life
+                                Academic & campus life
                             </small>
 
                         </span>
+
 
                         <i class="fa-solid fa-arrow-right category-arrow"></i>
 
                     </button>
 
+
+                    <button
+                        type="button"
+                        class="academic-category-card"
+                        data-category="Scholarships"
+                    >
+
+                        <span class="category-icon">
+
+                            <i class="fa-solid fa-award"></i>
+
+                        </span>
+
+
+                        <span class="category-copy">
+
+                            <strong>
+                                Scholarships
+                            </strong>
+
+                            <small>
+                                Funding & opportunities
+                            </small>
+
+                        </span>
+
+
+                        <i class="fa-solid fa-arrow-right category-arrow"></i>
+
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="academic-category-card"
+                        data-category="Study Skills"
+                    >
+
+                        <span class="category-icon">
+
+                            <i class="fa-solid fa-book-bookmark"></i>
+
+                        </span>
+
+
+                        <span class="category-copy">
+
+                            <strong>
+                                Study Skills
+                            </strong>
+
+                            <small>
+                                Better ways to learn
+                            </small>
+
+                        </span>
+
+
+                        <i class="fa-solid fa-arrow-right category-arrow"></i>
+
+                    </button>
 
 
                     <button
@@ -343,8 +423,11 @@
                     >
 
                         <span class="category-icon">
+
                             <i class="fa-solid fa-compass"></i>
+
                         </span>
+
 
                         <span class="category-copy">
 
@@ -358,6 +441,7 @@
 
                         </span>
 
+
                         <i class="fa-solid fa-arrow-right category-arrow"></i>
 
                     </button>
@@ -367,17 +451,14 @@
             </section>
 
 
-
-            <!-- =================================================
-                 FAQ / ANSWERS
-            ================================================== -->
+            <!-- ==================================================
+                 FAQ
+            =================================================== -->
 
             <section
                 class="academic-faq-section"
-                id="academicFaqSection"
-                data-aos="fade-up"
+                id="faqSection"
             >
-
 
                 <div class="academic-section-heading faq-heading">
 
@@ -399,46 +480,17 @@
                         class="academic-show-all"
                         id="showAllFaqs"
                     >
+
                         <span>
                             Show all
                         </span>
 
                         <i class="fa-solid fa-arrow-right"></i>
+
                     </button>
 
                 </div>
 
-
-
-                <!-- SEARCH -->
-
-                <div class="academic-search-box">
-
-                    <i class="fa-solid fa-magnifying-glass"></i>
-
-                    <input
-                        type="search"
-                        id="academicSearch"
-                        placeholder="Search questions..."
-                        autocomplete="off"
-                        aria-label="Search academic questions"
-                    >
-
-                    <button
-                        type="button"
-                        id="clearAcademicSearch"
-                        class="academic-search-clear"
-                        aria-label="Clear search"
-                        hidden
-                    >
-                        <i class="fa-solid fa-xmark"></i>
-                    </button>
-
-                </div>
-
-
-
-                <!-- FILTERS -->
 
                 <div
                     class="academic-filter-row"
@@ -453,6 +505,7 @@
                         All
                     </button>
 
+
                     <button
                         type="button"
                         class="academic-filter"
@@ -460,6 +513,7 @@
                     >
                         Secondary
                     </button>
+
 
                     <button
                         type="button"
@@ -469,6 +523,7 @@
                         JAMB
                     </button>
 
+
                     <button
                         type="button"
                         class="academic-filter"
@@ -476,6 +531,25 @@
                     >
                         University
                     </button>
+
+
+                    <button
+                        type="button"
+                        class="academic-filter"
+                        data-filter="Scholarships"
+                    >
+                        Scholarships
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="academic-filter"
+                        data-filter="Study Skills"
+                    >
+                        Study Skills
+                    </button>
+
 
                     <button
                         type="button"
@@ -488,17 +562,23 @@
                 </div>
 
 
-
-                <!-- FAQ LIST -->
-
                 <div
                     class="academic-faq-list"
                     id="academicFaqList"
-                ></div>
+                >
 
+                    <div class="academic-loading-state">
 
+                        <i class="fa-solid fa-spinner fa-spin"></i>
 
-                <!-- EMPTY -->
+                        <span>
+                            Loading answers...
+                        </span>
+
+                    </div>
+
+                </div>
+
 
                 <div
                     class="academic-empty-state"
@@ -512,22 +592,27 @@
 
                     </div>
 
+
                     <h3>
-                        No matching question
+                        No matching questions
                     </h3>
 
+
                     <p>
-                        Can't find what you need?
-                        Ask the Academic Help team.
+                        We couldn't find an answer for that search.
                     </p>
+
 
                     <button
                         type="button"
                         class="academic-primary-btn"
                         data-scroll-to="askQuestionSection"
                     >
-                        <i class="fa-solid fa-paper-plane"></i>
-                        Ask the Team
+
+                        Ask the team
+
+                        <i class="fa-solid fa-arrow-right"></i>
+
                     </button>
 
                 </div>
@@ -535,19 +620,14 @@
             </section>
 
 
-
-            <!-- =================================================
+            <!-- ==================================================
                  ASK QUESTION
-            ================================================== -->
+            =================================================== -->
 
             <section
                 class="ask-question-section"
                 id="askQuestionSection"
-                data-aos="fade-up"
             >
-
-
-                <!-- INTRO CARD -->
 
                 <div class="ask-question-intro">
 
@@ -558,38 +638,44 @@
                     </div>
 
 
-                    <div class="ask-question-intro-copy">
+                    <span class="academic-section-kicker">
+                        Need Personal Guidance?
+                    </span>
 
-                        <span class="academic-section-kicker">
-                            Need Personal Help?
+
+                    <h2>
+                        Can't find your answer?
+                    </h2>
+
+
+                    <p>
+                        Send your question to the Academic Help
+                        team and we'll review it.
+                    </p>
+
+
+                    <div class="response-note">
+
+                        <i class="fa-solid fa-clock"></i>
+
+                        <span>
+                            Your question will be reviewed by the team.
                         </span>
-
-                        <h2>
-                            Can't find your answer?
-                        </h2>
-
-                        <p>
-                            Send your question to the Academic Help team.
-                            We'll review it and provide guidance.
-                        </p>
 
                     </div>
 
                 </div>
 
 
-
                 <!-- FORM CARD -->
 
                 <div class="academic-question-card">
-
 
                     <form
                         id="academicQuestionForm"
                         class="academic-question-form"
                         novalidate
                     >
-
 
                         <!-- NAME + PHONE -->
 
@@ -598,9 +684,13 @@
                             <div class="form-field">
 
                                 <label for="questionName">
+
                                     Your Name
+
                                     <span>*</span>
+
                                 </label>
+
 
                                 <div class="input-wrapper">
 
@@ -610,13 +700,14 @@
                                         type="text"
                                         id="questionName"
                                         name="name"
-                                        placeholder="Your name"
+                                        placeholder="Enter your name"
                                         maxlength="100"
                                         autocomplete="name"
                                         required
                                     >
 
                                 </div>
+
 
                                 <small
                                     class="field-error"
@@ -626,13 +717,16 @@
                             </div>
 
 
-
                             <div class="form-field">
 
                                 <label for="questionPhone">
+
                                     WhatsApp / Phone
+
                                     <span>*</span>
+
                                 </label>
+
 
                                 <div class="input-wrapper">
 
@@ -642,13 +736,14 @@
                                         type="tel"
                                         id="questionPhone"
                                         name="phone"
-                                        placeholder="08012345678"
+                                        placeholder="e.g. 08012345678"
                                         maxlength="30"
                                         autocomplete="tel"
                                         required
                                     >
 
                                 </div>
+
 
                                 <small
                                     class="field-error"
@@ -660,7 +755,6 @@
                         </div>
 
 
-
                         <!-- CATEGORY + CONTACT -->
 
                         <div class="form-row">
@@ -668,9 +762,13 @@
                             <div class="form-field">
 
                                 <label for="questionCategory">
+
                                     Category
+
                                     <span>*</span>
+
                                 </label>
+
 
                                 <div class="select-wrapper">
 
@@ -683,7 +781,7 @@
                                     >
 
                                         <option value="">
-                                            Select category
+                                            Select a category
                                         </option>
 
                                         <option value="Secondary School">
@@ -718,6 +816,7 @@
 
                                 </div>
 
+
                                 <small
                                     class="field-error"
                                     id="questionCategoryError"
@@ -726,12 +825,12 @@
                             </div>
 
 
-
                             <div class="form-field">
 
                                 <label for="questionContact">
                                     Preferred Response
                                 </label>
+
 
                                 <div class="select-wrapper">
 
@@ -763,26 +862,30 @@
                         </div>
 
 
-
                         <!-- QUESTION -->
 
                         <div class="form-field">
 
                             <label for="questionMessage">
-                                Your Question
+
+                                What would you like help with?
+
                                 <span>*</span>
+
                             </label>
+
 
                             <div class="textarea-wrapper">
 
                                 <textarea
                                     id="questionMessage"
                                     name="question"
-                                    rows="5"
+                                    rows="6"
                                     maxlength="2000"
-                                    placeholder="Tell us what you need help with..."
+                                    placeholder="Tell us clearly what you need help with..."
                                     required
                                 ></textarea>
+
 
                                 <div class="character-count">
 
@@ -796,13 +899,13 @@
 
                             </div>
 
+
                             <small
                                 class="field-error"
                                 id="questionMessageError"
                             ></small>
 
                         </div>
-
 
 
                         <!-- CONSENT -->
@@ -816,21 +919,22 @@
                                 required
                             >
 
+
                             <span class="custom-checkbox">
 
                                 <i class="fa-solid fa-check"></i>
 
                             </span>
 
+
                             <span class="consent-text">
 
-                                I agree that the Academic Help team may
-                                contact me about this question.
+                                I agree that the Academic Help team
+                                may contact me regarding this question.
 
                             </span>
 
                         </label>
-
 
 
                         <!-- SUBMIT -->
@@ -868,7 +972,6 @@
                         </button>
 
 
-
                         <!-- STATUS -->
 
                         <div
@@ -878,7 +981,6 @@
                             aria-live="polite"
                         ></div>
 
-
                     </form>
 
                 </div>
@@ -886,15 +988,11 @@
             </section>
 
 
-
-            <!-- =================================================
+            <!-- ==================================================
                  PUBLISHED ANSWERS
-            ================================================== -->
+            =================================================== -->
 
-            <section
-                class="published-answers-section"
-                data-aos="fade-up"
-            >
+            <section class="published-answers-section">
 
                 <div class="academic-section-heading">
 
@@ -923,7 +1021,7 @@
                         <i class="fa-solid fa-spinner fa-spin"></i>
 
                         <span>
-                            Loading answers...
+                            Loading helpful answers...
                         </span>
 
                     </div>
@@ -933,28 +1031,23 @@
             </section>
 
 
-
         </main>
 
     </div>
 
 
-    <!-- =========================================================
+    <!-- ======================================================
          MOBILE BOTTOM NAV
-    ========================================================== -->
+    ======================================================= -->
 
     <div id="app-bottom-nav"></div>
-
 
 </div>
 
 
-
-<!-- =============================================================
+<!-- =========================================================
      JAVASCRIPT
-============================================================== -->
-
-<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+========================================================= -->
 
 <script src="../js/pwa.js"></script>
 
