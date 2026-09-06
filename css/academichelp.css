@@ -1,1652 +1,1334 @@
 /* ============================================================
    AFC ISIU YOUTH PORTAL V2
-   ACADEMIC HELP
    FILE: academichelp.css
-
-   DESIGN
-   ------------------------------------------------------------
-   • Matches academichelp.html exactly
-   • SLC Quiz-inspired spacing and width
-   • Purple brand foundation
-   • Orange / blue / green / yellow supporting accents
-   • No animations
-   • No transitions
-   • No hero icon
-   • Responsive and mobile-first
+   PURPOSE: ACADEMIC HELP PAGE
    ============================================================ */
 
 
 /* ============================================================
-   01. PAGE FOUNDATION
+   PAGE FOUNDATION
    ============================================================ */
 
 .academic-page {
-
-    --purple: #4a0754;
-    --purple-dark: #300238;
-    --purple-deep: #0a0016;
-
-    --orange: #ea580c;
-    --orange-light: #fff1e8;
-
-    --blue: #2563eb;
-    --blue-light: #eff6ff;
-
-    --green: #15803d;
-    --green-light: #effaf3;
-
-    --yellow: #ca8a04;
-    --yellow-light: #fff9e8;
-
-    --violet: #7c3aed;
-    --violet-light: #f5f3ff;
-
-    --cream: #faf8f3;
-
-    --heading: #18131a;
-    --text: #49414c;
-    --muted: #817783;
-
-    --border: #e8e2ea;
-    --border-dark: #d9d0dc;
-
     width: 100%;
     max-width: none;
-
-    padding-top: 24px;
-    padding-bottom: 55px;
-
+    padding-left: 0;
+    padding-right: 0;
     box-sizing: border-box;
 
-    color: var(--text);
+    --academic-purple: #4a0754;
+    --academic-purple-dark: #10051a;
+    --academic-purple-soft: #f7f0f8;
 
+    --academic-orange: #ea580c;
+    --academic-orange-light: #fff7ed;
+
+    --academic-teal: #0891b2;
+    --academic-teal-light: #ecfeff;
+
+    --academic-blue: #2563eb;
+    --academic-blue-light: #eff6ff;
+
+    --academic-green: #059669;
+    --academic-green-light: #ecfdf5;
+
+    --academic-yellow: #ca8a04;
+    --academic-yellow-light: #fefce8;
+
+    --academic-pink: #db2777;
+    --academic-pink-light: #fdf2f8;
+
+    --academic-text: #111827;
+    --academic-body: #4b5563;
+    --academic-muted: #6b7280;
+
+    --academic-border: #e5e7eb;
+    --academic-border-soft: #eef0f3;
+
+    --academic-surface: #ffffff;
+    --academic-background: #f8fafc;
+}
+
+
+.academic-page *,
+.academic-page *::before,
+.academic-page *::after {
+    box-sizing: border-box;
 }
 
 
 /* ============================================================
-   02. WIDTH SYSTEM
-   ------------------------------------------------------------
-   This intentionally follows the SLC Quiz width system.
+   WIDE PAGE CONTAINER
+   MATCHES SLC QUIZ / LESSONS PAGE WIDTH
    ============================================================ */
 
-.academic-page > section {
-
-    width: min(
-        100% - 32px,
-        1500px
-    );
-
+.academic-page .dashboard-container {
+    width: min(100% - 32px, 1500px);
     max-width: 1500px;
 
     margin-left: auto;
     margin-right: auto;
 
-    box-sizing: border-box;
+    padding-left: 0;
+    padding-right: 0;
+}
 
+
+.academic-page > section {
+    width: 100%;
 }
 
 
 /* ============================================================
-   03. TYPOGRAPHY
+   FONT CONTROL
+   BRICOLAGE GROTESQUE = HEADINGS / UI
+   DM SANS = BODY / INPUTS / TEXT
    ============================================================ */
 
 .academic-page h1,
 .academic-page h2,
 .academic-page h3,
 .academic-page h4,
-.academic-page strong,
 .academic-page button,
 .academic-page label,
+.academic-page strong,
 .academic-page .academic-eyebrow,
-.academic-page .academic-section-kicker {
-
-    font-family:
-        "Bricolage Grotesque",
-        sans-serif;
-
+.academic-page .academic-section-kicker,
+.academic-page .category-copy strong,
+.academic-page .academic-filter,
+.academic-page .academic-show-all,
+.academic-page .submit-question-btn,
+.academic-page .academic-primary-btn {
+    font-family: "Bricolage Grotesque", sans-serif;
 }
 
 
 .academic-page p,
-.academic-page span,
-.academic-page small,
 .academic-page input,
+.academic-page select,
 .academic-page textarea,
-.academic-page select {
+.academic-page small,
+.academic-page .category-copy small,
+.academic-page .consent-text,
+.academic-page .response-note,
+.academic-page .field-error,
+.academic-page .character-count {
+    font-family: "DM Sans", sans-serif;
+}
 
-    font-family:
-        "DM Sans",
-        sans-serif;
 
+/* ============================================================
+   GENERAL
+   ============================================================ */
+
+.academic-page button,
+.academic-page input,
+.academic-page select,
+.academic-page textarea,
+.academic-page a {
+    -webkit-tap-highlight-color: transparent;
 }
 
 
 .academic-page button {
+    -webkit-appearance: none;
+}
 
-    -webkit-tap-highlight-color: transparent;
 
-    cursor: pointer;
+.academic-page button:focus,
+.academic-page button:focus-visible,
+.academic-page a:focus,
+.academic-page a:focus-visible {
+    outline: none;
+}
 
+
+.academic-page input,
+.academic-page select,
+.academic-page textarea {
+    outline: none;
 }
 
 
 .academic-page [hidden] {
-
     display: none !important;
-
 }
 
 
 /* ============================================================
-   04. HERO
+   HERO
+   SLC QUIZ-INSPIRED
+   CLEAN / SHORT / WIDE
    ============================================================ */
 
 .academic-hero {
-
     position: relative;
-
-    display: flex;
-
-    align-items: center;
-
-    min-height: 290px;
-
-    padding: 42px 46px;
-
     overflow: hidden;
 
-    border: 1px solid rgba(74, 7, 84, 0.10);
+    width: 100%;
+    max-width: none;
+
+    margin-bottom: 24px;
+    padding: 28px 30px;
 
     border-radius: 28px;
 
     background:
-
         radial-gradient(
-            circle at 88% 16%,
-            rgba(234, 88, 12, 0.15),
-            transparent 24%
+            circle at 88% 8%,
+            rgba(234, 88, 12, .12),
+            transparent 25%
         ),
-
         radial-gradient(
-            circle at 76% 100%,
-            rgba(37, 99, 235, 0.11),
-            transparent 30%
-        ),
-
-        radial-gradient(
-            circle at 5% 100%,
-            rgba(21, 128, 61, 0.08),
+            circle at 8% 100%,
+            rgba(8, 145, 178, .08),
             transparent 28%
         ),
-
         linear-gradient(
             135deg,
             #ffffff 0%,
-            #fcf9fd 55%,
-            #f7f1f8 100%
+            #faf7fc 53%,
+            #fff8f1 100%
         );
 
-    box-shadow:
-        0 16px 45px rgba(38, 3, 47, 0.07);
+    border: 1px solid rgba(74, 7, 84, .09);
 
+    box-shadow:
+        0 18px 55px rgba(15, 23, 42, .055);
 }
 
 
-/* Static decorative shape */
+/* Static decorative layer */
 
 .academic-hero::before {
-
     content: "";
 
     position: absolute;
 
-    right: -75px;
-    bottom: -105px;
+    width: 230px;
+    height: 230px;
 
-    width: 250px;
-    height: 250px;
-
-    border: 1px solid rgba(234, 88, 12, 0.15);
+    top: -145px;
+    right: -55px;
 
     border-radius: 50%;
 
     background:
-        rgba(234, 88, 12, 0.025);
+        radial-gradient(
+            circle,
+            rgba(234, 88, 12, .16),
+            rgba(234, 88, 12, 0)
+        );
 
+    pointer-events: none;
 }
 
 
 .academic-hero::after {
-
     content: "";
 
     position: absolute;
 
-    top: -65px;
-    right: 25%;
+    width: 210px;
+    height: 210px;
 
-    width: 125px;
-    height: 125px;
+    bottom: -145px;
+    left: 18%;
 
-    border: 1px solid rgba(37, 99, 235, 0.10);
+    border-radius: 50%;
 
-    border-radius: 30px;
+    background:
+        radial-gradient(
+            circle,
+            rgba(74, 7, 84, .09),
+            rgba(74, 7, 84, 0)
+        );
 
-    transform: rotate(18deg);
-
+    pointer-events: none;
 }
 
 
 /* ============================================================
-   05. HERO CONTENT
+   HERO CONTENT
    ============================================================ */
 
 .academic-hero-content {
-
     position: relative;
-
     z-index: 2;
 
-    width: min(
-        100%,
-        760px
-    );
+    width: 100%;
+    max-width: 850px;
+}
 
+
+/*
+   Hero visual is intentionally hidden.
+   The page does not need the book icon.
+*/
+
+.academic-hero-visual {
+    display: none !important;
 }
 
 
 .academic-eyebrow {
-
     display: inline-flex;
-
     align-items: center;
-
     gap: 8px;
 
-    margin-bottom: 15px;
+    margin-bottom: 10px;
 
-    padding: 7px 11px;
+    color: var(--academic-orange);
 
-    border: 1px solid rgba(74, 7, 84, 0.10);
+    font-size: .68rem;
+    font-weight: 800;
 
-    border-radius: 999px;
-
-    background: rgba(255, 255, 255, 0.86);
-
-    color: var(--purple);
-
-    font-size: 0.74rem;
-
-    font-weight: 700;
-
+    letter-spacing: .09em;
+    text-transform: uppercase;
 }
 
 
 .academic-eyebrow i {
-
-    color: var(--orange);
-
-    font-size: 0.78rem;
-
+    font-size: .72rem;
 }
 
 
 .academic-hero h1 {
-
-    max-width: 720px;
-
     margin: 0;
 
-    color: var(--heading);
+    color: var(--academic-text);
 
-    font-size: clamp(
-        2.2rem,
-        4vw,
-        3.4rem
-    );
+    font-size: clamp(1.7rem, 3.5vw, 2.5rem);
 
-    line-height: 0.98;
-
-    letter-spacing: -0.05em;
-
+    line-height: 1.08;
     font-weight: 800;
 
+    letter-spacing: -.035em;
 }
 
 
 .academic-hero h1 span {
+    color: var(--academic-purple);
 
-    color: var(--orange);
-
-    font: inherit;
-
+    font-family: "Bricolage Grotesque", sans-serif;
 }
 
 
 .academic-hero p {
-
     max-width: 620px;
 
-    margin: 18px 0 0;
+    margin: 10px 0 0;
 
-    color: var(--text);
+    color: var(--academic-muted);
 
-    font-size: 0.94rem;
-
-    line-height: 1.65;
-
-}
-
-
-.academic-hero-actions {
-
-    display: flex;
-
-    align-items: center;
-
-    flex-wrap: wrap;
-
-    gap: 15px;
-
-    margin-top: 25px;
-
+    font-size: .8rem;
+    line-height: 1.5;
 }
 
 
 /* ============================================================
-   06. HERO BUTTON
+   HERO ACTIONS
    ============================================================ */
 
-.academic-primary-btn {
-
-    display: inline-flex;
-
+.academic-hero-actions {
+    display: flex;
     align-items: center;
+    flex-wrap: wrap;
 
+    gap: 12px;
+
+    margin-top: 19px;
+}
+
+
+.academic-primary-btn {
+    display: inline-flex;
+    align-items: center;
     justify-content: center;
 
     gap: 8px;
 
-    min-height: 44px;
+    min-height: 45px;
 
-    padding: 10px 17px;
+    padding: 11px 18px;
 
-    border: 0;
-
-    border-radius: 12px;
+    border: none;
+    border-radius: 999px;
 
     background:
         linear-gradient(
             135deg,
-            var(--purple),
-            var(--purple-dark)
+            var(--academic-purple-dark),
+            var(--academic-purple)
         );
 
     color: #ffffff;
 
-    font-size: 0.78rem;
+    font-size: .77rem;
+    font-weight: 750;
 
-    font-weight: 700;
+    cursor: pointer;
 
     box-shadow:
-        0 8px 18px rgba(74, 7, 84, 0.16);
-
+        0 9px 23px rgba(74, 7, 84, .15);
 }
 
 
-.academic-primary-btn:hover {
-
-    background:
-        linear-gradient(
-            135deg,
-            #5c0967,
-            #3a0444
-        );
-
+.academic-primary-btn i {
+    font-size: .76rem;
 }
 
 
 .academic-text-btn {
-
     display: inline-flex;
-
     align-items: center;
+    justify-content: center;
 
-    gap: 8px;
+    gap: 7px;
 
-    min-height: 40px;
+    min-height: 42px;
 
-    padding: 8px 2px;
+    padding: 10px 7px;
 
-    border: 0;
+    border: none;
 
     background: transparent;
 
-    color: var(--purple);
+    color: var(--academic-orange);
 
-    font-size: 0.77rem;
+    font-size: .77rem;
+    font-weight: 750;
 
-    font-weight: 700;
-
+    cursor: pointer;
 }
 
 
 .academic-text-btn i {
-
-    color: var(--orange);
-
-    font-size: 0.68rem;
-
-}
-
-
-.academic-text-btn:hover {
-
-    color: var(--orange);
-
+    font-size: .68rem;
 }
 
 
 /* ============================================================
-   07. HERO VISUAL
-   ------------------------------------------------------------
-   The HTML still contains .academic-hero-visual,
-   but the requested design does not use the icon.
-   ============================================================ */
-
-.academic-hero-visual {
-
-    display: none !important;
-
-}
-
-
-/* ============================================================
-   08. SEARCH
+   SEARCH
    ============================================================ */
 
 .academic-search-section {
+    width: 100%;
 
-    margin-top: 20px;
-
+    margin-bottom: 30px;
 }
 
 
 .academic-search-box {
+    position: relative;
 
     display: flex;
-
     align-items: center;
 
     width: 100%;
+    min-height: 58px;
 
-    min-height: 60px;
-
-    padding: 0 8px 0 17px;
-
-    border: 1px solid var(--border);
-
-    border-radius: 16px;
+    border-radius: 18px;
 
     background: #ffffff;
 
+    border: 1px solid var(--academic-border);
+
     box-shadow:
-        0 8px 24px rgba(25, 15, 30, 0.045);
-
-    box-sizing: border-box;
-
+        0 9px 28px rgba(15, 23, 42, .035);
 }
 
 
 .academic-search-icon {
+    width: 54px;
+
+    flex: 0 0 54px;
 
     display: flex;
-
     align-items: center;
-
     justify-content: center;
 
-    flex: 0 0 34px;
+    color: var(--academic-purple);
 
-    width: 34px;
-    height: 34px;
-
-    border-radius: 10px;
-
-    background: var(--blue-light);
-
-    color: var(--blue);
-
-}
-
-
-.academic-search-icon i {
-
-    font-size: 0.78rem;
-
+    font-size: .9rem;
 }
 
 
 .academic-search-box input {
-
-    flex: 1;
-
+    width: 100%;
     min-width: 0;
 
-    height: 48px;
+    min-height: 56px;
 
-    padding: 0 12px;
+    padding: 0 12px 0 0;
 
-    border: 0;
-
-    outline: 0;
+    border: none;
 
     background: transparent;
 
-    color: var(--heading);
+    color: var(--academic-text);
 
-    font-size: 0.82rem;
-
+    font-size: .82rem;
 }
 
 
 .academic-search-box input::placeholder {
-
-    color: #a29aa5;
-
+    color: #9ca3af;
 }
 
 
 .academic-search-clear {
+    width: 43px;
+    height: 43px;
+
+    flex: 0 0 43px;
+
+    margin-right: 7px;
 
     display: flex;
-
     align-items: center;
-
     justify-content: center;
 
-    width: 38px;
-    height: 38px;
+    border: none;
+    border-radius: 13px;
 
-    border: 0;
+    background: #f3f4f6;
 
-    border-radius: 10px;
+    color: #6b7280;
 
-    background: #f5f2f6;
-
-    color: var(--muted);
-
-}
-
-
-.academic-search-clear:hover {
-
-    background: var(--orange-light);
-
-    color: var(--orange);
-
+    cursor: pointer;
 }
 
 
 /* ============================================================
-   09. SECTION SPACING
-   ============================================================ */
-
-.academic-categories-section,
-.academic-faq-section,
-.ask-question-section,
-.published-answers-section {
-
-    margin-top: 46px;
-
-}
-
-
-/* ============================================================
-   10. SECTION HEADINGS
+   SECTION HEADING
    ============================================================ */
 
 .academic-section-heading {
-
     display: flex;
-
-    align-items: flex-end;
-
+    align-items: flex-start;
     justify-content: space-between;
 
-    gap: 20px;
+    gap: 18px;
 
-    margin-bottom: 19px;
-
+    margin-bottom: 21px;
 }
 
 
 .academic-section-kicker {
-
     display: block;
 
-    margin-bottom: 6px;
+    margin-bottom: 5px;
 
-    color: var(--orange);
+    color: var(--academic-orange);
 
-    font-size: 0.68rem;
-
+    font-size: .68rem;
     font-weight: 800;
 
-    letter-spacing: 0.08em;
-
+    letter-spacing: .08em;
     text-transform: uppercase;
-
 }
 
 
 .academic-section-heading h2 {
-
     margin: 0;
 
-    color: var(--heading);
+    color: var(--academic-text);
 
-    font-size: clamp(
-        1.45rem,
-        2.3vw,
-        2rem
-    );
+    font-size: 1.35rem;
 
-    line-height: 1.08;
-
-    letter-spacing: -0.035em;
-
+    line-height: 1.18;
     font-weight: 800;
 
-}
-
-
-/* ============================================================
-   11. CATEGORY GRID
-   ============================================================ */
-
-.academic-category-grid {
-
-    display: grid;
-
-    grid-template-columns:
-        repeat(
-            3,
-            minmax(0, 1fr)
-        );
-
-    gap: 13px;
-
-}
-
-
-.academic-category-card {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 13px;
-
-    width: 100%;
-
-    min-width: 0;
-
-    min-height: 88px;
-
-    padding: 14px;
-
-    border: 1px solid var(--border);
-
-    border-radius: 16px;
-
-    background: #ffffff;
-
-    text-align: left;
-
-    box-sizing: border-box;
-
-    box-shadow:
-        0 6px 20px rgba(25, 15, 30, 0.035);
-
-}
-
-
-.academic-category-card:hover {
-
-    border-color: rgba(74, 7, 84, 0.20);
-
-    box-shadow:
-        0 11px 26px rgba(25, 15, 30, 0.07);
-
-}
-
-
-/* ============================================================
-   12. CATEGORY COLORS
-   ============================================================ */
-
-.category-icon {
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    flex: 0 0 42px;
-
-    width: 42px;
-    height: 42px;
-
-    border-radius: 12px;
-
-    background: var(--purple);
-
-    color: #ffffff;
-
-}
-
-
-.academic-category-card:nth-child(2)
-.category-icon {
-
-    background: var(--orange);
-
-}
-
-
-.academic-category-card:nth-child(3)
-.category-icon {
-
-    background: var(--blue);
-
-}
-
-
-.academic-category-card:nth-child(4)
-.category-icon {
-
-    background: var(--yellow);
-
-}
-
-
-.academic-category-card:nth-child(5)
-.category-icon {
-
-    background: var(--green);
-
-}
-
-
-.academic-category-card:nth-child(6)
-.category-icon {
-
-    background: var(--violet);
-
-}
-
-
-.category-icon i {
-
-    font-size: 0.88rem;
-
-}
-
-
-.category-copy {
-
-    display: flex;
-
-    flex-direction: column;
-
-    min-width: 0;
-
-    gap: 3px;
-
-}
-
-
-.category-copy strong {
-
-    overflow: hidden;
-
-    color: var(--heading);
-
-    font-size: 0.80rem;
-
-    line-height: 1.2;
-
-    font-weight: 750;
-
-    text-overflow: ellipsis;
-
-    white-space: nowrap;
-
-}
-
-
-.category-copy small {
-
-    overflow: hidden;
-
-    color: var(--muted);
-
-    font-size: 0.66rem;
-
-    line-height: 1.3;
-
-    text-overflow: ellipsis;
-
-    white-space: nowrap;
-
-}
-
-
-.category-arrow {
-
-    flex: 0 0 auto;
-
-    margin-left: auto;
-
-    color: #aaa1ad;
-
-    font-size: 0.66rem;
-
-}
-
-
-/* ============================================================
-   13. FAQ HEADER
-   ============================================================ */
-
-.faq-heading {
-
-    align-items: center;
-
+    letter-spacing: -.02em;
 }
 
 
 .academic-show-all {
-
     display: inline-flex;
-
     align-items: center;
 
     gap: 7px;
 
     flex: 0 0 auto;
 
-    padding: 8px 11px;
+    margin-top: 4px;
 
-    border: 1px solid var(--border);
+    padding: 7px 0;
 
-    border-radius: 10px;
+    border: none;
 
-    background: #ffffff;
+    background: transparent;
 
-    color: var(--purple);
+    color: var(--academic-purple);
 
-    font-size: 0.70rem;
+    font-size: .73rem;
+    font-weight: 750;
 
-    font-weight: 700;
-
+    cursor: pointer;
 }
 
 
 .academic-show-all i {
-
-    color: var(--orange);
-
-    font-size: 0.62rem;
-
-}
-
-
-.academic-show-all:hover {
-
-    border-color: var(--purple);
-
-    background: var(--purple);
-
-    color: #ffffff;
-
+    font-size: .65rem;
 }
 
 
 /* ============================================================
-   14. FAQ FILTERS
+   CATEGORIES
+   ============================================================ */
+
+.academic-categories-section {
+    width: 100%;
+
+    margin-bottom: 38px;
+}
+
+
+.academic-category-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+
+    gap: 14px;
+}
+
+
+.academic-category-card {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+
+    width: 100%;
+    min-width: 0;
+
+    min-height: 84px;
+
+    gap: 13px;
+
+    padding: 15px;
+
+    border: 1px solid var(--academic-border);
+
+    border-radius: 20px;
+
+    background: #ffffff;
+
+    text-align: left;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 8px 25px rgba(15, 23, 42, .035);
+}
+
+
+.category-icon {
+    width: 43px;
+    height: 43px;
+
+    flex: 0 0 43px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 14px;
+
+    background: var(--academic-purple-soft);
+
+    color: var(--academic-purple);
+
+    font-size: .88rem;
+}
+
+
+.category-copy {
+    min-width: 0;
+
+    flex: 1;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 3px;
+}
+
+
+.category-copy strong {
+    overflow: hidden;
+
+    color: var(--academic-text);
+
+    font-size: .78rem;
+    font-weight: 750;
+
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+
+.category-copy small {
+    color: var(--academic-muted);
+
+    font-size: .69rem;
+    line-height: 1.3;
+}
+
+
+.category-arrow {
+    flex: 0 0 auto;
+
+    color: #9ca3af;
+
+    font-size: .65rem;
+}
+
+
+/* Category colour accents */
+
+.academic-category-card:nth-child(1) .category-icon {
+    background: var(--academic-purple-soft);
+    color: var(--academic-purple);
+}
+
+
+.academic-category-card:nth-child(2) .category-icon {
+    background: var(--academic-orange-light);
+    color: var(--academic-orange);
+}
+
+
+.academic-category-card:nth-child(3) .category-icon {
+    background: var(--academic-blue-light);
+    color: var(--academic-blue);
+}
+
+
+.academic-category-card:nth-child(4) .category-icon {
+    background: var(--academic-yellow-light);
+    color: var(--academic-yellow);
+}
+
+
+.academic-category-card:nth-child(5) .category-icon {
+    background: var(--academic-teal-light);
+    color: var(--academic-teal);
+}
+
+
+.academic-category-card:nth-child(6) .category-icon {
+    background: var(--academic-green-light);
+    color: var(--academic-green);
+}
+
+
+/* ============================================================
+   FAQ SECTION
+   ============================================================ */
+
+.academic-faq-section {
+    width: 100%;
+
+    margin-bottom: 38px;
+}
+
+
+.faq-heading {
+    margin-bottom: 17px;
+}
+
+
+/* ============================================================
+   FAQ FILTER
    ============================================================ */
 
 .academic-filter-row {
-
     display: flex;
-
     align-items: center;
 
-    gap: 7px;
+    gap: 8px;
+
+    width: 100%;
+
+    margin-bottom: 18px;
 
     overflow-x: auto;
 
-    padding: 2px 1px 10px;
-
     scrollbar-width: none;
-
 }
 
 
 .academic-filter-row::-webkit-scrollbar {
-
     display: none;
-
 }
 
 
 .academic-filter {
-
     flex: 0 0 auto;
 
-    min-height: 33px;
+    min-height: 35px;
 
-    padding: 7px 12px;
+    padding: 8px 13px;
 
-    border: 1px solid var(--border);
+    border: 1px solid var(--academic-border);
 
     border-radius: 999px;
 
     background: #ffffff;
 
-    color: var(--muted);
+    color: #6b7280;
 
-    font-size: 0.66rem;
+    font-size: .69rem;
+    font-weight: 700;
 
-    font-weight: 600;
-
-}
-
-
-.academic-filter:hover {
-
-    border-color: rgba(74, 7, 84, 0.22);
-
-    color: var(--purple);
-
+    cursor: pointer;
 }
 
 
 .academic-filter.active {
+    border-color: var(--academic-purple);
 
-    border-color: var(--purple);
-
-    background: var(--purple);
+    background: var(--academic-purple);
 
     color: #ffffff;
-
 }
 
 
 /* ============================================================
-   15. FAQ LIST
+   FAQ LIST
    ============================================================ */
 
 .academic-faq-list {
-
     display: grid;
 
     grid-template-columns:
-        repeat(
-            2,
-            minmax(0, 1fr)
-        );
-
-    gap: 13px;
-
-    margin-top: 7px;
-
-}
-
-
-.academic-faq-item {
-
-    min-width: 0;
-
-    overflow: hidden;
-
-    border: 1px solid var(--border);
-
-    border-radius: 16px;
-
-    background: #ffffff;
-
-    box-shadow:
-        0 6px 20px rgba(25, 15, 30, 0.035);
-
-}
-
-
-.academic-faq-question {
-
-    display: flex;
-
-    align-items: flex-start;
-
-    justify-content: space-between;
+        repeat(2, minmax(0, 1fr));
 
     gap: 14px;
 
     width: 100%;
+}
 
-    padding: 16px;
 
-    border: 0;
+.academic-faq-item {
+    width: 100%;
 
-    background: transparent;
+    background: #ffffff;
 
-    color: var(--heading);
+    border: 1px solid var(--academic-border);
+
+    border-radius: 20px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 8px 27px rgba(15, 23, 42, .035);
+}
+
+
+.academic-faq-question {
+    width: 100%;
+
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    padding: 18px;
+
+    border: none;
+
+    background: #ffffff;
+
+    color: var(--academic-text);
 
     text-align: left;
 
-    font-size: 0.82rem;
-
+    font-size: .82rem;
     line-height: 1.4;
+    font-weight: 750;
 
-    font-weight: 700;
+    cursor: pointer;
+}
 
+
+.academic-faq-question i {
+    flex: 0 0 auto;
+
+    margin-top: 2px;
+
+    color: var(--academic-orange);
+
+    font-size: .7rem;
 }
 
 
 .academic-faq-answer {
+    padding: 0 18px 18px;
 
-    padding: 0 16px 16px;
+    color: var(--academic-body);
 
-    color: var(--text);
+    font-family: "DM Sans", sans-serif;
 
-    font-size: 0.75rem;
-
-    line-height: 1.65;
-
+    font-size: .78rem;
+    line-height: 1.55;
 }
 
 
-.academic-faq-meta {
-
-    display: flex;
-
-    flex-wrap: wrap;
-
-    gap: 6px;
-
-    padding: 0 16px 13px;
-
+.academic-faq-answer p {
+    margin: 0;
 }
 
 
-.academic-faq-category {
+.academic-faq-item:nth-child(3n + 1) {
+    border-top: 3px solid var(--academic-purple);
+}
 
-    display: inline-flex;
 
-    align-items: center;
+.academic-faq-item:nth-child(3n + 2) {
+    border-top: 3px solid var(--academic-orange);
+}
 
-    width: fit-content;
 
-    padding: 5px 8px;
-
-    border-radius: 999px;
-
-    background: var(--purple);
-
-    color: #ffffff;
-
-    font-size: 0.59rem;
-
-    font-weight: 700;
-
+.academic-faq-item:nth-child(3n + 3) {
+    border-top: 3px solid var(--academic-teal);
 }
 
 
 /* ============================================================
-   16. LOADING
+   FAQ LOADING
    ============================================================ */
 
 .academic-loading-state {
+    grid-column: 1 / -1;
 
     display: flex;
-
     align-items: center;
-
     justify-content: center;
 
     gap: 9px;
 
-    min-height: 100px;
+    min-height: 110px;
 
     padding: 20px;
 
-    border: 1px dashed var(--border-dark);
+    border-radius: 20px;
 
-    border-radius: 15px;
+    background: #ffffff;
 
-    background: #faf8fb;
+    border: 1px solid var(--academic-border);
 
-    color: var(--muted);
+    color: var(--academic-muted);
 
-    font-size: 0.76rem;
+    font-family: "DM Sans", sans-serif;
 
+    font-size: .78rem;
 }
 
 
 .academic-loading-state i {
-
-    color: var(--purple);
-
+    color: var(--academic-purple);
 }
 
 
 /* ============================================================
-   17. EMPTY STATE
+   EMPTY STATE
    ============================================================ */
 
 .academic-empty-state {
+    width: 100%;
 
-    margin-top: 14px;
-
-    padding: 32px 22px;
-
-    border: 1px dashed var(--border-dark);
-
-    border-radius: 17px;
-
-    background:
-        linear-gradient(
-            145deg,
-            #ffffff,
-            #faf7fb
-        );
+    padding: 35px 25px;
 
     text-align: center;
 
+    border-radius: 23px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #ffffff,
+            #faf7fc
+        );
+
+    border: 1px solid var(--academic-border);
 }
 
 
 .empty-icon {
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
     width: 48px;
     height: 48px;
 
-    margin: 0 auto 12px;
+    margin: 0 auto 13px;
 
-    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-    background: var(--blue-light);
+    border-radius: 15px;
 
-    color: var(--blue);
+    background: var(--academic-orange-light);
 
-}
+    color: var(--academic-orange);
 
-
-.empty-icon i {
-
-    font-size: 0.96rem;
-
+    font-size: .9rem;
 }
 
 
 .academic-empty-state h3 {
+    margin: 0 0 6px;
 
-    margin: 0;
-
-    color: var(--heading);
+    color: var(--academic-text);
 
     font-size: 1rem;
-
+    font-weight: 800;
 }
 
 
 .academic-empty-state p {
+    margin: 0 auto 17px;
 
-    max-width: 420px;
+    color: var(--academic-muted);
 
-    margin: 7px auto 16px;
-
-    color: var(--muted);
-
-    font-size: 0.73rem;
-
-    line-height: 1.5;
-
+    font-size: .76rem;
+    line-height: 1.45;
 }
 
 
 /* ============================================================
-   18. ASK QUESTION LAYOUT
+   ASK QUESTION SECTION
    ============================================================ */
 
 .ask-question-section {
-
     display: grid;
 
     grid-template-columns:
-        minmax(245px, 0.38fr)
-        minmax(0, 1fr);
+        minmax(260px, .72fr)
+        minmax(0, 1.28fr);
 
-    gap: 18px;
+    gap: 20px;
 
-    align-items: stretch;
+    width: 100%;
 
+    margin-bottom: 38px;
 }
 
 
 /* ============================================================
-   19. ASK QUESTION INTRO
+   ASK INTRO
    ============================================================ */
 
 .ask-question-intro {
-
     position: relative;
-
-    display: flex;
-
-    flex-direction: column;
-
-    justify-content: center;
+    overflow: hidden;
 
     min-width: 0;
 
-    padding: 27px;
+    padding: 30px;
 
-    overflow: hidden;
-
-    border-radius: 21px;
+    border-radius: 28px;
 
     background:
-
         radial-gradient(
             circle at 100% 0%,
-            rgba(234, 88, 12, 0.20),
+            rgba(234, 88, 12, .24),
+            transparent 30%
+        ),
+        radial-gradient(
+            circle at 0% 100%,
+            rgba(8, 145, 178, .16),
             transparent 35%
         ),
-
         linear-gradient(
             145deg,
-            #26032f,
+            #10051a,
             #4a0754
         );
 
     color: #ffffff;
 
-}
-
-
-.ask-question-intro::after {
-
-    content: "";
-
-    position: absolute;
-
-    right: -70px;
-    bottom: -75px;
-
-    width: 170px;
-    height: 170px;
-
-    border: 1px solid rgba(255,255,255,0.13);
-
-    border-radius: 50%;
-
+    box-shadow:
+        0 17px 45px rgba(74, 7, 84, .13);
 }
 
 
 .ask-question-icon {
+    width: 48px;
+    height: 48px;
+
+    margin-bottom: 21px;
 
     display: flex;
-
     align-items: center;
-
     justify-content: center;
 
-    width: 44px;
-    height: 44px;
+    border-radius: 16px;
 
-    margin-bottom: 17px;
-
-    border-radius: 13px;
-
-    background: rgba(255,255,255,0.12);
+    background: rgba(255, 255, 255, .1);
 
     color: #ffffff;
 
-}
-
-
-.ask-question-icon i {
-
-    font-size: 0.96rem;
-
+    font-size: .95rem;
 }
 
 
 .ask-question-intro .academic-section-kicker {
-
-    position: relative;
-
-    z-index: 2;
-
-    color: #ffb28d;
-
+    color: #fdba74;
 }
 
 
 .ask-question-intro h2 {
-
-    position: relative;
-
-    z-index: 2;
-
-    margin: 0;
+    margin: 0 0 8px;
 
     color: #ffffff;
 
-    font-size: 1.52rem;
+    font-size: 1.55rem;
 
-    line-height: 1.08;
+    line-height: 1.13;
+    font-weight: 800;
 
-    letter-spacing: -0.03em;
-
+    letter-spacing: -.025em;
 }
 
 
 .ask-question-intro > p {
+    margin: 0;
 
-    position: relative;
+    max-width: 390px;
 
-    z-index: 2;
+    color: rgba(255, 255, 255, .72);
 
-    margin: 11px 0 0;
-
-    color: rgba(255,255,255,0.76);
-
-    font-size: 0.75rem;
-
-    line-height: 1.6;
-
+    font-size: .79rem;
+    line-height: 1.5;
 }
 
 
 .response-note {
-
-    position: relative;
-
-    z-index: 2;
-
     display: flex;
-
     align-items: flex-start;
 
-    gap: 8px;
+    gap: 9px;
 
-    margin-top: 19px;
+    margin-top: 22px;
+    padding-top: 17px;
 
-    padding-top: 14px;
+    border-top: 1px solid rgba(255, 255, 255, .12);
 
-    border-top: 1px solid rgba(255,255,255,0.12);
+    color: rgba(255, 255, 255, .68);
 
-    color: rgba(255,255,255,0.70);
-
-    font-size: 0.65rem;
-
-    line-height: 1.45;
-
+    font-size: .7rem;
+    line-height: 1.4;
 }
 
 
 .response-note i {
-
     flex: 0 0 auto;
 
     margin-top: 2px;
 
-    color: #ff9b68;
+    color: #fb923c;
 
+    font-size: .72rem;
 }
 
 
 /* ============================================================
-   20. QUESTION FORM CARD
+   QUESTION FORM CARD
    ============================================================ */
 
 .academic-question-card {
+    width: 100%;
 
-    min-width: 0;
+    padding: clamp(26px, 4vw, 38px);
 
-    padding: 27px;
-
-    border: 1px solid var(--border);
-
-    border-radius: 21px;
+    border-radius: 28px;
 
     background: #ffffff;
 
-    box-shadow:
-        0 11px 33px rgba(25, 15, 30, 0.055);
+    border: 1px solid var(--academic-border);
 
+    box-shadow:
+        0 16px 45px rgba(15, 23, 42, .045);
 }
 
 
 .academic-question-form {
-
-    display: flex;
-
-    flex-direction: column;
-
-    gap: 17px;
-
+    width: 100%;
 }
 
 
 .form-row {
-
     display: grid;
 
     grid-template-columns:
-        repeat(
-            2,
-            minmax(0, 1fr)
-        );
+        repeat(2, minmax(0, 1fr));
 
-    gap: 15px;
+    gap: 16px;
 
+    margin-bottom: 16px;
 }
 
 
 .form-field {
-
     min-width: 0;
 
+    margin-bottom: 16px;
+}
+
+
+.form-row .form-field {
+    margin-bottom: 0;
 }
 
 
 .form-field label {
-
     display: block;
 
-    margin-bottom: 7px;
+    margin-bottom: 8px;
 
-    color: var(--heading);
+    color: #374151;
 
-    font-size: 0.70rem;
-
-    font-weight: 700;
-
+    font-size: .76rem;
+    font-weight: 750;
 }
 
 
-.form-field label > span {
-
-    color: var(--orange);
-
+.form-field label span {
+    color: var(--academic-orange);
 }
 
 
 /* ============================================================
-   21. FORM INPUTS
+   FORM INPUT WRAPPERS
    ============================================================ */
 
 .input-wrapper,
 .select-wrapper,
 .textarea-wrapper {
-
     position: relative;
-
 }
 
 
-.input-wrapper > i,
-.select-wrapper > i {
-
+.input-wrapper i,
+.select-wrapper i {
     position: absolute;
 
-    left: 13px;
-
+    left: 16px;
     top: 50%;
 
-    z-index: 2;
+    color: #9ca3af;
 
-    transform: translateY(-50%);
-
-    color: #9c939f;
-
-    font-size: 0.73rem;
+    font-size: .78rem;
 
     pointer-events: none;
+}
 
+
+.input-wrapper i,
+.select-wrapper i {
+    transform: translateY(-50%);
 }
 
 
 .input-wrapper input,
 .select-wrapper select {
-
     width: 100%;
 
-    height: 45px;
+    min-height: 51px;
 
-    padding:
-        0 13px 0 38px;
+    padding: 0 16px 0 44px;
 
-    border: 1px solid var(--border);
+    border: 1px solid #e1e6ec;
 
-    border-radius: 11px;
+    border-radius: 15px;
 
-    outline: none;
+    background: #ffffff;
 
-    background: #fcfbfc;
+    color: var(--academic-text);
 
-    color: var(--heading);
+    font-family: "DM Sans", sans-serif;
 
-    font-size: 0.75rem;
-
-    box-sizing: border-box;
-
+    font-size: .78rem;
 }
 
 
 .select-wrapper select {
-
     appearance: none;
-
     -webkit-appearance: none;
 
-    padding-right: 32px;
+    padding-right: 38px;
 
+    cursor: pointer;
 }
 
 
-.input-wrapper input:focus,
-.select-wrapper select:focus,
-.textarea-wrapper textarea:focus {
-
-    border-color: rgba(74, 7, 84, 0.40);
-
-    background: #ffffff;
-
-    box-shadow:
-        0 0 0 3px rgba(74, 7, 84, 0.055);
-
-}
-
-
-.input-wrapper input::placeholder,
-.textarea-wrapper textarea::placeholder {
-
-    color: #aaa2ac;
-
+.input-wrapper input::placeholder {
+    color: #a0a7b0;
 }
 
 
 /* ============================================================
-   22. TEXTAREA
+   TEXTAREA
    ============================================================ */
 
 .textarea-wrapper textarea {
-
     display: block;
 
     width: 100%;
 
     min-height: 145px;
 
-    padding: 13px;
-
     resize: vertical;
 
-    border: 1px solid var(--border);
+    padding: 15px 16px 36px;
 
-    border-radius: 12px;
+    border: 1px solid #e1e6ec;
 
-    outline: none;
+    border-radius: 16px;
 
-    background: #fcfbfc;
+    background: #ffffff;
 
-    color: var(--heading);
+    color: var(--academic-text);
 
-    font-size: 0.75rem;
+    font-family: "DM Sans", sans-serif;
 
-    line-height: 1.55;
+    font-size: .79rem;
+    line-height: 1.5;
+}
 
-    box-sizing: border-box;
 
+.textarea-wrapper textarea::placeholder {
+    color: #a0a7b0;
 }
 
 
 .character-count {
-
     position: absolute;
 
-    right: 10px;
-
-    bottom: 9px;
+    right: 12px;
+    bottom: 10px;
 
     padding: 3px 6px;
 
     border-radius: 6px;
 
-    background: rgba(255,255,255,0.90);
+    background: #f8fafc;
 
-    color: #99909c;
+    color: #9ca3af;
 
-    font-size: 0.57rem;
-
+    font-size: .63rem;
 }
 
 
-.field-error {
+/* ============================================================
+   FIELD ERRORS
+   ============================================================ */
 
+.field-error {
     display: block;
 
     min-height: 0;
@@ -1655,1071 +1337,1066 @@
 
     color: #dc2626;
 
-    font-size: 0.61rem;
-
+    font-size: .66rem;
     line-height: 1.3;
-
 }
 
 
 /* ============================================================
-   23. CONSENT
+   CONTACT CONSENT
    ============================================================ */
 
 .contact-consent {
+    position: relative;
 
-    display: grid;
+    display: flex;
+    align-items: flex-start;
 
-    grid-template-columns:
-        18px
-        18px
-        minmax(0, 1fr);
+    gap: 10px;
 
-    align-items: start;
-
-    gap: 8px;
-
-    color: var(--muted);
-
-    font-size: 0.66rem;
-
-    line-height: 1.5;
+    margin: 3px 0 19px;
 
     cursor: pointer;
-
 }
 
 
 .contact-consent input {
-
     position: absolute;
 
+    width: 1px;
+    height: 1px;
+
     opacity: 0;
-
-    pointer-events: none;
-
 }
 
 
 .custom-checkbox {
+    width: 19px;
+    height: 19px;
+
+    flex: 0 0 19px;
 
     display: flex;
-
     align-items: center;
-
     justify-content: center;
-
-    width: 18px;
-    height: 18px;
 
     margin-top: 1px;
 
-    border: 1px solid #cfc7d1;
+    border: 1px solid #d1d5db;
 
-    border-radius: 5px;
+    border-radius: 6px;
 
     background: #ffffff;
 
     color: #ffffff;
 
-    box-sizing: border-box;
-
+    font-size: .58rem;
 }
 
 
-.contact-consent input:checked
-+ .custom-checkbox {
+.contact-consent input:checked + .custom-checkbox {
+    border-color: var(--academic-purple);
 
-    border-color: var(--purple);
-
-    background: var(--purple);
-
-}
-
-
-.custom-checkbox i {
-
-    display: none;
-
-    font-size: 0.56rem;
-
-}
-
-
-.contact-consent input:checked
-+ .custom-checkbox i {
-
-    display: block;
-
+    background: var(--academic-purple);
 }
 
 
 .consent-text {
+    color: var(--academic-body);
 
-    min-width: 0;
-
+    font-size: .7rem;
+    line-height: 1.45;
 }
 
 
 /* ============================================================
-   24. SUBMIT
+   SUBMIT BUTTON
    ============================================================ */
 
 .submit-question-btn {
-
     display: flex;
-
     align-items: center;
-
     justify-content: center;
 
     width: 100%;
+    min-height: 50px;
 
-    min-height: 46px;
+    padding: 12px 20px;
 
-    padding: 11px 18px;
-
-    border: 0;
-
-    border-radius: 12px;
+    border: none;
+    border-radius: 999px;
 
     background:
         linear-gradient(
             135deg,
-            var(--orange),
-            #c2410c
+            var(--academic-orange),
+            #f97316
         );
 
     color: #ffffff;
 
-    font-size: 0.78rem;
-
+    font-size: .79rem;
     font-weight: 750;
 
+    cursor: pointer;
+
     box-shadow:
-        0 8px 19px rgba(234, 88, 12, 0.15);
-
-}
-
-
-.submit-question-btn:hover {
-
-    background:
-        linear-gradient(
-            135deg,
-            #f06b20,
-            #b83a09
-        );
-
+        0 10px 25px rgba(234, 88, 12, .15);
 }
 
 
 .submit-question-btn:disabled {
-
-    opacity: 0.65;
+    opacity: .5;
 
     cursor: not-allowed;
 
+    box-shadow: none;
 }
 
 
 .btn-label,
 .btn-loading {
-
     display: inline-flex;
-
     align-items: center;
-
     justify-content: center;
 
     gap: 8px;
-
 }
 
 
 .form-status {
-
     min-height: 0;
 
-    font-size: 0.69rem;
+    margin-top: 14px;
 
+    color: var(--academic-body);
+
+    font-family: "DM Sans", sans-serif;
+
+    font-size: .75rem;
     line-height: 1.45;
-
 }
 
 
 .form-status.success {
+    padding: 13px 14px;
 
-    padding: 10px 12px;
+    border-radius: 13px;
 
-    border: 1px solid #bbf7d0;
+    background: var(--academic-green-light);
 
-    border-radius: 9px;
+    border: 1px solid #a7f3d0;
 
-    background: var(--green-light);
-
-    color: var(--green);
-
+    color: #047857;
 }
 
 
 .form-status.error {
+    padding: 13px 14px;
 
-    padding: 10px 12px;
-
-    border: 1px solid #fecaca;
-
-    border-radius: 9px;
+    border-radius: 13px;
 
     background: #fef2f2;
 
-    color: #b91c1c;
+    border: 1px solid #fecaca;
 
+    color: #b91c1c;
 }
 
 
 /* ============================================================
-   25. PUBLISHED ANSWERS
+   PUBLISHED ANSWERS
    ============================================================ */
 
-.published-answer-grid {
+.published-answers-section {
+    width: 100%;
 
-    display: grid;
-
-    grid-template-columns:
-        repeat(
-            3,
-            minmax(0, 1fr)
-        );
-
-    gap: 14px;
-
+    margin-bottom: 35px;
 }
 
 
-.published-loading {
+.published-answer-grid {
+    display: grid;
 
-    display: flex;
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
 
-    align-items: center;
+    gap: 15px;
 
-    justify-content: center;
-
-    gap: 8px;
-
-    min-height: 100px;
-
-    padding: 20px;
-
-    border: 1px dashed var(--border-dark);
-
-    border-radius: 15px;
-
-    background: #faf8fb;
-
-    color: var(--muted);
-
-    font-size: 0.72rem;
-
+    width: 100%;
 }
 
 
 .published-answer-card {
+    width: 100%;
 
-    min-width: 0;
+    padding: 21px;
 
-    padding: 18px;
-
-    border: 1px solid var(--border);
-
-    border-radius: 16px;
+    border-radius: 21px;
 
     background: #ffffff;
 
-    box-shadow:
-        0 6px 20px rgba(25, 15, 30, 0.04);
+    border: 1px solid var(--academic-border);
 
+    box-shadow:
+        0 8px 27px rgba(15, 23, 42, .035);
 }
 
 
 .published-answer-card h3 {
+    margin: 11px 0 8px;
 
-    margin: 0;
+    color: var(--academic-text);
 
-    color: var(--heading);
-
-    font-size: 0.82rem;
-
-    line-height: 1.4;
-
+    font-size: .9rem;
+    line-height: 1.3;
+    font-weight: 800;
 }
 
 
 .published-answer-card p {
+    margin: 0;
 
-    margin: 9px 0 0;
+    color: var(--academic-body);
 
-    color: var(--text);
-
-    font-size: 0.72rem;
-
-    line-height: 1.6;
-
-}
-
-
-.published-answer-card small {
-
-    display: block;
-
-    margin-top: 12px;
-
-    color: var(--muted);
-
-    font-size: 0.60rem;
-
+    font-size: .75rem;
+    line-height: 1.5;
 }
 
 
 .published-answer-category {
-
     display: inline-flex;
-
     align-items: center;
 
-    width: fit-content;
-
-    margin-bottom: 9px;
-
-    padding: 5px 8px;
+    padding: 6px 9px;
 
     border-radius: 999px;
 
-    background: var(--blue-light);
+    background: var(--academic-purple-soft);
 
-    color: var(--blue);
+    color: var(--academic-purple);
 
-    font-size: 0.59rem;
+    font-family: "Bricolage Grotesque", sans-serif;
 
-    font-weight: 700;
+    font-size: .62rem;
+    font-weight: 750;
+}
 
+
+.published-answer-card:nth-child(3n + 1) {
+    border-top: 3px solid var(--academic-purple);
+}
+
+
+.published-answer-card:nth-child(3n + 2) {
+    border-top: 3px solid var(--academic-orange);
+}
+
+
+.published-answer-card:nth-child(3n + 3) {
+    border-top: 3px solid var(--academic-teal);
+}
+
+
+.published-loading {
+    grid-column: 1 / -1;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 9px;
+
+    min-height: 110px;
+
+    padding: 20px;
+
+    border-radius: 20px;
+
+    background: #ffffff;
+
+    border: 1px solid var(--academic-border);
+
+    color: var(--academic-muted);
+
+    font-family: "DM Sans", sans-serif;
+
+    font-size: .78rem;
+}
+
+
+.published-loading i {
+    color: var(--academic-purple);
 }
 
 
 /* ============================================================
-   26. TABLET
+   NO ANIMATIONS
    ============================================================ */
 
-@media (min-width: 1100px) {
-
-    .academic-page > section {
-
-        width: calc(100% - 48px);
-
-        max-width: 1550px;
-
-    }
-
+.academic-page *,
+.academic-page *::before,
+.academic-page *::after {
+    transition: none !important;
 }
 
 
-@media (min-width: 1500px) {
-
-    .academic-page > section {
-
-        width: calc(100% - 64px);
-
-        max-width: 1650px;
-
-    }
-
+.academic-page .fa-spin {
+    animation: none !important;
 }
 
 
-@media (max-width: 1100px) {
+/* ============================================================
+   TABLET / MOBILE WIDTH
+   MATCHES SLC QUIZ
+   ============================================================ */
 
-    .academic-page > section {
+@media (max-width: 900px) {
 
+    .academic-page .dashboard-container {
         width: calc(100% - 28px);
-
         max-width: none;
-
-    }
-
-
-    .academic-hero {
-
-        padding: 36px;
-
-    }
-
-
-    .academic-hero h1 {
-
-        font-size: 2.65rem;
-
     }
 
 
     .academic-category-grid {
-
         grid-template-columns:
-            repeat(
-                2,
-                minmax(0, 1fr)
-            );
-
+            repeat(2, minmax(0, 1fr));
     }
 
 
     .published-answer-grid {
-
         grid-template-columns:
-            repeat(
-                2,
-                minmax(0, 1fr)
-            );
+            repeat(2, minmax(0, 1fr));
+    }
 
+
+    .ask-question-section {
+        grid-template-columns:
+            1fr;
+    }
+
+
+    .ask-question-intro {
+        padding: 27px;
     }
 
 }
 
 
 /* ============================================================
-   27. MOBILE
+   DESKTOP WIDTH
+   MATCHES SLC QUIZ
+   ============================================================ */
+
+@media (min-width: 1100px) {
+
+    .academic-page .dashboard-container {
+        width: calc(100% - 48px);
+        max-width: 1550px;
+    }
+
+}
+
+
+/* ============================================================
+   LARGE DESKTOP WIDTH
+   MATCHES SLC QUIZ
+   ============================================================ */
+
+@media (min-width: 1500px) {
+
+    .academic-page .dashboard-container {
+        width: calc(100% - 64px);
+        max-width: 1650px;
+    }
+
+}
+
+
+/* ============================================================
+   MOBILE
    ============================================================ */
 
 @media (max-width: 768px) {
 
-    .academic-page {
-
-        padding-top: 16px;
-
-        padding-bottom: 38px;
-
-    }
-
-
-    .academic-page > section {
-
+    .academic-page .dashboard-container {
         width: calc(100% - 28px);
-
         max-width: none;
-
     }
 
 
-    /* HERO */
+    /* ========================================================
+       HERO
+       ======================================================== */
 
     .academic-hero {
+        margin-bottom: 20px;
 
-        min-height: 0;
+        padding: 22px;
 
-        padding: 27px 23px;
-
-        border-radius: 21px;
-
-    }
-
-
-    .academic-hero::after {
-
-        display: none;
-
+        border-radius: 24px;
     }
 
 
     .academic-eyebrow {
+        margin-bottom: 8px;
 
-        margin-bottom: 12px;
-
-        padding: 6px 9px;
-
-        font-size: 0.64rem;
-
+        font-size: .64rem;
     }
 
 
     .academic-hero h1 {
+        font-size: clamp(1.35rem, 6vw, 1.8rem);
 
-        font-size: 1.72rem;
-
-        line-height: 1.02;
-
-        letter-spacing: -0.04em;
-
+        line-height: 1.08;
     }
 
 
     .academic-hero p {
+        margin-top: 9px;
 
-        margin-top: 12px;
+        font-size: .76rem;
 
-        font-size: 0.76rem;
-
-        line-height: 1.55;
-
+        line-height: 1.45;
     }
 
 
     .academic-hero-actions {
+        gap: 9px;
 
-        gap: 10px;
-
-        margin-top: 18px;
-
+        margin-top: 16px;
     }
 
 
     .academic-primary-btn {
+        min-height: 43px;
 
-        min-height: 41px;
+        padding: 10px 16px;
 
-        padding: 9px 14px;
-
-        border-radius: 11px;
-
-        font-size: 0.72rem;
-
+        font-size: .73rem;
     }
 
 
     .academic-text-btn {
+        min-height: 40px;
 
-        font-size: 0.70rem;
-
+        font-size: .72rem;
     }
 
 
-    /* SEARCH */
+    /* ========================================================
+       SEARCH
+       ======================================================== */
 
     .academic-search-section {
-
-        margin-top: 14px;
-
+        margin-bottom: 25px;
     }
 
 
     .academic-search-box {
-
         min-height: 54px;
 
-        padding-left: 13px;
-
-        border-radius: 14px;
-
+        border-radius: 16px;
     }
 
 
     .academic-search-icon {
-
-        flex-basis: 31px;
-
-        width: 31px;
-        height: 31px;
-
-        border-radius: 9px;
-
+        width: 48px;
+        flex-basis: 48px;
     }
 
 
     .academic-search-box input {
+        min-height: 52px;
 
-        height: 44px;
-
-        padding: 0 9px;
-
-        font-size: 0.72rem;
-
+        font-size: .76rem;
     }
 
 
-    /* SECTION SPACING */
-
-    .academic-categories-section,
-    .academic-faq-section,
-    .ask-question-section,
-    .published-answers-section {
-
-        margin-top: 35px;
-
-    }
-
-
-    /* SECTION HEADING */
+    /* ========================================================
+       SECTION HEADINGS
+       ======================================================== */
 
     .academic-section-heading {
-
-        align-items: center;
-
         gap: 12px;
 
-        margin-bottom: 14px;
-
+        margin-bottom: 17px;
     }
 
 
     .academic-section-kicker {
-
-        margin-bottom: 5px;
-
-        font-size: 0.61rem;
-
+        font-size: .63rem;
     }
 
 
     .academic-section-heading h2 {
+        font-size: 1.08rem;
 
-        font-size: 1.28rem;
-
-        line-height: 1.08;
-
-    }
-
-
-    /* CATEGORIES */
-
-    .academic-category-grid {
-
-        grid-template-columns: 1fr;
-
-        gap: 9px;
-
-    }
-
-
-    .academic-category-card {
-
-        min-height: 70px;
-
-        padding: 12px;
-
-        border-radius: 14px;
-
-    }
-
-
-    .category-icon {
-
-        flex-basis: 38px;
-
-        width: 38px;
-        height: 38px;
-
-        border-radius: 11px;
-
-    }
-
-
-    .category-icon i {
-
-        font-size: 0.79rem;
-
-    }
-
-
-    .category-copy strong {
-
-        font-size: 0.73rem;
-
-    }
-
-
-    .category-copy small {
-
-        font-size: 0.62rem;
-
-    }
-
-
-    .category-arrow {
-
-        font-size: 0.59rem;
-
-    }
-
-
-    /* FAQ */
-
-    .faq-heading {
-
-        align-items: center;
-
+        line-height: 1.18;
     }
 
 
     .academic-show-all {
+        font-size: .68rem;
+    }
 
-        padding: 7px 9px;
 
-        font-size: 0.62rem;
+    /* ========================================================
+       CATEGORIES
+       ======================================================== */
 
+    .academic-categories-section {
+        margin-bottom: 30px;
+    }
+
+
+    .academic-category-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+        gap: 11px;
+    }
+
+
+    .academic-category-card {
+        min-height: 76px;
+
+        gap: 10px;
+
+        padding: 12px;
+
+        border-radius: 17px;
+    }
+
+
+    .category-icon {
+        width: 38px;
+        height: 38px;
+
+        flex-basis: 38px;
+
+        border-radius: 12px;
+
+        font-size: .78rem;
+    }
+
+
+    .category-copy strong {
+        font-size: .7rem;
+    }
+
+
+    .category-copy small {
+        font-size: .62rem;
+    }
+
+
+    .category-arrow {
+        display: none;
+    }
+
+
+    /* ========================================================
+       FAQ
+       ======================================================== */
+
+    .academic-faq-section {
+        margin-bottom: 30px;
     }
 
 
     .academic-filter-row {
-
-        margin-right: -1px;
-
-        margin-left: -1px;
-
+        margin-bottom: 15px;
     }
 
 
     .academic-filter {
+        min-height: 33px;
 
-        min-height: 31px;
+        padding: 7px 11px;
 
-        padding: 6px 10px;
-
-        font-size: 0.61rem;
-
+        font-size: .65rem;
     }
 
 
     .academic-faq-list {
-
         grid-template-columns: 1fr;
 
-        gap: 9px;
-
+        gap: 11px;
     }
 
 
     .academic-faq-question {
+        padding: 16px;
 
-        padding: 14px;
-
-        font-size: 0.75rem;
-
+        font-size: .77rem;
     }
 
 
     .academic-faq-answer {
+        padding: 0 16px 16px;
 
-        padding: 0 14px 14px;
-
-        font-size: 0.69rem;
-
+        font-size: .73rem;
     }
 
 
-    /* ASK QUESTION */
+    /* ========================================================
+       ASK QUESTION
+       ======================================================== */
 
     .ask-question-section {
-
         grid-template-columns: 1fr;
 
-        gap: 11px;
+        gap: 13px;
 
+        margin-bottom: 30px;
     }
 
 
     .ask-question-intro {
+        padding: 24px;
 
-        padding: 22px 20px;
-
-        border-radius: 18px;
-
+        border-radius: 23px;
     }
 
 
     .ask-question-icon {
+        width: 43px;
+        height: 43px;
 
-        width: 40px;
-        height: 40px;
+        margin-bottom: 17px;
 
-        margin-bottom: 14px;
-
-        border-radius: 12px;
-
+        border-radius: 14px;
     }
 
 
     .ask-question-intro h2 {
-
-        font-size: 1.30rem;
-
+        font-size: 1.25rem;
     }
 
 
     .ask-question-intro > p {
-
-        margin-top: 9px;
-
-        font-size: 0.70rem;
-
+        font-size: .75rem;
     }
 
 
     .response-note {
+        margin-top: 18px;
+        padding-top: 14px;
 
-        margin-top: 15px;
-
-        padding-top: 12px;
-
-        font-size: 0.61rem;
-
+        font-size: .67rem;
     }
 
-
-    /* FORM */
 
     .academic-question-card {
+        padding: 23px;
 
-        padding: 18px 15px;
-
-        border-radius: 18px;
-
+        border-radius: 23px;
     }
 
 
-    .academic-question-form {
-
-        gap: 14px;
-
-    }
-
+    /* ========================================================
+       FORM
+       ======================================================== */
 
     .form-row {
-
         grid-template-columns: 1fr;
 
-        gap: 14px;
+        gap: 0;
 
+        margin-bottom: 0;
+    }
+
+
+    .form-row .form-field {
+        margin-bottom: 16px;
     }
 
 
     .form-field label {
-
-        margin-bottom: 6px;
-
-        font-size: 0.67rem;
-
+        font-size: .72rem;
     }
 
 
     .input-wrapper input,
     .select-wrapper select {
+        min-height: 50px;
 
-        height: 43px;
-
-        font-size: 0.71rem;
-
+        font-size: .75rem;
     }
 
 
     .textarea-wrapper textarea {
+        min-height: 135px;
 
-        min-height: 125px;
-
-        font-size: 0.71rem;
-
+        font-size: .75rem;
     }
 
 
-    .contact-consent {
-
-        font-size: 0.61rem;
-
+    .consent-text {
+        font-size: .67rem;
     }
 
 
     .submit-question-btn {
+        min-height: 49px;
 
-        min-height: 44px;
-
-        font-size: 0.71rem;
-
+        font-size: .75rem;
     }
 
 
-    /* PUBLISHED ANSWERS */
+    /* ========================================================
+       PUBLISHED ANSWERS
+       ======================================================== */
+
+    .published-answers-section {
+        margin-bottom: 30px;
+    }
+
 
     .published-answer-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
 
-        grid-template-columns: 1fr;
-
-        gap: 9px;
-
+        gap: 11px;
     }
 
 
     .published-answer-card {
+        padding: 17px;
 
-        padding: 15px;
+        border-radius: 18px;
+    }
 
-        border-radius: 14px;
 
+    .published-answer-card h3 {
+        font-size: .78rem;
+    }
+
+
+    .published-answer-card p {
+        font-size: .69rem;
+    }
+
+
+    .published-answer-category {
+        font-size: .58rem;
     }
 
 }
 
 
 /* ============================================================
-   28. SMALL PHONES
+   MOBILE WIDTH
+   MATCHES SLC QUIZ
    ============================================================ */
 
 @media (max-width: 600px) {
 
-    .academic-page > section {
-
+    .academic-page .dashboard-container {
         width: calc(100% - 20px);
-
         max-width: none;
-
     }
 
 
+    .academic-page {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+
+    .academic-category-grid {
+        grid-template-columns: 1fr;
+    }
+
+
+    .published-answer-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+
+/* ============================================================
+   SMALL PHONES
+   MATCHES SLC TYPOGRAPHY SCALE
+   ============================================================ */
+
+@media (max-width: 480px) {
+
+    /* ========================================================
+       HERO
+       ======================================================== */
+
     .academic-hero {
+        padding: 19px;
 
-        padding: 23px 18px;
+        border-radius: 22px;
+    }
 
-        border-radius: 18px;
 
+    .academic-eyebrow {
+        font-size: .61rem;
     }
 
 
     .academic-hero h1 {
+        font-size: 1.25rem;
 
-        font-size: 1.52rem;
-
-        line-height: 1.04;
-
+        line-height: 1.08;
     }
 
 
     .academic-hero p {
+        font-size: .72rem;
 
-        font-size: 0.72rem;
-
-        line-height: 1.52;
-
+        line-height: 1.43;
     }
 
 
     .academic-hero-actions {
-
-        align-items: flex-start;
+        align-items: stretch;
 
         flex-direction: column;
-
-        gap: 7px;
-
     }
 
 
     .academic-primary-btn {
-
         width: 100%;
-
     }
 
 
     .academic-text-btn {
+        align-self: flex-start;
+    }
 
-        padding-left: 1px;
 
+    /* ========================================================
+       SEARCH
+       ======================================================== */
+
+    .academic-search-box {
+        min-height: 52px;
+
+        border-radius: 15px;
+    }
+
+
+    .academic-search-icon {
+        width: 45px;
+        flex-basis: 45px;
+    }
+
+
+    .academic-search-box input {
+        min-height: 50px;
+
+        font-size: .73rem;
+    }
+
+
+    /* ========================================================
+       SECTION HEADING
+       ======================================================== */
+
+    .academic-section-kicker {
+        font-size: .6rem;
     }
 
 
     .academic-section-heading h2 {
+        font-size: .9rem;
+    }
 
-        font-size: 1.18rem;
 
+    .academic-show-all {
+        padding-top: 3px;
+
+        font-size: .65rem;
+    }
+
+
+    /* ========================================================
+       CATEGORY CARDS
+       ======================================================== */
+
+    .academic-category-grid {
+        grid-template-columns: 1fr;
+
+        gap: 9px;
     }
 
 
     .academic-category-card {
+        min-height: 70px;
 
-        min-height: 66px;
+        padding: 11px;
 
+        border-radius: 16px;
     }
 
 
-    .academic-question-card {
+    .category-icon {
+        width: 36px;
+        height: 36px;
 
-        padding: 16px 13px;
+        flex-basis: 36px;
 
-    }
-
-}
-
-
-/* ============================================================
-   29. VERY SMALL PHONES
-   ============================================================ */
-
-@media (max-width: 360px) {
-
-    .academic-page > section {
-
-        width: calc(100% - 16px);
-
-    }
-
-
-    .academic-hero {
-
-        padding: 21px 16px;
-
-    }
-
-
-    .academic-hero h1 {
-
-        font-size: 1.40rem;
-
-    }
-
-
-    .academic-section-heading h2 {
-
-        font-size: 1.10rem;
-
-    }
-
-
-    .academic-category-card {
-
-        padding: 10px;
-
+        border-radius: 11px;
     }
 
 
     .category-copy strong {
-
-        font-size: 0.69rem;
-
+        font-size: .68rem;
     }
 
 
     .category-copy small {
+        font-size: .6rem;
+    }
 
-        font-size: 0.58rem;
 
+    /* ========================================================
+       FAQ
+       ======================================================== */
+
+    .academic-filter {
+        min-height: 31px;
+
+        padding: 6px 10px;
+
+        font-size: .62rem;
+    }
+
+
+    .academic-faq-question {
+        padding: 14px;
+
+        font-size: .73rem;
+    }
+
+
+    .academic-faq-answer {
+        padding: 0 14px 14px;
+
+        font-size: .7rem;
+    }
+
+
+    /* ========================================================
+       ASK SECTION
+       ======================================================== */
+
+    .ask-question-intro {
+        padding: 21px;
+
+        border-radius: 21px;
+    }
+
+
+    .ask-question-icon {
+        width: 40px;
+        height: 40px;
+
+        margin-bottom: 15px;
+
+        border-radius: 13px;
+    }
+
+
+    .ask-question-intro h2 {
+        font-size: 1.05rem;
+    }
+
+
+    .ask-question-intro > p {
+        font-size: .71rem;
+    }
+
+
+    .response-note {
+        font-size: .63rem;
+    }
+
+
+    .academic-question-card {
+        padding: 20px;
+
+        border-radius: 21px;
+    }
+
+
+    /* ========================================================
+       FORM
+       ======================================================== */
+
+    .form-field label {
+        font-size: .69rem;
+    }
+
+
+    .input-wrapper input,
+    .select-wrapper select {
+        min-height: 49px;
+
+        font-size: .72rem;
+    }
+
+
+    .textarea-wrapper textarea {
+        min-height: 130px;
+
+        font-size: .72rem;
+    }
+
+
+    .consent-text {
+        font-size: .63rem;
+    }
+
+
+    .submit-question-btn {
+        min-height: 48px;
+
+        font-size: .73rem;
+    }
+
+
+    /* ========================================================
+       PUBLISHED
+       ======================================================== */
+
+    .published-answer-card {
+        padding: 16px;
+
+        border-radius: 17px;
+    }
+
+
+    .published-answer-card h3 {
+        font-size: .75rem;
+    }
+
+
+    .published-answer-card p {
+        font-size: .67rem;
     }
 
 }
 
 
 /* ============================================================
-   30. FOCUS STATES
+   REDUCED MOTION
    ============================================================ */
 
-.academic-page button:focus-visible {
+@media (prefers-reduced-motion: reduce) {
 
-    outline: 3px solid rgba(37, 99, 235, 0.20);
-
-    outline-offset: 2px;
-
-}
-
-
-.academic-page input:focus-visible,
-.academic-page select:focus-visible,
-.academic-page textarea:focus-visible {
-
-    outline: none;
+    .academic-page *,
+    .academic-page *::before,
+    .academic-page *::after {
+        animation: none !important;
+        transition: none !important;
+    }
 
 }
