@@ -1,378 +1,1036 @@
 /* ============================================================
    AFC ISIU YOUTH PORTAL V2
-   ACADEMIC HELP
-   CLEAN / MOBILE-FIRST VERSION
+   FILE: academichelp.js
+
+   PURPOSE:
+   - Academic Help FAQ
+   - Search
+   - Category filtering
+   - Question submission
+   - Published answers
+   - Mobile-friendly interaction
+
+   IMPORTANT:
+   - Public page
+   - No login required
+   - Loader only appears AFTER submit is clicked
    ============================================================ */
 
-(function () {
-
-    "use strict";
+"use strict";
 
 
-    /* ========================================================
-       CONFIGURATION
-    ======================================================== */
+/* ============================================================
+   CONFIG
+============================================================ */
 
-    const ACADEMIC_CONFIG = {
+const ACADEMIC_HELP_CONFIG = {
 
-        VERSION: "2.0.0",
+    API:
+        "https://script.google.com/macros/s/AKfycbw1mVwpgAcIOSNbpgzy52TFyozEGMtWWwVWUDFaofGNpzsguBIaKR4q1dXVtgVHO2xZ1w/exec",
 
-        API_URL:
-            "https://script.google.com/macros/s/AKfycbw1mVwpgAcIOSNbpgzy52TFyozEGMtWWwVWUDFaofGNpzsguBIaKR4q1dXVtgVHO2xZ1w/exec",
+    SUBMIT_ACTION:
+        "submitAcademicQuestion",
 
-        FAQ_INITIAL_LIMIT: 5
+    PUBLISHED_ACTION:
+        "getPublishedAcademicAnswers",
 
-    };
+    FAQ_ACTION:
+        "getAcademicHelpFaqs"
 
-
-    /* ========================================================
-       STATE
-    ======================================================== */
-
-    let activeFilter = "All";
-
-    let searchTerm = "";
-
-    let showAllFaqs = false;
-
-    let formSubmitting = false;
+};
 
 
-    /* ========================================================
-       FAQ DATA
-    ======================================================== */
+/* ============================================================
+   STATE
+============================================================ */
 
-    const FAQ_DATA = [
+let academicFaqs = [];
 
-        {
-            category: "Secondary School",
-            question: "How can I study when I have many subjects to cover?",
-            answer:
-                "Start by listing your subjects and identifying the ones that need the most attention. Create a simple timetable and study in focused sessions instead of trying to cover everything at once. Consistency is more important than studying for many hours on one day."
-        },
+let publishedAnswers = [];
 
-        {
-            category: "Secondary School",
-            question: "What should I do if I keep forgetting what I study?",
-            answer:
-                "Do not rely only on rereading. After studying a topic, close your book and try to explain what you remember. Practice questions, short reviews, and teaching the idea to someone else can also strengthen your understanding."
-        },
+let activeAcademicFilter = "All";
 
-        {
-            category: "Secondary School",
-            question: "How can I prepare better for examinations?",
-            answer:
-                "Start early, understand the topics, practise past questions, and identify areas where you regularly make mistakes. In the final days before an examination, focus more on revision and practice than on trying to learn everything from the beginning."
-        },
+let academicSearchTerm = "";
 
-        {
-            category: "JAMB & UTME",
-            question: "How should I prepare for JAMB?",
-            answer:
-                "Begin by understanding the subjects and topics required for your chosen course. Use reliable study materials, practise questions regularly, and work on answering questions within the available time. Review your mistakes instead of simply counting your scores."
-        },
+let showingAllFaqs = false;
 
-        {
-            category: "JAMB & UTME",
-            question: "What if I don't know which course to choose?",
-            answer:
-                "Start with three things: the subjects you genuinely enjoy, the areas where your strengths are clear, and the kind of work you may want to do in the future. Also check the current admission requirements for the courses you are considering."
-        },
-
-        {
-            category: "JAMB & UTME",
-            question: "How can I improve my performance in practice tests?",
-            answer:
-                "Treat every practice test as feedback. After completing it, review the questions you missed and identify why you missed them. Work on those weak areas before taking another test."
-        },
-
-        {
-            category: "University",
-            question: "How can I adjust to university life?",
-            answer:
-                "University requires more personal responsibility. Learn your timetable, keep track of deadlines, attend classes, build healthy friendships, and ask questions when you do not understand something. Do not wait until examinations before taking your studies seriously."
-        },
-
-        {
-            category: "University",
-            question: "What should I do if I am struggling with a course?",
-            answer:
-                "Identify the exact part you do not understand. Review your notes, practise relevant questions, discuss the topic with classmates, and ask your lecturer or another trusted academic resource for clarification. Getting help early is usually much easier than waiting until the end of the semester."
-        },
-
-        {
-            category: "University",
-            question: "How can I manage school work and other responsibilities?",
-            answer:
-                "Plan your week before it becomes busy. Put important academic deadlines into a calendar and break large assignments into smaller tasks. Leave room for rest and other responsibilities instead of filling every hour with work."
-        },
-
-        {
-            category: "Career",
-            question: "How do I know which career direction may be right for me?",
-            answer:
-                "Explore rather than rushing to decide. Learn about different fields, speak with people who work in them, research the skills they require, and pay attention to the subjects and activities that consistently interest you."
-        },
-
-        {
-            category: "Career",
-            question: "Should I choose a course only because it has good job opportunities?",
-            answer:
-                "Career opportunities matter, but they should not be the only factor. Consider your strengths, interests, required skills, available opportunities, and whether you can see yourself developing in that field over time."
-        },
-
-        {
-            category: "Scholarships",
-            question: "Where should I start when looking for scholarships?",
-            answer:
-                "Start with official school, government, foundation, and organisation websites. Check the eligibility requirements, application deadline, required documents, and application instructions carefully. Avoid paying anyone simply because they claim they can guarantee a scholarship."
-        },
-
-        {
-            category: "Study Skills",
-            question: "Is studying for many hours always better?",
-            answer:
-                "Not necessarily. Focused study with active recall, practice, revision, and short breaks can be more useful than spending a long time passively reading. The quality and consistency of your study matter."
-        },
-
-        {
-            category: "Study Skills",
-            question: "How can I stop procrastinating on school work?",
-            answer:
-                "Make the first task very small. Instead of telling yourself to finish an entire assignment, decide to work on one section or one question first. Once you begin, continuing usually becomes easier."
-        }
-
-    ];
+let academicSubmissionInProgress = false;
 
 
-    /* ========================================================
-       DOM HELPER
-    ======================================================== */
+/* ============================================================
+   DOM HELPER
+============================================================ */
 
-    function $(id) {
+function academicElement(id) {
 
-        return document.getElementById(id);
+    return document.getElementById(id);
+
+}
+
+
+/* ============================================================
+   SAFE HTML
+============================================================ */
+
+function escapeAcademicHTML(value) {
+
+    return String(value ?? "")
+
+        .replace(/&/g, "&amp;")
+
+        .replace(/</g, "&lt;")
+
+        .replace(/>/g, "&gt;")
+
+        .replace(/"/g, "&quot;")
+
+        .replace(/'/g, "&#039;");
+
+}
+
+
+/* ============================================================
+   API GET
+============================================================ */
+
+async function academicApiGet(action) {
+
+    const url =
+        `${ACADEMIC_HELP_CONFIG.API}?action=${encodeURIComponent(action)}`;
+
+    const response =
+        await fetch(
+            url,
+            {
+                method: "GET",
+                cache: "no-store"
+            }
+        );
+
+
+    if (!response.ok) {
+
+        throw new Error(
+            `Request failed with HTTP ${response.status}.`
+        );
 
     }
 
 
-    /* ========================================================
-       ESCAPE HTML
-    ======================================================== */
+    return await response.json();
 
-    function escapeHTML(value) {
-
-        return String(value ?? "")
-            .replace(/&/g, "&amp;")
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;")
-            .replace(/"/g, "&quot;")
-            .replace(/'/g, "&#039;");
-
-    }
+}
 
 
-    /* ========================================================
-       NORMALIZE TEXT
-    ======================================================== */
+/* ============================================================
+   API POST
+============================================================ */
 
-    function normalizeText(value) {
+async function academicApiPost(action, payload) {
 
-        return String(value || "")
-            .trim()
-            .toLowerCase();
+    const response =
+        await fetch(
+            ACADEMIC_HELP_CONFIG.API,
+            {
+                method: "POST",
 
-    }
+                headers: {
+                    "Content-Type":
+                        "text/plain;charset=utf-8"
+                },
 
+                body:
+                    JSON.stringify({
+                        action:
+                            action,
 
-    /* ========================================================
-       SCROLL
-    ======================================================== */
-
-    function scrollToElement(id) {
-
-        const element = $(id);
-
-        if (!element) {
-
-            return;
-
-        }
-
-
-        const top =
-            element.getBoundingClientRect().top +
-            window.scrollY -
-            18;
+                        ...payload
+                    })
+            }
+        );
 
 
-        window.scrollTo({
+    if (!response.ok) {
 
-            top: Math.max(top, 0),
-
-            behavior: "smooth"
-
-        });
+        throw new Error(
+            `Request failed with HTTP ${response.status}.`
+        );
 
     }
 
 
-    /* ========================================================
-       SCROLL BUTTONS
-    ======================================================== */
+    return await response.json();
 
-    function initializeScrollButtons() {
+}
 
-        document
-            .querySelectorAll("[data-scroll-to]")
-            .forEach(function (button) {
 
-                button.addEventListener(
-                    "click",
-                    function () {
+/* ============================================================
+   RESPONSE DATA HELPER
+============================================================ */
 
-                        const target =
-                            button.getAttribute(
-                                "data-scroll-to"
-                            );
+function getAcademicResponseData(response) {
 
-                        if (!target) {
+    if (
+        response &&
+        Array.isArray(response.data)
+    ) {
 
-                            return;
+        return response.data;
 
-                        }
+    }
 
-                        scrollToElement(target);
 
-                    }
+    if (
+        response &&
+        Array.isArray(response.items)
+    ) {
+
+        return response.items;
+
+    }
+
+
+    if (
+        response &&
+        Array.isArray(response.faqs)
+    ) {
+
+        return response.faqs;
+
+    }
+
+
+    if (
+        response &&
+        Array.isArray(response.answers)
+    ) {
+
+        return response.answers;
+
+    }
+
+
+    if (Array.isArray(response)) {
+
+        return response;
+
+    }
+
+
+    return [];
+
+}
+
+
+/* ============================================================
+   INITIALISE
+============================================================ */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        initializeAcademicHelp();
+
+    }
+);
+
+
+/* ============================================================
+   INITIALIZE
+============================================================ */
+
+async function initializeAcademicHelp() {
+
+    setupAcademicScrollButtons();
+
+    setupAcademicSearch();
+
+    setupAcademicFilters();
+
+    setupAcademicCategories();
+
+    setupAcademicFaqControls();
+
+    setupAcademicQuestionForm();
+
+    setupCharacterCounter();
+
+    /*
+     * CRITICAL:
+     *
+     * Always make sure the submit button starts in its
+     * normal state.
+     *
+     * This prevents "Sending..." from appearing when
+     * the page first loads.
+     */
+
+    resetAcademicSubmitButton();
+
+
+    /*
+     * Load FAQ data.
+     */
+
+    await loadAcademicFaqs();
+
+
+    /*
+     * Load published answers.
+     */
+
+    await loadPublishedAcademicAnswers();
+
+}
+
+
+/* ============================================================
+   SCROLL BUTTONS
+============================================================ */
+
+function setupAcademicScrollButtons() {
+
+    document.addEventListener(
+        "click",
+        function (event) {
+
+            const button =
+                event.target.closest(
+                    "[data-scroll-to]"
                 );
 
-            });
+
+            if (!button) {
+
+                return;
+
+            }
+
+
+            const targetId =
+                button.getAttribute(
+                    "data-scroll-to"
+                );
+
+
+            if (!targetId) {
+
+                return;
+
+            }
+
+
+            const target =
+                document.getElementById(
+                    targetId
+                );
+
+
+            if (!target) {
+
+                return;
+
+            }
+
+
+            event.preventDefault();
+
+
+            target.scrollIntoView(
+                {
+                    behavior:
+                        "smooth",
+
+                    block:
+                        "start"
+                }
+            );
+
+        }
+    );
+
+}
+
+
+/* ============================================================
+   SEARCH
+============================================================ */
+
+function setupAcademicSearch() {
+
+    const searchInput =
+        academicElement(
+            "academicSearch"
+        );
+
+
+    const clearButton =
+        academicElement(
+            "clearAcademicSearch"
+        );
+
+
+    if (!searchInput) {
+
+        return;
 
     }
 
 
-    /* ========================================================
-       FAQ FILTER
-    ======================================================== */
+    searchInput.addEventListener(
+        "input",
+        function () {
 
-    function getFilteredFAQs() {
-
-        return FAQ_DATA.filter(
-            function (item) {
-
-                const categoryMatches =
-                    activeFilter === "All" ||
-                    item.category === activeFilter;
+            academicSearchTerm =
+                searchInput.value
+                    .trim()
+                    .toLowerCase();
 
 
-                if (!categoryMatches) {
+            if (clearButton) {
 
-                    return false;
+                clearButton.hidden =
+                    academicSearchTerm === "";
 
-                }
-
-
-                if (!searchTerm) {
-
-                    return true;
-
-                }
+            }
 
 
-                const haystack =
-                    normalizeText(
-                        item.question +
-                        " " +
-                        item.answer +
-                        " " +
-                        item.category
-                    );
+            renderAcademicFaqs();
+
+        }
+    );
 
 
-                return haystack.includes(
-                    normalizeText(searchTerm)
-                );
+    if (clearButton) {
+
+        clearButton.addEventListener(
+            "click",
+            function () {
+
+                searchInput.value =
+                    "";
+
+                academicSearchTerm =
+                    "";
+
+                clearButton.hidden =
+                    true;
+
+                renderAcademicFaqs();
+
+                searchInput.focus();
 
             }
         );
 
     }
 
-
-    /* ========================================================
-       RENDER FAQS
-    ======================================================== */
-
-    function renderFAQs() {
-
-        const container =
-            $("academicFaqList");
-
-        const emptyState =
-            $("academicEmptyState");
+}
 
 
-        if (!container) {
+/* ============================================================
+   CATEGORY FILTERS
+============================================================ */
 
-            return;
+function setupAcademicFilters() {
 
-        }
-
-
-        const filtered =
-            getFilteredFAQs();
-
-
-        let visible =
-            filtered;
+    const filterRow =
+        academicElement(
+            "academicFilterRow"
+        );
 
 
-        if (
-            !showAllFaqs &&
-            !searchTerm &&
-            activeFilter === "All"
-        ) {
+    if (!filterRow) {
 
-            visible =
-                filtered.slice(
-                    0,
-                    ACADEMIC_CONFIG.FAQ_INITIAL_LIMIT
+        return;
+
+    }
+
+
+    filterRow.addEventListener(
+        "click",
+        function (event) {
+
+            const button =
+                event.target.closest(
+                    ".academic-filter"
                 );
 
-        }
 
+            if (!button) {
 
-        if (visible.length === 0) {
-
-            container.innerHTML = "";
-
-            if (emptyState) {
-
-                emptyState.hidden = false;
+                return;
 
             }
 
-            return;
+
+            const filter =
+                button.dataset.filter ||
+                "All";
+
+
+            activeAcademicFilter =
+                filter;
+
+
+            filterRow
+                .querySelectorAll(
+                    ".academic-filter"
+                )
+                .forEach(
+                    function (item) {
+
+                        item.classList.toggle(
+                            "active",
+                            item === button
+                        );
+
+                    }
+                );
+
+
+            showingAllFaqs =
+                false;
+
+
+            renderAcademicFaqs();
+
+        }
+    );
+
+}
+
+
+/* ============================================================
+   CATEGORY CARDS
+============================================================ */
+
+function setupAcademicCategories() {
+
+    document.addEventListener(
+        "click",
+        function (event) {
+
+            const card =
+                event.target.closest(
+                    ".academic-category-card"
+                );
+
+
+            if (!card) {
+
+                return;
+
+            }
+
+
+            const category =
+                card.dataset.category;
+
+
+            if (!category) {
+
+                return;
+
+            }
+
+
+            activeAcademicFilter =
+                category;
+
+
+            const filterButtons =
+                document.querySelectorAll(
+                    ".academic-filter"
+                );
+
+
+            filterButtons.forEach(
+                function (button) {
+
+                    button.classList.toggle(
+                        "active",
+                        button.dataset.filter ===
+                            category
+                    );
+
+                }
+            );
+
+
+            const faqSection =
+                academicElement(
+                    "faqSection"
+                );
+
+
+            if (faqSection) {
+
+                faqSection.scrollIntoView(
+                    {
+                        behavior:
+                            "smooth",
+
+                        block:
+                            "start"
+                    }
+                );
+
+            }
+
+
+            renderAcademicFaqs();
+
+        }
+    );
+
+}
+
+
+/* ============================================================
+   FAQ CONTROLS
+============================================================ */
+
+function setupAcademicFaqControls() {
+
+    const showAllButton =
+        academicElement(
+            "showAllFaqs"
+        );
+
+
+    if (!showAllButton) {
+
+        return;
+
+    }
+
+
+    showAllButton.addEventListener(
+        "click",
+        function () {
+
+            showingAllFaqs =
+                !showingAllFaqs;
+
+
+            renderAcademicFaqs();
+
+            showAllButton
+                .querySelector(
+                    "span"
+                )
+                .textContent =
+                    showingAllFaqs
+                        ? "Show less"
+                        : "Show all";
+
+        }
+    );
+
+
+    const faqList =
+        academicElement(
+            "academicFaqList"
+        );
+
+
+    if (!faqList) {
+
+        return;
+
+    }
+
+
+    faqList.addEventListener(
+        "click",
+        function (event) {
+
+            const button =
+                event.target.closest(
+                    ".academic-faq-question"
+                );
+
+
+            if (!button) {
+
+                return;
+
+            }
+
+
+            const item =
+                button.closest(
+                    ".academic-faq-item"
+                );
+
+
+            if (!item) {
+
+                return;
+
+            }
+
+
+            const isOpen =
+                item.classList.contains(
+                    "open"
+                );
+
+
+            faqList
+                .querySelectorAll(
+                    ".academic-faq-item.open"
+                )
+                .forEach(
+                    function (openItem) {
+
+                        openItem.classList.remove(
+                            "open"
+                        );
+
+                    }
+                );
+
+
+            if (!isOpen) {
+
+                item.classList.add(
+                    "open"
+                );
+
+            }
+
+        }
+    );
+
+}
+
+
+/* ============================================================
+   LOAD FAQS
+============================================================ */
+
+async function loadAcademicFaqs() {
+
+    const list =
+        academicElement(
+            "academicFaqList"
+        );
+
+
+    if (!list) {
+
+        return;
+
+    }
+
+
+    try {
+
+        const response =
+            await academicApiGet(
+                ACADEMIC_HELP_CONFIG.FAQ_ACTION
+            );
+
+
+        academicFaqs =
+            getAcademicResponseData(
+                response
+            );
+
+
+        /*
+         * If the backend does not yet have the FAQ action,
+         * keep the page usable with the built-in questions.
+         */
+
+        if (!academicFaqs.length) {
+
+            academicFaqs =
+                getDefaultAcademicFaqs();
 
         }
 
+
+        renderAcademicFaqs();
+
+    }
+
+    catch (error) {
+
+        console.warn(
+            "Academic FAQ request failed:",
+            error
+        );
+
+
+        academicFaqs =
+            getDefaultAcademicFaqs();
+
+
+        renderAcademicFaqs();
+
+    }
+
+}
+
+
+/* ============================================================
+   DEFAULT FAQS
+============================================================ */
+
+function getDefaultAcademicFaqs() {
+
+    return [
+
+        {
+            category:
+                "Secondary School",
+
+            question:
+                "How can I study better for my examinations?",
+
+            answer:
+                "Create a realistic study timetable, study in focused sessions, practise past questions and review difficult topics regularly. Avoid waiting until the last few days before an examination."
+        },
+
+
+        {
+            category:
+                "JAMB & UTME",
+
+            question:
+                "How should I prepare for JAMB?",
+
+            answer:
+                "Start early, understand the current examination requirements, study the recommended subjects consistently and practise with past questions under timed conditions."
+        },
+
+
+        {
+            category:
+                "University",
+
+            question:
+                "How can I adjust to university life?",
+
+            answer:
+                "Learn how your department works, attend classes, keep track of deadlines and build healthy relationships with classmates and lecturers. Good organisation makes university life much easier."
+        },
+
+
+        {
+            category:
+                "Scholarships",
+
+            question:
+                "Where can I find scholarship opportunities?",
+
+            answer:
+                "Watch for opportunities from universities, foundations, government organisations and reputable educational institutions. Always check the official application requirements and deadlines before applying."
+        },
+
+
+        {
+            category:
+                "Study Skills",
+
+            question:
+                "What should I do when I don't understand a topic?",
+
+            answer:
+                "Break the topic into smaller parts, review the basic concepts, use another explanation or resource and ask a teacher, lecturer or trusted person for clarification."
+        },
+
+
+        {
+            category:
+                "Career",
+
+            question:
+                "How do I know which career path to choose?",
+
+            answer:
+                "Consider your interests, strengths, values and the type of work you enjoy. Research possible careers and speak with people who have experience in those fields before making major decisions."
+        }
+
+    ];
+
+}
+
+
+/* ============================================================
+   RENDER FAQS
+============================================================ */
+
+function renderAcademicFaqs() {
+
+    const list =
+        academicElement(
+            "academicFaqList"
+        );
+
+
+    const emptyState =
+        academicElement(
+            "academicEmptyState"
+        );
+
+
+    if (!list) {
+
+        return;
+
+    }
+
+
+    let filtered =
+        academicFaqs.filter(
+            function (item) {
+
+                const category =
+                    String(
+                        item.category ||
+                        ""
+                    ).trim();
+
+
+                const question =
+                    String(
+                        item.question ||
+                        item.Question ||
+                        ""
+                    ).trim();
+
+
+                const answer =
+                    String(
+                        item.answer ||
+                        item.Answer ||
+                        ""
+                    ).trim();
+
+
+                const matchesCategory =
+                    activeAcademicFilter ===
+                        "All" ||
+
+                    category.toLowerCase() ===
+                        activeAcademicFilter.toLowerCase();
+
+
+                const searchText =
+                    (
+                        question +
+                        " " +
+                        answer +
+                        " " +
+                        category
+                    )
+                    .toLowerCase();
+
+
+                const matchesSearch =
+                    !academicSearchTerm ||
+                    searchText.includes(
+                        academicSearchTerm
+                    );
+
+
+                return (
+                    matchesCategory &&
+                    matchesSearch
+                );
+
+            }
+        );
+
+
+    /*
+     * Keep the initial page compact.
+     *
+     * Show only the first 5 unless the user asks
+     * to see everything.
+     */
+
+    if (
+        !showingAllFaqs &&
+        !academicSearchTerm &&
+        filtered.length > 5
+    ) {
+
+        filtered =
+            filtered.slice(
+                0,
+                5
+            );
+
+    }
+
+
+    if (!filtered.length) {
+
+        list.innerHTML =
+            "";
 
         if (emptyState) {
 
-            emptyState.hidden = true;
+            emptyState.hidden =
+                false;
 
         }
 
+        return;
 
-        container.innerHTML =
-            visible.map(
-                function (item, index) {
+    }
+
+
+    if (emptyState) {
+
+        emptyState.hidden =
+            true;
+
+    }
+
+
+    list.innerHTML =
+        filtered
+            .map(
+                function (
+                    item,
+                    index
+                ) {
+
+                    const category =
+                        escapeAcademicHTML(
+                            item.category ||
+                            "Academic Help"
+                        );
+
+
+                    const question =
+                        escapeAcademicHTML(
+                            item.question ||
+                            item.Question ||
+                            "Question"
+                        );
+
+
+                    const answer =
+                        escapeAcademicHTML(
+                            item.answer ||
+                            item.Answer ||
+                            ""
+                        );
+
 
                     return `
 
                         <article
                             class="academic-faq-item"
+                            data-category="${category}"
                         >
 
                             <button
@@ -384,34 +1042,32 @@
                                 <span
                                     class="academic-faq-number"
                                 >
-                                    ${String(index + 1).padStart(2, "0")}
+                                    ${index + 1}
                                 </span>
 
 
                                 <span
                                     class="academic-faq-question-text"
                                 >
-                                    ${escapeHTML(item.question)}
+                                    ${question}
                                 </span>
 
 
                                 <span
                                     class="academic-faq-chevron"
                                 >
-                                    <i
-                                        class="fa-solid fa-chevron-down"
-                                    ></i>
+
+                                    <i class="fa-solid fa-chevron-down"></i>
+
                                 </span>
 
                             </button>
 
 
-                            <div
-                                class="academic-faq-answer"
-                            >
+                            <div class="academic-faq-answer">
 
                                 <p>
-                                    ${escapeHTML(item.answer)}
+                                    ${answer}
                                 </p>
 
                             </div>
@@ -424,966 +1080,734 @@
             )
             .join("");
 
+}
 
-        bindFAQButtons();
 
-    }
+/* ============================================================
+   LOAD PUBLISHED ANSWERS
+============================================================ */
 
+async function loadPublishedAcademicAnswers() {
 
-    /* ========================================================
-       FAQ BUTTONS
-    ======================================================== */
-
-    function bindFAQButtons() {
-
-        document
-            .querySelectorAll(
-                ".academic-faq-question"
-            )
-            .forEach(
-                function (button) {
-
-                    button.addEventListener(
-                        "click",
-                        function () {
-
-                            const item =
-                                button.closest(
-                                    ".academic-faq-item"
-                                );
-
-                            if (!item) {
-
-                                return;
-
-                            }
-
-
-                            const isOpen =
-                                item.classList.contains(
-                                    "open"
-                                );
-
-
-                            document
-                                .querySelectorAll(
-                                    ".academic-faq-item.open"
-                                )
-                                .forEach(
-                                    function (openItem) {
-
-                                        if (
-                                            openItem !== item
-                                        ) {
-
-                                            openItem.classList.remove(
-                                                "open"
-                                            );
-
-                                            const openButton =
-                                                openItem.querySelector(
-                                                    ".academic-faq-question"
-                                                );
-
-                                            if (openButton) {
-
-                                                openButton.setAttribute(
-                                                    "aria-expanded",
-                                                    "false"
-                                                );
-
-                                            }
-
-                                        }
-
-                                    }
-                                );
-
-
-                            item.classList.toggle(
-                                "open",
-                                !isOpen
-                            );
-
-
-                            button.setAttribute(
-                                "aria-expanded",
-                                String(!isOpen)
-                            );
-
-                        }
-                    );
-
-                }
-            );
-
-    }
-
-
-    /* ========================================================
-       FILTER BUTTONS
-    ======================================================== */
-
-    function initializeFilters() {
-
-        document
-            .querySelectorAll(
-                ".academic-filter"
-            )
-            .forEach(
-                function (button) {
-
-                    button.addEventListener(
-                        "click",
-                        function () {
-
-                            activeFilter =
-                                button.getAttribute(
-                                    "data-filter"
-                                ) ||
-                                "All";
-
-
-                            document
-                                .querySelectorAll(
-                                    ".academic-filter"
-                                )
-                                .forEach(
-                                    function (filterButton) {
-
-                                        filterButton.classList.toggle(
-                                            "active",
-                                            filterButton === button
-                                        );
-
-                                    }
-                                );
-
-
-                            showAllFaqs = true;
-
-
-                            updateShowAllButton();
-
-                            renderFAQs();
-
-                        }
-                    );
-
-                }
-            );
-
-    }
-
-
-    /* ========================================================
-       CATEGORY CARDS
-    ======================================================== */
-
-    function initializeCategories() {
-
-        document
-            .querySelectorAll(
-                ".academic-category-card"
-            )
-            .forEach(
-                function (button) {
-
-                    button.addEventListener(
-                        "click",
-                        function () {
-
-                            const category =
-                                button.getAttribute(
-                                    "data-category"
-                                );
-
-
-                            if (!category) {
-
-                                return;
-
-                            }
-
-
-                            activeFilter =
-                                category;
-
-                            showAllFaqs =
-                                true;
-
-
-                            document
-                                .querySelectorAll(
-                                    ".academic-filter"
-                                )
-                                .forEach(
-                                    function (filterButton) {
-
-                                        filterButton.classList.toggle(
-                                            "active",
-                                            filterButton.getAttribute(
-                                                "data-filter"
-                                            ) === category
-                                        );
-
-                                    }
-                                );
-
-
-                            updateShowAllButton();
-
-                            renderFAQs();
-
-                            scrollToElement(
-                                "academicFaqSection"
-                            );
-
-                        }
-                    );
-
-                }
-            );
-
-    }
-
-
-    /* ========================================================
-       SHOW ALL
-    ======================================================== */
-
-    function updateShowAllButton() {
-
-        const button =
-            $("showAllFaqs");
-
-
-        if (!button) {
-
-            return;
-
-        }
-
-
-        const span =
-            button.querySelector("span");
-
-
-        if (showAllFaqs) {
-
-            button.classList.add(
-                "expanded"
-            );
-
-            if (span) {
-
-                span.textContent =
-                    "Show less";
-
-            }
-
-        } else {
-
-            button.classList.remove(
-                "expanded"
-            );
-
-            if (span) {
-
-                span.textContent =
-                    "Show all";
-
-            }
-
-        }
-
-    }
-
-
-    function initializeShowAll() {
-
-        const button =
-            $("showAllFaqs");
-
-
-        if (!button) {
-
-            return;
-
-        }
-
-
-        button.addEventListener(
-            "click",
-            function () {
-
-                showAllFaqs =
-                    !showAllFaqs;
-
-
-                updateShowAllButton();
-
-                renderFAQs();
-
-            }
-        );
-
-    }
-
-
-    /* ========================================================
-       SEARCH
-    ======================================================== */
-
-    function initializeSearch() {
-
-        const input =
-            $("academicSearch");
-
-        const clearButton =
-            $("clearAcademicSearch");
-
-
-        if (!input) {
-
-            return;
-
-        }
-
-
-        input.addEventListener(
-            "input",
-            function () {
-
-                searchTerm =
-                    input.value.trim();
-
-
-                if (clearButton) {
-
-                    clearButton.hidden =
-                        searchTerm.length === 0;
-
-                }
-
-
-                if (searchTerm) {
-
-                    showAllFaqs = true;
-
-                }
-
-
-                updateShowAllButton();
-
-                renderFAQs();
-
-            }
+    const container =
+        academicElement(
+            "publishedAnswerGrid"
         );
 
 
-        if (clearButton) {
+    if (!container) {
 
-            clearButton.addEventListener(
-                "click",
-                function () {
-
-                    input.value =
-                        "";
-
-                    searchTerm =
-                        "";
-
-                    clearButton.hidden =
-                        true;
-
-                    renderFAQs();
-
-                    input.focus();
-
-                }
-            );
-
-        }
+        return;
 
     }
 
 
-    /* ========================================================
-       CHARACTER COUNTER
-    ======================================================== */
+    try {
 
-    function initializeCharacterCounter() {
-
-        const textarea =
-            $("questionMessage");
-
-        const counter =
-            $("questionCharacterCount");
+        const response =
+            await academicApiGet(
+                ACADEMIC_HELP_CONFIG.PUBLISHED_ACTION
+            );
 
 
-        if (!textarea || !counter) {
-
-            return;
-
-        }
-
-
-        function updateCounter() {
-
-            counter.textContent =
-                String(textarea.value.length);
-
-        }
+        publishedAnswers =
+            getAcademicResponseData(
+                response
+            );
 
 
-        textarea.addEventListener(
-            "input",
-            updateCounter
+        renderPublishedAcademicAnswers();
+
+    }
+
+    catch (error) {
+
+        console.warn(
+            "Published academic answers could not be loaded:",
+            error
         );
 
 
-        updateCounter();
+        publishedAnswers =
+            [];
+
+
+        renderPublishedAcademicAnswers();
+
+    }
+
+}
+
+
+/* ============================================================
+   RENDER PUBLISHED ANSWERS
+============================================================ */
+
+function renderPublishedAcademicAnswers() {
+
+    const container =
+        academicElement(
+            "publishedAnswerGrid"
+        );
+
+
+    if (!container) {
+
+        return;
 
     }
 
 
-    /* ========================================================
-       FORM HELPERS
-    ======================================================== */
+    if (!publishedAnswers.length) {
 
-    function clearFieldErrors() {
+        container.innerHTML =
+            `
+                <div class="published-loading">
 
-        document
-            .querySelectorAll(
-                ".form-field.has-error"
-            )
-            .forEach(
-                function (field) {
+                    <span>
+                        New helpful answers will appear here.
+                    </span>
 
-                    field.classList.remove(
-                        "has-error"
-                    );
+                </div>
+            `;
 
-                }
-            );
-
-
-        document
-            .querySelectorAll(
-                ".field-error"
-            )
-            .forEach(
-                function (error) {
-
-                    error.textContent =
-                        "";
-
-                }
-            );
+        return;
 
     }
 
 
-    function setFieldError(
-        fieldId,
-        errorId,
-        message
+    container.innerHTML =
+        publishedAnswers
+            .slice(0, 6)
+            .map(
+                function (item) {
+
+                    const category =
+                        escapeAcademicHTML(
+                            item.category ||
+                            "Academic Help"
+                        );
+
+
+                    const question =
+                        escapeAcademicHTML(
+                            item.question ||
+                            item.Question ||
+                            "Academic Question"
+                        );
+
+
+                    const answer =
+                        escapeAcademicHTML(
+                            item.answer ||
+                            item.Answer ||
+                            ""
+                        );
+
+
+                    return `
+
+                        <article
+                            class="published-answer-card"
+                        >
+
+                            <span
+                                class="published-answer-category"
+                            >
+                                ${category}
+                            </span>
+
+
+                            <h3>
+                                ${question}
+                            </h3>
+
+
+                            <p>
+                                ${answer}
+                            </p>
+
+                        </article>
+
+                    `;
+
+                }
+            )
+            .join("");
+
+}
+
+
+/* ============================================================
+   CHARACTER COUNTER
+============================================================ */
+
+function setupCharacterCounter() {
+
+    const textarea =
+        academicElement(
+            "questionMessage"
+        );
+
+
+    const counter =
+        academicElement(
+            "questionCharacterCount"
+        );
+
+
+    if (!textarea || !counter) {
+
+        return;
+
+    }
+
+
+    function updateCounter() {
+
+        counter.textContent =
+            textarea.value.length;
+
+    }
+
+
+    textarea.addEventListener(
+        "input",
+        updateCounter
+    );
+
+
+    updateCounter();
+
+}
+
+
+/* ============================================================
+   FORM
+============================================================ */
+
+function setupAcademicQuestionForm() {
+
+    const form =
+        academicElement(
+            "academicQuestionForm"
+        );
+
+
+    if (!form) {
+
+        return;
+
+    }
+
+
+    form.addEventListener(
+        "submit",
+        handleAcademicQuestionSubmit
+    );
+
+}
+
+
+/* ============================================================
+   VALIDATION
+============================================================ */
+
+function validateAcademicQuestionForm() {
+
+    let valid =
+        true;
+
+
+    const name =
+        academicElement(
+            "questionName"
+        );
+
+
+    const phone =
+        academicElement(
+            "questionPhone"
+        );
+
+
+    const category =
+        academicElement(
+            "questionCategory"
+        );
+
+
+    const question =
+        academicElement(
+            "questionMessage"
+        );
+
+
+    const consent =
+        academicElement(
+            "questionConsent"
+        );
+
+
+    clearAcademicErrors();
+
+
+    if (
+        !name ||
+        !name.value.trim()
     ) {
 
-        const field =
-            $(fieldId);
+        showAcademicFieldError(
+            "questionName",
+            "questionNameError",
+            "Please enter your name."
+        );
 
-        const error =
-            $(errorId);
+        valid =
+            false;
+
+    }
 
 
-        if (field) {
+    if (
+        !phone ||
+        !phone.value.trim()
+    ) {
 
-            const wrapper =
-                field.closest(
-                    ".form-field"
-                );
+        showAcademicFieldError(
+            "questionPhone",
+            "questionPhoneError",
+            "Please enter your WhatsApp number or phone number."
+        );
 
-            if (wrapper) {
+        valid =
+            false;
 
-                wrapper.classList.add(
+    }
+
+
+    if (
+        !category ||
+        !category.value
+    ) {
+
+        showAcademicFieldError(
+            "questionCategory",
+            "questionCategoryError",
+            "Please select a category."
+        );
+
+        valid =
+            false;
+
+    }
+
+
+    if (
+        !question ||
+        !question.value.trim()
+    ) {
+
+        showAcademicFieldError(
+            "questionMessage",
+            "questionMessageError",
+            "Please tell us what you need help with."
+        );
+
+        valid =
+            false;
+
+    }
+
+
+    if (
+        question &&
+        question.value.trim().length < 10
+    ) {
+
+        showAcademicFieldError(
+            "questionMessage",
+            "questionMessageError",
+            "Please give us a little more detail."
+        );
+
+        valid =
+            false;
+
+    }
+
+
+    if (
+        !consent ||
+        !consent.checked
+    ) {
+
+        showAcademicFormStatus(
+            "Please agree that the Academic Help team may contact you.",
+            "error"
+        );
+
+        valid =
+            false;
+
+    }
+
+
+    return valid;
+
+}
+
+
+/* ============================================================
+   CLEAR ERRORS
+============================================================ */
+
+function clearAcademicErrors() {
+
+    document
+        .querySelectorAll(
+            ".academic-page .form-field.has-error"
+        )
+        .forEach(
+            function (field) {
+
+                field.classList.remove(
                     "has-error"
                 );
 
             }
+        );
 
-        }
+
+    document
+        .querySelectorAll(
+            ".academic-page .field-error"
+        )
+        .forEach(
+            function (error) {
+
+                error.textContent =
+                    "";
+
+            }
+        );
 
 
-        if (error) {
+    clearAcademicFormStatus();
 
-            error.textContent =
-                message;
+}
+
+
+/* ============================================================
+   SHOW FIELD ERROR
+============================================================ */
+
+function showAcademicFieldError(
+    inputId,
+    errorId,
+    message
+) {
+
+    const input =
+        academicElement(
+            inputId
+        );
+
+
+    const error =
+        academicElement(
+            errorId
+        );
+
+
+    if (input) {
+
+        const field =
+            input.closest(
+                ".form-field"
+            );
+
+
+        if (field) {
+
+            field.classList.add(
+                "has-error"
+            );
 
         }
 
     }
 
 
-    function setFormStatus(
-        message,
-        type
-    ) {
+    if (error) {
 
-        const status =
-            $("academicFormStatus");
-
-
-        if (!status) {
-
-            return;
-
-        }
-
-
-        if (!message) {
-
-            status.textContent =
-                "";
-
-            status.className =
-                "form-status";
-
-            return;
-
-        }
-
-
-        status.textContent =
+        error.textContent =
             message;
 
-        status.className =
-            "form-status show " +
-            (
-                type === "success"
-                    ? "success"
-                    : "error"
-            );
+    }
+
+}
+
+
+/* ============================================================
+   FORM STATUS
+============================================================ */
+
+function showAcademicFormStatus(
+    message,
+    type
+) {
+
+    const status =
+        academicElement(
+            "academicFormStatus"
+        );
+
+
+    if (!status) {
+
+        return;
 
     }
 
 
-    /* ========================================================
-       BUTTON LOADING
-    ======================================================== */
-
-    function setSubmitLoading(
-        loading
-    ) {
-
-        const button =
-            $("submitQuestionBtn");
-
-        const label =
-            $("submitButtonLabel");
-
-        const loadingElement =
-            $("submitButtonLoading");
+    status.textContent =
+        message;
 
 
-        if (!button) {
+    status.className =
+        "form-status show " +
+        (
+            type === "success"
+                ? "success"
+                : "error"
+        );
 
-            return;
-
-        }
+}
 
 
-        if (loading) {
+function clearAcademicFormStatus() {
 
-            button.disabled =
+    const status =
+        academicElement(
+            "academicFormStatus"
+        );
+
+
+    if (!status) {
+
+        return;
+
+    }
+
+
+    status.textContent =
+        "";
+
+    status.className =
+        "form-status";
+
+}
+
+
+/* ============================================================
+   SUBMIT BUTTON LOADING
+============================================================ */
+
+function setAcademicSubmitLoading(
+    loading
+) {
+
+    const button =
+        academicElement(
+            "submitQuestionBtn"
+        );
+
+
+    const label =
+        academicElement(
+            "submitButtonLabel"
+        );
+
+
+    const loader =
+        academicElement(
+            "submitButtonLoading"
+        );
+
+
+    if (!button) {
+
+        return;
+
+    }
+
+
+    if (loading) {
+
+        button.disabled =
+            true;
+
+
+        if (label) {
+
+            label.hidden =
                 true;
 
-
-            if (label) {
-
-                label.hidden =
-                    true;
-
-            }
+        }
 
 
-            if (loadingElement) {
+        if (loader) {
 
-                loadingElement.hidden =
-                    false;
-
-            }
-
-        } else {
-
-            button.disabled =
+            loader.hidden =
                 false;
-
-
-            if (label) {
-
-                label.hidden =
-                    false;
-
-            }
-
-
-            if (loadingElement) {
-
-                loadingElement.hidden =
-                    true;
-
-            }
 
         }
 
     }
 
+    else {
 
-    /* ========================================================
-       VALIDATE FORM
-    ======================================================== */
-
-    function validateForm() {
-
-        clearFieldErrors();
-
-        setFormStatus("", "");
+        button.disabled =
+            false;
 
 
-        const name =
-            $("questionName");
+        if (label) {
 
-        const phone =
-            $("questionPhone");
-
-        const category =
-            $("questionCategory");
-
-        const message =
-            $("questionMessage");
-
-        const consent =
-            $("questionConsent");
-
-
-        let valid =
-            true;
-
-
-        const nameValue =
-            name
-                ? name.value.trim()
-                : "";
-
-
-        const phoneValue =
-            phone
-                ? phone.value.trim()
-                : "";
-
-
-        const categoryValue =
-            category
-                ? category.value.trim()
-                : "";
-
-
-        const messageValue =
-            message
-                ? message.value.trim()
-                : "";
-
-
-        if (nameValue.length < 2) {
-
-            setFieldError(
-                "questionName",
-                "questionNameError",
-                "Please enter your name."
-            );
-
-            valid =
+            label.hidden =
                 false;
 
         }
 
 
-        if (phoneValue.length < 7) {
+        if (loader) {
 
-            setFieldError(
-                "questionPhone",
-                "questionPhoneError",
-                "Please enter a valid phone or WhatsApp number."
-            );
-
-            valid =
-                false;
+            loader.hidden =
+                true;
 
         }
-
-
-        if (!categoryValue) {
-
-            setFieldError(
-                "questionCategory",
-                "questionCategoryError",
-                "Please select a category."
-            );
-
-            valid =
-                false;
-
-        }
-
-
-        if (messageValue.length < 10) {
-
-            setFieldError(
-                "questionMessage",
-                "questionMessageError",
-                "Please tell us a little more about your question."
-            );
-
-            valid =
-                false;
-
-        }
-
-
-        if (!consent || !consent.checked) {
-
-            setFormStatus(
-                "Please agree that the Academic Help team may contact you.",
-                "error"
-            );
-
-            valid =
-                false;
-
-        }
-
-
-        if (!valid) {
-
-            const firstError =
-                document.querySelector(
-                    ".form-field.has-error"
-                );
-
-
-            if (firstError) {
-
-                firstError.scrollIntoView({
-
-                    behavior: "smooth",
-
-                    block: "center"
-
-                });
-
-            }
-
-        }
-
-
-        return valid;
 
     }
 
-
-    /* ========================================================
-       API RESPONSE PARSER
-    ======================================================== */
-
-    function parseAPIResponse(data) {
-
-        if (!data) {
-
-            return {
-
-                success: false,
-
-                message:
-                    "The server returned an empty response."
-
-            };
-
-        }
+}
 
 
-        if (
-            typeof data === "object" &&
-            data.success !== undefined
-        ) {
+/* ============================================================
+   RESET SUBMIT BUTTON
+============================================================ */
 
-            return data;
+function resetAcademicSubmitButton() {
 
-        }
-
-
-        if (
-            data.data &&
-            typeof data.data === "object"
-        ) {
-
-            return data.data;
-
-        }
+    academicSubmissionInProgress =
+        false;
 
 
-        return data;
+    setAcademicSubmitLoading(
+        false
+    );
 
-    }
+}
 
 
-    /* ========================================================
-       POST REQUEST
-    ======================================================== */
+/* ============================================================
+   SUBMIT QUESTION
+============================================================ */
 
-    async function postAPI(
-        payload
+async function handleAcademicQuestionSubmit(
+    event
+) {
+
+    event.preventDefault();
+
+
+    /*
+     * Prevent double submission.
+     */
+
+    if (
+        academicSubmissionInProgress
     ) {
+
+        return;
+
+    }
+
+
+    /*
+     * Validate first.
+     *
+     * IMPORTANT:
+     * The loading state is NOT turned on until
+     * validation has completely passed.
+     */
+
+    if (
+        !validateAcademicQuestionForm()
+    ) {
+
+        return;
+
+    }
+
+
+    const name =
+        academicElement(
+            "questionName"
+        ).value.trim();
+
+
+    const phone =
+        academicElement(
+            "questionPhone"
+        ).value.trim();
+
+
+    const category =
+        academicElement(
+            "questionCategory"
+        ).value;
+
+
+    const contactPreference =
+        academicElement(
+            "questionContact"
+        ).value;
+
+
+    const question =
+        academicElement(
+            "questionMessage"
+        ).value.trim();
+
+
+    const consent =
+        academicElement(
+            "questionConsent"
+        ).checked;
+
+
+    /*
+     * NOW — and only now — show Sending...
+     */
+
+    academicSubmissionInProgress =
+        true;
+
+
+    setAcademicSubmitLoading(
+        true
+    );
+
+
+    clearAcademicFormStatus();
+
+
+    try {
 
         const response =
-            await fetch(
-                ACADEMIC_CONFIG.API_URL,
+            await academicApiPost(
+                ACADEMIC_HELP_CONFIG.SUBMIT_ACTION,
                 {
-
-                    method:
-                        "POST",
-
-                    headers: {
-
-                        "Content-Type":
-                            "text/plain;charset=utf-8"
-
-                    },
-
-                    body:
-                        JSON.stringify(
-                            payload
-                        )
-
-                }
-            );
-
-
-        if (!response.ok) {
-
-            throw new Error(
-                "HTTP " +
-                response.status
-            );
-
-        }
-
-
-        const text =
-            await response.text();
-
-
-        let data;
-
-
-        try {
-
-            data =
-                JSON.parse(
-                    text
-                );
-
-        } catch (error) {
-
-            throw new Error(
-                "The server returned an invalid response."
-            );
-
-        }
-
-
-        return parseAPIResponse(
-            data
-        );
-
-    }
-
-
-    /* ========================================================
-       SUBMIT QUESTION
-    ======================================================== */
-
-    async function submitQuestion(
-        event
-    ) {
-
-        event.preventDefault();
-
-
-        /*
-         * Never allow double submissions.
-         */
-
-        if (formSubmitting) {
-
-            return;
-
-        }
-
-
-        if (!validateForm()) {
-
-            return;
-
-        }
-
-
-        const name =
-            $("questionName").value.trim();
-
-        const phone =
-            $("questionPhone").value.trim();
-
-        const category =
-            $("questionCategory").value.trim();
-
-        const contactPreference =
-            $("questionContact")
-                ? $("questionContact").value
-                : "WhatsApp";
-
-        const question =
-            $("questionMessage").value.trim();
-
-
-        formSubmitting =
-            true;
-
-
-        /*
-         * Loader starts ONLY HERE,
-         * after the user has actually submitted.
-         */
-
-        setSubmitLoading(
-            true
-        );
-
-
-        setFormStatus(
-            "",
-            ""
-        );
-
-
-        try {
-
-            const result =
-                await postAPI({
-
-                    action:
-                        "submitAcademicQuestion",
 
                     name:
                         name,
@@ -1394,686 +1818,152 @@
                     category:
                         category,
 
+                    question:
+                        question,
+
                     contactPreference:
                         contactPreference,
 
-                    question:
-                        question
+                    consent:
+                        consent,
 
-                });
+                    page:
+                        "Academic Help"
 
-
-            console.log(
-                "[Academic Help] Submit response:",
-                result
+                }
             );
 
 
-            if (
-                result &&
-                (
-                    result.success === true ||
-                    result.success === "true"
-                )
-            ) {
-
-                const requestId =
-                    result.requestId ||
-                    result.requestID ||
-                    result.id ||
-                    "";
+        console.log(
+            "Academic Help submission response:",
+            response
+        );
 
 
-                if (requestId) {
+        if (
+            response &&
+            response.success === false
+        ) {
 
-                    setFormStatus(
-                        "Your question has been sent successfully. Reference: " +
-                        requestId,
-                        "success"
-                    );
-
-                } else {
-
-                    setFormStatus(
-                        "Your question has been sent successfully. The Academic Help team will review it.",
-                        "success"
-                    );
-
-                }
-
-
-                const form =
-                    $("academicQuestionForm");
-
-
-                if (form) {
-
-                    form.reset();
-
-                }
-
-
-                const counter =
-                    $("questionCharacterCount");
-
-
-                if (counter) {
-
-                    counter.textContent =
-                        "0";
-
-                }
-
-
-                clearFieldErrors();
-
-
-                /*
-                 * Refresh published answers after submission
-                 * in case the backend returns new public data.
-                 */
-
-                loadPublishedAnswers();
-
-            } else {
-
-                throw new Error(
-                    result &&
-                    (
-                        result.message ||
-                        result.error
-                    )
-                        ? (
-                            result.message ||
-                            result.error
-                        )
-                        : "We could not submit your question."
-                );
-
-            }
-
-        } catch (error) {
-
-            console.error(
-                "[Academic Help] Submit error:",
-                error
-            );
-
-
-            setFormStatus(
-                error &&
-                error.message
-                    ? error.message
-                    : "Unable to send your question right now. Please try again.",
-                "error"
-            );
-
-        } finally {
-
-            formSubmitting =
-                false;
-
-
-            /*
-             * Always return the button to
-             * its normal state.
-             */
-
-            setSubmitLoading(
-                false
+            throw new Error(
+                response.message ||
+                "Unable to submit your question."
             );
 
         }
 
-    }
 
-
-    /* ========================================================
-       FORM INITIALIZATION
-    ======================================================== */
-
-    function initializeForm() {
-
-        const form =
-            $("academicQuestionForm");
-
-
-        if (!form) {
-
-            return;
-
-        }
+        showAcademicFormStatus(
+            response &&
+            response.message
+                ? response.message
+                : "Your question has been sent successfully. The Academic Help team will review it.",
+            "success"
+        );
 
 
         /*
-         * HARD RESET OF LOADING STATE.
-         *
-         * This is intentional.
-         * It prevents a CSS/global-state issue from leaving
-         * "Sending..." visible when the page first opens.
+         * Clear the form after successful submission.
          */
 
-        formSubmitting =
+        const form =
+            academicElement(
+                "academicQuestionForm"
+            );
+
+
+        if (form) {
+
+            form.reset();
+
+        }
+
+
+        const counter =
+            academicElement(
+                "questionCharacterCount"
+            );
+
+
+        if (counter) {
+
+            counter.textContent =
+                "0";
+
+        }
+
+
+        clearAcademicErrors();
+
+
+        /*
+         * Keep the success message visible.
+         */
+
+        showAcademicFormStatus(
+            response &&
+            response.message
+                ? response.message
+                : "Your question has been sent successfully. The Academic Help team will review it.",
+            "success"
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Academic Help submission error:",
+            error
+        );
+
+
+        showAcademicFormStatus(
+            error &&
+            error.message
+                ? error.message
+                : "We couldn't send your question right now. Please try again.",
+            "error"
+        );
+
+    }
+
+    finally {
+
+        academicSubmissionInProgress =
             false;
 
 
-        setSubmitLoading(
+        /*
+         * IMPORTANT:
+         *
+         * This guarantees that the button returns to
+         * "Send My Question" whether the request succeeds
+         * or fails.
+         */
+
+        setAcademicSubmitLoading(
             false
         );
 
-
-        setFormStatus(
-            "",
-            ""
-        );
-
-
-        form.addEventListener(
-            "submit",
-            submitQuestion
-        );
-
     }
 
+}
 
-    /* ========================================================
-       PUBLISHED ANSWERS
-    ======================================================== */
 
-    function normalizePublishedAnswers(
-        result
-    ) {
+/* ============================================================
+   EXPOSE OPTIONAL DEBUG OBJECT
+============================================================ */
 
-        if (!result) {
+window.AFCAcademicHelp = {
 
-            return [];
+    reloadFaqs:
+        loadAcademicFaqs,
 
-        }
+    reloadAnswers:
+        loadPublishedAcademicAnswers,
 
+    renderFaqs:
+        renderAcademicFaqs
 
-        if (Array.isArray(result)) {
-
-            return result;
-
-        }
-
-
-        if (
-            Array.isArray(
-                result.answers
-            )
-        ) {
-
-            return result.answers;
-
-        }
-
-
-        if (
-            Array.isArray(
-                result.data
-            )
-        ) {
-
-            return result.data;
-
-        }
-
-
-        if (
-            result.data &&
-            Array.isArray(
-                result.data.answers
-            )
-        ) {
-
-            return result.data.answers;
-
-        }
-
-
-        return [];
-
-    }
-
-
-    function getPublishedField(
-        item,
-        names
-    ) {
-
-        for (
-            let i = 0;
-            i < names.length;
-            i++
-        ) {
-
-            const key =
-                names[i];
-
-
-            if (
-                item &&
-                item[key] !== undefined &&
-                item[key] !== null &&
-                String(item[key]).trim()
-            ) {
-
-                return String(
-                    item[key]
-                ).trim();
-
-            }
-
-        }
-
-
-        return "";
-
-    }
-
-
-    function renderPublishedAnswers(
-        answers
-    ) {
-
-        const container =
-            $("publishedAnswerGrid");
-
-
-        if (!container) {
-
-            return;
-
-        }
-
-
-        if (!answers.length) {
-
-            container.innerHTML = `
-
-                <div class="published-answer-card">
-
-                    <div class="published-answer-category">
-                        Academic Help
-                    </div>
-
-                    <h3>
-                        No published answers yet
-                    </h3>
-
-                    <p>
-                        New answers from the Academic Help team
-                        will appear here.
-                    </p>
-
-                </div>
-
-            `;
-
-            return;
-
-        }
-
-
-        container.innerHTML =
-            answers
-                .slice(0, 6)
-                .map(
-                    function (item) {
-
-                        const category =
-                            getPublishedField(
-                                item,
-                                [
-                                    "category",
-                                    "Category"
-                                ]
-                            ) ||
-                            "Academic Help";
-
-
-                        const question =
-                            getPublishedField(
-                                item,
-                                [
-                                    "question",
-                                    "Question",
-                                    "title",
-                                    "Title"
-                                ]
-                            ) ||
-                            "Academic question";
-
-
-                        const answer =
-                            getPublishedField(
-                                item,
-                                [
-                                    "answer",
-                                    "Answer",
-                                    "response",
-                                    "Response"
-                                ]
-                            ) ||
-                            "An answer from the Academic Help team.";
-
-                        
-                        return `
-
-                            <article
-                                class="published-answer-card"
-                            >
-
-                                <span
-                                    class="published-answer-category"
-                                >
-                                    ${escapeHTML(category)}
-                                </span>
-
-
-                                <h3>
-                                    ${escapeHTML(question)}
-                                </h3>
-
-
-                                <p>
-                                    ${escapeHTML(
-                                        truncateText(
-                                            answer,
-                                            170
-                                        )
-                                    )}
-                                </p>
-
-                            </article>
-
-                        `;
-
-                    }
-                )
-                .join("");
-
-    }
-
-
-    function truncateText(
-        value,
-        maxLength
-    ) {
-
-        const text =
-            String(value || "");
-
-
-        if (
-            text.length <= maxLength
-        ) {
-
-            return text;
-
-        }
-
-
-        return (
-            text.substring(
-                0,
-                maxLength
-            ).trim() +
-            "..."
-        );
-
-    }
-
-
-    /* ========================================================
-       LOAD PUBLISHED ANSWERS
-    ======================================================== */
-
-    async function loadPublishedAnswers() {
-
-        const container =
-            $("publishedAnswerGrid");
-
-
-        if (!container) {
-
-            return;
-
-        }
-
-
-        try {
-
-            const response =
-                await fetch(
-                    ACADEMIC_CONFIG.API_URL +
-                    "?action=getPublishedAcademicAnswers",
-                    {
-
-                        method:
-                            "GET",
-
-                        cache:
-                            "no-store"
-
-                    }
-                );
-
-
-            if (!response.ok) {
-
-                throw new Error(
-                    "HTTP " +
-                    response.status
-                );
-
-            }
-
-
-            const data =
-                await response.json();
-
-
-            const result =
-                parseAPIResponse(
-                    data
-                );
-
-
-            const answers =
-                normalizePublishedAnswers(
-                    result
-                );
-
-
-            renderPublishedAnswers(
-                answers
-            );
-
-        } catch (error) {
-
-            console.warn(
-                "[Academic Help] Published answers unavailable:",
-                error
-            );
-
-
-            /*
-             * Do not show a giant error block.
-             * The rest of the page remains usable.
-             */
-
-            container.innerHTML = `
-
-                <div class="published-answer-card">
-
-                    <div class="published-answer-category">
-                        Academic Help
-                    </div>
-
-                    <h3>
-                        Answers will appear here
-                    </h3>
-
-                    <p>
-                        Published responses from our Academic Help
-                        team will be displayed here.
-                    </p>
-
-                </div>
-
-            `;
-
-        }
-
-    }
-
-
-    /* ========================================================
-       FONT CHECK
-    ======================================================== */
-
-    function checkFonts() {
-
-        if (
-            !document.fonts ||
-            typeof document.fonts.check !== "function"
-        ) {
-
-            return;
-
-        }
-
-
-        document.fonts.ready.then(
-            function () {
-
-                const br =
-                    document.fonts.check(
-                        '700 16px "Bricolage Grotesque"'
-                    );
-
-                const dm =
-                    document.fonts.check(
-                        '400 16px "DM Sans"'
-                    );
-
-
-                console.log(
-                    "[Academic Help] Fonts:",
-                    {
-                        "Bricolage Grotesque": br,
-                        "DM Sans": dm
-                    }
-                );
-
-            }
-        );
-
-    }
-
-
-    /* ========================================================
-       INITIALIZE PAGE
-    ======================================================== */
-
-    function initializeAcademicHelp() {
-
-        initializeScrollButtons();
-
-        initializeCategories();
-
-        initializeFilters();
-
-        initializeShowAll();
-
-        initializeSearch();
-
-        initializeCharacterCounter();
-
-        initializeForm();
-
-        renderFAQs();
-
-        updateShowAllButton();
-
-        checkFonts();
-
-        loadPublishedAnswers();
-
-    }
-
-
-    /* ========================================================
-       AOS / LAYOUT READY
-    ======================================================== */
-
-    function startPage() {
-
-        initializeAcademicHelp();
-
-    }
-
-
-    if (
-        window.AFC_LAYOUT_READY
-    ) {
-
-        startPage();
-
-    } else {
-
-        window.addEventListener(
-            "afc:layout-ready",
-            startPage,
-            {
-                once: true
-            }
-        );
-
-    }
-
-
-    /*
-     * Safety fallback.
-     *
-     * If layout.js is unavailable or fails before dispatching,
-     * the page-specific functionality still initializes.
-     */
-
-    document.addEventListener(
-        "DOMContentLoaded",
-        function () {
-
-            setTimeout(
-                function () {
-
-                    const faq =
-                        $("academicFaqList");
-
-
-                    if (
-                        faq &&
-                        !faq.dataset.initialized
-                    ) {
-
-                        faq.dataset.initialized =
-                            "true";
-
-                        startPage();
-
-                    }
-
-                },
-                250
-            );
-
-        },
-        {
-            once: true
-        }
-    );
-
-
-})();
+};
