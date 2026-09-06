@@ -26,7 +26,7 @@
 const ACADEMIC_HELP_CONFIG = {
 
     API:
-        "https://script.google.com/macros/s/AKfycbw1mVwpgAcIOSNbpgzy52TFyozEGMtWWwVWUDFaofGNpzsguBIaKR4q1dXVtgVHO2xZ1w/exec",
+        "https://script.google.com/macros/s/AKfycbw1mVwpgAcIOSNbpgzy52TFyozEGMtWWwVWUDFaofGNzpsguBIaKR4q1dXVtgVHO2xZ1w/exec",
 
     SUBMIT_ACTION:
         "submitAcademicQuestion",
