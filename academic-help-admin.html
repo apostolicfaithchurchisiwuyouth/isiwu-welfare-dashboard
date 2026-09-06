@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    >
+
+    <title>
+        Academic Help Admin | AFC Isiu Youth Portal
+    </title>
+
+    <link
+        rel="manifest"
+        href="/manifest.json"
+    >
+
+    <meta
+        name="theme-color"
+        content="#4a0754"
+    >
+
+    <link
+        rel="icon"
+        type="image/png"
+        href="/images/logo.png"
+    >
+
+    <link
+        rel="apple-touch-icon"
+        href="/images/logo.png"
+    >
+
+    <!-- =====================================================
+         FONTS
+    ====================================================== -->
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap"
+        rel="stylesheet"
+    >
+
+    <!-- =====================================================
+         ICONS
+    ====================================================== -->
+
+    <link
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+        rel="stylesheet"
+    >
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/remixicon@4.6.0/fonts/remixicon.css"
+        rel="stylesheet"
+    >
+
+    <!-- =====================================================
+         GLOBAL CSS
+    ====================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="../css/main.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="../css/layout.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="../css/academichelp-admin.css"
+    >
+
+</head>
+
+
+<body>
+
+<div class="app-layout">
+
+    <!-- =====================================================
+         SIDEBAR
+    ====================================================== -->
+
+    <div id="app-sidebar"></div>
+
+
+    <div class="main-area">
+
+        <!-- =================================================
+             TOPBAR
+        ================================================== -->
+
+        <div id="app-topbar"></div>
+
+
+        <main class="dashboard-content academic-admin-page">
+
+
+            <!-- =================================================
+                 PAGE HEADER
+            ================================================== -->
+
+            <section class="academic-admin-header">
+
+                <div>
+
+                    <span class="admin-eyebrow">
+
+                        <i class="fa-solid fa-shield-halved"></i>
+
+                        Academic Help · Admin
+
+                    </span>
+
+
+                    <h1>
+                        Academic Help
+                    </h1>
+
+
+                    <p>
+                        Review questions, provide helpful answers,
+                        publish approved responses and prepare
+                        messages for the youth group.
+                    </p>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="admin-refresh-btn"
+                    id="refreshAcademicBtn"
+                >
+
+                    <i class="fa-solid fa-rotate"></i>
+
+                    <span>
+                        Refresh
+                    </span>
+
+                </button>
+
+            </section>
+
+
+
+            <!-- =================================================
+                 STATISTICS
+            ================================================== -->
+
+            <section
+                class="academic-admin-stats"
+                aria-label="Academic Help statistics"
+            >
+
+                <article class="admin-stat-card pending">
+
+                    <div class="admin-stat-icon">
+
+                        <i class="fa-regular fa-clock"></i>
+
+                    </div>
+
+                    <div>
+
+                        <span>
+                            Pending
+                        </span>
+
+                        <strong id="pendingCount">
+                            0
+                        </strong>
+
+                    </div>
+
+                </article>
+
+
+                <article class="admin-stat-card answered">
+
+                    <div class="admin-stat-icon">
+
+                        <i class="fa-solid fa-circle-check"></i>
+
+                    </div>
+
+                    <div>
+
+                        <span>
+                            Answered
+                        </span>
+
+                        <strong id="answeredCount">
+                            0
+                        </strong>
+
+                    </div>
+
+                </article>
+
+
+                <article class="admin-stat-card published">
+
+                    <div class="admin-stat-icon">
+
+                        <i class="fa-solid fa-globe"></i>
+
+                    </div>
+
+                    <div>
+
+                        <span>
+                            Published
+                        </span>
+
+                        <strong id="publishedCount">
+                            0
+                        </strong>
+
+                    </div>
+
+                </article>
+
+
+                <article class="admin-stat-card total">
+
+                    <div class="admin-stat-icon">
+
+                        <i class="fa-solid fa-inbox"></i>
+
+                    </div>
+
+                    <div>
+
+                        <span>
+                            Total
+                        </span>
+
+                        <strong id="totalCount">
+                            0
+                        </strong>
+
+                    </div>
+
+                </article>
+
+            </section>
+
+
+
+            <!-- =================================================
+                 WORKSPACE
+            ================================================== -->
+
+            <section class="academic-admin-workspace">
+
+
+                <!-- =================================================
+                     QUESTION INBOX
+                ================================================== -->
+
+                <aside class="academic-admin-inbox">
+
+
+                    <div class="inbox-header">
+
+                        <div>
+
+                            <span class="admin-section-label">
+                                Inbox
+                            </span>
+
+                            <h2>
+                                Questions
+                            </h2>
+
+                        </div>
+
+
+                        <select
+                            id="academicStatusFilter"
+                            aria-label="Filter Academic Help questions"
+                        >
+
+                            <option value="Pending">
+                                Pending
+                            </option>
+
+                            <option value="Answered">
+                                Answered
+                            </option>
+
+                            <option value="Published">
+                                Published
+                            </option>
+
+                            <option value="Closed">
+                                Closed
+                            </option>
+
+                            <option value="All">
+                                All
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="admin-search">
+
+                        <i class="fa-solid fa-magnifying-glass"></i>
+
+                        <input
+                            type="search"
+                            id="academicAdminSearch"
+                            placeholder="Search questions..."
+                            autocomplete="off"
+                        >
+
+                    </div>
+
+
+                    <div
+                        class="academic-question-list"
+                        id="academicRequestList"
+                    >
+
+                        <div class="admin-loading">
+
+                            <i class="fa-solid fa-spinner fa-spin"></i>
+
+                            <span>
+                                Loading questions...
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </aside>
+
+
+
+                <!-- =================================================
+                     EDITOR
+                ================================================== -->
+
+                <section class="academic-admin-editor">
+
+
+                    <!-- EMPTY -->
+                    <div
+                        class="editor-empty"
+                        id="adminEditorEmpty"
+                    >
+
+                        <div class="editor-empty-icon">
+
+                            <i class="fa-solid fa-inbox"></i>
+
+                        </div>
+
+                        <h2>
+                            Select a question
+                        </h2>
+
+                        <p>
+                            Select a question from the inbox
+                            to review it and prepare a response.
+                        </p>
+
+                    </div>
+
+
+
+                    <!-- ACTIVE EDITOR -->
+                    <div
+                        id="academicEditorContent"
+                        hidden
+                    >
+
+
+                        <!-- =========================================
+                             EDITOR HEADER
+                        ========================================== -->
+
+                        <div class="editor-header">
+
+                            <div>
+
+                                <span class="admin-section-label">
+                                    Request
+                                </span>
+
+                                <h2 id="editorRequestId">
+                                    AH-2026-0000
+                                </h2>
+
+                            </div>
+
+
+                            <span
+                                class="admin-status"
+                                id="editorStatusBadge"
+                            >
+                                Pending
+                            </span>
+
+                        </div>
+
+
+
+                        <!-- =========================================
+                             META
+                        ========================================== -->
+
+                        <div class="request-meta">
+
+                            <div>
+
+                                <span>
+                                    Submitted by
+                                </span>
+
+                                <strong id="editorName">
+                                    —
+                                </strong>
+
+                            </div>
+
+
+                            <div>
+
+                                <span>
+                                    Category
+                                </span>
+
+                                <strong id="editorCategory">
+                                    —
+                                </strong>
+
+                            </div>
+
+
+                            <div>
+
+                                <span>
+                                    Contact preference
+                                </span>
+
+                                <strong id="editorContact">
+                                    —
+                                </strong>
+
+                            </div>
+
+
+                            <div>
+
+                                <span>
+                                    Date
+                                </span>
+
+                                <strong id="editorDate">
+                                    —
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- =========================================
+                             PRIVATE CONTACT
+                        ========================================== -->
+
+                        <div class="private-contact">
+
+                            <i class="fa-brands fa-whatsapp"></i>
+
+                            <span>
+                                Private phone:
+                            </span>
+
+                            <strong id="editorPhone">
+                                —
+                            </strong>
+
+                            <small>
+                                This information is never published.
+                            </small>
+
+                        </div>
+
+
+
+                        <!-- =========================================
+                             QUESTION
+                        ========================================== -->
+
+                        <section class="question-card">
+
+                            <div class="question-card-label">
+
+                                <i class="fa-regular fa-circle-question"></i>
+
+                                What they asked
+
+                            </div>
+
+
+                            <p id="editorQuestion"></p>
+
+                        </section>
+
+
+
+                        <!-- =========================================
+                             ANSWER
+                        ========================================== -->
+
+                        <section class="answer-editor">
+
+                            <div class="editor-section-heading">
+
+                                <div>
+
+                                    <span class="admin-section-label">
+                                        Response
+                                    </span>
+
+                                    <h3>
+                                        Write your answer
+                                    </h3>
+
+                                </div>
+
+
+                                <span>
+                                    Maximum 5,000 characters
+                                </span>
+
+                            </div>
+
+
+                            <textarea
+                                id="academicAnswer"
+                                maxlength="5000"
+                                rows="10"
+                                placeholder="Write a clear, practical and encouraging answer..."
+                            ></textarea>
+
+
+                            <div class="textarea-footer">
+
+                                <span id="answerCharacterCount">
+                                    0 / 5000
+                                </span>
+
+                                <span id="answeredByLabel">
+                                    Answering as —
+                                </span>
+
+                            </div>
+
+                        </section>
+
+
+
+                        <!-- =========================================
+                             ACTIONS
+                        ========================================== -->
+
+                        <div class="editor-actions">
+
+                            <button
+                                type="button"
+                                class="admin-btn secondary"
+                                id="saveAnswerBtn"
+                            >
+
+                                <i class="fa-solid fa-floppy-disk"></i>
+
+                                Save Answer
+
+                            </button>
+
+
+                            <button
+                                type="button"
+                                class="admin-btn primary"
+                                id="publishAnswerBtn"
+                            >
+
+                                <i class="fa-solid fa-globe"></i>
+
+                                Publish Answer
+
+                            </button>
+
+
+                            <button
+                                type="button"
+                                class="admin-btn danger"
+                                id="unpublishAnswerBtn"
+                                hidden
+                            >
+
+                                <i class="fa-solid fa-eye-slash"></i>
+
+                                Unpublish
+
+                            </button>
+
+
+                            <button
+                                type="button"
+                                class="admin-btn close"
+                                id="closeQuestionBtn"
+                            >
+
+                                <i class="fa-solid fa-box-archive"></i>
+
+                                Close
+
+                            </button>
+
+                        </div>
+
+
+                        <div
+                            class="admin-message"
+                            id="editorMessage"
+                            role="status"
+                            aria-live="polite"
+                        ></div>
+
+
+
+                        <!-- =========================================
+                             GROUP MESSAGE
+                        ========================================== -->
+
+                        <section class="group-message">
+
+                            <div class="editor-section-heading">
+
+                                <div>
+
+                                    <span class="admin-section-label">
+                                        Optional
+                                    </span>
+
+                                    <h3>
+                                        Prepare a group message
+                                    </h3>
+
+                                </div>
+
+
+                                <span
+                                    class="shared-badge"
+                                    id="groupSharedBadge"
+                                    hidden
+                                >
+
+                                    <i class="fa-solid fa-check"></i>
+
+                                    Shared
+
+                                </span>
+
+                            </div>
+
+
+                            <p>
+                                Prepare a public-friendly version
+                                for the youth group. Do not include
+                                names, phone numbers or private details.
+                            </p>
+
+
+                            <textarea
+                                id="academicGroupMessage"
+                                maxlength="5000"
+                                rows="7"
+                                placeholder="Write the question and answer in a form suitable for the youth group..."
+                            ></textarea>
+
+
+                            <div class="group-actions">
+
+                                <button
+                                    type="button"
+                                    class="admin-btn secondary"
+                                    id="saveGroupMessageBtn"
+                                >
+
+                                    <i class="fa-solid fa-floppy-disk"></i>
+
+                                    Save Message
+
+                                </button>
+
+
+                                <button
+                                    type="button"
+                                    class="admin-btn group"
+                                    id="markGroupSharedBtn"
+                                >
+
+                                    <i class="fa-solid fa-users"></i>
+
+                                    Mark as Shared
+
+                                </button>
+
+                            </div>
+
+
+                            <div
+                                class="admin-message"
+                                id="groupMessageStatus"
+                                role="status"
+                                aria-live="polite"
+                            ></div>
+
+                        </section>
+
+
+
+                        <!-- =========================================
+                             HISTORY
+                        ========================================== -->
+
+                        <div
+                            class="editor-history"
+                            id="editorHistory"
+                        ></div>
+
+                    </div>
+
+                </section>
+
+            </section>
+
+        </main>
+
+    </div>
+
+
+    <!-- =====================================================
+         BOTTOM NAV
+    ====================================================== -->
+
+    <div id="app-bottom-nav"></div>
+
+</div>
+
+
+
+<!-- =========================================================
+     SCRIPTS
+========================================================= -->
+
+<script src="../js/pwa.js"></script>
+
+<script src="../js/main.js"></script>
+
+<script src="../js/academichelp-admin.js"></script>
+
+<script src="../js/layout.js"></script>
+
+</body>
+
+</html>
