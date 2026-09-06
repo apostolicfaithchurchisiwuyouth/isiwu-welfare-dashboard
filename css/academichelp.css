@@ -1,94 +1,71 @@
 /* ============================================================
    AFC ISIU YOUTH PORTAL V2
-   ACADEMIC HELP
-   CLEAN / SIMPLE / MOBILE-FIRST
+   FILE: academichelp.css
+
+   PURPOSE:
+   Academic Help page styling
+
+   IMPORTANT:
+   - Mobile first
+   - Bricolage Grotesque = headings / buttons / labels
+   - DM Sans = body / inputs / answers
+   - Do not style Font Awesome icons with DM Sans
    ============================================================ */
 
 
 /* ============================================================
-   PAGE VARIABLES + BASE
+   PAGE
    ============================================================ */
 
 .academic-page {
 
     --academic-purple: #4a0754;
-    --academic-purple-dark: #0a0016;
+    --academic-purple-dark: #26032f;
     --academic-purple-soft: #f5edf7;
 
     --academic-text: #17131a;
     --academic-muted: #6f6872;
 
-    --academic-border: #e9e4ea;
+    --academic-border: #e8e3e9;
 
-    --academic-surface: #ffffff;
-    --academic-page-bg: #f7f6f8;
+    width:
+        calc(100% - 32px);
 
-    --academic-radius-lg: 20px;
-    --academic-radius-md: 15px;
-    --academic-radius-sm: 11px;
+    max-width:
+        1500px;
 
-    width: calc(100% - 32px);
-    max-width: 1500px;
+    margin:
+        0 auto;
 
-    margin-left: auto;
-    margin-right: auto;
+    padding-left:
+        0 !important;
 
-    padding-left: 0 !important;
-    padding-right: 0 !important;
+    padding-right:
+        0 !important;
 
-    box-sizing: border-box;
+    color:
+        var(--academic-text);
 
-    color: var(--academic-text);
+    font-family:
+        "DM Sans",
+        Arial,
+        sans-serif;
 
-    /*
-       DM Sans is the default font for the whole page.
-       Specific heading/UI elements are overridden below.
-    */
-    font-family: "DM Sans", sans-serif;
+    -webkit-font-smoothing:
+        antialiased;
+
+    text-rendering:
+        optimizeLegibility;
 
 }
 
 
 /* ============================================================
-   GLOBAL FONT ENFORCEMENT
+   FONT CONTROL
+
+   Do NOT use .academic-page * here because that would
+   interfere with Font Awesome icon fonts.
    ============================================================ */
-
-.academic-page,
-.academic-page *,
-.academic-page *::before,
-.academic-page *::after {
-
-    font-family: "DM Sans", sans-serif;
-
-}
-
-
-/* Bricolage Grotesque */
-
-.academic-page h1,
-.academic-page h2,
-.academic-page h3,
-.academic-page h4,
-.academic-page h5,
-.academic-page h6,
-.academic-page button,
-.academic-page label,
-.academic-page strong,
-.academic-page .academic-eyebrow,
-.academic-page .academic-section-kicker,
-.academic-page .academic-faq-question-text,
-.academic-page .academic-primary-btn,
-.academic-page .academic-text-btn,
-.academic-page .academic-show-all,
-.academic-page .published-answer-category,
-.academic-page .published-answer-link {
-
-    font-family: "Bricolage Grotesque", sans-serif;
-
-}
-
-
-/* DM Sans */
 
 .academic-page p,
 .academic-page span,
@@ -98,18 +75,28 @@
 .academic-page select,
 .academic-page option {
 
-    font-family: "DM Sans", sans-serif;
+    font-family:
+        "DM Sans",
+        Arial,
+        sans-serif !important;
 
 }
 
 
-/* ============================================================
-   CRITICAL HIDDEN ELEMENT FIX
-   ============================================================ */
+.academic-page h1,
+.academic-page h2,
+.academic-page h3,
+.academic-page h4,
+.academic-page h5,
+.academic-page h6,
+.academic-page button,
+.academic-page label,
+.academic-page strong {
 
-.academic-page [hidden] {
-
-    display: none !important;
+    font-family:
+        "Bricolage Grotesque",
+        Arial,
+        sans-serif !important;
 
 }
 
@@ -122,7 +109,8 @@
 .academic-page *::before,
 .academic-page *::after {
 
-    box-sizing: border-box;
+    box-sizing:
+        border-box;
 
 }
 
@@ -132,14 +120,24 @@
 .academic-page textarea,
 .academic-page select {
 
-    font: inherit;
+    font-size:
+        16px;
 
 }
 
 
 .academic-page button {
 
-    -webkit-tap-highlight-color: transparent;
+    -webkit-tap-highlight-color:
+        transparent;
+
+}
+
+
+.academic-page [hidden] {
+
+    display:
+        none !important;
 
 }
 
@@ -149,29 +147,35 @@
 .academic-page textarea:focus-visible,
 .academic-page select:focus-visible {
 
-    outline: 3px solid rgba(74, 7, 84, .14);
-    outline-offset: 2px;
+    outline:
+        3px solid
+        rgba(74, 7, 84, .15);
+
+    outline-offset:
+        2px;
 
 }
 
 
 /* ============================================================
-   PAGE SECTIONS
+   SECTIONS
    ============================================================ */
 
 .academic-page > section {
 
-    width: 100%;
-    max-width: none;
+    width:
+        100%;
 
-    margin-bottom: 22px;
+    margin-bottom:
+        18px;
 
 }
 
 
 .academic-page > section:last-child {
 
-    margin-bottom: 0;
+    margin-bottom:
+        0;
 
 }
 
@@ -182,139 +186,128 @@
 
 .academic-hero {
 
-    position: relative;
+    position:
+        relative;
 
-    overflow: hidden;
+    overflow:
+        hidden;
 
-    display: grid;
+    display:
+        grid;
 
     grid-template-columns:
         minmax(0, 1fr)
-        150px;
+        130px;
 
-    align-items: center;
+    align-items:
+        center;
 
-    gap: 24px;
+    gap:
+        20px;
 
-    min-height: 185px;
+    min-height:
+        175px;
 
-    padding: 27px 30px;
+    padding:
+        25px 28px;
 
     border:
         1px solid
-        rgba(74, 7, 84, .09);
+        rgba(74, 7, 84, .08);
 
     border-radius:
-        var(--academic-radius-lg);
+        20px;
 
     background:
         linear-gradient(
             135deg,
             #ffffff 0%,
-            #fbf9fc 55%,
+            #fbf9fc 58%,
             #f4ecf7 100%
         );
 
     box-shadow:
-        0 14px 34px
-        rgba(45, 20, 50, .065);
+        0 12px 30px
+        rgba(45, 20, 50, .055);
 
 }
 
 
-/* Decorative circles */
-
 .academic-hero::before {
 
-    content: "";
+    content:
+        "";
 
-    position: absolute;
+    position:
+        absolute;
 
-    width: 230px;
-    height: 230px;
+    width:
+        220px;
 
-    right: -125px;
-    top: -145px;
+    height:
+        220px;
 
-    border-radius: 50%;
+    right:
+        -125px;
+
+    top:
+        -135px;
 
     border:
         1px solid
         rgba(74, 7, 84, .07);
 
-    pointer-events: none;
+    border-radius:
+        50%;
+
+    pointer-events:
+        none;
 
 }
 
 
-.academic-hero::after {
+.academic-hero-content {
 
-    content: "";
+    position:
+        relative;
 
-    position: absolute;
+    z-index:
+        2;
 
-    width: 125px;
-    height: 125px;
-
-    right: 70px;
-    bottom: -90px;
-
-    border-radius: 50%;
-
-    border:
-        1px solid
-        rgba(74, 7, 84, .055);
-
-    pointer-events: none;
+    min-width:
+        0;
 
 }
 
-
-/* ============================================================
-   HERO CONTENT
-   Supports both current HTML class names and older names.
-   ============================================================ */
-
-.academic-hero-content,
-.academic-hero-copy {
-
-    position: relative;
-
-    z-index: 2;
-
-    min-width: 0;
-
-}
-
-
-/* ============================================================
-   HERO EYEBROW
-   ============================================================ */
 
 .academic-eyebrow {
 
-    display: inline-flex;
+    display:
+        inline-flex;
 
-    align-items: center;
+    align-items:
+        center;
 
-    gap: 7px;
+    gap:
+        7px;
 
-    margin-bottom: 8px;
+    margin-bottom:
+        7px;
 
     color:
         var(--academic-purple);
 
     font-size:
-        .72rem;
-
-    font-weight:
-        800;
+        .78rem;
 
     line-height:
         1.2;
 
+    font-weight:
+        800;
+
     letter-spacing:
-        .07em;
+        .06em;
 
     text-transform:
         uppercase;
@@ -324,46 +317,16 @@
 
 .academic-eyebrow i {
 
-    font-size:
-        .78rem;
+    font-family:
+        "Font Awesome 6 Free";
 
 }
 
-
-.academic-eyebrow-icon {
-
-    width: 25px;
-    height: 25px;
-
-    display: inline-flex;
-
-    align-items: center;
-    justify-content: center;
-
-    border-radius: 8px;
-
-    background:
-        var(--academic-purple-soft);
-
-}
-
-
-.academic-eyebrow-icon i {
-
-    font-size:
-        .72rem;
-
-}
-
-
-/* ============================================================
-   HERO TITLE
-   ============================================================ */
 
 .academic-hero h1 {
 
     max-width:
-        650px;
+        680px;
 
     margin:
         0;
@@ -373,13 +336,13 @@
 
     font-size:
         clamp(
-            1.8rem,
+            1.9rem,
             3vw,
-            2.45rem
+            2.55rem
         );
 
     line-height:
-        1.07;
+        1.05;
 
     letter-spacing:
         -.045em;
@@ -398,14 +361,10 @@
 }
 
 
-/* ============================================================
-   HERO DESCRIPTION
-   ============================================================ */
-
 .academic-hero p {
 
     max-width:
-        620px;
+        650px;
 
     margin:
         9px 0 0;
@@ -414,17 +373,13 @@
         var(--academic-muted);
 
     font-size:
-        .92rem;
+        .95rem;
 
     line-height:
-        1.52;
+        1.5;
 
 }
 
-
-/* ============================================================
-   HERO ACTIONS
-   ============================================================ */
 
 .academic-hero-actions {
 
@@ -438,22 +393,22 @@
         wrap;
 
     gap:
-        11px;
+        12px;
 
     margin-top:
-        16px;
+        15px;
 
 }
 
 
 /* ============================================================
-   PRIMARY BUTTON
+   HERO BUTTONS
    ============================================================ */
 
 .academic-primary-btn {
 
     min-height:
-        43px;
+        44px;
 
     display:
         inline-flex;
@@ -483,7 +438,10 @@
         #ffffff;
 
     font-size:
-        .82rem;
+        .86rem;
+
+    line-height:
+        1;
 
     font-weight:
         700;
@@ -497,8 +455,7 @@
 
     transition:
         transform .2s ease,
-        background .2s ease,
-        box-shadow .2s ease;
+        background .2s ease;
 
 }
 
@@ -511,10 +468,6 @@
     transform:
         translateY(-1px);
 
-    box-shadow:
-        0 10px 22px
-        rgba(74, 7, 84, .19);
-
 }
 
 
@@ -526,11 +479,10 @@
 }
 
 
-/* ============================================================
-   TEXT BUTTON
-   ============================================================ */
-
 .academic-text-btn {
+
+    min-height:
+        40px;
 
     display:
         inline-flex;
@@ -542,7 +494,7 @@
         7px;
 
     padding:
-        9px 3px;
+        7px 2px;
 
     border:
         0;
@@ -554,7 +506,7 @@
         var(--academic-purple);
 
     font-size:
-        .82rem;
+        .84rem;
 
     font-weight:
         700;
@@ -585,13 +537,10 @@
 
 
 /* ============================================================
-   HERO VISUAL
-   Supports current .academic-hero-visual
-   and older .academic-hero-mark structure.
+   HERO ICON
    ============================================================ */
 
-.academic-hero-visual,
-.academic-hero-mark {
+.academic-hero-visual {
 
     position:
         relative;
@@ -611,28 +560,7 @@
 }
 
 
-.academic-hero-visual {
-
-    min-height:
-        125px;
-
-}
-
-
-/* Hide decorative floating items if present.
-   Keeps the hero simple. */
-
-.academic-hero-visual .academic-orbit,
-.academic-hero-visual .academic-floating-card {
-
-    display:
-        none;
-
-}
-
-
-.academic-book-icon,
-.hero-mark-circle {
+.academic-book-icon {
 
     width:
         82px;
@@ -649,6 +577,10 @@
     justify-content:
         center;
 
+    border:
+        1px solid
+        rgba(74, 7, 84, .09);
+
     border-radius:
         50%;
 
@@ -659,56 +591,194 @@
             #eee1f1
         );
 
-    border:
-        1px solid
-        rgba(74, 7, 84, .09);
-
     color:
         var(--academic-purple);
 
     box-shadow:
-        0 12px 27px
+        0 12px 26px
         rgba(74, 7, 84, .09);
 
 }
 
 
-.academic-book-icon i,
-.hero-mark-circle i {
+.academic-book-icon i {
 
     font-size:
-        29px;
+        28px;
 
 }
 
 
-.academic-hero-mark {
+/* ============================================================
+   SEARCH
+   ============================================================ */
 
-    flex-direction:
-        column;
+.academic-search-section {
+
+    margin-bottom:
+        14px !important;
+
+}
+
+
+.academic-search-box {
+
+    width:
+        100%;
+
+    min-height:
+        50px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
 
     gap:
-        8px;
+        10px;
+
+    padding:
+        0 14px;
+
+    border:
+        1px solid
+        var(--academic-border);
+
+    border-radius:
+        12px;
+
+    background:
+        #ffffff;
+
+    transition:
+        border-color .2s ease,
+        box-shadow .2s ease;
 
 }
 
 
-.academic-hero-mark > span {
+.academic-search-box:focus-within {
+
+    border-color:
+        rgba(74, 7, 84, .35);
+
+    box-shadow:
+        0 0 0 4px
+        rgba(74, 7, 84, .05);
+
+}
+
+
+.academic-search-icon {
+
+    flex:
+        0 0 auto;
 
     color:
-        var(--academic-muted);
+        #918894;
+
+}
+
+
+.academic-search-icon i {
 
     font-size:
-        .64rem;
+        .9rem;
 
-    font-weight:
-        700;
+}
 
-    letter-spacing:
-        .04em;
 
-    text-transform:
-        uppercase;
+.academic-search-box input {
+
+    width:
+        100%;
+
+    min-width:
+        0;
+
+    height:
+        48px;
+
+    padding:
+        0;
+
+    border:
+        0;
+
+    outline:
+        none;
+
+    background:
+        transparent;
+
+    color:
+        var(--academic-text);
+
+    font-family:
+        "DM Sans",
+        Arial,
+        sans-serif !important;
+
+    font-size:
+        .95rem !important;
+
+}
+
+
+.academic-search-box input::placeholder {
+
+    color:
+        #99919c;
+
+}
+
+
+.academic-search-clear {
+
+    width:
+        30px;
+
+    height:
+        30px;
+
+    flex:
+        0 0 auto;
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    padding:
+        0;
+
+    border:
+        0;
+
+    border-radius:
+        8px;
+
+    background:
+        #eee9ef;
+
+    color:
+        #6d6470;
+
+    cursor:
+        pointer;
+
+}
+
+
+.academic-search-clear[hidden] {
+
+    display:
+        none !important;
 
 }
 
@@ -729,10 +799,10 @@
         space-between;
 
     gap:
-        18px;
+        14px;
 
     margin-bottom:
-        13px;
+        12px;
 
 }
 
@@ -743,19 +813,21 @@
         block;
 
     margin-bottom:
-        5px;
+        4px;
 
     color:
         var(--academic-purple);
 
+    font-family:
+        "Bricolage Grotesque",
+        Arial,
+        sans-serif !important;
+
     font-size:
-        .67rem;
+        .68rem;
 
     font-weight:
         800;
-
-    line-height:
-        1.2;
 
     letter-spacing:
         .08em;
@@ -800,12 +872,12 @@
 
     grid-template-columns:
         repeat(
-            4,
+            3,
             minmax(0, 1fr)
         );
 
     gap:
-        11px;
+        10px;
 
 }
 
@@ -819,7 +891,7 @@
         0;
 
     min-height:
-        80px;
+        78px;
 
     display:
         grid;
@@ -833,10 +905,10 @@
         center;
 
     gap:
-        10px;
+        9px;
 
     padding:
-        12px;
+        11px;
 
     border:
         1px solid
@@ -846,7 +918,7 @@
         14px;
 
     background:
-        rgba(255,255,255,.96);
+        #ffffff;
 
     color:
         var(--academic-text);
@@ -871,11 +943,11 @@
         translateY(-2px);
 
     border-color:
-        rgba(74, 7, 84, .20);
+        rgba(74, 7, 84, .2);
 
     box-shadow:
-        0 9px 22px
-        rgba(50, 3, 56, .06);
+        0 8px 20px
+        rgba(50, 3, 56, .055);
 
 }
 
@@ -943,7 +1015,7 @@
         var(--academic-text);
 
     font-size:
-        .8rem;
+        .83rem;
 
     line-height:
         1.2;
@@ -966,7 +1038,7 @@
         var(--academic-muted);
 
     font-size:
-        .68rem;
+        .7rem;
 
     line-height:
         1.25;
@@ -992,37 +1064,32 @@
 
 
 /* ============================================================
-   FAQ SECTION
+   FAQ
    ============================================================ */
 
 .academic-faq-section {
 
     padding:
-        22px 24px;
+        22px 23px;
 
     border:
         1px solid
         var(--academic-border);
 
     border-radius:
-        var(--academic-radius-lg);
+        19px;
 
     background:
         #ffffff;
 
     box-shadow:
-        0 11px 32px
-        rgba(45, 20, 50, .04);
+        0 10px 28px
+        rgba(45, 20, 50, .035);
 
 }
 
 
-/* ============================================================
-   SHOW ALL
-   ============================================================ */
-
-.academic-show-all,
-.view-all-btn {
+.academic-show-all {
 
     display:
         inline-flex;
@@ -1046,7 +1113,7 @@
         var(--academic-purple);
 
     font-size:
-        .74rem;
+        .76rem;
 
     font-weight:
         700;
@@ -1057,211 +1124,13 @@
 }
 
 
-.academic-show-all i,
-.view-all-btn i {
+.academic-show-all i {
 
     font-size:
-        .64rem;
-
-    transition:
-        transform .2s ease;
+        .65rem;
 
 }
 
-
-.academic-show-all.expanded i {
-
-    transform:
-        rotate(90deg);
-
-}
-
-
-/* ============================================================
-   SEARCH
-   ============================================================ */
-
-.academic-search-section {
-
-    margin-bottom:
-        15px !important;
-
-}
-
-
-.academic-search-box {
-
-    width:
-        100%;
-
-    min-height:
-        48px;
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    gap:
-        10px;
-
-    padding:
-        0 14px;
-
-    border:
-        1px solid
-        var(--academic-border);
-
-    border-radius:
-        12px;
-
-    background:
-        #faf9fb;
-
-    transition:
-        border-color .2s ease,
-        box-shadow .2s ease,
-        background .2s ease;
-
-}
-
-
-.academic-search-box:focus-within {
-
-    border-color:
-        rgba(74, 7, 84, .35);
-
-    background:
-        #ffffff;
-
-    box-shadow:
-        0 0 0 4px
-        rgba(74, 7, 84, .055);
-
-}
-
-
-.academic-search-icon {
-
-    flex:
-        0 0 auto;
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    justify-content:
-        center;
-
-    color:
-        #928a94;
-
-}
-
-
-.academic-search-icon i {
-
-    font-size:
-        .84rem;
-
-}
-
-
-.academic-search-box > i {
-
-    flex:
-        0 0 auto;
-
-    color:
-        #928a94;
-
-    font-size:
-        .84rem;
-
-}
-
-
-.academic-search-box input {
-
-    width:
-        100%;
-
-    min-width:
-        0;
-
-    height:
-        46px;
-
-    border:
-        0;
-
-    outline:
-        0;
-
-    background:
-        transparent;
-
-    color:
-        var(--academic-text);
-
-    font-size:
-        .9rem;
-
-}
-
-
-.academic-search-box input::placeholder {
-
-    color:
-        #9b939d;
-
-}
-
-
-.academic-search-clear {
-
-    width:
-        28px;
-
-    height:
-        28px;
-
-    flex:
-        0 0 auto;
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    justify-content:
-        center;
-
-    border:
-        0;
-
-    border-radius:
-        8px;
-
-    background:
-        #eee9ef;
-
-    color:
-        #6d6470;
-
-    cursor:
-        pointer;
-
-}
-
-
-/* ============================================================
-   FILTERS
-   ============================================================ */
 
 .academic-filter-row {
 
@@ -1275,7 +1144,7 @@
         7px;
 
     margin-bottom:
-        14px;
+        13px;
 
     overflow-x:
         auto;
@@ -1323,27 +1192,17 @@
 
     font-family:
         "DM Sans",
-        sans-serif;
+        Arial,
+        sans-serif !important;
 
     font-size:
-        .75rem;
+        .75rem !important;
 
     font-weight:
         600;
 
     cursor:
         pointer;
-
-    transition:
-        all .2s ease;
-
-}
-
-
-.academic-filter:hover {
-
-    border-color:
-        rgba(74, 7, 84, .25);
 
 }
 
@@ -1363,7 +1222,7 @@
 
 
 /* ============================================================
-   FAQ LIST
+   FAQ ITEMS
    ============================================================ */
 
 .academic-faq-list {
@@ -1375,7 +1234,7 @@
         column;
 
     gap:
-        8px;
+        7px;
 
 }
 
@@ -1395,10 +1254,6 @@
     background:
         #ffffff;
 
-    transition:
-        border-color .2s ease,
-        box-shadow .2s ease;
-
 }
 
 
@@ -1406,10 +1261,6 @@
 
     border-color:
         rgba(74, 7, 84, .18);
-
-    box-shadow:
-        0 7px 21px
-        rgba(50, 3, 56, .05);
 
 }
 
@@ -1420,7 +1271,7 @@
         100%;
 
     min-height:
-        58px;
+        59px;
 
     display:
         grid;
@@ -1428,16 +1279,16 @@
     grid-template-columns:
         31px
         minmax(0, 1fr)
-        30px;
+        29px;
 
     align-items:
         center;
 
     gap:
-        10px;
+        9px;
 
     padding:
-        9px 12px;
+        9px 11px;
 
     border:
         0;
@@ -1484,7 +1335,7 @@
         var(--academic-purple);
 
     font-size:
-        .69rem;
+        .68rem;
 
     font-weight:
         800;
@@ -1500,8 +1351,13 @@
     color:
         var(--academic-text);
 
+    font-family:
+        "Bricolage Grotesque",
+        Arial,
+        sans-serif !important;
+
     font-size:
-        .86rem;
+        .88rem;
 
     line-height:
         1.38;
@@ -1515,10 +1371,10 @@
 .academic-faq-chevron {
 
     width:
-        30px;
+        29px;
 
     height:
-        30px;
+        29px;
 
     display:
         flex;
@@ -1530,7 +1386,7 @@
         center;
 
     border-radius:
-        9px;
+        8px;
 
     background:
         #f6f4f6;
@@ -1539,8 +1395,7 @@
         #777079;
 
     transition:
-        transform .25s ease,
-        background .2s ease;
+        transform .2s ease;
 
 }
 
@@ -1566,20 +1421,21 @@
         none;
 
     padding:
-        0 16px 17px 53px;
+        0 15px 17px 51px;
 
     color:
         #655e67;
 
     font-family:
         "DM Sans",
-        sans-serif;
+        Arial,
+        sans-serif !important;
 
     font-size:
-        .88rem;
+        .9rem;
 
     line-height:
-        1.62;
+        1.65;
 
 }
 
@@ -1596,27 +1452,56 @@
 .academic-faq-answer p {
 
     margin:
-        0 0 9px;
-
-}
-
-
-.academic-faq-answer p:last-child {
-
-    margin-bottom:
         0;
+
+    font-family:
+        "DM Sans",
+        Arial,
+        sans-serif !important;
 
 }
 
 
 /* ============================================================
-   EMPTY STATE
+   LOADING / EMPTY
    ============================================================ */
+
+.academic-loading-state,
+.published-loading {
+
+    min-height:
+        80px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    gap:
+        9px;
+
+    color:
+        var(--academic-muted);
+
+    font-family:
+        "DM Sans",
+        Arial,
+        sans-serif !important;
+
+    font-size:
+        .82rem;
+
+}
+
 
 .academic-empty-state {
 
     padding:
-        30px 18px;
+        30px 16px;
 
     text-align:
         center;
@@ -1679,9 +1564,6 @@
 
 .academic-empty-state p {
 
-    max-width:
-        420px;
-
     margin:
         0 auto 15px;
 
@@ -1689,7 +1571,7 @@
         var(--academic-muted);
 
     font-size:
-        .84rem;
+        .85rem;
 
     line-height:
         1.5;
@@ -1698,7 +1580,7 @@
 
 
 /* ============================================================
-   ASK QUESTION SECTION
+   ASK QUESTION
    ============================================================ */
 
 .ask-question-section {
@@ -1707,21 +1589,14 @@
         grid;
 
     grid-template-columns:
-        minmax(240px, .55fr)
-        minmax(0, 1.45fr);
+        minmax(240px, .6fr)
+        minmax(0, 1.4fr);
 
     gap:
-        15px;
-
-    align-items:
-        stretch;
+        14px;
 
 }
 
-
-/* ============================================================
-   ASK INTRO CARD
-   ============================================================ */
 
 .ask-question-intro {
 
@@ -1735,14 +1610,10 @@
         center;
 
     padding:
-        26px;
-
-    border:
-        1px solid
-        rgba(74, 7, 84, .10);
+        25px;
 
     border-radius:
-        var(--academic-radius-lg);
+        19px;
 
     background:
         linear-gradient(
@@ -1755,8 +1626,8 @@
         #ffffff;
 
     box-shadow:
-        0 14px 32px
-        rgba(50, 3, 56, .13);
+        0 12px 28px
+        rgba(50, 3, 56, .12);
 
 }
 
@@ -1779,16 +1650,13 @@
         center;
 
     margin-bottom:
-        15px;
+        14px;
 
     border-radius:
         12px;
 
     background:
         rgba(255,255,255,.12);
-
-    color:
-        #ffffff;
 
 }
 
@@ -1818,11 +1686,7 @@
         #ffffff;
 
     font-size:
-        clamp(
-            1.35rem,
-            2.2vw,
-            1.75rem
-        );
+        1.55rem;
 
     line-height:
         1.08;
@@ -1835,9 +1699,6 @@
 
 .ask-question-intro p {
 
-    max-width:
-        380px;
-
     margin:
         0;
 
@@ -1845,17 +1706,13 @@
         rgba(255,255,255,.74);
 
     font-size:
-        .86rem;
+        .88rem;
 
     line-height:
         1.58;
 
 }
 
-
-/* ============================================================
-   RESPONSE NOTE
-   ============================================================ */
 
 .response-note {
 
@@ -1869,10 +1726,10 @@
         8px;
 
     margin-top:
-        16px;
+        15px;
 
     padding:
-        10px 11px;
+        10px;
 
     border-radius:
         10px;
@@ -1883,8 +1740,13 @@
     color:
         rgba(255,255,255,.72);
 
+    font-family:
+        "DM Sans",
+        Arial,
+        sans-serif !important;
+
     font-size:
-        .73rem;
+        .74rem;
 
     line-height:
         1.45;
@@ -1892,19 +1754,8 @@
 }
 
 
-.response-note i {
-
-    margin-top:
-        2px;
-
-    flex:
-        0 0 auto;
-
-}
-
-
 /* ============================================================
-   QUESTION FORM CARD
+   FORM CARD
    ============================================================ */
 
 .academic-question-card {
@@ -1913,28 +1764,24 @@
         0;
 
     padding:
-        25px;
+        24px;
 
     border:
         1px solid
         var(--academic-border);
 
     border-radius:
-        var(--academic-radius-lg);
+        19px;
 
     background:
         #ffffff;
 
     box-shadow:
-        0 11px 32px
-        rgba(45, 20, 50, .05);
+        0 10px 28px
+        rgba(45, 20, 50, .045);
 
 }
 
-
-/* ============================================================
-   FORM
-   ============================================================ */
 
 .academic-question-form {
 
@@ -1956,10 +1803,10 @@
         );
 
     gap:
-        15px;
+        14px;
 
     margin-bottom:
-        15px;
+        14px;
 
 }
 
@@ -1978,7 +1825,7 @@
         block;
 
     margin-bottom:
-        7px;
+        6px;
 
     color:
         #3b3540;
@@ -2001,7 +1848,7 @@
 
 
 /* ============================================================
-   INPUTS / SELECT
+   INPUTS
    ============================================================ */
 
 .input-wrapper,
@@ -2038,7 +1885,7 @@
         #928993;
 
     font-size:
-        .78rem;
+        .8rem;
 
     pointer-events:
         none;
@@ -2073,18 +1920,14 @@
 
     font-family:
         "DM Sans",
-        sans-serif;
+        Arial,
+        sans-serif !important;
 
     font-size:
-        .88rem;
+        .9rem !important;
 
     outline:
         none;
-
-    transition:
-        border-color .2s ease,
-        box-shadow .2s ease,
-        background .2s ease;
 
 }
 
@@ -2098,10 +1941,7 @@
         none;
 
     padding-right:
-        34px;
-
-    cursor:
-        pointer;
+        35px;
 
 }
 
@@ -2152,7 +1992,7 @@
 
     box-shadow:
         0 0 0 4px
-        rgba(74, 7, 84, .055);
+        rgba(74, 7, 84, .05);
 
 }
 
@@ -2198,10 +2038,11 @@
 
     font-family:
         "DM Sans",
-        sans-serif;
+        Arial,
+        sans-serif !important;
 
     font-size:
-        .88rem;
+        .9rem !important;
 
     line-height:
         1.55;
@@ -2211,11 +2052,6 @@
 
     outline:
         none;
-
-    transition:
-        border-color .2s ease,
-        box-shadow .2s ease,
-        background .2s ease;
 
 }
 
@@ -2230,7 +2066,7 @@
 
     box-shadow:
         0 0 0 4px
-        rgba(74, 7, 84, .055);
+        rgba(74, 7, 84, .05);
 
 }
 
@@ -2252,10 +2088,15 @@
         12px;
 
     bottom:
-        10px;
+        9px;
 
     color:
         #938b95;
+
+    font-family:
+        "DM Sans",
+        Arial,
+        sans-serif !important;
 
     font-size:
         .68rem;
@@ -2264,7 +2105,7 @@
 
 
 /* ============================================================
-   FIELD ERRORS
+   ERRORS
    ============================================================ */
 
 .field-error {
@@ -2280,6 +2121,11 @@
 
     color:
         #b3261e;
+
+    font-family:
+        "DM Sans",
+        Arial,
+        sans-serif !important;
 
     font-size:
         .68rem;
@@ -2378,9 +2224,6 @@
     color:
         #ffffff;
 
-    transition:
-        all .2s ease;
-
 }
 
 
@@ -2423,19 +2266,20 @@
 
     font-family:
         "DM Sans",
-        sans-serif;
+        Arial,
+        sans-serif !important;
 
     font-size:
-        .76rem;
+        .77rem;
 
     line-height:
-        1.48;
+        1.5;
 
 }
 
 
 /* ============================================================
-   SUBMIT BUTTON
+   SUBMIT
    ============================================================ */
 
 .submit-question-btn {
@@ -2455,11 +2299,11 @@
     justify-content:
         center;
 
-    gap:
-        8px;
-
     margin-top:
-        17px;
+        16px;
+
+    padding:
+        0 16px;
 
     border:
         0;
@@ -2475,44 +2319,17 @@
 
     font-family:
         "Bricolage Grotesque",
-        sans-serif;
+        Arial,
+        sans-serif !important;
 
     font-size:
-        .86rem;
+        .88rem !important;
 
     font-weight:
         700;
 
     cursor:
         pointer;
-
-    box-shadow:
-        0 8px 20px
-        rgba(74, 7, 84, .15);
-
-    transition:
-        transform .2s ease,
-        background .2s ease,
-        opacity .2s ease;
-
-}
-
-
-.submit-question-btn:hover {
-
-    background:
-        #35043d;
-
-    transform:
-        translateY(-1px);
-
-}
-
-
-.submit-question-btn:active {
-
-    transform:
-        translateY(0);
 
 }
 
@@ -2525,24 +2342,28 @@
     cursor:
         wait;
 
-    transform:
-        none;
-
 }
 
 
-/* Loader */
+.submit-question-btn .btn-label,
+.submit-question-btn .btn-loading {
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    gap:
+        8px;
+
+}
+
 
 .submit-question-btn .btn-label {
 
     display:
         inline-flex;
-
-    align-items:
-        center;
-
-    gap:
-        8px;
 
 }
 
@@ -2552,22 +2373,11 @@
     display:
         inline-flex;
 
-    align-items:
-        center;
-
-    gap:
-        8px;
-
 }
 
 
-/*
-   IMPORTANT:
-   Prevent CSS from overriding the HTML hidden attribute.
-*/
-
-.academic-page .submit-question-btn .btn-loading[hidden],
-.academic-page .submit-question-btn .btn-label[hidden] {
+.submit-question-btn .btn-label[hidden],
+.submit-question-btn .btn-loading[hidden] {
 
     display:
         none !important;
@@ -2595,13 +2405,14 @@
 
     font-family:
         "DM Sans",
-        sans-serif;
+        Arial,
+        sans-serif !important;
 
     font-size:
-        .76rem;
+        .78rem;
 
     line-height:
-        1.45;
+        1.5;
 
 }
 
@@ -2616,30 +2427,30 @@
 
 .form-status.success {
 
+    border:
+        1px solid
+        #ccebd3;
+
     background:
         #edf8f0;
 
     color:
         #246b35;
 
-    border:
-        1px solid
-        #ccebd3;
-
 }
 
 
 .form-status.error {
+
+    border:
+        1px solid
+        #f0cfcc;
 
     background:
         #fff3f2;
 
     color:
         #a62c26;
-
-    border:
-        1px solid
-        #f0cfcc;
 
 }
 
@@ -2660,7 +2471,7 @@
         );
 
     gap:
-        12px;
+        10px;
 
 }
 
@@ -2671,7 +2482,7 @@
         0;
 
     padding:
-        18px;
+        17px;
 
     border:
         1px solid
@@ -2682,10 +2493,6 @@
 
     background:
         #ffffff;
-
-    box-shadow:
-        0 8px 22px
-        rgba(45, 20, 50, .04);
 
 }
 
@@ -2698,14 +2505,11 @@
     align-items:
         center;
 
-    min-height:
-        25px;
-
     padding:
         5px 8px;
 
     margin-bottom:
-        10px;
+        9px;
 
     border-radius:
         7px;
@@ -2758,10 +2562,11 @@
 
     font-family:
         "DM Sans",
-        sans-serif;
+        Arial,
+        sans-serif !important;
 
     font-size:
-        .8rem;
+        .82rem;
 
     line-height:
         1.58;
@@ -2781,7 +2586,10 @@
         5px;
 
     margin-top:
-        12px;
+        11px;
+
+    padding:
+        0;
 
     border:
         0;
@@ -2792,153 +2600,19 @@
     color:
         var(--academic-purple);
 
+    font-family:
+        "Bricolage Grotesque",
+        Arial,
+        sans-serif !important;
+
     font-size:
-        .72rem;
+        .73rem;
 
     font-weight:
         700;
 
     cursor:
         pointer;
-
-}
-
-
-.published-loading {
-
-    grid-column:
-        1 / -1;
-
-    min-height:
-        80px;
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    justify-content:
-        center;
-
-    gap:
-        9px;
-
-    color:
-        var(--academic-muted);
-
-    font-family:
-        "DM Sans",
-        sans-serif;
-
-    font-size:
-        .8rem;
-
-}
-
-
-/* ============================================================
-   FINAL CTA
-   ============================================================ */
-
-.academic-final-cta {
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    gap:
-        15px;
-
-    padding:
-        20px 22px;
-
-    border:
-        1px solid
-        rgba(74, 7, 84, .09);
-
-    border-radius:
-        var(--academic-radius-lg);
-
-    background:
-        linear-gradient(
-            135deg,
-            #fbf8fc,
-            #f4ecf7
-        );
-
-}
-
-
-.final-cta-icon {
-
-    width:
-        44px;
-
-    height:
-        44px;
-
-    flex:
-        0 0 auto;
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    justify-content:
-        center;
-
-    border-radius:
-        12px;
-
-    background:
-        #ffffff;
-
-    color:
-        var(--academic-purple);
-
-}
-
-
-.final-cta-copy {
-
-    min-width:
-        0;
-
-    flex:
-        1;
-
-}
-
-
-.final-cta-copy h2 {
-
-    margin:
-        0 0 4px;
-
-    font-size:
-        1.05rem;
-
-}
-
-
-.final-cta-copy p {
-
-    margin:
-        0;
-
-    color:
-        var(--academic-muted);
-
-    font-size:
-        .78rem;
-
-    line-height:
-        1.45;
 
 }
 
@@ -2953,9 +2627,6 @@
 
         width:
             calc(100% - 28px);
-
-        max-width:
-            none;
 
     }
 
@@ -2990,10 +2661,11 @@
     }
 
 
-    .ask-question-intro {
+    .academic-hero {
 
-        min-height:
-            auto;
+        grid-template-columns:
+            minmax(0,1fr)
+            105px;
 
     }
 
@@ -3014,23 +2686,18 @@
         max-width:
             none;
 
-        margin:
-            0 auto;
-
     }
 
 
     .academic-page > section {
 
         margin-bottom:
-            15px;
+            14px;
 
     }
 
 
-    /* --------------------------------------------------------
-       HERO
-       -------------------------------------------------------- */
+    /* HERO */
 
     .academic-hero {
 
@@ -3046,43 +2713,21 @@
         border-radius:
             17px;
 
-        box-shadow:
-            0 9px 25px
-            rgba(45,20,50,.055);
-
     }
 
 
-    .academic-hero::before {
-
-        width:
-            160px;
-
-        height:
-            160px;
-
-        right:
-            -105px;
-
-        top:
-            -95px;
-
-    }
-
-
-    .academic-hero::after {
-
-        display:
-            none;
-
-    }
-
-
-    .academic-hero-content,
-    .academic-hero-copy {
+    .academic-hero-content {
 
         width:
             100%;
+
+    }
+
+
+    .academic-hero-visual {
+
+        display:
+            none;
 
     }
 
@@ -3093,23 +2738,12 @@
             7px;
 
         font-size:
-            .7rem;
-
-    }
-
-
-    .academic-eyebrow i {
-
-        font-size:
-            .74rem;
+            .72rem;
 
     }
 
 
     .academic-hero h1 {
-
-        max-width:
-            100%;
 
         font-size:
             1.85rem;
@@ -3117,25 +2751,19 @@
         line-height:
             1.08;
 
-        letter-spacing:
-            -.04em;
-
     }
 
 
     .academic-hero p {
 
-        max-width:
-            100%;
-
         margin-top:
             8px;
 
         font-size:
-            .94rem;
+            .95rem;
 
         line-height:
-            1.5;
+            1.52;
 
     }
 
@@ -3146,7 +2774,7 @@
             13px;
 
         gap:
-            9px;
+            10px;
 
     }
 
@@ -3154,13 +2782,13 @@
     .academic-primary-btn {
 
         min-height:
-            43px;
+            44px;
 
         padding:
             9px 14px;
 
         font-size:
-            .84rem;
+            .86rem !important;
 
     }
 
@@ -3168,49 +2796,38 @@
     .academic-text-btn {
 
         font-size:
-            .82rem;
+            .84rem;
 
     }
 
 
-    /*
-       Keep the mobile hero compact.
-    */
+    /* SEARCH */
 
-    .academic-hero-visual,
-    .academic-hero-mark {
+    .academic-search-box {
 
-        display:
-            none;
+        min-height:
+            50px;
 
     }
 
 
-    /* --------------------------------------------------------
-       SECTION HEADINGS
-       -------------------------------------------------------- */
+    .academic-search-box input {
+
+        height:
+            48px;
+
+        font-size:
+            16px !important;
+
+    }
+
+
+    /* SECTION HEADINGS */
 
     .academic-section-heading {
 
-        align-items:
-            center;
-
-        gap:
-            10px;
-
         margin-bottom:
-            10px;
-
-    }
-
-
-    .academic-section-kicker {
-
-        margin-bottom:
-            4px;
-
-        font-size:
-            .66rem;
+            9px;
 
     }
 
@@ -3220,23 +2837,18 @@
         font-size:
             1.25rem;
 
-        line-height:
-            1.16;
+    }
+
+
+    .academic-section-kicker {
+
+        font-size:
+            .68rem;
 
     }
 
 
-    /* --------------------------------------------------------
-       CATEGORIES
-       -------------------------------------------------------- */
-
-    .academic-categories-section {
-
-        padding:
-            1px 0;
-
-    }
-
+    /* CATEGORIES */
 
     .academic-category-grid {
 
@@ -3252,15 +2864,12 @@
     .academic-category-card {
 
         min-height:
-            61px;
+            62px;
 
         grid-template-columns:
-            39px
+            40px
             minmax(0,1fr)
             auto;
-
-        gap:
-            9px;
 
         padding:
             9px 10px;
@@ -3274,21 +2883,10 @@
     .category-icon {
 
         width:
-            39px;
+            40px;
 
         height:
-            39px;
-
-        border-radius:
-            10px;
-
-    }
-
-
-    .category-icon i {
-
-        font-size:
-            14px;
+            40px;
 
     }
 
@@ -3296,10 +2894,7 @@
     .category-copy strong {
 
         font-size:
-            .88rem;
-
-        line-height:
-            1.18;
+            .9rem;
 
     }
 
@@ -3307,67 +2902,17 @@
     .category-copy small {
 
         font-size:
-            .75rem;
-
-        line-height:
-            1.25;
+            .76rem;
 
     }
 
 
-    .category-arrow {
-
-        margin-right:
-            2px;
-
-        font-size:
-            .68rem;
-
-    }
-
-
-    /* --------------------------------------------------------
-       SEARCH
-       -------------------------------------------------------- */
-
-    .academic-search-section {
-
-        margin-bottom:
-            12px !important;
-
-    }
-
-
-    .academic-search-box {
-
-        min-height:
-            49px;
-
-        border-radius:
-            11px;
-
-    }
-
-
-    .academic-search-box input {
-
-        height:
-            47px;
-
-        font-size:
-            .92rem;
-
-    }
-
-
-    /* --------------------------------------------------------
-       FAQ
-       -------------------------------------------------------- */
+    /* FAQ */
 
     .academic-faq-section {
 
         padding:
-            17px 11px;
+            17px 10px;
 
         border-radius:
             16px;
@@ -3375,57 +2920,10 @@
     }
 
 
-    .faq-heading {
-
-        margin-bottom:
-            9px;
-
-    }
-
-
-    .academic-show-all,
-    .view-all-btn {
-
-        font-size:
-            .72rem;
-
-    }
-
-
-    .academic-filter-row {
-
-        margin-bottom:
-            10px;
-
-    }
-
-
     .academic-filter {
 
-        min-height:
-            34px;
-
-        padding:
-            7px 11px;
-
         font-size:
-            .75rem;
-
-    }
-
-
-    .academic-faq-list {
-
-        gap:
-            6px;
-
-    }
-
-
-    .academic-faq-item {
-
-        border-radius:
-            11px;
+            .76rem !important;
 
     }
 
@@ -3433,7 +2931,7 @@
     .academic-faq-question {
 
         min-height:
-            57px;
+            58px;
 
         grid-template-columns:
             30px
@@ -3449,44 +2947,13 @@
     }
 
 
-    .academic-faq-number {
-
-        width:
-            30px;
-
-        height:
-            30px;
-
-        border-radius:
-            8px;
-
-        font-size:
-            .66rem;
-
-    }
-
-
     .academic-faq-question-text {
 
         font-size:
-            .87rem;
+            .9rem;
 
         line-height:
             1.4;
-
-    }
-
-
-    .academic-faq-chevron {
-
-        width:
-            28px;
-
-        height:
-            28px;
-
-        border-radius:
-            8px;
 
     }
 
@@ -3497,17 +2964,15 @@
             0 11px 15px 46px;
 
         font-size:
-            .9rem;
+            .93rem;
 
         line-height:
-            1.62;
+            1.65;
 
     }
 
 
-    /* --------------------------------------------------------
-       ASK SECTION
-       -------------------------------------------------------- */
+    /* ASK QUESTION */
 
     .ask-question-section {
 
@@ -3528,38 +2993,10 @@
     }
 
 
-    .ask-question-icon {
-
-        width:
-            40px;
-
-        height:
-            40px;
-
-        margin-bottom:
-            12px;
-
-        border-radius:
-            11px;
-
-    }
-
-
-    .ask-question-icon i {
-
-        font-size:
-            16px;
-
-    }
-
-
     .ask-question-intro h2 {
 
         font-size:
-            1.38rem;
-
-        line-height:
-            1.1;
+            1.4rem;
 
     }
 
@@ -3567,31 +3004,20 @@
     .ask-question-intro p {
 
         font-size:
-            .9rem;
-
-        line-height:
-            1.55;
+            .91rem;
 
     }
 
 
     .response-note {
 
-        margin-top:
-            13px;
-
-        padding:
-            9px 10px;
-
         font-size:
-            .75rem;
+            .76rem;
 
     }
 
 
-    /* --------------------------------------------------------
-       FORM
-       -------------------------------------------------------- */
+    /* FORM */
 
     .academic-question-card {
 
@@ -3628,11 +3054,8 @@
 
     .form-field > label {
 
-        margin-bottom:
-            6px;
-
         font-size:
-            .82rem;
+            .84rem;
 
     }
 
@@ -3641,10 +3064,10 @@
     .select-wrapper select {
 
         height:
-            48px;
+            49px;
 
         font-size:
-            .9rem;
+            16px !important;
 
     }
 
@@ -3652,13 +3075,10 @@
     .textarea-wrapper textarea {
 
         min-height:
-            128px;
+            130px;
 
         font-size:
-            .91rem;
-
-        line-height:
-            1.55;
+            16px !important;
 
     }
 
@@ -3666,10 +3086,7 @@
     .consent-text {
 
         font-size:
-            .78rem;
-
-        line-height:
-            1.48;
+            .79rem;
 
     }
 
@@ -3677,39 +3094,20 @@
     .submit-question-btn {
 
         min-height:
-            50px;
-
-        margin-top:
-            15px;
+            51px;
 
         font-size:
-            .87rem;
+            .9rem !important;
 
     }
 
 
-    /* --------------------------------------------------------
-       PUBLISHED ANSWERS
-       -------------------------------------------------------- */
+    /* PUBLISHED */
 
     .published-answer-grid {
 
         grid-template-columns:
             1fr;
-
-        gap:
-            7px;
-
-    }
-
-
-    .published-answer-card {
-
-        padding:
-            15px;
-
-        border-radius:
-            12px;
 
     }
 
@@ -3717,7 +3115,7 @@
     .published-answer-card h3 {
 
         font-size:
-            .94rem;
+            .96rem;
 
     }
 
@@ -3725,89 +3123,7 @@
     .published-answer-card p {
 
         font-size:
-            .84rem;
-
-        line-height:
-            1.58;
-
-    }
-
-
-    /* --------------------------------------------------------
-       EMPTY STATE
-       -------------------------------------------------------- */
-
-    .academic-empty-state {
-
-        padding:
-            25px 13px;
-
-    }
-
-
-    .academic-empty-state h3 {
-
-        font-size:
-            1.02rem;
-
-    }
-
-
-    .academic-empty-state p {
-
-        font-size:
-            .84rem;
-
-    }
-
-
-    /* --------------------------------------------------------
-       FINAL CTA
-       -------------------------------------------------------- */
-
-    .academic-final-cta {
-
-        align-items:
-            flex-start;
-
-        padding:
-            17px;
-
-        gap:
-            11px;
-
-        border-radius:
-            16px;
-
-    }
-
-
-    .final-cta-icon {
-
-        width:
-            40px;
-
-        height:
-            40px;
-
-        border-radius:
-            10px;
-
-    }
-
-
-    .final-cta-copy h2 {
-
-        font-size:
-            1rem;
-
-    }
-
-
-    .final-cta-copy p {
-
-        font-size:
-            .78rem;
+            .86rem;
 
     }
 
@@ -3839,7 +3155,7 @@
     .academic-hero h1 {
 
         font-size:
-            1.7rem;
+            1.72rem;
 
     }
 
@@ -3868,37 +3184,10 @@
     }
 
 
-    .academic-faq-question {
-
-        grid-template-columns:
-            28px
-            minmax(0,1fr)
-            27px;
-
-        gap:
-            7px;
-
-        padding:
-            8px;
-
-    }
-
-
-    .academic-faq-number {
-
-        width:
-            28px;
-
-        height:
-            28px;
-
-    }
-
-
     .academic-faq-question-text {
 
         font-size:
-            .84rem;
+            .86rem;
 
     }
 
@@ -3909,7 +3198,7 @@
             43px;
 
         font-size:
-            .87rem;
+            .89rem;
 
     }
 
@@ -3921,35 +3210,11 @@
 
     }
 
-
-    .academic-category-card {
-
-        min-height:
-            59px;
-
-    }
-
-
-    .category-copy strong {
-
-        font-size:
-            .84rem;
-
-    }
-
-
-    .category-copy small {
-
-        font-size:
-            .72rem;
-
-    }
-
 }
 
 
 /* ============================================================
-   DESKTOP WIDTHS
+   LARGE DESKTOP
    ============================================================ */
 
 @media (min-width: 1100px) {
@@ -3992,17 +3257,11 @@
     .academic-page *::before,
     .academic-page *::after {
 
-        scroll-behavior:
-            auto !important;
+        transition:
+            none !important;
 
-        transition-duration:
-            .01ms !important;
-
-        animation-duration:
-            .01ms !important;
-
-        animation-iteration-count:
-            1 !important;
+        animation:
+            none !important;
 
     }
 
