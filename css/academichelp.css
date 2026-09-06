@@ -1654,7 +1654,7 @@
 @media (max-width: 900px) {
 
     .academic-page .dashboard-container {
-        width: calc(100% - 28px);
+        width: calc(100% - 20px);
         max-width: none;
     }
 
@@ -1721,7 +1721,7 @@
 @media (max-width: 768px) {
 
     .academic-page .dashboard-container {
-        width: calc(100% - 28px);
+        width: calc(100% - 20px);
         max-width: none;
     }
 
