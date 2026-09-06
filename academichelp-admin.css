@@ -1,0 +1,1021 @@
+/* ============================================================
+   AFC ISIU YOUTH PORTAL V2
+   ACADEMIC HELP ADMIN
+   ============================================================ */
+
+.academic-admin-page {
+    width: 100%;
+    max-width: none;
+    padding: 0;
+    font-family: "DM Sans", Arial, sans-serif;
+}
+
+.academic-admin-page h1,
+.academic-admin-page h2,
+.academic-admin-page h3,
+.academic-admin-page strong,
+.academic-admin-page button,
+.academic-admin-page .admin-eyebrow,
+.academic-admin-page .admin-section-label {
+    font-family: "Bricolage Grotesque", Arial, sans-serif;
+}
+
+.academic-admin-header,
+.academic-admin-stats,
+.academic-admin-workspace {
+    width: min(100% - 32px, 1500px);
+    max-width: 1500px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+
+.academic-admin-header {
+    margin-top: 20px;
+    padding: 27px 30px;
+    border: 1px solid rgba(74, 7, 84, .12);
+    border-radius: 23px;
+
+    background:
+        radial-gradient(
+            circle at 95% 0%,
+            rgba(234, 88, 12, .13),
+            transparent 28%
+        ),
+        radial-gradient(
+            circle at 0% 100%,
+            rgba(8, 145, 178, .10),
+            transparent 30%
+        ),
+        #fff;
+
+    box-shadow:
+        0 15px 40px rgba(10, 0, 22, .06);
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 25px;
+}
+
+.admin-eyebrow,
+.admin-section-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+
+    text-transform: uppercase;
+    letter-spacing: .09em;
+
+    font-size: .67rem;
+    font-weight: 800;
+}
+
+.admin-eyebrow {
+    color: #4a0754;
+}
+
+.admin-eyebrow i {
+    color: #ea580c;
+}
+
+.academic-admin-header h1 {
+    margin: 7px 0 5px;
+    font-size: 2.05rem;
+    line-height: 1.05;
+    color: #18091d;
+}
+
+.academic-admin-header p {
+    max-width: 760px;
+    margin: 0;
+
+    color: #68616c;
+
+    font-size: .81rem;
+    line-height: 1.55;
+}
+
+.admin-refresh-btn {
+    min-height: 42px;
+
+    border: 0;
+    border-radius: 12px;
+
+    padding: 0 16px;
+
+    background: #4a0754;
+    color: #fff;
+
+    cursor: pointer;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    font-size: .72rem;
+    font-weight: 750;
+}
+
+
+/* ============================================================
+   STATISTICS
+   ============================================================ */
+
+.academic-admin-stats {
+    margin-top: 15px;
+
+    display: grid;
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+
+    gap: 11px;
+}
+
+.admin-stat-card {
+    min-height: 90px;
+
+    padding: 15px;
+
+    border: 1px solid #ece8ed;
+    border-radius: 17px;
+
+    background: #fff;
+
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.admin-stat-icon {
+    width: 42px;
+    height: 42px;
+    flex: 0 0 42px;
+
+    border-radius: 12px;
+
+    display: grid;
+    place-items: center;
+}
+
+.admin-stat-card.pending
+.admin-stat-icon {
+    background: #fff7ed;
+    color: #ea580c;
+}
+
+.admin-stat-card.answered
+.admin-stat-icon {
+    background: #ecfdf5;
+    color: #059669;
+}
+
+.admin-stat-card.published
+.admin-stat-icon {
+    background: #eff6ff;
+    color: #2563eb;
+}
+
+.admin-stat-card.total
+.admin-stat-icon {
+    background: #f5f3ff;
+    color: #4a0754;
+}
+
+.admin-stat-card span {
+    display: block;
+
+    margin-bottom: 3px;
+
+    color: #827b85;
+
+    font-size: .63rem;
+}
+
+.admin-stat-card strong {
+    display: block;
+
+    color: #1e1522;
+
+    font-size: 1.3rem;
+    line-height: 1;
+}
+
+
+/* ============================================================
+   WORKSPACE
+   ============================================================ */
+
+.academic-admin-workspace {
+    margin-top: 15px;
+    margin-bottom: 35px;
+
+    display: grid;
+
+    grid-template-columns:
+        minmax(300px, 390px)
+        minmax(0, 1fr);
+
+    gap: 14px;
+
+    align-items: start;
+}
+
+.academic-admin-inbox,
+.academic-admin-editor {
+    min-width: 0;
+
+    border: 1px solid #e9e5ea;
+    border-radius: 19px;
+
+    background: #fff;
+
+    box-shadow:
+        0 10px 32px rgba(10, 0, 22, .05);
+}
+
+
+/* ============================================================
+   INBOX
+   ============================================================ */
+
+.inbox-header {
+    padding: 18px 17px 13px;
+
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.inbox-header h2 {
+    margin: 4px 0 0;
+
+    color: #1e1522;
+
+    font-size: 1.27rem;
+}
+
+.admin-section-label {
+    color: #4a0754;
+}
+
+.inbox-header select {
+    min-height: 34px;
+
+    padding: 0 8px;
+
+    border: 1px solid #ddd7df;
+    border-radius: 9px;
+
+    background: #fff;
+
+    color: #3b333e;
+
+    font-family: "DM Sans", sans-serif;
+    font-size: .66rem;
+
+    outline: none;
+}
+
+.admin-search {
+    height: 38px;
+
+    margin: 0 17px 12px;
+
+    padding: 0 10px;
+
+    border: 1px solid #e4dfe6;
+    border-radius: 10px;
+
+    background: #fbfafc;
+
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.admin-search i {
+    color: #99929d;
+    font-size: .7rem;
+}
+
+.admin-search input {
+    width: 100%;
+    min-width: 0;
+
+    border: 0;
+    outline: 0;
+
+    background: transparent;
+
+    color: #2d2630;
+
+    font-family: "DM Sans", sans-serif;
+    font-size: .71rem;
+}
+
+.academic-question-list {
+    max-height: 690px;
+
+    overflow-y: auto;
+
+    border-top: 1px solid #f0edf1;
+}
+
+.academic-question-item {
+    width: 100%;
+
+    padding: 14px 16px;
+
+    border: 0;
+    border-bottom: 1px solid #f0edf1;
+
+    background: #fff;
+
+    text-align: left;
+
+    cursor: pointer;
+}
+
+.academic-question-item.active {
+    background: #faf5fc;
+
+    box-shadow:
+        inset 3px 0 0 #4a0754;
+}
+
+.question-item-top,
+.question-item-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.question-item-id {
+    color: #4a0754;
+
+    font-family: "Bricolage Grotesque", sans-serif;
+
+    font-size: .67rem;
+    font-weight: 800;
+}
+
+.question-item-date {
+    color: #948c96;
+    font-size: .59rem;
+}
+
+.question-item-text {
+    margin: 8px 0;
+
+    color: #322a35;
+
+    font-size: .73rem;
+    line-height: 1.46;
+
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+
+    overflow: hidden;
+}
+
+.question-item-category {
+    color: #756e78;
+    font-size: .59rem;
+}
+
+.question-item-status {
+    padding: 4px 7px;
+
+    border-radius: 999px;
+
+    font-size: .56rem;
+    font-weight: 800;
+}
+
+.status-pending {
+    background: #fff7ed;
+    color: #c2410c;
+}
+
+.status-answered {
+    background: #ecfdf5;
+    color: #047857;
+}
+
+.status-published {
+    background: #eff6ff;
+    color: #1d4ed8;
+}
+
+.status-closed {
+    background: #f3f4f6;
+    color: #4b5563;
+}
+
+.admin-loading,
+.admin-no-results {
+    min-height: 180px;
+
+    padding: 25px;
+
+    display: grid;
+    place-items: center;
+
+    text-align: center;
+
+    color: #817985;
+
+    font-size: .7rem;
+}
+
+.admin-loading i,
+.admin-no-results i {
+    margin-bottom: 8px;
+}
+
+
+/* ============================================================
+   EDITOR EMPTY
+   ============================================================ */
+
+.editor-empty {
+    min-height: 590px;
+
+    padding: 35px;
+
+    display: grid;
+    place-content: center;
+
+    text-align: center;
+}
+
+.editor-empty-icon {
+    width: 58px;
+    height: 58px;
+
+    margin: 0 auto 14px;
+
+    border-radius: 17px;
+
+    background: #f6f0f8;
+    color: #4a0754;
+
+    display: grid;
+    place-items: center;
+}
+
+.editor-empty h2 {
+    margin: 0 0 5px;
+
+    color: #251a29;
+
+    font-size: 1.18rem;
+}
+
+.editor-empty p {
+    max-width: 370px;
+
+    margin: 0;
+
+    color: #77717b;
+
+    font-size: .73rem;
+    line-height: 1.5;
+}
+
+
+/* ============================================================
+   EDITOR
+   ============================================================ */
+
+#academicEditorContent {
+    padding: 21px;
+}
+
+.editor-header {
+    padding-bottom: 15px;
+
+    border-bottom: 1px solid #eeeaf0;
+
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.editor-header h2 {
+    margin: 4px 0 0;
+
+    color: #211723;
+
+    font-size: 1.2rem;
+}
+
+.admin-status {
+    padding: 6px 9px;
+
+    border-radius: 999px;
+
+    background: #fff7ed;
+    color: #c2410c;
+
+    font-family: "Bricolage Grotesque", sans-serif;
+
+    font-size: .6rem;
+    font-weight: 800;
+}
+
+.request-meta {
+    margin-top: 14px;
+
+    display: grid;
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+
+    gap: 8px;
+}
+
+.request-meta > div {
+    min-width: 0;
+
+    padding: 10px;
+
+    border: 1px solid #eeeaf0;
+    border-radius: 10px;
+
+    background: #faf9fb;
+}
+
+.request-meta span {
+    display: block;
+
+    margin-bottom: 4px;
+
+    color: #8b838f;
+
+    font-size: .57rem;
+}
+
+.request-meta strong {
+    display: block;
+
+    color: #3a313d;
+
+    font-size: .65rem;
+
+    overflow-wrap: anywhere;
+}
+
+.private-contact {
+    margin-top: 9px;
+
+    padding: 9px 11px;
+
+    border: 1px solid #f5dfc1;
+    border-radius: 10px;
+
+    background: #fffaf3;
+
+    color: #805a28;
+
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+
+    font-size: .62rem;
+}
+
+.private-contact i {
+    color: #16a34a;
+}
+
+.private-contact small {
+    width: 100%;
+
+    margin-left: 18px;
+
+    color: #927a59;
+
+    font-size: .56rem;
+}
+
+
+/* ============================================================
+   QUESTION
+   ============================================================ */
+
+.question-card {
+    margin-top: 13px;
+
+    padding: 15px;
+
+    border: 1px solid #eadfed;
+    border-radius: 14px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #fbf7fc,
+            #fff
+        );
+}
+
+.question-card-label {
+    margin-bottom: 8px;
+
+    color: #4a0754;
+
+    font-family: "Bricolage Grotesque", sans-serif;
+
+    font-size: .66rem;
+    font-weight: 800;
+
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.question-card p {
+    margin: 0;
+
+    color: #312833;
+
+    font-size: .78rem;
+    line-height: 1.58;
+
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+
+/* ============================================================
+   ANSWER
+   ============================================================ */
+
+.answer-editor {
+    margin-top: 18px;
+}
+
+.editor-section-heading {
+    margin-bottom: 9px;
+
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.editor-section-heading h3 {
+    margin: 4px 0 0;
+
+    color: #261c2b;
+
+    font-size: .98rem;
+}
+
+.editor-section-heading > span {
+    color: #938b96;
+    font-size: .57rem;
+}
+
+.academic-admin-editor textarea {
+    width: 100%;
+
+    min-height: 145px;
+
+    padding: 13px 14px;
+
+    border: 1px solid #ded8e1;
+    border-radius: 12px;
+
+    outline: none;
+
+    background: #fff;
+
+    color: #29212d;
+
+    font-family: "DM Sans", sans-serif;
+    font-size: .75rem;
+    line-height: 1.55;
+
+    resize: vertical;
+}
+
+.academic-admin-editor textarea:focus {
+    border-color: #4a0754;
+}
+
+.textarea-footer {
+    margin-top: 5px;
+
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+
+    color: #8c8490;
+
+    font-size: .57rem;
+}
+
+
+/* ============================================================
+   BUTTONS
+   ============================================================ */
+
+.editor-actions,
+.group-actions {
+    margin-top: 12px;
+
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.admin-btn {
+    min-height: 40px;
+
+    padding: 0 13px;
+
+    border: 0;
+    border-radius: 10px;
+
+    cursor: pointer;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+
+    font-size: .68rem;
+    font-weight: 750;
+}
+
+.admin-btn.primary {
+    background: #4a0754;
+    color: #fff;
+}
+
+.admin-btn.secondary {
+    background: #f3f0f4;
+    color: #352b38;
+}
+
+.admin-btn.danger {
+    border: 1px solid #dc2626;
+
+    background: #fff;
+
+    color: #b91c1c;
+}
+
+.admin-btn.close {
+    background: #f6f6f7;
+    color: #57515b;
+}
+
+.admin-btn.group {
+    background: #ecfeff;
+    color: #0f766e;
+}
+
+.admin-btn:disabled {
+    opacity: .55;
+    cursor: not-allowed;
+}
+
+
+/* ============================================================
+   MESSAGES
+   ============================================================ */
+
+.admin-message {
+    min-height: 18px;
+
+    margin-top: 8px;
+
+    font-size: .64rem;
+}
+
+.message-success {
+    color: #047857;
+}
+
+.message-error {
+    color: #b91c1c;
+}
+
+
+/* ============================================================
+   GROUP MESSAGE
+   ============================================================ */
+
+.group-message {
+    margin-top: 22px;
+
+    padding-top: 18px;
+
+    border-top: 1px solid #eeeaf0;
+}
+
+.group-message > p {
+    margin: 0 0 10px;
+
+    color: #77707a;
+
+    font-size: .65rem;
+    line-height: 1.5;
+}
+
+.shared-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+
+    padding: 5px 8px;
+
+    border-radius: 999px;
+
+    background: #ecfdf5;
+    color: #047857;
+
+    font-size: .57rem;
+    font-weight: 800;
+}
+
+
+/* ============================================================
+   HISTORY
+   ============================================================ */
+
+.editor-history {
+    margin-top: 18px;
+
+    padding-top: 14px;
+
+    border-top: 1px solid #eeeaf0;
+
+    color: #817985;
+
+    font-size: .6rem;
+    line-height: 1.55;
+}
+
+.editor-history strong {
+    color: #463b49;
+}
+
+
+/* ============================================================
+   HIDDEN
+   ============================================================ */
+
+[hidden] {
+    display: none !important;
+}
+
+
+/* ============================================================
+   TABLET
+   ============================================================ */
+
+@media (max-width: 1100px) {
+
+    .academic-admin-header,
+    .academic-admin-stats,
+    .academic-admin-workspace {
+        width: calc(100% - 28px);
+        max-width: none;
+    }
+
+    .academic-admin-workspace {
+        grid-template-columns:
+            minmax(280px, 350px)
+            minmax(0, 1fr);
+    }
+
+    .request-meta {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+}
+
+
+/* ============================================================
+   MOBILE
+   ============================================================ */
+
+@media (max-width: 850px) {
+
+    .academic-admin-stats {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+    .academic-admin-workspace {
+        grid-template-columns: 1fr;
+    }
+
+    .academic-question-list {
+        max-height: 360px;
+    }
+
+}
+
+
+/* ============================================================
+   SMALL MOBILE
+   ============================================================ */
+
+@media (max-width: 600px) {
+
+    .academic-admin-header,
+    .academic-admin-stats,
+    .academic-admin-workspace {
+        width: calc(100% - 20px);
+    }
+
+    .academic-admin-header {
+        margin-top: 12px;
+
+        padding: 19px 16px;
+
+        border-radius: 18px;
+
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .academic-admin-header h1 {
+        font-size: 1.45rem;
+    }
+
+    .academic-admin-header p {
+        font-size: .71rem;
+    }
+
+    .admin-refresh-btn {
+        width: 100%;
+    }
+
+    .admin-stat-card {
+        min-height: 75px;
+        padding: 10px;
+    }
+
+    .admin-stat-icon {
+        width: 34px;
+        height: 34px;
+        flex-basis: 34px;
+    }
+
+    .admin-stat-card strong {
+        font-size: 1.05rem;
+    }
+
+    .admin-stat-card span {
+        font-size: .57rem;
+    }
+
+    #academicEditorContent {
+        padding: 15px;
+    }
+
+    .editor-header h2 {
+        font-size: .98rem;
+    }
+
+    .request-meta {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .question-card p {
+        font-size: .71rem;
+    }
+
+    .editor-section-heading {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .editor-actions .admin-btn,
+    .group-actions .admin-btn {
+        flex: 1 1 100%;
+    }
+
+    .academic-admin-editor textarea {
+        min-height: 135px;
+        font-size: .7rem;
+    }
+
+}
