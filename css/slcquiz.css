@@ -374,7 +374,7 @@
 
 .quiz-card,
 .reflection-card,
-.questions-card,
+.questions-header-card,
 .result-card,
 .review-header-card,
 .question-card,
@@ -386,7 +386,6 @@
 
 .quiz-card,
 .reflection-card,
-.questions-card,
 .result-card {
     background: #ffffff;
 
@@ -412,45 +411,32 @@
     border-radius: 30px;
 }
 
-.questions-card {
-    margin-bottom: 24px;
-
-    padding: clamp(26px, 4vw, 40px);
-
-    border-radius: 30px;
-}
-
 .result-card {
     padding: clamp(30px, 5vw, 46px);
 
     border-radius: 30px;
 }
 
-.question-card {
-    margin-bottom: 18px;
 
-    padding: clamp(24px, 3.5vw, 32px);
+/* ============================================================
+   SEPARATE QUIZ HEADER CARD
+   ============================================================ */
+
+.questions-header-card {
+    width: 100%;
+
+    margin-bottom: 14px;
+
+    padding: 17px 20px;
+
+    border-radius: 20px;
 
     background: #ffffff;
 
-    border: 1px solid #e8edf2;
-
-    border-radius: 23px;
+    border: 1px solid rgba(15, 23, 42, .055);
 
     box-shadow:
-        0 8px 28px rgba(15, 23, 42, .035);
-
-    transition:
-        border-color .2s ease,
-        box-shadow .2s ease,
-        transform .2s ease;
-}
-
-.question-card:hover {
-    border-color: rgba(74, 7, 84, .16);
-
-    box-shadow:
-        0 13px 34px rgba(15, 23, 42, .055);
+        0 10px 32px rgba(15, 23, 42, .045);
 }
 
 
@@ -1171,7 +1157,6 @@ button:disabled {
 
 /* ============================================================
    REFLECTION ACTION
-   Used for "Take the Quiz Now" when reflection exists
    ============================================================ */
 
 .reflection-message-action {
@@ -1303,22 +1288,16 @@ button:disabled {
     justify-content: space-between;
 
     gap: 18px;
-
-    margin-bottom: 25px;
-
-    padding-bottom: 19px;
-
-    border-bottom: 1px solid #eef0f3;
 }
 
 .questions-header > div:first-child > span {
     display: block;
 
-    margin-bottom: 5px;
+    margin-bottom: 4px;
 
     color: #ea580c;
 
-    font-size: .67rem;
+    font-size: .61rem;
 
     font-weight: 800;
 
@@ -1330,17 +1309,17 @@ button:disabled {
 
     color: #111827;
 
-    font-size: 1.26rem;
+    font-size: .98rem;
 
-    line-height: 1.18;
+    line-height: 1.2;
 
-    font-weight: 800;
+    font-weight: 700;
 }
 
 .question-count-badge {
     flex: 0 0 auto;
 
-    padding: 8px 12px;
+    padding: 7px 10px;
 
     border-radius: 999px;
 
@@ -1348,41 +1327,107 @@ button:disabled {
 
     color: #4b5563;
 
-    font-size: .70rem;
+    font-size: .66rem;
 
     font-weight: 750;
 }
 
 
 /* ============================================================
-   QUESTIONS
+   QUESTIONS LIST
    ============================================================ */
 
-.question-number {
-    margin-bottom: 11px;
+.questions-list {
+    width: 100%;
 
-    color: #4a0754;
+    display: grid;
 
-    font-size: .69rem;
+    gap: 13px;
+}
+
+
+/* ============================================================
+   INDIVIDUAL QUESTION CARDS
+   ============================================================ */
+
+.questions-list .question-card {
+    width: 100%;
+
+    margin: 0;
+
+    padding: 18px 20px;
+
+    border-radius: 19px;
+
+    background: #ffffff;
+
+    border: 1px solid #e9edf2;
+
+    box-shadow:
+        0 8px 28px rgba(15, 23, 42, .035);
+
+    transition:
+        border-color .2s ease,
+        box-shadow .2s ease,
+        transform .2s ease;
+}
+
+.questions-list .question-card:hover {
+    border-color: rgba(74, 7, 84, .14);
+
+    box-shadow:
+        0 12px 30px rgba(15, 23, 42, .045);
+}
+
+
+/* ============================================================
+   QUESTION NUMBER
+   More breathing room before actual question
+   ============================================================ */
+
+.questions-list .question-card .question-number {
+    display: block;
+
+    margin-bottom: 15px;
+
+    color: #7c3aed;
+
+    font-family: "DM Sans", sans-serif;
+
+    font-size: .61rem;
+
+    line-height: 1.2;
 
     font-weight: 800;
 
-    letter-spacing: .06em;
+    letter-spacing: .08em;
 }
 
-.question-card h3 {
-    margin: 0 0 20px;
 
-    color: #111827;
+/* ============================================================
+   QUESTION TEXT
+   REDUCED SIZE
+   ============================================================ */
+
+.questions-list .question-card h3 {
+    margin: 0 0 14px;
+
+    color: #172033;
 
     font-family: "Bricolage Grotesque", sans-serif;
 
-    font-size: .96rem;
+    font-size: .78rem;
 
-    line-height: 1.38;
+    line-height: 1.42;
 
-    font-weight: 700;
+    font-weight: 650;
 }
+
+
+/* ============================================================
+   ANSWER OPTIONS
+   KEPT COMFORTABLE
+   ============================================================ */
 
 .options {
     display: grid;
@@ -1483,9 +1528,9 @@ button:disabled {
 
     color: #374151;
 
-    font-size: .80rem;
+    font-size: .75rem;
 
-    line-height: 1.42;
+    line-height: 1.5;
 }
 
 .option span strong {
@@ -1506,9 +1551,9 @@ button:disabled {
 
     gap: 22px;
 
-    margin-top: 26px;
+    margin-top: 14px;
 
-    padding-top: 21px;
+    padding-top: 17px;
 
     border-top: 1px solid #eef0f3;
 }
@@ -1529,6 +1574,155 @@ button:disabled {
     flex: 0 0 auto;
 
     min-height: 48px !important;
+}
+
+
+/* ============================================================
+   ALREADY COMPLETED QUIZ CARD
+   Created dynamically by slcquiz.js
+   ============================================================ */
+
+.completed-card {
+    width: 100%;
+
+    text-align: center;
+
+    padding: clamp(24px, 4vw, 34px);
+}
+
+
+/* ============================================================
+   COMPLETED QUIZ ICON
+   ============================================================ */
+
+.completed-card .completed-icon {
+    width: 54px;
+    height: 54px;
+
+    margin: 0 auto 15px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background:
+        linear-gradient(
+            135deg,
+            #f5f3ff,
+            #ede9fe
+        );
+
+    border: 1px solid #e5ddff;
+
+    color: #6d28d9;
+
+    font-size: 1.22rem;
+
+    box-shadow:
+        0 5px 16px rgba(109, 40, 217, .08);
+}
+
+.completed-card .completed-icon i {
+    font-size: 1.22rem;
+}
+
+
+/* ============================================================
+   ALREADY COMPLETED HEADING
+   ============================================================ */
+
+.completed-card h2 {
+    max-width: 420px;
+
+    margin: 0 auto 9px;
+
+    color: #111827;
+
+    font-family: "Bricolage Grotesque", sans-serif;
+
+    font-size: .94rem;
+
+    line-height: 1.25;
+
+    font-weight: 700;
+}
+
+
+/* ============================================================
+   COMPLETED MESSAGE
+   ============================================================ */
+
+.completed-card p {
+    max-width: 480px;
+
+    margin: 0 auto 19px;
+
+    color: #64748b;
+
+    font-family: "DM Sans", sans-serif;
+
+    font-size: .74rem;
+
+    line-height: 1.55;
+}
+
+
+/* ============================================================
+   COMPLETED QUIZ BUTTON
+   ============================================================ */
+
+.completed-card .purple-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+
+    min-height: 40px;
+
+    padding: 9px 17px;
+
+    border: none;
+
+    border-radius: 999px;
+
+    background: #6d28d9;
+
+    color: #ffffff;
+
+    font-family: "DM Sans", sans-serif;
+
+    font-size: .72rem;
+
+    font-weight: 700;
+
+    text-decoration: none;
+
+    cursor: pointer;
+
+    transition:
+        transform .2s ease,
+        box-shadow .2s ease,
+        background .2s ease;
+}
+
+.completed-card .purple-btn:hover {
+    background: #5b21b6;
+
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 7px 18px rgba(109, 40, 217, .16);
+}
+
+.completed-card .purple-btn:active {
+    transform: scale(.97);
+}
+
+.completed-card .purple-btn i {
+    font-size: .68rem;
 }
 
 
@@ -1801,7 +1995,6 @@ button:disabled {
 
 /* ============================================================
    TABLET / MOBILE WIDTH
-   MATCHES LESSONS PAGE
    ============================================================ */
 
 @media (max-width: 900px) {
@@ -1816,7 +2009,6 @@ button:disabled {
 
 /* ============================================================
    DESKTOP WIDTH
-   MATCHES LESSONS PAGE
    ============================================================ */
 
 @media (min-width: 1100px) {
@@ -1831,7 +2023,6 @@ button:disabled {
 
 /* ============================================================
    LARGE DESKTOP WIDTH
-   MATCHES LESSONS PAGE
    ============================================================ */
 
 @media (min-width: 1500px) {
@@ -1911,7 +2102,6 @@ button:disabled {
 
     .quiz-card,
     .reflection-card,
-    .questions-card,
     .result-card {
         padding: 24px;
 
@@ -2081,6 +2271,8 @@ button:disabled {
         height: 44px;
 
         border-radius: 14px;
+
+        font-size: .86rem;
     }
 
     .quiz-ready-card > div:last-child > span {
@@ -2096,40 +2288,79 @@ button:disabled {
     }
 
 
-    /* QUESTIONS */
+    /* QUIZ HEADER */
+
+    .questions-header-card {
+        margin-bottom: 12px;
+
+        padding: 15px 17px;
+
+        border-radius: 18px;
+    }
 
     .questions-header {
-        align-items: flex-start;
+        gap: 12px;
     }
 
     .questions-header > div:first-child > span {
-        font-size: .64rem;
+        font-size: .58rem;
     }
 
     .questions-header h2 {
-        font-size: 1.12rem;
+        font-size: .91rem;
+
+        line-height: 1.2;
     }
 
     .question-count-badge {
-        padding: 8px 10px;
+        padding: 7px 9px;
 
-        font-size: .66rem;
+        font-size: .63rem;
     }
 
-    .question-card {
-        padding: 21px;
 
-        border-radius: 21px;
+    /* QUESTION LIST */
+
+    .questions-list {
+        gap: 11px;
     }
 
-    .question-number {
-        font-size: .66rem;
+
+    /* QUESTION CARD */
+
+    .questions-list .question-card {
+        padding: 16px 17px;
+
+        border-radius: 17px;
     }
 
-    .question-card h3 {
-        font-size: .90rem;
 
-        line-height: 1.4;
+    /* QUESTION NUMBER */
+
+    .questions-list .question-card .question-number {
+        margin-bottom: 13px;
+
+        font-size: .58rem;
+    }
+
+
+    /* QUESTION TEXT */
+
+    .questions-list .question-card h3 {
+        margin-bottom: 12px;
+
+        font-size: .74rem;
+
+        line-height: 1.43;
+    }
+
+
+    /* ANSWERS */
+
+    .questions-list .option span {
+        font-size: .74rem;
+
+        line-height: 1.48;
     }
 
     .option {
@@ -2138,22 +2369,23 @@ button:disabled {
         gap: 11px;
     }
 
-    .option span {
-        font-size: .75rem;
 
-        line-height: 1.42;
-    }
+    /* SUBMIT */
 
     .quiz-submit-area {
         flex-direction: column;
 
         align-items: stretch;
+
+        margin-top: 12px;
+
+        padding-top: 15px;
     }
 
     .quiz-submit-area p {
         max-width: none;
 
-        font-size: .73rem;
+        font-size: .70rem;
     }
 
     .submit-quiz-btn {
@@ -2162,6 +2394,52 @@ button:disabled {
         min-height: 46px !important;
 
         font-size: .75rem !important;
+    }
+
+
+    /* COMPLETED QUIZ */
+
+    .completed-card {
+        padding: 22px 17px;
+    }
+
+    .completed-card .completed-icon {
+        width: 50px;
+        height: 50px;
+
+        margin-bottom: 13px;
+
+        font-size: 1.12rem;
+    }
+
+    .completed-card .completed-icon i {
+        font-size: 1.12rem;
+    }
+
+    .completed-card h2 {
+        font-size: .88rem;
+
+        line-height: 1.25;
+
+        margin-bottom: 8px;
+    }
+
+    .completed-card p {
+        font-size: .71rem;
+
+        line-height: 1.5;
+
+        margin-bottom: 17px;
+    }
+
+    .completed-card .purple-btn {
+        width: 100%;
+
+        min-height: 39px;
+
+        padding: 8px 15px;
+
+        font-size: .70rem;
     }
 
 
@@ -2241,7 +2519,6 @@ button:disabled {
 
 /* ============================================================
    MOBILE WIDTH
-   MATCHES LESSONS PAGE
    ============================================================ */
 
 @media (max-width: 600px) {
@@ -2302,7 +2579,6 @@ button:disabled {
 
     .quiz-card,
     .reflection-card,
-    .questions-card,
     .result-card {
         padding: 20px;
 
@@ -2327,7 +2603,7 @@ button:disabled {
     }
 
     .section-heading h2 {
-        font-size: 0.86rem;
+        font-size: .86rem;
     }
 
     .section-heading p {
@@ -2363,6 +2639,9 @@ button:disabled {
         font-size: .60rem;
     }
 
+
+    /* REFLECTION */
+
     .reflection-number {
         width: 42px;
         height: 42px;
@@ -2377,7 +2656,7 @@ button:disabled {
     }
 
     .reflection-header h2 {
-        font-size: 0.88rem;
+        font-size: .88rem;
     }
 
     .reflection-header p {
@@ -2466,30 +2745,72 @@ button:disabled {
     }
 
 
-    /* QUESTIONS */
+    /* QUIZ HEADER */
+
+    .questions-header-card {
+        padding: 13px 15px;
+
+        margin-bottom: 10px;
+
+        border-radius: 16px;
+    }
 
     .questions-header {
-        gap: 12px;
+        gap: 10px;
     }
 
     .questions-header > div:first-child > span {
-        font-size: .60rem;
+        font-size: .55rem;
     }
 
     .questions-header h2 {
-        font-size: 1rem;
-    }
-
-    .question-number {
-        font-size: .63rem;
-    }
-
-    .question-card {
-        padding: 18px;
-    }
-
-    .question-card h3 {
         font-size: .86rem;
+
+        line-height: 1.18;
+    }
+
+    .question-count-badge {
+        padding: 7px 9px;
+
+        font-size: .61rem;
+    }
+
+
+    /* QUESTIONS */
+
+    .questions-list {
+        gap: 9px;
+    }
+
+    .questions-list .question-card {
+        padding: 14px 15px;
+
+        border-radius: 16px;
+    }
+
+    .questions-list .question-card .question-number {
+        margin-bottom: 13px;
+
+        font-size: .56rem;
+
+        letter-spacing: .07em;
+    }
+
+    .questions-list .question-card h3 {
+        margin-bottom: 11px;
+
+        font-size: .70rem;
+
+        line-height: 1.42;
+    }
+
+
+    /* ANSWERS */
+
+    .questions-list .option span {
+        font-size: .72rem;
+
+        line-height: 1.45;
     }
 
     .option {
@@ -2505,24 +2826,63 @@ button:disabled {
         min-width: 18px;
     }
 
-    .option span {
-        font-size: .71rem;
-    }
 
-    .question-count-badge {
-        padding: 7px 9px;
+    /* SUBMIT */
 
-        font-size: .63rem;
+    .quiz-submit-area {
+        margin-top: 10px;
+
+        padding-top: 13px;
     }
 
     .quiz-submit-area p {
-        font-size: .70rem;
+        font-size: .68rem;
     }
 
     .submit-quiz-btn {
         min-height: 44px !important;
 
         font-size: .72rem !important;
+    }
+
+
+    /* COMPLETED QUIZ */
+
+    .completed-card {
+        padding: 20px 15px;
+    }
+
+    .completed-card .completed-icon {
+        width: 46px;
+        height: 46px;
+
+        margin-bottom: 12px;
+
+        font-size: 1.04rem;
+    }
+
+    .completed-card .completed-icon i {
+        font-size: 1.04rem;
+    }
+
+    .completed-card h2 {
+        font-size: .82rem;
+
+        line-height: 1.25;
+    }
+
+    .completed-card p {
+        font-size: .68rem;
+
+        line-height: 1.48;
+    }
+
+    .completed-card .purple-btn {
+        min-height: 38px;
+
+        padding: 8px 14px;
+
+        font-size: .68rem;
     }
 
 
@@ -2597,770 +2957,4 @@ button:disabled {
         transition: none !important;
     }
 
-}
-
-
-
-
-
-
-/* ============================================================
-   QUIZ HEADING — SEPARATE CARD
-============================================================ */
-
-.questions-header-card {
-    width: 100%;
-    margin-bottom: 16px;
-    padding: clamp(19px, 3vw, 25px);
-    border-radius: 23px;
-    background: #ffffff;
-    border: 1px solid rgba(15,23,42,.055);
-    box-shadow:
-        0 10px 32px rgba(15,23,42,.045);
-}
-
-
-/* ============================================================
-   QUESTIONS LIST
-============================================================ */
-
-.questions-list {
-    width: 100%;
-    display: grid;
-    gap: 16px;
-}
-
-
-/* ============================================================
-   INDIVIDUAL QUESTION CARDS
-============================================================ */
-
-.questions-list .question-card {
-    width: 100%;
-    margin: 0;
-    padding: clamp(20px, 3.5vw, 27px);
-    border-radius: 21px;
-    background: #ffffff;
-    border: 1px solid #e9edf2;
-    box-shadow:
-        0 8px 28px rgba(15,23,42,.035);
-}
-
-
-/* ============================================================
-   QUIZ TITLE
-============================================================ */
-
-.questions-header h2 {
-    font-size: 1.08rem;
-    line-height: 1.2;
-}
-
-
-/* ============================================================
-   QUESTION TEXT
-============================================================ */
-
-.questions-list .question-card h3 {
-    margin-bottom: 18px;
-    font-size: .87rem;
-    line-height: 1.48;
-}
-
-
-/* ============================================================
-   ANSWERS
-   Keep answer text comfortable and readable.
-============================================================ */
-
-.questions-list .option span {
-    font-size: .75rem;
-    line-height: 1.55;
-}
-
-
-/* ============================================================
-   QUIZ SUBMIT AREA
-============================================================ */
-
-.quiz-submit-area {
-    margin-top: 16px;
-    padding: 19px 0 0;
-}
-
-
-/* ============================================================
-   COMPLETED QUIZ CARD
-   Created dynamically by slcquiz.js
-============================================================ */
-
-.completed-card {
-    text-align: center;
-}
-
-
-.completed-card .purple-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-
-    min-height: 43px;
-    padding: 10px 18px;
-
-    border: none;
-    border-radius: 999px;
-
-    background:
-        linear-gradient(
-            135deg,
-            #4a0754,
-            #7c3aed
-        );
-
-    color: #ffffff;
-
-    font-family:
-        "Bricolage Grotesque",
-        sans-serif;
-
-    font-size: .74rem;
-    font-weight: 750;
-
-    text-decoration: none;
-
-    box-shadow:
-        0 9px 22px rgba(74,7,84,.16);
-
-    transition:
-        transform .2s ease,
-        box-shadow .2s ease,
-        opacity .2s ease;
-}
-
-
-.completed-card .purple-btn:hover {
-    transform: translateY(-2px);
-
-    box-shadow:
-        0 12px 26px rgba(74,7,84,.2);
-}
-
-
-.completed-card .purple-btn:active {
-    transform: scale(.97);
-}
-
-
-/* ============================================================
-   MOBILE QUIZ
-============================================================ */
-
-@media (max-width: 768px) {
-
-    .questions-header-card {
-        margin-bottom: 14px;
-        padding: 18px;
-        border-radius: 20px;
-    }
-
-
-    .questions-header {
-        margin-bottom: 0;
-        padding-bottom: 0;
-        border-bottom: none;
-    }
-
-
-    .questions-header h2 {
-        font-size: 1rem;
-    }
-
-
-    .questions-list {
-        gap: 13px;
-    }
-
-
-    .questions-list .question-card {
-        padding: 18px;
-        border-radius: 19px;
-    }
-
-
-    .questions-list .question-card h3 {
-        margin-bottom: 17px;
-        font-size: .85rem;
-        line-height: 1.5;
-    }
-
-
-    .questions-list .option span {
-        font-size: .75rem;
-        line-height: 1.55;
-    }
-
-
-    .quiz-submit-area {
-        margin-top: 14px;
-    }
-
-
-    .completed-card .purple-btn {
-        width: 100%;
-        min-height: 44px;
-        font-size: .73rem;
-    }
-
-}
-
-
-/* ============================================================
-   VERY SMALL PHONES
-============================================================ */
-
-@media (max-width: 480px) {
-
-    .questions-header-card {
-        padding: 16px;
-        border-radius: 19px;
-    }
-
-
-    .questions-header h2 {
-        font-size: .94rem;
-    }
-
-
-    .questions-list {
-        gap: 12px;
-    }
-
-
-    .questions-list .question-card {
-        padding: 17px;
-        border-radius: 18px;
-    }
-
-
-    .questions-list .question-card h3 {
-        font-size: .82rem;
-        line-height: 1.5;
-    }
-
-
-    .questions-list .option span {
-        font-size: .74rem;
-    }
-
-
-    .completed-card .purple-btn {
-        min-height: 42px;
-        padding: 9px 16px;
-        font-size: .71rem;
-    }
-
-}
-
-
-
-/* ============================================================
-   SLC QUIZ — REFINED QUESTION SIZING
-   Reduce question text + quiz header
-   Keep answer options comfortable
-   ============================================================ */
-
-/* ------------------------------------------------------------
-   QUIZ HEADER CARD
-   ------------------------------------------------------------ */
-
-.questions-header-card {
-    width: 100%;
-    margin-bottom: 14px;
-    padding: 17px 20px;
-    border-radius: 20px;
-}
-
-.questions-header {
-    min-height: 0;
-}
-
-.questions-header h2 {
-    margin: 4px 0 0;
-    font-family: "Bricolage Grotesque", sans-serif;
-    font-size: 0.98rem;
-    line-height: 1.2;
-    font-weight: 700;
-}
-
-.questions-header span {
-    font-size: 0.62rem;
-    line-height: 1.2;
-    letter-spacing: 0.09em;
-}
-
-
-/* ------------------------------------------------------------
-   QUESTION LIST
-   ------------------------------------------------------------ */
-
-.questions-list {
-    width: 100%;
-    display: grid;
-    gap: 13px;
-}
-
-
-/* ------------------------------------------------------------
-   INDIVIDUAL QUESTION CARDS
-   ------------------------------------------------------------ */
-
-.questions-list .question-card {
-    width: 100%;
-    margin: 0;
-    padding: 18px 20px;
-    border-radius: 19px;
-}
-
-
-/* QUESTION TEXT — REDUCED */
-
-.questions-list .question-card h3 {
-    margin: 0 0 14px;
-    font-family: "Bricolage Grotesque", sans-serif;
-    font-size: 0.78rem;
-    line-height: 1.42;
-    font-weight: 650;
-}
-
-
-/* ------------------------------------------------------------
-   ANSWER OPTIONS
-   Keep these comfortable — do not make them too small.
-   ------------------------------------------------------------ */
-
-.questions-list .option span {
-    font-size: 0.75rem;
-    line-height: 1.5;
-}
-
-
-/* ------------------------------------------------------------
-   SUBMIT AREA
-   ------------------------------------------------------------ */
-
-.quiz-submit-area {
-    margin-top: 14px;
-    padding: 17px 0 0;
-}
-
-
-/* ============================================================
-   TABLET / MOBILE
-   ============================================================ */
-
-@media (max-width: 768px) {
-
-    .questions-header-card {
-        margin-bottom: 12px;
-        padding: 15px 17px;
-        border-radius: 18px;
-    }
-
-    .questions-header h2 {
-        font-size: 0.91rem;
-        line-height: 1.2;
-    }
-
-    .questions-header span {
-        font-size: 0.58rem;
-    }
-
-    .questions-list {
-        gap: 11px;
-    }
-
-    .questions-list .question-card {
-        padding: 16px 17px;
-        border-radius: 17px;
-    }
-
-    /* Smaller question text on mobile */
-    .questions-list .question-card h3 {
-        margin-bottom: 12px;
-        font-size: 0.74rem;
-        line-height: 1.43;
-    }
-
-    /* Options remain comfortable */
-    .questions-list .option span {
-        font-size: 0.74rem;
-        line-height: 1.48;
-    }
-
-    .quiz-submit-area {
-        margin-top: 12px;
-        padding-top: 15px;
-    }
-}
-
-
-/* ============================================================
-   SMALL PHONES
-   ============================================================ */
-
-@media (max-width: 480px) {
-
-    .questions-header-card {
-        padding: 13px 15px;
-        margin-bottom: 10px;
-        border-radius: 16px;
-    }
-
-    .questions-header h2 {
-        font-size: 0.86rem;
-        line-height: 1.18;
-    }
-
-    .questions-header span {
-        font-size: 0.55rem;
-    }
-
-    .questions-list {
-        gap: 9px;
-    }
-
-    .questions-list .question-card {
-        padding: 14px 15px;
-        border-radius: 16px;
-    }
-
-    /* Question becomes noticeably smaller */
-    .questions-list .question-card h3 {
-        margin-bottom: 10px;
-        font-size: 0.70rem;
-        line-height: 1.42;
-    }
-
-    /* Keep options readable */
-    .questions-list .option span {
-        font-size: 0.72rem;
-        line-height: 1.45;
-    }
-
-    .quiz-submit-area {
-        margin-top: 10px;
-        padding-top: 13px;
-    }
-}
-
-
-
-/* ============================================================
-   SLC QUIZ — FINAL VISUAL REFINEMENTS
-   ------------------------------------------------------------
-   1. Smaller "already completed" heading
-   2. Better completed icon
-   3. Better completed-card button
-   4. More breathing room between QUESTION number and question
-   5. Keeps answer options comfortable
-   ============================================================ */
-
-
-/* ============================================================
-   ALREADY COMPLETED CARD
-   ============================================================ */
-
-.completed-card {
-    width: 100%;
-    text-align: center;
-    padding: clamp(24px, 4vw, 34px);
-}
-
-
-/* ------------------------------------------------------------
-   COMPLETED ICON
-   ------------------------------------------------------------ */
-
-.completed-card .completed-icon {
-    width: 54px;
-    height: 54px;
-    margin: 0 auto 15px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    border-radius: 50%;
-
-    background: #f3f0ff;
-    border: 1px solid #e8e1ff;
-
-    color: #6d28d9;
-
-    font-size: 1.35rem;
-
-    box-shadow: 0 5px 16px rgba(109, 40, 217, 0.08);
-}
-
-.completed-card .completed-icon i {
-    font-size: 1.35rem;
-}
-
-
-/* ------------------------------------------------------------
-   ALREADY COMPLETED HEADING
-   ------------------------------------------------------------ */
-
-.completed-card h2 {
-    margin: 0 auto 9px;
-
-    max-width: 420px;
-
-    font-family: "Bricolage Grotesque", sans-serif;
-
-    font-size: 0.98rem;
-    line-height: 1.25;
-
-    font-weight: 700;
-
-    color: #111827;
-}
-
-
-/* ------------------------------------------------------------
-   COMPLETED MESSAGE
-   ------------------------------------------------------------ */
-
-.completed-card p {
-    max-width: 480px;
-    margin: 0 auto 19px;
-
-    font-family: "DM Sans", sans-serif;
-
-    font-size: 0.74rem;
-    line-height: 1.55;
-
-    color: #64748b;
-}
-
-
-/* ------------------------------------------------------------
-   VIEW RESULTS BUTTON
-   ------------------------------------------------------------ */
-
-.completed-card .purple-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-
-    min-height: 40px;
-
-    padding: 9px 17px;
-
-    border: 0;
-    border-radius: 999px;
-
-    background: #6d28d9;
-    color: #ffffff;
-
-    font-family: "DM Sans", sans-serif;
-    font-size: 0.72rem;
-    font-weight: 700;
-
-    text-decoration: none;
-
-    cursor: pointer;
-
-    transition:
-        transform 0.2s ease,
-        box-shadow 0.2s ease,
-        background 0.2s ease;
-}
-
-.completed-card .purple-btn:hover {
-    background: #5b21b6;
-    transform: translateY(-1px);
-    box-shadow: 0 7px 18px rgba(109, 40, 217, 0.16);
-}
-
-.completed-card .purple-btn i {
-    font-size: 0.68rem;
-}
-
-
-/* ============================================================
-   QUESTION NUMBER
-   ------------------------------------------------------------
-   Create clearer separation between:
-   
-   QUESTION 1
-   ↓
-   actual question
-   
-   without making the question card too tall.
-   ============================================================ */
-
-.questions-list .question-card .question-number {
-    display: block;
-
-    margin-bottom: 9px;
-
-    font-family: "DM Sans", sans-serif;
-
-    font-size: 0.61rem;
-    line-height: 1.2;
-
-    font-weight: 800;
-
-    letter-spacing: 0.08em;
-
-    color: #7c3aed;
-}
-
-
-/* ------------------------------------------------------------
-   QUESTION TEXT
-   ------------------------------------------------------------ */
-
-.questions-list .question-card h3 {
-    margin-top: 0;
-    margin-bottom: 14px;
-
-    font-family: "Bricolage Grotesque", sans-serif;
-
-    font-size: 0.78rem;
-    line-height: 1.42;
-
-    font-weight: 650;
-
-    color: #172033;
-}
-
-
-/* ============================================================
-   MOBILE
-   ============================================================ */
-
-@media (max-width: 768px) {
-
-    .completed-card {
-        padding: 22px 17px;
-    }
-
-    .completed-card .completed-icon {
-        width: 50px;
-        height: 50px;
-
-        margin-bottom: 13px;
-
-        font-size: 1.2rem;
-    }
-
-    .completed-card .completed-icon i {
-        font-size: 1.2rem;
-    }
-
-    .completed-card h2 {
-        font-size: 0.90rem;
-        line-height: 1.25;
-
-        margin-bottom: 8px;
-    }
-
-    .completed-card p {
-        font-size: 0.71rem;
-        line-height: 1.5;
-
-        margin-bottom: 17px;
-    }
-
-    .completed-card .purple-btn {
-        min-height: 39px;
-        padding: 8px 15px;
-
-        font-size: 0.70rem;
-    }
-
-
-    /* QUESTION NUMBER */
-
-    .questions-list .question-card .question-number {
-        margin-bottom: 8px;
-
-        font-size: 0.58rem;
-    }
-
-
-    /* QUESTION */
-
-    .questions-list .question-card h3 {
-        margin-bottom: 12px;
-
-        font-size: 0.74rem;
-        line-height: 1.43;
-    }
-}
-
-
-/* ============================================================
-   SMALL PHONES
-   ============================================================ */
-
-@media (max-width: 480px) {
-
-    .completed-card {
-        padding: 20px 15px;
-    }
-
-    .completed-card .completed-icon {
-        width: 46px;
-        height: 46px;
-
-        margin-bottom: 12px;
-
-        font-size: 1.08rem;
-    }
-
-    .completed-card .completed-icon i {
-        font-size: 1.08rem;
-    }
-
-    .completed-card h2 {
-        font-size: 0.84rem;
-        line-height: 1.25;
-    }
-
-    .completed-card p {
-        font-size: 0.69rem;
-        line-height: 1.48;
-    }
-
-    .completed-card .purple-btn {
-        min-height: 38px;
-        padding: 8px 14px;
-
-        font-size: 0.68rem;
-    }
-
-
-    /* QUESTION NUMBER */
-
-    .questions-list .question-card .question-number {
-        margin-bottom: 8px;
-
-        font-size: 0.56rem;
-        letter-spacing: 0.07em;
-    }
-
-
-    /* QUESTION TEXT */
-
-    .questions-list .question-card h3 {
-        margin-bottom: 11px;
-
-        font-size: 0.70rem;
-        line-height: 1.42;
-    }
 }
