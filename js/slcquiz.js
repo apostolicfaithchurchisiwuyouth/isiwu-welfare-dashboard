@@ -174,19 +174,11 @@ function createSLCPageLoader() {
 
             padding: 20px;
 
-            background:
-                radial-gradient(
-                    circle at center,
-                    rgba(74, 7, 84, 0.32) 0%,
-                    rgba(10, 0, 22, 0.96) 58%,
-                    #0a0016 100%
-                );
+background: #0a0016;
 
-            backdrop-filter:
-                blur(9px);
+backdrop-filter: none;
 
-            -webkit-backdrop-filter:
-                blur(9px);
+-webkit-backdrop-filter: none;
 
             opacity: 0;
 
