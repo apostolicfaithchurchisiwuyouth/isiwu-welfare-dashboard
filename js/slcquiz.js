@@ -9740,3 +9740,268 @@ document.addEventListener(
 
     }
 );
+
+                selected ||
+                "Not answered";
+
+            const correctText =
+                questionData[`option${String(correct).toUpperCase()}`] ||
+                correct ||
+                "Unavailable";
+
+
+            const card =
+                document.createElement(
+                    "div"
+                );
+
+
+            card.className =
+                "question-card";
+
+
+            card.innerHTML = `
+                <div class="question-number">
+                    QUESTION ${index + 1}
+                </div>
+
+                <h3>
+                    ${escapeHTML(question)}
+                </h3>
+
+                <p>
+                    <strong>
+                        Your answer:
+                    </strong>
+
+                    ${escapeHTML(selected)}
+                    —
+                    ${escapeHTML(selectedText)}
+                </p>
+
+                <p>
+                    <strong>
+                        Correct answer:
+                    </strong>
+
+                    ${escapeHTML(correct)}
+                    —
+                    ${escapeHTML(correctText)}
+                </p>
+
+                <p class="${isCorrect ? "review-correct" : "review-wrong"}">
+                    ${
+                        isCorrect
+                            ? "✓ Correct"
+                            : "✗ Incorrect"
+                    }
+                </p>
+
+            `;
+
+
+            reviewContainer.appendChild(
+                card
+            );
+
+        }
+    );
+
+
+    showElement(
+        "reviewSection"
+    );
+
+
+    hideElement(
+        "resultSection"
+    );
+
+
+    window.scrollTo({
+
+        top: 0,
+
+        behavior: "smooth"
+
+    });
+
+}
+
+
+/* ============================================================
+   HIDE REVIEW
+============================================================ */
+
+function hideReview() {
+
+    hideElement(
+        "reviewSection"
+    );
+
+}
+
+
+/* ============================================================
+   BACK TO QUIZ
+============================================================ */
+
+function backToQuiz() {
+
+    hideElement(
+        "reviewSection"
+    );
+
+    showElement(
+        "quizSection"
+    );
+
+}
+
+
+/* ============================================================
+   OPEN SAVED SCORE
+============================================================ */
+
+function openSavedScore() {
+
+    try {
+
+        const score =
+            localStorage.getItem(
+                LAST_SCORE_KEY
+            );
+
+        const points =
+            localStorage.getItem(
+                LAST_POINTS_KEY
+            );
+
+        const total =
+            localStorage.getItem(
+                LAST_TOTAL_KEY
+            );
+
+
+        if (score !== null) {
+
+            const scoreText =
+                getElement(
+                    "scoreText"
+                );
+
+            if (scoreText) {
+
+                scoreText.textContent =
+                    score;
+
+            }
+
+        }
+
+
+        if (points !== null) {
+
+            const pointsText =
+                getElement(
+                    "pointsText"
+                );
+
+            if (pointsText) {
+
+                pointsText.textContent =
+                    points;
+
+            }
+
+        }
+
+
+        if (total !== null) {
+
+            const totalPointsText =
+                getElement(
+                    "totalPointsText"
+                );
+
+            if (totalPointsText) {
+
+                totalPointsText.textContent =
+                    total;
+
+            }
+
+        }
+
+
+        showElement(
+            "resultSection"
+        );
+
+    }
+    catch (error) {
+
+        console.warn(
+            "Unable to open saved score:",
+            error
+        );
+
+    }
+
+}
+
+
+/* ============================================================
+   OPEN SAVED REVIEW
+============================================================ */
+
+function openSavedReview() {
+
+    try {
+
+        const rawReview =
+            localStorage.getItem(
+                LAST_REVIEW_KEY
+            );
+
+
+        const rawQuestions =
+            localStorage.getItem(
+                LAST_QUESTIONS_KEY
+            );
+
+
+        if (rawQuestions) {
+
+            reviewQuestions =
+                JSON.parse(
+                    rawQuestions
+                );
+
+        }
+
+
+        if (rawReview) {
+
+            reviewData =
+                JSON.parse(
+                    rawReview
+                );
+
+        }
+
+
+        showReview();
+
+    }
+    catch (error) {
+
+        console.warn(
+            "Unable to open saved review:",
+            error
+        );
+
+    }
+
+}
+
