@@ -174,7 +174,7 @@ function createSLCPageLoader() {
 
             padding: 20px;
 
-background: #0a0016;
+background: #fff;
 
 backdrop-filter: none;
 
