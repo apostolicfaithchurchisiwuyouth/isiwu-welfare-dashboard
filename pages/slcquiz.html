@@ -649,105 +649,127 @@
             </section>
 
 
-            <!-- =========================================
-                 QUIZ SECTION
-            ========================================== -->
+  <!-- =========================================
+     QUIZ SECTION
+========================================= -->
 
-            <section
-                id="quizSection"
-                class="quiz-step-section hidden"
-                data-aos="fade-up"
+<section
+    id="quizSection"
+    class="quiz-step-section hidden"
+    data-aos="fade-up"
+>
+
+
+    <!-- =====================================
+         QUIZ UNLOCKED
+    ====================================== -->
+
+    <div class="quiz-ready-card">
+
+        <div class="quiz-ready-icon">
+
+            <i class="fa-solid fa-circle-check"></i>
+
+        </div>
+
+
+        <div>
+
+            <span>
+                QUIZ UNLOCKED
+            </span>
+
+            <h2>
+                You're ready to begin.
+            </h2>
+
+            <p>
+                Your answers are automatically saved on
+                this device while you work.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================
+         QUIZ HEADING
+         
+         Kept separate from the question cards.
+    ====================================== -->
+
+    <div class="questions-header-card">
+
+        <div class="questions-header">
+
+            <div>
+
+                <span>
+                    WEEKLY SLC QUIZ
+                </span>
+
+                <h2>
+                    Answer the questions below
+                </h2>
+
+            </div>
+
+
+            <div
+                id="questionCountBadge"
+                class="question-count-badge"
             >
+                —
+            </div>
 
-                <div class="quiz-ready-card">
+        </div>
 
-                    <div class="quiz-ready-icon">
-
-                        <i class="fa-solid fa-circle-check"></i>
-
-                    </div>
+    </div>
 
 
-                    <div>
+    <!-- =====================================
+         QUESTIONS
+         
+         Each question rendered by slcquiz.js
+         becomes its own separate card.
+    ====================================== -->
 
-                        <span>
-                            QUIZ UNLOCKED
-                        </span>
-
-                        <h2>
-                            You're ready to begin.
-                        </h2>
-
-                        <p>
-                            Your answers are automatically saved on
-                            this device while you work.
-                        </p>
-
-                    </div>
-
-                </div>
+    <div
+        id="questions"
+        class="questions-list"
+    ></div>
 
 
-                <div
-                    id="questionsCard"
-                    class="questions-card"
-                >
+    <!-- =====================================
+         QUIZ SUBMIT AREA
+    ====================================== -->
 
-                    <div class="questions-header">
+    <div class="quiz-submit-area">
 
-                        <div>
-
-                            <span>
-                                WEEKLY SLC QUIZ
-                            </span>
-
-                            <h2>
-                                Answer the questions below
-                            </h2>
-
-                        </div>
+        <p>
+            Make sure every question has been answered
+            before submitting your quiz.
+        </p>
 
 
-                        <div
-                            id="questionCountBadge"
-                            class="question-count-badge"
-                        >
-                            —
-                        </div>
+        <button
+            id="submitBtn"
+            type="button"
+            class="green-btn submit-quiz-btn"
+            onclick="submitQuiz()"
+        >
 
-                    </div>
+            <i class="fa-solid fa-paper-plane"></i>
 
+            Submit Quiz
 
-                    <div id="questions"></div>
+        </button>
 
-
-                    <div class="quiz-submit-area">
-
-                        <p>
-                            Make sure every question has been answered
-                            before submitting your quiz.
-                        </p>
+    </div>
 
 
-                        <button
-                            id="submitBtn"
-                            type="button"
-                            class="green-btn submit-quiz-btn"
-                            onclick="submitQuiz()"
-                        >
-
-                            <i class="fa-solid fa-paper-plane"></i>
-
-                            Submit Quiz
-
-                        </button>
-
-                    </div>
-
-                </div>
-
-            </section>
-
+</section>
 
             <!-- =========================================
                  RESULT SECTION
