@@ -94,6 +94,51 @@ let quizCompleted = false;
 
 
 /* ============================================================
+   SINGLE-ACTION LOCKS
+============================================================ */
+
+/*
+   These locks are extremely important.
+
+   They prevent:
+
+   - Add Name being sent twice
+   - Participant locking twice
+   - Reflection being submitted twice
+   - Quiz being submitted twice
+   - Completion status being checked twice simultaneously
+
+   This is in addition to making the button handlers
+   themselves idempotent.
+*/
+
+let addingMember = false;
+
+let participantLocking = false;
+
+let reflectionSubmitting = false;
+
+let quizSubmitting = false;
+
+let completionCheckInProgress = false;
+
+
+/* ============================================================
+   TRANSITION LOADER STATE
+============================================================ */
+
+let slcTransitionLoader = null;
+
+
+/*
+   Prevent the main initialization routine from being
+   started more than once.
+*/
+
+let slcDomReadyStarted = false;
+
+
+/* ============================================================
    DOM READY
 ============================================================ */
 
@@ -101,15 +146,65 @@ document.addEventListener(
     "DOMContentLoaded",
     async function () {
 
-        if (typeof AOS !== "undefined") {
+        /*
+        Prevent duplicate initialization.
+        */
+
+        if (
+            slcDomReadyStarted
+        ) {
+
+            return;
+
+        }
+
+
+        slcDomReadyStarted =
+            true;
+
+
+        /*
+        Create the transition loader immediately.
+
+        This means the page never sits blank while the
+        quiz state is being determined.
+        */
+
+        createTransitionLoader();
+
+        showTransitionLoader(
+            "Loading your SLC quiz..."
+        );
+
+
+        if (
+            typeof AOS !== "undefined"
+        ) {
 
             AOS.init({
-                duration: 650,
-                once: true
+
+                duration:
+                    650,
+
+                once:
+                    true
+
             });
 
         }
 
+
+        /*
+        IMPORTANT:
+
+        These functions use onclick/onchange/oninput
+        properties rather than repeatedly stacking
+        addEventListener handlers.
+
+        If initialization ever happens again,
+        the old handler is replaced instead of
+        creating another one.
+        */
 
         setupParticipantListeners();
 
@@ -121,7 +216,11 @@ document.addEventListener(
         await loadQuiz();
 
 
-        if (!quizLoaded) {
+        if (
+            !quizLoaded
+        ) {
+
+            hideTransitionLoader();
 
             return;
 
@@ -132,43 +231,508 @@ document.addEventListener(
 
         await restoreQuizSession();
 
+
+        /*
+        If there is no saved participant/session,
+        the normal participant-selection page is ready.
+        */
+
+        if (
+            !selectedMemberId
+        ) {
+
+            hideTransitionLoader();
+
+        }
+
     }
+
 );
+
+
+/* ============================================================
+   TRANSITION LOADER
+============================================================ */
+
+/*
+   The loader is created entirely from JavaScript.
+
+   No modification to slcquiz.html or slcquiz.css is required.
+
+   It is used during:
+
+   - Initial quiz loading
+   - Restoring participant session
+   - Preparing reflection
+   - Preparing quiz
+   - Submitting quiz
+   - Loading results
+============================================================ */
+
+function createTransitionLoader() {
+
+    if (
+        slcTransitionLoader
+    ) {
+
+        return slcTransitionLoader;
+
+    }
+
+
+    /*
+    Reuse an existing loader if one already exists.
+    */
+
+    let loader =
+        document.getElementById(
+            "slcTransitionLoader"
+        );
+
+
+    if (
+        loader
+    ) {
+
+        slcTransitionLoader =
+            loader;
+
+        return loader;
+
+    }
+
+
+    loader =
+        document.createElement(
+            "div"
+        );
+
+
+    loader.id =
+        "slcTransitionLoader";
+
+
+    loader.setAttribute(
+        "role",
+        "status"
+    );
+
+
+    loader.setAttribute(
+        "aria-live",
+        "polite"
+    );
+
+
+    loader.innerHTML = `
+
+        <div class="slc-transition-loader-box">
+
+            <div
+                class="slc-transition-spinner"
+                aria-hidden="true"
+            ></div>
+
+            <div class="slc-transition-loader-title">
+                Please wait
+            </div>
+
+            <div class="slc-transition-loader-message">
+            </div>
+
+        </div>
+
+    `;
+
+
+    /*
+    Add loader styles only once.
+    */
+
+    if (
+        !document.getElementById(
+            "slcTransitionLoaderStyles"
+        )
+    ) {
+
+        const style =
+            document.createElement(
+                "style"
+            );
+
+
+        style.id =
+            "slcTransitionLoaderStyles";
+
+
+        style.textContent = `
+
+            #slcTransitionLoader {
+
+                position: fixed;
+
+                inset: 0;
+
+                z-index: 999999;
+
+                display: none;
+
+                align-items: center;
+
+                justify-content: center;
+
+                padding: 24px;
+
+                background:
+                    rgba(10, 0, 22, 0.94);
+
+                box-sizing: border-box;
+
+            }
+
+
+            #slcTransitionLoader.is-visible {
+
+                display: flex;
+
+            }
+
+
+            .slc-transition-loader-box {
+
+                width:
+                    min(360px, 100%);
+
+                text-align:
+                    center;
+
+                color:
+                    #ffffff;
+
+            }
+
+
+            .slc-transition-spinner {
+
+                width:
+                    46px;
+
+                height:
+                    46px;
+
+                margin:
+                    0 auto 20px;
+
+                border:
+                    4px solid
+                    rgba(255,255,255,0.22);
+
+                border-top-color:
+                    #ffffff;
+
+                border-radius:
+                    50%;
+
+                animation:
+                    slcTransitionSpin
+                    0.8s linear infinite;
+
+            }
+
+
+            .slc-transition-loader-title {
+
+                font-size:
+                    1.05rem;
+
+                font-weight:
+                    700;
+
+                margin-bottom:
+                    8px;
+
+            }
+
+
+            .slc-transition-loader-message {
+
+                font-size:
+                    0.88rem;
+
+                line-height:
+                    1.5;
+
+                opacity:
+                    0.78;
+
+            }
+
+
+            @keyframes slcTransitionSpin {
+
+                to {
+
+                    transform:
+                        rotate(360deg);
+
+                }
+
+            }
+
+        `;
+
+
+        document.head.appendChild(
+            style
+        );
+
+    }
+
+
+    document.body.appendChild(
+        loader
+    );
+
+
+    slcTransitionLoader =
+        loader;
+
+
+    return loader;
+
+}
+
+
+/* ============================================================
+   SHOW TRANSITION LOADER
+============================================================ */
+
+function showTransitionLoader(
+    message
+) {
+
+    const loader =
+        createTransitionLoader();
+
+
+    if (
+        !loader
+    ) {
+
+        return;
+
+    }
+
+
+    const messageElement =
+        loader.querySelector(
+            ".slc-transition-loader-message"
+        );
+
+
+    if (
+        messageElement
+    ) {
+
+        messageElement.textContent =
+            message ||
+            "Loading...";
+
+    }
+
+
+    loader.classList.add(
+        "is-visible"
+    );
+
+
+    /*
+    Prevent the user from interacting with
+    the page underneath the loader.
+    */
+
+    document.body.style.overflow =
+        "hidden";
+
+}
+
+
+/* ============================================================
+   HIDE TRANSITION LOADER
+============================================================ */
+
+function hideTransitionLoader() {
+
+    if (
+        !slcTransitionLoader
+    ) {
+
+        return;
+
+    }
+
+
+    slcTransitionLoader.classList.remove(
+        "is-visible"
+    );
+
+
+    document.body.style.overflow =
+        "";
+
+}
+
+
+/* ============================================================
+   GET SAVED QUIZ STAGE
+============================================================ */
+
+function getSavedQuizStage() {
+
+    try {
+
+        const raw =
+            sessionStorage.getItem(
+                SESSION_KEY
+            );
+
+
+        if (
+            !raw
+        ) {
+
+            return "";
+
+        }
+
+
+        const saved =
+            JSON.parse(
+                raw
+            );
+
+
+        return String(
+            saved?.stage || ""
+        )
+            .trim()
+            .toLowerCase();
+
+    }
+    catch (
+        error
+    ) {
+
+        return "";
+
+    }
+
+}
+
+
+/* ============================================================
+   STAGE LOADER MESSAGE
+============================================================ */
+
+function getStageLoaderMessage(
+    stage
+) {
+
+    switch (
+        String(
+            stage || ""
+        )
+            .trim()
+            .toLowerCase()
+    ) {
+
+        case "reflection":
+
+            return (
+                "Loading your reflection page..."
+            );
+
+
+        case "quiz":
+
+            return (
+                "Loading your quiz..."
+            );
+
+
+        case "completed":
+
+            return (
+                "Loading your completed quiz..."
+            );
+
+
+        default:
+
+            return (
+                "Checking your SLC progress..."
+            );
+
+    }
+
+}
 
 
 /* ============================================================
    DOM HELPERS
 ============================================================ */
 
-function getElement(id) {
+function getElement(
+    id
+) {
 
-    return document.getElementById(id);
+    return document.getElementById(
+        id
+    );
 
 }
 
 
-function showElement(id) {
+function showElement(
+    id
+) {
 
     const element =
-        getElement(id);
+        getElement(
+            id
+        );
 
-    if (element) {
 
-        element.classList.remove("hidden");
+    if (
+        element
+    ) {
+
+        element.classList.remove(
+            "hidden"
+        );
 
     }
 
 }
 
 
-function hideElement(id) {
+function hideElement(
+    id
+) {
 
     const element =
-        getElement(id);
+        getElement(
+            id
+        );
 
-    if (element) {
 
-        element.classList.add("hidden");
+    if (
+        element
+    ) {
+
+        element.classList.add(
+            "hidden"
+        );
 
     }
 
@@ -179,14 +743,33 @@ function hideElement(id) {
    SAFE HTML
 ============================================================ */
 
-function escapeHTML(value) {
+function escapeHTML(
+    value
+) {
 
-    return String(value ?? "")
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+    return String(
+        value ?? ""
+    )
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
 
 }
 
@@ -197,14 +780,28 @@ function escapeHTML(value) {
 
 async function loadQuiz() {
 
+    showTransitionLoader(
+        "Loading this week's SLC quiz..."
+    );
+
+
     const status =
-        getElement("quizStatus");
+        getElement(
+            "quizStatus"
+        );
+
 
     const countdown =
-        getElement("quizCountdown");
+        getElement(
+            "quizCountdown"
+        );
 
 
-    if (!status) {
+    if (
+        !status
+    ) {
+
+        hideTransitionLoader();
 
         return;
 
@@ -223,7 +820,9 @@ async function loadQuiz() {
             );
 
 
-        if (!response.ok) {
+        if (
+            !response.ok
+        ) {
 
             throw new Error(
                 `HTTP ${response.status}`
@@ -247,14 +846,17 @@ async function loadQuiz() {
         ==================================================== */
 
         if (
-            data.status === "closed"
+            data.status ===
+            "closed"
         ) {
 
             status.textContent =
                 "🔒 This week's quiz has closed.";
 
 
-            if (countdown) {
+            if (
+                countdown
+            ) {
 
                 countdown.style.display =
                     "none";
@@ -262,19 +864,32 @@ async function loadQuiz() {
             }
 
 
-            hideElement("participantSection");
+            hideElement(
+                "participantSection"
+            );
 
-            hideElement("lockedParticipantSection");
+            hideElement(
+                "lockedParticipantSection"
+            );
 
-            hideElement("reflectionSection");
+            hideElement(
+                "reflectionSection"
+            );
 
-            hideElement("quizSection");
+            hideElement(
+                "quizSection"
+            );
 
-            hideElement("completedSection");
+            hideElement(
+                "completedSection"
+            );
 
 
             quizLoaded =
                 false;
+
+
+            hideTransitionLoader();
 
 
             return;
@@ -287,25 +902,38 @@ async function loadQuiz() {
         ==================================================== */
 
         if (
-            data.status === "not_open"
+            data.status ===
+            "not_open"
         ) {
 
             status.textContent =
                 "⏳ The weekly SLC quiz opens soon.";
 
 
-            hideElement("participantSection");
+            hideElement(
+                "participantSection"
+            );
 
-            hideElement("lockedParticipantSection");
+            hideElement(
+                "lockedParticipantSection"
+            );
 
-            hideElement("reflectionSection");
+            hideElement(
+                "reflectionSection"
+            );
 
-            hideElement("quizSection");
+            hideElement(
+                "quizSection"
+            );
 
-            hideElement("completedSection");
+            hideElement(
+                "completedSection"
+            );
 
 
-            if (data.openTime) {
+            if (
+                data.openTime
+            ) {
 
                 quizOpenTime =
                     new Date(
@@ -313,13 +941,18 @@ async function loadQuiz() {
                     );
 
 
-                startCountdown("open");
+                startCountdown(
+                    "open"
+                );
 
             }
 
 
             quizLoaded =
                 false;
+
+
+            hideTransitionLoader();
 
 
             return;
@@ -349,6 +982,9 @@ async function loadQuiz() {
                 false;
 
 
+            hideTransitionLoader();
+
+
             return;
 
         }
@@ -359,20 +995,25 @@ async function loadQuiz() {
         ==================================================== */
 
         quizData =
-            Array.isArray(data.questions)
+            Array.isArray(
+                data.questions
+            )
                 ? data.questions
                 : [];
 
 
         selectedLesson =
             String(
-                data.lessonNo || ""
+                data.lessonNo ||
+                ""
             ).trim();
 
 
         quizCloseTime =
             data.closeTime
-                ? new Date(data.closeTime)
+                ? new Date(
+                    data.closeTime
+                )
                 : null;
 
 
@@ -387,6 +1028,7 @@ async function loadQuiz() {
 
         quizCompleted =
             false;
+
 
         reflectionSubmitted =
             false;
@@ -406,7 +1048,9 @@ async function loadQuiz() {
             );
 
 
-        if (questionBadge) {
+        if (
+            questionBadge
+        ) {
 
             questionBadge.textContent =
                 `${quizData.length} Questions`;
@@ -414,9 +1058,13 @@ async function loadQuiz() {
         }
 
 
-        if (quizCloseTime) {
+        if (
+            quizCloseTime
+        ) {
 
-            startCountdown("close");
+            startCountdown(
+                "close"
+            );
 
         }
 
@@ -424,32 +1072,39 @@ async function loadQuiz() {
         /*
         Always begin with participant selection.
 
-        Do NOT show results merely because a quiz
-        is active.
+        The loader remains visible until
+        restoreQuizSession() determines whether
+        we need reflection, quiz, or completed state.
         */
 
         showElement(
             "participantSection"
         );
 
+
         hideElement(
             "lockedParticipantSection"
         );
+
 
         hideElement(
             "reflectionSection"
         );
 
+
         hideElement(
             "quizSection"
         );
+
 
         hideElement(
             "completedSection"
         );
 
     }
-    catch (error) {
+    catch (
+        error
+    ) {
 
         console.error(
             "loadQuiz error:",
@@ -465,6 +1120,9 @@ async function loadQuiz() {
             "participantSection"
         );
 
+
+        hideTransitionLoader();
+
     }
 
 }
@@ -474,7 +1132,9 @@ async function loadQuiz() {
    COUNTDOWN
 ============================================================ */
 
-function startCountdown(mode) {
+function startCountdown(
+    mode
+) {
 
     clearInterval(
         countdownInterval
@@ -487,7 +1147,9 @@ function startCountdown(mode) {
         );
 
 
-    if (!countdown) {
+    if (
+        !countdown
+    ) {
 
         return;
 
@@ -508,11 +1170,14 @@ function startCountdown(mode) {
                         : quizCloseTime;
 
 
-                if (!target) {
+                if (
+                    !target
+                ) {
 
                     clearInterval(
                         countdownInterval
                     );
+
 
                     return;
 
@@ -543,7 +1208,8 @@ function startCountdown(mode) {
 
                 const days =
                     Math.floor(
-                        diff / 86400000
+                        diff /
+                        86400000
                     );
 
 
@@ -586,10 +1252,12 @@ function startCountdown(mode) {
                     }
 
                     <strong>
+
                         ${days}d
                         ${hours}h
                         ${mins}m
                         ${secs}s
+
                     </strong>
 
                 `;
@@ -613,7 +1281,9 @@ async function loadMembers() {
         );
 
 
-    if (!select) {
+    if (
+        !select
+    ) {
 
         return;
 
@@ -623,7 +1293,9 @@ async function loadMembers() {
     select.innerHTML = `
 
         <option value="">
+
             Select your name here
+
         </option>
 
     `;
@@ -637,7 +1309,9 @@ async function loadMembers() {
             );
 
 
-        if (!response.ok) {
+        if (
+            !response.ok
+        ) {
 
             throw new Error(
                 `HTTP ${response.status}`
@@ -652,7 +1326,9 @@ async function loadMembers() {
 
         if (
             !data.success ||
-            !Array.isArray(data.members)
+            !Array.isArray(
+                data.members
+            )
         ) {
 
             return;
@@ -661,7 +1337,9 @@ async function loadMembers() {
 
 
         data.members.forEach(
-            function (member) {
+            function (
+                member
+            ) {
 
                 const option =
                     document.createElement(
@@ -687,7 +1365,9 @@ async function loadMembers() {
         );
 
     }
-    catch (error) {
+    catch (
+        error
+    ) {
 
         console.error(
             "loadMembers error:",
@@ -702,6 +1382,17 @@ async function loadMembers() {
 /* ============================================================
    PARTICIPANT LISTENERS
 ============================================================ */
+
+/*
+   IMPORTANT:
+
+   These use .onchange/.onclick instead of
+   addEventListener().
+
+   That means if setupParticipantListeners()
+   is ever called again, it REPLACES the old
+   handler instead of adding another handler.
+*/
 
 function setupParticipantListeners() {
 
@@ -723,15 +1414,17 @@ function setupParticipantListeners() {
         );
 
 
-    if (select) {
+    if (
+        select
+    ) {
 
-        select.addEventListener(
-            "change",
+        select.onchange =
             function () {
 
                 if (
                     selectedMemberId ||
-                    quizCompleted
+                    quizCompleted ||
+                    participantLocking
                 ) {
 
                     return;
@@ -739,35 +1432,36 @@ function setupParticipantListeners() {
                 }
 
 
-                if (continueBtn) {
+                if (
+                    continueBtn
+                ) {
 
                     continueBtn.disabled =
                         !select.value;
 
                 }
 
-            }
-        );
+            };
 
     }
 
 
-    if (continueBtn) {
+    if (
+        continueBtn
+    ) {
 
-        continueBtn.addEventListener(
-            "click",
-            lockSelectedParticipant
-        );
+        continueBtn.onclick =
+            lockSelectedParticipant;
 
     }
 
 
-    if (addButton) {
+    if (
+        addButton
+    ) {
 
-        addButton.addEventListener(
-            "click",
-            addNewMember
-        );
+        addButton.onclick =
+            addNewMember;
 
     }
 
@@ -780,9 +1474,17 @@ function setupParticipantListeners() {
 
 async function addNewMember() {
 
+    /*
+    SINGLE REQUEST LOCK.
+
+    If the user taps twice before the first
+    request finishes, the second request exits.
+    */
+
     if (
         selectedMemberId ||
-        quizCompleted
+        quizCompleted ||
+        addingMember
     ) {
 
         return;
@@ -823,7 +1525,9 @@ async function addNewMember() {
         input.value.trim();
 
 
-    if (!name) {
+    if (
+        !name
+    ) {
 
         alert(
             "Please enter your name."
@@ -859,6 +1563,14 @@ async function addNewMember() {
         button.innerHTML;
 
 
+    /*
+    LOCK BEFORE FETCH.
+    */
+
+    addingMember =
+        true;
+
+
     button.disabled =
         true;
 
@@ -878,23 +1590,28 @@ async function addNewMember() {
             await fetch(
                 API,
                 {
-                    method: "POST",
 
-                    body: JSON.stringify({
+                    method:
+                        "POST",
 
-                        action:
-                            "addMember",
+                    body:
+                        JSON.stringify({
 
-                        name:
-                            name
+                            action:
+                                "addMember",
 
-                    })
+                            name:
+                                name
+
+                        })
 
                 }
             );
 
 
-        if (!response.ok) {
+        if (
+            !response.ok
+        ) {
 
             throw new Error(
                 `HTTP ${response.status}`
@@ -905,6 +1622,12 @@ async function addNewMember() {
 
         const data =
             await response.json();
+
+
+        console.log(
+            "Add member response:",
+            data
+        );
 
 
         if (
@@ -921,6 +1644,10 @@ async function addNewMember() {
 
         }
 
+
+        /*
+        Reload the member list exactly once.
+        */
 
         await loadMembers();
 
@@ -941,7 +1668,9 @@ async function addNewMember() {
             );
 
 
-        if (continueBtn) {
+        if (
+            continueBtn
+        ) {
 
             continueBtn.disabled =
                 false;
@@ -949,12 +1678,22 @@ async function addNewMember() {
         }
 
 
+        /*
+        SINGLE SUCCESS MESSAGE.
+
+        Because addingMember is locked,
+        another click cannot reach this point
+        simultaneously.
+        */
+
         alert(
             "Your name has been added successfully."
         );
 
     }
-    catch (error) {
+    catch (
+        error
+    ) {
 
         console.error(
             "addNewMember error:",
@@ -968,6 +1707,15 @@ async function addNewMember() {
 
     }
     finally {
+
+        /*
+        Release the lock only after the request
+        has completely finished.
+        */
+
+        addingMember =
+            false;
+
 
         button.disabled =
             false;
@@ -987,9 +1735,14 @@ async function addNewMember() {
 
 async function lockSelectedParticipant() {
 
+    /*
+    SINGLE PARTICIPANT LOCK.
+    */
+
     if (
         selectedMemberId ||
-        quizCompleted
+        quizCompleted ||
+        participantLocking
     ) {
 
         return;
@@ -1003,7 +1756,9 @@ async function lockSelectedParticipant() {
         );
 
 
-    if (!select) {
+    if (
+        !select
+    ) {
 
         return;
 
@@ -1012,11 +1767,14 @@ async function lockSelectedParticipant() {
 
     const memberId =
         String(
-            select.value || ""
+            select.value ||
+            ""
         ).trim();
 
 
-    if (!memberId) {
+    if (
+        !memberId
+    ) {
 
         alert(
             "Please select your name first."
@@ -1040,7 +1798,9 @@ async function lockSelectedParticipant() {
             : "";
 
 
-    if (!memberName) {
+    if (
+        !memberName
+    ) {
 
         alert(
             "Unable to identify the selected participant."
@@ -1053,9 +1813,18 @@ async function lockSelectedParticipant() {
 
 
     /*
-    Set the participant only after we have
-    confirmed that the selection is valid.
+    LOCK THE OPERATION BEFORE CHANGING
+    THE PAGE OR STARTING THE BACKEND CHECK.
     */
+
+    participantLocking =
+        true;
+
+
+    showTransitionLoader(
+        "Preparing your SLC experience..."
+    );
+
 
     selectedMemberId =
         memberId;
@@ -1079,7 +1848,9 @@ async function lockSelectedParticipant() {
         );
 
 
-    if (input) {
+    if (
+        input
+    ) {
 
         input.disabled =
             true;
@@ -1093,7 +1864,9 @@ async function lockSelectedParticipant() {
         );
 
 
-    if (addButton) {
+    if (
+        addButton
+    ) {
 
         addButton.disabled =
             true;
@@ -1107,7 +1880,9 @@ async function lockSelectedParticipant() {
         );
 
 
-    if (continueBtn) {
+    if (
+        continueBtn
+    ) {
 
         continueBtn.disabled =
             true;
@@ -1121,7 +1896,9 @@ async function lockSelectedParticipant() {
         );
 
 
-    if (lockedName) {
+    if (
+        lockedName
+    ) {
 
         lockedName.textContent =
             selectedMemberName;
@@ -1139,7 +1916,17 @@ async function lockSelectedParticipant() {
     );
 
 
-    saveQuizSession();
+    /*
+    Save the stage BEFORE checking the backend.
+
+    If the user leaves now, the next page load
+    knows that this participant had reached the
+    restoration/checking stage.
+    */
+
+    saveQuizSession(
+        "checking"
+    );
 
 
     /*
@@ -1148,7 +1935,6 @@ async function lockSelectedParticipant() {
     The backend now checks THIS participant
     against THIS lesson.
     */
-
 
     await checkCompletionStatus();
 
@@ -1159,7 +1945,9 @@ async function lockSelectedParticipant() {
    SAVE QUIZ SESSION
 ============================================================ */
 
-function saveQuizSession() {
+function saveQuizSession(
+    stage
+) {
 
     if (
         !selectedMemberId ||
@@ -1182,6 +1970,12 @@ function saveQuizSession() {
         lessonNo:
             selectedLesson,
 
+        stage:
+            String(
+                stage ||
+                "checking"
+            ).trim(),
+
         savedAt:
             new Date().toISOString()
 
@@ -1192,11 +1986,15 @@ function saveQuizSession() {
 
         sessionStorage.setItem(
             SESSION_KEY,
-            JSON.stringify(session)
+            JSON.stringify(
+                session
+            )
         );
 
     }
-    catch (error) {
+    catch (
+        error
+    ) {
 
         console.warn(
             "Unable to save quiz session:",
@@ -1235,7 +2033,9 @@ async function restoreQuizSession() {
             );
 
 
-        if (!raw) {
+        if (
+            !raw
+        ) {
 
             return;
 
@@ -1243,10 +2043,14 @@ async function restoreQuizSession() {
 
 
         saved =
-            JSON.parse(raw);
+            JSON.parse(
+                raw
+            );
 
     }
-    catch (error) {
+    catch (
+        error
+    ) {
 
         console.warn(
             "Invalid saved quiz session.",
@@ -1273,9 +2077,13 @@ async function restoreQuizSession() {
 
     if (
         !saved ||
-        String(saved.lessonNo).trim()
+        String(
+            saved.lessonNo
+        ).trim()
         !==
-        String(selectedLesson).trim()
+        String(
+            selectedLesson
+        ).trim()
     ) {
 
         sessionStorage.removeItem(
@@ -1288,7 +2096,9 @@ async function restoreQuizSession() {
     }
 
 
-    if (!saved.memberId) {
+    if (
+        !saved.memberId
+    ) {
 
         return;
 
@@ -1301,7 +2111,9 @@ async function restoreQuizSession() {
         );
 
 
-    if (!select) {
+    if (
+        !select
+    ) {
 
         return;
 
@@ -1312,18 +2124,26 @@ async function restoreQuizSession() {
         Array.from(
             select.options
         ).find(
-            function (item) {
+            function (
+                item
+            ) {
 
                 return (
-                    String(item.value) ===
-                    String(saved.memberId)
+                    String(
+                        item.value
+                    ) ===
+                    String(
+                        saved.memberId
+                    )
                 );
 
             }
         );
 
 
-    if (!option) {
+    if (
+        !option
+    ) {
 
         sessionStorage.removeItem(
             SESSION_KEY
@@ -1349,13 +2169,30 @@ async function restoreQuizSession() {
         ).trim();
 
 
+    /*
+    Show the correct loader based on where
+    the participant was last recorded.
+
+    Backend will still verify the real state.
+    */
+
+    showTransitionLoader(
+        getStageLoaderMessage(
+            saved.stage ||
+            "checking"
+        )
+    );
+
+
     const lockedName =
         getElement(
             "lockedMemberName"
         );
 
 
-    if (lockedName) {
+    if (
+        lockedName
+    ) {
 
         lockedName.textContent =
             selectedMemberName;
@@ -1373,7 +2210,9 @@ async function restoreQuizSession() {
         );
 
 
-    if (input) {
+    if (
+        input
+    ) {
 
         input.disabled =
             true;
@@ -1387,7 +2226,9 @@ async function restoreQuizSession() {
         );
 
 
-    if (addButton) {
+    if (
+        addButton
+    ) {
 
         addButton.disabled =
             true;
@@ -1401,7 +2242,9 @@ async function restoreQuizSession() {
         );
 
 
-    if (continueBtn) {
+    if (
+        continueBtn
+    ) {
 
         continueBtn.disabled =
             true;
@@ -1420,8 +2263,8 @@ async function restoreQuizSession() {
 
 
     /*
-    NEVER assume that the saved session means
-    the quiz was completed.
+    NEVER assume the saved session means the
+    quiz was completed.
 
     Ask the backend again.
     */
@@ -1437,14 +2280,38 @@ async function restoreQuizSession() {
 
 async function checkCompletionStatus() {
 
+    /*
+    Prevent simultaneous status checks.
+
+    This is especially important when restoring
+    a session or when a user acts quickly.
+    */
+
     if (
         !selectedMemberId ||
-        !selectedLesson
+        !selectedLesson ||
+        completionCheckInProgress
     ) {
 
         return;
 
     }
+
+
+    completionCheckInProgress =
+        true;
+
+
+    /*
+    Keep the loader visible while the backend
+    determines the user's exact stage.
+    */
+
+    showTransitionLoader(
+        getStageLoaderMessage(
+            getSavedQuizStage()
+        )
+    );
 
 
     const reflectionMessage =
@@ -1453,7 +2320,9 @@ async function checkCompletionStatus() {
         );
 
 
-    if (reflectionMessage) {
+    if (
+        reflectionMessage
+    ) {
 
         reflectionMessage.className =
             "reflection-message show";
@@ -1473,7 +2342,9 @@ async function checkCompletionStatus() {
             );
 
 
-        if (!response.ok) {
+        if (
+            !response.ok
+        ) {
 
             throw new Error(
                 `HTTP ${response.status}`
@@ -1489,6 +2360,7 @@ async function checkCompletionStatus() {
         console.log(
             "SLC completion status for current lesson:",
             {
+
                 memberId:
                     selectedMemberId,
 
@@ -1497,6 +2369,7 @@ async function checkCompletionStatus() {
 
                 response:
                     data
+
             }
         );
 
@@ -1505,7 +2378,9 @@ async function checkCompletionStatus() {
             !data.success
         ) {
 
-            if (reflectionMessage) {
+            if (
+                reflectionMessage
+            ) {
 
                 reflectionMessage.className =
                     "reflection-message show error";
@@ -1518,6 +2393,17 @@ async function checkCompletionStatus() {
             }
 
 
+            completionCheckInProgress =
+                false;
+
+
+            participantLocking =
+                false;
+
+
+            hideTransitionLoader();
+
+
             return;
 
         }
@@ -1528,16 +2414,10 @@ async function checkCompletionStatus() {
         CRITICAL RULE
         ========================================================
 
-        ONLY this value decides whether the participant
-        has already completed the CURRENT lesson.
+        ONLY these current-lesson values decide
+        what happens.
 
-        We intentionally DO NOT use:
-
-            data.completed
-
-        because a generic "completed" flag can represent
-        a broader completion state and must never cause an
-        older lesson to block the current lesson.
+        Previous lessons do not block this lesson.
         */
 
 
@@ -1568,9 +2448,25 @@ async function checkCompletionStatus() {
             clearQuizSession();
 
 
+            showTransitionLoader(
+                "Loading your completed quiz..."
+            );
+
+
             showCompletedState(
                 data
             );
+
+
+            completionCheckInProgress =
+                false;
+
+
+            participantLocking =
+                false;
+
+
+            hideTransitionLoader();
 
 
             return;
@@ -1594,10 +2490,25 @@ async function checkCompletionStatus() {
                 true;
 
 
-            saveQuizSession();
+            saveQuizSession(
+                "quiz"
+            );
+
+
+            showTransitionLoader(
+                "Loading your quiz..."
+            );
 
 
             unlockQuiz();
+
+
+            completionCheckInProgress =
+                false;
+
+
+            participantLocking =
+                false;
 
 
             return;
@@ -1617,7 +2528,14 @@ async function checkCompletionStatus() {
             false;
 
 
-        saveQuizSession();
+        saveQuizSession(
+            "reflection"
+        );
+
+
+        showTransitionLoader(
+            "Loading your reflection page..."
+        );
 
 
         showElement(
@@ -1635,7 +2553,9 @@ async function checkCompletionStatus() {
         );
 
 
-        if (reflectionMessage) {
+        if (
+            reflectionMessage
+        ) {
 
             reflectionMessage.className =
                 "reflection-message";
@@ -1649,8 +2569,21 @@ async function checkCompletionStatus() {
 
         updateReflectionProgress();
 
+
+        completionCheckInProgress =
+            false;
+
+
+        participantLocking =
+            false;
+
+
+        hideTransitionLoader();
+
     }
-    catch (error) {
+    catch (
+        error
+    ) {
 
         console.error(
             "checkCompletionStatus error:",
@@ -1658,7 +2591,9 @@ async function checkCompletionStatus() {
         );
 
 
-        if (reflectionMessage) {
+        if (
+            reflectionMessage
+        ) {
 
             reflectionMessage.className =
                 "reflection-message show error";
@@ -1669,6 +2604,17 @@ async function checkCompletionStatus() {
 
         }
 
+
+        completionCheckInProgress =
+            false;
+
+
+        participantLocking =
+            false;
+
+
+        hideTransitionLoader();
+
     }
 
 }
@@ -1678,7 +2624,9 @@ async function checkCompletionStatus() {
    SHOW COMPLETED STATE
 ============================================================ */
 
-function showCompletedState(data) {
+function showCompletedState(
+    data
+) {
 
     hideElement(
         "participantSection"
@@ -1700,13 +2648,26 @@ function showCompletedState(data) {
     );
 
 
-    const completedSection =
+    let completedSection =
         getElement(
             "completedSection"
         );
 
 
-    if (!completedSection) {
+    /*
+    If HTML does not already contain the
+    completed section, create it once.
+
+    IMPORTANT:
+
+    Before creating it, we check for the element
+    again. This prevents duplicate completed
+    cards from ever being created.
+    */
+
+    if (
+        !completedSection
+    ) {
 
         const container =
             document.querySelector(
@@ -1714,28 +2675,30 @@ function showCompletedState(data) {
             );
 
 
-        if (!container) {
+        if (
+            !container
+        ) {
 
             return;
 
         }
 
 
-        const card =
+        completedSection =
             document.createElement(
                 "section"
             );
 
 
-        card.id =
+        completedSection.id =
             "completedSection";
 
 
-        card.className =
+        completedSection.className =
             "quiz-card completed-card";
 
 
-        card.innerHTML = `
+        completedSection.innerHTML = `
 
             <div class="completed-icon">
 
@@ -1745,7 +2708,9 @@ function showCompletedState(data) {
 
 
             <h2>
+
                 You've already completed this quiz
+
             </h2>
 
 
@@ -1766,8 +2731,11 @@ function showCompletedState(data) {
             >
 
                 <span>
+
                     View My Results
+
                 </span>
+
 
                 <i class="fa-solid fa-arrow-right"></i>
 
@@ -1777,11 +2745,8 @@ function showCompletedState(data) {
 
 
         container.appendChild(
-            card
+            completedSection
         );
-
-
-        return;
 
     }
 
@@ -1792,7 +2757,9 @@ function showCompletedState(data) {
         );
 
 
-    if (completedLesson) {
+    if (
+        completedLesson
+    ) {
 
         completedLesson.textContent =
             selectedLesson;
@@ -1806,8 +2773,13 @@ function showCompletedState(data) {
 
 
     window.scrollTo({
-        top: 0,
-        behavior: "smooth"
+
+        top:
+            0,
+
+        behavior:
+            "smooth"
+
     });
 
 }
@@ -1826,7 +2798,9 @@ function clearQuizSession() {
         );
 
     }
-    catch (error) {
+    catch (
+        error
+    ) {
 
         console.warn(
             "Unable to clear session:",
@@ -1842,6 +2816,11 @@ function clearQuizSession() {
    REFLECTION LISTENERS
 ============================================================ */
 
+/*
+   These use .oninput/.onclick so they can never
+   stack another handler on top of an existing one.
+*/
+
 function setupReflectionListeners() {
 
     const ids = [
@@ -1856,23 +2835,27 @@ function setupReflectionListeners() {
 
 
     ids.forEach(
-        function (id) {
+        function (
+            id
+        ) {
 
             const field =
-                getElement(id);
+                getElement(
+                    id
+                );
 
 
-            if (!field) {
+            if (
+                !field
+            ) {
 
                 return;
 
             }
 
 
-            field.addEventListener(
-                "input",
-                updateReflectionProgress
-            );
+            field.oninput =
+                updateReflectionProgress;
 
         }
     );
@@ -1884,12 +2867,12 @@ function setupReflectionListeners() {
         );
 
 
-    if (button) {
+    if (
+        button
+    ) {
 
-        button.addEventListener(
-            "click",
-            submitReflection
-        );
+        button.onclick =
+            submitReflection;
 
     }
 
@@ -1900,10 +2883,17 @@ function setupReflectionListeners() {
    CLEAN REFLECTION TEXT
 ============================================================ */
 
-function cleanReflectionText(text) {
+function cleanReflectionText(
+    text
+) {
 
-    return String(text || "")
-        .replace(/\s+/g, " ")
+    return String(
+        text || ""
+    )
+        .replace(
+            /\s+/g,
+            " "
+        )
         .trim();
 
 }
@@ -1927,10 +2917,15 @@ function getReflectionCharacterCount() {
 
 
     return fields.reduce(
-        function (total, id) {
+        function (
+            total,
+            id
+        ) {
 
             const field =
-                getElement(id);
+                getElement(
+                    id
+                );
 
 
             const text =
@@ -1944,7 +2939,10 @@ function getReflectionCharacterCount() {
             return (
                 total +
                 text
-                    .replace(/\s/g, "")
+                    .replace(
+                        /\s/g,
+                        ""
+                    )
                     .length
             );
 
@@ -2063,7 +3061,9 @@ function updateReflectionProgress() {
         ).length;
 
 
-    if (countDisplay) {
+    if (
+        countDisplay
+    ) {
 
         countDisplay.textContent =
             `${count} / ${REFLECTION_MIN_CHARACTERS} characters`;
@@ -2071,7 +3071,9 @@ function updateReflectionProgress() {
     }
 
 
-    if (progressBar) {
+    if (
+        progressBar
+    ) {
 
         const percentage =
             Math.min(
@@ -2096,7 +3098,9 @@ function updateReflectionProgress() {
         reflectionRequirementsMet();
 
 
-    if (button) {
+    if (
+        button
+    ) {
 
         button.disabled =
             !ready;
@@ -2104,9 +3108,13 @@ function updateReflectionProgress() {
     }
 
 
-    if (requirementText) {
+    if (
+        requirementText
+    ) {
 
-        if (ready) {
+        if (
+            ready
+        ) {
 
             requirementText.textContent =
                 "You're ready. Submit your reflection to unlock the quiz.";
@@ -2146,9 +3154,18 @@ function updateReflectionProgress() {
 
 async function submitReflection() {
 
+    /*
+    SINGLE REFLECTION SUBMISSION LOCK.
+
+    This is separate from the button's disabled
+    state because a second click can happen before
+    the browser visually updates the button.
+    */
+
     if (
         reflectionSubmitted ||
-        quizCompleted
+        quizCompleted ||
+        reflectionSubmitting
     ) {
 
         return;
@@ -2156,7 +3173,9 @@ async function submitReflection() {
     }
 
 
-    if (!selectedMemberId) {
+    if (
+        !selectedMemberId
+    ) {
 
         alert(
             "Please select your name first."
@@ -2168,7 +3187,9 @@ async function submitReflection() {
     }
 
 
-    if (!selectedLesson) {
+    if (
+        !selectedLesson
+    ) {
 
         alert(
             "The current quiz lesson could not be identified."
@@ -2180,7 +3201,9 @@ async function submitReflection() {
     }
 
 
-    if (!reflectionRequirementsMet()) {
+    if (
+        !reflectionRequirementsMet()
+    ) {
 
         updateReflectionProgress();
 
@@ -2193,6 +3216,19 @@ async function submitReflection() {
         return;
 
     }
+
+
+    /*
+    LOCK BEFORE FETCH.
+    */
+
+    reflectionSubmitting =
+        true;
+
+
+    showTransitionLoader(
+        "Saving your reflection..."
+    );
 
 
     const answer1 =
@@ -2231,7 +3267,9 @@ async function submitReflection() {
         );
 
 
-    if (button) {
+    if (
+        button
+    ) {
 
         button.disabled =
             true;
@@ -2248,7 +3286,9 @@ async function submitReflection() {
     }
 
 
-    if (message) {
+    if (
+        message
+    ) {
 
         message.className =
             "reflection-message show";
@@ -2266,35 +3306,40 @@ async function submitReflection() {
             await fetch(
                 API,
                 {
-                    method: "POST",
 
-                    body: JSON.stringify({
+                    method:
+                        "POST",
 
-                        action:
-                            "submitReflection",
+                    body:
+                        JSON.stringify({
 
-                        memberId:
-                            selectedMemberId,
+                            action:
+                                "submitReflection",
 
-                        lessonNo:
-                            selectedLesson,
+                            memberId:
+                                selectedMemberId,
 
-                        question1:
-                            answer1,
+                            lessonNo:
+                                selectedLesson,
 
-                        question2:
-                            answer2,
+                            question1:
+                                answer1,
 
-                        question3:
-                            answer3
+                            question2:
+                                answer2,
 
-                    })
+                            question3:
+                                answer3
+
+                        })
 
                 }
             );
 
 
-        if (!response.ok) {
+        if (
+            !response.ok
+        ) {
 
             throw new Error(
                 `HTTP ${response.status}`
@@ -2314,16 +3359,12 @@ async function submitReflection() {
 
 
         /*
-        Another tab/device may have completed
-        the reflection already.
+        If another request/tab already saved
+        the reflection, we do NOT submit another
+        reflection.
 
-        That does NOT mean the quiz was completed.
-
-        Therefore unlock the quiz and let the backend
-        decide whether the quiz itself has already
-        been attempted.
+        We simply continue to the quiz.
         */
-
 
         if (
             data.status ===
@@ -2334,10 +3375,21 @@ async function submitReflection() {
                 true;
 
 
-            saveQuizSession();
+            saveQuizSession(
+                "quiz"
+            );
+
+
+            showTransitionLoader(
+                "Loading your quiz..."
+            );
 
 
             unlockQuiz();
+
+
+            reflectionSubmitting =
+                false;
 
 
             return;
@@ -2349,7 +3401,9 @@ async function submitReflection() {
             !data.success
         ) {
 
-            if (message) {
+            if (
+                message
+            ) {
 
                 message.className =
                     "reflection-message show error";
@@ -2365,19 +3419,40 @@ async function submitReflection() {
             restoreReflectionButton();
 
 
+            reflectionSubmitting =
+                false;
+
+
+            hideTransitionLoader();
+
+
             return;
 
         }
 
 
+        /*
+        Reflection has now been successfully
+        recorded ONCE.
+        */
+
         reflectionSubmitted =
             true;
 
 
-        saveQuizSession();
+        saveQuizSession(
+            "quiz"
+        );
 
 
-        if (message) {
+        showTransitionLoader(
+            "Loading your quiz..."
+        );
+
+
+        if (
+            message
+        ) {
 
             message.className =
                 "reflection-message show success";
@@ -2389,17 +3464,26 @@ async function submitReflection() {
         }
 
 
+        /*
+        Keep the existing small transition delay.
+        */
+
         setTimeout(
             function () {
 
                 unlockQuiz();
+
+                reflectionSubmitting =
+                    false;
 
             },
             500
         );
 
     }
-    catch (error) {
+    catch (
+        error
+    ) {
 
         console.error(
             "submitReflection error:",
@@ -2407,7 +3491,9 @@ async function submitReflection() {
         );
 
 
-        if (message) {
+        if (
+            message
+        ) {
 
             message.className =
                 "reflection-message show error";
@@ -2420,6 +3506,13 @@ async function submitReflection() {
 
 
         restoreReflectionButton();
+
+
+        reflectionSubmitting =
+            false;
+
+
+        hideTransitionLoader();
 
     }
 
@@ -2438,7 +3531,9 @@ function restoreReflectionButton() {
         );
 
 
-    if (!button) {
+    if (
+        !button
+    ) {
 
         return;
 
@@ -2452,7 +3547,9 @@ function restoreReflectionButton() {
     button.innerHTML = `
 
         <span>
+
             Submit Reflection
+
         </span>
 
         <i class="fa-solid fa-arrow-right"></i>
@@ -2487,7 +3584,17 @@ function unlockQuiz() {
         false;
 
 
-    saveQuizSession();
+    /*
+    Remember that the participant is now
+    at the quiz stage.
+
+    If the page is left, the next visit
+    can display the correct loader.
+    */
+
+    saveQuizSession(
+        "quiz"
+    );
 
 
     const lockedName =
@@ -2496,7 +3603,9 @@ function unlockQuiz() {
         );
 
 
-    if (lockedName) {
+    if (
+        lockedName
+    ) {
 
         lockedName.textContent =
             selectedMemberName;
@@ -2532,6 +3641,14 @@ function unlockQuiz() {
     );
 
 
+    /*
+    Quiz is now actually visible,
+    so the transition loader can disappear.
+    */
+
+    hideTransitionLoader();
+
+
     setTimeout(
         function () {
 
@@ -2541,7 +3658,9 @@ function unlockQuiz() {
                 );
 
 
-            if (quiz) {
+            if (
+                quiz
+            ) {
 
                 quiz.scrollIntoView({
 
@@ -2574,7 +3693,9 @@ function renderQuestions() {
         );
 
 
-    if (!container) {
+    if (
+        !container
+    ) {
 
         return;
 
@@ -2594,7 +3715,9 @@ function renderQuestions() {
             <div class="question-card">
 
                 <h3>
+
                     No quiz questions are available right now.
+
                 </h3>
 
             </div>
@@ -2618,13 +3741,19 @@ function renderQuestions() {
 
 
             [
+
                 "A",
+
                 "B",
+
                 "C",
+
                 "D"
 
             ].forEach(
-                function (letter) {
+                function (
+                    letter
+                ) {
 
                     const text =
                         question[
@@ -2632,7 +3761,9 @@ function renderQuestions() {
                         ];
 
 
-                    if (!text) {
+                    if (
+                        !text
+                    ) {
 
                         return;
 
@@ -2652,7 +3783,9 @@ function renderQuestions() {
                             <span>
 
                                 <strong>
+
                                     ${escapeHTML(letter)}.
+
                                 </strong>
 
                                 ${escapeHTML(text)}
@@ -2677,6 +3810,7 @@ function renderQuestions() {
 
                     </div>
 
+
                     <h3>
 
                         ${escapeHTML(
@@ -2684,6 +3818,7 @@ function renderQuestions() {
                         )}
 
                     </h3>
+
 
                     <div class="options">
 
@@ -2705,13 +3840,24 @@ function renderQuestions() {
    QUIZ LISTENERS
 ============================================================ */
 
+/*
+   Use onclick instead of repeatedly attaching
+   click listeners.
+
+   This makes the submit handler single.
+*/
+
 function setupQuizListeners() {
 
     const submitBtn =
-        getElement("submitBtn");
+        getElement(
+            "submitBtn"
+        );
 
 
-    if (!submitBtn) {
+    if (
+        !submitBtn
+    ) {
 
         console.warn(
             "submitBtn was not found on the page."
@@ -2723,10 +3869,8 @@ function setupQuizListeners() {
     }
 
 
-    submitBtn.addEventListener(
-        "click",
-        submitQuiz
-    );
+    submitBtn.onclick =
+        submitQuiz;
 
 }
 
@@ -2737,8 +3881,23 @@ function setupQuizListeners() {
 
 async function submitQuiz() {
 
+    /*
+    ============================================================
+    SINGLE QUIZ SUBMISSION LOCK
+    ============================================================
+
+    This is the main protection against:
+
+    - double clicking Submit Quiz
+    - mobile double tapping
+    - repeated event execution
+    - duplicate score records
+    - duplicate result processing
+    */
+
     if (
-        quizCompleted
+        quizCompleted ||
+        quizSubmitting
     ) {
 
         return;
@@ -2746,7 +3905,9 @@ async function submitQuiz() {
     }
 
 
-    if (!selectedMemberId) {
+    if (
+        !selectedMemberId
+    ) {
 
         alert(
             "Your participant has not been selected."
@@ -2758,7 +3919,9 @@ async function submitQuiz() {
     }
 
 
-    if (!reflectionSubmitted) {
+    if (
+        !reflectionSubmitted
+    ) {
 
         alert(
             "Please complete the reflection before taking the quiz."
@@ -2770,7 +3933,9 @@ async function submitQuiz() {
     }
 
 
-    if (!selectedLesson) {
+    if (
+        !selectedLesson
+    ) {
 
         alert(
             "The current quiz lesson could not be identified."
@@ -2783,30 +3948,17 @@ async function submitQuiz() {
 
 
     /*
-    IMPORTANT:
+    ============================================================
+    ANSWERS
+    ============================================================
 
-    The backend expects answers keyed by the
-    actual question number.
+    The backend expects the actual question number.
 
     Question 1 → answers[1]
     Question 2 → answers[2]
     Question 3 → answers[3]
 
-    The previous version sent a zero-based array:
-
-        [ "B", "A", "C" ]
-
-    which could cause the backend to associate
-    the selected answers with the wrong questions.
-
-    We now send:
-
-        {
-            1: "B",
-            2: "A",
-            3: "C"
-        }
-
+    Therefore we deliberately use i + 1.
     */
 
     const answers = {};
@@ -2824,7 +3976,9 @@ async function submitQuiz() {
             );
 
 
-        if (!selected) {
+        if (
+            !selected
+        ) {
 
             alert(
                 `Please answer question ${i + 1}.`
@@ -2860,17 +4014,28 @@ async function submitQuiz() {
 
 
         /*
-        QUESTION NUMBER IS ONE-BASED.
-
-        i = 0 → Question 1
-        i = 1 → Question 2
-        i = 2 → Question 3
+        ONE-BASED QUESTION NUMBER.
         */
 
-        answers[i + 1] =
+        answers[
+            i + 1
+        ] =
             selected.value;
 
     }
+
+
+    /*
+    LOCK THE QUIZ BEFORE STARTING THE REQUEST.
+    */
+
+    quizSubmitting =
+        true;
+
+
+    showTransitionLoader(
+        "Submitting your quiz..."
+    );
 
 
     const submitBtn =
@@ -2879,7 +4044,9 @@ async function submitQuiz() {
         );
 
 
-    if (submitBtn) {
+    if (
+        submitBtn
+    ) {
 
         submitBtn.disabled =
             true;
@@ -2902,34 +4069,39 @@ async function submitQuiz() {
             await fetch(
                 API,
                 {
-                    method: "POST",
 
-                    body: JSON.stringify({
+                    method:
+                        "POST",
 
-                        action:
-                            "scoreQuiz",
+                    body:
+                        JSON.stringify({
 
-                        memberId:
-                            selectedMemberId,
+                            action:
+                                "scoreQuiz",
 
-                        lessonNo:
-                            selectedLesson,
+                            memberId:
+                                selectedMemberId,
 
-                        /*
-                        Send the corrected one-based
-                        question-number object.
-                        */
+                            lessonNo:
+                                selectedLesson,
 
-                        answers:
-                            answers
+                            /*
+                            Send the corrected one-based
+                            question-number object.
+                            */
 
-                    })
+                            answers:
+                                answers
+
+                        })
 
                 }
             );
 
 
-        if (!response.ok) {
+        if (
+            !response.ok
+        ) {
 
             throw new Error(
                 `HTTP ${response.status}`
@@ -2962,6 +4134,11 @@ async function submitQuiz() {
 
 
             clearQuizSession();
+
+
+            showTransitionLoader(
+                "Loading your results..."
+            );
 
 
             alert(
@@ -3002,6 +4179,15 @@ async function submitQuiz() {
             );
 
 
+            /*
+            Reset the quiz submission lock because
+            this request did not submit the quiz.
+            */
+
+            quizSubmitting =
+                false;
+
+
             await checkCompletionStatus();
 
 
@@ -3012,6 +4198,9 @@ async function submitQuiz() {
 
 
             restoreQuizSubmitButton();
+
+
+            hideTransitionLoader();
 
 
             return;
@@ -3036,6 +4225,13 @@ async function submitQuiz() {
             restoreQuizSubmitButton();
 
 
+            quizSubmitting =
+                false;
+
+
+            hideTransitionLoader();
+
+
             return;
 
         }
@@ -3044,6 +4240,13 @@ async function submitQuiz() {
         /* ====================================================
            SUCCESS
         ==================================================== */
+
+        /*
+        Mark completed BEFORE redirecting.
+
+        This means another click cannot trigger
+        another submission during the transition.
+        */
 
         quizCompleted =
             true;
@@ -3056,17 +4259,23 @@ async function submitQuiz() {
         clearQuizSession();
 
 
+        showTransitionLoader(
+            "Quiz submitted successfully. Loading your results..."
+        );
+
+
         /*
         Results page handles the actual score,
         history and answer review.
         */
 
-
         window.location.href =
             `results.html?memberId=${encodeURIComponent(selectedMemberId)}&lessonNo=${encodeURIComponent(selectedLesson)}&completed=1`;
 
     }
-    catch (error) {
+    catch (
+        error
+    ) {
 
         console.error(
             "submitQuiz error:",
@@ -3080,6 +4289,13 @@ async function submitQuiz() {
 
 
         restoreQuizSubmitButton();
+
+
+        quizSubmitting =
+            false;
+
+
+        hideTransitionLoader();
 
     }
 
@@ -3098,7 +4314,9 @@ function restoreQuizSubmitButton() {
         );
 
 
-    if (!submitBtn) {
+    if (
+        !submitBtn
+    ) {
 
         return;
 
