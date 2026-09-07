@@ -214,7 +214,7 @@
 
     color: #4a0754;
 
-    font-size: .68rem;
+    font-size: .66rem;
     font-weight: 800;
     letter-spacing: .06em;
 }
@@ -224,7 +224,7 @@
 
     font-family: "Bricolage Grotesque", sans-serif;
 
-    font-size: .72rem;
+    font-size: .70rem;
     font-weight: 700;
 }
 
@@ -249,7 +249,7 @@
 
     color: #ffffff;
 
-    font-size: 1rem;
+    font-size: .95rem;
 
     box-shadow:
         0 10px 24px rgba(74, 7, 84, .16);
@@ -274,7 +274,7 @@
 
     color: #ea580c;
 
-    font-size: .67rem;
+    font-size: .64rem;
     font-weight: 800;
     letter-spacing: .09em;
 }
@@ -284,7 +284,7 @@
 
     color: #111827;
 
-    font-size: clamp(1.6rem, 3.5vw, 2.45rem);
+    font-size: clamp(1.5rem, 3.3vw, 2.3rem);
 
     line-height: 1.08;
 
@@ -306,7 +306,7 @@
 
     color: #6b7280;
 
-    font-size: .78rem;
+    font-size: .76rem;
 
     line-height: 1.45;
 }
@@ -340,7 +340,7 @@
 
     font-family: "DM Sans", sans-serif;
 
-    font-size: .74rem;
+    font-size: .72rem;
 }
 
 .quiz-status {
@@ -483,7 +483,7 @@
 
     color: #ea580c;
 
-    font-size: 1rem;
+    font-size: .95rem;
 }
 
 .section-heading > div:last-child > span {
@@ -493,7 +493,7 @@
 
     color: #ea580c;
 
-    font-size: .72rem;
+    font-size: .69rem;
     font-weight: 800;
     letter-spacing: .08em;
 }
@@ -503,7 +503,7 @@
 
     color: #111827;
 
-    font-size: 1.35rem;
+    font-size: 1.28rem;
 
     line-height: 1.18;
 
@@ -515,7 +515,7 @@
 
     color: #6b7280;
 
-    font-size: .82rem;
+    font-size: .79rem;
 
     line-height: 1.4;
 }
@@ -528,13 +528,13 @@
 .member-box {
     display: grid;
 
-    gap: 15px;
+    gap: 14px;
 }
 
 .field-label {
     color: #374151;
 
-    font-size: .82rem;
+    font-size: .75rem;
 
     font-weight: 700;
 }
@@ -543,11 +543,11 @@
 .member-box input {
     width: 100%;
 
-    min-height: 55px;
+    min-height: 52px;
 
-    padding: 0 17px;
+    padding: 0 15px;
 
-    border-radius: 16px;
+    border-radius: 15px;
 
     border: 1px solid #e1e6ec;
 
@@ -557,7 +557,7 @@
 
     outline: none;
 
-    font-size: .82rem;
+    font-size: .75rem;
 
     transition:
         border-color .2s ease,
@@ -593,7 +593,7 @@
 .quiz-submit-area button,
 .result-buttons button,
 .review-header-card button {
-    min-height: 48px;
+    min-height: 46px;
 
     border: none;
 
@@ -601,11 +601,11 @@
 
     border-radius: 999px;
 
-    padding: 12px 21px;
+    padding: 11px 19px;
 
     color: #ffffff;
 
-    font-size: .8rem;
+    font-size: .76rem;
 
     font-weight: 750;
 
@@ -697,7 +697,7 @@ button:disabled {
 
     gap: 15px;
 
-    padding: 17px 20px;
+    padding: 16px 19px;
 
     border-radius: 22px;
 
@@ -710,8 +710,8 @@ button:disabled {
 }
 
 .locked-participant-icon {
-    width: 35px;
-    height: 35px;
+    width: 34px;
+    height: 34px;
 
     flex: 0 0 auto;
 
@@ -724,6 +724,8 @@ button:disabled {
     background: rgba(8, 145, 178, .08);
 
     color: #0891b2;
+
+    font-size: .78rem;
 }
 
 .locked-participant-info {
@@ -738,7 +740,7 @@ button:disabled {
 .locked-participant-info span {
     color: #0891b2;
 
-    font-size: .67rem;
+    font-size: .64rem;
 
     font-weight: 800;
 
@@ -752,7 +754,7 @@ button:disabled {
 
     font-family: "Bricolage Grotesque", sans-serif;
 
-    font-size: .78rem;
+    font-size: .75rem;
 }
 
 .locked-participant-info small {
@@ -762,7 +764,7 @@ button:disabled {
 
     font-family: "DM Sans", sans-serif;
 
-    font-size: .68rem;
+    font-size: .66rem;
 }
 
 .locked-badge {
@@ -781,7 +783,7 @@ button:disabled {
 
     font-family: "DM Sans", sans-serif;
 
-    font-size: .67rem;
+    font-size: .65rem;
 
     font-weight: 700;
 }
@@ -801,8 +803,8 @@ button:disabled {
 }
 
 .reflection-number {
-    width: 51px;
-    height: 51px;
+    width: 49px;
+    height: 49px;
 
     flex: 0 0 auto;
 
@@ -821,7 +823,7 @@ button:disabled {
 
     color: #ffffff;
 
-    font-size: .84rem;
+    font-size: .80rem;
 
     font-weight: 800;
 }
@@ -833,7 +835,7 @@ button:disabled {
 
     color: #4a0754;
 
-    font-size: .72rem;
+    font-size: .69rem;
 
     font-weight: 800;
 
@@ -845,7 +847,7 @@ button:disabled {
 
     color: #111827;
 
-    font-size: 1.4rem;
+    font-size: 1.32rem;
 
     line-height: 1.18;
 
@@ -857,7 +859,7 @@ button:disabled {
 
     color: #6b7280;
 
-    font-size: .82rem;
+    font-size: .79rem;
 
     line-height: 1.4;
 }
@@ -884,7 +886,7 @@ button:disabled {
 
     color: #ea580c;
 
-    font-size: .95rem;
+    font-size: .9rem;
 }
 
 .reflection-intro p {
@@ -892,7 +894,7 @@ button:disabled {
 
     color: #4b5563;
 
-    font-size: .8rem;
+    font-size: .77rem;
 
     line-height: 1.45;
 }
@@ -911,7 +913,7 @@ button:disabled {
 
     color: #1f2937;
 
-    font-size: .9rem;
+    font-size: .84rem;
 
     line-height: 1.35;
 
@@ -921,8 +923,8 @@ button:disabled {
 }
 
 .reflection-question-number {
-    width: 29px;
-    height: 29px;
+    width: 28px;
+    height: 28px;
 
     flex: 0 0 auto;
 
@@ -938,7 +940,7 @@ button:disabled {
 
     font-family: "Bricolage Grotesque", sans-serif;
 
-    font-size: .67rem;
+    font-size: .65rem;
 
     font-weight: 800;
 }
@@ -952,7 +954,7 @@ button:disabled {
 
     resize: vertical;
 
-    padding: 16px 17px;
+    padding: 15px 16px;
 
     border-radius: 17px;
 
@@ -964,7 +966,7 @@ button:disabled {
 
     color: #111827;
 
-    font-size: .82rem;
+    font-size: .78rem;
 
     line-height: 1.45;
 
@@ -1024,7 +1026,7 @@ button:disabled {
 
     font-family: "DM Sans", sans-serif;
 
-    font-size: .74rem;
+    font-size: .70rem;
 
     font-weight: 700;
 }
@@ -1034,7 +1036,7 @@ button:disabled {
 
     font-family: "Bricolage Grotesque", sans-serif;
 
-    font-size: .75rem;
+    font-size: .72rem;
 
     font-weight: 800;
 }
@@ -1073,13 +1075,13 @@ button:disabled {
 
     font-family: "DM Sans", sans-serif;
 
-    font-size: .74rem;
+    font-size: .70rem;
 
     line-height: 1.4;
 }
 
 .reflection-submit-btn {
-    min-height: 51px;
+    min-height: 47px;
 
     flex: 0 0 auto;
 
@@ -1087,11 +1089,11 @@ button:disabled {
     align-items: center;
     justify-content: center;
 
-    gap: 9px;
+    gap: 8px;
 
     border: none;
 
-    padding: 13px 22px;
+    padding: 11px 19px;
 
     border-radius: 999px;
 
@@ -1104,14 +1106,14 @@ button:disabled {
 
     color: #ffffff;
 
-    font-size: .84rem;
+    font-size: .77rem;
 
     font-weight: 750;
 
     cursor: pointer;
 
     box-shadow:
-        0 12px 27px rgba(74, 7, 84, .18);
+        0 10px 23px rgba(74, 7, 84, .16);
 
     transition:
         transform .2s ease,
@@ -1141,7 +1143,7 @@ button:disabled {
 
     font-family: "DM Sans", sans-serif;
 
-    font-size: .8rem;
+    font-size: .77rem;
 
     line-height: 1.4;
 }
@@ -1181,9 +1183,9 @@ button:disabled {
 
     margin-top: 12px;
 
-    min-height: 44px;
+    min-height: 42px;
 
-    padding: 10px 17px;
+    padding: 9px 16px;
 
     border: none;
 
@@ -1200,7 +1202,7 @@ button:disabled {
 
     font-family: "Bricolage Grotesque", sans-serif;
 
-    font-size: .78rem;
+    font-size: .75rem;
 
     font-weight: 750;
 
@@ -1223,7 +1225,7 @@ button:disabled {
 
     margin-bottom: 18px;
 
-    padding: 19px 21px;
+    padding: 18px 20px;
 
     border-radius: 22px;
 
@@ -1238,8 +1240,8 @@ button:disabled {
 }
 
 .quiz-ready-icon {
-    width: 48px;
-    height: 48px;
+    width: 46px;
+    height: 46px;
 
     flex: 0 0 auto;
 
@@ -1252,6 +1254,8 @@ button:disabled {
     background: #d1fae5;
 
     color: #059669;
+
+    font-size: .9rem;
 }
 
 .quiz-ready-card > div:last-child > span {
@@ -1261,7 +1265,7 @@ button:disabled {
 
     color: #047857;
 
-    font-size: .7rem;
+    font-size: .67rem;
 
     font-weight: 800;
 
@@ -1273,7 +1277,7 @@ button:disabled {
 
     color: #111827;
 
-    font-size: 1.15rem;
+    font-size: 1.08rem;
 
     font-weight: 800;
 }
@@ -1283,7 +1287,7 @@ button:disabled {
 
     color: #4b5563;
 
-    font-size: .8rem;
+    font-size: .76rem;
 
     line-height: 1.4;
 }
@@ -1314,7 +1318,7 @@ button:disabled {
 
     color: #ea580c;
 
-    font-size: .7rem;
+    font-size: .67rem;
 
     font-weight: 800;
 
@@ -1326,7 +1330,7 @@ button:disabled {
 
     color: #111827;
 
-    font-size: 1.32rem;
+    font-size: 1.26rem;
 
     line-height: 1.18;
 
@@ -1336,7 +1340,7 @@ button:disabled {
 .question-count-badge {
     flex: 0 0 auto;
 
-    padding: 9px 13px;
+    padding: 8px 12px;
 
     border-radius: 999px;
 
@@ -1344,7 +1348,7 @@ button:disabled {
 
     color: #4b5563;
 
-    font-size: .72rem;
+    font-size: .70rem;
 
     font-weight: 750;
 }
@@ -1359,7 +1363,7 @@ button:disabled {
 
     color: #4a0754;
 
-    font-size: .72rem;
+    font-size: .69rem;
 
     font-weight: 800;
 
@@ -1373,7 +1377,7 @@ button:disabled {
 
     font-family: "Bricolage Grotesque", sans-serif;
 
-    font-size: 1rem;
+    font-size: .96rem;
 
     line-height: 1.38;
 
@@ -1394,9 +1398,9 @@ button:disabled {
 
     width: 100%;
 
-    min-height: 52px;
+    min-height: 51px;
 
-    padding: 14px 15px;
+    padding: 13px 14px;
 
     border-radius: 15px;
 
@@ -1428,10 +1432,10 @@ button:disabled {
     appearance: none;
     -webkit-appearance: none;
 
-    width: 20px;
-    height: 20px;
+    width: 19px;
+    height: 19px;
 
-    min-width: 20px;
+    min-width: 19px;
 
     margin: 1px 0 0;
 
@@ -1479,7 +1483,7 @@ button:disabled {
 
     color: #374151;
 
-    font-size: .84rem;
+    font-size: .80rem;
 
     line-height: 1.42;
 }
@@ -1516,7 +1520,7 @@ button:disabled {
 
     color: #6b7280;
 
-    font-size: .78rem;
+    font-size: .75rem;
 
     line-height: 1.4;
 }
@@ -1524,7 +1528,7 @@ button:disabled {
 .submit-quiz-btn {
     flex: 0 0 auto;
 
-    min-height: 51px !important;
+    min-height: 48px !important;
 }
 
 
@@ -1541,8 +1545,8 @@ button:disabled {
 }
 
 .result-success-icon {
-    width: 64px;
-    height: 64px;
+    width: 62px;
+    height: 62px;
 
     margin: 0 auto 15px;
 
@@ -1556,7 +1560,7 @@ button:disabled {
 
     color: #ea580c;
 
-    font-size: 1.4rem;
+    font-size: 1.3rem;
 }
 
 .result-eyebrow {
@@ -1566,7 +1570,7 @@ button:disabled {
 
     color: #ea580c;
 
-    font-size: .7rem;
+    font-size: .67rem;
 
     font-weight: 800;
 
@@ -1578,7 +1582,7 @@ button:disabled {
 
     color: #111827;
 
-    font-size: 1.45rem;
+    font-size: 1.38rem;
 
     font-weight: 800;
 }
@@ -1590,7 +1594,7 @@ button:disabled {
 
     color: #6b7280;
 
-    font-size: .8rem;
+    font-size: .77rem;
 
     line-height: 1.4;
 }
@@ -1600,7 +1604,7 @@ button:disabled {
 
     color: #4a0754;
 
-    font-size: clamp(3rem, 9vw, 5rem);
+    font-size: clamp(2.8rem, 9vw, 4.8rem);
 
     line-height: 1;
 
@@ -1637,7 +1641,7 @@ button:disabled {
 
     font-family: "DM Sans", sans-serif;
 
-    font-size: .68rem;
+    font-size: .66rem;
 }
 
 .result-stat strong {
@@ -1645,7 +1649,7 @@ button:disabled {
 
     font-family: "Bricolage Grotesque", sans-serif;
 
-    font-size: .95rem;
+    font-size: .92rem;
 }
 
 .result-buttons {
@@ -1674,7 +1678,7 @@ button:disabled {
 
     margin-bottom: 20px;
 
-    padding: 24px;
+    padding: 23px;
 
     border-radius: 25px;
 
@@ -1693,7 +1697,7 @@ button:disabled {
 
     color: #4a0754;
 
-    font-size: .68rem;
+    font-size: .65rem;
 
     font-weight: 800;
 
@@ -1705,7 +1709,7 @@ button:disabled {
 
     color: #111827;
 
-    font-size: 1.28rem;
+    font-size: 1.24rem;
 
     font-weight: 800;
 }
@@ -1717,7 +1721,7 @@ button:disabled {
 
     font-family: "DM Sans", sans-serif;
 
-    font-size: .8rem;
+    font-size: .77rem;
 
     line-height: 1.4;
 }
@@ -1730,7 +1734,7 @@ button:disabled {
 .review-option {
     width: 100%;
 
-    padding: 15px;
+    padding: 14px;
 
     margin-bottom: 10px;
 
@@ -1744,7 +1748,7 @@ button:disabled {
 
     font-family: "DM Sans", sans-serif;
 
-    font-size: .82rem;
+    font-size: .79rem;
 
     line-height: 1.42;
 }
@@ -1764,7 +1768,7 @@ button:disabled {
 .review-option-label {
     margin-top: 7px;
 
-    font-size: .68rem;
+    font-size: .66rem;
 
     font-weight: 750;
 }
@@ -1878,7 +1882,7 @@ button:disabled {
     }
 
     .quiz-hero h1 {
-        font-size: clamp(1.65rem, 7vw, 2.05rem);
+        font-size: clamp(1.55rem, 7vw, 1.95rem);
 
         line-height: 1.08;
     }
@@ -1888,7 +1892,7 @@ button:disabled {
 
         margin: 0;
 
-        font-size: .78rem;
+        font-size: .74rem;
     }
 
     .quiz-hero-bottom {
@@ -1899,7 +1903,7 @@ button:disabled {
 
     .quiz-status,
     .countdown-card {
-        font-size: .73rem;
+        font-size: .70rem;
     }
 
 
@@ -1918,26 +1922,29 @@ button:disabled {
     /* PARTICIPANT */
 
     .section-heading h2 {
-        font-size: 1.22rem;
+        font-size: 1.14rem;
     }
 
     .section-heading p {
-        font-size: .8rem;
+        font-size: .75rem;
     }
 
     .section-heading > div:last-child > span {
-        font-size: .7rem;
+        font-size: .66rem;
     }
 
     .field-label {
-        font-size: .8rem;
+        font-size: .73rem;
     }
 
     .member-box select,
     .member-box input {
-        min-height: 54px;
+        min-height: 51px;
 
-        font-size: .8rem;
+        padding-left: 14px;
+        padding-right: 14px;
+
+        font-size: .74rem;
     }
 
     .add-member {
@@ -1947,14 +1954,28 @@ button:disabled {
     .member-box button {
         width: 100%;
 
-        min-height: 49px;
+        min-height: 46px;
+
+        font-size: .74rem;
     }
 
 
     /* LOCKED */
 
     .locked-participant-card {
-        padding: 15px;
+        padding: 14px;
+    }
+
+    .locked-participant-info span {
+        font-size: .61rem;
+    }
+
+    .locked-participant-info strong {
+        font-size: .72rem;
+    }
+
+    .locked-participant-info small {
+        font-size: .63rem;
     }
 
     .locked-badge {
@@ -1969,31 +1990,39 @@ button:disabled {
     }
 
     .reflection-number {
-        width: 45px;
-        height: 45px;
+        width: 44px;
+        height: 44px;
 
         border-radius: 15px;
+
+        font-size: .75rem;
+    }
+
+    .reflection-header > div:last-child > span {
+        font-size: .65rem;
     }
 
     .reflection-header h2 {
-        font-size: 1.25rem;
+        font-size: 1.18rem;
     }
 
     .reflection-header p,
     .reflection-intro p {
-        font-size: .8rem;
+        font-size: .75rem;
     }
 
     .reflection-question label {
-        font-size: .82rem;
+        font-size: .78rem;
 
         line-height: 1.38;
     }
 
     .reflection-question textarea {
-        min-height: 145px;
+        min-height: 140px;
 
-        font-size: .8rem;
+        padding: 14px 15px;
+
+        font-size: .74rem;
     }
 
     .reflection-footer {
@@ -2001,25 +2030,41 @@ button:disabled {
 
         align-items: stretch;
 
-        gap: 18px;
+        gap: 17px;
+    }
+
+    .reflection-progress-top span {
+        font-size: .68rem;
+    }
+
+    .reflection-progress-top strong {
+        font-size: .70rem;
+    }
+
+    .reflection-progress p {
+        font-size: .68rem;
     }
 
     .reflection-submit-btn {
         width: 100%;
 
-        min-height: 52px;
+        min-height: 47px;
 
-        font-size: .84rem;
+        padding: 10px 18px;
+
+        font-size: .75rem;
     }
 
     .reflection-message {
-        font-size: .78rem;
+        font-size: .74rem;
     }
 
     .reflection-message-action {
         width: 100%;
 
-        min-height: 48px;
+        min-height: 45px;
+
+        font-size: .73rem;
     }
 
 
@@ -2028,15 +2073,26 @@ button:disabled {
     .quiz-ready-card {
         align-items: flex-start;
 
-        padding: 18px;
+        padding: 17px;
+    }
+
+    .quiz-ready-icon {
+        width: 44px;
+        height: 44px;
+
+        border-radius: 14px;
+    }
+
+    .quiz-ready-card > div:last-child > span {
+        font-size: .64rem;
     }
 
     .quiz-ready-card h2 {
-        font-size: 1.08rem;
+        font-size: 1rem;
     }
 
     .quiz-ready-card p {
-        font-size: .8rem;
+        font-size: .74rem;
     }
 
 
@@ -2046,28 +2102,44 @@ button:disabled {
         align-items: flex-start;
     }
 
+    .questions-header > div:first-child > span {
+        font-size: .64rem;
+    }
+
     .questions-header h2 {
-        font-size: 1.18rem;
+        font-size: 1.12rem;
+    }
+
+    .question-count-badge {
+        padding: 8px 10px;
+
+        font-size: .66rem;
     }
 
     .question-card {
-        padding: 22px;
+        padding: 21px;
 
         border-radius: 21px;
     }
 
+    .question-number {
+        font-size: .66rem;
+    }
+
     .question-card h3 {
-        font-size: .95rem;
+        font-size: .90rem;
 
         line-height: 1.4;
     }
 
     .option {
-        padding: 14px;
+        padding: 13px;
+
+        gap: 11px;
     }
 
     .option span {
-        font-size: .8rem;
+        font-size: .75rem;
 
         line-height: 1.42;
     }
@@ -2081,15 +2153,31 @@ button:disabled {
     .quiz-submit-area p {
         max-width: none;
 
-        font-size: .78rem;
+        font-size: .73rem;
     }
 
     .submit-quiz-btn {
         width: 100%;
+
+        min-height: 46px !important;
+
+        font-size: .75rem !important;
     }
 
 
     /* RESULT */
+
+    .result-eyebrow {
+        font-size: .65rem;
+    }
+
+    .result-card h2 {
+        font-size: 1.28rem;
+    }
+
+    .result-intro {
+        font-size: .74rem;
+    }
 
     .result-stats {
         flex-direction: column;
@@ -2101,12 +2189,22 @@ button:disabled {
         min-width: 0;
     }
 
+    .result-stat span {
+        font-size: .64rem;
+    }
+
+    .result-stat strong {
+        font-size: .88rem;
+    }
+
     .result-buttons {
         flex-direction: column;
     }
 
     .result-buttons button {
         width: 100%;
+
+        font-size: .74rem;
     }
 
 
@@ -2118,8 +2216,24 @@ button:disabled {
         align-items: stretch;
     }
 
+    .review-header-card > div > span {
+        font-size: .63rem;
+    }
+
+    .review-header-card h2 {
+        font-size: 1.16rem;
+    }
+
+    .review-header-card p {
+        font-size: .74rem;
+    }
+
     .review-header-card button {
         width: 100%;
+    }
+
+    .review-option {
+        font-size: .75rem;
     }
 
 }
@@ -2162,26 +2276,28 @@ button:disabled {
         height: 44px;
 
         border-radius: 14px;
+
+        font-size: .88rem;
     }
 
     .quiz-lesson-label span {
-        font-size: .63rem;
+        font-size: .60rem;
     }
 
     .quiz-lesson-label strong {
-        font-size: .67rem;
+        font-size: .64rem;
     }
 
     .quiz-hero-kicker {
-        font-size: .63rem;
+        font-size: .60rem;
     }
 
     .quiz-hero h1 {
-        font-size: 1.25rem;
+        font-size: 1.20rem;
     }
 
     .quiz-hero-main > p {
-        font-size: .75rem;
+        font-size: .71rem;
     }
 
     .quiz-card,
@@ -2198,54 +2314,271 @@ button:disabled {
     }
 
     .section-heading-icon {
-        width: 44px;
-        height: 44px;
+        width: 42px;
+        height: 42px;
 
         border-radius: 14px;
+
+        font-size: .86rem;
+    }
+
+    .section-heading > div:last-child > span {
+        font-size: .63rem;
     }
 
     .section-heading h2 {
-        font-size: 0.9rem;
+        font-size: 0.86rem;
     }
 
     .section-heading p {
-        font-size: .75rem;
+        font-size: .71rem;
+    }
+
+    .field-label {
+        font-size: .70rem;
+    }
+
+    .member-box select,
+    .member-box input {
+        min-height: 49px;
+
+        font-size: .71rem;
+    }
+
+    .member-box button {
+        min-height: 44px;
+
+        font-size: .71rem;
+    }
+
+    .locked-participant-info span {
+        font-size: .59rem;
+    }
+
+    .locked-participant-info strong {
+        font-size: .69rem;
+    }
+
+    .locked-participant-info small {
+        font-size: .60rem;
+    }
+
+    .reflection-number {
+        width: 42px;
+        height: 42px;
+
+        border-radius: 14px;
+
+        font-size: .72rem;
+    }
+
+    .reflection-header > div:last-child > span {
+        font-size: .61rem;
     }
 
     .reflection-header h2 {
-        font-size: 0.90rem;
+        font-size: 0.88rem;
+    }
+
+    .reflection-header p {
+        font-size: .71rem;
+    }
+
+    .reflection-intro p {
+        font-size: .71rem;
     }
 
     .reflection-question label {
-        font-size: .75rem;
+        font-size: .71rem;
+    }
+
+    .reflection-question-number {
+        width: 27px;
+        height: 27px;
+
+        font-size: .62rem;
     }
 
     .reflection-question textarea {
-        font-size: .75rem;
+        min-height: 135px;
+
+        font-size: .71rem;
+    }
+
+    .reflection-progress-top span {
+        font-size: .65rem;
+    }
+
+    .reflection-progress-top strong {
+        font-size: .67rem;
+    }
+
+    .reflection-progress p {
+        font-size: .65rem;
+    }
+
+    .reflection-submit-btn {
+        min-height: 45px;
+
+        padding: 9px 16px;
+
+        font-size: .72rem;
+    }
+
+    .reflection-message {
+        font-size: .71rem;
+    }
+
+    .reflection-message-action {
+        min-height: 44px;
+
+        font-size: .70rem;
+    }
+
+
+    /* QUIZ READY */
+
+    .quiz-ready-card {
+        padding: 16px;
+
+        gap: 13px;
+    }
+
+    .quiz-ready-icon {
+        width: 41px;
+        height: 41px;
+
+        border-radius: 13px;
+
+        font-size: .82rem;
+    }
+
+    .quiz-ready-card > div:last-child > span {
+        font-size: .60rem;
+    }
+
+    .quiz-ready-card h2 {
+        font-size: .94rem;
+    }
+
+    .quiz-ready-card p {
+        font-size: .70rem;
+    }
+
+
+    /* QUESTIONS */
+
+    .questions-header {
+        gap: 12px;
+    }
+
+    .questions-header > div:first-child > span {
+        font-size: .60rem;
+    }
+
+    .questions-header h2 {
+        font-size: 1rem;
+    }
+
+    .question-number {
+        font-size: .63rem;
     }
 
     .question-card {
-        padding: 19px;
+        padding: 18px;
     }
 
     .question-card h3 {
-        font-size: .9rem;
+        font-size: .86rem;
     }
 
     .option {
-        padding: 13px;
+        padding: 12px;
 
-        gap: 11px;
+        gap: 10px;
+    }
+
+    .option input {
+        width: 18px;
+        height: 18px;
+
+        min-width: 18px;
     }
 
     .option span {
-        font-size: .75rem;
+        font-size: .71rem;
     }
 
     .question-count-badge {
-        padding: 8px 10px;
+        padding: 7px 9px;
 
-        font-size: .67rem;
+        font-size: .63rem;
+    }
+
+    .quiz-submit-area p {
+        font-size: .70rem;
+    }
+
+    .submit-quiz-btn {
+        min-height: 44px !important;
+
+        font-size: .72rem !important;
+    }
+
+
+    /* RESULT */
+
+    .result-eyebrow {
+        font-size: .61rem;
+    }
+
+    .result-card h2 {
+        font-size: 1.18rem;
+    }
+
+    .result-intro {
+        font-size: .71rem;
+    }
+
+    .result-stat span {
+        font-size: .61rem;
+    }
+
+    .result-stat strong {
+        font-size: .84rem;
+    }
+
+    .result-buttons button {
+        font-size: .71rem;
+    }
+
+
+    /* REVIEW */
+
+    .review-header-card {
+        padding: 20px;
+    }
+
+    .review-header-card > div > span {
+        font-size: .59rem;
+    }
+
+    .review-header-card h2 {
+        font-size: 1.08rem;
+    }
+
+    .review-header-card p {
+        font-size: .71rem;
+    }
+
+    .review-option {
+        padding: 13px;
+
+        font-size: .71rem;
+    }
+
+    .review-option-label {
+        font-size: .63rem;
     }
 
 }
