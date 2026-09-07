@@ -125,12 +125,373 @@ let completionCheckInProgress = false;
 
 
 /* ============================================================
+   LOADER
+   ADDED ONLY FOR PAGE TRANSITIONS
+============================================================ */
+
+let slcLoaderElement = null;
+
+
+/* ============================================================
+   CREATE LOADER
+============================================================ */
+
+function createSLCPageLoader() {
+
+    if (slcLoaderElement) {
+        return slcLoaderElement;
+    }
+
+
+    /*
+     * Inject loader styles once.
+     *
+     * This keeps the existing HTML and CSS untouched.
+     */
+
+    if (!document.getElementById("slcLoaderStyles")) {
+
+        const style =
+            document.createElement("style");
+
+
+        style.id =
+            "slcLoaderStyles";
+
+
+        style.textContent = `
+
+            #slcPageLoader {
+
+                position: fixed;
+
+                inset: 0;
+
+                z-index: 99999;
+
+                display: flex;
+
+                align-items: center;
+
+                justify-content: center;
+
+                padding: 24px;
+
+                background:
+                    rgba(10, 0, 22, 0.88);
+
+                backdrop-filter:
+                    blur(8px);
+
+                -webkit-backdrop-filter:
+                    blur(8px);
+
+                opacity: 0;
+
+                visibility: hidden;
+
+                pointer-events: none;
+
+                transition:
+                    opacity 0.2s ease,
+                    visibility 0.2s ease;
+
+            }
+
+
+            #slcPageLoader.show {
+
+                opacity: 1;
+
+                visibility: visible;
+
+                pointer-events: all;
+
+            }
+
+
+            .slc-loader-card {
+
+                width: min(
+                    360px,
+                    100%
+                );
+
+                padding: 32px 24px;
+
+                text-align: center;
+
+                border-radius: 20px;
+
+                background:
+                    rgba(255, 255, 255, 0.98);
+
+                box-shadow:
+                    0 20px 60px
+                    rgba(0, 0, 0, 0.25);
+
+                transform:
+                    translateY(8px)
+                    scale(0.98);
+
+                transition:
+                    transform 0.25s ease;
+
+            }
+
+
+            #slcPageLoader.show
+            .slc-loader-card {
+
+                transform:
+                    translateY(0)
+                    scale(1);
+
+            }
+
+
+            .slc-loader-spinner {
+
+                width: 48px;
+
+                height: 48px;
+
+                margin: 0 auto 18px;
+
+                border-radius: 50%;
+
+                border:
+                    4px solid
+                    rgba(74, 7, 84, 0.15);
+
+                border-top-color:
+                    #4a0754;
+
+                animation:
+                    slcLoaderSpin
+                    0.8s linear infinite;
+
+            }
+
+
+            .slc-loader-title {
+
+                margin: 0 0 7px;
+
+                font-size: 1rem;
+
+                font-weight: 700;
+
+                color: #0a0016;
+
+            }
+
+
+            .slc-loader-message {
+
+                margin: 0;
+
+                font-size: 0.85rem;
+
+                line-height: 1.5;
+
+                color: #666;
+
+            }
+
+
+            @keyframes slcLoaderSpin {
+
+                to {
+
+                    transform:
+                        rotate(360deg);
+
+                }
+
+            }
+
+
+            @media (
+                prefers-reduced-motion: reduce
+            ) {
+
+                .slc-loader-spinner {
+
+                    animation:
+                        none;
+
+                }
+
+                #slcPageLoader,
+                .slc-loader-card {
+
+                    transition:
+                        none;
+
+                }
+
+            }
+
+        `;
+
+
+        document.head.appendChild(
+            style
+        );
+
+    }
+
+
+    /*
+     * Create loader element.
+     */
+
+    const loader =
+        document.createElement(
+            "div"
+        );
+
+
+    loader.id =
+        "slcPageLoader";
+
+
+    loader.setAttribute(
+        "aria-hidden",
+        "true"
+    );
+
+
+    loader.innerHTML = `
+
+        <div
+            class="slc-loader-card"
+            role="status"
+            aria-live="polite"
+        >
+
+            <div
+                class="slc-loader-spinner"
+                aria-hidden="true"
+            ></div>
+
+            <p class="slc-loader-title">
+                Please wait
+            </p>
+
+            <p
+                class="slc-loader-message"
+                id="slcLoaderMessage"
+            >
+                Loading...
+            </p>
+
+        </div>
+
+    `;
+
+
+    document.body.appendChild(
+        loader
+    );
+
+
+    slcLoaderElement =
+        loader;
+
+
+    return loader;
+
+}
+
+
+/* ============================================================
+   SHOW LOADER
+============================================================ */
+
+function showSLCPageLoader(
+    message = "Loading..."
+) {
+
+    const loader =
+        createSLCPageLoader();
+
+
+    const messageElement =
+        loader.querySelector(
+            "#slcLoaderMessage"
+        );
+
+
+    if (messageElement) {
+
+        messageElement.textContent =
+            message;
+
+    }
+
+
+    loader.classList.add(
+        "show"
+    );
+
+
+    loader.setAttribute(
+        "aria-hidden",
+        "false"
+    );
+
+
+    document.body.style.overflow =
+        "hidden";
+
+}
+
+
+/* ============================================================
+   HIDE LOADER
+============================================================ */
+
+function hideSLCPageLoader() {
+
+    if (!slcLoaderElement) {
+        return;
+    }
+
+
+    slcLoaderElement.classList.remove(
+        "show"
+    );
+
+
+    slcLoaderElement.setAttribute(
+        "aria-hidden",
+        "true"
+    );
+
+
+    document.body.style.overflow =
+        "";
+
+}
+
+
+/* ============================================================
    DOM READY
 ============================================================ */
 
 document.addEventListener(
     "DOMContentLoaded",
     async function () {
+
+        /*
+         * Create the loader early so it is ready
+         * immediately when a transition begins.
+         */
+
+        createSLCPageLoader();
+
 
         if (typeof AOS !== "undefined") {
 
@@ -1111,6 +1472,26 @@ async function lockSelectedParticipant() {
 
 
     /*
+     * ========================================================
+     * LOADER ADDED
+     * ========================================================
+     *
+     * The participant has selected their name.
+     *
+     * We now show a transition loader while the backend
+     * determines whether they should see:
+     *
+     * - Completed
+     * - Reflection
+     * - Quiz
+     */
+
+    showSLCPageLoader(
+        "Checking your quiz status..."
+    );
+
+
+    /*
      * IMPORTANT:
      *
      * Do not assume the participant needs reflection.
@@ -1124,7 +1505,22 @@ async function lockSelectedParticipant() {
      * 3. Nothing completed
      */
 
-    await checkCompletionStatus();
+    try {
+
+        await checkCompletionStatus();
+
+    }
+    finally {
+
+        /*
+         * Keep the loader visible until the state
+         * has actually been prepared by
+         * checkCompletionStatus().
+         */
+
+        hideSLCPageLoader();
+
+    }
 
 }
 
@@ -2349,6 +2745,22 @@ async function submitReflection() {
     }
 
 
+    /*
+     * ========================================================
+     * LOADER ADDED
+     * ========================================================
+     *
+     * Once the participant presses Submit Reflection,
+     * cover the transition so the page does not appear
+     * frozen while the backend saves the reflection and
+     * the next state is determined.
+     */
+
+    showSLCPageLoader(
+        "Saving your reflection..."
+    );
+
+
     try {
 
         const response =
@@ -2423,6 +2835,11 @@ async function submitReflection() {
             saveQuizSession();
 
 
+            showSLCPageLoader(
+                "Reflection confirmed. Loading your quiz..."
+            );
+
+
             await checkCompletionStatus();
 
 
@@ -2473,6 +2890,18 @@ async function submitReflection() {
 
 
         /*
+         * The reflection has been saved.
+         *
+         * Update the loader message so the participant
+         * knows the next step is being prepared.
+         */
+
+        showSLCPageLoader(
+            "Reflection saved. Loading your quiz..."
+        );
+
+
+        /*
          * Do not immediately assume everything is fine.
          *
          * Re-check the server.
@@ -2512,6 +2941,72 @@ async function submitReflection() {
 
 
         restoreReflectionButton();
+
+
+        /*
+         * The request failed, so the participant
+         * must be able to see the reflection page
+         * and try again.
+         */
+
+        hideSLCPageLoader();
+
+    }
+
+
+    /*
+     * IMPORTANT:
+     *
+     * The 500ms callback above is asynchronous.
+     * Therefore the loader must remain visible while
+     * checkCompletionStatus() determines the next state.
+     *
+     * For successful submissions, the loader is hidden
+     * after checkCompletionStatus() completes below.
+     */
+
+    if (
+        reflectionSubmitted &&
+        !quizCompleted
+    ) {
+
+        /*
+         * Give the asynchronous transition a little
+         * time to complete naturally.
+         *
+         * The actual quiz rendering is handled by
+         * unlockQuiz().
+         */
+
+        setTimeout(
+            function () {
+
+                /*
+                 * Only hide if the quiz is actually
+                 * visible. If the status check is still
+                 * working, the loader remains visible.
+                 */
+
+                const quizSection =
+                    getElement(
+                        "quizSection"
+                    );
+
+
+                if (
+                    quizSection &&
+                    !quizSection.classList.contains(
+                        "hidden"
+                    )
+                ) {
+
+                    hideSLCPageLoader();
+
+                }
+
+            },
+            650
+        );
 
     }
 
@@ -2611,6 +3106,10 @@ function unlockQuiz() {
     );
 
 
+    /*
+     * Render the quiz before revealing it.
+     */
+
     renderQuestions();
 
 
@@ -2656,6 +3155,18 @@ function unlockQuiz() {
                 });
 
             }
+
+
+            /*
+             * ==================================================
+             * LOADER ADDED
+             * ==================================================
+             *
+             * The quiz is now rendered and visible.
+             * It is safe to remove the transition loader.
+             */
+
+            hideSLCPageLoader();
 
         },
         100
@@ -3923,3 +4434,4 @@ function openSavedReview() {
     }
 
 }
+ 
