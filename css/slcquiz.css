@@ -3053,3 +3053,314 @@ button:disabled {
         padding-top: 13px;
     }
 }
+
+
+
+/* ============================================================
+   SLC QUIZ — FINAL VISUAL REFINEMENTS
+   ------------------------------------------------------------
+   1. Smaller "already completed" heading
+   2. Better completed icon
+   3. Better completed-card button
+   4. More breathing room between QUESTION number and question
+   5. Keeps answer options comfortable
+   ============================================================ */
+
+
+/* ============================================================
+   ALREADY COMPLETED CARD
+   ============================================================ */
+
+.completed-card {
+    width: 100%;
+    text-align: center;
+    padding: clamp(24px, 4vw, 34px);
+}
+
+
+/* ------------------------------------------------------------
+   COMPLETED ICON
+   ------------------------------------------------------------ */
+
+.completed-card .completed-icon {
+    width: 54px;
+    height: 54px;
+    margin: 0 auto 15px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #f3f0ff;
+    border: 1px solid #e8e1ff;
+
+    color: #6d28d9;
+
+    font-size: 1.35rem;
+
+    box-shadow: 0 5px 16px rgba(109, 40, 217, 0.08);
+}
+
+.completed-card .completed-icon i {
+    font-size: 1.35rem;
+}
+
+
+/* ------------------------------------------------------------
+   ALREADY COMPLETED HEADING
+   ------------------------------------------------------------ */
+
+.completed-card h2 {
+    margin: 0 auto 9px;
+
+    max-width: 420px;
+
+    font-family: "Bricolage Grotesque", sans-serif;
+
+    font-size: 0.98rem;
+    line-height: 1.25;
+
+    font-weight: 700;
+
+    color: #111827;
+}
+
+
+/* ------------------------------------------------------------
+   COMPLETED MESSAGE
+   ------------------------------------------------------------ */
+
+.completed-card p {
+    max-width: 480px;
+    margin: 0 auto 19px;
+
+    font-family: "DM Sans", sans-serif;
+
+    font-size: 0.74rem;
+    line-height: 1.55;
+
+    color: #64748b;
+}
+
+
+/* ------------------------------------------------------------
+   VIEW RESULTS BUTTON
+   ------------------------------------------------------------ */
+
+.completed-card .purple-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    min-height: 40px;
+
+    padding: 9px 17px;
+
+    border: 0;
+    border-radius: 999px;
+
+    background: #6d28d9;
+    color: #ffffff;
+
+    font-family: "DM Sans", sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+
+    text-decoration: none;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
+}
+
+.completed-card .purple-btn:hover {
+    background: #5b21b6;
+    transform: translateY(-1px);
+    box-shadow: 0 7px 18px rgba(109, 40, 217, 0.16);
+}
+
+.completed-card .purple-btn i {
+    font-size: 0.68rem;
+}
+
+
+/* ============================================================
+   QUESTION NUMBER
+   ------------------------------------------------------------
+   Create clearer separation between:
+   
+   QUESTION 1
+   ↓
+   actual question
+   
+   without making the question card too tall.
+   ============================================================ */
+
+.questions-list .question-card .question-number {
+    display: block;
+
+    margin-bottom: 9px;
+
+    font-family: "DM Sans", sans-serif;
+
+    font-size: 0.61rem;
+    line-height: 1.2;
+
+    font-weight: 800;
+
+    letter-spacing: 0.08em;
+
+    color: #7c3aed;
+}
+
+
+/* ------------------------------------------------------------
+   QUESTION TEXT
+   ------------------------------------------------------------ */
+
+.questions-list .question-card h3 {
+    margin-top: 0;
+    margin-bottom: 14px;
+
+    font-family: "Bricolage Grotesque", sans-serif;
+
+    font-size: 0.78rem;
+    line-height: 1.42;
+
+    font-weight: 650;
+
+    color: #172033;
+}
+
+
+/* ============================================================
+   MOBILE
+   ============================================================ */
+
+@media (max-width: 768px) {
+
+    .completed-card {
+        padding: 22px 17px;
+    }
+
+    .completed-card .completed-icon {
+        width: 50px;
+        height: 50px;
+
+        margin-bottom: 13px;
+
+        font-size: 1.2rem;
+    }
+
+    .completed-card .completed-icon i {
+        font-size: 1.2rem;
+    }
+
+    .completed-card h2 {
+        font-size: 0.90rem;
+        line-height: 1.25;
+
+        margin-bottom: 8px;
+    }
+
+    .completed-card p {
+        font-size: 0.71rem;
+        line-height: 1.5;
+
+        margin-bottom: 17px;
+    }
+
+    .completed-card .purple-btn {
+        min-height: 39px;
+        padding: 8px 15px;
+
+        font-size: 0.70rem;
+    }
+
+
+    /* QUESTION NUMBER */
+
+    .questions-list .question-card .question-number {
+        margin-bottom: 8px;
+
+        font-size: 0.58rem;
+    }
+
+
+    /* QUESTION */
+
+    .questions-list .question-card h3 {
+        margin-bottom: 12px;
+
+        font-size: 0.74rem;
+        line-height: 1.43;
+    }
+}
+
+
+/* ============================================================
+   SMALL PHONES
+   ============================================================ */
+
+@media (max-width: 480px) {
+
+    .completed-card {
+        padding: 20px 15px;
+    }
+
+    .completed-card .completed-icon {
+        width: 46px;
+        height: 46px;
+
+        margin-bottom: 12px;
+
+        font-size: 1.08rem;
+    }
+
+    .completed-card .completed-icon i {
+        font-size: 1.08rem;
+    }
+
+    .completed-card h2 {
+        font-size: 0.84rem;
+        line-height: 1.25;
+    }
+
+    .completed-card p {
+        font-size: 0.69rem;
+        line-height: 1.48;
+    }
+
+    .completed-card .purple-btn {
+        min-height: 38px;
+        padding: 8px 14px;
+
+        font-size: 0.68rem;
+    }
+
+
+    /* QUESTION NUMBER */
+
+    .questions-list .question-card .question-number {
+        margin-bottom: 8px;
+
+        font-size: 0.56rem;
+        letter-spacing: 0.07em;
+    }
+
+
+    /* QUESTION TEXT */
+
+    .questions-list .question-card h3 {
+        margin-bottom: 11px;
+
+        font-size: 0.70rem;
+        line-height: 1.42;
+    }
+}
