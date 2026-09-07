@@ -55,7 +55,7 @@
 ============================================================ */
 
 const API =
-    "https://script.google.com/macros/s/AKfycbw1mVwpgAcIOSNbpgzy52TFyozEGMtWWwVWUDFaofGNzpsguBIaKR4q1dXVtgVHO2xZ1w/exec";
+    "https://script.google.com/macros/s/AKfycbw1mVwpgAcIOSNbpgzy52TFyozEGMtWWwVWUDFaofGNpsguBIaKR4q1dXVtgVHO2xZ1w/exec";
 
 
 /* ============================================================
@@ -66,9 +66,6 @@ const REFLECTION_MIN_CHARACTERS = 100;
 
 const SESSION_KEY =
     "afc_isiu_slc_quiz_session_v1";
-
-const SESSION_STAGE_KEY =
-    "afc_isiu_slc_quiz_stage_v1";
 
 
 /* ============================================================
@@ -95,7 +92,11 @@ let quizLoaded = false;
 
 let quizCompleted = false;
 
-let currentSessionStage = "";
+/*
+   Prevent duplicate quiz submissions while the
+   first request is still being processed.
+*/
+let quizSubmitting = false;
 
 
 /* ============================================================
@@ -114,9 +115,6 @@ document.addEventListener(
             });
 
         }
-
-
-        createSLCPageLoader();
 
 
         setupParticipantListeners();
@@ -179,243 +177,6 @@ function hideElement(id) {
         element.classList.add("hidden");
 
     }
-
-}
-
-
-/* ============================================================
-   SLC PAGE LOADER
-============================================================ */
-
-function createSLCPageLoader() {
-
-    if (getElement("slcPageLoader")) {
-
-        return;
-
-    }
-
-
-    const style =
-        document.createElement("style");
-
-
-    style.id =
-        "slcPageLoaderStyles";
-
-
-    style.textContent = `
-        #slcPageLoader {
-            position: fixed;
-            inset: 0;
-            z-index: 99999;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            background: linear-gradient(135deg, #ffffff 0%, #fdfaff 48%, #f7f1ff 100%);
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
-            transition: opacity 0.22s ease, visibility 0.22s ease;
-        }
-
-        #slcPageLoader.show {
-            opacity: 1;
-            visibility: visible;
-            pointer-events: auto;
-        }
-
-        .slc-loader-card {
-            width: min(360px, 100%);
-            padding: 30px 24px;
-            text-align: center;
-            background: #ffffff;
-            border: 1px solid #eee7f7;
-            border-radius: 22px;
-            box-shadow: none;
-        }
-
-        .slc-loader-spinner {
-            width: 42px;
-            height: 42px;
-            margin: 0 auto 16px;
-            border: 3px solid #f0eafb;
-            border-top-color: #a78bfa;
-            border-right-color: #c4b5fd;
-            border-radius: 50%;
-            animation: slcLoaderSpin 0.85s linear infinite;
-        }
-
-        .slc-loader-title {
-            margin: 0 0 6px;
-            color: #3b3150;
-            font-size: 0.92rem;
-            font-weight: 700;
-            line-height: 1.35;
-        }
-
-        .slc-loader-message {
-            margin: 0;
-            color: #81768f;
-            font-size: 0.78rem;
-            line-height: 1.5;
-        }
-
-        @keyframes slcLoaderSpin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        @media (max-width: 480px) {
-            .slc-loader-card {
-                width: min(330px, 100%);
-                padding: 26px 20px;
-                border-radius: 19px;
-            }
-
-            .slc-loader-title {
-                font-size: 0.88rem;
-            }
-
-            .slc-loader-message {
-                font-size: 0.75rem;
-            }
-        }
-    `;
-
-
-    document.head.appendChild(style);
-
-
-    const loader =
-        document.createElement("div");
-
-
-    loader.id =
-        "slcPageLoader";
-
-
-    loader.innerHTML = `
-        <div class="slc-loader-card" role="status" aria-live="polite">
-            <div class="slc-loader-spinner" aria-hidden="true"></div>
-            <p class="slc-loader-title">Please wait</p>
-            <p class="slc-loader-message">Loading...</p>
-        </div>
-    `;
-
-
-    document.body.appendChild(loader);
-
-}
-
-
-function updateSLCPageLoader(title, message) {
-
-    const loader =
-        getElement("slcPageLoader");
-
-
-    if (!loader) {
-
-        return;
-
-    }
-
-
-    const titleElement =
-        loader.querySelector(".slc-loader-title");
-
-
-    const messageElement =
-        loader.querySelector(".slc-loader-message");
-
-
-    if (titleElement) {
-
-        titleElement.textContent =
-            title || "Please wait";
-
-    }
-
-
-    if (messageElement) {
-
-        messageElement.textContent =
-            message || "Loading...";
-
-    }
-
-}
-
-
-function showSLCPageLoader(title, message) {
-
-    updateSLCPageLoader(
-        title,
-        message
-    );
-
-
-    const loader =
-        getElement("slcPageLoader");
-
-
-    if (loader) {
-
-        loader.classList.add("show");
-
-    }
-
-}
-
-
-function hideSLCPageLoader() {
-
-    const loader =
-        getElement("slcPageLoader");
-
-
-    if (loader) {
-
-        loader.classList.remove("show");
-
-    }
-
-}
-
-
-function getSavedSessionStage(saved) {
-
-    const storedStage =
-        sessionStorage.getItem(
-            SESSION_STAGE_KEY
-        );
-
-
-    if (
-        storedStage === "quiz" ||
-        storedStage === "reflection"
-    ) {
-
-        return storedStage;
-
-    }
-
-
-    if (
-        saved &&
-        (saved.stage === "quiz" ||
-            saved.stage === "reflection")
-    ) {
-
-        return saved.stage;
-
-    }
-
-
-    return "reflection";
 
 }
 
@@ -626,6 +387,9 @@ async function loadQuiz() {
             false;
 
         reflectionSubmitted =
+            false;
+
+        quizSubmitting =
             false;
 
 
@@ -1376,17 +1140,7 @@ async function lockSelectedParticipant() {
     );
 
 
-    currentSessionStage =
-        "reflection";
-
-
     saveQuizSession();
-
-
-    showSLCPageLoader(
-        "Loading your reflection",
-        "Preparing the reflection stage for you..."
-    );
 
 
     /*
@@ -1440,9 +1194,6 @@ function saveQuizSession() {
         lessonNo:
             selectedLesson,
 
-        stage:
-            currentSessionStage || "reflection",
-
         savedAt:
             new Date().toISOString()
 
@@ -1454,11 +1205,6 @@ function saveQuizSession() {
         sessionStorage.setItem(
             SESSION_KEY,
             JSON.stringify(session)
-        );
-
-        sessionStorage.setItem(
-            SESSION_STAGE_KEY,
-            currentSessionStage || "reflection"
         );
 
     }
@@ -1503,10 +1249,6 @@ async function restoreQuizSession() {
 
         if (!raw) {
 
-            sessionStorage.removeItem(
-                SESSION_STAGE_KEY
-            );
-
             return;
 
         }
@@ -1550,10 +1292,6 @@ async function restoreQuizSession() {
 
         sessionStorage.removeItem(
             SESSION_KEY
-        );
-
-        sessionStorage.removeItem(
-            SESSION_STAGE_KEY
         );
 
 
@@ -1601,10 +1339,6 @@ async function restoreQuizSession() {
 
         sessionStorage.removeItem(
             SESSION_KEY
-        );
-
-        sessionStorage.removeItem(
-            SESSION_STAGE_KEY
         );
 
 
@@ -1695,31 +1429,6 @@ async function restoreQuizSession() {
     hideElement(
         "participantSection"
     );
-
-
-    currentSessionStage =
-        getSavedSessionStage(saved);
-
-
-    if (currentSessionStage === "quiz") {
-
-        showSLCPageLoader(
-            "Loading your quiz",
-            "Bringing you back to the quiz you left..."
-        );
-
-    }
-    else {
-
-        currentSessionStage =
-            "reflection";
-
-        showSLCPageLoader(
-            "Loading your reflection",
-            "Bringing you back to the reflection you left..."
-        );
-
-    }
 
 
     /*
@@ -1843,34 +1552,6 @@ async function checkCompletionStatus() {
         older lesson to block the current lesson.
         */
 
-        const statusLesson =
-            String(
-                data.currentLesson ||
-                data.lessonNo ||
-                ""
-            ).trim();
-
-        const lessonMatches =
-            statusLesson ===
-            String(selectedLesson).trim();
-
-        if (!lessonMatches) {
-
-            if (reflectionMessage) {
-
-                reflectionMessage.className =
-                    "reflection-message show error";
-
-                reflectionMessage.textContent =
-                    "We could not confirm the current quiz lesson. Please refresh and try again.";
-
-            }
-
-            return;
-
-        }
-
-
         const currentLessonQuizCompleted =
             data.quizCompleted === true;
 
@@ -1896,8 +1577,6 @@ async function checkCompletionStatus() {
 
 
             clearQuizSession();
-
-            hideSLCPageLoader();
 
 
             showCompletedState(
@@ -1925,16 +1604,8 @@ async function checkCompletionStatus() {
             reflectionSubmitted =
                 true;
 
-            currentSessionStage =
-                "quiz";
-
 
             saveQuizSession();
-
-            updateSLCPageLoader(
-                "Loading your quiz",
-                "Your reflection is already complete. Opening your quiz..."
-            );
 
 
             unlockQuiz();
@@ -1955,9 +1626,6 @@ async function checkCompletionStatus() {
 
         reflectionSubmitted =
             false;
-
-        currentSessionStage =
-            "reflection";
 
 
         saveQuizSession();
@@ -1992,8 +1660,6 @@ async function checkCompletionStatus() {
 
         updateReflectionProgress();
 
-        hideSLCPageLoader();
-
     }
     catch (error) {
 
@@ -2013,8 +1679,6 @@ async function checkCompletionStatus() {
                 "We could not check your quiz status. Please check your connection and try again.";
 
         }
-
-        hideSLCPageLoader();
 
     }
 
@@ -2155,10 +1819,6 @@ function clearQuizSession() {
 
         sessionStorage.removeItem(
             SESSION_KEY
-        );
-
-        sessionStorage.removeItem(
-            SESSION_STAGE_KEY
         );
 
     }
@@ -2592,12 +2252,6 @@ async function submitReflection() {
     }
 
 
-    showSLCPageLoader(
-        "Saving your reflection",
-        "Saving your reflection and preparing your quiz..."
-    );
-
-
     try {
 
         const response =
@@ -2664,9 +2318,7 @@ async function submitReflection() {
 
         if (
             data.status ===
-            "already_completed" ||
-            data.status ===
-            "reflection_completed"
+            "already_completed"
         ) {
 
             reflectionSubmitted =
@@ -2702,7 +2354,6 @@ async function submitReflection() {
 
 
             restoreReflectionButton();
-            hideSLCPageLoader();
 
 
             return;
@@ -2760,7 +2411,6 @@ async function submitReflection() {
 
 
         restoreReflectionButton();
-        hideSLCPageLoader();
 
     }
 
@@ -2827,16 +2477,12 @@ function unlockQuiz() {
     quizCompleted =
         false;
 
-    currentSessionStage =
-        "quiz";
+
+    quizSubmitting =
+        false;
 
 
     saveQuizSession();
-
-    updateSLCPageLoader(
-        "Loading your quiz",
-        "Preparing your quiz..."
-    );
 
 
     const lockedName =
@@ -2879,9 +2525,6 @@ function unlockQuiz() {
     showElement(
         "quizSection"
     );
-
-
-    hideSLCPageLoader();
 
 
     setTimeout(
@@ -3057,18 +2700,36 @@ function renderQuestions() {
 function setupQuizListeners() {
 
     const submitBtn =
-        getElement(
-            "submitBtn"
-        );
+        getElement("submitBtn");
+
 
     if (!submitBtn) {
+
+        console.warn(
+            "submitBtn was not found on the page."
+        );
+
         return;
+
     }
 
-    submitBtn.addEventListener(
-        "click",
-        submitQuiz
-    );
+
+    /*
+       Use the button's onclick property instead of adding
+       another click listener.
+
+       This prevents duplicate submissions when the HTML
+       button already uses:
+
+           onclick="submitQuiz()"
+
+       Assigning onclick here also replaces an existing
+       inline onclick handler rather than stacking another
+       event listener on top of it.
+    */
+
+    submitBtn.onclick =
+        submitQuiz;
 
 }
 
@@ -3079,7 +2740,14 @@ function setupQuizListeners() {
 
 async function submitQuiz() {
 
+    /*
+       Prevent the same quiz from being submitted more
+       than once while the first request is still being
+       processed.
+    */
+
     if (
+        quizSubmitting ||
         quizCompleted
     ) {
 
@@ -3124,7 +2792,29 @@ async function submitQuiz() {
     }
 
 
-    const answers = [];
+    /*
+       IMPORTANT:
+
+       The backend expects answers as a numbered object:
+
+       {
+           1: "A",
+           2: "C",
+           3: "B"
+       }
+
+       It does NOT expect:
+
+       [
+           "A",
+           "C",
+           "B"
+       ]
+
+       Therefore we build the numbered object here.
+    */
+
+    const answers = {};
 
 
     for (
@@ -3173,11 +2863,36 @@ async function submitQuiz() {
         }
 
 
-        answers.push(
-            selected.value
-        );
+        /*
+           Store each answer using the question number.
+
+           Example:
+
+           Question 1 → answers[1] = "A"
+           Question 2 → answers[2] = "C"
+           Question 3 → answers[3] = "B"
+        */
+
+        answers[i + 1] =
+            String(
+                selected.value || ""
+            )
+                .trim()
+                .toUpperCase();
 
     }
+
+
+    /*
+       Lock submission BEFORE the network request starts.
+
+       This is important because the user could otherwise
+       trigger the function twice before the first fetch
+       finishes.
+    */
+
+    quizSubmitting =
+        true;
 
 
     const submitBtn =
@@ -3263,22 +2978,6 @@ async function submitQuiz() {
                 true;
 
 
-            try {
-                localStorage.setItem(
-                    "afc_isiu_slc_member_v1",
-                    JSON.stringify({
-                        memberId: selectedMemberId,
-                        memberName: selectedMemberName
-                    })
-                );
-            } catch (storageError) {
-                console.warn(
-                    "Unable to save results member:",
-                    storageError
-                );
-            }
-
-
             clearQuizSession();
 
 
@@ -3290,6 +2989,7 @@ async function submitQuiz() {
 
             window.location.href =
                 `results.html?memberId=${encodeURIComponent(selectedMemberId)}`;
+
 
             return;
 
@@ -3328,6 +3028,10 @@ async function submitQuiz() {
             );
 
 
+            quizSubmitting =
+                false;
+
+
             restoreQuizSubmitButton();
 
 
@@ -3350,6 +3054,10 @@ async function submitQuiz() {
             );
 
 
+            quizSubmitting =
+                false;
+
+
             restoreQuizSubmitButton();
 
 
@@ -3368,22 +3076,6 @@ async function submitQuiz() {
 
         reflectionSubmitted =
             true;
-
-
-        try {
-            localStorage.setItem(
-                "afc_isiu_slc_member_v1",
-                JSON.stringify({
-                    memberId: selectedMemberId,
-                    memberName: selectedMemberName
-                })
-            );
-        } catch (storageError) {
-            console.warn(
-                "Unable to save results member:",
-                storageError
-            );
-        }
 
 
         clearQuizSession();
@@ -3409,6 +3101,10 @@ async function submitQuiz() {
         alert(
             "Unable to submit quiz. Please check your connection and try again."
         );
+
+
+        quizSubmitting =
+            false;
 
 
         restoreQuizSubmitButton();
