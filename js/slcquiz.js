@@ -14,22 +14,17 @@
         ↓
    Lock Participant
         ↓
-   Check CURRENT LESSON status
+   Check CURRENT LESSON Completion
         ↓
    ┌─────────────────────────────────────┐
    │                                     │
-   │ Quiz already completed              │
+   │ Already completed CURRENT lesson    │
    │        ↓                            │
    │ Show completed state                │
    │                                     │
-   │ Quiz NOT completed                  │
+   │ Not completed CURRENT lesson        │
    │        ↓                            │
-   │ Reflection already submitted?       │
-   │        ↓                            │
-   │ YES → Open Quiz directly            │
-   │ NO  → Show Reflection               │
-   │                                     │
-   │ Reflection submitted                │
+   │ Reflection                          │
    │        ↓                            │
    │ Quiz                                │
    │        ↓                            │
@@ -40,13 +35,16 @@
 
    IMPORTANT:
 
-   - Completion is checked by memberId + current lesson.
+   - Quiz Settings lesson number identifies ONLY the
+     currently active lesson.
    - Previous lessons do NOT block the current lesson.
-   - Reflection completion and quiz completion are separate.
-   - Refreshing after reflection skips reflection.
-   - Refreshing during quiz restores saved answers.
-   - Completed quizzes cannot be repeated.
+   - Participant cannot be changed after selection.
+   - Reflection requires all 3 questions.
+   - Minimum 100 meaningful characters.
    - Backend remains the final authority.
+   - A participant is considered completed ONLY when
+     Quiz Attempts contains an attempt for THIS lesson.
+   - Completed lessons cannot be repeated.
    ============================================================ */
 
 "use strict";
@@ -57,7 +55,7 @@
 ============================================================ */
 
 const API =
-    "https://script.google.com/macros/s/AKfycbw1mVwpgAcIOSNbpgzy52TFyozEGMtWWwVWUDFaofGNzpsguBIaKR4q1dXVtgVHO2xZ1w/exec";
+    "https://script.google.com/macros/s/AKfycbw1mVwpgAcIOSNbpgzy52TFyozEGMtWWwVWUDFaofGNpsguBIaKR4q1dXVtgVHO2xZ1w/exec";
 
 
 /* ============================================================
@@ -69,26 +67,8 @@ const REFLECTION_MIN_CHARACTERS = 100;
 const SESSION_KEY =
     "afc_isiu_slc_quiz_session_v1";
 
-const ANSWERS_KEY =
-    "afc_isiu_slc_saved_answers_v2";
-
-const LAST_REVIEW_KEY =
-    "lastQuizReview";
-
-const LAST_QUESTIONS_KEY =
-    "lastQuizQuestions";
-
-const LAST_SCORE_KEY =
-    "lastQuizScore";
-
-const LAST_POINTS_KEY =
-    "lastQuizPoints";
-
-const LAST_TOTAL_KEY =
-    "lastQuizTotal";
-
-const LAST_RESULT_LESSON_KEY =
-    "lastQuizResultLesson";
+const SESSION_STAGE_KEY =
+    "afc_isiu_slc_quiz_stage_v1";
 
 
 /* ============================================================
@@ -98,10 +78,6 @@ const LAST_RESULT_LESSON_KEY =
 let quizData = [];
 
 let selectedLesson = "";
-
-let reviewData = [];
-
-let reviewQuestions = [];
 
 let quizCloseTime = null;
 
@@ -117,699 +93,9 @@ let reflectionSubmitted = false;
 
 let quizLoaded = false;
 
-let quizSubmitted = false;
-
 let quizCompleted = false;
 
-let completionCheckInProgress = false;
-
-let slcLoaderElement = null;
-
-
-/* ============================================================
-   SLC PAGE LOADER
-============================================================ */
-
-function createSLCPageLoader() {
-
-    if (
-        document.getElementById(
-            "slcPageLoader"
-        )
-    ) {
-
-        slcLoaderElement =
-            document.getElementById(
-                "slcPageLoader"
-            );
-
-        return;
-
-    }
-
-
-    const style =
-        document.createElement(
-            "style"
-        );
-
-    style.id =
-        "slcPageLoaderStyles";
-
-    style.textContent = `
-
-        #slcPageLoader {
-
-            position: fixed;
-
-            inset: 0;
-
-            z-index: 99999;
-
-            display: flex;
-
-            align-items: center;
-
-            justify-content: center;
-
-            padding: 20px;
-
-background: #fff;
-
-backdrop-filter: none;
-
--webkit-backdrop-filter: none;
-
-            opacity: 0;
-
-            visibility: hidden;
-
-            pointer-events: none;
-
-            transition:
-                opacity 0.28s ease,
-                visibility 0.28s ease;
-
-        }
-
-
-        #slcPageLoader.show {
-
-            opacity: 1;
-
-            visibility: visible;
-
-            pointer-events: auto;
-
-        }
-
-
-        .slc-loader-card {
-
-            width:
-                min(330px, 100%);
-
-            padding:
-                28px 22px 24px;
-
-            text-align: center;
-
-            border:
-                1px solid
-                rgba(
-                    255,
-                    255,
-                    255,
-                    0.10
-                );
-
-            border-radius: 22px;
-
-            background:
-                linear-gradient(
-                    145deg,
-                    rgba(
-                        74,
-                        7,
-                        84,
-                        0.94
-                    ),
-                    rgba(
-                        10,
-                        0,
-                        22,
-                        0.98
-                    )
-                );
-
-            box-shadow:
-                0 24px 70px
-                rgba(
-                    0,
-                    0,
-                    0,
-                    0.55
-                ),
-                0 0 45px
-                rgba(
-                    74,
-                    7,
-                    84,
-                    0.28
-                );
-
-            transform:
-                translateY(10px)
-                scale(0.97);
-
-            transition:
-                transform 0.3s ease;
-
-        }
-
-
-        #slcPageLoader.show
-        .slc-loader-card {
-
-            transform:
-                translateY(0)
-                scale(1);
-
-        }
-
-
-        .slc-loader-spinner-wrap {
-
-            position: relative;
-
-            width: 54px;
-
-            height: 54px;
-
-            margin:
-                0 auto 17px;
-
-        }
-
-
-        .slc-loader-spinner {
-
-            width: 54px;
-
-            height: 54px;
-
-            box-sizing:
-                border-box;
-
-            border-radius: 50%;
-
-            border:
-                3px solid
-                rgba(
-                    255,
-                    255,
-                    255,
-                    0.13
-                );
-
-            border-top-color:
-                #ffffff;
-
-            border-right-color:
-                #b66fc0;
-
-            box-shadow:
-                0 0 24px
-                rgba(
-                    182,
-                    111,
-                    192,
-                    0.25
-                );
-
-            animation:
-                slcLoaderSpin
-                0.82s
-                linear
-                infinite;
-
-        }
-
-
-        .slc-loader-spinner-wrap::after {
-
-            content: "";
-
-            position: absolute;
-
-            inset: 11px;
-
-            border-radius: 50%;
-
-            border:
-                1px solid
-                rgba(
-                    255,
-                    255,
-                    255,
-                    0.08
-                );
-
-        }
-
-
-        .slc-loader-title {
-
-            margin:
-                0 0 6px;
-
-            font-size:
-                0.92rem;
-
-            line-height:
-                1.35;
-
-            font-weight:
-                700;
-
-            letter-spacing:
-                0.01em;
-
-            color:
-                #ffffff;
-
-        }
-
-
-        .slc-loader-message {
-
-            min-height:
-                34px;
-
-            margin: 0;
-
-            font-size:
-                0.78rem;
-
-            line-height:
-                1.5;
-
-            font-weight:
-                400;
-
-            color:
-                rgba(
-                    255,
-                    255,
-                    255,
-                    0.72
-                );
-
-        }
-
-
-        .slc-loader-dots {
-
-            display: flex;
-
-            justify-content:
-                center;
-
-            align-items:
-                center;
-
-            gap: 5px;
-
-            height: 12px;
-
-            margin-top: 11px;
-
-        }
-
-
-        .slc-loader-dots span {
-
-            width: 4px;
-
-            height: 4px;
-
-            border-radius: 50%;
-
-            background:
-                rgba(
-                    255,
-                    255,
-                    255,
-                    0.72
-                );
-
-            animation:
-                slcLoaderDot
-                1.2s
-                ease-in-out
-                infinite;
-
-        }
-
-
-        .slc-loader-dots
-        span:nth-child(2) {
-
-            animation-delay:
-                0.15s;
-
-        }
-
-
-        .slc-loader-dots
-        span:nth-child(3) {
-
-            animation-delay:
-                0.30s;
-
-        }
-
-
-        .slc-loader-progress {
-
-            width: 100%;
-
-            height: 2px;
-
-            margin-top: 16px;
-
-            overflow: hidden;
-
-            border-radius: 999px;
-
-            background:
-                rgba(
-                    255,
-                    255,
-                    255,
-                    0.08
-                );
-
-        }
-
-
-        .slc-loader-progress span {
-
-            display: block;
-
-            width: 35%;
-
-            height: 100%;
-
-            border-radius:
-                inherit;
-
-            background:
-                rgba(
-                    255,
-                    255,
-                    255,
-                    0.78
-                );
-
-            animation:
-                slcLoaderProgress
-                1.35s
-                ease-in-out
-                infinite;
-
-        }
-
-
-        @keyframes slcLoaderSpin {
-
-            to {
-
-                transform:
-                    rotate(360deg);
-
-            }
-
-        }
-
-
-        @keyframes slcLoaderDot {
-
-            0%,
-            60%,
-            100% {
-
-                transform:
-                    translateY(0);
-
-                opacity:
-                    0.35;
-
-            }
-
-            30% {
-
-                transform:
-                    translateY(-3px);
-
-                opacity:
-                    1;
-
-            }
-
-        }
-
-
-        @keyframes slcLoaderProgress {
-
-            0% {
-
-                transform:
-                    translateX(-130%);
-
-            }
-
-            50% {
-
-                transform:
-                    translateX(160%);
-
-            }
-
-            100% {
-
-                transform:
-                    translateX(300%);
-
-            }
-
-        }
-
-
-        @media (max-width: 480px) {
-
-            .slc-loader-card {
-
-                width:
-                    min(300px, 100%);
-
-                padding:
-                    25px 19px 21px;
-
-                border-radius:
-                    19px;
-
-            }
-
-
-            .slc-loader-spinner-wrap,
-            .slc-loader-spinner {
-
-                width: 50px;
-
-                height: 50px;
-
-            }
-
-
-            .slc-loader-title {
-
-                font-size:
-                    0.88rem;
-
-            }
-
-
-            .slc-loader-message {
-
-                font-size:
-                    0.75rem;
-
-            }
-
-        }
-
-
-        @media (prefers-reduced-motion: reduce) {
-
-            #slcPageLoader,
-            .slc-loader-card {
-
-                transition:
-                    none;
-
-            }
-
-
-            .slc-loader-spinner,
-            .slc-loader-dots span,
-            .slc-loader-progress span {
-
-                animation-duration:
-                    2.5s;
-
-            }
-
-        }
-
-    `;
-
-    document.head.appendChild(
-        style
-    );
-
-
-    const loader =
-        document.createElement(
-            "div"
-        );
-
-    loader.id =
-        "slcPageLoader";
-
-    loader.setAttribute(
-        "aria-hidden",
-        "true"
-    );
-
-    loader.innerHTML = `
-
-        <div
-            class="slc-loader-card"
-            role="status"
-            aria-live="polite"
-        >
-
-            <div
-                class="slc-loader-spinner-wrap"
-                aria-hidden="true"
-            >
-
-                <div
-                    class="slc-loader-spinner"
-                ></div>
-
-            </div>
-
-
-            <p
-                class="slc-loader-title"
-            >
-                Please wait
-            </p>
-
-
-            <p
-                class="slc-loader-message"
-                id="slcLoaderMessage"
-            >
-                Loading...
-            </p>
-
-
-            <div
-                class="slc-loader-dots"
-                aria-hidden="true"
-            >
-
-                <span></span>
-
-                <span></span>
-
-                <span></span>
-
-            </div>
-
-
-            <div
-                class="slc-loader-progress"
-                aria-hidden="true"
-            >
-
-                <span></span>
-
-            </div>
-
-        </div>
-
-    `;
-
-    document.body.appendChild(
-        loader
-    );
-
-    slcLoaderElement =
-        loader;
-
-}
-
-
-function showSLCPageLoader(
-    message = "Loading..."
-) {
-
-    if (!slcLoaderElement) {
-
-        createSLCPageLoader();
-
-    }
-
-
-    const messageElement =
-        getElement(
-            "slcLoaderMessage"
-        );
-
-    if (messageElement) {
-
-        messageElement.textContent =
-            message;
-
-    }
-
-
-    if (slcLoaderElement) {
-
-        slcLoaderElement.classList.add(
-            "show"
-        );
-
-        slcLoaderElement.setAttribute(
-            "aria-hidden",
-            "false"
-        );
-
-    }
-
-
-    document.body.style.overflow =
-        "hidden";
-
-}
-
-
-function hideSLCPageLoader() {
-
-    if (!slcLoaderElement) {
-
-        return;
-
-    }
-
-
-    slcLoaderElement.classList.remove(
-        "show"
-    );
-
-    slcLoaderElement.setAttribute(
-        "aria-hidden",
-        "true"
-    );
-
-    document.body.style.overflow =
-        "";
-
-}
+let currentSessionStage = "";
 
 
 /* ============================================================
@@ -820,27 +106,22 @@ document.addEventListener(
     "DOMContentLoaded",
     async function () {
 
-        createSLCPageLoader();
-
-
-        if (
-            typeof AOS !== "undefined"
-        ) {
+        if (typeof AOS !== "undefined") {
 
             AOS.init({
-
                 duration: 650,
-
                 once: true
-
             });
 
         }
 
 
-        setupReflectionListeners();
+        createSLCPageLoader();
+
 
         setupParticipantListeners();
+
+        setupReflectionListeners();
 
         setupQuizListeners();
 
@@ -869,9 +150,7 @@ document.addEventListener(
 
 function getElement(id) {
 
-    return document.getElementById(
-        id
-    );
+    return document.getElementById(id);
 
 }
 
@@ -883,9 +162,7 @@ function showElement(id) {
 
     if (element) {
 
-        element.classList.remove(
-            "hidden"
-        );
+        element.classList.remove("hidden");
 
     }
 
@@ -899,11 +176,246 @@ function hideElement(id) {
 
     if (element) {
 
-        element.classList.add(
-            "hidden"
-        );
+        element.classList.add("hidden");
 
     }
+
+}
+
+
+/* ============================================================
+   SLC PAGE LOADER
+============================================================ */
+
+function createSLCPageLoader() {
+
+    if (getElement("slcPageLoader")) {
+
+        return;
+
+    }
+
+
+    const style =
+        document.createElement("style");
+
+
+    style.id =
+        "slcPageLoaderStyles";
+
+
+    style.textContent = `
+        #slcPageLoader {
+            position: fixed;
+            inset: 0;
+            z-index: 99999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #ffffff 0%, #fdfaff 48%, #f7f1ff 100%);
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition: opacity 0.22s ease, visibility 0.22s ease;
+        }
+
+        #slcPageLoader.show {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+        }
+
+        .slc-loader-card {
+            width: min(360px, 100%);
+            padding: 30px 24px;
+            text-align: center;
+            background: #ffffff;
+            border: 1px solid #eee7f7;
+            border-radius: 22px;
+            box-shadow: none;
+        }
+
+        .slc-loader-spinner {
+            width: 42px;
+            height: 42px;
+            margin: 0 auto 16px;
+            border: 3px solid #f0eafb;
+            border-top-color: #a78bfa;
+            border-right-color: #c4b5fd;
+            border-radius: 50%;
+            animation: slcLoaderSpin 0.85s linear infinite;
+        }
+
+        .slc-loader-title {
+            margin: 0 0 6px;
+            color: #3b3150;
+            font-size: 0.92rem;
+            font-weight: 700;
+            line-height: 1.35;
+        }
+
+        .slc-loader-message {
+            margin: 0;
+            color: #81768f;
+            font-size: 0.78rem;
+            line-height: 1.5;
+        }
+
+        @keyframes slcLoaderSpin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .slc-loader-card {
+                width: min(330px, 100%);
+                padding: 26px 20px;
+                border-radius: 19px;
+            }
+
+            .slc-loader-title {
+                font-size: 0.88rem;
+            }
+
+            .slc-loader-message {
+                font-size: 0.75rem;
+            }
+        }
+    `;
+
+
+    document.head.appendChild(style);
+
+
+    const loader =
+        document.createElement("div");
+
+
+    loader.id =
+        "slcPageLoader";
+
+
+    loader.innerHTML = `
+        <div class="slc-loader-card" role="status" aria-live="polite">
+            <div class="slc-loader-spinner" aria-hidden="true"></div>
+            <p class="slc-loader-title">Please wait</p>
+            <p class="slc-loader-message">Loading...</p>
+        </div>
+    `;
+
+
+    document.body.appendChild(loader);
+
+}
+
+
+function updateSLCPageLoader(title, message) {
+
+    const loader =
+        getElement("slcPageLoader");
+
+
+    if (!loader) {
+
+        return;
+
+    }
+
+
+    const titleElement =
+        loader.querySelector(".slc-loader-title");
+
+
+    const messageElement =
+        loader.querySelector(".slc-loader-message");
+
+
+    if (titleElement) {
+
+        titleElement.textContent =
+            title || "Please wait";
+
+    }
+
+
+    if (messageElement) {
+
+        messageElement.textContent =
+            message || "Loading...";
+
+    }
+
+}
+
+
+function showSLCPageLoader(title, message) {
+
+    updateSLCPageLoader(
+        title,
+        message
+    );
+
+
+    const loader =
+        getElement("slcPageLoader");
+
+
+    if (loader) {
+
+        loader.classList.add("show");
+
+    }
+
+}
+
+
+function hideSLCPageLoader() {
+
+    const loader =
+        getElement("slcPageLoader");
+
+
+    if (loader) {
+
+        loader.classList.remove("show");
+
+    }
+
+}
+
+
+function getSavedSessionStage(saved) {
+
+    const storedStage =
+        sessionStorage.getItem(
+            SESSION_STAGE_KEY
+        );
+
+
+    if (
+        storedStage === "quiz" ||
+        storedStage === "reflection"
+    ) {
+
+        return storedStage;
+
+    }
+
+
+    if (
+        saved &&
+        (saved.stage === "quiz" ||
+            saved.stage === "reflection")
+    ) {
+
+        return saved.stage;
+
+    }
+
+
+    return "reflection";
 
 }
 
@@ -915,26 +427,11 @@ function hideElement(id) {
 function escapeHTML(value) {
 
     return String(value ?? "")
-        .replace(
-            /&/g,
-            "&amp;"
-        )
-        .replace(
-            /</g,
-            "&lt;"
-        )
-        .replace(
-            />/g,
-            "&gt;"
-        )
-        .replace(
-            /"/g,
-            "&quot;"
-        )
-        .replace(
-            /'/g,
-            "&#039;"
-        );
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
 
 }
 
@@ -946,14 +443,10 @@ function escapeHTML(value) {
 async function loadQuiz() {
 
     const status =
-        getElement(
-            "quizStatus"
-        );
+        getElement("quizStatus");
 
     const countdown =
-        getElement(
-            "quizCountdown"
-        );
+        getElement("quizCountdown");
 
 
     if (!status) {
@@ -971,11 +464,7 @@ async function loadQuiz() {
 
         const response =
             await fetch(
-                `${API}?action=getQuiz`,
-                {
-                    cache:
-                        "no-store"
-                }
+                `${API}?action=getQuiz`
             );
 
 
@@ -1018,29 +507,11 @@ async function loadQuiz() {
             }
 
 
-            hideElement(
-                "participantSection"
-            );
-
-            hideElement(
-                "lockedParticipantSection"
-            );
-
-            hideElement(
-                "reflectionSection"
-            );
-
-            hideElement(
-                "quizSection"
-            );
-
-            hideElement(
-                "resultSection"
-            );
-
-            hideElement(
-                "completedSection"
-            );
+            hideElement("participantSection");
+            hideElement("lockedParticipantSection");
+            hideElement("reflectionSection");
+            hideElement("quizSection");
+            hideElement("completedSection");
 
 
             quizLoaded =
@@ -1064,29 +535,11 @@ async function loadQuiz() {
                 "⏳ The weekly SLC quiz opens soon.";
 
 
-            hideElement(
-                "participantSection"
-            );
-
-            hideElement(
-                "lockedParticipantSection"
-            );
-
-            hideElement(
-                "reflectionSection"
-            );
-
-            hideElement(
-                "quizSection"
-            );
-
-            hideElement(
-                "resultSection"
-            );
-
-            hideElement(
-                "completedSection"
-            );
+            hideElement("participantSection");
+            hideElement("lockedParticipantSection");
+            hideElement("reflectionSection");
+            hideElement("quizSection");
+            hideElement("completedSection");
 
 
             if (data.openTime) {
@@ -1096,9 +549,8 @@ async function loadQuiz() {
                         data.openTime
                     );
 
-                startCountdown(
-                    "open"
-                );
+
+                startCountdown("open");
 
             }
 
@@ -1117,7 +569,7 @@ async function loadQuiz() {
         ==================================================== */
 
         if (
-            data.success === false
+            !data.success
         ) {
 
             status.textContent =
@@ -1144,9 +596,7 @@ async function loadQuiz() {
         ==================================================== */
 
         quizData =
-            Array.isArray(
-                data.questions
-            )
+            Array.isArray(data.questions)
                 ? data.questions
                 : [];
 
@@ -1159,28 +609,25 @@ async function loadQuiz() {
 
         quizCloseTime =
             data.closeTime
-                ? new Date(
-                    data.closeTime
-                )
+                ? new Date(data.closeTime)
                 : null;
 
 
-        quizOpenTime =
-            data.openTime
-                ? new Date(
-                    data.openTime
-                )
-                : null;
+        /*
+        Every time the active lesson is loaded,
+        reset frontend completion state.
 
+        Completion will ONLY be determined after
+        the selected participant is checked against
+        this specific lesson.
+        */
 
         quizCompleted =
             false;
 
-        quizSubmitted =
-            false;
-
         reflectionSubmitted =
             false;
+
 
         quizLoaded =
             true;
@@ -1206,25 +653,21 @@ async function loadQuiz() {
 
         if (quizCloseTime) {
 
-            startCountdown(
-                "close"
-            );
+            startCountdown("close");
 
         }
 
 
         /*
-         * Always begin with participant selection.
-         *
-         * restoreQuizSession() will decide whether
-         * this participant should resume at reflection,
-         * quiz, or completed state.
-         */
+        Always begin with participant selection.
+
+        Do NOT show results merely because a quiz
+        is active.
+        */
 
         showElement(
             "participantSection"
         );
-
 
         hideElement(
             "lockedParticipantSection"
@@ -1236,10 +679,6 @@ async function loadQuiz() {
 
         hideElement(
             "quizSection"
-        );
-
-        hideElement(
-            "resultSection"
         );
 
         hideElement(
@@ -1330,7 +769,9 @@ function startCountdown(mode) {
                         countdownInterval
                     );
 
+
                     window.location.reload();
+
 
                     return;
 
@@ -1339,8 +780,7 @@ function startCountdown(mode) {
 
                 const days =
                     Math.floor(
-                        diff /
-                        86400000
+                        diff / 86400000
                     );
 
 
@@ -1383,12 +823,10 @@ function startCountdown(mode) {
                     }
 
                     <strong>
-
                         ${days}d
                         ${hours}h
                         ${mins}m
                         ${secs}s
-
                     </strong>
 
                 `;
@@ -1422,9 +860,7 @@ async function loadMembers() {
     select.innerHTML = `
 
         <option value="">
-
             Select your name here
-
         </option>
 
     `;
@@ -1434,11 +870,7 @@ async function loadMembers() {
 
         const response =
             await fetch(
-                `${API}?action=getMembers`,
-                {
-                    cache:
-                        "no-store"
-                }
+                `${API}?action=getMembers`
             );
 
 
@@ -1457,9 +889,7 @@ async function loadMembers() {
 
         if (
             !data.success ||
-            !Array.isArray(
-                data.members
-            )
+            !Array.isArray(data.members)
         ) {
 
             return;
@@ -1569,13 +999,14 @@ function setupParticipantListeners() {
     }
 
 
-    /*
-     * The HTML already has onclick="addNewMember()".
-     *
-     * Therefore we intentionally DO NOT add another
-     * click listener here. This prevents duplicate
-     * requests to the backend.
-     */
+    if (addButton) {
+
+        addButton.addEventListener(
+            "click",
+            addNewMember
+        );
+
+    }
 
 }
 
@@ -1638,6 +1069,7 @@ async function addNewMember() {
 
         input.focus();
 
+
         return;
 
     }
@@ -1654,6 +1086,7 @@ async function addNewMember() {
 
         input.focus();
 
+
         return;
 
     }
@@ -1669,9 +1102,7 @@ async function addNewMember() {
 
     button.innerHTML = `
 
-        <i
-            class="fa-solid fa-spinner fa-spin"
-        ></i>
+        <i class="fa-solid fa-spinner fa-spin"></i>
 
         Adding...
 
@@ -1684,19 +1115,17 @@ async function addNewMember() {
             await fetch(
                 API,
                 {
-                    method:
-                        "POST",
+                    method: "POST",
 
-                    body:
-                        JSON.stringify({
+                    body: JSON.stringify({
 
-                            action:
-                                "addMember",
+                        action:
+                            "addMember",
 
-                            name:
-                                name
+                        name:
+                            name
 
-                        })
+                    })
 
                 }
             );
@@ -1723,6 +1152,7 @@ async function addNewMember() {
                 data.message ||
                 "Unable to add your name."
             );
+
 
             return;
 
@@ -1829,6 +1259,7 @@ async function lockSelectedParticipant() {
             "Please select your name first."
         );
 
+
         return;
 
     }
@@ -1852,10 +1283,16 @@ async function lockSelectedParticipant() {
             "Unable to identify the selected participant."
         );
 
+
         return;
 
     }
 
+
+    /*
+    Set the participant only after we have
+    confirmed that the selection is valid.
+    */
 
     selectedMemberId =
         memberId;
@@ -1865,19 +1302,9 @@ async function lockSelectedParticipant() {
         memberName;
 
 
-    reflectionSubmitted =
-        false;
-
-    quizCompleted =
-        false;
-
-    quizSubmitted =
-        false;
-
-
-    /*
-     * Lock participant controls.
-     */
+    /* ========================================================
+       LOCK PARTICIPANT CONTROLS
+    ======================================================== */
 
     select.disabled =
         true;
@@ -1943,44 +1370,43 @@ async function lockSelectedParticipant() {
         "lockedParticipantSection"
     );
 
+
     hideElement(
         "participantSection"
     );
 
-    hideElement(
-        "reflectionSection"
-    );
 
-    hideElement(
-        "quizSection"
-    );
-
-    hideElement(
-        "completedSection"
-    );
+    currentSessionStage =
+        "reflection";
 
 
     saveQuizSession();
 
 
-    /*
-     * IMPORTANT:
-     *
-     * Do not assume the participant needs reflection.
-     *
-     * Check the server first.
-     *
-     * The server decides:
-     *
-     * 1. Quiz completed
-     * 2. Reflection completed
-     * 3. Nothing completed
-     */
-
     showSLCPageLoader(
-        "Checking your quiz status..."
+        "Loading your reflection",
+        "Preparing the reflection stage for you..."
     );
 
+
+    /*
+    IMPORTANT:
+
+    The backend now checks THIS participant
+    against THIS lesson.
+
+    For example:
+
+    Active lesson = 87
+
+    Member completed 81
+        → NOT completed for 87
+        → continue to reflection
+
+    Member completed 87
+        → completed for 87
+        → show completed state
+    */
 
     await checkCompletionStatus();
 
@@ -2014,6 +1440,9 @@ function saveQuizSession() {
         lessonNo:
             selectedLesson,
 
+        stage:
+            currentSessionStage || "reflection",
+
         savedAt:
             new Date().toISOString()
 
@@ -2024,9 +1453,12 @@ function saveQuizSession() {
 
         sessionStorage.setItem(
             SESSION_KEY,
-            JSON.stringify(
-                session
-            )
+            JSON.stringify(session)
+        );
+
+        sessionStorage.setItem(
+            SESSION_STAGE_KEY,
+            currentSessionStage || "reflection"
         );
 
     }
@@ -2071,15 +1503,17 @@ async function restoreQuizSession() {
 
         if (!raw) {
 
+            sessionStorage.removeItem(
+                SESSION_STAGE_KEY
+            );
+
             return;
 
         }
 
 
         saved =
-            JSON.parse(
-                raw
-            );
+            JSON.parse(raw);
 
     }
     catch (error) {
@@ -2101,24 +1535,27 @@ async function restoreQuizSession() {
 
 
     /*
-     * Only restore a session belonging
-     * to the current active lesson.
-     */
+    CRITICAL:
+
+    Only restore a session belonging to
+    the CURRENT active lesson.
+    */
 
     if (
         !saved ||
-        String(
-            saved.lessonNo
-        ).trim()
+        String(saved.lessonNo).trim()
         !==
-        String(
-            selectedLesson
-        ).trim()
+        String(selectedLesson).trim()
     ) {
 
         sessionStorage.removeItem(
             SESSION_KEY
         );
+
+        sessionStorage.removeItem(
+            SESSION_STAGE_KEY
+        );
+
 
         return;
 
@@ -2132,20 +1569,6 @@ async function restoreQuizSession() {
     }
 
 
-    /*
-     * The participant already reached a stage
-     * of the quiz before leaving/reloading.
-     *
-     * Keep the page covered while we restore
-     * the participant and ask the backend where
-     * the participant should continue.
-     */
-
-    showSLCPageLoader(
-        "Bringing you back to your quiz..."
-    );
-
-
     const select =
         getElement(
             "memberSelect"
@@ -2153,8 +1576,6 @@ async function restoreQuizSession() {
 
 
     if (!select) {
-
-        hideSLCPageLoader();
 
         return;
 
@@ -2168,12 +1589,8 @@ async function restoreQuizSession() {
             function (item) {
 
                 return (
-                    String(
-                        item.value
-                    ) ===
-                    String(
-                        saved.memberId
-                    )
+                    String(item.value) ===
+                    String(saved.memberId)
                 );
 
             }
@@ -2186,8 +1603,9 @@ async function restoreQuizSession() {
             SESSION_KEY
         );
 
-
-        hideSLCPageLoader();
+        sessionStorage.removeItem(
+            SESSION_STAGE_KEY
+        );
 
 
         return;
@@ -2207,16 +1625,6 @@ async function restoreQuizSession() {
             option.textContent ||
             ""
         ).trim();
-
-
-    reflectionSubmitted =
-        false;
-
-    quizCompleted =
-        false;
-
-    quizSubmitted =
-        false;
 
 
     const lockedName =
@@ -2289,38 +1697,39 @@ async function restoreQuizSession() {
     );
 
 
-    hideElement(
-        "reflectionSection"
-    );
+    currentSessionStage =
+        getSavedSessionStage(saved);
 
 
-    hideElement(
-        "quizSection"
-    );
+    if (currentSessionStage === "quiz") {
 
+        showSLCPageLoader(
+            "Loading your quiz",
+            "Bringing you back to the quiz you left..."
+        );
 
-    hideElement(
-        "completedSection"
-    );
+    }
+    else {
+
+        currentSessionStage =
+            "reflection";
+
+        showSLCPageLoader(
+            "Loading your reflection",
+            "Bringing you back to the reflection you left..."
+        );
+
+    }
 
 
     /*
-     * VERY IMPORTANT:
-     *
-     * Never trust the old session as proof
-     * that the reflection was completed.
-     *
-     * Check the backend again.
-     */
+    NEVER assume that the saved session means
+    the quiz was completed.
+
+    Ask the backend again.
+    */
 
     await checkCompletionStatus();
-
-
-    if (quizCompleted) {
-
-        hideSLCPageLoader();
-
-    }
 
 }
 
@@ -2341,56 +1750,19 @@ async function checkCompletionStatus() {
     }
 
 
-    /*
-     * Prevent multiple simultaneous checks.
-     */
-
-    if (
-        completionCheckInProgress
-    ) {
-
-        return;
-
-    }
-
-
-    completionCheckInProgress =
-        true;
-
-
-    /*
-     * While checking, do not accidentally
-     * show reflection or quiz.
-     */
-
-    hideElement(
-        "reflectionSection"
-    );
-
-
-    hideElement(
-        "quizSection"
-    );
-
-
-    hideElement(
-        "completedSection"
-    );
-
-
-    const message =
+    const reflectionMessage =
         getElement(
             "reflectionMessage"
         );
 
 
-    if (message) {
+    if (reflectionMessage) {
 
-        message.className =
+        reflectionMessage.className =
             "reflection-message show";
 
 
-        message.textContent =
+        reflectionMessage.textContent =
             "Checking your quiz status...";
 
     }
@@ -2398,23 +1770,9 @@ async function checkCompletionStatus() {
 
     try {
 
-        const url =
-            `${API}?action=getSLCCompletionStatus` +
-            `&memberId=${encodeURIComponent(
-                selectedMemberId
-            )}` +
-            `&lessonNo=${encodeURIComponent(
-                selectedLesson
-            )}`;
-
-
         const response =
             await fetch(
-                url,
-                {
-                    cache:
-                        "no-store"
-                }
+                `${API}?action=getSLCCompletionStatus&memberId=${encodeURIComponent(selectedMemberId)}&lessonNo=${encodeURIComponent(selectedLesson)}`
             );
 
 
@@ -2432,7 +1790,7 @@ async function checkCompletionStatus() {
 
 
         console.log(
-            "SLC completion status:",
+            "SLC completion status for current lesson:",
             {
                 memberId:
                     selectedMemberId,
@@ -2450,26 +1808,67 @@ async function checkCompletionStatus() {
             !data.success
         ) {
 
-            throw new Error(
-                data.message ||
-                "Unable to check quiz status."
-            );
+            if (reflectionMessage) {
+
+                reflectionMessage.className =
+                    "reflection-message show error";
+
+
+                reflectionMessage.textContent =
+                    data.message ||
+                    "Unable to check your quiz status.";
+
+            }
+
+
+            return;
 
         }
 
 
         /*
-         * ======================================================
-         * SERVER STATE
-         * ======================================================
-         *
-         * The backend should return:
-         *
-         * quizCompleted
-         * reflectionCompleted
-         *
-         * for THIS member + THIS lesson.
-         */
+        ========================================================
+        CRITICAL RULE
+        ========================================================
+
+        ONLY this value decides whether the participant
+        has already completed the CURRENT lesson.
+
+        We intentionally DO NOT use:
+
+            data.completed
+
+        because a generic "completed" flag can represent
+        a broader completion state and must never cause an
+        older lesson to block the current lesson.
+        */
+
+        const statusLesson =
+            String(
+                data.currentLesson ||
+                data.lessonNo ||
+                ""
+            ).trim();
+
+        const lessonMatches =
+            statusLesson ===
+            String(selectedLesson).trim();
+
+        if (!lessonMatches) {
+
+            if (reflectionMessage) {
+
+                reflectionMessage.className =
+                    "reflection-message show error";
+
+                reflectionMessage.textContent =
+                    "We could not confirm the current quiz lesson. Please refresh and try again.";
+
+            }
+
+            return;
+
+        }
 
 
         const currentLessonQuizCompleted =
@@ -2481,7 +1880,7 @@ async function checkCompletionStatus() {
 
 
         /* ====================================================
-           CASE 1 — QUIZ ALREADY COMPLETED
+           CURRENT LESSON ALREADY COMPLETED
         ==================================================== */
 
         if (
@@ -2491,24 +1890,19 @@ async function checkCompletionStatus() {
             quizCompleted =
                 true;
 
-            quizSubmitted =
-                true;
 
             reflectionSubmitted =
                 true;
 
 
-            clearSavedAnswers();
-
             clearQuizSession();
+
+            hideSLCPageLoader();
 
 
             showCompletedState(
                 data
             );
-
-
-            hideSLCPageLoader();
 
 
             return;
@@ -2517,7 +1911,7 @@ async function checkCompletionStatus() {
 
 
         /* ====================================================
-           CASE 2 — REFLECTION ALREADY COMPLETED
+           CURRENT LESSON REFLECTION ALREADY COMPLETED
         ==================================================== */
 
         if (
@@ -2527,41 +1921,20 @@ async function checkCompletionStatus() {
             quizCompleted =
                 false;
 
-            quizSubmitted =
-                false;
 
             reflectionSubmitted =
                 true;
 
+            currentSessionStage =
+                "quiz";
+
 
             saveQuizSession();
 
-
-            /*
-             * THIS IS THE IMPORTANT PART.
-             *
-             * The participant has already completed
-             * the reflection.
-             *
-             * Therefore:
-             *
-             * DO NOT SHOW REFLECTION AGAIN.
-             *
-             * Go directly to the quiz.
-             */
-
-            const loaderMessage =
-                getElement(
-                    "slcLoaderMessage"
-                );
-
-
-            if (loaderMessage) {
-
-                loaderMessage.textContent =
-                    "Reflection found. Loading your quiz...";
-
-            }
+            updateSLCPageLoader(
+                "Loading your quiz",
+                "Your reflection is already complete. Opening your quiz..."
+            );
 
 
             unlockQuiz();
@@ -2573,17 +1946,18 @@ async function checkCompletionStatus() {
 
 
         /* ====================================================
-           CASE 3 — NOTHING COMPLETED
+           CURRENT LESSON NOT STARTED
         ==================================================== */
 
         quizCompleted =
             false;
 
-        quizSubmitted =
-            false;
 
         reflectionSubmitted =
             false;
+
+        currentSessionStage =
+            "reflection";
 
 
         saveQuizSession();
@@ -2604,28 +1978,19 @@ async function checkCompletionStatus() {
         );
 
 
-        if (message) {
+        if (reflectionMessage) {
 
-            message.className =
+            reflectionMessage.className =
                 "reflection-message";
 
 
-            message.textContent =
+            reflectionMessage.textContent =
                 "";
 
         }
 
 
         updateReflectionProgress();
-
-
-        /*
-         * Clear old reflection text so a previous
-         * lesson/session cannot accidentally appear.
-         */
-
-        clearReflectionFields();
-
 
         hideSLCPageLoader();
 
@@ -2638,49 +2003,18 @@ async function checkCompletionStatus() {
         );
 
 
-        /*
-         * SECURITY/STATE RULE:
-         *
-         * If we cannot verify the status,
-         * do NOT unlock the quiz.
-         *
-         * Keep the quiz hidden.
-         */
+        if (reflectionMessage) {
 
-        hideElement(
-            "quizSection"
-        );
-
-
-        hideElement(
-            "completedSection"
-        );
-
-
-        showElement(
-            "reflectionSection"
-        );
-
-
-        if (message) {
-
-            message.className =
+            reflectionMessage.className =
                 "reflection-message show error";
 
 
-            message.textContent =
+            reflectionMessage.textContent =
                 "We could not check your quiz status. Please check your connection and try again.";
 
         }
 
-
         hideSLCPageLoader();
-
-    }
-    finally {
-
-        completionCheckInProgress =
-            false;
 
     }
 
@@ -2712,11 +2046,6 @@ function showCompletedState(data) {
         "quizSection"
     );
 
-
-    /*
-     * Use existing result/completion section if
-     * your HTML contains one.
-     */
 
     const completedSection =
         getElement(
@@ -2755,53 +2084,25 @@ function showCompletedState(data) {
 
         card.innerHTML = `
 
-            <div
-                class="completed-icon"
-            >
-
-                <i
-                    class="fa-solid fa-circle-check"
-                ></i>
-
+            <div class="completed-icon">
+                <i class="fa-solid fa-circle-check"></i>
             </div>
 
-
-            <h2>
-
-                You've already completed this quiz
-
-            </h2>
-
+            <h2>You've already completed this quiz</h2>
 
             <p>
-
                 You have already completed Lesson
-                ${escapeHTML(
-                    selectedLesson
-                )}.
+                ${escapeHTML(selectedLesson)}.
                 You cannot repeat the reflection or quiz
                 for the same lesson.
-
             </p>
 
-
             <a
-                href="results.html?memberId=${encodeURIComponent(
-                    selectedMemberId
-                )}&lessonNo=${encodeURIComponent(
-                    selectedLesson
-                )}"
+                href="results.html"
                 class="purple-btn"
             >
-
-                <span>
-                    View My Results
-                </span>
-
-                <i
-                    class="fa-solid fa-arrow-right"
-                ></i>
-
+                <span>View My Results</span>
+                <i class="fa-solid fa-arrow-right"></i>
             </a>
 
         `;
@@ -2837,19 +2138,15 @@ function showCompletedState(data) {
 
 
     window.scrollTo({
-
         top: 0,
-
-        behavior:
-            "smooth"
-
+        behavior: "smooth"
     });
 
 }
 
 
 /* ============================================================
-   CLEAR QUIZ SESSION
+   CLEAR SESSION
 ============================================================ */
 
 function clearQuizSession() {
@@ -2860,11 +2157,15 @@ function clearQuizSession() {
             SESSION_KEY
         );
 
+        sessionStorage.removeItem(
+            SESSION_STAGE_KEY
+        );
+
     }
     catch (error) {
 
         console.warn(
-            "Unable to clear quiz session:",
+            "Unable to clear session:",
             error
         );
 
@@ -2882,9 +2183,7 @@ function setupReflectionListeners() {
     const ids = [
 
         "reflection1",
-
         "reflection2",
-
         "reflection3"
 
     ];
@@ -2932,57 +2231,13 @@ function setupReflectionListeners() {
 
 
 /* ============================================================
-   CLEAR REFLECTION FIELDS
-============================================================ */
-
-function clearReflectionFields() {
-
-    [
-
-        "reflection1",
-
-        "reflection2",
-
-        "reflection3"
-
-    ].forEach(
-        function (id) {
-
-            const field =
-                getElement(id);
-
-
-            if (field) {
-
-                field.value =
-                    "";
-
-            }
-
-        }
-    );
-
-
-    updateReflectionProgress();
-
-}
-
-
-/* ============================================================
    CLEAN REFLECTION TEXT
 ============================================================ */
 
-function cleanReflectionText(
-    text
-) {
+function cleanReflectionText(text) {
 
-    return String(
-        text || ""
-    )
-        .replace(
-            /\s+/g,
-            " "
-        )
+    return String(text || "")
+        .replace(/\s+/g, " ")
         .trim();
 
 }
@@ -2997,19 +2252,14 @@ function getReflectionCharacterCount() {
     const fields = [
 
         "reflection1",
-
         "reflection2",
-
         "reflection3"
 
     ];
 
 
     return fields.reduce(
-        function (
-            total,
-            id
-        ) {
+        function (total, id) {
 
             const field =
                 getElement(id);
@@ -3026,10 +2276,7 @@ function getReflectionCharacterCount() {
             return (
                 total +
                 text
-                    .replace(
-                        /\s/g,
-                        ""
-                    )
+                    .replace(/\s/g, "")
                     .length
             );
 
@@ -3076,13 +2323,10 @@ function reflectionRequirementsMet() {
 
 
     return (
-
         allAnswered &&
-
         getReflectionCharacterCount()
             >=
             REFLECTION_MIN_CHARACTERS
-
     );
 
 }
@@ -3239,28 +2483,6 @@ async function submitReflection() {
         quizCompleted
     ) {
 
-        /*
-         * Reflection has already been completed.
-         *
-         * If this function somehow gets called again,
-         * simply move the participant to the quiz.
-         */
-
-        if (
-            reflectionSubmitted &&
-            !quizCompleted
-        ) {
-
-            showSLCPageLoader(
-                "Loading your quiz..."
-            );
-
-
-            unlockQuiz();
-
-        }
-
-
         return;
 
     }
@@ -3271,6 +2493,7 @@ async function submitReflection() {
         alert(
             "Please select your name first."
         );
+
 
         return;
 
@@ -3283,14 +2506,13 @@ async function submitReflection() {
             "The current quiz lesson could not be identified."
         );
 
+
         return;
 
     }
 
 
-    if (
-        !reflectionRequirementsMet()
-    ) {
+    if (!reflectionRequirementsMet()) {
 
         updateReflectionProgress();
 
@@ -3349,9 +2571,7 @@ async function submitReflection() {
 
         button.innerHTML = `
 
-            <i
-                class="fa-solid fa-spinner fa-spin"
-            ></i>
+            <i class="fa-solid fa-spinner fa-spin"></i>
 
             Saving Reflection...
 
@@ -3373,7 +2593,8 @@ async function submitReflection() {
 
 
     showSLCPageLoader(
-        "Saving your reflection..."
+        "Saving your reflection",
+        "Saving your reflection and preparing your quiz..."
     );
 
 
@@ -3383,31 +2604,29 @@ async function submitReflection() {
             await fetch(
                 API,
                 {
-                    method:
-                        "POST",
+                    method: "POST",
 
-                    body:
-                        JSON.stringify({
+                    body: JSON.stringify({
 
-                            action:
-                                "submitReflection",
+                        action:
+                            "submitReflection",
 
-                            memberId:
-                                selectedMemberId,
+                        memberId:
+                            selectedMemberId,
 
-                            lessonNo:
-                                selectedLesson,
+                        lessonNo:
+                            selectedLesson,
 
-                            question1:
-                                answer1,
+                        question1:
+                            answer1,
 
-                            question2:
-                                answer2,
+                        question2:
+                            answer2,
 
-                            question3:
-                                answer3
+                        question3:
+                            answer3
 
-                        })
+                    })
 
                 }
             );
@@ -3433,18 +2652,21 @@ async function submitReflection() {
 
 
         /*
-         * The reflection may already have been
-         * submitted from another tab/device.
-         *
-         * That still means the participant is
-         * allowed to continue to the quiz,
-         * unless the quiz itself has already
-         * been completed.
-         */
+        Another tab/device may have completed
+        the reflection already.
+
+        That does NOT mean the quiz was completed.
+
+        Therefore unlock the quiz and let the backend
+        decide whether the quiz itself has already
+        been attempted.
+        */
 
         if (
             data.status ===
-            "already_completed"
+            "already_completed" ||
+            data.status ===
+            "reflection_completed"
         ) {
 
             reflectionSubmitted =
@@ -3454,21 +2676,7 @@ async function submitReflection() {
             saveQuizSession();
 
 
-            const loaderMessage =
-                getElement(
-                    "slcLoaderMessage"
-                );
-
-
-            if (loaderMessage) {
-
-                loaderMessage.textContent =
-                    "Reflection found. Loading your quiz...";
-
-            }
-
-
-            await checkCompletionStatus();
+            unlockQuiz();
 
 
             return;
@@ -3494,8 +2702,6 @@ async function submitReflection() {
 
 
             restoreReflectionButton();
-
-
             hideSLCPageLoader();
 
 
@@ -3523,34 +2729,10 @@ async function submitReflection() {
         }
 
 
-        const loaderMessage =
-            getElement(
-                "slcLoaderMessage"
-            );
-
-
-        if (loaderMessage) {
-
-            loaderMessage.textContent =
-                "Reflection saved. Loading your quiz...";
-
-        }
-
-
-        /*
-         * Do not immediately assume everything is fine.
-         *
-         * Re-check the server.
-         *
-         * This makes the backend the final authority
-         * and protects against duplicate/completed
-         * quiz attempts.
-         */
-
         setTimeout(
-            async function () {
+            function () {
 
-                await checkCompletionStatus();
+                unlockQuiz();
 
             },
             500
@@ -3578,8 +2760,6 @@ async function submitReflection() {
 
 
         restoreReflectionButton();
-
-
         hideSLCPageLoader();
 
     }
@@ -3616,9 +2796,7 @@ function restoreReflectionButton() {
             Submit Reflection
         </span>
 
-        <i
-            class="fa-solid fa-arrow-right"
-        ></i>
+        <i class="fa-solid fa-arrow-right"></i>
 
     `;
 
@@ -3649,12 +2827,16 @@ function unlockQuiz() {
     quizCompleted =
         false;
 
-
-    quizSubmitted =
-        false;
+    currentSessionStage =
+        "quiz";
 
 
     saveQuizSession();
+
+    updateSLCPageLoader(
+        "Loading your quiz",
+        "Preparing your quiz..."
+    );
 
 
     const lockedName =
@@ -3694,26 +2876,12 @@ function unlockQuiz() {
     renderQuestions();
 
 
-    /*
-     * Restore answers that were saved locally
-     * before the participant left/closed the page.
-     */
-
-    restoreSavedAnswers();
-
-
     showElement(
         "quizSection"
     );
 
 
-    if (
-        typeof AOS !== "undefined"
-    ) {
-
-        AOS.refresh();
-
-    }
+    hideSLCPageLoader();
 
 
     setTimeout(
@@ -3728,7 +2896,6 @@ function unlockQuiz() {
             if (quiz) {
 
                 quiz.scrollIntoView({
-
                     behavior:
                         "smooth",
 
@@ -3742,9 +2909,6 @@ function unlockQuiz() {
         },
         100
     );
-
-
-    hideSLCPageLoader();
 
 }
 
@@ -3778,14 +2942,10 @@ function renderQuestions() {
 
         container.innerHTML = `
 
-            <div
-                class="question-card"
-            >
+            <div class="question-card">
 
                 <h3>
-
                     No quiz questions are available right now.
-
                 </h3>
 
             </div>
@@ -3809,13 +2969,9 @@ function renderQuestions() {
 
 
             [
-
                 "A",
-
                 "B",
-
                 "C",
-
                 "D"
 
             ].forEach(
@@ -3836,29 +2992,21 @@ function renderQuestions() {
 
                     options += `
 
-                        <label
-                            class="option"
-                        >
+                        <label class="option">
 
                             <input
                                 type="radio"
                                 name="q${index}"
-                                value="${escapeHTML(
-                                    letter
-                                )}"
+                                value="${escapeHTML(letter)}"
                             >
 
                             <span>
 
                                 <strong>
-                                    ${escapeHTML(
-                                        letter
-                                    )}.
+                                    ${escapeHTML(letter)}.
                                 </strong>
 
-                                ${escapeHTML(
-                                    text
-                                )}
+                                ${escapeHTML(text)}
 
                             </span>
 
@@ -3872,31 +3020,21 @@ function renderQuestions() {
 
             container.innerHTML += `
 
-                <div
-                    class="question-card"
-                >
+                <div class="question-card">
 
-                    <div
-                        class="question-number"
-                    >
+                    <div class="question-number">
 
                         QUESTION ${index + 1}
 
                     </div>
 
-
                     <h3>
-
                         ${escapeHTML(
                             question.question
                         )}
-
                     </h3>
 
-
-                    <div
-                        class="options"
-                    >
+                    <div class="options">
 
                         ${options}
 
@@ -3908,27 +3046,6 @@ function renderQuestions() {
 
         }
     );
-
-
-    /*
-     * Save answers immediately whenever
-     * an option is selected.
-     */
-
-    container
-        .querySelectorAll(
-            'input[type="radio"]'
-        )
-        .forEach(
-            function (radio) {
-
-                radio.addEventListener(
-                    "change",
-                    saveCurrentAnswers
-                );
-
-            }
-        );
 
 }
 
@@ -3944,273 +3061,14 @@ function setupQuizListeners() {
             "submitBtn"
         );
 
-
     if (!submitBtn) {
-
-        console.warn(
-            "submitBtn was not found on the page."
-        );
-
-
         return;
-
     }
-
-
-    /*
-     * IMPORTANT:
-     *
-     * We use ONLY this listener.
-     *
-     * Do not add another onclick listener
-     * in JavaScript because the HTML already
-     * contains onclick="submitQuiz()".
-     */
 
     submitBtn.addEventListener(
         "click",
         submitQuiz
     );
-
-}
-
-
-/* ============================================================
-   ANSWERS STORAGE KEY
-============================================================ */
-
-function getAnswersStorageKey() {
-
-    return (
-
-        `${ANSWERS_KEY}_` +
-
-        `${selectedLesson}_` +
-
-        `${selectedMemberId}`
-
-    );
-
-}
-
-
-/* ============================================================
-   SAVE CURRENT ANSWERS
-============================================================ */
-
-function saveCurrentAnswers() {
-
-    if (
-        !selectedLesson ||
-        !selectedMemberId
-    ) {
-
-        return;
-
-    }
-
-
-    const answers = {};
-
-
-    quizData.forEach(
-        function (
-            question,
-            index
-        ) {
-
-            const selected =
-                document.querySelector(
-                    `input[name="q${index}"]:checked`
-                );
-
-
-            if (selected) {
-
-                answers[index] =
-                    selected.value;
-
-            }
-
-        }
-    );
-
-
-    try {
-
-        localStorage.setItem(
-
-            getAnswersStorageKey(),
-
-            JSON.stringify({
-
-                lessonNo:
-                    selectedLesson,
-
-                memberId:
-                    selectedMemberId,
-
-                answers:
-                    answers,
-
-                savedAt:
-                    new Date().toISOString()
-
-            })
-
-        );
-
-    }
-    catch (error) {
-
-        console.warn(
-            "Unable to save quiz answers:",
-            error
-        );
-
-    }
-
-}
-
-
-/* ============================================================
-   RESTORE SAVED ANSWERS
-============================================================ */
-
-function restoreSavedAnswers() {
-
-    if (
-        !selectedLesson ||
-        !selectedMemberId
-    ) {
-
-        return;
-
-    }
-
-
-    try {
-
-        const raw =
-            localStorage.getItem(
-                getAnswersStorageKey()
-            );
-
-
-        if (!raw) {
-
-            return;
-
-        }
-
-
-        const saved =
-            JSON.parse(
-                raw
-            );
-
-
-        if (
-            !saved ||
-            String(
-                saved.lessonNo
-            ) !==
-            String(
-                selectedLesson
-            ) ||
-            String(
-                saved.memberId
-            ) !==
-            String(
-                selectedMemberId
-            )
-        ) {
-
-            return;
-
-        }
-
-
-        const answers =
-            saved.answers || {};
-
-
-        Object.keys(
-            answers
-        ).forEach(
-            function (index) {
-
-                const value =
-                    answers[index];
-
-
-                const radio =
-                    document.querySelector(
-                        `input[name="q${index}"][value="${CSS.escape(
-                            value
-                        )}"]`
-                    );
-
-
-                if (radio) {
-
-                    radio.checked =
-                        true;
-
-                }
-
-            }
-        );
-
-
-        console.log(
-            "Saved quiz answers restored."
-        );
-
-    }
-    catch (error) {
-
-        console.warn(
-            "Unable to restore saved answers:",
-            error
-        );
-
-    }
-
-}
-
-
-/* ============================================================
-   CLEAR SAVED ANSWERS
-============================================================ */
-
-function clearSavedAnswers() {
-
-    if (
-        !selectedLesson ||
-        !selectedMemberId
-    ) {
-
-        return;
-
-    }
-
-
-    try {
-
-        localStorage.removeItem(
-            getAnswersStorageKey()
-        );
-
-    }
-    catch (error) {
-
-        console.warn(
-            "Unable to clear saved answers:",
-            error
-        );
-
-    }
 
 }
 
@@ -4222,8 +3080,7 @@ function clearSavedAnswers() {
 async function submitQuiz() {
 
     if (
-        quizCompleted ||
-        quizSubmitted
+        quizCompleted
     ) {
 
         return;
@@ -4243,35 +3100,11 @@ async function submitQuiz() {
     }
 
 
-    /*
-     * Reflection must already be completed.
-     */
-
     if (!reflectionSubmitted) {
 
-        /*
-         * Before telling the participant to
-         * complete reflection, check the backend.
-         *
-         * It may already have been completed
-         * from another tab/device.
-         */
-
-        showSLCPageLoader(
-            "Checking your quiz status..."
+        alert(
+            "Please complete the reflection before taking the quiz."
         );
-
-
-        await checkCompletionStatus();
-
-
-        if (!reflectionSubmitted) {
-
-            alert(
-                "Please complete the reflection before taking the quiz."
-            );
-
-        }
 
 
         return;
@@ -4324,7 +3157,6 @@ async function submitQuiz() {
             ) {
 
                 questionCards[i].scrollIntoView({
-
                     behavior:
                         "smooth",
 
@@ -4362,9 +3194,7 @@ async function submitQuiz() {
 
         submitBtn.innerHTML = `
 
-            <i
-                class="fa-solid fa-spinner fa-spin"
-            ></i>
+            <i class="fa-solid fa-spinner fa-spin"></i>
 
             Submitting...
 
@@ -4373,36 +3203,29 @@ async function submitQuiz() {
     }
 
 
-    quizSubmitted =
-        true;
-
-
     try {
 
         const response =
             await fetch(
                 API,
                 {
+                    method: "POST",
 
-                    method:
-                        "POST",
+                    body: JSON.stringify({
 
-                    body:
-                        JSON.stringify({
+                        action:
+                            "scoreQuiz",
 
-                            action:
-                                "scoreQuiz",
+                        memberId:
+                            selectedMemberId,
 
-                            memberId:
-                                selectedMemberId,
+                        lessonNo:
+                            selectedLesson,
 
-                            lessonNo:
-                                selectedLesson,
+                        answers:
+                            answers
 
-                            answers:
-                                answers
-
-                        })
+                    })
 
                 }
             );
@@ -4440,11 +3263,21 @@ async function submitQuiz() {
                 true;
 
 
-            quizSubmitted =
-                true;
+            try {
+                localStorage.setItem(
+                    "afc_isiu_slc_member_v1",
+                    JSON.stringify({
+                        memberId: selectedMemberId,
+                        memberName: selectedMemberName
+                    })
+                );
+            } catch (storageError) {
+                console.warn(
+                    "Unable to save results member:",
+                    storageError
+                );
+            }
 
-
-            clearSavedAnswers();
 
             clearQuizSession();
 
@@ -4456,12 +3289,7 @@ async function submitQuiz() {
 
 
             window.location.href =
-                `results.html?memberId=${encodeURIComponent(
-                    selectedMemberId
-                )}&lessonNo=${encodeURIComponent(
-                    selectedLesson
-                )}`;
-
+                `results.html?memberId=${encodeURIComponent(selectedMemberId)}`;
 
             return;
 
@@ -4477,44 +3305,27 @@ async function submitQuiz() {
             "reflection_required"
         ) {
 
-            quizSubmitted =
-                false;
-
-
             reflectionSubmitted =
                 false;
 
 
-            /*
-             * DO NOT blindly show reflection.
-             *
-             * Ask the backend again.
-             *
-             * If the backend says reflection is already
-             * completed, checkCompletionStatus() will
-             * send the participant directly back to quiz.
-             *
-             * If not completed, it will show reflection.
-             */
+            showElement(
+                "reflectionSection"
+            );
 
-            showSLCPageLoader(
-                "Checking your quiz status..."
+
+            hideElement(
+                "quizSection"
             );
 
 
             await checkCompletionStatus();
 
 
-            if (
-                !reflectionSubmitted
-            ) {
-
-                alert(
-                    data.message ||
-                    "Please complete your reflection before taking the quiz."
-                );
-
-            }
+            alert(
+                data.message ||
+                "Please complete your reflection before taking the quiz."
+            );
 
 
             restoreQuizSubmitButton();
@@ -4532,10 +3343,6 @@ async function submitQuiz() {
         if (
             !data.success
         ) {
-
-            quizSubmitted =
-                false;
-
 
             alert(
                 data.message ||
@@ -4559,129 +3366,36 @@ async function submitQuiz() {
             true;
 
 
-        quizSubmitted =
-            true;
-
-
         reflectionSubmitted =
             true;
 
 
-        /*
-         * Save result information before clearing
-         * the participant session.
-         */
-
         try {
-
             localStorage.setItem(
-
-                LAST_REVIEW_KEY,
-
-                JSON.stringify(
-
-                    data.review ||
-                    data.answers ||
-                    []
-
-                )
-
+                "afc_isiu_slc_member_v1",
+                JSON.stringify({
+                    memberId: selectedMemberId,
+                    memberName: selectedMemberName
+                })
             );
-
-
-            localStorage.setItem(
-
-                LAST_QUESTIONS_KEY,
-
-                JSON.stringify(
-                    quizData
-                )
-
-            );
-
-
-            localStorage.setItem(
-
-                LAST_SCORE_KEY,
-
-                String(
-                    data.score ?? 0
-                )
-
-            );
-
-
-            localStorage.setItem(
-
-                LAST_POINTS_KEY,
-
-                String(
-                    data.points ?? 0
-                )
-
-            );
-
-
-            localStorage.setItem(
-
-                LAST_TOTAL_KEY,
-
-                String(
-
-                    data.totalPoints ??
-                    data.total ??
-                    0
-
-                )
-
-            );
-
-
-            localStorage.setItem(
-
-                LAST_RESULT_LESSON_KEY,
-
-                String(
-                    selectedLesson
-                )
-
-            );
-
-        }
-        catch (storageError) {
-
+        } catch (storageError) {
             console.warn(
-                "Unable to save result information:",
+                "Unable to save results member:",
                 storageError
             );
-
         }
 
-
-        /*
-         * The quiz has now been permanently completed
-         * for this participant + lesson.
-         *
-         * Remove temporary answers and session.
-         */
-
-        clearSavedAnswers();
 
         clearQuizSession();
 
 
         /*
-         * Send participant to the results page.
-         *
-         * The backend remains the source of truth.
-         */
+        Results page handles the actual score,
+        history and answer review.
+        */
 
         window.location.href =
-            `results.html?memberId=${encodeURIComponent(
-                selectedMemberId
-            )}&lessonNo=${encodeURIComponent(
-                selectedLesson
-            )}&completed=1`;
+            `results.html?memberId=${encodeURIComponent(selectedMemberId)}&lessonNo=${encodeURIComponent(selectedLesson)}&completed=1`;
 
     }
     catch (error) {
@@ -4690,15 +3404,6 @@ async function submitQuiz() {
             "submitQuiz error:",
             error
         );
-
-
-        /*
-         * Allow another attempt if the request
-         * genuinely failed.
-         */
-
-        quizSubmitted =
-            false;
 
 
         alert(
@@ -4738,453 +3443,10 @@ function restoreQuizSubmitButton() {
 
     submitBtn.innerHTML = `
 
-        <i
-            class="fa-solid fa-paper-plane"
-        ></i>
+        <i class="fa-solid fa-paper-plane"></i>
 
         Submit Quiz
 
     `;
-
-}
-
-
-/* ============================================================
-   REVIEW
-============================================================ */
-
-function showReview() {
-
-    const reviewSection =
-        getElement(
-            "reviewSection"
-        );
-
-
-    const reviewContainer =
-        getElement(
-            "reviewContainer"
-        );
-
-
-    if (
-        !reviewSection ||
-        !reviewContainer
-    ) {
-
-        return;
-
-    }
-
-
-    reviewContainer.innerHTML =
-        "";
-
-
-    let review =
-        reviewData;
-
-
-    if (
-        !Array.isArray(review) ||
-        !review.length
-    ) {
-
-        try {
-
-            const saved =
-                localStorage.getItem(
-                    LAST_REVIEW_KEY
-                );
-
-
-            if (saved) {
-
-                review =
-                    JSON.parse(
-                        saved
-                    );
-
-            }
-
-        }
-        catch (error) {
-
-            console.warn(
-                "Unable to load saved review:",
-                error
-            );
-
-        }
-
-    }
-
-
-    if (
-        !Array.isArray(review) ||
-        !review.length
-    ) {
-
-        reviewContainer.innerHTML = `
-
-            <div
-                class="question-card"
-            >
-
-                <h3>
-
-                    Review information is not available.
-
-                </h3>
-
-            </div>
-
-        `;
-
-
-        showElement(
-            "reviewSection"
-        );
-
-
-        hideElement(
-            "resultSection"
-        );
-
-
-        return;
-
-    }
-
-
-    review.forEach(
-        function (
-            item,
-            index
-        ) {
-
-            const question =
-                item.question ||
-                item.questionText ||
-                quizData[index]?.question ||
-                "";
-
-
-            const selected =
-                item.selectedAnswer ||
-                item.answer ||
-                item.userAnswer ||
-                "";
-
-
-            const correct =
-                item.correctAnswer ||
-                item.correct ||
-                "";
-
-
-            const isCorrect =
-                String(
-                    selected
-                )
-                    .trim()
-                    .toUpperCase() ===
-                String(
-                    correct
-                )
-                    .trim()
-                    .toUpperCase();
-
-
-            const card =
-                document.createElement(
-                    "div"
-                );
-
-
-            card.className =
-                "question-card";
-
-
-            card.innerHTML = `
-
-                <div
-                    class="question-number"
-                >
-
-                    QUESTION ${index + 1}
-
-                </div>
-
-
-                <h3>
-
-                    ${escapeHTML(
-                        question
-                    )}
-
-                </h3>
-
-
-                <p>
-
-                    <strong>
-                        Your answer:
-                    </strong>
-
-                    ${escapeHTML(
-                        selected
-                    )}
-
-                </p>
-
-
-                <p>
-
-                    <strong>
-                        Correct answer:
-                    </strong>
-
-                    ${escapeHTML(
-                        correct
-                    )}
-
-                </p>
-
-
-                <p
-                    class="${
-                        isCorrect
-                            ? "review-correct"
-                            : "review-wrong"
-                    }"
-                >
-
-                    ${
-                        isCorrect
-                            ? "✓ Correct"
-                            : "✗ Incorrect"
-                    }
-
-                </p>
-
-            `;
-
-
-            reviewContainer.appendChild(
-                card
-            );
-
-        }
-    );
-
-
-    showElement(
-        "reviewSection"
-    );
-
-
-    hideElement(
-        "resultSection"
-    );
-
-
-    window.scrollTo({
-
-        top: 0,
-
-        behavior:
-            "smooth"
-
-    });
-
-}
-
-
-/* ============================================================
-   HIDE REVIEW
-============================================================ */
-
-function hideReview() {
-
-    hideElement(
-        "reviewSection"
-    );
-
-}
-
-
-/* ============================================================
-   BACK TO QUIZ
-============================================================ */
-
-function backToQuiz() {
-
-    hideElement(
-        "reviewSection"
-    );
-
-
-    showElement(
-        "quizSection"
-    );
-
-}
-
-
-/* ============================================================
-   OPEN SAVED SCORE
-============================================================ */
-
-function openSavedScore() {
-
-    try {
-
-        const score =
-            localStorage.getItem(
-                LAST_SCORE_KEY
-            );
-
-
-        const points =
-            localStorage.getItem(
-                LAST_POINTS_KEY
-            );
-
-
-        const total =
-            localStorage.getItem(
-                LAST_TOTAL_KEY
-            );
-
-
-        if (
-            score !== null
-        ) {
-
-            const scoreText =
-                getElement(
-                    "scoreText"
-                );
-
-
-            if (scoreText) {
-
-                scoreText.textContent =
-                    score;
-
-            }
-
-        }
-
-
-        if (
-            points !== null
-        ) {
-
-            const pointsText =
-                getElement(
-                    "pointsText"
-                );
-
-
-            if (pointsText) {
-
-                pointsText.textContent =
-                    points;
-
-            }
-
-        }
-
-
-        if (
-            total !== null
-        ) {
-
-            const totalPointsText =
-                getElement(
-                    "totalPointsText"
-                );
-
-
-            if (totalPointsText) {
-
-                totalPointsText.textContent =
-                    total;
-
-            }
-
-        }
-
-
-        showElement(
-            "resultSection"
-        );
-
-    }
-    catch (error) {
-
-        console.warn(
-            "Unable to open saved score:",
-            error
-        );
-
-    }
-
-}
-
-
-/* ============================================================
-   OPEN SAVED REVIEW
-============================================================ */
-
-function openSavedReview() {
-
-    try {
-
-        const rawReview =
-            localStorage.getItem(
-                LAST_REVIEW_KEY
-            );
-
-
-        const rawQuestions =
-            localStorage.getItem(
-                LAST_QUESTIONS_KEY
-            );
-
-
-        if (rawQuestions) {
-
-            reviewQuestions =
-                JSON.parse(
-                    rawQuestions
-                );
-
-        }
-
-
-        if (rawReview) {
-
-            reviewData =
-                JSON.parse(
-                    rawReview
-                );
-
-        }
-
-
-        showReview();
-
-    }
-    catch (error) {
-
-        console.warn(
-            "Unable to open saved review:",
-            error
-        );
-
-    }
 
 }
