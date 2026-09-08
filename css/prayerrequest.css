@@ -931,14 +931,14 @@
         gap: 16px;
     }
 
+    /* --------------------------------------------------------
+       MOBILE: HIDE THE INTRO/DETAILS CARD
+       Only the form card should show on mobile — the intro
+       panel stays visible on tablet and desktop.
+    -------------------------------------------------------- */
+
     .prayer-intro {
-        padding: 24px;
-
-        border-radius: 24px;
-    }
-
-    .prayer-intro h2 {
-        font-size: 1.25rem;
+        display: none;
     }
 
     .prayer-form-card {
