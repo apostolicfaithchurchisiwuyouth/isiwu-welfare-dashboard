@@ -406,7 +406,7 @@ function createTransitionLoader() {
                     center;
 
                 color:
-                    #ddd;
+                    #333;
 
             }
 
