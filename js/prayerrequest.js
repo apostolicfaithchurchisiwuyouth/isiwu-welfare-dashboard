@@ -9,8 +9,10 @@
 
 /* ============================================================
    API
-   PASTE YOUR APPS SCRIPT WEB APP URL HERE AFTER DEPLOYING
-   (see PrayerRequestCode.gs for the backend + deploy steps)
+   This now points to the SAME Apps Script deployment used by
+   the SLC Quiz and Results pages, since PrayerRequestModule.gs
+   lives inside that same project (see PrayerRequestModule.gs
+   for how the shared doPost routes to it).
 ============================================================ */
 
 const PRAYER_API =
@@ -585,6 +587,9 @@ async function handlePrayerSubmit(
 
 
     const payload = {
+
+        action:
+            "submitPrayerRequest",
 
         name:
             isAnonymous
