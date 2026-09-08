@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    >
+
+    <title>Prayer Requests | AFC Isiu Youth Portal</title>
+
+
+    <!-- =====================================================
+         PWA
+    ====================================================== -->
+
+    <link
+        rel="manifest"
+        href="/manifest.json"
+    >
+
+    <meta
+        name="theme-color"
+        content="#4a0754"
+    >
+
+    <meta
+        name="mobile-web-app-capable"
+        content="yes"
+    >
+
+    <meta
+        name="apple-mobile-web-app-capable"
+        content="yes"
+    >
+
+    <meta
+        name="apple-mobile-web-app-status-bar-style"
+        content="default"
+    >
+
+    <meta
+        name="apple-mobile-web-app-title"
+        content="AFC Isiu"
+    >
+
+
+    <!-- =====================================================
+         ICONS
+    ====================================================== -->
+
+    <link
+        rel="icon"
+        type="image/png"
+        href="/images/logo.png"
+    >
+
+    <link
+        rel="apple-touch-icon"
+        href="/images/logo.png"
+    >
+
+
+    <!-- =====================================================
+         FONTS
+    ====================================================== -->
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap"
+        rel="stylesheet"
+    >
+
+
+    <!-- =====================================================
+         FONT AWESOME
+    ====================================================== -->
+
+    <link
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+        rel="stylesheet"
+    >
+
+
+    <!-- =====================================================
+         PORTAL CSS
+    ====================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="../css/main.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="../css/layout.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="../css/prayerrequest.css"
+    >
+
+</head>
+
+
+<body>
+
+<div class="app-layout">
+
+    <!-- ======================================================
+         SIDEBAR
+    ======================================================= -->
+
+    <div id="app-sidebar"></div>
+
+
+    <!-- ======================================================
+         MAIN AREA
+    ======================================================= -->
+
+    <div class="main-area">
+
+        <!-- TOPBAR -->
+
+        <div id="app-topbar"></div>
+
+
+        <!-- ==================================================
+             PAGE CONTENT
+        =================================================== -->
+
+        <main class="dashboard-content prayer-page">
+
+            <!-- ==================================================
+                 HERO
+            =================================================== -->
+
+            <section class="prayer-hero">
+
+                <div class="prayer-hero-content">
+
+                    <div class="prayer-eyebrow">
+
+                        <i class="fa-solid fa-hands-praying"></i>
+
+                        Prayer Requests
+
+                    </div>
+
+
+                    <h1>
+
+                        Bring your request
+
+                        <span>
+                            to God.
+                        </span>
+
+                    </h1>
+
+
+                    <p>
+
+                        "Cast all your anxiety on Him because
+                        He cares for you." — 1 Peter 5:7.
+                        Share what's on your heart and our
+                        prayer team will stand with you in faith.
+
+                    </p>
+
+
+                    <div class="prayer-hero-actions">
+
+                        <button
+                            type="button"
+                            class="prayer-primary-btn"
+                            data-scroll-to="prayerFormSection"
+                        >
+
+                            <i class="fa-solid fa-hands-praying"></i>
+
+                            Submit a Prayer Request
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ==================================================
+                 PRAYER REQUEST FORM
+            =================================================== -->
+
+            <section
+                class="prayer-form-section"
+                id="prayerFormSection"
+            >
+
+                <div class="prayer-intro">
+
+                    <div class="prayer-intro-icon">
+
+                        <i class="fa-solid fa-hands-praying"></i>
+
+                    </div>
+
+
+                    <span class="prayer-section-kicker">
+                        We're praying with you
+                    </span>
+
+
+                    <h2>
+                        Every request matters
+                    </h2>
+
+
+                    <p>
+
+                        Whatever you're carrying — healing,
+                        family, provision, direction — you don't
+                        have to carry it alone. Write it below
+                        and our prayer team will lift it up.
+
+                    </p>
+
+
+                    <div class="prayer-response-note">
+
+                        <i class="fa-solid fa-lock"></i>
+
+                        <span>
+
+                            Your request is seen only by the
+                            prayer team and is treated with
+                            care and confidentiality.
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- FORM CARD -->
+
+                <div class="prayer-form-card">
+
+                    <form
+                        id="prayerRequestForm"
+                        class="prayer-request-form"
+                        novalidate
+                    >
+
+                        <!-- ANONYMOUS TOGGLE -->
+
+                        <label class="prayer-anonymous-toggle">
+
+                            <input
+                                type="checkbox"
+                                id="prayerAnonymous"
+                                name="anonymous"
+                            >
+
+
+                            <span class="custom-checkbox">
+
+                                <i class="fa-solid fa-check"></i>
+
+                            </span>
+
+
+                            <span class="consent-text">
+
+                                Submit this request anonymously
+
+                            </span>
+
+                        </label>
+
+
+                        <!-- NAME + PHONE -->
+
+                        <div class="form-row">
+
+                            <div class="form-field">
+
+                                <label
+                                    for="prayerName"
+                                    id="prayerNameLabel"
+                                >
+
+                                    Your Name
+
+                                    <span>*</span>
+
+                                </label>
+
+
+                                <div class="input-wrapper">
+
+                                    <i class="fa-regular fa-user"></i>
+
+                                    <input
+                                        type="text"
+                                        id="prayerName"
+                                        name="name"
+                                        placeholder="Enter your name"
+                                        maxlength="100"
+                                        autocomplete="name"
+                                        required
+                                    >
+
+                                </div>
+
+
+                                <small
+                                    class="field-error"
+                                    id="prayerNameError"
+                                ></small>
+
+                            </div>
+
+
+                            <div class="form-field">
+
+                                <label for="prayerPhone">
+
+                                    Phone
+
+                                    <span class="optional-tag">
+                                        (optional)
+                                    </span>
+
+                                </label>
+
+
+                                <div class="input-wrapper">
+
+                                    <i class="fa-brands fa-whatsapp"></i>
+
+                                    <input
+                                        type="tel"
+                                        id="prayerPhone"
+                                        name="phone"
+                                        placeholder="e.g. 08012345678"
+                                        maxlength="30"
+                                        autocomplete="tel"
+                                    >
+
+                                </div>
+
+
+                                <small
+                                    class="field-error"
+                                    id="prayerPhoneError"
+                                ></small>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- CATEGORY -->
+
+                        <div class="form-field">
+
+                            <label for="prayerCategory">
+
+                                Prayer Category
+
+                                <span>*</span>
+
+                            </label>
+
+
+                            <div class="select-wrapper">
+
+                                <i class="fa-solid fa-layer-group"></i>
+
+                                <select
+                                    id="prayerCategory"
+                                    name="category"
+                                    required
+                                >
+
+                                    <option value="">
+                                        Select a category
+                                    </option>
+
+                                    <option value="Healing &amp; Health">
+                                        Healing &amp; Health
+                                    </option>
+
+                                    <option value="Family &amp; Relationships">
+                                        Family &amp; Relationships
+                                    </option>
+
+                                    <option value="Finances &amp; Provision">
+                                        Finances &amp; Provision
+                                    </option>
+
+                                    <option value="Academic &amp; Career">
+                                        Academic &amp; Career
+                                    </option>
+
+                                    <option value="Salvation &amp; Spiritual Growth">
+                                        Salvation &amp; Spiritual Growth
+                                    </option>
+
+                                    <option value="Ministry &amp; Church">
+                                        Ministry &amp; Church
+                                    </option>
+
+                                    <option value="Thanksgiving">
+                                        Thanksgiving
+                                    </option>
+
+                                    <option value="Other">
+                                        Other
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+
+                            <small
+                                class="field-error"
+                                id="prayerCategoryError"
+                            ></small>
+
+                        </div>
+
+
+                        <!-- PRAYER REQUEST -->
+
+                        <div class="form-field">
+
+                            <label for="prayerMessage">
+
+                                What would you like us to pray about?
+
+                                <span>*</span>
+
+                            </label>
+
+
+                            <div class="textarea-wrapper">
+
+                                <textarea
+                                    id="prayerMessage"
+                                    name="message"
+                                    rows="6"
+                                    maxlength="1500"
+                                    placeholder="Share as much or as little as you're comfortable with..."
+                                    required
+                                ></textarea>
+
+
+                                <div class="character-count">
+
+                                    <span id="prayerCharacterCount">
+                                        0
+                                    </span>
+
+                                    / 1500
+
+                                </div>
+
+                            </div>
+
+
+                            <small
+                                class="field-error"
+                                id="prayerMessageError"
+                            ></small>
+
+                        </div>
+
+
+                        <!-- SUBMIT -->
+
+                        <button
+                            type="submit"
+                            class="submit-prayer-btn"
+                            id="submitPrayerBtn"
+                        >
+
+                            <span
+                                class="btn-label"
+                                id="submitPrayerLabel"
+                            >
+
+                                <i class="fa-solid fa-hands-praying"></i>
+
+                                Send Prayer Request
+
+                            </span>
+
+
+                            <span
+                                class="btn-loading"
+                                id="submitPrayerLoading"
+                                hidden
+                            >
+
+                                <i class="fa-solid fa-spinner fa-spin"></i>
+
+                                Sending...
+
+                            </span>
+
+                        </button>
+
+
+                        <!-- STATUS -->
+
+                        <div
+                            class="form-status"
+                            id="prayerFormStatus"
+                            role="status"
+                            aria-live="polite"
+                        ></div>
+
+                    </form>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+
+    <!-- ======================================================
+         MOBILE BOTTOM NAV
+    ======================================================= -->
+
+    <div id="app-bottom-nav"></div>
+
+</div>
+
+
+<!-- =========================================================
+     JAVASCRIPT
+========================================================= -->
+
+<script src="../js/pwa.js"></script>
+
+<script src="../js/main.js"></script>
+
+<script src="../js/prayerrequest.js"></script>
+
+<script src="../js/layout.js"></script>
+
+
+</body>
+
+</html>
