@@ -121,6 +121,82 @@ function escapeResultHTML(value) {
 
 
 /* ============================================================
+   BUTTON LOADING STATE
+   Puts a spinner + disabled state on any button while it is
+   doing async work, then restores its original label/state.
+============================================================ */
+
+function setButtonLoading(
+    button,
+    loadingText
+) {
+
+    if (!button) return;
+
+    if (button.dataset.loading === "true") {
+
+        return;
+
+    }
+
+
+    button.dataset.loading = "true";
+
+    button.dataset.originalHtml =
+        button.innerHTML;
+
+    button.disabled = true;
+
+    button.classList.add(
+        "is-loading"
+    );
+
+    button.innerHTML = `
+
+        <i class="fa-solid fa-spinner fa-spin"></i>
+
+        ${escapeResultHTML(
+            loadingText || "Loading..."
+        )}
+
+    `;
+
+}
+
+
+function restoreButtonState(
+    button
+) {
+
+    if (!button) return;
+
+
+    button.disabled = false;
+
+    button.classList.remove(
+        "is-loading"
+    );
+
+
+    if (
+        button.dataset.originalHtml !==
+        undefined
+    ) {
+
+        button.innerHTML =
+            button.dataset.originalHtml;
+
+    }
+
+
+    delete button.dataset.loading;
+
+    delete button.dataset.originalHtml;
+
+}
+
+
+/* ============================================================
    IDENTIFY PARTICIPANT
 ============================================================ */
 
@@ -1035,7 +1111,8 @@ function formatScoreForHistory(
 ============================================================ */
 
 async function openReview(
-    lessonNo
+    lessonNo,
+    triggerButton
 ) {
 
     const lesson =
@@ -1057,6 +1134,18 @@ async function openReview(
 
     selectedReviewLesson =
         lesson;
+
+
+    /* --------------------------------------------------------
+       PUT THE CLICKED BUTTON INTO A LOADING STATE
+       (spinner + disabled) right away so the user knows
+       something is happening.
+    -------------------------------------------------------- */
+
+    setButtonLoading(
+        triggerButton,
+        "Loading..."
+    );
 
 
     showResultElement(
@@ -1247,6 +1336,15 @@ async function openReview(
     } finally {
 
         isLoadingReview = false;
+
+
+        /* ----------------------------------------------------
+           RESTORE THE CLICKED BUTTON TO ITS NORMAL STATE
+        ---------------------------------------------------- */
+
+        restoreButtonState(
+            triggerButton
+        );
 
     }
 
@@ -1963,7 +2061,8 @@ function setupResultsListeners() {
 
 
                 openReview(
-                    lesson
+                    lesson,
+                    latestReviewBtn
                 );
 
             }
@@ -1998,7 +2097,8 @@ function setupResultsListeners() {
 
 
             openReview(
-                lesson
+                lesson,
+                button
             );
 
         }
