@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    >
+
+    <title>My Profile | AFC Isiu Youth Portal</title>
+
+
+    <!-- =====================================================
+         PWA
+    ====================================================== -->
+
+    <link
+        rel="manifest"
+        href="/manifest.json"
+    >
+
+    <meta
+        name="theme-color"
+        content="#4a0754"
+    >
+
+    <meta
+        name="mobile-web-app-capable"
+        content="yes"
+    >
+
+    <meta
+        name="apple-mobile-web-app-capable"
+        content="yes"
+    >
+
+    <meta
+        name="apple-mobile-web-app-status-bar-style"
+        content="default"
+    >
+
+    <meta
+        name="apple-mobile-web-app-title"
+        content="AFC Isiu"
+    >
+
+
+    <!-- =====================================================
+         ICONS
+    ====================================================== -->
+
+    <link
+        rel="icon"
+        type="image/png"
+        href="/images/logo.png"
+    >
+
+    <link
+        rel="apple-touch-icon"
+        href="/images/logo.png"
+    >
+
+
+    <!-- =====================================================
+         FONTS
+    ====================================================== -->
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap"
+        rel="stylesheet"
+    >
+
+
+    <!-- =====================================================
+         FONT AWESOME
+    ====================================================== -->
+
+    <link
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+        rel="stylesheet"
+    >
+
+
+    <!-- =====================================================
+         REMIX ICONS
+         (used by the shared bottom-nav center hub button)
+    ====================================================== -->
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/remixicon@4.6.0/fonts/remixicon.css"
+        rel="stylesheet"
+    >
+
+
+    <!-- =====================================================
+         PORTAL CSS
+    ====================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="../css/main.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="../css/layout.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="../css/profile.css"
+    >
+
+</head>
+
+
+<body>
+
+<div class="app-layout">
+
+    <!-- ======================================================
+         SIDEBAR
+    ======================================================= -->
+
+    <div id="app-sidebar"></div>
+
+
+    <!-- ======================================================
+         MAIN AREA
+    ======================================================= -->
+
+    <div class="main-area">
+
+        <!-- TOPBAR -->
+
+        <div id="app-topbar"></div>
+
+
+        <!-- ==================================================
+             PAGE CONTENT
+        =================================================== -->
+
+        <main class="dashboard-content profile-page">
+
+            <!-- ==================================================
+                 HERO
+            =================================================== -->
+
+            <section class="profile-hero">
+
+                <div class="profile-hero-content">
+
+                    <div class="profile-eyebrow">
+
+                        <i class="fa-solid fa-id-badge"></i>
+
+                        My Profile
+
+                    </div>
+
+
+                    <h1>
+
+                        Your space
+
+                        <span>
+                            on the portal.
+                        </span>
+
+                    </h1>
+
+
+                    <p>
+
+                        Your name, your avatar, your journey
+                        through the SLC quizzes — all in one place.
+
+                    </p>
+
+                </div>
+
+            </section>
+
+
+            <!-- ==================================================
+                 LOADING STATE
+            =================================================== -->
+
+            <section
+                id="profileLoadingState"
+                class="profile-status-card"
+            >
+
+                <i class="fa-solid fa-spinner fa-spin"></i>
+
+                <span>
+                    Loading your profile...
+                </span>
+
+            </section>
+
+
+            <!-- ==================================================
+                 ERROR STATE
+            =================================================== -->
+
+            <section
+                id="profileErrorState"
+                class="profile-status-card profile-status-error hidden"
+            >
+
+                <i class="fa-solid fa-circle-exclamation"></i>
+
+                <span id="profileErrorMessage">
+                    Unable to load your profile right now.
+                </span>
+
+            </section>
+
+
+            <!-- ==================================================
+                 EMPTY STATE — NO PARTICIPANT SELECTED
+            =================================================== -->
+
+            <section
+                id="profileEmptyState"
+                class="profile-empty-card hidden"
+            >
+
+                <div class="profile-empty-avatar">
+
+                    <i class="fa-solid fa-user"></i>
+
+                </div>
+
+
+                <h2>
+                    You haven't selected your name yet
+                </h2>
+
+
+                <p>
+
+                    Head to the SLC Quiz page and select your
+                    name to unlock your profile — your avatar,
+                    your details and your quiz stats will all
+                    show up here.
+
+                </p>
+
+
+                <a
+                    href="slcquiz.html"
+                    class="profile-primary-btn"
+                >
+
+                    <i class="fa-solid fa-arrow-right"></i>
+
+                    Go Select My Name
+
+                </a>
+
+            </section>
+
+
+            <!-- ==================================================
+                 PROFILE CARD
+            =================================================== -->
+
+            <section
+                id="profileCardSection"
+                class="hidden"
+            >
+
+                <div class="profile-card">
+
+                    <div class="profile-card-top">
+
+                        <div class="profile-avatar-wrap">
+
+                            <img
+                                id="profileAvatarImage"
+                                class="profile-avatar-image"
+                                alt="Your avatar"
+                            >
+
+
+                            <button
+                                type="button"
+                                id="editAvatarBtn"
+                                class="profile-edit-avatar-btn"
+                                aria-label="Change avatar"
+                            >
+
+                                <i class="fa-solid fa-camera"></i>
+
+                            </button>
+
+                        </div>
+
+
+                        <div class="profile-identity">
+
+                            <h2 id="profileName">
+                                —
+                            </h2>
+
+
+                            <div
+                                id="profileActiveBadge"
+                                class="profile-active-badge hidden"
+                            >
+
+                                <i class="fa-solid fa-circle-check"></i>
+
+                                Active Member
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="profile-meta-row">
+
+                        <div class="profile-meta-item">
+
+                            <i class="fa-solid fa-cake-candles"></i>
+
+                            <div>
+
+                                <span>
+                                    Birthday
+                                </span>
+
+                                <strong id="profileBirthday">
+                                    —
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="profile-meta-item">
+
+                            <i class="fa-solid fa-calendar-check"></i>
+
+                            <div>
+
+                                <span>
+                                    Member Since
+                                </span>
+
+                                <strong id="profileMemberSince">
+                                    —
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ==============================================
+                     STATS
+                =============================================== -->
+
+                <div class="profile-stats-grid">
+
+                    <div class="profile-stat-card">
+
+                        <div class="profile-stat-icon profile-stat-icon-orange">
+
+                            <i class="fa-solid fa-clipboard-check"></i>
+
+                        </div>
+
+
+                        <div class="profile-stat-copy">
+
+                            <strong id="profileQuizzesCompleted">
+                                0
+                            </strong>
+
+                            <span>
+                                Quizzes Completed
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="profile-stat-card">
+
+                        <div class="profile-stat-icon profile-stat-icon-purple">
+
+                            <i class="fa-solid fa-star"></i>
+
+                        </div>
+
+
+                        <div class="profile-stat-copy">
+
+                            <strong id="profileTotalPoints">
+                                0
+                            </strong>
+
+                            <span>
+                                Total Points Earned
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="profile-links-row">
+
+                    <a
+                        href="results.html"
+                        class="profile-link-card"
+                    >
+
+                        <div class="profile-link-icon">
+
+                            <i class="fa-solid fa-chart-simple"></i>
+
+                        </div>
+
+
+                        <div class="profile-link-copy">
+
+                            <strong>
+                                View My Results
+                            </strong>
+
+                            <span>
+                                See your full quiz history
+                            </span>
+
+                        </div>
+
+
+                        <i class="fa-solid fa-arrow-right profile-link-arrow"></i>
+
+                    </a>
+
+
+                    <a
+                        href="slcquiz.html"
+                        class="profile-link-card"
+                    >
+
+                        <div class="profile-link-icon">
+
+                            <i class="fa-solid fa-clipboard-question"></i>
+
+                        </div>
+
+
+                        <div class="profile-link-copy">
+
+                            <strong>
+                                Take This Week's Quiz
+                            </strong>
+
+                            <span>
+                                Continue your SLC journey
+                            </span>
+
+                        </div>
+
+
+                        <i class="fa-solid fa-arrow-right profile-link-arrow"></i>
+
+                    </a>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+
+    <!-- ======================================================
+         MOBILE BOTTOM NAV
+    ======================================================= -->
+
+    <div id="app-bottom-nav"></div>
+
+</div>
+
+
+<!-- =========================================================
+     AVATAR PICKER MODAL
+========================================================= -->
+
+<div
+    id="avatarModal"
+    class="profile-avatar-modal hidden"
+>
+
+    <div
+        class="profile-avatar-modal-overlay"
+        id="avatarModalOverlay"
+    ></div>
+
+
+    <div class="profile-avatar-modal-panel">
+
+        <div class="profile-avatar-modal-header">
+
+            <div>
+
+                <span class="profile-eyebrow">
+                    Choose Your Look
+                </span>
+
+                <h3>
+                    Pick an avatar
+                </h3>
+
+            </div>
+
+
+            <button
+                type="button"
+                id="closeAvatarModalBtn"
+                class="profile-avatar-modal-close"
+                aria-label="Close"
+            >
+
+                <i class="fa-solid fa-xmark"></i>
+
+            </button>
+
+        </div>
+
+
+        <div
+            id="avatarGrid"
+            class="profile-avatar-grid"
+        ></div>
+
+
+        <div
+            id="avatarSavingNote"
+            class="profile-avatar-saving-note hidden"
+        >
+
+            <i class="fa-solid fa-spinner fa-spin"></i>
+
+            Saving your avatar...
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     JAVASCRIPT
+========================================================= -->
+
+<script src="../js/pwa.js"></script>
+
+<script src="../js/main.js"></script>
+
+<script src="../js/profile.js"></script>
+
+<script src="../js/layout.js"></script>
+
+
+</body>
+
+</html>
