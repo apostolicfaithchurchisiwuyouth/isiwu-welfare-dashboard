@@ -392,6 +392,7 @@
 
 /* ============================================================
    PROFILE CARD
+   CLEAN WHITE IDENTITY CARD
    ============================================================ */
 
 .profile-card {
@@ -402,20 +403,48 @@
 
     margin-bottom: 18px;
 
-    padding: 30px;
+    padding: 34px;
 
-    border-radius: 28px;
+    border-radius: 30px;
 
-    background:
-        linear-gradient(
-            145deg,
-            #10051a 0%,
-            #4a0754 65%,
-            #5d0b67 100%
-        );
+    background: #ffffff;
+
+    border: 1px solid #e7e9ed;
 
     box-shadow:
-        0 18px 45px rgba(74, 7, 84, .15);
+        0 18px 50px rgba(15, 23, 42, .065);
+
+    isolation: isolate;
+}
+
+
+/* ============================================================
+   PROFILE CARD DECORATIVE GLOW
+   ============================================================ */
+
+.profile-card::before {
+    content: "";
+
+    position: absolute;
+
+    width: 230px;
+    height: 230px;
+
+    top: -145px;
+    right: -80px;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(74, 7, 84, .075),
+            rgba(74, 7, 84, 0)
+        );
+
+    pointer-events: none;
+
+    z-index: -1;
 }
 
 .profile-card::after {
@@ -423,34 +452,46 @@
 
     position: absolute;
 
-    width: 220px;
-    height: 220px;
+    width: 190px;
+    height: 190px;
 
-    right: -90px;
-    bottom: -110px;
+    left: -90px;
+    bottom: -120px;
 
     border-radius: 50%;
 
     background:
         radial-gradient(
             circle,
-            rgba(8, 145, 178, .25),
+            rgba(8, 145, 178, .055),
             rgba(8, 145, 178, 0)
         );
 
     pointer-events: none;
+
+    z-index: -1;
 }
+
+
+/* ============================================================
+   PROFILE CARD TOP
+   CENTERED IDENTITY
+   ============================================================ */
 
 .profile-card-top {
     position: relative;
     z-index: 2;
 
     display: flex;
+    flex-direction: column;
     align-items: center;
+    justify-content: center;
 
-    gap: 20px;
+    gap: 13px;
 
-    margin-bottom: 22px;
+    margin-bottom: 28px;
+
+    text-align: center;
 }
 
 
@@ -463,47 +504,75 @@
 
     flex: 0 0 auto;
 
-    width: 92px;
-    height: 92px;
+    width: 112px;
+    height: 112px;
+
+    margin: 0 auto;
 }
 
 .profile-avatar-image {
-    width: 92px;
-    height: 92px;
+    width: 112px;
+    height: 112px;
 
     display: block;
 
     border-radius: 50%;
 
-    background: #ffffff;
+    background: #f8f7fa;
 
-    border: 3px solid rgba(255, 255, 255, .5);
+    border: 4px solid #ffffff;
 
     box-shadow:
-        0 10px 26px rgba(0, 0, 0, .18);
+        0 10px 30px rgba(15, 23, 42, .14);
+
+    object-fit: cover;
 }
+
+
+/* ============================================================
+   AVATAR OUTER RING
+   ============================================================ */
+
+.profile-avatar-wrap::before {
+    content: "";
+
+    position: absolute;
+
+    inset: -5px;
+
+    border-radius: 50%;
+
+    border: 1px solid rgba(74, 7, 84, .14);
+
+    pointer-events: none;
+}
+
+
+/* ============================================================
+   EDIT AVATAR BUTTON
+   ============================================================ */
 
 .profile-edit-avatar-btn {
     position: absolute;
 
-    right: -2px;
-    bottom: -2px;
+    right: -3px;
+    bottom: -3px;
 
-    width: 32px;
-    height: 32px;
+    width: 34px;
+    height: 34px;
 
     display: flex;
     align-items: center;
     justify-content: center;
 
-    border: 3px solid #4a0754;
+    border: 3px solid #ffffff;
     border-radius: 50%;
 
     background:
         linear-gradient(
             135deg,
-            #ea580c,
-            #f97316
+            #4a0754,
+            #6d1b78
         );
 
     color: #ffffff;
@@ -513,7 +582,18 @@
     cursor: pointer;
 
     box-shadow:
-        0 6px 16px rgba(234, 88, 12, .3);
+        0 6px 16px rgba(74, 7, 84, .24);
+
+    transition:
+        transform .18s ease,
+        box-shadow .18s ease;
+}
+
+.profile-edit-avatar-btn:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 9px 20px rgba(74, 7, 84, .28);
 }
 
 
@@ -523,40 +603,64 @@
 
 .profile-identity {
     min-width: 0;
+
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    text-align: center;
 }
 
 .profile-identity h2 {
-    margin: 0 0 8px;
+    max-width: 100%;
 
-    color: #ffffff;
+    margin: 2px 0 8px;
 
-    font-size: 1.35rem;
+    color: #111827;
 
-    line-height: 1.2;
+    font-size: 1.45rem;
+
+    line-height: 1.18;
 
     font-weight: 800;
 
-    letter-spacing: -.02em;
+    letter-spacing: -.025em;
 
     word-break: break-word;
 }
 
+
+/* ============================================================
+   ACTIVE BADGE
+   ============================================================ */
+
 .profile-active-badge {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
 
     gap: 6px;
 
-    padding: 6px 11px;
+    padding: 6px 12px;
 
     border-radius: 999px;
 
-    background: rgba(16, 185, 129, .18);
+    background: #ecfdf5;
 
-    color: #6ee7b7;
+    border: 1px solid #d1fae5;
 
-    font-size: .66rem;
+    color: #047857;
+
+    font-size: .65rem;
     font-weight: 750;
+
+    line-height: 1;
+}
+
+.profile-active-badge i {
+    font-size: .5rem;
 }
 
 
@@ -586,9 +690,9 @@
 
     border-radius: 18px;
 
-    background: rgba(255, 255, 255, .08);
+    background: #fafafa;
 
-    border: 1px solid rgba(255, 255, 255, .1);
+    border: 1px solid #eceef1;
 }
 
 .profile-meta-item i {
@@ -603,9 +707,9 @@
 
     border-radius: 11px;
 
-    background: rgba(251, 146, 60, .18);
+    background: rgba(74, 7, 84, .08);
 
-    color: #fb923c;
+    color: #4a0754;
 
     font-size: .78rem;
 }
@@ -620,13 +724,13 @@
 }
 
 .profile-meta-item span {
-    color: rgba(255, 255, 255, .6);
+    color: #9ca3af;
 
     font-size: .65rem;
 }
 
 .profile-meta-item strong {
-    color: #ffffff;
+    color: #111827;
 
     font-size: .8rem;
 
@@ -1055,34 +1159,38 @@
     }
 
     .profile-card {
-        padding: 22px;
+        padding: 26px 22px;
 
-        border-radius: 24px;
+        border-radius: 26px;
     }
 
     .profile-card-top {
-        gap: 15px;
+        gap: 13px;
+
+        margin-bottom: 24px;
     }
 
     .profile-avatar-wrap {
-        width: 74px;
-        height: 74px;
+        width: 92px;
+        height: 92px;
     }
 
     .profile-avatar-image {
-        width: 74px;
-        height: 74px;
+        width: 92px;
+        height: 92px;
     }
 
     .profile-edit-avatar-btn {
-        width: 28px;
-        height: 28px;
+        width: 30px;
+        height: 30px;
 
         font-size: .62rem;
     }
 
     .profile-identity h2 {
-        font-size: 1.1rem;
+        font-size: 1.2rem;
+
+        margin-bottom: 7px;
     }
 
     .profile-meta-row {
@@ -1160,12 +1268,26 @@
     }
 
     .profile-card {
-        padding: 18px;
+        padding: 24px 16px;
+
+        border-radius: 24px;
     }
 
     .profile-card-top {
         flex-direction: column;
-        align-items: flex-start;
+        align-items: center;
+
+        gap: 12px;
+    }
+
+    .profile-avatar-wrap {
+        width: 86px;
+        height: 86px;
+    }
+
+    .profile-avatar-image {
+        width: 86px;
+        height: 86px;
     }
 
     .profile-avatar-grid {
@@ -1182,7 +1304,7 @@
    NO ANIMATIONS
    ============================================================ */
 
-.profile-page *,
+.profile-page * ,
 .profile-page *::before,
 .profile-page *::after {
     animation: none !important;
