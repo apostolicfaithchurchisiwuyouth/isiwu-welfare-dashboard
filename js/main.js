@@ -1605,35 +1605,20 @@
             }
 
 
-            const member =
-                getStoredMember();
-
-
-            const memberId =
-                getMemberId(
-                    member
-                );
-
-
-            const memberName =
-                getMemberName(
-                    member
-                );
-
-
             /*
-             * The current PWA push system expects a member ID.
+             * IMPORTANT:
+             *
+             * Notifications are intentionally anonymous.
+             *
+             * A user does NOT need:
+             * - a profile
+             * - a login
+             * - a member ID
+             * - a member name
+             *
+             * pwa.js handles the browser push subscription
+             * and saves it anonymously.
              */
-
-            if (!memberId) {
-
-                setNotificationStatus(
-                    "error",
-                    "Please log in or create your youth portal profile before enabling notifications."
-                );
-
-                return;
-            }
 
 
             const originalHTML =
@@ -1662,11 +1647,14 @@
                 );
 
 
+                /*
+                 * Subscribe anonymously.
+                 *
+                 * Do NOT pass memberId or memberName.
+                 */
+
                 const result =
-                    await pwa.subscribeToPush(
-                        memberId,
-                        memberName
-                    );
+                    await pwa.subscribeToPush();
 
 
                 if (
