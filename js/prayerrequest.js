@@ -14,7 +14,7 @@
 ============================================================ */
 
 const PRAYER_API =
-    "PASTE_YOUR_APPS_SCRIPT_WEB_APP_URL_HERE";
+    "https://script.google.com/macros/s/AKfycbw1mVwpgAcIOSNbpgzy52TFyozEGMtWWwVWUDFaofGNzpsguBIaKR4q1dXVtgVHO2xZ1w/exec";
 
 
 /* ============================================================
