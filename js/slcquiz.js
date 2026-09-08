@@ -383,8 +383,7 @@ function createTransitionLoader() {
 
                 padding: 24px;
 
-                background:
-                    rgba(10, 0, 22, 0.94);
+                background:#fff;
 
                 box-sizing: border-box;
 
@@ -407,7 +406,7 @@ function createTransitionLoader() {
                     center;
 
                 color:
-                    #ffffff;
+                    #ddd;
 
             }
 
@@ -443,7 +442,7 @@ function createTransitionLoader() {
             .slc-transition-loader-title {
 
                 font-size:
-                    1.05rem;
+                    .9rem;
 
                 font-weight:
                     700;
@@ -457,7 +456,7 @@ function createTransitionLoader() {
             .slc-transition-loader-message {
 
                 font-size:
-                    0.88rem;
+                    0.78rem;
 
                 line-height:
                     1.5;
