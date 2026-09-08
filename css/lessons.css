@@ -19,6 +19,9 @@
         "DM Sans",
         sans-serif;
 
+    /* Keep this page light regardless of device preference */
+    color-scheme: light;
+
 }
 
 
@@ -339,10 +342,13 @@
 
     padding: 24px 28px;
 
-    border-bottom-left-radius:0;
-   border-top-left-radius:0;
-   border-bottom-right-radius:18px;
-   border-top-right-radius:18px;
+    border-bottom-left-radius: 0;
+
+    border-top-left-radius: 0;
+
+    border-bottom-right-radius: 18px;
+
+    border-top-right-radius: 18px;
 
     background:
         #ffffff;
@@ -444,7 +450,8 @@
 
     max-width: 950px;
 
-    color:#6b7280;
+    color:
+        #6b7280;
 
     font-size: 0.9rem;
 
@@ -1573,51 +1580,6 @@
 }
 
 
-.finish-text {
-
-    min-width:
-        0;
-
-}
-
-
-.finish-text strong {
-
-    display:
-        block;
-
-    color:
-        rgba(255, 255, 255, 0.92);
-
-    font-size:
-        0.8rem;
-
-    line-height:
-        1.3;
-
-}
-
-
-.finish-text small {
-
-    display:
-        block;
-
-    margin-top:
-        3px;
-
-    color:
-        rgba(255, 255, 255, 0.62);
-
-    font-size:
-        0.65rem;
-
-    line-height:
-        1.3;
-
-}
-
-
 /* =========================================================
    MOBILE FINISH CARD
 ========================================================= */
@@ -1894,10 +1856,17 @@
         padding:
             20px 18px;
 
-         border-bottom-left-radius:0;
-   border-top-left-radius:0;
-   border-bottom-right-radius:18px;
-   border-top-right-radius:18px;
+        border-bottom-left-radius:
+            0;
+
+        border-top-left-radius:
+            0;
+
+        border-bottom-right-radius:
+            18px;
+
+        border-top-right-radius:
+            18px;
 
         border-left-width:
             4px;
@@ -2501,210 +2470,6 @@
 
         padding-right:
             16px;
-
-    }
-
-}
-
-
-/* =========================================================
-   DARK MODE SUPPORT
-========================================================= */
-
-@media (prefers-color-scheme: dark) {
-
-    .lessons-page {
-
-        color:
-            #e5e7eb;
-
-    }
-
-
-    .lessons-heading h1 {
-
-        color:
-            #f3f4f6;
-
-    }
-
-
-    .lessons-heading p {
-
-        color:
-            #9ca3af;
-
-    }
-
-
-    .lesson-week {
-
-        background:
-            #18181b;
-
-        border-color:
-            rgba(255,255,255,0.08);
-
-        color:
-            #d4d4d8;
-
-    }
-
-
-    .lesson-selector {
-
-        background:
-            #18181b;
-
-        border-color:
-            rgba(255,255,255,0.06);
-
-    }
-
-
-    .class-tab {
-
-        color:
-            #a1a1aa;
-
-    }
-
-
-    .class-tab.active {
-
-        background:
-            #27272a;
-
-        color:
-            #fb923c;
-
-    }
-
-
-    .lesson-topic-card {
-
-        background:
-            #18181b;
-
-        border-color:
-            rgba(234, 88, 12, 0.25);
-
-    }
-
-
-    .lesson-topic-card h2,
-    .lesson-topic-card h4 {
-
-        color:
-            #e5e7eb;
-
-    }
-
-
-    .lesson-topic {
-
-        color:
-            #a1a1aa;
-
-    }
-
-
-    .lesson-info-card,
-    .lesson-content-card,
-    .discussion-card,
-    .lesson-progress-box,
-    .lesson-meta-box > div,
-    .mobile-finish-card {
-
-        background:
-            #18181b;
-
-        border-color:
-            rgba(255,255,255,0.07);
-
-    }
-
-
-    .lesson-info-card strong,
-    .content-card-header h3,
-    .discussion-header h3,
-    .lesson-meta-box strong {
-
-        color:
-            #d1d5db;
-
-    }
-
-
-    .lesson-content {
-
-        color:
-            #d4d4d8;
-
-    }
-
-
-    .lesson-content strong,
-    .lesson-rich-content strong,
-    .lesson-rich-content b {
-
-        color:
-            #e5e7eb;
-
-    }
-
-
-    .lesson-content h1,
-    .lesson-content h2,
-    .lesson-content h3,
-    .lesson-content h4 {
-
-        color:
-            #f4f4f5;
-
-    }
-
-
-    .discussion-question p {
-
-        color:
-            #d4d4d8;
-
-    }
-
-
-    .lesson-progress-box > p,
-    .discussion-empty {
-
-        color:
-            #a1a1aa;
-
-    }
-
-
-    .mobile-reading-info > div {
-
-        background:
-            #27272a;
-
-    }
-
-
-    .memory-verse-card {
-
-        background:
-            #2a1d14;
-
-        border-color:
-            rgba(234, 88, 12, 0.18);
-
-    }
-
-
-    .memory-verse-content p {
-
-        color:
-            #fed7aa;
 
     }
 
@@ -3319,7 +3084,9 @@
 
     color:
         #4b5563;
-   padding:7px;
+
+    padding:
+        7px;
 
 }
 
@@ -3671,5 +3438,46 @@
             0.9rem 1rem;
 
     }
+
+}
+
+
+/* =========================================================
+   LIGHT THEME PROTECTION
+   PREVENT DEVICE/BROWSER DARK THEME OVERRIDE
+========================================================= */
+
+.lessons-page {
+
+    color-scheme:
+        light;
+
+}
+
+
+/* Keep the primary lesson surfaces white */
+
+.lessons-page .lesson-topic-card,
+.lessons-page .lesson-info-card,
+.lessons-page .lesson-content-card,
+.lessons-page .discussion-card,
+.lessons-page .lesson-progress-box,
+.lessons-page .lesson-meta-box > div,
+.lessons-page .mobile-finish-card,
+.lessons-page .lesson-week,
+.lessons-page .class-tab.active {
+
+    background-color:
+        #ffffff;
+
+}
+
+
+/* Keep the mobile information surfaces light */
+
+.lessons-page .mobile-reading-info > div {
+
+    background-color:
+        #f8fafb;
 
 }
