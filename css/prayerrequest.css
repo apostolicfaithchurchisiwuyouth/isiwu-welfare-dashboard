@@ -1,0 +1,1064 @@
+/* ============================================================
+   AFC ISIU YOUTH PORTAL V2
+   FILE: prayerrequest.css
+   PURPOSE: PRAYER REQUEST PAGE
+   ============================================================ */
+
+
+/* ============================================================
+   PAGE FOUNDATION
+   MATCHES SLC QUIZ / ACADEMIC HELP WIDTH SYSTEM
+   ============================================================ */
+
+.dashboard-content.prayer-page {
+    width: min(100% - 32px, 1500px);
+    max-width: 1500px;
+
+    margin-left: auto;
+    margin-right: auto;
+
+    padding-left: 0;
+    padding-right: 0;
+
+    box-sizing: border-box;
+}
+
+.prayer-page *,
+.prayer-page *::before,
+.prayer-page *::after {
+    box-sizing: border-box;
+}
+
+.prayer-page {
+    min-width: 0;
+}
+
+.prayer-page section {
+    width: 100%;
+    max-width: none;
+}
+
+
+/* ============================================================
+   FONT SYSTEM
+   ============================================================ */
+
+.prayer-page h1,
+.prayer-page h2,
+.prayer-page h3,
+.prayer-page h4,
+.prayer-page button,
+.prayer-page label,
+.prayer-page .prayer-eyebrow,
+.prayer-page .prayer-section-kicker,
+.prayer-page .prayer-primary-btn,
+.prayer-page .submit-prayer-btn {
+    font-family: "Bricolage Grotesque", sans-serif;
+}
+
+.prayer-page p,
+.prayer-page input,
+.prayer-page select,
+.prayer-page textarea,
+.prayer-page .prayer-response-note,
+.prayer-page .consent-text,
+.prayer-page .field-error,
+.prayer-page .character-count,
+.prayer-page .optional-tag {
+    font-family: "DM Sans", sans-serif;
+}
+
+
+/* ============================================================
+   GENERAL
+   ============================================================ */
+
+.prayer-page button,
+.prayer-page input,
+.prayer-page select,
+.prayer-page textarea,
+.prayer-page a {
+    -webkit-tap-highlight-color: transparent;
+}
+
+.prayer-page button {
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.prayer-page button:focus,
+.prayer-page button:focus-visible,
+.prayer-page input:focus,
+.prayer-page select:focus,
+.prayer-page textarea:focus {
+    outline: none;
+}
+
+.prayer-page [hidden] {
+    display: none !important;
+}
+
+
+/* ============================================================
+   HERO
+   ============================================================ */
+
+.prayer-hero {
+    position: relative;
+    overflow: hidden;
+
+    width: 100%;
+    max-width: none;
+
+    margin-bottom: 24px;
+
+    padding: 30px;
+
+    border-radius: 28px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #ffffff 0%,
+            #faf7fc 48%,
+            #fff7f0 100%
+        );
+
+    border: 1px solid rgba(74, 7, 84, .09);
+
+    box-shadow:
+        0 18px 55px rgba(15, 23, 42, .055);
+}
+
+.prayer-hero::before {
+    content: "";
+
+    position: absolute;
+
+    width: 260px;
+    height: 260px;
+
+    top: -155px;
+    right: -70px;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(74, 7, 84, .12),
+            rgba(74, 7, 84, 0)
+        );
+
+    pointer-events: none;
+}
+
+.prayer-hero::after {
+    content: "";
+
+    position: absolute;
+
+    width: 240px;
+    height: 240px;
+
+    bottom: -170px;
+    left: 28%;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(8, 145, 178, .09),
+            rgba(8, 145, 178, 0)
+        );
+
+    pointer-events: none;
+}
+
+.prayer-hero-content {
+    position: relative;
+    z-index: 2;
+
+    width: 100%;
+    max-width: 820px;
+}
+
+
+/* ============================================================
+   HERO EYEBROW
+   ============================================================ */
+
+.prayer-eyebrow {
+    display: inline-flex;
+    align-items: center;
+
+    gap: 8px;
+
+    margin-bottom: 9px;
+
+    color: #4a0754;
+
+    font-size: .67rem;
+    font-weight: 800;
+
+    letter-spacing: .09em;
+}
+
+.prayer-eyebrow i {
+    font-size: .72rem;
+}
+
+
+/* ============================================================
+   HERO HEADING
+   ============================================================ */
+
+.prayer-hero h1 {
+    margin: 0;
+
+    color: #111827;
+
+    font-size: clamp(1.6rem, 3.5vw, 2.45rem);
+
+    line-height: 1.08;
+
+    font-weight: 800;
+
+    letter-spacing: -.035em;
+}
+
+.prayer-hero h1 span {
+    color: #ea580c;
+
+    font-family: "Bricolage Grotesque", sans-serif;
+}
+
+.prayer-hero p {
+    max-width: 650px;
+
+    margin: 11px 0 0;
+
+    color: #6b7280;
+
+    font-size: .78rem;
+
+    line-height: 1.5;
+}
+
+
+/* ============================================================
+   HERO ACTIONS
+   ============================================================ */
+
+.prayer-hero-actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+
+    gap: 10px;
+
+    margin-top: 18px;
+}
+
+.prayer-primary-btn {
+    min-height: 46px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+
+    padding: 11px 18px;
+
+    border: none;
+    border-radius: 999px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #4a0754,
+            #6d1b78
+        );
+
+    color: #ffffff;
+
+    font-size: .78rem;
+    font-weight: 750;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 10px 24px rgba(74, 7, 84, .18);
+}
+
+
+/* ============================================================
+   SECTION KICKER
+   ============================================================ */
+
+.prayer-section-kicker {
+    display: block;
+
+    margin-bottom: 5px;
+
+    color: #ea580c;
+
+    font-size: .72rem;
+    font-weight: 800;
+
+    letter-spacing: .08em;
+}
+
+
+/* ============================================================
+   FORM SECTION LAYOUT
+   ============================================================ */
+
+.prayer-form-section {
+    display: grid;
+
+    grid-template-columns:
+        minmax(260px, .72fr)
+        minmax(0, 1.28fr);
+
+    gap: 20px;
+
+    width: 100%;
+
+    margin-bottom: 30px;
+}
+
+
+/* ============================================================
+   INTRO PANEL
+   ============================================================ */
+
+.prayer-intro {
+    position: relative;
+    overflow: hidden;
+
+    min-width: 0;
+
+    padding: 28px;
+
+    border-radius: 28px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #10051a 0%,
+            #4a0754 65%,
+            #5d0b67 100%
+        );
+
+    color: #ffffff;
+
+    box-shadow:
+        0 18px 45px rgba(74, 7, 84, .15);
+}
+
+.prayer-intro::after {
+    content: "";
+
+    position: absolute;
+
+    width: 170px;
+    height: 170px;
+
+    right: -75px;
+    bottom: -80px;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(8, 145, 178, .28),
+            rgba(8, 145, 178, 0)
+        );
+}
+
+.prayer-intro-icon {
+    width: 50px;
+    height: 50px;
+
+    margin-bottom: 22px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 16px;
+
+    background: rgba(234, 88, 12, .18);
+
+    color: #fb923c;
+
+    font-size: 1rem;
+}
+
+.prayer-intro .prayer-section-kicker {
+    color: #fb923c;
+}
+
+.prayer-intro h2 {
+    position: relative;
+    z-index: 2;
+
+    margin: 0 0 8px;
+
+    color: #ffffff;
+
+    font-size: 1.45rem;
+
+    line-height: 1.15;
+
+    font-weight: 800;
+}
+
+.prayer-intro > p {
+    position: relative;
+    z-index: 2;
+
+    margin: 0;
+
+    color: rgba(255,255,255,.72);
+
+    font-size: .8rem;
+
+    line-height: 1.5;
+}
+
+.prayer-response-note {
+    position: relative;
+    z-index: 2;
+
+    display: flex;
+    align-items: flex-start;
+
+    gap: 9px;
+
+    margin-top: 22px;
+
+    padding-top: 17px;
+
+    border-top: 1px solid rgba(255,255,255,.12);
+
+    color: rgba(255,255,255,.67);
+
+    font-size: .72rem;
+
+    line-height: 1.4;
+}
+
+.prayer-response-note i {
+    margin-top: 2px;
+
+    color: #22d3ee;
+}
+
+
+/* ============================================================
+   FORM CARD
+   ============================================================ */
+
+.prayer-form-card {
+    width: 100%;
+    min-width: 0;
+
+    padding: 28px;
+
+    border-radius: 28px;
+
+    background: #ffffff;
+
+    border: 1px solid rgba(15, 23, 42, .06);
+
+    box-shadow:
+        0 16px 45px rgba(15, 23, 42, .045);
+}
+
+.prayer-request-form {
+    width: 100%;
+}
+
+
+/* ============================================================
+   ANONYMOUS TOGGLE
+   ============================================================ */
+
+.prayer-anonymous-toggle {
+    display: flex;
+    align-items: flex-start;
+
+    gap: 10px;
+
+    margin: 0 0 20px;
+
+    padding: 13px 15px;
+
+    border: 1px solid #ece3f0;
+
+    border-radius: 15px;
+
+    background: #fbf8fc;
+
+    cursor: pointer;
+}
+
+.prayer-anonymous-toggle input {
+    position: absolute;
+
+    opacity: 0;
+
+    pointer-events: none;
+}
+
+.prayer-anonymous-toggle .custom-checkbox {
+    width: 20px;
+    height: 20px;
+
+    flex: 0 0 auto;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid #d6dce2;
+
+    border-radius: 6px;
+
+    background: #ffffff;
+
+    color: #ffffff;
+
+    font-size: .62rem;
+}
+
+.prayer-anonymous-toggle input:checked + .custom-checkbox {
+    border-color: #4a0754;
+
+    background: #4a0754;
+}
+
+.prayer-anonymous-toggle .consent-text {
+    color: #4b5563;
+
+    font-size: .74rem;
+
+    font-weight: 650;
+
+    line-height: 1.4;
+}
+
+
+/* ============================================================
+   FORM FIELDS
+   ============================================================ */
+
+.form-row {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 15px;
+
+    margin-bottom: 17px;
+}
+
+.form-field {
+    min-width: 0;
+
+    margin-bottom: 17px;
+}
+
+.form-row .form-field {
+    margin-bottom: 0;
+}
+
+.form-field label {
+    display: block;
+
+    margin-bottom: 8px;
+
+    color: #374151;
+
+    font-size: .78rem;
+
+    font-weight: 750;
+}
+
+.form-field label span {
+    color: #ea580c;
+}
+
+.form-field label .optional-tag {
+    color: #9ca3af;
+
+    font-weight: 600;
+
+    font-size: .7rem;
+}
+
+.input-wrapper,
+.select-wrapper,
+.textarea-wrapper {
+    position: relative;
+
+    width: 100%;
+}
+
+.input-wrapper > i,
+.select-wrapper > i {
+    position: absolute;
+
+    left: 15px;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    color: #8b95a1;
+
+    font-size: .78rem;
+
+    pointer-events: none;
+}
+
+.input-wrapper input,
+.select-wrapper select {
+    width: 100%;
+
+    min-height: 52px;
+
+    padding: 0 15px 0 40px;
+
+    border: 1px solid #e1e6ec;
+
+    border-radius: 16px;
+
+    background: #ffffff;
+
+    color: #111827;
+
+    outline: none;
+
+    font-family: "DM Sans", sans-serif;
+
+    font-size: .8rem;
+}
+
+.input-wrapper input:disabled {
+    background: #f3f4f6;
+
+    color: #9ca3af;
+
+    cursor: not-allowed;
+}
+
+.select-wrapper select {
+    appearance: none;
+    -webkit-appearance: none;
+
+    cursor: pointer;
+}
+
+.input-wrapper input:focus,
+.select-wrapper select:focus,
+.textarea-wrapper textarea:focus {
+    border-color: #4a0754;
+
+    box-shadow:
+        0 0 0 4px rgba(74, 7, 84, .06);
+}
+
+.input-wrapper input::placeholder,
+.textarea-wrapper textarea::placeholder {
+    color: #a0a7b0;
+}
+
+
+/* ============================================================
+   TEXTAREA
+   ============================================================ */
+
+.textarea-wrapper textarea {
+    display: block;
+
+    width: 100%;
+
+    min-height: 145px;
+
+    resize: vertical;
+
+    padding: 15px 16px;
+
+    border: 1px solid #e1e6ec;
+
+    border-radius: 17px;
+
+    background: #ffffff;
+
+    color: #111827;
+
+    outline: none;
+
+    font-family: "DM Sans", sans-serif;
+
+    font-size: .8rem;
+
+    line-height: 1.55;
+}
+
+.character-count {
+    position: absolute;
+
+    right: 12px;
+    bottom: 10px;
+
+    padding: 4px 7px;
+
+    border-radius: 7px;
+
+    background: rgba(255,255,255,.9);
+
+    color: #9ca3af;
+
+    font-size: .62rem;
+}
+
+
+/* ============================================================
+   FORM ERRORS
+   ============================================================ */
+
+.field-error {
+    display: block;
+
+    min-height: 0;
+
+    margin-top: 5px;
+
+    color: #dc2626;
+
+    font-size: .66rem;
+
+    line-height: 1.35;
+}
+
+
+/* ============================================================
+   SUBMIT BUTTON
+   ============================================================ */
+
+.submit-prayer-btn {
+    width: 100%;
+
+    min-height: 50px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    border: none;
+
+    border-radius: 999px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #4a0754,
+            #6d1b78
+        );
+
+    color: #ffffff;
+
+    font-size: .8rem;
+
+    font-weight: 750;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 11px 25px rgba(74, 7, 84, .16);
+}
+
+.submit-prayer-btn:disabled {
+    opacity: .55;
+
+    cursor: not-allowed;
+}
+
+.btn-label,
+.btn-loading {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+}
+
+.form-status {
+    margin-top: 13px;
+
+    font-family: "DM Sans", sans-serif;
+
+    font-size: .76rem;
+
+    line-height: 1.4;
+}
+
+.form-status.success {
+    padding: 12px 14px;
+
+    border-radius: 13px;
+
+    background: #ecfdf5;
+
+    color: #047857;
+
+    border: 1px solid #a7f3d0;
+}
+
+.form-status.error {
+    padding: 12px 14px;
+
+    border-radius: 13px;
+
+    background: #fef2f2;
+
+    color: #b91c1c;
+
+    border: 1px solid #fecaca;
+}
+
+
+/* ============================================================
+   TABLET
+   MATCHES SLC QUIZ / ACADEMIC HELP WIDTH
+   ============================================================ */
+
+@media (max-width: 900px) {
+
+    .dashboard-content.prayer-page {
+        width: calc(100% - 28px);
+
+        max-width: none;
+    }
+
+    .prayer-form-section {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+
+/* ============================================================
+   DESKTOP
+   ============================================================ */
+
+@media (min-width: 1100px) {
+
+    .dashboard-content.prayer-page {
+        width: calc(100% - 48px);
+
+        max-width: 1550px;
+    }
+
+}
+
+
+/* ============================================================
+   LARGE DESKTOP
+   ============================================================ */
+
+@media (min-width: 1500px) {
+
+    .dashboard-content.prayer-page {
+        width: calc(100% - 64px);
+
+        max-width: 1650px;
+    }
+
+}
+
+
+/* ============================================================
+   MOBILE
+   ============================================================ */
+
+@media (max-width: 768px) {
+
+    .dashboard-content.prayer-page {
+        width: calc(100% - 28px);
+
+        max-width: none;
+    }
+
+    .prayer-hero {
+        margin-bottom: 20px;
+
+        padding: 22px;
+
+        border-radius: 24px;
+    }
+
+    .prayer-hero h1 {
+        font-size: clamp(1.5rem, 7vw, 2.05rem);
+
+        line-height: 1.08;
+    }
+
+    .prayer-hero p {
+        max-width: 100%;
+
+        font-size: .78rem;
+    }
+
+    .prayer-hero-actions {
+        margin-top: 16px;
+    }
+
+    .prayer-primary-btn {
+        font-size: .75rem;
+    }
+
+    .prayer-form-section {
+        grid-template-columns: 1fr;
+
+        gap: 16px;
+    }
+
+    .prayer-intro {
+        padding: 24px;
+
+        border-radius: 24px;
+    }
+
+    .prayer-intro h2 {
+        font-size: 1.25rem;
+    }
+
+    .prayer-form-card {
+        padding: 24px;
+
+        border-radius: 23px;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+
+        gap: 0;
+    }
+
+    .form-row .form-field {
+        margin-bottom: 17px;
+    }
+
+}
+
+
+/* ============================================================
+   SMALL MOBILE WIDTH
+   ============================================================ */
+
+@media (max-width: 600px) {
+
+    .dashboard-content.prayer-page {
+        width: calc(100% - 20px);
+
+        max-width: none;
+    }
+
+    .prayer-page {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+}
+
+
+/* ============================================================
+   SMALL PHONES
+   ============================================================ */
+
+@media (max-width: 480px) {
+
+    .prayer-hero {
+        padding: 19px;
+
+        border-radius: 22px;
+    }
+
+    .prayer-eyebrow {
+        font-size: .63rem;
+    }
+
+    .prayer-hero h1 {
+        font-size: 1.25rem;
+    }
+
+    .prayer-hero p {
+        font-size: .75rem;
+    }
+
+    .prayer-primary-btn {
+        min-height: 44px;
+
+        padding: 10px 15px;
+
+        font-size: .7rem;
+    }
+
+    .prayer-intro {
+        padding: 20px;
+    }
+
+    .prayer-intro h2 {
+        font-size: .95rem;
+    }
+
+    .prayer-intro > p {
+        font-size: .74rem;
+    }
+
+    .prayer-form-card {
+        padding: 20px;
+
+        border-radius: 21px;
+    }
+
+    .prayer-anonymous-toggle {
+        padding: 11px 13px;
+    }
+
+    .form-field label {
+        font-size: .72rem;
+    }
+
+    .input-wrapper input,
+    .select-wrapper select,
+    .textarea-wrapper textarea {
+        font-size: .75rem;
+    }
+
+    .submit-prayer-btn {
+        min-height: 48px;
+
+        font-size: .75rem;
+    }
+
+}
+
+
+/* ============================================================
+   NO ANIMATIONS
+   ============================================================ */
+
+.prayer-page *,
+.prayer-page *::before,
+.prayer-page *::after {
+    animation: none !important;
+}
