@@ -648,7 +648,7 @@ function getStageLoaderMessage(
         case "reflection":
 
             return (
-                "Loading your reflection page..."
+                "Loading the next stage of the quiz..."
             );
 
 
@@ -2533,7 +2533,7 @@ async function checkCompletionStatus() {
 
 
         showTransitionLoader(
-            "Loading your reflection page..."
+            "Loading stage 2 of the quiz..."
         );
 
 
