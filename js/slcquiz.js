@@ -2533,7 +2533,7 @@ async function checkCompletionStatus() {
 
 
         showTransitionLoader(
-            "Loading stage 2 of the quiz..."
+            "Loading the next stage of the quiz..."
         );
 
 
@@ -3226,7 +3226,7 @@ async function submitReflection() {
 
 
     showTransitionLoader(
-        "Saving your reflection..."
+        "Saving your answers..."
     );
 
 
