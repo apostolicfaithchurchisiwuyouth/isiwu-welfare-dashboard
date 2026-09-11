@@ -613,7 +613,86 @@
 
 </div>
 
+<!-- ============================================================
+     HOLIDAY LESSON VIDEO MODAL
+     ============================================================ -->
 
+<div
+    class="lesson-video-modal"
+    id="lessonVideoModal"
+    hidden
+    aria-hidden="true"
+>
+    <div
+        class="lesson-video-modal-backdrop"
+        id="lessonVideoModalBackdrop"
+    ></div>
+
+    <div
+        class="lesson-video-modal-dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="lessonVideoModalTitle"
+    >
+
+        <div class="lesson-video-modal-header">
+
+            <div class="lesson-video-modal-heading">
+
+                <span class="lesson-video-modal-kicker">
+                    LEARNING RESOURCE
+                </span>
+
+                <h2 id="lessonVideoModalTitle">
+                    Watch the lesson
+                </h2>
+
+            </div>
+
+            <button
+                type="button"
+                class="lesson-video-modal-close"
+                id="lessonVideoModalClose"
+                aria-label="Close video"
+            >
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+        </div>
+
+
+        <div class="lesson-video-modal-player">
+
+            <div
+                class="lesson-video-player-container"
+                id="lessonVideoPlayerContainer"
+            ></div>
+
+        </div>
+
+
+        <div class="lesson-video-modal-footer">
+
+            <div class="lesson-video-modal-footer-icon">
+                <i class="fa-brands fa-youtube"></i>
+            </div>
+
+            <div>
+                <strong id="lessonVideoModalLessonTitle">
+                    Lesson video
+                </strong>
+
+                <span>
+                    Watch the resource, then close this window to continue
+                    your lesson.
+                </span>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+    
 <!-- =========================================================
      SCRIPTS
 ========================================================== -->
