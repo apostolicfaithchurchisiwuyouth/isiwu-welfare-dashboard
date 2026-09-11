@@ -243,7 +243,7 @@ document.addEventListener(
             if (holidayDescription) {
 
                 holidayDescription.textContent =
-                    "Use your school holiday to learn usefulskills and discover new opportunities.";
+                    "Use your school holiday to learn useful skills and discover new opportunities.";
 
             }
 
