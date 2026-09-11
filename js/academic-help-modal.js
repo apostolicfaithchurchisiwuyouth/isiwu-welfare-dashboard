@@ -1,3 +1,4 @@
+ js
 /* ============================================================
    AFC ISIU YOUTH PORTAL V2
    FILE: academic-help-modal.js
@@ -7,57 +8,48 @@
 
 "use strict";
 
-
 document.addEventListener(
     "DOMContentLoaded",
     () => {
 
-
-        /* ====================================================
+        /* ========================================================
            ELEMENTS
-           ==================================================== */
+           ======================================================== */
 
         const trigger =
             document.getElementById(
                 "academicHelpTrigger"
             );
 
-
         const modal =
             document.getElementById(
                 "academicHelpModal"
             );
-
 
         const backdrop =
             document.getElementById(
                 "academicHelpModalBackdrop"
             );
 
-
         const closeButton =
             document.getElementById(
                 "academicHelpModalClose"
             );
-
 
         const holidayOption =
             document.getElementById(
                 "holidaySkillsOption"
             );
 
-
         const holidayBadge =
             document.getElementById(
                 "holidaySkillsBadge"
             );
 
-
         const holidayDescription =
             document.getElementById(
                 "holidaySkillsDescription"
             );
-
 
         const holidayNote =
             document.getElementById(
@@ -65,17 +57,18 @@ document.addEventListener(
             );
 
 
-        if (
-            !trigger ||
-            !modal
-        ) {
+        /* ========================================================
+           REQUIRED MODAL CHECK
+           ======================================================== */
+
+        if (!trigger || !modal) {
             return;
         }
 
 
-        /* ====================================================
+        /* ========================================================
            CONFIGURATION
-           ==================================================== */
+           ======================================================== */
 
         const ACADEMIC_HELP_CONFIG = {
 
@@ -91,275 +84,222 @@ document.addEventListener(
         };
 
 
-        /* ====================================================
-           MODAL
-           ==================================================== */
+        /* ========================================================
+           HOLIDAY STATE
+           ======================================================== */
+
+        let holidaySkillsOpen = false;
+
+        let holidayStatusResolved = false;
+
+
+        /* ========================================================
+           OPEN ACADEMIC HELP MODAL
+           ======================================================== */
 
         function openAcademicHelpModal() {
 
-            modal.classList.add(
-                "is-open"
-            );
-
+            modal.classList.add("is-open");
 
             modal.setAttribute(
                 "aria-hidden",
                 "false"
             );
 
-
             document.body.classList.add(
                 "academic-help-modal-open"
             );
-
 
             window.setTimeout(
                 () => {
 
                     if (closeButton) {
-
                         closeButton.focus();
-
                     }
 
                 },
                 100
             );
-
         }
 
 
+        /* ========================================================
+           CLOSE ACADEMIC HELP MODAL
+           ======================================================== */
+
         function closeAcademicHelpModal() {
 
-            modal.classList.remove(
-                "is-open"
-            );
-
+            modal.classList.remove("is-open");
 
             modal.setAttribute(
                 "aria-hidden",
                 "true"
             );
 
-
             document.body.classList.remove(
                 "academic-help-modal-open"
             );
 
-
             trigger.focus();
-
         }
 
 
-        /* ====================================================
-           HOLIDAY API
-           ==================================================== */
+        /* ========================================================
+           HOLIDAY STATUS REQUEST
+           ======================================================== */
 
         async function getHolidayProgrammeStatus() {
 
             const url =
-                new URL(
-                    ACADEMIC_HELP_CONFIG.HOLIDAY_API
-                );
-
-
-            url.searchParams.set(
-                "action",
-                ACADEMIC_HELP_CONFIG
-                    .HOLIDAY_STATUS_ACTION
-            );
-
+                ACADEMIC_HELP_CONFIG.HOLIDAY_API +
+                "?action=" +
+                encodeURIComponent(
+                    ACADEMIC_HELP_CONFIG.HOLIDAY_STATUS_ACTION
+                ) +
+                "&_=" +
+                Date.now();
 
             const response =
                 await fetch(
-                    url.toString(),
+                    url,
                     {
                         method: "GET",
-                        cache: "no-store",
-                        headers: {
-                            "Accept":
-                                "application/json"
-                        }
+                        cache: "no-store"
                     }
                 );
 
-
             if (!response.ok) {
-
                 throw new Error(
-                    "Holiday Learning API returned HTTP " +
-                    response.status
+                    "Holiday programme request failed."
                 );
-
             }
-
 
             const data =
                 await response.json();
 
+            if (!data) {
+                throw new Error(
+                    "No holiday programme response received."
+                );
+            }
+
+            if (data.success === false) {
+                throw new Error(
+                    data.message ||
+                    "Holiday programme status could not be verified."
+                );
+            }
 
             return data;
-
         }
 
 
-        /* ====================================================
-           HOLIDAY ACCESS
-           
+        /* ========================================================
+           INITIAL / CHECKING STATE
+
            IMPORTANT:
-           The Google Apps Script backend is the authority.
+           Do NOT visually show LOCKED while the API is checking.
 
-           We do NOT use a manual true/false switch here.
-           ==================================================== */
+           The user will initially see the existing:
+           HOLIDAYS
 
-        async function configureHolidaySkills() {
+           Once the backend responds:
+           OPEN   = programme is available
+           LOCKED = programme is closed
+           ======================================================== */
+
+        function setHolidayCheckingState() {
 
             if (!holidayOption) {
                 return;
             }
 
+            holidaySkillsOpen = false;
+
+            holidayStatusResolved = false;
 
             /*
-             * Always begin in the locked state.
-             * This prevents accidental access while the
-             * backend status is being checked.
+             * Keep the option visually neutral while checking.
+             * This prevents the LOCKED → OPEN flicker.
              */
-
-            setHolidayLockedState(
-                "Checking availability..."
-            );
-
-
-            try {
-
-                const response =
-                    await getHolidayProgrammeStatus();
-
-
-                if (
-                    !response ||
-                    response.success === false
-                ) {
-
-                    throw new Error(
-                        response?.message ||
-                        "Holiday programme status is unavailable."
-                    );
-
-                }
-
-
-                const isOpen =
-                    response.open === true;
-
-
-                const programmeName =
-                    String(
-                        response.programmeName ||
-                        "Holiday Learning"
-                    ).trim();
-
-
-                const programmeMessage =
-                    String(
-                        response.message ||
-                        ""
-                    ).trim();
-
-
-                /* ==========================================
-                   HOLIDAY PERIOD OPEN
-                   ========================================== */
-
-                if (isOpen) {
-
-                    setHolidayOpenState(
-                        programmeName
-                    );
-
-                    return;
-
-                }
-
-
-                /* ==========================================
-                   HOLIDAY PERIOD CLOSED
-                   ========================================== */
-
-                setHolidayLockedState(
-                    programmeMessage ||
-                    "Holiday Learning is currently unavailable."
-                );
-
-
-            } catch (error) {
-
-                console.warn(
-                    "Holiday Learning access status could not be loaded:",
-                    error
-                );
-
-
-                /*
-                 * Fail closed.
-                 *
-                 * If the backend cannot be reached, users
-                 * must not gain access simply because the
-                 * browser cannot verify the holiday period.
-                 */
-
-                if (
-                    ACADEMIC_HELP_CONFIG
-                        .FAIL_CLOSED
-                ) {
-
-                    setHolidayLockedState(
-                        "Holiday Learning availability could not be verified. Please try again."
-                    );
-
-                    return;
-
-                }
-
-
-                /*
-                 * This branch is intentionally available
-                 * for future configuration, but the current
-                 * setting keeps access safely locked.
-                 */
-
-                setHolidayLockedState(
-                    "Holiday Learning is currently unavailable."
-                );
-
-            }
-
-        }
-
-
-        /* ====================================================
-           HOLIDAY OPEN STATE
-           ==================================================== */
-
-        function setHolidayOpenState(
-            programmeName
-        ) {
 
             holidayOption.classList.remove(
                 "is-locked"
             );
 
+            /*
+             * It must still be inaccessible until the
+             * backend confirms that the programme is open.
+             */
+
+            holidayOption.setAttribute(
+                "aria-disabled",
+                "true"
+            );
+
+            holidayOption.setAttribute(
+                "tabindex",
+                "-1"
+            );
+
+            holidayOption.dataset.holidayOpen =
+                "false";
+
+            /*
+             * Keep the original neutral badge.
+             */
+
+            if (holidayBadge) {
+
+                holidayBadge.textContent =
+                    "HOLIDAYS";
+
+            }
+
+            if (holidayDescription) {
+
+                holidayDescription.textContent =
+                    "Use your school holiday to learn useful skills and discover new opportunities.";
+
+            }
+
+            /*
+             * Do not show the closed message while checking.
+             */
+
+            if (holidayNote) {
+
+                holidayNote.hidden = true;
+
+            }
+        }
+
+
+        /* ========================================================
+           HOLIDAY OPEN STATE
+           ======================================================== */
+
+        function setHolidayOpenState() {
+
+            if (!holidayOption) {
+                return;
+            }
+
+            holidaySkillsOpen = true;
+
+            holidayStatusResolved = true;
+
+            holidayOption.classList.remove(
+                "is-locked"
+            );
 
             holidayOption.removeAttribute(
                 "aria-disabled"
             );
 
-
             holidayOption.removeAttribute(
                 "tabindex"
             );
-
 
             holidayOption.dataset.holidayOpen =
                 "true";
@@ -383,52 +323,47 @@ document.addEventListener(
 
             if (holidayNote) {
 
-                holidayNote.hidden =
-                    true;
+                holidayNote.hidden = true;
 
             }
 
 
-            /*
-             * The option may previously have received the
-             * locked click handler. Removing the attribute
-             * above is enough for keyboard semantics, while
-             * the click handler below also checks the state.
-             */
-
             holidayOption.setAttribute(
                 "aria-label",
-                programmeName +
-                " — Holiday Learning is open"
+                "Holiday Learning Hub — Open"
             );
-
         }
 
 
-        /* ====================================================
+        /* ========================================================
            HOLIDAY LOCKED STATE
-           ==================================================== */
+           ======================================================== */
 
         function setHolidayLockedState(
             message
         ) {
 
+            if (!holidayOption) {
+                return;
+            }
+
+            holidaySkillsOpen = false;
+
+            holidayStatusResolved = true;
+
             holidayOption.classList.add(
                 "is-locked"
             );
-
 
             holidayOption.setAttribute(
                 "aria-disabled",
                 "true"
             );
 
-
             holidayOption.setAttribute(
                 "tabindex",
                 "-1"
             );
-
 
             holidayOption.dataset.holidayOpen =
                 "false";
@@ -452,63 +387,137 @@ document.addEventListener(
 
             if (holidayNote) {
 
-                holidayNote.hidden =
-                    false;
+                holidayNote.hidden = false;
+
+                /*
+                 * Keep the existing note text unless
+                 * a specific message is supplied.
+                 */
+
+                if (message) {
+
+                    const noteText =
+                        holidayNote.querySelector(
+                            "span"
+                        );
+
+                    if (noteText) {
+
+                        noteText.textContent =
+                            message;
+
+                    }
+
+                }
 
             }
 
 
             holidayOption.setAttribute(
                 "aria-label",
-                message ||
-                "Holiday Learning is currently unavailable"
+                "Holiday Learning Hub — Currently locked"
             );
-
         }
 
 
-        /* ====================================================
-           HOLIDAY OPTION CLICK PROTECTION
-           ==================================================== */
+        /* ========================================================
+           CONFIGURE HOLIDAY LEARNING
+           ======================================================== */
 
-        holidayOption &&
-            holidayOption.addEventListener(
-                "click",
-                (event) => {
+        async function configureHolidaySkills() {
 
-                    const isOpen =
-                        holidayOption.dataset
-                            .holidayOpen ===
-                        "true";
+            if (!holidayOption) {
+                return;
+            }
 
+            /*
+             * Start in a neutral checking state.
+             * NEVER display LOCKED before the backend responds.
+             */
+
+            setHolidayCheckingState();
+
+
+            try {
+
+                const status =
+                    await getHolidayProgrammeStatus();
+
+
+                /*
+                 * Backend is the final authority.
+                 */
+
+                if (
+                    status.open === true
+                ) {
+
+                    setHolidayOpenState();
+
+                    return;
+                }
+
+
+                /*
+                 * Programme is officially closed.
+                 */
+
+                setHolidayLockedState(
+                    status.message ||
+                    "Holiday Learning Hub is currently closed and will open during the next school holiday."
+                );
+
+            } catch (error) {
+
+                console.warn(
+                    "Holiday Learning status check failed:",
+                    error
+                );
+
+
+                /*
+                 * Security rule:
+                 * If the status cannot be verified,
+                 * do not allow access.
+                 */
+
+                if (
+                    ACADEMIC_HELP_CONFIG.FAIL_CLOSED
+                ) {
+
+                    setHolidayLockedState(
+                        "Holiday Learning Hub availability could not be verified. Please try again later."
+                    );
+
+                } else {
 
                     /*
-                     * Backend has not confirmed access yet,
-                     * or the programme is closed.
+                     * This branch is intentionally available
+                     * for future configuration, but the current
+                     * configuration uses FAIL_CLOSED = true.
                      */
 
-                    if (!isOpen) {
-
-                        event.preventDefault();
-                        event.stopPropagation();
-
-                        return;
-
-                    }
+                    setHolidayLockedState();
 
                 }
-            );
+
+            }
+        }
 
 
-        /* ====================================================
-           EVENTS
-           ==================================================== */
+        /* ========================================================
+           ACADEMIC HELP TRIGGER
+           ======================================================== */
 
         trigger.addEventListener(
             "click",
             openAcademicHelpModal
         );
 
+
+        /* ========================================================
+           CLOSE BUTTON
+           ======================================================== */
 
         if (closeButton) {
 
@@ -520,6 +529,10 @@ document.addEventListener(
         }
 
 
+        /* ========================================================
+           BACKDROP CLOSE
+           ======================================================== */
+
         if (backdrop) {
 
             backdrop.addEventListener(
@@ -530,15 +543,17 @@ document.addEventListener(
         }
 
 
+        /* ========================================================
+           ESCAPE KEY
+           ======================================================== */
+
         document.addEventListener(
             "keydown",
             (event) => {
 
                 if (
                     event.key === "Escape" &&
-                    modal.classList.contains(
-                        "is-open"
-                    )
+                    modal.classList.contains("is-open")
                 ) {
 
                     closeAcademicHelpModal();
@@ -549,11 +564,48 @@ document.addEventListener(
         );
 
 
-        /* ====================================================
-           INITIALISE
-           ==================================================== */
+        /* ========================================================
+           HOLIDAY OPTION CLICK CONTROL
+           ======================================================== */
+
+        if (holidayOption) {
+
+            holidayOption.addEventListener(
+                "click",
+                (event) => {
+
+                    /*
+                     * Never allow the link to open until the
+                     * backend has explicitly confirmed OPEN.
+                     */
+
+                    if (
+                        holidaySkillsOpen !== true
+                    ) {
+
+                        event.preventDefault();
+
+                        event.stopPropagation();
+
+                        return;
+                    }
+
+                    /*
+                     * If OPEN, allow the normal href to work.
+                     */
+
+                }
+            );
+
+        }
+
+
+        /* ========================================================
+           INITIALISE HOLIDAY ACCESS CONTROL
+           ======================================================== */
 
         configureHolidaySkills();
 
     }
 );
+ 
