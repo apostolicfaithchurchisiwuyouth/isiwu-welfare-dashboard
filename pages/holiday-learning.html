@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    >
+
+    <title>Holiday Learning | AFC Isiu Youth Portal</title>
+
+    <!-- =========================================================
+         PWA
+    ========================================================== -->
+
+    <link
+        rel="manifest"
+        href="/manifest.json"
+    >
+
+    <meta
+        name="theme-color"
+        content="#4a0754"
+    >
+
+    <meta
+        name="mobile-web-app-capable"
+        content="yes"
+    >
+
+    <meta
+        name="apple-mobile-web-app-capable"
+        content="yes"
+    >
+
+    <meta
+        name="apple-mobile-web-app-status-bar-style"
+        content="default"
+    >
+
+    <meta
+        name="apple-mobile-web-app-title"
+        content="AFC Isiu"
+    >
+
+    <link
+        rel="icon"
+        type="image/png"
+        href="/images/logo.png"
+    >
+
+    <link
+        rel="apple-touch-icon"
+        href="/images/logo.png"
+    >
+
+
+    <!-- =========================================================
+         FONTS
+    ========================================================== -->
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap"
+        rel="stylesheet"
+    >
+
+
+    <!-- =========================================================
+         ICONS
+    ========================================================== -->
+
+    <link
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+        rel="stylesheet"
+    >
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/remixicon@4.6.0/fonts/remixicon.css"
+        rel="stylesheet"
+    >
+
+
+    <!-- =========================================================
+         MAIN STYLES
+    ========================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="/css/main.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="/css/layout.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="/css/holiday-learning.css"
+    >
+
+</head>
+
+
+<body>
+
+<div class="app-layout">
+
+    <!-- =========================================================
+         SIDEBAR
+    ========================================================== -->
+
+    <div id="app-sidebar"></div>
+
+
+    <div class="main-area">
+
+        <!-- =====================================================
+             TOPBAR
+        ====================================================== -->
+
+        <div id="app-topbar"></div>
+
+
+        <!-- =====================================================
+             HOLIDAY LEARNING HUB
+        ====================================================== -->
+
+        <main class="dashboard-content holiday-learning-page">
+
+
+            <!-- =================================================
+                 HERO
+            ================================================== -->
+
+            <section class="holiday-hero">
+
+                <div class="holiday-hero-copy">
+
+                    <span class="holiday-eyebrow">
+                        HOLIDAY LEARNING
+                    </span>
+
+                    <h1>
+                        Learn something useful
+                        <span>this holiday.</span>
+                    </h1>
+
+                    <p>
+                        Your school break can be more than just a time
+                        to rest. Explore practical skills, discover
+                        new interests and prepare yourself for the future.
+                    </p>
+
+
+                    <div class="holiday-hero-meta">
+
+                        <span
+                            class="holiday-status"
+                            id="holidayProgrammeStatus"
+                        >
+                            <span class="holiday-status-dot"></span>
+                            Checking programme...
+                        </span>
+
+                        <span
+                            class="holiday-season"
+                            id="holidayProgrammeName"
+                        >
+                            Holiday Learning
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="holiday-hero-visual">
+
+                    <div class="holiday-visual-orbit orbit-one"></div>
+
+                    <div class="holiday-visual-orbit orbit-two"></div>
+
+                    <div class="holiday-visual-icon">
+                        <i class="fa-solid fa-lightbulb"></i>
+                    </div>
+
+                    <div class="holiday-floating-card card-one">
+                        <i class="fa-solid fa-laptop-code"></i>
+                        <span>Digital Skills</span>
+                    </div>
+
+                    <div class="holiday-floating-card card-two">
+                        <i class="fa-solid fa-compass"></i>
+                        <span>Future Skills</span>
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 CLOSED STATE
+            ================================================== -->
+
+            <section
+                class="holiday-closed-state"
+                id="holidayClosedState"
+                hidden
+            >
+
+                <div class="holiday-closed-icon">
+                    <i class="fa-regular fa-calendar"></i>
+                </div>
+
+                <div class="holiday-closed-copy">
+
+                    <span class="holiday-section-kicker">
+                        PROGRAMME CLOSED
+                    </span>
+
+                    <h2>
+                        Holiday Learning is currently unavailable.
+                    </h2>
+
+                    <p id="holidayClosedMessage">
+                        This programme is available during approved
+                        school holiday periods. Please check back
+                        when the next holiday programme opens.
+                    </p>
+
+                </div>
+
+                <a
+                    href="/"
+                    class="holiday-back-button"
+                >
+                    <i class="fa-solid fa-arrow-left"></i>
+                    Back to Home
+                </a>
+
+            </section>
+
+
+            <!-- =================================================
+                 ACTIVE HUB
+            ================================================== -->
+
+            <div
+                id="holidayHubContent"
+                hidden
+            >
+
+
+                <!-- =============================================
+                     FEATURED
+                ============================================== -->
+
+                <section class="holiday-section">
+
+                    <div class="holiday-section-heading">
+
+                        <div>
+                            <span class="holiday-section-kicker">
+                                START HERE
+                            </span>
+
+                            <h2>
+                                Choose something to learn
+                            </h2>
+                        </div>
+
+                        <p>
+                            Short, practical learning you can complete
+                            at your own pace.
+                        </p>
+
+                    </div>
+
+
+                    <div
+                        class="holiday-category-grid"
+                        id="holidayCategoryGrid"
+                    >
+
+                        <!-- DIGITAL SKILLS -->
+
+                        <button
+                            type="button"
+                            class="holiday-category-card"
+                            data-category="Digital Skills"
+                        >
+
+                            <span class="holiday-category-icon digital">
+                                <i class="fa-solid fa-laptop-code"></i>
+                            </span>
+
+                            <span class="holiday-category-copy">
+
+                                <strong>
+                                    Digital Skills
+                                </strong>
+
+                                <small>
+                                    Learn useful digital tools and
+                                    everyday computer skills.
+                                </small>
+
+                            </span>
+
+                            <i class="fa-solid fa-arrow-right"></i>
+
+                        </button>
+
+
+                        <!-- CAREER -->
+
+                        <button
+                            type="button"
+                            class="holiday-category-card"
+                            data-category="Career & Future Skills"
+                        >
+
+                            <span class="holiday-category-icon career">
+                                <i class="fa-solid fa-compass"></i>
+                            </span>
+
+                            <span class="holiday-category-copy">
+
+                                <strong>
+                                    Career & Future Skills
+                                </strong>
+
+                                <small>
+                                    Discover yourself and build skills
+                                    for your future.
+                                </small>
+
+                            </span>
+
+                            <i class="fa-solid fa-arrow-right"></i>
+
+                        </button>
+
+
+                        <!-- CHALLENGES -->
+
+                        <button
+                            type="button"
+                            class="holiday-category-card"
+                            data-category="Holiday Challenges"
+                        >
+
+                            <span class="holiday-category-icon challenge">
+                                <i class="fa-solid fa-bolt"></i>
+                            </span>
+
+                            <span class="holiday-category-copy">
+
+                                <strong>
+                                    Holiday Challenges
+                                </strong>
+
+                                <small>
+                                    Take small challenges that help
+                                    you practise what you learn.
+                                </small>
+
+                            </span>
+
+                            <i class="fa-solid fa-arrow-right"></i>
+
+                        </button>
+
+
+                        <!-- CREATIVE -->
+
+                        <button
+                            type="button"
+                            class="holiday-category-card"
+                            data-category="Creative Skills"
+                        >
+
+                            <span class="holiday-category-icon creative">
+                                <i class="fa-solid fa-wand-magic-sparkles"></i>
+                            </span>
+
+                            <span class="holiday-category-copy">
+
+                                <strong>
+                                    Creative Skills
+                                </strong>
+
+                                <small>
+                                    Explore design, content creation
+                                    and creative thinking.
+                                </small>
+
+                            </span>
+
+                            <i class="fa-solid fa-arrow-right"></i>
+
+                        </button>
+
+                    </div>
+
+                </section>
+
+
+                <!-- =============================================
+                     LESSONS
+                ============================================== -->
+
+                <section
+                    class="holiday-section"
+                    id="holidayLessonsSection"
+                >
+
+                    <div class="holiday-section-heading">
+
+                        <div>
+
+                            <span class="holiday-section-kicker">
+                                LEARNING LIBRARY
+                            </span>
+
+                            <h2>
+                                Featured learning
+                            </h2>
+
+                        </div>
+
+                        <button
+                            type="button"
+                            class="holiday-filter-button"
+                            id="holidayClearFilter"
+                        >
+                            Show all
+                        </button>
+
+                    </div>
+
+
+                    <div
+                        class="holiday-filter-row"
+                        id="holidayFilterRow"
+                    >
+
+                        <button
+                            type="button"
+                            class="holiday-filter active"
+                            data-category="All"
+                        >
+                            All
+                        </button>
+
+                        <button
+                            type="button"
+                            class="holiday-filter"
+                            data-category="Digital Skills"
+                        >
+                            Digital Skills
+                        </button>
+
+                        <button
+                            type="button"
+                            class="holiday-filter"
+                            data-category="Career & Future Skills"
+                        >
+                            Future Skills
+                        </button>
+
+                        <button
+                            type="button"
+                            class="holiday-filter"
+                            data-category="Holiday Challenges"
+                        >
+                            Challenges
+                        </button>
+
+                        <button
+                            type="button"
+                            class="holiday-filter"
+                            data-category="Creative Skills"
+                        >
+                            Creative
+                        </button>
+
+                    </div>
+
+
+                    <div
+                        class="holiday-lesson-grid"
+                        id="holidayLessonGrid"
+                    ></div>
+
+
+                    <div
+                        class="holiday-empty-state"
+                        id="holidayEmptyState"
+                        hidden
+                    >
+
+                        <div class="holiday-empty-icon">
+                            <i class="fa-regular fa-folder-open"></i>
+                        </div>
+
+                        <h3>
+                            Nothing here yet
+                        </h3>
+
+                        <p>
+                            More learning activities will be added
+                            to this category soon.
+                        </p>
+
+                    </div>
+
+                </section>
+
+
+                <!-- =============================================
+                     YOUR LEARNING
+                ============================================== -->
+
+                <section class="holiday-section">
+
+                    <div class="holiday-section-heading">
+
+                        <div>
+
+                            <span class="holiday-section-kicker">
+                                YOUR LEARNING
+                            </span>
+
+                            <h2>
+                                Keep track of your progress
+                            </h2>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="holiday-progress-card">
+
+                        <div class="holiday-progress-icon">
+                            <i class="fa-solid fa-chart-line"></i>
+                        </div>
+
+                        <div class="holiday-progress-copy">
+
+                            <strong>
+                                Your learning journey
+                            </strong>
+
+                            <p>
+                                Lessons you start or complete will
+                                appear here as we add progress tracking.
+                            </p>
+
+                        </div>
+
+                        <span class="holiday-progress-value">
+                            Coming soon
+                        </span>
+
+                    </div>
+
+                </section>
+
+
+                <!-- =============================================
+                     HOW IT WORKS
+                ============================================== -->
+
+                <section class="holiday-section">
+
+                    <div class="holiday-section-heading">
+
+                        <div>
+
+                            <span class="holiday-section-kicker">
+                                HOW IT WORKS
+                            </span>
+
+                            <h2>
+                                Learn at your own pace
+                            </h2>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="holiday-steps">
+
+                        <div class="holiday-step">
+
+                            <span class="holiday-step-number">
+                                01
+                            </span>
+
+                            <div>
+                                <strong>
+                                    Choose a skill
+                                </strong>
+
+                                <p>
+                                    Pick something useful that
+                                    interests you.
+                                </p>
+                            </div>
+
+                        </div>
+
+
+                        <div class="holiday-step">
+
+                            <span class="holiday-step-number">
+                                02
+                            </span>
+
+                            <div>
+                                <strong>
+                                    Learn
+                                </strong>
+
+                                <p>
+                                    Follow the short lesson and
+                                    practise what you learn.
+                                </p>
+                            </div>
+
+                        </div>
+
+
+                        <div class="holiday-step">
+
+                            <span class="holiday-step-number">
+                                03
+                            </span>
+
+                            <div>
+                                <strong>
+                                    Apply it
+                                </strong>
+
+                                <p>
+                                    Complete a challenge or use
+                                    the skill in a real situation.
+                                </p>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+            </div>
+
+
+            <!-- =================================================
+                 FOOTER NOTE
+            ================================================== -->
+
+            <div class="holiday-footer-note">
+
+                <i class="fa-solid fa-circle-info"></i>
+
+                <span>
+                    Holiday Learning is designed to complement
+                    your school education with practical skills
+                    and personal development.
+                </span>
+
+            </div>
+
+
+        </main>
+
+    </div>
+
+
+    <!-- =========================================================
+         MOBILE BOTTOM NAVIGATION
+    ========================================================== -->
+
+    <div id="app-bottom-nav"></div>
+
+</div>
+
+
+<!-- =============================================================
+     AOS
+============================================================== -->
+
+<script
+    src="https://unpkg.com/aos@2.3.4/dist/aos.js"
+></script>
+
+
+<!-- =============================================================
+     SHARED LAYOUT
+============================================================== -->
+
+<script src="/js/layout.js"></script>
+
+
+<!-- =============================================================
+     PWA
+============================================================== -->
+
+<script src="/js/pwa.js"></script>
+
+
+<!-- =============================================================
+     MAIN CONTROLLER
+============================================================== -->
+
+<script src="/js/main.js"></script>
+
+
+<!-- =============================================================
+     HOLIDAY LEARNING
+============================================================== -->
+
+<script src="/js/holiday-learning.js"></script>
+
+
+</body>
+
+</html>
