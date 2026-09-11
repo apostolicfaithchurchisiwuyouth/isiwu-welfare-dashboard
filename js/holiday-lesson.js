@@ -56,6 +56,66 @@ function escapeLessonHTML(value) {
 
 
 /* ============================================================
+   SAFE LESSON RESOURCE URL
+============================================================ */
+
+function getSafeLessonResourceUrl(value) {
+
+    const raw =
+        String(value || "")
+            .trim();
+
+
+    if (!raw) {
+        return "";
+    }
+
+
+    try {
+
+        const url =
+            new URL(
+                raw,
+                window.location.origin
+            );
+
+
+        /*
+           Only allow normal HTTP/HTTPS
+           learning resources.
+
+           This prevents javascript:
+           and other unsafe protocols.
+        */
+
+        if (
+            url.protocol !== "https:" &&
+            url.protocol !== "http:"
+        ) {
+
+            return "";
+
+        }
+
+
+        return url.href;
+
+    }
+    catch (error) {
+
+        console.warn(
+            "Invalid Holiday Learning resource URL:",
+            error
+        );
+
+        return "";
+
+    }
+
+}
+
+
+/* ============================================================
    GET RESPONSE DATA
 ============================================================ */
 
@@ -161,6 +221,7 @@ function saveSelectedLesson(lesson) {
         sessionStorage.setItem(
             "afc_holiday_selected_lesson",
             JSON.stringify({
+
                 lessonId:
                     lesson.lessonId ||
                     lesson.lesson_id ||
@@ -175,8 +236,14 @@ function saveSelectedLesson(lesson) {
                     lesson.category ||
                     "",
 
+                lessonUrl:
+                    lesson.lessonUrl ||
+                    lesson.lesson_url ||
+                    "",
+
                 savedAt:
                     Date.now()
+
             })
         );
 
@@ -305,9 +372,11 @@ function showError(message) {
             );
 
         if (messageElement) {
+
             messageElement.textContent =
                 message ||
                 "Please return to Holiday Learning and try again.";
+
         }
 
     }
@@ -805,6 +874,81 @@ function sanitizeLessonHTML(
 
 
 /* ============================================================
+   RENDER LESSON RESOURCE
+============================================================ */
+
+function renderLessonResource(
+    lesson
+) {
+
+    /*
+       The HTML resource area will be added
+       separately.
+
+       This function is deliberately safe
+       if the element does not exist yet,
+       so the current reader does not break.
+    */
+
+    const resourceContainer =
+        lessonElement(
+            "lessonResource"
+        );
+
+
+    if (!resourceContainer) {
+        return;
+    }
+
+
+    const resourceUrl =
+        getSafeLessonResourceUrl(
+            lesson.lessonUrl ||
+            lesson.lesson_url ||
+            ""
+        );
+
+
+    if (!resourceUrl) {
+
+        resourceContainer.hidden =
+            true;
+
+        resourceContainer.innerHTML =
+            "";
+
+        return;
+
+    }
+
+
+    resourceContainer.hidden =
+        false;
+
+
+    const resourceLink =
+        lessonElement(
+            "lessonResourceLink"
+        );
+
+
+    if (resourceLink) {
+
+        resourceLink.href =
+            resourceUrl;
+
+        resourceLink.target =
+            "_blank";
+
+        resourceLink.rel =
+            "noopener noreferrer";
+
+    }
+
+}
+
+
+/* ============================================================
    RENDER LESSON
 ============================================================ */
 
@@ -902,8 +1046,10 @@ function renderLesson(
 
 
     if (titleElement) {
+
         titleElement.textContent =
             title;
+
     }
 
 
@@ -990,6 +1136,16 @@ function renderLesson(
             );
 
     }
+
+
+    /*
+       Render optional external
+       learning resource.
+    */
+
+    renderLessonResource(
+        lesson
+    );
 
 
     /*
@@ -1135,6 +1291,7 @@ function buildSectionNavigation() {
                             target.scrollIntoView({
                                 behavior:
                                     "smooth",
+
                                 block:
                                     "start"
                             });
@@ -1380,6 +1537,7 @@ async function saveHolidayProgress(
             localStorage.setItem(
                 `afc_holiday_progress_${lessonId}`,
                 JSON.stringify({
+
                     lessonId:
                         lessonId,
 
@@ -1389,6 +1547,7 @@ async function saveHolidayProgress(
 
                     completedAt:
                         new Date().toISOString()
+
                 })
             );
 
@@ -1619,3 +1778,4 @@ document.addEventListener(
 
     }
 );
+ 
