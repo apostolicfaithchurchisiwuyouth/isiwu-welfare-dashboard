@@ -14,11 +14,11 @@
     width:
         min(
             calc(100% - 32px),
-            1480px
+            1500px
         );
 
     max-width:
-        1480px;
+        1500px;
 
     margin:
         0 auto;
@@ -2137,7 +2137,7 @@
         width:
             min(
                 calc(100% - 22px),
-                1480px
+                1500px
             );
 
         padding-bottom:
