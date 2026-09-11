@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    >
+
+    <title>Lesson | AFC Isiu Youth Portal</title>
+
+    <link rel="manifest" href="/manifest.json">
+
+    <meta
+        name="theme-color"
+        content="#4a0754"
+    >
+
+    <meta
+        name="mobile-web-app-capable"
+        content="yes"
+    >
+
+    <meta
+        name="apple-mobile-web-app-capable"
+        content="yes"
+    >
+
+    <meta
+        name="apple-mobile-web-app-status-bar-style"
+        content="default"
+    >
+
+    <meta
+        name="apple-mobile-web-app-title"
+        content="AFC Isiu"
+    >
+
+    <link
+        rel="icon"
+        type="image/png"
+        href="/images/logo.png"
+    >
+
+    <link
+        rel="apple-touch-icon"
+        href="/images/logo.png"
+    >
+
+    <!-- =========================================================
+         FONTS
+    ========================================================== -->
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap"
+        rel="stylesheet"
+    >
+
+    <!-- =========================================================
+         ICONS
+    ========================================================== -->
+
+    <link
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+        rel="stylesheet"
+    >
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/remixicon@4.6.0/fonts/remixicon.css"
+        rel="stylesheet"
+    >
+
+    <!-- =========================================================
+         PORTAL CSS
+    ========================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="/css/main.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="/css/layout.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="/css/holiday-lesson.css"
+    >
+</head>
+
+
+<body>
+
+<div class="app-layout">
+
+    <!-- SIDEBAR -->
+    <div id="app-sidebar"></div>
+
+
+    <div class="main-area">
+
+        <!-- TOPBAR -->
+        <div id="app-topbar"></div>
+
+
+        <main class="dashboard-content holiday-lesson-page">
+
+            <!-- =================================================
+                 LOADING STATE
+            ================================================== -->
+
+            <section
+                class="lesson-loading"
+                id="lessonLoading"
+            >
+
+                <div class="lesson-loading-icon">
+                    <i class="fa-solid fa-book-open"></i>
+                </div>
+
+                <div>
+
+                    <span class="lesson-loading-kicker">
+                        HOLIDAY LEARNING
+                    </span>
+
+                    <h1>
+                        Opening your lesson
+                    </h1>
+
+                    <p>
+                        Preparing your learning material...
+                    </p>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 ERROR STATE
+            ================================================== -->
+
+            <section
+                class="lesson-error"
+                id="lessonError"
+                hidden
+            >
+
+                <div class="lesson-error-icon">
+                    <i class="fa-solid fa-circle-exclamation"></i>
+                </div>
+
+                <span class="lesson-section-kicker">
+                    LESSON UNAVAILABLE
+                </span>
+
+                <h1>
+                    We couldn't open this lesson
+                </h1>
+
+                <p id="lessonErrorMessage">
+                    Please return to Holiday Learning and try again.
+                </p>
+
+                <a
+                    href="/pages/holiday-learning.html"
+                    class="lesson-error-button"
+                >
+                    <i class="fa-solid fa-arrow-left"></i>
+                    Back to Learning
+                </a>
+
+            </section>
+
+
+            <!-- =================================================
+                 LESSON READER
+            ================================================== -->
+
+            <article
+                class="lesson-reader"
+                id="lessonReader"
+                hidden
+            >
+
+                <!-- READER TOP BAR -->
+
+                <div class="lesson-reader-topbar">
+
+                    <a
+                        href="/pages/holiday-learning.html"
+                        class="lesson-back-button"
+                    >
+
+                        <i class="fa-solid fa-arrow-left"></i>
+
+                        <span>
+                            All lessons
+                        </span>
+
+                    </a>
+
+
+                    <span class="lesson-reader-label">
+                        READING
+                    </span>
+
+                </div>
+
+
+                <!-- =================================================
+                     LESSON HERO
+                ================================================== -->
+
+                <header class="lesson-reader-header">
+
+                    <div class="lesson-reader-header-main">
+
+                        <div class="lesson-reader-icon">
+                            <i
+                                class="fa-solid fa-book-open-reader"
+                                id="lessonIcon"
+                            ></i>
+                        </div>
+
+
+                        <div class="lesson-reader-title-area">
+
+                            <div class="lesson-reader-badges">
+
+                                <span
+                                    class="lesson-category-badge"
+                                    id="lessonCategory"
+                                >
+                                    Learning
+                                </span>
+
+                                <span
+                                    class="lesson-level-badge"
+                                    id="lessonLevel"
+                                >
+                                    Beginner
+                                </span>
+
+                            </div>
+
+
+                            <h1 id="lessonTitle">
+                                Introduction to Canva
+                            </h1>
+
+
+                            <p
+                                class="lesson-description"
+                                id="lessonDescription"
+                            >
+                                Learn the basics of Canva and discover
+                                how to create simple designs.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- LESSON META -->
+
+                    <div class="lesson-reader-meta">
+
+                        <span>
+                            <i class="fa-regular fa-clock"></i>
+
+                            <strong id="lessonDuration">
+                                Self-paced
+                            </strong>
+                        </span>
+
+
+                        <span>
+                            <i class="fa-solid fa-signal"></i>
+
+                            <strong id="lessonMetaLevel">
+                                Beginner
+                            </strong>
+                        </span>
+
+
+                        <span>
+                            <i class="fa-solid fa-tag"></i>
+
+                            <strong id="lessonPrice">
+                                Free
+                            </strong>
+                        </span>
+
+                    </div>
+
+                </header>
+
+
+                <!-- =================================================
+                     READING PROGRESS
+                ================================================== -->
+
+                <div class="lesson-reading-progress">
+
+                    <div class="lesson-reading-progress-top">
+
+                        <span>
+                            Your reading progress
+                        </span>
+
+                        <strong id="readingProgressText">
+                            0%
+                        </strong>
+
+                    </div>
+
+
+                    <div class="lesson-reading-progress-track">
+
+                        <div
+                            class="lesson-reading-progress-fill"
+                            id="readingProgressFill"
+                        ></div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     LESSON BODY
+                ================================================== -->
+
+                <div class="lesson-reader-layout">
+
+                    <!-- CONTENT -->
+
+                    <div class="lesson-reader-content">
+
+                        <div
+                            class="lesson-content"
+                            id="lessonContent"
+                        ></div>
+
+
+                        <!-- =================================================
+                             COMPLETION AREA
+                        ================================================== -->
+
+                        <section class="lesson-completion">
+
+                            <div class="lesson-completion-icon">
+
+                                <i class="fa-solid fa-check"></i>
+
+                            </div>
+
+
+                            <div class="lesson-completion-copy">
+
+                                <span>
+                                    LESSON COMPLETE?
+                                </span>
+
+                                <h2>
+                                    Finished reading?
+                                </h2>
+
+                                <p>
+                                    Mark this lesson as completed
+                                    when you have finished reading it.
+                                </p>
+
+                            </div>
+
+
+                            <button
+                                type="button"
+                                class="lesson-complete-button"
+                                id="completeLessonButton"
+                            >
+
+                                <span>
+                                    Mark as complete
+                                </span>
+
+                                <i class="fa-solid fa-arrow-right"></i>
+
+                            </button>
+
+                        </section>
+
+                    </div>
+
+
+                    <!-- SIDEBAR -->
+
+                    <aside class="lesson-reader-sidebar">
+
+                        <div class="lesson-sidebar-card">
+
+                            <div class="lesson-sidebar-heading">
+
+                                <i class="fa-solid fa-list"></i>
+
+                                <span>
+                                    In this lesson
+                                </span>
+
+                            </div>
+
+
+                            <nav
+                                class="lesson-section-list"
+                                id="lessonSectionList"
+                            ></nav>
+
+                        </div>
+
+
+                        <div class="lesson-sidebar-note">
+
+                            <i class="fa-solid fa-lightbulb"></i>
+
+                            <div>
+
+                                <strong>
+                                    Learn at your pace
+                                </strong>
+
+                                <p>
+                                    Take your time. Read each section
+                                    carefully and come back whenever
+                                    you need to review it.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </aside>
+
+                </div>
+
+
+                <!-- =================================================
+                     BOTTOM NAVIGATION
+                ================================================== -->
+
+                <footer class="lesson-reader-footer">
+
+                    <a
+                        href="/pages/holiday-learning.html"
+                        class="lesson-footer-back"
+                    >
+
+                        <i class="fa-solid fa-arrow-left"></i>
+
+                        Back to Learning
+
+                    </a>
+
+
+                    <button
+                        type="button"
+                        class="lesson-next-button"
+                        id="lessonFinishButton"
+                    >
+
+                        Finish Lesson
+
+                        <i class="fa-solid fa-check"></i>
+
+                    </button>
+
+                </footer>
+
+            </article>
+
+
+            <!-- =================================================
+                 COMPLETED STATE
+            ================================================== -->
+
+            <section
+                class="lesson-completed"
+                id="lessonCompleted"
+                hidden
+            >
+
+                <div class="lesson-completed-icon">
+
+                    <i class="fa-solid fa-check"></i>
+
+                </div>
+
+                <span class="lesson-section-kicker">
+                    WELL DONE
+                </span>
+
+                <h1>
+                    Lesson completed
+                </h1>
+
+                <p id="lessonCompletedMessage">
+                    You have completed this learning activity.
+                </p>
+
+                <div class="lesson-completed-actions">
+
+                    <a
+                        href="/pages/holiday-learning.html"
+                        class="lesson-completed-primary"
+                    >
+                        Continue Learning
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+
+                    <button
+                        type="button"
+                        class="lesson-completed-secondary"
+                        id="readAgainButton"
+                    >
+                        Read Again
+                    </button>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+
+    <!-- BOTTOM NAV -->
+
+    <div id="app-bottom-nav"></div>
+
+</div>
+
+
+<!-- =========================================================
+     SCRIPTS
+========================================================== -->
+
+<script src="/js/layout.js"></script>
+
+<script src="/js/pwa.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/holiday-lesson.js"></script>
+
+</body>
+
+</html>
