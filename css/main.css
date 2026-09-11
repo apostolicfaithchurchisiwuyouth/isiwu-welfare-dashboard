@@ -2265,3 +2265,533 @@ body.offline-active
     }
 
 }
+
+
+
+/* ============================================================
+   ACADEMIC HELP MODAL
+   ============================================================ */
+
+body.academic-help-modal-open {
+    overflow: hidden;
+}
+
+
+/* ============================================================
+   HOMEPAGE ACADEMIC HELP TRIGGER
+   ============================================================ */
+
+.hub-item.academic-help-trigger {
+    width: 100%;
+
+    border: 0;
+
+    text-align: left;
+
+    font: inherit;
+
+    cursor: pointer;
+}
+
+
+/* ============================================================
+   MODAL WRAPPER
+   ============================================================ */
+
+.academic-help-modal {
+    position: fixed;
+    inset: 0;
+
+    z-index: 9999;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 24px;
+
+    pointer-events: none;
+}
+
+
+.academic-help-modal.is-open {
+    pointer-events: auto;
+}
+
+
+/* ============================================================
+   BACKDROP
+   ============================================================ */
+
+.academic-help-modal-backdrop {
+    position: absolute;
+    inset: 0;
+
+    background: rgba(10, 0, 22, 0.58);
+
+    opacity: 0;
+
+    transition: opacity 0.22s ease;
+}
+
+
+.academic-help-modal.is-open
+.academic-help-modal-backdrop {
+    opacity: 1;
+}
+
+
+/* ============================================================
+   PANEL
+   ============================================================ */
+
+.academic-help-modal-panel {
+    position: relative;
+
+    width: min(100%, 680px);
+    max-height: calc(100vh - 48px);
+
+    overflow-y: auto;
+
+    padding: 26px;
+
+    border: 1px solid rgba(15, 23, 42, 0.07);
+    border-radius: 28px;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 30px 90px rgba(10, 0, 22, 0.24);
+
+    opacity: 0;
+
+    transform:
+        translateY(18px)
+        scale(0.98);
+
+    transition:
+        opacity 0.22s ease,
+        transform 0.22s ease;
+}
+
+
+.academic-help-modal.is-open
+.academic-help-modal-panel {
+    opacity: 1;
+
+    transform:
+        translateY(0)
+        scale(1);
+}
+
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+
+.academic-help-modal-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    gap: 20px;
+}
+
+
+.academic-help-modal-heading {
+    display: flex;
+    align-items: center;
+
+    gap: 13px;
+}
+
+
+.academic-help-modal-icon {
+    width: 48px;
+    height: 48px;
+
+    flex: 0 0 48px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 15px;
+
+    background: rgba(74, 7, 84, 0.10);
+
+    color: #4a0754;
+
+    font-size: 1.05rem;
+}
+
+
+.academic-help-modal-eyebrow {
+    display: block;
+
+    margin-bottom: 4px;
+
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-size: 0.62rem;
+    font-weight: 800;
+
+    letter-spacing: 0.11em;
+
+    color: #94a3b8;
+}
+
+
+.academic-help-modal-heading h2 {
+    margin: 0;
+
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-size: 1.35rem;
+    line-height: 1.15;
+    font-weight: 800;
+
+    letter-spacing: -0.025em;
+
+    color: #10051a;
+}
+
+
+.academic-help-modal-close {
+    width: 38px;
+    height: 38px;
+
+    flex: 0 0 38px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid #e8edf3;
+    border-radius: 11px;
+
+    background: #ffffff;
+    color: #64748b;
+
+    cursor: pointer;
+
+    transition:
+        background 0.18s ease,
+        color 0.18s ease,
+        border-color 0.18s ease;
+}
+
+
+.academic-help-modal-close:hover {
+    background: #f8fafc;
+    border-color: #dce3ea;
+    color: #10051a;
+}
+
+
+/* ============================================================
+   INTRO
+   ============================================================ */
+
+.academic-help-modal-intro {
+    margin-top: 22px;
+}
+
+
+.academic-help-modal-intro p {
+    margin: 0;
+
+    font-family: "DM Sans", sans-serif;
+    font-size: 0.82rem;
+    line-height: 1.55;
+
+    color: #64748b;
+}
+
+
+/* ============================================================
+   OPTIONS
+   ============================================================ */
+
+.academic-help-options {
+    display: grid;
+
+    gap: 10px;
+
+    margin-top: 20px;
+}
+
+
+.academic-help-option {
+    display: flex;
+    align-items: center;
+
+    gap: 15px;
+
+    padding: 17px;
+
+    border: 1px solid #edf0f4;
+    border-radius: 18px;
+
+    background: #ffffff;
+
+    text-decoration: none;
+
+    transition:
+        transform 0.18s ease,
+        border-color 0.18s ease,
+        background 0.18s ease,
+        box-shadow 0.18s ease;
+}
+
+
+.academic-help-option:hover {
+    transform: translateY(-2px);
+
+    border-color: rgba(74, 7, 84, 0.16);
+
+    background: #fcfafc;
+
+    box-shadow:
+        0 10px 28px rgba(15, 23, 42, 0.05);
+}
+
+
+.academic-help-option-icon {
+    width: 46px;
+    height: 46px;
+
+    flex: 0 0 46px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 14px;
+
+    background: rgba(74, 7, 84, 0.08);
+
+    color: #4a0754;
+
+    font-size: 0.95rem;
+}
+
+
+.academic-help-option-content {
+    min-width: 0;
+    flex: 1;
+}
+
+
+.academic-help-option-content h3 {
+    margin: 0;
+
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-size: 0.92rem;
+    line-height: 1.25;
+    font-weight: 750;
+
+    color: #10051a;
+}
+
+
+.academic-help-option-content p {
+    margin: 5px 0 0;
+
+    font-family: "DM Sans", sans-serif;
+    font-size: 0.76rem;
+    line-height: 1.5;
+
+    color: #64748b;
+}
+
+
+.academic-help-option-arrow {
+    flex: 0 0 auto;
+
+    color: #94a3b8;
+
+    font-size: 0.78rem;
+}
+
+
+.academic-help-option-title-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+
+    gap: 8px;
+}
+
+
+/* ============================================================
+   HOLIDAY BADGE
+   ============================================================ */
+
+.academic-help-holiday-badge {
+    display: inline-flex;
+    align-items: center;
+
+    min-height: 20px;
+
+    padding: 3px 7px;
+
+    border-radius: 6px;
+
+    background: rgba(234, 88, 12, 0.10);
+
+    color: #c2410c;
+
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-size: 0.56rem;
+    font-weight: 800;
+
+    letter-spacing: 0.07em;
+}
+
+
+/* ============================================================
+   LOCKED HOLIDAY OPTION
+   ============================================================ */
+
+.academic-help-option.is-locked {
+    opacity: 0.66;
+
+    cursor: not-allowed;
+}
+
+
+.academic-help-option.is-locked:hover {
+    transform: none;
+
+    border-color: #edf0f4;
+
+    background: #ffffff;
+
+    box-shadow: none;
+}
+
+
+.academic-help-option.is-locked
+.academic-help-option-icon {
+    background: #f8fafc;
+
+    color: #94a3b8;
+}
+
+
+.academic-help-option.is-locked
+.academic-help-option-arrow {
+    color: #cbd5e1;
+}
+
+
+/* ============================================================
+   HOLIDAY NOTE
+   ============================================================ */
+
+.academic-help-holiday-note {
+    display: flex;
+    align-items: flex-start;
+
+    gap: 9px;
+
+    margin-top: 15px;
+    padding: 12px 14px;
+
+    border-radius: 13px;
+
+    background: #f8fafc;
+
+    font-family: "DM Sans", sans-serif;
+    font-size: 0.72rem;
+    line-height: 1.5;
+
+    color: #64748b;
+}
+
+
+.academic-help-holiday-note i {
+    margin-top: 2px;
+
+    color: #94a3b8;
+
+    font-size: 0.78rem;
+}
+
+
+/* ============================================================
+   MOBILE
+   ============================================================ */
+
+@media (max-width: 600px) {
+
+    .academic-help-modal {
+        align-items: flex-end;
+
+        padding: 0;
+    }
+
+
+    .academic-help-modal-panel {
+        width: 100%;
+        max-height: 88vh;
+
+        padding: 21px 18px;
+
+        border-radius: 24px 24px 0 0;
+
+        transform:
+            translateY(30px);
+    }
+
+
+    .academic-help-modal.is-open
+    .academic-help-modal-panel {
+        transform:
+            translateY(0);
+    }
+
+
+    .academic-help-modal-icon {
+        width: 43px;
+        height: 43px;
+
+        flex-basis: 43px;
+
+        border-radius: 13px;
+    }
+
+
+    .academic-help-modal-heading h2 {
+        font-size: 1.18rem;
+    }
+
+
+    .academic-help-option {
+        gap: 12px;
+
+        padding: 14px;
+
+        border-radius: 16px;
+    }
+
+
+    .academic-help-option-icon {
+        width: 42px;
+        height: 42px;
+
+        flex-basis: 42px;
+
+        border-radius: 13px;
+    }
+
+
+    .academic-help-option-content h3 {
+        font-size: 0.86rem;
+    }
+
+
+    .academic-help-option-content p {
+        font-size: 0.72rem;
+    }
+
+}
