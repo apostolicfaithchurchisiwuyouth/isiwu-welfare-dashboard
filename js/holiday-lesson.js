@@ -877,76 +877,360 @@ function sanitizeLessonHTML(
    RENDER LESSON RESOURCE
 ============================================================ */
 
-function renderLessonResource(
-    lesson
-) {
+function renderLessonResource(lesson) {
+
+    const resource = document.getElementById("lessonResource");
+    const resourceIcon = document.getElementById("lessonResourceIcon");
+    const resourceTitle = document.getElementById("lessonResourceTitle");
+    const resourceDescription = document.getElementById("lessonResourceDescription");
+    const resourceButton = document.getElementById("lessonResourceLink");
+    const resourceButtonText = document.getElementById("lessonResourceButtonText");
+
+    if (!resource) return;
+
+    const lessonUrl = getSafeLessonResourceUrl(
+        lesson && lesson.lessonUrl
+    );
+
+    if (!lessonUrl) {
+        resource.hidden = true;
+        return;
+    }
+
+    const isYouTube = isYouTubeUrl(lessonUrl);
+
+    resource.hidden = false;
+
+    if (isYouTube) {
+
+        if (resourceIcon) {
+            resourceIcon.className = "fa-brands fa-youtube";
+        }
+
+        if (resourceTitle) {
+            resourceTitle.textContent = "Watch the lesson video";
+        }
+
+        if (resourceDescription) {
+            resourceDescription.textContent =
+                "Watch the video here without leaving the AFC Youth Portal.";
+        }
+
+        if (resourceButtonText) {
+            resourceButtonText.textContent = "Watch Video";
+        }
+
+        if (resourceButton) {
+            resourceButton.removeAttribute("href");
+            resourceButton.removeAttribute("target");
+            resourceButton.removeAttribute("rel");
+
+            resourceButton.setAttribute(
+                "type",
+                "button"
+            );
+
+            resourceButton.onclick = function () {
+                openLessonVideoModal(
+                    lessonUrl,
+                    lesson && lesson.title
+                        ? lesson.title
+                        : "Lesson video"
+                );
+            };
+        }
+
+        return;
+    }
 
     /*
-       The HTML resource area will be added
-       separately.
+     * Non-YouTube resources can still use the normal
+     * external-resource behaviour.
+     */
 
-       This function is deliberately safe
-       if the element does not exist yet,
-       so the current reader does not break.
-    */
-
-    const resourceContainer =
-        lessonElement(
-            "lessonResource"
-        );
-
-
-    if (!resourceContainer) {
-        return;
+    if (resourceIcon) {
+        resourceIcon.className =
+            "fa-solid fa-arrow-up-right-from-square";
     }
 
-
-    const resourceUrl =
-        getSafeLessonResourceUrl(
-            lesson.lessonUrl ||
-            lesson.lesson_url ||
-            ""
-        );
-
-
-    if (!resourceUrl) {
-
-        resourceContainer.hidden =
-            true;
-
-        resourceContainer.innerHTML =
-            "";
-
-        return;
-
+    if (resourceTitle) {
+        resourceTitle.textContent =
+            "Open learning resource";
     }
 
-
-    resourceContainer.hidden =
-        false;
-
-
-    const resourceLink =
-        lessonElement(
-            "lessonResourceLink"
-        );
-
-
-    if (resourceLink) {
-
-        resourceLink.href =
-            resourceUrl;
-
-        resourceLink.target =
-            "_blank";
-
-        resourceLink.rel =
-            "noopener noreferrer";
-
+    if (resourceDescription) {
+        resourceDescription.textContent =
+            "This lesson includes an additional learning resource.";
     }
 
+    if (resourceButtonText) {
+        resourceButtonText.textContent =
+            "Open Resource";
+    }
+
+    if (resourceButton) {
+
+        resourceButton.href = lessonUrl;
+        resourceButton.target = "_blank";
+        resourceButton.rel = "noopener noreferrer";
+
+        resourceButton.onclick = null;
+    }
 }
 
+/* ============================================================
+   YOUTUBE VIDEO MODAL
+   ============================================================ */
+
+let lessonVideoModalOpen = false;
+
+
+function openLessonVideoModal(videoUrl, lessonTitle) {
+
+    const modal =
+        document.getElementById("lessonVideoModal");
+
+    const playerContainer =
+        document.getElementById(
+            "lessonVideoPlayerContainer"
+        );
+
+    const modalTitle =
+        document.getElementById(
+            "lessonVideoModalTitle"
+        );
+
+    const modalLessonTitle =
+        document.getElementById(
+            "lessonVideoModalLessonTitle"
+        );
+
+    if (!modal || !playerContainer) {
+        console.warn(
+            "Lesson video modal elements were not found."
+        );
+
+        return;
+    }
+
+
+    const videoId =
+        getYouTubeVideoId(videoUrl);
+
+    if (!videoId) {
+
+        console.warn(
+            "Invalid YouTube video URL:",
+            videoUrl
+        );
+
+        return;
+    }
+
+
+    /*
+     * Clean any previous player first.
+     */
+
+    playerContainer.innerHTML = "";
+
+
+    /*
+     * Create the YouTube iframe.
+     *
+     * playsinline keeps playback inside the page
+     * where supported.
+     */
+
+    const iframe =
+        document.createElement("iframe");
+
+    iframe.src =
+        "https://www.youtube.com/embed/" +
+        encodeURIComponent(videoId) +
+        "?playsinline=1&rel=0";
+
+    iframe.title =
+        lessonTitle || "Lesson video";
+
+    iframe.setAttribute(
+        "allow",
+        "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+    );
+
+    iframe.setAttribute(
+        "allowfullscreen",
+        ""
+    );
+
+    iframe.setAttribute(
+        "loading",
+        "eager"
+    );
+
+    playerContainer.appendChild(iframe);
+
+
+    /*
+     * Update modal title.
+     */
+
+    const safeTitle =
+        String(
+            lessonTitle || "Watch the lesson"
+        ).trim();
+
+
+    if (modalTitle) {
+
+        modalTitle.textContent =
+            "Watch the lesson";
+    }
+
+
+    if (modalLessonTitle) {
+
+        modalLessonTitle.textContent =
+            safeTitle || "Lesson video";
+    }
+
+
+    /*
+     * Open modal.
+     */
+
+    modal.hidden = false;
+
+    modal.setAttribute(
+        "aria-hidden",
+        "false"
+    );
+
+    document.body.classList.add(
+        "lesson-video-modal-open"
+    );
+
+    lessonVideoModalOpen = true;
+
+
+    /*
+     * Move focus to close button.
+     */
+
+    const closeButton =
+        document.getElementById(
+            "lessonVideoModalClose"
+        );
+
+    if (closeButton) {
+
+        setTimeout(function () {
+
+            closeButton.focus();
+
+        }, 50);
+    }
+}
+
+
+/* ============================================================
+   CLOSE VIDEO MODAL
+   ============================================================ */
+
+function closeLessonVideoModal() {
+
+    const modal =
+        document.getElementById(
+            "lessonVideoModal"
+        );
+
+    const playerContainer =
+        document.getElementById(
+            "lessonVideoPlayerContainer"
+        );
+
+    if (!modal) {
+        return;
+    }
+
+
+    /*
+     * Removing the iframe completely stops
+     * the YouTube playback.
+     */
+
+    if (playerContainer) {
+        playerContainer.innerHTML = "";
+    }
+
+
+    modal.hidden = true;
+
+    modal.setAttribute(
+        "aria-hidden",
+        "true"
+    );
+
+    document.body.classList.remove(
+        "lesson-video-modal-open"
+    );
+
+    lessonVideoModalOpen = false;
+}
+
+/* ============================================================
+   VIDEO MODAL EVENTS
+   ============================================================ */
+
+function initialiseLessonVideoModal() {
+
+    const closeButton =
+        document.getElementById(
+            "lessonVideoModalClose"
+        );
+
+    const backdrop =
+        document.getElementById(
+            "lessonVideoModalBackdrop"
+        );
+
+
+    if (closeButton) {
+
+        closeButton.addEventListener(
+            "click",
+            closeLessonVideoModal
+        );
+    }
+
+
+    if (backdrop) {
+
+        backdrop.addEventListener(
+            "click",
+            closeLessonVideoModal
+        );
+    }
+
+
+    /*
+     * Escape key closes the modal.
+     */
+
+    document.addEventListener(
+        "keydown",
+        function (event) {
+
+            if (
+                event.key === "Escape" &&
+                lessonVideoModalOpen
+            ) {
+
+                closeLessonVideoModal();
+            }
+        }
+    );
+}
 
 /* ============================================================
    RENDER LESSON
