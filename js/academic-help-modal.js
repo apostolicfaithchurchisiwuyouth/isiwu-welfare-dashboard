@@ -243,7 +243,7 @@ document.addEventListener(
             if (holidayDescription) {
 
                 holidayDescription.textContent =
-                    "This learning space opens during school holidays.";
+                    "Use your school holiday to learn usefulskills and discover new opportunities.";
 
             }
 
