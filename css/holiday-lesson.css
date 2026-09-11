@@ -1026,6 +1026,250 @@
 
 }
 
+/* ============================================================
+   HOLIDAY LESSON — MULTIPLE RESOURCE ITEMS
+   ============================================================ */
+
+.lesson-resource-list {
+    width: 100%;
+    display: grid;
+    gap: 12px;
+}
+
+
+.lesson-resource-item {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 52px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 15px;
+    padding: 19px 21px;
+    box-sizing: border-box;
+
+    background:
+        linear-gradient(
+            135deg,
+            #fff7ed 0%,
+            #ffffff 62%,
+            #faf7ff 100%
+        );
+
+    border: 1px solid rgba(234, 88, 12, 0.15);
+    border-radius: 18px;
+    box-shadow: 0 9px 28px rgba(67, 29, 10, 0.045);
+}
+
+
+.lesson-resource-item
+.lesson-resource-icon {
+    width: 52px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    background: #ffedd5;
+    color: #ea580c;
+
+    border-radius: 15px;
+}
+
+
+.lesson-resource-item
+.lesson-resource-copy {
+    min-width: 0;
+}
+
+
+.lesson-resource-item
+.lesson-resource-copy > span {
+    display: block;
+    margin-bottom: 4px;
+
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+
+    color: #ea580c;
+}
+
+
+.lesson-resource-item
+.lesson-resource-copy h2 {
+    margin: 0 0 5px;
+
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-size: 0.98rem;
+    line-height: 1.25;
+
+    color: #171717;
+}
+
+
+.lesson-resource-item
+.lesson-resource-copy p {
+    margin: 0;
+
+    font-size: 0.78rem;
+    line-height: 1.55;
+
+    color: #666;
+}
+
+
+.lesson-resource-complete {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+
+    margin-top: 8px;
+
+    font-size: 0.7rem;
+    font-weight: 700;
+
+    color: #16a34a;
+}
+
+
+.lesson-resource-complete i {
+    font-size: 0.72rem;
+}
+
+
+.lesson-resource-item
+.lesson-resource-button {
+    min-height: 42px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    padding: 10px 16px;
+
+    border: 0;
+    border-radius: 12px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #ea580c,
+            #f97316
+        );
+
+    color: #fff;
+
+    font-family: "DM Sans", sans-serif;
+    font-size: 0.76rem;
+    font-weight: 800;
+
+    text-decoration: none;
+    cursor: pointer;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.lesson-resource-item
+.lesson-resource-button:hover {
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 8px 18px rgba(234, 88, 12, 0.18);
+}
+
+
+.lesson-video-player {
+    width: 100%;
+    height: 100%;
+}
+
+
+.lesson-video-player iframe {
+    width: 100%;
+    height: 100%;
+    display: block;
+    border: 0;
+}
+
+
+.lesson-video-player-error {
+    min-height: 240px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+
+    text-align: center;
+}
+
+
+.lesson-video-player-error i {
+    font-size: 1.8rem;
+    color: #ea580c;
+}
+
+
+.lesson-video-player-error p {
+    margin: 0;
+
+    font-size: 0.82rem;
+    color: #666;
+}
+
+
+@media (max-width: 768px) {
+
+    .lesson-resource-item {
+        grid-template-columns: 48px minmax(0, 1fr);
+        gap: 13px;
+        padding: 17px;
+    }
+
+
+    .lesson-resource-item
+    .lesson-resource-icon {
+        width: 48px;
+        height: 48px;
+    }
+
+
+    .lesson-resource-item
+    .lesson-resource-button {
+        grid-column: 1 / -1;
+        width: 100%;
+    }
+
+}
+
+
+@media (max-width: 520px) {
+
+    .lesson-resource-item {
+        padding: 15px;
+        gap: 11px;
+    }
+
+
+    .lesson-resource-item
+    .lesson-resource-copy h2 {
+        font-size: 0.92rem;
+    }
+
+
+    .lesson-resource-item
+    .lesson-resource-copy p {
+        font-size: 0.75rem;
+    }
+
+}
+
 
 .lesson-resource-icon {
 
