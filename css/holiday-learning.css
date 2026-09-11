@@ -2,7 +2,7 @@
    AFC ISIU YOUTH PORTAL V2
    FILE: holiday-learning.css
    PURPOSE: HOLIDAY LEARNING HUB
-   STAGE 2
+   DESIGN: PREMIUM PRACTICAL LEARNING EXPERIENCE
    ============================================================ */
 
 
@@ -34,7 +34,7 @@
         0;
 
     padding-bottom:
-        70px;
+        80px;
 
     box-sizing:
         border-box;
@@ -79,41 +79,41 @@
         space-between;
 
     gap:
-        35px;
+        40px;
 
     width:
         100%;
 
     min-height:
-        310px;
+        330px;
 
     margin-bottom:
-        30px;
+        42px;
 
     padding:
-        34px 38px;
+        42px 46px;
 
     overflow:
         hidden;
 
     border:
         1px solid
-        rgba(74, 7, 84, .08);
+        rgba(74, 7, 84, .10);
 
     border-radius:
-        28px;
+        30px;
 
     background:
         linear-gradient(
-            135deg,
+            120deg,
             #ffffff 0%,
-            #faf7ff 52%,
-            #fff8f2 100%
+            #faf7ff 47%,
+            #f7effb 100%
         );
 
     box-shadow:
-        0 18px 50px
-        rgba(74, 7, 84, .07);
+        0 24px 65px
+        rgba(74, 7, 84, .08);
 }
 
 
@@ -126,16 +126,16 @@
         absolute;
 
     width:
-        300px;
+        430px;
 
     height:
-        300px;
+        430px;
 
     right:
-        -120px;
+        -170px;
 
     top:
-        -150px;
+        -210px;
 
     border-radius:
         50%;
@@ -143,7 +143,7 @@
     background:
         radial-gradient(
             circle,
-            rgba(124, 58, 237, .13),
+            rgba(124, 58, 237, .17),
             transparent 68%
         );
 
@@ -161,16 +161,16 @@
         absolute;
 
     width:
-        260px;
+        320px;
 
     height:
-        260px;
+        320px;
 
     left:
-        -150px;
+        -190px;
 
     bottom:
-        -150px;
+        -210px;
 
     border-radius:
         50%;
@@ -187,13 +187,67 @@
 }
 
 
+.holiday-hero-glow {
+
+    position:
+        absolute;
+
+    border-radius:
+        50%;
+
+    filter:
+        blur(1px);
+
+    pointer-events:
+        none;
+}
+
+
+.hero-glow-one {
+
+    width:
+        130px;
+
+    height:
+        130px;
+
+    right:
+        34%;
+
+    bottom:
+        -75px;
+
+    background:
+        rgba(74, 7, 84, .06);
+}
+
+
+.hero-glow-two {
+
+    width:
+        90px;
+
+    height:
+        90px;
+
+    right:
+        13%;
+
+    top:
+        22px;
+
+    background:
+        rgba(234, 88, 12, .07);
+}
+
+
 .holiday-hero-copy {
 
     position:
         relative;
 
     z-index:
-        2;
+        5;
 
     width:
         min(
@@ -203,7 +257,7 @@
 }
 
 
-.holiday-eyebrow {
+.holiday-hero-label {
 
     display:
         inline-flex;
@@ -211,8 +265,24 @@
     align-items:
         center;
 
+    gap:
+        8px;
+
     margin-bottom:
-        10px;
+        14px;
+
+    padding:
+        7px 10px;
+
+    border:
+        1px solid
+        rgba(74, 7, 84, .10);
+
+    border-radius:
+        9px;
+
+    background:
+        rgba(255, 255, 255, .75);
 
     color:
         #6f1680;
@@ -222,7 +292,7 @@
         sans-serif;
 
     font-size:
-        .68rem;
+        .58rem;
 
     font-weight:
         800;
@@ -235,13 +305,33 @@
 }
 
 
-.holiday-hero h1 {
+.holiday-hero-label-dot {
 
-    margin:
-        0;
+    width:
+        6px;
+
+    height:
+        6px;
+
+    border-radius:
+        50%;
+
+    background:
+        #7c3aed;
+
+    box-shadow:
+        0 0 0 4px
+        rgba(124, 58, 237, .10);
+}
+
+
+.holiday-hero h1 {
 
     max-width:
         700px;
+
+    margin:
+        0;
 
     font-family:
         "Bricolage Grotesque",
@@ -249,19 +339,19 @@
 
     font-size:
         clamp(
-            1.7rem,
-            3.7vw,
-            2.65rem
+            2rem,
+            4vw,
+            3.15rem
         );
 
     line-height:
-        1.05;
+        1.02;
 
     font-weight:
         800;
 
     letter-spacing:
-        -.04em;
+        -.055em;
 
     color:
         #10051a;
@@ -269,6 +359,9 @@
 
 
 .holiday-hero h1 span {
+
+    display:
+        inline-block;
 
     color:
         #6f1680;
@@ -278,20 +371,20 @@
 .holiday-hero p {
 
     max-width:
-        650px;
+        630px;
 
     margin:
-        17px 0 0;
+        18px 0 0;
 
     font-family:
         "DM Sans",
         sans-serif;
 
     font-size:
-        .8rem;
+        .82rem;
 
     line-height:
-        1.6;
+        1.7;
 
     color:
         #64748b;
@@ -313,7 +406,7 @@
         9px;
 
     margin-top:
-        22px;
+        25px;
 }
 
 
@@ -329,7 +422,7 @@
         7px;
 
     min-height:
-        31px;
+        32px;
 
     padding:
         6px 11px;
@@ -339,7 +432,7 @@
         rgba(74, 7, 84, .10);
 
     border-radius:
-        999px;
+        9px;
 
     background:
         rgba(74, 7, 84, .06);
@@ -352,7 +445,7 @@
         sans-serif;
 
     font-size:
-        .61rem;
+        .59rem;
 
     font-weight:
         800;
@@ -390,7 +483,7 @@
         rgba(14, 164, 114, .08);
 
     border-color:
-        rgba(14, 164, 114, .14);
+        rgba(14, 164, 114, .15);
 
     color:
         #087f5b;
@@ -427,20 +520,20 @@
         center;
 
     min-height:
-        31px;
+        32px;
 
     padding:
         6px 11px;
 
-    border-radius:
-        999px;
-
-    background:
-        #ffffff;
-
     border:
         1px solid
-        #ececf2;
+        rgba(74, 7, 84, .08);
+
+    border-radius:
+        9px;
+
+    background:
+        rgba(255, 255, 255, .72);
 
     color:
         #64748b;
@@ -450,7 +543,7 @@
         sans-serif;
 
     font-size:
-        .62rem;
+        .61rem;
 
     font-weight:
         700;
@@ -467,13 +560,13 @@
         relative;
 
     width:
-        280px;
+        315px;
 
     height:
-        230px;
+        245px;
 
     flex:
-        0 0 280px;
+        0 0 315px;
 
     display:
         flex;
@@ -483,10 +576,13 @@
 
     justify-content:
         center;
+
+    z-index:
+        3;
 }
 
 
-.holiday-visual-orbit {
+.holiday-visual-ring {
 
     position:
         absolute;
@@ -500,26 +596,39 @@
 }
 
 
-.orbit-one {
+.ring-one {
 
     width:
-        190px;
+        215px;
 
     height:
-        190px;
+        215px;
 }
 
 
-.orbit-two {
+.ring-two {
 
     width:
-        130px;
+        160px;
 
     height:
-        130px;
+        160px;
 
     border-color:
-        rgba(234, 88, 12, .12);
+        rgba(124, 58, 237, .14);
+}
+
+
+.ring-three {
+
+    width:
+        112px;
+
+    height:
+        112px;
+
+    border-color:
+        rgba(234, 88, 12, .15);
 }
 
 
@@ -529,13 +638,13 @@
         relative;
 
     z-index:
-        3;
+        5;
 
     width:
-        86px;
+        92px;
 
     height:
-        86px;
+        92px;
 
     display:
         flex;
@@ -546,8 +655,12 @@
     justify-content:
         center;
 
+    border:
+        7px solid
+        rgba(255, 255, 255, .75);
+
     border-radius:
-        25px;
+        28px;
 
     background:
         linear-gradient(
@@ -560,11 +673,11 @@
         #ffffff;
 
     font-size:
-        1.65rem;
+        1.7rem;
 
     box-shadow:
-        0 20px 45px
-        rgba(74, 7, 84, .24);
+        0 24px 55px
+        rgba(74, 7, 84, .25);
 }
 
 
@@ -574,7 +687,7 @@
         absolute;
 
     z-index:
-        4;
+        7;
 
     display:
         flex;
@@ -586,24 +699,24 @@
         8px;
 
     min-height:
-        39px;
+        42px;
 
     padding:
-        8px 11px;
+        7px 10px 7px 7px;
 
     border:
         1px solid
-        rgba(255, 255, 255, .75);
+        rgba(255, 255, 255, .85);
 
     border-radius:
-        12px;
+        13px;
 
     background:
         rgba(255, 255, 255, .94);
 
     box-shadow:
-        0 12px 30px
-        rgba(15, 23, 42, .09);
+        0 14px 34px
+        rgba(15, 23, 42, .10);
 
     color:
         #334155;
@@ -613,45 +726,103 @@
         sans-serif;
 
     font-size:
-        .62rem;
+        .59rem;
 
     font-weight:
-        700;
+        750;
+
+    white-space:
+        nowrap;
 }
 
 
-.holiday-floating-card i {
+.holiday-floating-icon {
 
-    color:
-        #6f1680;
+    width:
+        28px;
+
+    height:
+        28px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    border-radius:
+        9px;
 
     font-size:
-        .75rem;
+        .68rem;
+}
+
+
+.holiday-floating-icon.digital {
+
+    background:
+        rgba(37, 99, 235, .10);
+
+    color:
+        #2563eb;
+}
+
+
+.holiday-floating-icon.career {
+
+    background:
+        rgba(124, 58, 237, .10);
+
+    color:
+        #7c3aed;
+}
+
+
+.holiday-floating-icon.creative {
+
+    background:
+        rgba(8, 145, 178, .10);
+
+    color:
+        #0891b2;
 }
 
 
 .card-one {
 
     top:
-        27px;
+        15px;
 
     right:
-        5px;
+        2px;
 }
 
 
 .card-two {
 
-    bottom:
-        28px;
-
     left:
-        0;
+        -5px;
+
+    bottom:
+        35px;
+}
+
+
+.card-three {
+
+    right:
+        13px;
+
+    bottom:
+        1px;
 }
 
 
 /* ============================================================
-   SECTION
+   SECTION FOUNDATION
    ============================================================ */
 
 .holiday-section {
@@ -660,7 +831,36 @@
         100%;
 
     margin-bottom:
-        34px;
+        45px;
+}
+
+
+.holiday-section-kicker {
+
+    display:
+        block;
+
+    margin-bottom:
+        7px;
+
+    color:
+        #c2410c;
+
+    font-family:
+        "Bricolage Grotesque",
+        sans-serif;
+
+    font-size:
+        .58rem;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        .13em;
+
+    text-transform:
+        uppercase;
 }
 
 
@@ -676,43 +876,16 @@
         space-between;
 
     gap:
-        20px;
+        25px;
 
     margin-bottom:
-        16px;
+        19px;
 }
 
 
-.holiday-section-kicker {
-
-    display:
-        block;
-
-    margin-bottom:
-        6px;
-
-    color:
-        #c2410c;
-
-    font-family:
-        "Bricolage Grotesque",
-        sans-serif;
-
-    font-size:
-        .62rem;
-
-    font-weight:
-        800;
-
-    letter-spacing:
-        .1em;
-
-    text-transform:
-        uppercase;
-}
-
-
-.holiday-section-heading h2 {
+.holiday-section-heading h2,
+.holiday-library-header h2,
+.holiday-progress-heading h2 {
 
     margin:
         0;
@@ -722,16 +895,16 @@
         sans-serif;
 
     font-size:
-        1.35rem;
+        1.5rem;
 
     line-height:
-        1.15;
+        1.1;
 
     font-weight:
         800;
 
     letter-spacing:
-        -.025em;
+        -.035em;
 
     color:
         #10051a;
@@ -750,10 +923,10 @@
         #64748b;
 
     font-size:
-        .72rem;
+        .7rem;
 
     line-height:
-        1.5;
+        1.55;
 
     text-align:
         right;
@@ -761,8 +934,22 @@
 
 
 /* ============================================================
-   CATEGORY GRID
+   START HERE / CATEGORY CARDS
    ============================================================ */
+
+.holiday-start-section {
+
+    position:
+        relative;
+}
+
+
+.holiday-start-heading {
+
+    margin-bottom:
+        20px;
+}
+
 
 .holiday-category-grid {
 
@@ -771,38 +958,44 @@
 
     grid-template-columns:
         repeat(
-            2,
+            4,
             minmax(0, 1fr)
         );
 
     gap:
-        14px;
+        13px;
 }
 
 
 .holiday-category-card {
 
+    position:
+        relative;
+
     display:
         flex;
 
-    align-items:
-        center;
+    flex-direction:
+        column;
 
-    gap:
-        13px;
+    align-items:
+        flex-start;
 
     width:
         100%;
 
     min-height:
-        91px;
+        190px;
 
     padding:
-        15px;
+        18px;
+
+    overflow:
+        hidden;
 
     border:
         1px solid
-        #ececf2;
+        #e9e8ee;
 
     border-radius:
         20px;
@@ -820,40 +1013,81 @@
         pointer;
 
     box-shadow:
-        0 9px 25px
+        0 10px 28px
         rgba(15, 23, 42, .045);
 
     transition:
-        transform .2s ease,
-        box-shadow .2s ease,
-        border-color .2s ease;
+        transform .22s ease,
+        box-shadow .22s ease,
+        border-color .22s ease;
+}
+
+
+.holiday-category-card::before {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    width:
+        105px;
+
+    height:
+        105px;
+
+    right:
+        -55px;
+
+    top:
+        -55px;
+
+    border-radius:
+        50%;
+
+    background:
+        rgba(74, 7, 84, .05);
+
+    transition:
+        transform .25s ease;
 }
 
 
 .holiday-category-card:hover {
 
     transform:
-        translateY(-2px);
+        translateY(-4px);
 
     border-color:
-        rgba(74, 7, 84, .15);
+        rgba(74, 7, 84, .14);
 
     box-shadow:
-        0 15px 32px
-        rgba(74, 7, 84, .08);
+        0 19px 40px
+        rgba(74, 7, 84, .09);
+}
+
+
+.holiday-category-card:hover::before {
+
+    transform:
+        scale(1.4);
 }
 
 
 .holiday-category-icon {
 
+    position:
+        relative;
+
+    z-index:
+        2;
+
     width:
-        45px;
+        47px;
 
     height:
-        45px;
-
-    flex:
-        0 0 45px;
+        47px;
 
     display:
         flex;
@@ -863,6 +1097,9 @@
 
     justify-content:
         center;
+
+    margin-bottom:
+        16px;
 
     border-radius:
         14px;
@@ -875,7 +1112,11 @@
 .holiday-category-icon.digital {
 
     background:
-        rgba(37, 99, 235, .10);
+        linear-gradient(
+            135deg,
+            rgba(37, 99, 235, .13),
+            rgba(59, 130, 246, .06)
+        );
 
     color:
         #2563eb;
@@ -885,17 +1126,25 @@
 .holiday-category-icon.career {
 
     background:
-        rgba(74, 7, 84, .09);
+        linear-gradient(
+            135deg,
+            rgba(124, 58, 237, .14),
+            rgba(167, 139, 250, .06)
+        );
 
     color:
-        #6f1680;
+        #7c3aed;
 }
 
 
 .holiday-category-icon.challenge {
 
     background:
-        rgba(234, 88, 12, .10);
+        linear-gradient(
+            135deg,
+            rgba(234, 88, 12, .14),
+            rgba(251, 146, 60, .06)
+        );
 
     color:
         #ea580c;
@@ -905,7 +1154,11 @@
 .holiday-category-icon.creative {
 
     background:
-        rgba(8, 145, 178, .10);
+        linear-gradient(
+            135deg,
+            rgba(8, 145, 178, .14),
+            rgba(34, 211, 238, .06)
+        );
 
     color:
         #0891b2;
@@ -914,11 +1167,43 @@
 
 .holiday-category-copy {
 
+    position:
+        relative;
+
+    z-index:
+        2;
+
+    display:
+        block;
+
     min-width:
         0;
+}
 
-    flex:
-        1;
+
+.holiday-category-number {
+
+    display:
+        block;
+
+    margin-bottom:
+        5px;
+
+    color:
+        #a1a1aa;
+
+    font-family:
+        "DM Sans",
+        sans-serif;
+
+    font-size:
+        .52rem;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        .08em;
 }
 
 
@@ -932,13 +1217,13 @@
         sans-serif;
 
     font-size:
-        .82rem;
+        .84rem;
 
     line-height:
         1.25;
 
     font-weight:
-        750;
+        780;
 
     color:
         #10051a;
@@ -950,34 +1235,299 @@
     display:
         block;
 
+    max-width:
+        230px;
+
     margin-top:
-        5px;
+        7px;
 
     font-family:
         "DM Sans",
         sans-serif;
 
     font-size:
-        .68rem;
+        .64rem;
 
     line-height:
-        1.45;
+        1.5;
 
     color:
         #64748b;
 }
 
 
-.holiday-category-card > i {
+.holiday-category-arrow {
 
-    flex:
-        0 0 auto;
+    position:
+        absolute;
+
+    right:
+        16px;
+
+    bottom:
+        15px;
+
+    width:
+        28px;
+
+    height:
+        28px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    border:
+        1px solid
+        #ececf2;
+
+    border-radius:
+        9px;
+
+    background:
+        #ffffff;
 
     color:
         #94a3b8;
 
     font-size:
-        .72rem;
+        .61rem;
+
+    transition:
+        color .2s ease,
+        background .2s ease,
+        border-color .2s ease;
+}
+
+
+.holiday-category-card:hover
+.holiday-category-arrow {
+
+    background:
+        #4a0754;
+
+    border-color:
+        #4a0754;
+
+    color:
+        #ffffff;
+}
+
+
+/* ============================================================
+   LEARNING LIBRARY
+   ============================================================ */
+
+.holiday-library-section {
+
+    position:
+        relative;
+
+    padding:
+        24px;
+
+    border:
+        1px solid
+        #ebe8ef;
+
+    border-radius:
+        26px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #ffffff 0%,
+            #fcfaff 100%
+        );
+
+    box-shadow:
+        0 18px 50px
+        rgba(74, 7, 84, .055);
+}
+
+
+.holiday-library-header {
+
+    display:
+        flex;
+
+    align-items:
+        flex-end;
+
+    justify-content:
+        space-between;
+
+    gap:
+        25px;
+
+    margin-bottom:
+        18px;
+}
+
+
+.holiday-library-title-row {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        9px;
+
+    margin-bottom:
+        5px;
+}
+
+
+.holiday-library-title-row
+.holiday-section-kicker {
+
+    margin:
+        0;
+}
+
+
+.holiday-library-count {
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    min-height:
+        22px;
+
+    padding:
+        4px 7px;
+
+    border-radius:
+        6px;
+
+    background:
+        #f3eef7;
+
+    color:
+        #6f1680;
+
+    font-family:
+        "DM Sans",
+        sans-serif;
+
+    font-size:
+        .51rem;
+
+    font-weight:
+        800;
+
+    text-transform:
+        uppercase;
+}
+
+
+.holiday-library-header p {
+
+    max-width:
+        550px;
+
+    margin:
+        7px 0 0;
+
+    color:
+        #64748b;
+
+    font-family:
+        "DM Sans",
+        sans-serif;
+
+    font-size:
+        .7rem;
+
+    line-height:
+        1.55;
+}
+
+
+.holiday-filter-button {
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    gap:
+        8px;
+
+    min-height:
+        38px;
+
+    padding:
+        8px 12px;
+
+    border:
+        1px solid
+        rgba(74, 7, 84, .12);
+
+    border-radius:
+        10px;
+
+    background:
+        #ffffff;
+
+    color:
+        #4a0754;
+
+    font-family:
+        "Bricolage Grotesque",
+        sans-serif;
+
+    font-size:
+        .6rem;
+
+    font-weight:
+        800;
+
+    cursor:
+        pointer;
+
+    white-space:
+        nowrap;
+
+    transition:
+        background .2s ease,
+        color .2s ease,
+        transform .2s ease;
+}
+
+
+.holiday-filter-button:hover {
+
+    background:
+        #4a0754;
+
+    color:
+        #ffffff;
+
+    transform:
+        translateY(-1px);
+}
+
+
+.holiday-filter-button i {
+
+    font-size:
+        .58rem;
 }
 
 
@@ -1000,25 +1550,27 @@
         7px;
 
     margin-bottom:
-        16px;
+        19px;
+
+    padding-bottom:
+        2px;
 }
 
 
-.holiday-filter,
-.holiday-filter-button {
+.holiday-filter {
 
     min-height:
-        34px;
+        32px;
 
     padding:
-        7px 12px;
+        6px 11px;
 
     border:
         1px solid
-        #e6e8ee;
+        #e6e4eb;
 
     border-radius:
-        9px;
+        8px;
 
     background:
         #ffffff;
@@ -1031,7 +1583,7 @@
         sans-serif;
 
     font-size:
-        .62rem;
+        .58rem;
 
     font-weight:
         750;
@@ -1053,42 +1605,101 @@
         rgba(74, 7, 84, .16);
 
     background:
-        rgba(74, 7, 84, .07);
-
-    color:
-        #4a0754;
-}
-
-
-.holiday-filter-button {
-
-    color:
         #4a0754;
 
-    background:
-        #faf7fc;
+    color:
+        #ffffff;
 }
 
 
 /* ============================================================
-   LESSON GRID
+   COURSE SLIDER
    ============================================================ */
+
+.holiday-library-slider {
+
+    width:
+        100%;
+
+    overflow:
+        hidden;
+}
+
 
 .holiday-lesson-grid {
 
     display:
         grid;
 
-    grid-template-columns:
-        repeat(
-            3,
-            minmax(0, 1fr)
+    grid-auto-flow:
+        column;
+
+    grid-auto-columns:
+        minmax(
+            290px,
+            32%
         );
 
+    grid-template-columns:
+        none;
+
     gap:
-        16px;
+        15px;
+
+    width:
+        100%;
+
+    padding:
+        2px 2px 13px;
+
+    overflow-x:
+        auto;
+
+    overflow-y:
+        hidden;
+
+    scroll-snap-type:
+        x mandatory;
+
+    scroll-behavior:
+        smooth;
+
+    scrollbar-width:
+        thin;
+
+    scrollbar-color:
+        rgba(74, 7, 84, .25)
+        transparent;
 }
 
+
+.holiday-lesson-grid::-webkit-scrollbar {
+
+    height:
+        5px;
+}
+
+
+.holiday-lesson-grid::-webkit-scrollbar-track {
+
+    background:
+        transparent;
+}
+
+
+.holiday-lesson-grid::-webkit-scrollbar-thumb {
+
+    border-radius:
+        999px;
+
+    background:
+        rgba(74, 7, 84, .20);
+}
+
+
+/* ============================================================
+   COURSE CARD
+   ============================================================ */
 
 .holiday-lesson-card {
 
@@ -1105,72 +1716,129 @@
         0;
 
     min-height:
-        220px;
+        345px;
 
     padding:
-        19px;
+        0;
 
     overflow:
         hidden;
 
     border:
         1px solid
-        #ececf2;
+        #e8e6ed;
 
     border-radius:
-        21px;
+        19px;
 
     background:
         #ffffff;
 
     box-shadow:
         0 10px 28px
-        rgba(15, 23, 42, .045);
+        rgba(15, 23, 42, .055);
+
+    scroll-snap-align:
+        start;
 
     transition:
-        transform .2s ease,
-        box-shadow .2s ease,
-        border-color .2s ease;
+        transform .22s ease,
+        box-shadow .22s ease,
+        border-color .22s ease;
 }
 
 
 .holiday-lesson-card:hover {
 
     transform:
-        translateY(-3px);
+        translateY(-4px);
 
     border-color:
-        rgba(74, 7, 84, .13);
+        rgba(74, 7, 84, .14);
 
     box-shadow:
-        0 17px 35px
-        rgba(74, 7, 84, .08);
+        0 20px 42px
+        rgba(74, 7, 84, .11);
 }
 
 
+/* ============================================================
+   COURSE TOP AREA
+   ============================================================ */
+
 .holiday-lesson-top {
+
+    position:
+        relative;
 
     display:
         flex;
 
     align-items:
-        center;
+        flex-start;
 
     justify-content:
         space-between;
 
-    gap:
-        10px;
+    min-height:
+        118px;
+
+    padding:
+        18px;
+
+    overflow:
+        hidden;
+
+    background:
+        linear-gradient(
+            135deg,
+            #f6f0f8,
+            #fbfafc
+        );
+}
+
+
+.holiday-lesson-top::after {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    width:
+        105px;
+
+    height:
+        105px;
+
+    right:
+        -45px;
+
+    top:
+        -50px;
+
+    border-radius:
+        50%;
+
+    background:
+        rgba(124, 58, 237, .08);
 }
 
 
 .holiday-lesson-icon {
 
+    position:
+        relative;
+
+    z-index:
+        2;
+
     width:
-        39px;
+        48px;
 
     height:
-        39px;
+        48px;
 
     display:
         flex;
@@ -1181,28 +1849,71 @@
     justify-content:
         center;
 
+    border:
+        1px solid
+        rgba(255, 255, 255, .8);
+
     border-radius:
-        12px;
+        14px;
 
     background:
-        rgba(74, 7, 84, .08);
+        linear-gradient(
+            135deg,
+            #4a0754,
+            #7c3aed
+        );
 
     color:
-        #4a0754;
+        #ffffff;
 
     font-size:
-        .8rem;
+        .86rem;
+
+    box-shadow:
+        0 10px 22px
+        rgba(74, 7, 84, .16);
 }
 
 
 .holiday-lesson-level {
+
+    position:
+        relative;
+
+    z-index:
+        2;
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    min-height:
+        24px;
+
+    padding:
+        4px 7px;
+
+    border:
+        1px solid
+        rgba(255, 255, 255, .9);
+
+    border-radius:
+        7px;
+
+    background:
+        rgba(255, 255, 255, .78);
+
+    color:
+        #64748b;
 
     font-family:
         "Bricolage Grotesque",
         sans-serif;
 
     font-size:
-        .56rem;
+        .51rem;
 
     font-weight:
         800;
@@ -1212,29 +1923,33 @@
 
     text-transform:
         uppercase;
-
-    color:
-        #94a3b8;
 }
 
+
+/* ============================================================
+   COURSE BODY
+   ============================================================ */
 
 .holiday-lesson-card h3 {
 
     margin:
-        20px 0 0;
+        18px 18px 0;
 
     font-family:
         "Bricolage Grotesque",
         sans-serif;
 
     font-size:
-        .95rem;
+        .96rem;
 
     line-height:
         1.25;
 
     font-weight:
         800;
+
+    letter-spacing:
+        -.015em;
 
     color:
         #10051a;
@@ -1244,14 +1959,14 @@
 .holiday-lesson-card p {
 
     margin:
-        8px 0 0;
+        8px 18px 0;
 
     font-family:
         "DM Sans",
         sans-serif;
 
     font-size:
-        .7rem;
+        .68rem;
 
     line-height:
         1.55;
@@ -1261,6 +1976,10 @@
 }
 
 
+/* ============================================================
+   COURSE META
+   ============================================================ */
+
 .holiday-lesson-meta {
 
     display:
@@ -1269,17 +1988,24 @@
     align-items:
         center;
 
-    gap:
-        12px;
+    flex-wrap:
+        wrap;
 
-    margin-top:
-        14px;
+    gap:
+        7px;
+
+    margin:
+        15px 18px 0;
 
     color:
-        #94a3b8;
+        #64748b;
+
+    font-family:
+        "DM Sans",
+        sans-serif;
 
     font-size:
-        .59rem;
+        .57rem;
 
     font-weight:
         700;
@@ -1296,13 +2022,94 @@
 
     gap:
         5px;
+
+    min-height:
+        25px;
+
+    padding:
+        4px 7px;
+
+    border:
+        1px solid
+        #ececf2;
+
+    border-radius:
+        7px;
+
+    background:
+        #fafafa;
 }
 
+
+.holiday-lesson-meta span i {
+
+    color:
+        #7c3aed;
+
+    font-size:
+        .58rem;
+}
+
+
+/*
+ * The current Holiday Learning lessons are free.
+ * This creates a clear pricing area without changing
+ * the JavaScript-generated card structure.
+ */
+
+.holiday-lesson-meta::after {
+
+    content:
+        "₦0  •  FREE";
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    min-height:
+        25px;
+
+    padding:
+        4px 7px;
+
+    border:
+        1px solid
+        rgba(14, 164, 114, .13);
+
+    border-radius:
+        7px;
+
+    background:
+        rgba(14, 164, 114, .07);
+
+    color:
+        #087f5b;
+
+    font-family:
+        "Bricolage Grotesque",
+        sans-serif;
+
+    font-size:
+        .51rem;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        .03em;
+}
+
+
+/* ============================================================
+   COURSE ACTION
+   ============================================================ */
 
 .holiday-lesson-action {
 
     display:
-        inline-flex;
+        flex;
 
     align-items:
         center;
@@ -1311,45 +2118,73 @@
         space-between;
 
     gap:
-        8px;
+        10px;
 
     width:
-        100%;
+        calc(
+            100% - 36px
+        );
 
     min-height:
-        39px;
+        40px;
 
-    margin-top:
-        auto;
+    margin:
+        auto 18px 18px;
 
     padding:
-        8px 11px;
+        9px 11px;
+
+    border:
+        1px solid
+        rgba(74, 7, 84, .08);
 
     border-radius:
         10px;
 
     background:
-        #f8f5fa;
+        #4a0754;
 
     color:
-        #4a0754;
+        #ffffff;
 
     font-family:
         "Bricolage Grotesque",
         sans-serif;
 
     font-size:
-        .63rem;
+        .61rem;
 
     font-weight:
         800;
+
+    text-decoration:
+        none;
+
+    transition:
+        background .2s ease,
+        transform .2s ease,
+        box-shadow .2s ease;
+}
+
+
+.holiday-lesson-action:hover {
+
+    background:
+        #35103d;
+
+    transform:
+        translateY(-1px);
+
+    box-shadow:
+        0 8px 18px
+        rgba(74, 7, 84, .17);
 }
 
 
 .holiday-lesson-action i {
 
     font-size:
-        .65rem;
+        .62rem;
 }
 
 
@@ -1360,14 +2195,14 @@
 .holiday-empty-state {
 
     padding:
-        38px 20px;
+        42px 20px;
 
     border:
         1px dashed
         #dfe3ea;
 
     border-radius:
-        20px;
+        18px;
 
     background:
         #ffffff;
@@ -1380,10 +2215,10 @@
 .holiday-empty-icon {
 
     width:
-        43px;
+        45px;
 
     height:
-        43px;
+        45px;
 
     margin:
         0 auto 12px;
@@ -1401,7 +2236,7 @@
         13px;
 
     background:
-        #f8fafc;
+        #f5f3f7;
 
     color:
         #94a3b8;
@@ -1418,7 +2253,10 @@
         sans-serif;
 
     font-size:
-        .9rem;
+        .88rem;
+
+    font-weight:
+        800;
 }
 
 
@@ -1434,7 +2272,10 @@
         #64748b;
 
     font-size:
-        .7rem;
+        .68rem;
+
+    line-height:
+        1.5;
 }
 
 
@@ -1442,7 +2283,24 @@
    PROGRESS
    ============================================================ */
 
+.holiday-progress-section {
+
+    margin-bottom:
+        30px;
+}
+
+
+.holiday-progress-heading {
+
+    margin-bottom:
+        16px;
+}
+
+
 .holiday-progress-card {
+
+    position:
+        relative;
 
     display:
         flex;
@@ -1451,37 +2309,89 @@
         center;
 
     gap:
-        15px;
+        17px;
+
+    min-height:
+        115px;
 
     padding:
-        18px;
+        20px;
+
+    overflow:
+        hidden;
 
     border:
         1px solid
-        #ececf2;
+        rgba(74, 7, 84, .10);
 
     border-radius:
-        20px;
+        21px;
 
     background:
+        linear-gradient(
+            110deg,
+            #4a0754,
+            #63136f 55%,
+            #7c3aed
+        );
+
+    color:
         #ffffff;
 
     box-shadow:
-        0 9px 25px
-        rgba(15, 23, 42, .04);
+        0 18px 42px
+        rgba(74, 7, 84, .17);
+}
+
+
+.holiday-progress-card::after {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    width:
+        190px;
+
+    height:
+        190px;
+
+    right:
+        -80px;
+
+    top:
+        -100px;
+
+    border-radius:
+        50%;
+
+    background:
+        rgba(255, 255, 255, .08);
+
+    pointer-events:
+        none;
+}
+
+
+.holiday-progress-visual {
+
+    position:
+        relative;
+
+    flex:
+        0 0 auto;
 }
 
 
 .holiday-progress-icon {
 
     width:
-        45px;
+        53px;
 
     height:
-        45px;
-
-    flex:
-        0 0 45px;
+        53px;
 
     display:
         flex;
@@ -1492,27 +2402,92 @@
     justify-content:
         center;
 
+    border:
+        1px solid
+        rgba(255, 255, 255, .16);
+
     border-radius:
-        14px;
+        16px;
 
     background:
-        rgba(14, 164, 114, .09);
+        rgba(255, 255, 255, .12);
 
     color:
-        #0ea472;
+        #ffffff;
 
     font-size:
-        .85rem;
+        .95rem;
+}
+
+
+.holiday-progress-pulse {
+
+    position:
+        absolute;
+
+    width:
+        8px;
+
+    height:
+        8px;
+
+    right:
+        -2px;
+
+    top:
+        -2px;
+
+    border:
+        2px solid
+        #4a0754;
+
+    border-radius:
+        50%;
+
+    background:
+        #34d399;
 }
 
 
 .holiday-progress-copy {
+
+    position:
+        relative;
+
+    z-index:
+        2;
 
     min-width:
         0;
 
     flex:
         1;
+}
+
+
+.holiday-progress-label {
+
+    display:
+        block;
+
+    margin-bottom:
+        4px;
+
+    color:
+        rgba(255, 255, 255, .58);
+
+    font-family:
+        "Bricolage Grotesque",
+        sans-serif;
+
+    font-size:
+        .51rem;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        .11em;
 }
 
 
@@ -1526,20 +2501,30 @@
         sans-serif;
 
     font-size:
-        .82rem;
+        .95rem;
+
+    font-weight:
+        800;
 }
 
 
 .holiday-progress-copy p {
 
+    max-width:
+        600px;
+
     margin:
-        4px 0 0;
+        5px 0 0;
 
     color:
-        #64748b;
+        rgba(255, 255, 255, .68);
+
+    font-family:
+        "DM Sans",
+        sans-serif;
 
     font-size:
-        .68rem;
+        .65rem;
 
     line-height:
         1.5;
@@ -1548,129 +2533,53 @@
 
 .holiday-progress-value {
 
-    flex:
-        0 0 auto;
+    position:
+        relative;
 
-    padding:
-        7px 9px;
-
-    border-radius:
-        8px;
-
-    background:
-        #f8fafc;
-
-    color:
-        #94a3b8;
-
-    font-family:
-        "Bricolage Grotesque",
-        sans-serif;
-
-    font-size:
-        .55rem;
-
-    font-weight:
-        800;
-
-    text-transform:
-        uppercase;
-}
-
-
-/* ============================================================
-   HOW IT WORKS
-   ============================================================ */
-
-.holiday-steps {
-
-    display:
-        grid;
-
-    grid-template-columns:
-        repeat(
-            3,
-            minmax(0, 1fr)
-        );
-
-    gap:
-        14px;
-}
-
-
-.holiday-step {
+    z-index:
+        2;
 
     display:
         flex;
 
+    flex-direction:
+        column;
+
     align-items:
-        flex-start;
-
-    gap:
-        12px;
-
-    padding:
-        18px;
-
-    border:
-        1px solid
-        #ececf2;
-
-    border-radius:
-        19px;
-
-    background:
-        #ffffff;
-}
-
-
-.holiday-step-number {
+        flex-end;
 
     flex:
         0 0 auto;
+}
+
+
+.holiday-progress-value strong {
 
     font-family:
         "Bricolage Grotesque",
         sans-serif;
 
     font-size:
-        .64rem;
+        .7rem;
 
     font-weight:
         800;
 
     color:
-        #c2410c;
+        #ffffff;
 }
 
 
-.holiday-step strong {
+.holiday-progress-value span {
 
-    display:
-        block;
-
-    font-family:
-        "Bricolage Grotesque",
-        sans-serif;
-
-    font-size:
-        .77rem;
-}
-
-
-.holiday-step p {
-
-    margin:
-        5px 0 0;
+    margin-top:
+        4px;
 
     color:
-        #64748b;
+        rgba(255, 255, 255, .55);
 
     font-size:
-        .67rem;
-
-    line-height:
-        1.5;
+        .55rem;
 }
 
 
@@ -1678,160 +2587,18 @@
    CLOSED STATE
    ============================================================ */
 
+/*
+ * The JavaScript still has this element because it uses the
+ * ID as its access-control hook.
+ *
+ * Visually, however, the old large "Programme Closed" card
+ * has been removed from the page design.
+ */
+
 .holiday-closed-state {
 
     display:
-        flex;
-
-    align-items:
-        center;
-
-    gap:
-        18px;
-
-    width:
-        100%;
-
-    margin-bottom:
-        34px;
-
-    padding:
-        22px;
-
-    border:
-        1px solid
-        #e8eaf0;
-
-    border-radius:
-        22px;
-
-    background:
-        #ffffff;
-
-    box-shadow:
-        0 10px 30px
-        rgba(15, 23, 42, .045);
-}
-
-
-.holiday-closed-icon {
-
-    width:
-        48px;
-
-    height:
-        48px;
-
-    flex:
-        0 0 48px;
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    justify-content:
-        center;
-
-    border-radius:
-        14px;
-
-    background:
-        #f8fafc;
-
-    color:
-        #64748b;
-}
-
-
-.holiday-closed-copy {
-
-    min-width:
-        0;
-
-    flex:
-        1;
-}
-
-
-.holiday-closed-copy h2 {
-
-    margin:
-        0;
-
-    font-family:
-        "Bricolage Grotesque",
-        sans-serif;
-
-    font-size:
-        1rem;
-
-    line-height:
-        1.25;
-
-    color:
-        #10051a;
-}
-
-
-.holiday-closed-copy p {
-
-    margin:
-        6px 0 0;
-
-    max-width:
-        680px;
-
-    color:
-        #64748b;
-
-    font-size:
-        .7rem;
-
-    line-height:
-        1.5;
-}
-
-
-.holiday-back-button {
-
-    display:
-        inline-flex;
-
-    align-items:
-        center;
-
-    gap:
-        7px;
-
-    min-height:
-        39px;
-
-    padding:
-        8px 13px;
-
-    border-radius:
-        10px;
-
-    background:
-        #4a0754;
-
-    color:
-        #ffffff;
-
-    font-family:
-        "Bricolage Grotesque",
-        sans-serif;
-
-    font-size:
-        .63rem;
-
-    font-weight:
-        750;
-
-    white-space:
-        nowrap;
+        none !important;
 }
 
 
@@ -1850,23 +2617,36 @@
     gap:
         8px;
 
+    max-width:
+        850px;
+
+    margin:
+        0 auto;
+
     padding:
-        12px 14px;
+        10px 13px;
+
+    border:
+        1px solid
+        #ececf2;
 
     border-radius:
-        13px;
+        10px;
 
     background:
-        #f8fafc;
+        #ffffff;
 
     color:
-        #64748b;
+        #94a3b8;
 
     font-size:
-        .66rem;
+        .61rem;
 
     line-height:
         1.5;
+
+    text-align:
+        center;
 }
 
 
@@ -1876,26 +2656,17 @@
         2px;
 
     color:
-        #94a3b8;
+        #a78bfa;
 }
 
 
 /* ============================================================
-   RESPONSIVE
+   RESPONSIVE — LARGE TABLET
    ============================================================ */
 
-@media (max-width: 1100px) {
+@media (max-width: 1200px) {
 
-    .holiday-hero-visual {
-
-        width:
-            230px;
-
-        flex-basis:
-            230px;
-    }
-
-    .holiday-lesson-grid {
+    .holiday-category-grid {
 
         grid-template-columns:
             repeat(
@@ -1903,24 +2674,96 @@
                 minmax(0, 1fr)
             );
     }
+
+
+    .holiday-lesson-grid {
+
+        grid-auto-columns:
+            minmax(
+                300px,
+                43%
+            );
+    }
+
 }
 
+
+/* ============================================================
+   RESPONSIVE — TABLET
+   ============================================================ */
 
 @media (max-width: 900px) {
 
     .holiday-hero {
 
         padding:
-            28px;
+            34px;
+
     }
 
+
     .holiday-hero-visual {
+
+        width:
+            240px;
+
+        flex-basis:
+            240px;
+    }
+
+
+    .holiday-visual-ring.ring-one {
+
+        width:
+            180px;
+
+        height:
+            180px;
+    }
+
+
+    .holiday-visual-ring.ring-two {
+
+        width:
+            135px;
+
+        height:
+            135px;
+    }
+
+
+    .holiday-visual-ring.ring-three {
+
+        width:
+            95px;
+
+        height:
+            95px;
+    }
+
+
+    .holiday-floating-card {
+
+        font-size:
+            .55rem;
+    }
+
+
+    .card-three {
 
         display:
             none;
     }
 
-    .holiday-section-heading {
+
+    .holiday-library-section {
+
+        padding:
+            20px;
+    }
+
+
+    .holiday-library-header {
 
         align-items:
             flex-start;
@@ -1929,22 +2772,19 @@
             column;
     }
 
-    .holiday-section-heading > p {
 
-        text-align:
-            left;
-    }
+    .holiday-filter-button {
 
-    .holiday-closed-state {
-
-        align-items:
+        align-self:
             flex-start;
-
-        flex-direction:
-            column;
     }
+
 }
 
+
+/* ============================================================
+   RESPONSIVE — MOBILE
+   ============================================================ */
 
 @media (max-width: 768px) {
 
@@ -1959,132 +2799,176 @@
             100px;
     }
 
+
     .holiday-hero {
 
         min-height:
             auto;
 
         padding:
-            25px 22px;
+            27px 23px;
 
         border-radius:
-            23px;
+            24px;
+
+        margin-bottom:
+            32px;
     }
 
-    .holiday-hero h1 {
 
-        font-size:
-            1.7rem;
-    }
-
-    .holiday-hero p {
-
-        font-size:
-            .74rem;
-    }
-
-    .holiday-category-grid {
-
-        grid-template-columns:
-            1fr;
-    }
-
-    .holiday-lesson-grid {
-
-        grid-template-columns:
-            1fr;
-    }
-
-    .holiday-steps {
-
-        grid-template-columns:
-            1fr;
-    }
-
-    .holiday-progress-card {
-
-        align-items:
-            flex-start;
-    }
-
-    .holiday-progress-value {
+    .holiday-hero-visual {
 
         display:
             none;
     }
-}
 
-
-@media (max-width: 600px) {
-
-    .dashboard-content.holiday-learning-page {
-
-        width:
-            calc(
-                100% - 20px
-            );
-    }
-
-    .holiday-hero {
-
-        padding:
-            22px 18px;
-
-        border-radius:
-            20px;
-    }
 
     .holiday-hero h1 {
 
         font-size:
-            1.5rem;
+            1.85rem;
     }
 
-    .holiday-section-heading h2 {
+
+    .holiday-hero p {
 
         font-size:
-            1.18rem;
+            .73rem;
+
+        line-height:
+            1.6;
     }
+
+
+    .holiday-hero-meta {
+
+        margin-top:
+            19px;
+    }
+
+
+    .holiday-section {
+
+        margin-bottom:
+            35px;
+    }
+
+
+    .holiday-section-heading {
+
+        align-items:
+            flex-start;
+
+        flex-direction:
+            column;
+
+        gap:
+            9px;
+    }
+
+
+    .holiday-section-heading > p {
+
+        text-align:
+            left;
+    }
+
+
+    .holiday-section-heading h2,
+    .holiday-library-header h2,
+    .holiday-progress-heading h2 {
+
+        font-size:
+            1.28rem;
+    }
+
+
+    .holiday-category-grid {
+
+        grid-template-columns:
+            1fr 1fr;
+
+        gap:
+            10px;
+    }
+
 
     .holiday-category-card {
 
         min-height:
-            83px;
+            170px;
 
         padding:
-            13px;
+            14px;
     }
+
 
     .holiday-category-icon {
 
         width:
-            42px;
+            43px;
 
         height:
-            42px;
+            43px;
 
-        flex-basis:
-            42px;
+        margin-bottom:
+            13px;
     }
 
-    .holiday-lesson-card {
 
-        min-height:
-            205px;
+    .holiday-category-copy strong {
+
+        font-size:
+            .76rem;
+    }
+
+
+    .holiday-category-copy small {
+
+        font-size:
+            .6rem;
+    }
+
+
+    .holiday-category-arrow {
+
+        width:
+            25px;
+
+        height:
+            25px;
+
+        right:
+            12px;
+
+        bottom:
+            12px;
+    }
+
+
+    .holiday-library-section {
 
         padding:
             17px;
+
+        border-radius:
+            21px;
     }
 
-    .holiday-closed-state {
 
-        padding:
-            18px;
+    .holiday-library-header {
+
+        margin-bottom:
+            15px;
     }
-}
 
 
-@media (max-width: 420px) {
+    .holiday-library-header p {
+
+        font-size:
+            .65rem;
+    }
+
 
     .holiday-filter-row {
 
@@ -2094,12 +2978,10 @@
         flex-wrap:
             nowrap;
 
-        padding-bottom:
-            3px;
-
         scrollbar-width:
             none;
     }
+
 
     .holiday-filter-row::-webkit-scrollbar {
 
@@ -2107,11 +2989,125 @@
             none;
     }
 
+
     .holiday-filter {
 
         flex:
             0 0 auto;
     }
+
+
+    .holiday-lesson-grid {
+
+        grid-auto-columns:
+            minmax(
+                275px,
+                82%
+            );
+
+        gap:
+            12px;
+    }
+
+
+    .holiday-lesson-card {
+
+        min-height:
+            335px;
+    }
+
+
+    .holiday-progress-card {
+
+        align-items:
+            flex-start;
+
+        padding:
+            17px;
+
+        gap:
+            13px;
+    }
+
+
+    .holiday-progress-value {
+
+        display:
+            none;
+    }
+
+
+    .holiday-progress-copy strong {
+
+        font-size:
+            .85rem;
+    }
+
+
+    .holiday-progress-copy p {
+
+        font-size:
+            .61rem;
+    }
+
+
+    .holiday-footer-note {
+
+        font-size:
+            .58rem;
+    }
+
+}
+
+
+/* ============================================================
+   RESPONSIVE — SMALL MOBILE
+   ============================================================ */
+
+@media (max-width: 520px) {
+
+    .dashboard-content.holiday-learning-page {
+
+        width:
+            calc(
+                100% - 20px
+            );
+    }
+
+
+    .holiday-hero {
+
+        padding:
+            23px 18px;
+
+        border-radius:
+            20px;
+    }
+
+
+    .holiday-hero-label {
+
+        font-size:
+            .53rem;
+    }
+
+
+    .holiday-hero h1 {
+
+        font-size:
+            1.58rem;
+
+        letter-spacing:
+            -.045em;
+    }
+
+
+    .holiday-hero p {
+
+        font-size:
+            .69rem;
+    }
+
 
     .holiday-hero-meta {
 
@@ -2122,11 +3118,114 @@
             column;
     }
 
+
+    .holiday-category-grid {
+
+        grid-template-columns:
+            1fr;
+    }
+
+
+    .holiday-category-card {
+
+        min-height:
+            115px;
+
+        flex-direction:
+            row;
+
+        align-items:
+            center;
+
+        gap:
+            12px;
+
+        padding:
+            14px;
+    }
+
+
+    .holiday-category-icon {
+
+        flex:
+            0 0 42px;
+
+        margin:
+            0;
+    }
+
+
+    .holiday-category-copy {
+
+        flex:
+            1;
+    }
+
+
     .holiday-category-copy small {
 
-        font-size:
-            .64rem;
+        max-width:
+            none;
     }
+
+
+    .holiday-category-arrow {
+
+        position:
+            static;
+
+        flex:
+            0 0 25px;
+    }
+
+
+    .holiday-library-section {
+
+        padding:
+            15px;
+    }
+
+
+    .holiday-library-title-row {
+
+        flex-wrap:
+            wrap;
+    }
+
+
+    .holiday-lesson-grid {
+
+        grid-auto-columns:
+            88%;
+    }
+
+
+    .holiday-lesson-card {
+
+        min-height:
+            330px;
+    }
+
+
+    .holiday-lesson-top {
+
+        min-height:
+            110px;
+    }
+
+
+    .holiday-progress-icon {
+
+        width:
+            46px;
+
+        height:
+            46px;
+
+        flex:
+            0 0 46px;
+    }
+
 }
 
 
@@ -2158,8 +3257,12 @@ a:focus-visible {
     .holiday-learning-page *::before,
     .holiday-learning-page *::after {
 
+        scroll-behavior:
+            auto !important;
+
         transition:
             none !important;
     }
 
 }
+ 
