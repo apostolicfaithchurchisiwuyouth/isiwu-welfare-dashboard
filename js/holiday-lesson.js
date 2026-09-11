@@ -2,14 +2,19 @@
    AFC ISIU YOUTH PORTAL V2
    FILE: holiday-lesson.js
    PURPOSE: HOLIDAY LEARNING LESSON READER
+
+   FEATURES:
+   - Loads lesson from Holiday Learning backend
+   - Supports current single Lesson URL
+   - Supports multiple resources when backend provides them
+   - YouTube modal player
+   - YouTube video completion detection
+   - Reading progress tracking
+   - Dynamic "In this lesson" navigation
+   - Lesson completion
+   - Session fallback
+   - Preserves existing IDs / classes / UI
    ============================================================ */
-
-"use strict";
-
-
-/* ============================================================
-   API
-============================================================ */
 
 const HOLIDAY_LESSON_API =
     "https://script.google.com/macros/s/AKfycbw1mVwpgAcIOSNbpgzy52TFyozEGMtWWwVWUDFaofGNzpsguBIaKR4q1dXVtgVHO2xZ1w/exec";
@@ -17,10 +22,9 @@ const HOLIDAY_LESSON_API =
 
 /* ============================================================
    STATE
-============================================================ */
+   ============================================================ */
 
 let currentLesson = null;
-
 let currentSections = [];
 
 let lessonId = "";
@@ -29,118 +33,77 @@ let isCompleting = false;
 
 let lessonVideoModalOpen = false;
 
+let youtubePlayer = null;
+let youtubeApiPromise = null;
+
+let activeVideoResource = null;
+
+let completedVideoResources = new Set();
+
+let readingProgress = 0;
+
 
 /* ============================================================
-   DOM HELPER
-============================================================ */
+   DOM HELPERS
+   ============================================================ */
 
-function lessonElement(id) {
-
+function getElement(id) {
     return document.getElementById(id);
-
 }
 
 
 /* ============================================================
-   ESCAPE HTML
-============================================================ */
-
-function escapeLessonHTML(value) {
-
-    return String(value ?? "")
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-
-}
-
-
-/* ============================================================
-   SAFE LESSON RESOURCE URL
-============================================================ */
+   SAFE URL
+   ============================================================ */
 
 function getSafeLessonResourceUrl(value) {
 
-    const raw =
-        String(value || "")
-            .trim();
+    const url = String(value || "").trim();
 
-
-    if (!raw) {
+    if (!url) {
         return "";
     }
-
 
     try {
 
-        const url =
-            new URL(
-                raw,
-                window.location.origin
-            );
-
-
-        /*
-           Only allow normal HTTP/HTTPS
-           learning resources.
-        */
+        const parsed = new URL(url, window.location.origin);
 
         if (
-            url.protocol !== "https:" &&
-            url.protocol !== "http:"
+            parsed.protocol !== "http:" &&
+            parsed.protocol !== "https:"
         ) {
-
             return "";
-
         }
 
+        return parsed.href;
 
-        return url.href;
-
-    }
-    catch (error) {
-
-        console.warn(
-            "Invalid Holiday Learning resource URL:",
-            error
-        );
+    } catch (error) {
 
         return "";
-
     }
-
 }
 
 
 /* ============================================================
-   YOUTUBE URL DETECTION
-============================================================ */
+   YOUTUBE URL CHECK
+   ============================================================ */
 
 function isYouTubeUrl(value) {
 
-    const raw =
-        String(value || "")
-            .trim();
+    const url = String(value || "").trim();
 
-
-    if (!raw) {
+    if (!url) {
         return false;
     }
 
-
     try {
 
-        const url =
-            new URL(raw);
-
+        const parsed = new URL(url);
 
         const hostname =
-            url.hostname
+            parsed.hostname
                 .toLowerCase()
                 .replace(/^www\./, "");
-
 
         return (
             hostname === "youtube.com" ||
@@ -148,76 +111,46 @@ function isYouTubeUrl(value) {
             hostname.endsWith(".youtube.com")
         );
 
-    }
-    catch (error) {
-
-        console.warn(
-            "Unable to check YouTube URL:",
-            error
-        );
+    } catch (error) {
 
         return false;
-
     }
-
 }
 
 
 /* ============================================================
    GET YOUTUBE VIDEO ID
-============================================================ */
+   ============================================================ */
 
 function getYouTubeVideoId(value) {
 
-    const raw =
-        String(value || "")
-            .trim();
+    const url = String(value || "").trim();
 
-
-    if (!raw) {
+    if (!url) {
         return "";
     }
 
-
     try {
 
-        const url =
-            new URL(raw);
-
+        const parsed = new URL(url);
 
         const hostname =
-            url.hostname
+            parsed.hostname
                 .toLowerCase()
                 .replace(/^www\./, "");
 
+        /* youtu.be/VIDEO_ID */
+        if (hostname === "youtu.be") {
 
-        /*
-           SHORT YOUTUBE URL
-
-           https://youtu.be/VIDEO_ID
-        */
-
-        if (
-            hostname === "youtu.be"
-        ) {
-
-            const id =
-                url.pathname
-                    .replace(/^\/+/, "")
-                    .split("/")[0]
-                    .trim();
-
-
-            return id;
+            return parsed.pathname
+                .replace(/^\/+/, "")
+                .split("/")[0]
+                .trim();
 
         }
 
 
-        /*
-           NORMAL YOUTUBE URL
-
-           https://www.youtube.com/watch?v=VIDEO_ID
-        */
+        /* youtube.com/watch?v=VIDEO_ID */
 
         if (
             hostname === "youtube.com" ||
@@ -225,100 +158,162 @@ function getYouTubeVideoId(value) {
         ) {
 
             const watchId =
-                url.searchParams.get("v");
-
+                parsed.searchParams.get("v");
 
             if (watchId) {
-
                 return watchId.trim();
-
             }
 
 
-            /*
-               YOUTUBE SHORTS
-
-               https://youtube.com/shorts/VIDEO_ID
-            */
+            /* youtube.com/shorts/VIDEO_ID */
 
             const shortsMatch =
-                url.pathname.match(
+                parsed.pathname.match(
                     /^\/shorts\/([^/?#]+)/
                 );
 
-
             if (shortsMatch) {
-
                 return shortsMatch[1];
-
             }
 
 
-            /*
-               YOUTUBE EMBED
-
-               https://youtube.com/embed/VIDEO_ID
-            */
+            /* youtube.com/embed/VIDEO_ID */
 
             const embedMatch =
-                url.pathname.match(
+                parsed.pathname.match(
                     /^\/embed\/([^/?#]+)/
                 );
 
-
             if (embedMatch) {
-
                 return embedMatch[1];
-
             }
-
         }
 
+    } catch (error) {
+
+        return "";
     }
-    catch (error) {
-
-        console.warn(
-            "Unable to extract YouTube video ID:",
-            error
-        );
-
-    }
-
 
     return "";
-
 }
 
 
 /* ============================================================
-   GET RESPONSE DATA
-============================================================ */
+   LOAD YOUTUBE IFRAME API
+   ============================================================ */
 
-function getLessonResponseData(data) {
+function loadYouTubeIframeAPI() {
 
-    if (!data) {
+    if (
+        window.YT &&
+        window.YT.Player
+    ) {
+
+        return Promise.resolve();
+    }
+
+
+    if (youtubeApiPromise) {
+
+        return youtubeApiPromise;
+    }
+
+
+    youtubeApiPromise = new Promise((resolve, reject) => {
+
+        const previousReady =
+            window.onYouTubeIframeAPIReady;
+
+
+        window.onYouTubeIframeAPIReady =
+            function () {
+
+                if (
+                    typeof previousReady === "function"
+                ) {
+
+                    try {
+                        previousReady();
+                    } catch (error) {
+                        console.warn(
+                            "Previous YouTube callback failed:",
+                            error
+                        );
+                    }
+                }
+
+                resolve();
+            };
+
+
+        const existingScript =
+            document.querySelector(
+                'script[src="https://www.youtube.com/iframe_api"]'
+            );
+
+
+        if (existingScript) {
+
+            return;
+        }
+
+
+        const script =
+            document.createElement("script");
+
+        script.src =
+            "https://www.youtube.com/iframe_api";
+
+        script.async = true;
+
+        script.onerror = function () {
+
+            youtubeApiPromise = null;
+
+            reject(
+                new Error(
+                    "Unable to load YouTube player."
+                )
+            );
+        };
+
+
+        document.head.appendChild(script);
+
+    });
+
+
+    return youtubeApiPromise;
+}
+
+
+/* ============================================================
+   RESPONSE DATA HELPER
+   ============================================================ */
+
+function getLessonResponseData(response) {
+
+    if (!response) {
         return null;
     }
 
 
-    if (data.data) {
-        return data.data;
+    if (
+        response.data &&
+        typeof response.data === "object"
+    ) {
+
+        return response.data;
     }
 
 
-    if (data.result) {
-        return data.result;
-    }
-
-
-    return data;
-
+    return response;
 }
 
 
 /* ============================================================
-   GET LESSON ID
-============================================================ */
+   GET REQUESTED LESSON ID
+   ============================================================ */
 
 function getRequestedLessonId() {
 
@@ -329,86 +324,72 @@ function getRequestedLessonId() {
 
 
     const fromUrl =
-        String(
-            params.get("lessonId") ||
-            params.get("id") ||
-            ""
-        ).trim();
+        params.get("lessonId") ||
+        params.get("id");
 
 
     if (fromUrl) {
-        return fromUrl;
+
+        return String(fromUrl).trim();
     }
 
 
-    try {
-
-        /*
-           Support both the current reader key
-           and the newer hub key.
-        */
-
-        const storageKeys = [
-            "afc_holiday_selected_lesson",
-            "afc_holiday_selected_lesson_v1"
-        ];
+    const sessionKeys = [
+        "afc_holiday_selected_lesson",
+        "afc_holiday_selected_lesson_v1"
+    ];
 
 
-        for (
-            let i = 0;
-            i < storageKeys.length;
-            i++
-        ) {
+    for (const key of sessionKeys) {
+
+        try {
 
             const raw =
-                sessionStorage.getItem(
-                    storageKeys[i]
-                );
-
+                sessionStorage.getItem(key);
 
             if (!raw) {
                 continue;
             }
 
 
-            const saved =
+            const parsed =
                 JSON.parse(raw);
 
 
-            const savedId =
-                String(
-                    saved.lessonId ||
-                    saved.lesson_id ||
-                    saved.id ||
-                    ""
-                ).trim();
+            if (
+                parsed &&
+                typeof parsed === "object"
+            ) {
+
+                const savedId =
+                    parsed.id ||
+                    parsed.lessonId ||
+                    parsed.lesson_id;
 
 
-            if (savedId) {
-                return savedId;
+                if (savedId) {
+
+                    return String(savedId).trim();
+                }
             }
 
+        } catch (error) {
+
+            console.warn(
+                "Unable to read saved holiday lesson:",
+                error
+            );
         }
-
-    }
-    catch (error) {
-
-        console.warn(
-            "Unable to read saved Holiday Learning lesson.",
-            error
-        );
-
     }
 
 
     return "";
-
 }
 
 
 /* ============================================================
    SAVE SELECTED LESSON
-============================================================ */
+   ============================================================ */
 
 function saveSelectedLesson(lesson) {
 
@@ -417,204 +398,50 @@ function saveSelectedLesson(lesson) {
     }
 
 
-    try {
-
-        const lessonData = {
-
-            lessonId:
-                lesson.lessonId ||
-                lesson.lesson_id ||
-                lesson.id ||
-                "",
-
-            title:
-                lesson.title ||
-                "",
-
-            category:
-                lesson.category ||
-                "",
-
-            lessonUrl:
-                lesson.lessonUrl ||
-                lesson.lesson_url ||
-                "",
-
-            savedAt:
-                Date.now()
-
-        };
+    const payload =
+        JSON.stringify(lesson);
 
 
-        /*
-           Save using the original reader key.
-        */
-
-        sessionStorage.setItem(
-            "afc_holiday_selected_lesson",
-            JSON.stringify(
-                lessonData
-            )
-        );
+    const keys = [
+        "afc_holiday_selected_lesson",
+        "afc_holiday_selected_lesson_v1"
+    ];
 
 
-        /*
-           Also keep the hub key synchronized.
-        */
+    keys.forEach((key) => {
 
-        sessionStorage.setItem(
-            "afc_holiday_selected_lesson_v1",
-            JSON.stringify(
-                lessonData
-            )
-        );
+        try {
 
-    }
-    catch (error) {
-
-        console.warn(
-            "Unable to save Holiday Learning lesson.",
-            error
-        );
-
-    }
-
-}
-
-
-/* ============================================================
-   SHOW / HIDE
-============================================================ */
-
-function showReader() {
-
-    const loading =
-        lessonElement(
-            "lessonLoading"
-        );
-
-    const error =
-        lessonElement(
-            "lessonError"
-        );
-
-    const reader =
-        lessonElement(
-            "lessonReader"
-        );
-
-    if (loading) {
-        loading.hidden = true;
-    }
-
-    if (error) {
-        error.hidden = true;
-    }
-
-    if (reader) {
-        reader.hidden = false;
-    }
-
-}
-
-
-function showLoading() {
-
-    const loading =
-        lessonElement(
-            "lessonLoading"
-        );
-
-    const error =
-        lessonElement(
-            "lessonError"
-        );
-
-    const reader =
-        lessonElement(
-            "lessonReader"
-        );
-
-    const completed =
-        lessonElement(
-            "lessonCompleted"
-        );
-
-    if (loading) {
-        loading.hidden = false;
-    }
-
-    if (error) {
-        error.hidden = true;
-    }
-
-    if (reader) {
-        reader.hidden = true;
-    }
-
-    if (completed) {
-        completed.hidden = true;
-    }
-
-}
-
-
-function showError(message) {
-
-    const loading =
-        lessonElement(
-            "lessonLoading"
-        );
-
-    const error =
-        lessonElement(
-            "lessonError"
-        );
-
-    const reader =
-        lessonElement(
-            "lessonReader"
-        );
-
-    if (loading) {
-        loading.hidden = true;
-    }
-
-    if (reader) {
-        reader.hidden = true;
-    }
-
-    if (error) {
-
-        error.hidden = false;
-
-        const messageElement =
-            lessonElement(
-                "lessonErrorMessage"
+            sessionStorage.setItem(
+                key,
+                payload
             );
 
-        if (messageElement) {
+        } catch (error) {
 
-            messageElement.textContent =
-                message ||
-                "Please return to Holiday Learning and try again.";
-
+            console.warn(
+                "Unable to save lesson:",
+                error
+            );
         }
-
-    }
-
+    });
 }
 
 
 /* ============================================================
-   LOAD ALL HOLIDAY LESSONS
-============================================================ */
+   FETCH HOLIDAY LESSONS
+   ============================================================ */
 
 async function fetchHolidayLessons() {
 
+    const url =
+        HOLIDAY_LESSON_API +
+        "?action=getHolidayLessons";
+
+
     const response =
         await fetch(
-            `${HOLIDAY_LESSON_API}?action=getHolidayLessons`,
+            url,
             {
                 method: "GET",
                 cache: "no-store"
@@ -625,9 +452,8 @@ async function fetchHolidayLessons() {
     if (!response.ok) {
 
         throw new Error(
-            `Unable to contact the learning service. HTTP ${response.status}`
+            "Unable to load Holiday Learning lessons."
         );
-
     }
 
 
@@ -635,34 +461,17 @@ async function fetchHolidayLessons() {
         await response.json();
 
 
-    if (
-        data &&
-        data.success === false
-    ) {
-
-        throw new Error(
-            data.message ||
-            "The Holiday Learning lessons could not be loaded."
-        );
-
-    }
-
-
     return getLessonResponseData(data);
-
 }
 
 
 /* ============================================================
    FIND LESSON
-============================================================ */
+   ============================================================ */
 
-function findLessonInResponse(
-    responseData,
-    requestedId
-) {
+function findLessonInResponse(data, requestedId) {
 
-    if (!responseData) {
+    if (!data) {
         return null;
     }
 
@@ -670,313 +479,101 @@ function findLessonInResponse(
     let lessons = [];
 
 
-    if (
-        Array.isArray(
-            responseData
-        )
+    if (Array.isArray(data)) {
+
+        lessons = data;
+
+    } else if (
+        Array.isArray(data.lessons)
     ) {
 
-        lessons =
-            responseData;
+        lessons = data.lessons;
 
-    }
-    else if (
-        Array.isArray(
-            responseData.lessons
-        )
+    } else if (
+        data.data &&
+        Array.isArray(data.data.lessons)
     ) {
 
-        lessons =
-            responseData.lessons;
-
-    }
-    else if (
-        Array.isArray(
-            responseData.data
-        )
-    ) {
-
-        lessons =
-            responseData.data;
-
+        lessons = data.data.lessons;
     }
 
 
     const wanted =
-        String(
-            requestedId
-        ).trim();
+        String(requestedId || "")
+            .trim()
+            .toLowerCase();
 
 
-    if (!wanted) {
-        return null;
-    }
+    return (
+        lessons.find((lesson) => {
+
+            const id =
+                String(
+                    lesson.id ||
+                    lesson.lessonId ||
+                    lesson.lesson_id ||
+                    ""
+                )
+                .trim()
+                .toLowerCase();
 
 
-    const found =
-        lessons.find(
-            function (lesson) {
+            return id === wanted;
 
-                const id =
-                    String(
-                        lesson.lessonId ||
-                        lesson.lesson_id ||
-                        lesson.id ||
-                        ""
-                    ).trim();
-
-
-                return id === wanted;
-
-            }
-        );
-
-
-    return found || null;
-
+        }) || null
+    );
 }
 
 
 /* ============================================================
-   LOAD LESSON
-============================================================ */
+   GET LESSON CONTENT
+   ============================================================ */
 
-async function loadLesson() {
-
-    showLoading();
-
-
-    lessonId =
-        getRequestedLessonId();
-
-
-    if (!lessonId) {
-
-        showError(
-            "This lesson could not be identified. Please return to Holiday Learning and select a lesson again."
-        );
-
-        return;
-
-    }
-
-
-    try {
-
-        const responseData =
-            await fetchHolidayLessons();
-
-
-        const lesson =
-            findLessonInResponse(
-                responseData,
-                lessonId
-            );
-
-
-        if (!lesson) {
-
-            throw new Error(
-                "The selected lesson could not be found."
-            );
-
-        }
-
-
-        currentLesson =
-            lesson;
-
-
-        saveSelectedLesson(
-            lesson
-        );
-
-
-        renderLesson(
-            lesson
-        );
-
-
-        showReader();
-
-
-        setupReadingProgress();
-
-
-        window.scrollTo({
-            top: 0,
-            behavior: "instant"
-        });
-
-    }
-    catch (error) {
-
-        console.error(
-            "Holiday lesson loading error:",
-            error
-        );
-
-
-        showError(
-            error.message ||
-            "Unable to load this lesson right now."
-        );
-
-    }
-
-}
-
-
-/* ============================================================
-   GET CONTENT
-============================================================ */
-
-function getLessonContent(
-    lesson
-) {
+function getLessonContent(lesson) {
 
     if (!lesson) {
         return "";
     }
 
 
-    const candidates = [
-
-        lesson.content,
-
-        lesson.lesson_content,
-
-        lesson.lessonContent,
-
-        lesson.body,
-
-        lesson.text,
-
-        lesson.description_long,
-
-        lesson.description
-
-    ];
-
-
-    for (
-        let i = 0;
-        i < candidates.length;
-        i++
-    ) {
-
-        if (
-            typeof candidates[i] ===
-                "string" &&
-            candidates[i].trim()
-        ) {
-
-            return candidates[i].trim();
-
-        }
-
-    }
-
-
-    return "";
-
+    return String(
+        lesson.content ||
+        lesson.lesson_content ||
+        lesson.lessonContent ||
+        lesson.body ||
+        lesson.text ||
+        lesson.description_long ||
+        lesson.description ||
+        ""
+    ).trim();
 }
 
 
 /* ============================================================
-   FORMAT CONTENT
-============================================================ */
+   ESCAPE HTML
+   ============================================================ */
 
-function formatLessonContent(
-    content
-) {
+function escapeHTML(value) {
 
-    if (!content) {
-
-        return `
-            <div class="lesson-content-empty">
-                <h2>Lesson content coming soon</h2>
-
-                <p>
-                    This lesson has been added to the Holiday
-                    Learning library, but its learning material
-                    has not yet been published.
-                </p>
-            </div>
-        `;
-
-    }
-
-
-    if (
-        /<(h2|h3|p|ul|ol|li|strong|blockquote|br)\b/i.test(
-            content
-        )
-    ) {
-
-        return sanitizeLessonHTML(
-            content
-        );
-
-    }
-
-
-    const escaped =
-        escapeLessonHTML(
-            content
-        );
-
-
-    return escaped
-        .split(
-            /\n\s*\n/
-        )
-        .map(
-            function (paragraph) {
-
-                const text =
-                    paragraph
-                        .trim()
-                        .replace(
-                            /\n/g,
-                            "<br>"
-                        );
-
-
-                if (!text) {
-                    return "";
-                }
-
-
-                return `
-                    <p>
-                        ${text}
-                    </p>
-                `;
-
-            }
-        )
-        .join("");
-
+    return String(value || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
 }
 
 
 /* ============================================================
-   SIMPLE HTML SANITIZER
-============================================================ */
+   SANITIZE LESSON HTML
+   ============================================================ */
 
-function sanitizeLessonHTML(
-    html
-) {
+function sanitizeLessonHTML(html) {
 
-    const template =
-        document.createElement(
-            "template"
-        );
+    const container =
+        document.createElement("div");
 
-
-    template.innerHTML =
-        String(html);
+    container.innerHTML = html;
 
 
     const allowedTags = new Set([
@@ -995,461 +592,783 @@ function sanitizeLessonHTML(
     ]);
 
 
-    const walker =
-        document.createTreeWalker(
-            template.content,
-            NodeFilter.SHOW_ELEMENT
-        );
+    container
+        .querySelectorAll("*")
+        .forEach((element) => {
 
+            if (!allowedTags.has(element.tagName)) {
 
-    const elements = [];
+                const parent =
+                    element.parentNode;
 
-
-    while (
-        walker.nextNode()
-    ) {
-
-        elements.push(
-            walker.currentNode
-        );
-
-    }
-
-
-    elements.forEach(
-        function (element) {
-
-            if (
-                !allowedTags.has(
-                    element.tagName
-                )
-            ) {
-
-                const fragment =
-                    document.createDocumentFragment();
-
-
-                while (
-                    element.firstChild
-                ) {
-
-                    fragment.appendChild(
-                        element.firstChild
-                    );
-
+                if (!parent) {
+                    return;
                 }
 
 
-                element.replaceWith(
-                    fragment
-                );
+                while (element.firstChild) {
 
+                    parent.insertBefore(
+                        element.firstChild,
+                        element
+                    );
+                }
+
+
+                parent.removeChild(element);
 
                 return;
-
             }
 
 
             Array.from(
                 element.attributes
-            ).forEach(
-                function (attribute) {
+            ).forEach((attribute) => {
 
-                    element.removeAttribute(
-                        attribute.name
-                    );
-
-                }
-            );
-
-        }
-    );
+                element.removeAttribute(
+                    attribute.name
+                );
+            });
+        });
 
 
-    return template.innerHTML;
-
+    return container.innerHTML;
 }
 
 
 /* ============================================================
-   RENDER LESSON RESOURCE
-============================================================ */
+   FORMAT LESSON CONTENT
+   ============================================================ */
+
+function formatLessonContent(content) {
+
+    if (!content) {
+
+        return `
+            <div class="lesson-content-empty">
+                <i class="fa-solid fa-book-open"></i>
+                <p>
+                    Lesson content is not available yet.
+                </p>
+            </div>
+        `;
+    }
+
+
+    /*
+       If backend content already contains HTML
+       headings/paragraphs/lists, preserve the structure.
+    */
+
+    if (/<[a-z][\s\S]*>/i.test(content)) {
+
+        return sanitizeLessonHTML(content);
+    }
+
+
+    /*
+       Plain text fallback.
+    */
+
+    const lines =
+        content
+            .split(/\r?\n/)
+            .map((line) => line.trim())
+            .filter(Boolean);
+
+
+    if (!lines.length) {
+
+        return `
+            <div class="lesson-content-empty">
+                <i class="fa-solid fa-book-open"></i>
+                <p>
+                    Lesson content is not available yet.
+                </p>
+            </div>
+        `;
+    }
+
+
+    return lines
+        .map((line) => {
+
+            return `
+                <p>
+                    ${escapeHTML(line)}
+                </p>
+            `;
+
+        })
+        .join("");
+}
+
+
+/* ============================================================
+   NORMALISE LESSON RESOURCES
+   ============================================================ */
+
+function getLessonResources(lesson) {
+
+    if (!lesson) {
+        return [];
+    }
+
+
+    let resources =
+        lesson.resources ||
+        lesson.lessonResources ||
+        lesson.lesson_resources ||
+        lesson.resourceList ||
+        lesson.resource_list;
+
+
+    /*
+       Backend may return resources as JSON text.
+    */
+
+    if (typeof resources === "string") {
+
+        const trimmed =
+            resources.trim();
+
+
+        if (trimmed) {
+
+            try {
+
+                const parsed =
+                    JSON.parse(trimmed);
+
+
+                if (Array.isArray(parsed)) {
+
+                    resources = parsed;
+                }
+
+            } catch (error) {
+
+                /*
+                   Ignore invalid JSON.
+                   We will fall back to lessonUrl.
+                */
+            }
+        }
+    }
+
+
+    /*
+       Multiple resource array.
+    */
+
+    if (Array.isArray(resources)) {
+
+        return resources
+            .map((resource, index) => {
+
+                if (
+                    typeof resource === "string"
+                ) {
+
+                    return {
+                        id:
+                            "resource-" +
+                            (index + 1),
+
+                        title:
+                            "Learning resource " +
+                            (index + 1),
+
+                        description:
+                            "Open this learning resource.",
+
+                        url:
+                            resource.trim(),
+
+                        type:
+                            isYouTubeUrl(resource)
+                                ? "video"
+                                : "link"
+                    };
+                }
+
+
+                const url =
+                    resource.url ||
+                    resource.lessonUrl ||
+                    resource.lesson_url ||
+                    resource.resourceUrl ||
+                    resource.resource_url ||
+                    "";
+
+
+                return {
+
+                    id:
+                        resource.id ||
+                        resource.resourceId ||
+                        resource.resource_id ||
+                        "resource-" +
+                        (index + 1),
+
+                    title:
+                        resource.title ||
+                        resource.name ||
+                        "Learning resource " +
+                        (index + 1),
+
+                    description:
+                        resource.description ||
+                        resource.details ||
+                        "Open this learning resource.",
+
+                    url:
+                        String(url).trim(),
+
+                    type:
+                        resource.type ||
+                        (
+                            isYouTubeUrl(url)
+                                ? "video"
+                                : "link"
+                        )
+                };
+
+            })
+            .filter((resource) => resource.url);
+    }
+
+
+    /*
+       Backward compatibility:
+       Existing Lesson URL column.
+    */
+
+    const singleUrl =
+        String(
+            lesson.lessonUrl ||
+            lesson.lesson_url ||
+            ""
+        ).trim();
+
+
+    if (singleUrl) {
+
+        return [
+            {
+                id: "resource-1",
+
+                title:
+                    isYouTubeUrl(singleUrl)
+                        ? "Watch the lesson"
+                        : "Open learning resource",
+
+                description:
+                    isYouTubeUrl(singleUrl)
+                        ? "Watch the lesson video, then return here to continue."
+                        : "Open this external learning resource.",
+
+                url: singleUrl,
+
+                type:
+                    isYouTubeUrl(singleUrl)
+                        ? "video"
+                        : "link"
+            }
+        ];
+    }
+
+
+    return [];
+}
+
+
+/* ============================================================
+   RENDER LESSON RESOURCES
+   ============================================================ */
 
 function renderLessonResource(lesson) {
 
-    const resource =
-        document.getElementById(
-            "lessonResource"
-        );
+    const resourceSection =
+        getElement("lessonResource");
+
+    const resourceList =
+        getElement("lessonResourceList");
+
+
+    /*
+       Preserve the current HTML fallback
+       if lessonResourceList does not exist yet.
+    */
+
+    if (!resourceSection) {
+        return;
+    }
+
+
+    const resources =
+        getLessonResources(lesson);
+
+
+    if (!resources.length) {
+
+        resourceSection.hidden = true;
+
+        if (resourceList) {
+            resourceList.innerHTML = "";
+        }
+
+        return;
+    }
+
+
+    resourceSection.hidden = false;
+
+
+    /*
+       New multi-resource layout.
+    */
+
+    if (resourceList) {
+
+        resourceList.innerHTML =
+            resources
+                .map((resource, index) => {
+
+                    const safeUrl =
+                        getSafeLessonResourceUrl(
+                            resource.url
+                        );
+
+
+                    if (!safeUrl) {
+                        return "";
+                    }
+
+
+                    const isVideo =
+                        isYouTubeUrl(
+                            safeUrl
+                        );
+
+
+                    const icon =
+                        isVideo
+                            ? "fa-solid fa-play"
+                            : "fa-solid fa-arrow-up-right-from-square";
+
+
+                    const buttonText =
+                        isVideo
+                            ? "Watch Video"
+                            : "Open Resource";
+
+
+                    const resourceId =
+                        escapeHTML(
+                            String(
+                                resource.id ||
+                                "resource-" +
+                                (index + 1)
+                            )
+                        );
+
+
+                    const title =
+                        escapeHTML(
+                            resource.title ||
+                            (
+                                isVideo
+                                    ? "Watch the lesson"
+                                    : "Learning resource"
+                            )
+                        );
+
+
+                    const description =
+                        escapeHTML(
+                            resource.description ||
+                            (
+                                isVideo
+                                    ? "Watch this lesson video, then return here to continue."
+                                    : "Open this external learning resource."
+                            )
+                        );
+
+
+                    const completed =
+                        completedVideoResources.has(
+                            resourceId
+                        );
+
+
+                    return `
+                        <article
+                            class="lesson-resource-item"
+                            data-resource-id="${resourceId}"
+                        >
+
+                            <div class="lesson-resource-icon">
+                                <i class="${icon}"></i>
+                            </div>
+
+
+                            <div class="lesson-resource-copy">
+
+                                <span>
+                                    ${isVideo ? "VIDEO LESSON" : "LEARNING RESOURCE"}
+                                </span>
+
+                                <h2>
+                                    ${title}
+                                </h2>
+
+                                <p>
+                                    ${description}
+                                </p>
+
+
+                                ${
+                                    isVideo && completed
+                                        ? `
+                                            <small class="lesson-resource-complete">
+                                                <i class="fa-solid fa-circle-check"></i>
+                                                Video completed
+                                            </small>
+                                        `
+                                        : ""
+                                }
+
+                            </div>
+
+
+                            ${
+                                isVideo
+                                    ? `
+                                        <button
+                                            type="button"
+                                            class="lesson-resource-button"
+                                            data-video-url="${escapeHTML(safeUrl)}"
+                                            data-resource-id="${resourceId}"
+                                            data-resource-title="${title}"
+                                        >
+                                            <span>
+                                                ${buttonText}
+                                            </span>
+
+                                            <i class="fa-solid fa-play"></i>
+                                        </button>
+                                    `
+                                    : `
+                                        <a
+                                            href="${escapeHTML(safeUrl)}"
+                                            class="lesson-resource-button"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                        >
+                                            <span>
+                                                ${buttonText}
+                                            </span>
+
+                                            <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                                        </a>
+                                    `
+                            }
+
+                        </article>
+                    `;
+
+                })
+                .join("");
+
+
+        bindResourceButtons();
+
+        return;
+    }
+
+
+    /*
+       Backward-compatible fallback for the original
+       single-resource HTML.
+    */
 
     const resourceIcon =
-        document.getElementById(
-            "lessonResourceIcon"
-        );
+        getElement("lessonResourceIcon");
 
     const resourceTitle =
-        document.getElementById(
-            "lessonResourceTitle"
-        );
+        getElement("lessonResourceTitle");
 
     const resourceDescription =
-        document.getElementById(
-            "lessonResourceDescription"
-        );
+        getElement("lessonResourceDescription");
 
-    const resourceButton =
-        document.getElementById(
-            "lessonResourceLink"
-        );
+    const resourceLink =
+        getElement("lessonResourceLink");
 
     const resourceButtonText =
-        document.getElementById(
-            "lessonResourceButtonText"
-        );
+        getElement("lessonResourceButtonText");
 
 
-    if (!resource) {
-
-        console.warn(
-            "lessonResource element was not found in holiday-lesson.html."
-        );
-
-        return;
-
-    }
+    const resource =
+        resources[0];
 
 
-    const lessonUrl =
+    const safeUrl =
         getSafeLessonResourceUrl(
-            lesson &&
-            (
-                lesson.lessonUrl ||
-                lesson.lesson_url ||
-                ""
-            )
+            resource.url
         );
 
 
-    if (!lessonUrl) {
+    if (!safeUrl) {
 
-        resource.hidden = true;
+        resourceSection.hidden = true;
 
         return;
-
     }
 
 
-    const isYouTube =
-        isYouTubeUrl(
-            lessonUrl
-        );
+    const isVideo =
+        isYouTubeUrl(safeUrl);
 
-
-    resource.hidden = false;
-
-
-    /* --------------------------------------------------------
-       YOUTUBE RESOURCE
-    -------------------------------------------------------- */
-
-    if (isYouTube) {
-
-        if (resourceIcon) {
-
-            resourceIcon.className =
-                "fa-brands fa-youtube";
-
-        }
-
-
-        if (resourceTitle) {
-
-            resourceTitle.textContent =
-                "Watch the lesson video";
-
-        }
-
-
-        if (resourceDescription) {
-
-            resourceDescription.textContent =
-                "Watch the video here without leaving the AFC Youth Portal.";
-
-        }
-
-
-        if (resourceButtonText) {
-
-            resourceButtonText.textContent =
-                "Watch Video";
-
-        }
-
-
-        if (resourceButton) {
-
-            /*
-               It is a button even if the HTML
-               element was originally an <a>.
-            */
-
-            resourceButton.removeAttribute(
-                "href"
-            );
-
-            resourceButton.removeAttribute(
-                "target"
-            );
-
-            resourceButton.removeAttribute(
-                "rel"
-            );
-
-            resourceButton.setAttribute(
-                "type",
-                "button"
-            );
-
-
-            resourceButton.onclick =
-                function (event) {
-
-                    event.preventDefault();
-
-                    openLessonVideoModal(
-                        lessonUrl,
-                        lesson &&
-                        lesson.title
-                            ? lesson.title
-                            : "Lesson video"
-                    );
-
-                };
-
-        }
-
-
-        return;
-
-    }
-
-
-    /* --------------------------------------------------------
-       NORMAL EXTERNAL RESOURCE
-    -------------------------------------------------------- */
 
     if (resourceIcon) {
 
         resourceIcon.className =
-            "fa-solid fa-arrow-up-right-from-square";
-
+            isVideo
+                ? "fa-solid fa-play"
+                : "fa-solid fa-arrow-up-right-from-square";
     }
 
 
     if (resourceTitle) {
 
         resourceTitle.textContent =
-            "Open learning resource";
-
+            resource.title ||
+            (
+                isVideo
+                    ? "Watch the lesson"
+                    : "Open learning resource"
+            );
     }
 
 
     if (resourceDescription) {
 
         resourceDescription.textContent =
-            "This lesson includes an additional learning resource.";
-
+            resource.description ||
+            (
+                isVideo
+                    ? "Watch the lesson video, then return here to continue."
+                    : "Open this external learning resource."
+            );
     }
 
 
     if (resourceButtonText) {
 
         resourceButtonText.textContent =
-            "Open Resource";
-
+            isVideo
+                ? "Watch Video"
+                : "Open Resource";
     }
 
 
-    if (resourceButton) {
+    if (resourceLink) {
 
-        resourceButton.href =
-            lessonUrl;
+        if (isVideo) {
 
-        resourceButton.target =
-            "_blank";
+            resourceLink.removeAttribute("href");
 
-        resourceButton.rel =
-            "noopener noreferrer";
+            resourceLink.setAttribute(
+                "role",
+                "button"
+            );
 
-        resourceButton.onclick =
-            null;
+            resourceLink.onclick =
+                function (event) {
 
+                    event.preventDefault();
+
+                    openLessonVideoModal(
+                        safeUrl,
+                        resource.title ||
+                        currentLesson?.title ||
+                        "Lesson video",
+                        resource.id ||
+                        "resource-1"
+                    );
+                };
+
+        } else {
+
+            resourceLink.href =
+                safeUrl;
+
+            resourceLink.target =
+                "_blank";
+
+            resourceLink.rel =
+                "noopener noreferrer";
+
+            resourceLink.removeAttribute(
+                "role"
+            );
+
+            resourceLink.onclick = null;
+        }
     }
-
 }
 
 
 /* ============================================================
-   OPEN YOUTUBE VIDEO MODAL
-============================================================ */
+   BIND RESOURCE BUTTONS
+   ============================================================ */
 
-function openLessonVideoModal(
+function bindResourceButtons() {
+
+    document
+        .querySelectorAll(
+            ".lesson-resource-button[data-video-url]"
+        )
+        .forEach((button) => {
+
+            button.addEventListener(
+                "click",
+                function () {
+
+                    const url =
+                        this.dataset.videoUrl;
+
+                    const resourceId =
+                        this.dataset.resourceId ||
+                        "resource-1";
+
+                    const title =
+                        this.dataset.resourceTitle ||
+                        currentLesson?.title ||
+                        "Lesson video";
+
+
+                    openLessonVideoModal(
+                        url,
+                        title,
+                        resourceId
+                    );
+                }
+            );
+
+        });
+}
+
+
+/* ============================================================
+   OPEN VIDEO MODAL
+   ============================================================ */
+
+async function openLessonVideoModal(
     videoUrl,
-    lessonTitle
+    resourceTitle,
+    resourceId
 ) {
 
     const modal =
-        document.getElementById(
-            "lessonVideoModal"
-        );
+        getElement("lessonVideoModal");
 
     const playerContainer =
-        document.getElementById(
-            "lessonVideoPlayerContainer"
-        );
-
-    const modalTitle =
-        document.getElementById(
-            "lessonVideoModalTitle"
-        );
-
-    const modalLessonTitle =
-        document.getElementById(
-            "lessonVideoModalLessonTitle"
-        );
+        getElement("lessonVideoPlayerContainer");
 
 
-    if (
-        !modal ||
-        !playerContainer
-    ) {
-
-        console.error(
-            "Holiday Learning video modal is missing from holiday-lesson.html."
-        );
-
+    if (!modal || !playerContainer) {
         return;
-
     }
 
 
     const videoId =
-        getYouTubeVideoId(
-            videoUrl
-        );
+        getYouTubeVideoId(videoUrl);
 
 
     if (!videoId) {
 
-        console.error(
-            "Invalid YouTube video URL:",
-            videoUrl
+        window.open(
+            videoUrl,
+            "_blank",
+            "noopener,noreferrer"
         );
 
         return;
-
     }
 
 
-    /*
-       Remove any previous iframe.
-    */
+    activeVideoResource = {
+        id:
+            String(
+                resourceId ||
+                "resource-1"
+            ),
 
-    playerContainer.innerHTML =
-        "";
+        title:
+            String(
+                resourceTitle ||
+                "Lesson video"
+            ),
+
+        videoId
+    };
 
 
-    /*
-       Create YouTube iframe.
-    */
-
-    const iframe =
-        document.createElement(
-            "iframe"
+    const modalTitle =
+        getElement(
+            "lessonVideoModalTitle"
         );
 
-
-    iframe.src =
-        "https://www.youtube.com/embed/" +
-        encodeURIComponent(
-            videoId
-        ) +
-        "?playsinline=1&rel=0";
-
-
-    iframe.title =
-        lessonTitle ||
-        "Lesson video";
-
-
-    iframe.setAttribute(
-        "allow",
-        "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-    );
-
-
-    iframe.setAttribute(
-        "allowfullscreen",
-        ""
-    );
-
-
-    iframe.setAttribute(
-        "loading",
-        "eager"
-    );
-
-
-    iframe.setAttribute(
-        "referrerpolicy",
-        "strict-origin-when-cross-origin"
-    );
-
-
-    playerContainer.appendChild(
-        iframe
-    );
-
-
-    /*
-       Update modal title.
-    */
-
-    const safeTitle =
-        String(
-            lessonTitle ||
-            "Watch the lesson"
-        ).trim();
+    const modalLessonTitle =
+        getElement(
+            "lessonVideoModalLessonTitle"
+        );
 
 
     if (modalTitle) {
 
         modalTitle.textContent =
+            resourceTitle ||
             "Watch the lesson";
-
     }
 
 
     if (modalLessonTitle) {
 
         modalLessonTitle.textContent =
-            safeTitle ||
+            resourceTitle ||
             "Lesson video";
-
     }
 
 
     /*
-       Show modal.
+       Destroy any previous player.
     */
 
-    modal.hidden =
-        false;
+    destroyYouTubePlayer();
 
+
+    playerContainer.innerHTML =
+        `
+            <div
+                id="lessonVideoPlayer"
+                class="lesson-video-player"
+            ></div>
+        `;
+
+
+    modal.hidden = false;
 
     modal.setAttribute(
         "aria-hidden",
         "false"
+    );
+
+
+    modal.classList.add(
+        "is-open"
     );
 
 
@@ -1458,88 +1377,385 @@ function openLessonVideoModal(
     );
 
 
-    lessonVideoModalOpen =
-        true;
+    lessonVideoModalOpen = true;
 
 
-    /*
-       Prevent background page
-       from moving.
-    */
+    try {
 
-    document.body.style.overflow =
-        "hidden";
+        await loadYouTubeIframeAPI();
 
 
-    /*
-       Focus close button.
-    */
+        /*
+           User may have closed the modal
+           while the API was loading.
+        */
 
-    const closeButton =
-        document.getElementById(
-            "lessonVideoModalClose"
+        if (!lessonVideoModalOpen) {
+            return;
+        }
+
+
+        youtubePlayer =
+            new YT.Player(
+                "lessonVideoPlayer",
+                {
+
+                    videoId,
+
+                    playerVars: {
+
+                        playsinline: 1,
+
+                        rel: 0
+                    },
+
+
+                    events: {
+
+                        onReady:
+                            function (event) {
+
+                                /*
+                                   Do not autoplay.
+                                   The learner starts the video
+                                   using YouTube's controls.
+                                */
+
+                                try {
+
+                                    event.target
+                                        .setVolume(100);
+
+                                } catch (error) {
+
+                                    console.warn(
+                                        "Unable to set player volume:",
+                                        error
+                                    );
+                                }
+                            },
+
+
+                        onStateChange:
+                            handleYouTubePlayerStateChange,
+
+
+                        onError:
+                            function (event) {
+
+                                console.warn(
+                                    "YouTube player error:",
+                                    event.data
+                                );
+                            }
+                    }
+                }
+            );
+
+    } catch (error) {
+
+        console.error(
+            "YouTube player failed to load:",
+            error
         );
 
 
-    if (closeButton) {
-
-        setTimeout(
-            function () {
-
-                closeButton.focus();
-
-            },
-            50
-        );
-
+        playerContainer.innerHTML =
+            `
+                <div class="lesson-video-player-error">
+                    <i class="fa-solid fa-circle-exclamation"></i>
+                    <p>
+                        The video could not be loaded here.
+                    </p>
+                </div>
+            `;
     }
-
 }
 
 
 /* ============================================================
-   CLOSE YOUTUBE VIDEO MODAL
-============================================================ */
+   YOUTUBE STATE CHANGE
+   ============================================================ */
 
-function closeLessonVideoModal() {
+function handleYouTubePlayerStateChange(event) {
 
-    const modal =
-        document.getElementById(
-            "lessonVideoModal"
-        );
-
-    const playerContainer =
-        document.getElementById(
-            "lessonVideoPlayerContainer"
-        );
-
-
-    if (!modal) {
+    if (
+        !window.YT ||
+        !YT.PlayerState
+    ) {
         return;
     }
 
 
-    /*
-       Removing the iframe completely
-       stops the YouTube player.
-    */
+    if (
+        event.data ===
+        YT.PlayerState.ENDED
+    ) {
 
-    if (playerContainer) {
+        markActiveVideoCompleted();
+    }
+}
 
-        playerContainer.innerHTML =
-            "";
 
+/* ============================================================
+   MARK ACTIVE VIDEO COMPLETED
+   ============================================================ */
+
+function markActiveVideoCompleted() {
+
+    if (!activeVideoResource) {
+        return;
     }
 
 
-    modal.hidden =
-        true;
+    const resourceId =
+        String(
+            activeVideoResource.id
+        );
 
 
-    modal.setAttribute(
-        "aria-hidden",
-        "true"
+    completedVideoResources.add(
+        resourceId
     );
+
+
+    updateResourceCompletedUI(
+        resourceId
+    );
+
+
+    /*
+       Store locally so a refresh does not
+       immediately lose the visual state.
+    */
+
+    try {
+
+        const storageKey =
+            "afc_holiday_video_progress_" +
+            String(
+                currentLesson?.id ||
+                lessonId ||
+                "lesson"
+            );
+
+
+        const saved =
+            JSON.parse(
+                localStorage.getItem(
+                    storageKey
+                ) || "[]"
+            );
+
+
+        const values =
+            new Set(
+                Array.isArray(saved)
+                    ? saved
+                    : []
+            );
+
+
+        values.add(
+            resourceId
+        );
+
+
+        localStorage.setItem(
+            storageKey,
+            JSON.stringify(
+                Array.from(values)
+            )
+        );
+
+    } catch (error) {
+
+        console.warn(
+            "Unable to save video progress:",
+            error
+        );
+    }
+}
+
+
+/* ============================================================
+   LOAD LOCAL VIDEO PROGRESS
+   ============================================================ */
+
+function loadLocalVideoProgress() {
+
+    completedVideoResources =
+        new Set();
+
+
+    try {
+
+        const storageKey =
+            "afc_holiday_video_progress_" +
+            String(
+                currentLesson?.id ||
+                lessonId ||
+                "lesson"
+            );
+
+
+        const saved =
+            JSON.parse(
+                localStorage.getItem(
+                    storageKey
+                ) || "[]"
+            );
+
+
+        if (Array.isArray(saved)) {
+
+            saved.forEach((id) => {
+
+                completedVideoResources.add(
+                    String(id)
+                );
+
+            });
+        }
+
+    } catch (error) {
+
+        console.warn(
+            "Unable to load video progress:",
+            error
+        );
+    }
+}
+
+
+/* ============================================================
+   UPDATE RESOURCE COMPLETED UI
+   ============================================================ */
+
+function updateResourceCompletedUI(
+    resourceId
+) {
+
+    const item =
+        document.querySelector(
+            `.lesson-resource-item[data-resource-id="${CSS.escape(resourceId)}"]`
+        );
+
+
+    if (!item) {
+        return;
+    }
+
+
+    const copy =
+        item.querySelector(
+            ".lesson-resource-copy"
+        );
+
+
+    if (!copy) {
+        return;
+    }
+
+
+    if (
+        copy.querySelector(
+            ".lesson-resource-complete"
+        )
+    ) {
+
+        return;
+    }
+
+
+    const completed =
+        document.createElement("small");
+
+
+    completed.className =
+        "lesson-resource-complete";
+
+
+    completed.innerHTML =
+        `
+            <i class="fa-solid fa-circle-check"></i>
+            Video completed
+        `;
+
+
+    copy.appendChild(
+        completed
+    );
+}
+
+
+/* ============================================================
+   DESTROY YOUTUBE PLAYER
+   ============================================================ */
+
+function destroyYouTubePlayer() {
+
+    if (
+        youtubePlayer &&
+        typeof youtubePlayer.destroy === "function"
+    ) {
+
+        try {
+
+            youtubePlayer.destroy();
+
+        } catch (error) {
+
+            console.warn(
+                "Unable to destroy YouTube player:",
+                error
+            );
+        }
+    }
+
+
+    youtubePlayer = null;
+}
+
+
+/* ============================================================
+   CLOSE VIDEO MODAL
+   ============================================================ */
+
+function closeLessonVideoModal() {
+
+    const modal =
+        getElement("lessonVideoModal");
+
+    const playerContainer =
+        getElement("lessonVideoPlayerContainer");
+
+
+    lessonVideoModalOpen = false;
+
+
+    destroyYouTubePlayer();
+
+
+    if (playerContainer) {
+
+        playerContainer.innerHTML = "";
+    }
+
+
+    if (modal) {
+
+        modal.hidden = true;
+
+        modal.setAttribute(
+            "aria-hidden",
+            "true"
+        );
+
+        modal.classList.remove(
+            "is-open"
+        );
+    }
 
 
     document.body.classList.remove(
@@ -1547,30 +1763,23 @@ function closeLessonVideoModal() {
     );
 
 
-    document.body.style.overflow =
-        "";
-
-
-    lessonVideoModalOpen =
-        false;
-
+    activeVideoResource = null;
 }
 
 
 /* ============================================================
-   VIDEO MODAL EVENTS
-============================================================ */
+   INITIALISE VIDEO MODAL
+   ============================================================ */
 
 function initialiseLessonVideoModal() {
 
     const closeButton =
-        document.getElementById(
+        getElement(
             "lessonVideoModalClose"
         );
 
-
     const backdrop =
-        document.getElementById(
+        getElement(
             "lessonVideoModalBackdrop"
         );
 
@@ -1581,7 +1790,6 @@ function initialiseLessonVideoModal() {
             "click",
             closeLessonVideoModal
         );
-
     }
 
 
@@ -1591,13 +1799,8 @@ function initialiseLessonVideoModal() {
             "click",
             closeLessonVideoModal
         );
-
     }
 
-
-    /*
-       Escape closes the modal.
-    */
 
     document.addEventListener(
         "keydown",
@@ -1609,256 +1812,196 @@ function initialiseLessonVideoModal() {
             ) {
 
                 closeLessonVideoModal();
-
             }
 
         }
     );
-
 }
 
 
 /* ============================================================
    RENDER LESSON
-============================================================ */
+   ============================================================ */
 
-function renderLesson(
-    lesson
-) {
+function renderLesson(lesson) {
 
-    const title =
-        String(
-            lesson.title ||
-            "Untitled Lesson"
-        ).trim();
+    currentLesson =
+        lesson;
 
 
-    const description =
-        String(
-            lesson.description ||
-            lesson.summary ||
-            ""
-        ).trim();
+    saveSelectedLesson(
+        lesson
+    );
 
 
-    const category =
-        String(
-            lesson.category ||
-            lesson.category_name ||
-            "Holiday Learning"
-        ).trim();
+    loadLocalVideoProgress();
 
 
-    const level =
-        String(
-            lesson.level ||
-            lesson.difficulty ||
-            "Beginner"
-        ).trim();
-
-
-    const duration =
-        String(
-            lesson.duration ||
-            lesson.duration_minutes ||
-            "Self-paced"
-        ).trim();
-
-
-    const price =
-        String(
-            lesson.price ||
-            lesson.cost ||
-            ""
-        ).trim();
-
-
-    const titleElement =
-        lessonElement(
-            "lessonTitle"
+    const lessonReader =
+        getElement(
+            "lessonReader"
         );
 
 
-    const descriptionElement =
-        lessonElement(
-            "lessonDescription"
+    const lessonIcon =
+        getElement(
+            "lessonIcon"
         );
 
-
-    const categoryElement =
-        lessonElement(
+    const lessonCategory =
+        getElement(
             "lessonCategory"
         );
 
-
-    const levelElement =
-        lessonElement(
+    const lessonLevel =
+        getElement(
             "lessonLevel"
         );
 
-
-    const metaLevelElement =
-        lessonElement(
-            "lessonMetaLevel"
+    const lessonTitle =
+        getElement(
+            "lessonTitle"
         );
 
+    const lessonDescription =
+        getElement(
+            "lessonDescription"
+        );
 
-    const durationElement =
-        lessonElement(
+    const lessonDuration =
+        getElement(
             "lessonDuration"
         );
 
+    const lessonMetaLevel =
+        getElement(
+            "lessonMetaLevel"
+        );
 
-    const priceElement =
-        lessonElement(
+    const lessonPrice =
+        getElement(
             "lessonPrice"
         );
 
-
-    if (titleElement) {
-
-        titleElement.textContent =
-            title;
-
-    }
-
-
-    if (descriptionElement) {
-
-        if (description) {
-
-            descriptionElement.textContent =
-                description;
-
-            descriptionElement.style.display =
-                "";
-
-        }
-        else {
-
-            descriptionElement.style.display =
-                "none";
-
-        }
-
-    }
-
-
-    if (categoryElement) {
-
-        categoryElement.textContent =
-            category;
-
-    }
-
-
-    if (levelElement) {
-
-        levelElement.textContent =
-            level;
-
-    }
-
-
-    if (metaLevelElement) {
-
-        metaLevelElement.textContent =
-            level;
-
-    }
-
-
-    if (durationElement) {
-
-        durationElement.textContent =
-            duration;
-
-    }
-
-
-    if (priceElement) {
-
-        priceElement.textContent =
-            price
-                ? price
-                : "Free";
-
-    }
-
-
-    const content =
-        getLessonContent(
-            lesson
-        );
-
-
-    const contentElement =
-        lessonElement(
+    const lessonContent =
+        getElement(
             "lessonContent"
         );
 
 
-    if (contentElement) {
+    if (lessonIcon) {
 
-        contentElement.innerHTML =
-            formatLessonContent(
-                content
-            );
-
+        lessonIcon.className =
+            lesson.icon ||
+            "fa-solid fa-book-open";
     }
 
 
-    /*
-       Render optional learning resource.
-    */
+    if (lessonCategory) {
+
+        lessonCategory.textContent =
+            lesson.category ||
+            "Holiday Learning";
+    }
+
+
+    if (lessonLevel) {
+
+        lessonLevel.textContent =
+            lesson.level ||
+            "Beginner";
+    }
+
+
+    if (lessonTitle) {
+
+        lessonTitle.textContent =
+            lesson.title ||
+            "Holiday Learning Lesson";
+    }
+
+
+    if (lessonDescription) {
+
+        lessonDescription.textContent =
+            lesson.description ||
+            "";
+    }
+
+
+    if (lessonDuration) {
+
+        lessonDuration.textContent =
+            lesson.duration ||
+            "";
+    }
+
+
+    if (lessonMetaLevel) {
+
+        lessonMetaLevel.textContent =
+            lesson.level ||
+            "Beginner";
+    }
+
+
+    if (lessonPrice) {
+
+        lessonPrice.textContent =
+            lesson.price ||
+            "Free";
+    }
+
+
+    if (lessonContent) {
+
+        lessonContent.innerHTML =
+            formatLessonContent(
+                getLessonContent(
+                    lesson
+                )
+            );
+    }
+
 
     renderLessonResource(
         lesson
     );
 
 
-    /*
-       Build section navigation.
-    */
-
     buildSectionNavigation();
 
 
-    /*
-       Update page title.
-    */
+    setupReadingProgress();
 
-    document.title =
-        `${title} | AFC Isiu Youth Portal`;
 
+    if (lessonReader) {
+
+        lessonReader.hidden =
+            false;
+    }
 }
 
 
 /* ============================================================
-   BUILD SECTION NAVIGATION
-============================================================ */
+   BUILD "IN THIS LESSON"
+   ============================================================ */
 
 function buildSectionNavigation() {
 
     const content =
-        lessonElement(
+        getElement(
             "lessonContent"
         );
 
-
-    const navigation =
-        lessonElement(
+    const sectionList =
+        getElement(
             "lessonSectionList"
         );
 
 
-    if (
-        !content ||
-        !navigation
-    ) {
-
+    if (!content || !sectionList) {
         return;
-
     }
 
 
@@ -1874,35 +2017,20 @@ function buildSectionNavigation() {
         headings;
 
 
-    if (!headings.length) {
+    /*
+       If there are actual H2 headings,
+       use them.
+    */
 
-        navigation.innerHTML = `
-            <div class="lesson-section-link">
-                <span class="lesson-section-number">
-                    •
-                </span>
+    if (headings.length) {
 
-                <strong>
-                    Lesson reading
-                </strong>
-            </div>
-        `;
-
-        return;
-
-    }
-
-
-    navigation.innerHTML =
-        headings
-            .map(
-                function (
-                    heading,
-                    index
-                ) {
+        sectionList.innerHTML =
+            headings
+                .map((heading, index) => {
 
                     const id =
-                        `lesson-section-${index + 1}`;
+                        "lesson-section-" +
+                        (index + 1);
 
 
                     heading.id =
@@ -1915,140 +2043,205 @@ function buildSectionNavigation() {
                             class="lesson-section-link"
                         >
 
-                            <span
-                                class="lesson-section-number"
-                            >
+                            <span class="lesson-section-number">
                                 ${index + 1}
                             </span>
 
                             <strong>
-                                ${escapeLessonHTML(
-                                    heading.textContent
+                                ${escapeHTML(
+                                    heading.textContent.trim()
                                 )}
                             </strong>
 
                         </a>
                     `;
 
-                }
+                })
+                .join("");
+
+
+        sectionList
+            .querySelectorAll(
+                "a.lesson-section-link"
             )
-            .join("");
-
-
-    navigation
-        .querySelectorAll(
-            "a"
-        )
-        .forEach(
-            function (link) {
+            .forEach((link) => {
 
                 link.addEventListener(
                     "click",
-                    function () {
+                    function (event) {
 
-                        const target =
-                            document.querySelector(
-                                link.getAttribute(
-                                    "href"
-                                )
+                        event.preventDefault();
+
+
+                        const targetId =
+                            this.getAttribute(
+                                "href"
                             );
 
 
-                        if (target) {
+                        const target =
+                            document.querySelector(
+                                targetId
+                            );
 
-                            target.scrollIntoView({
-                                behavior:
-                                    "smooth",
 
-                                block:
-                                    "start"
-                            });
-
+                        if (!target) {
+                            return;
                         }
 
+
+                        const offset =
+                            90;
+
+
+                        const targetTop =
+                            target.getBoundingClientRect().top +
+                            window.scrollY -
+                            offset;
+
+
+                        window.scrollTo({
+                            top:
+                                Math.max(
+                                    0,
+                                    targetTop
+                                ),
+                            behavior:
+                                "smooth"
+                        });
                     }
                 );
+            });
 
-            }
-        );
 
+        return;
+    }
+
+
+    /*
+       No H2 headings.
+       Do NOT pretend that "Section 2" exists.
+       Show one useful fallback item.
+    */
+
+    sectionList.innerHTML =
+        `
+            <div class="lesson-section-link">
+                <span class="lesson-section-number">
+                    •
+                </span>
+
+                <strong>
+                    Lesson reading
+                </strong>
+            </div>
+        `;
 }
 
 
 /* ============================================================
    READING PROGRESS
-============================================================ */
+   ============================================================ */
 
 function setupReadingProgress() {
 
-    const fill =
-        lessonElement(
+    const content =
+        getElement(
+            "lessonContent"
+        );
+
+    const progressText =
+        getElement(
+            "readingProgressText"
+        );
+
+    const progressFill =
+        getElement(
             "readingProgressFill"
         );
 
 
-    const text =
-        lessonElement(
-            "readingProgressText"
-        );
-
-
-    const content =
-        lessonElement(
-            "lessonContent"
-        );
-
-
     if (
-        !fill ||
-        !text ||
-        !content
+        !content ||
+        !progressText ||
+        !progressFill
     ) {
 
         return;
-
     }
 
 
+    let ticking = false;
+
+
     function updateProgress() {
+
+        ticking = false;
+
 
         const rect =
             content.getBoundingClientRect();
 
 
         const contentTop =
-            window.scrollY +
-            rect.top;
+            rect.top +
+            window.scrollY;
 
 
         const contentHeight =
-            content.offsetHeight;
+            Math.max(
+                content.scrollHeight,
+                content.offsetHeight
+            );
 
 
-        const viewportHeight =
-            window.innerHeight;
+        const contentBottom =
+            contentTop +
+            contentHeight;
 
 
-        const maximum =
-            contentHeight -
-            viewportHeight;
+        /*
+           We measure using a point around 65%
+           down the viewport.
+
+           This gives a natural reading-progress
+           feeling:
+           - before the lesson starts = 0%
+           - middle of lesson = around 50%
+           - near the bottom = 100%
+        */
+
+        const readingPoint =
+            window.scrollY +
+            (
+                window.innerHeight *
+                0.65
+            );
+
+
+        const total =
+            Math.max(
+                1,
+                contentBottom -
+                contentTop
+            );
 
 
         let progress =
-            0;
+            (
+                readingPoint -
+                contentTop
+            ) /
+            total;
 
 
-        if (maximum > 0) {
+        /*
+           Before reaching the lesson:
+           0%
 
-            progress =
-                (
-                    window.scrollY -
-                    contentTop
-                ) /
-                maximum;
-
-        }
-
+           After reaching the bottom:
+           100%
+        */
 
         progress =
             Math.max(
@@ -2060,25 +2253,42 @@ function setupReadingProgress() {
             );
 
 
-        const percentage =
+        readingProgress =
             Math.round(
                 progress * 100
             );
 
 
-        fill.style.width =
-            `${percentage}%`;
+        progressText.textContent =
+            readingProgress +
+            "%";
 
 
-        text.textContent =
-            `${percentage}%`;
+        progressFill.style.width =
+            readingProgress +
+            "%";
+    }
 
+
+    function requestUpdate() {
+
+        if (ticking) {
+            return;
+        }
+
+
+        ticking = true;
+
+
+        window.requestAnimationFrame(
+            updateProgress
+        );
     }
 
 
     window.addEventListener(
         "scroll",
-        updateProgress,
+        requestUpdate,
         {
             passive: true
         }
@@ -2087,44 +2297,71 @@ function setupReadingProgress() {
 
     window.addEventListener(
         "resize",
-        updateProgress
+        requestUpdate
     );
 
 
-    updateProgress();
+    /*
+       First calculation.
+    */
 
+    requestUpdate();
+
+
+    /*
+       Recalculate after fonts/images/layout
+       have had time to settle.
+    */
+
+    setTimeout(
+        requestUpdate,
+        300
+    );
+
+
+    setTimeout(
+        requestUpdate,
+        1000
+    );
 }
 
 
 /* ============================================================
-   SAVE PROGRESS
-============================================================ */
+   SAVE HOLIDAY PROGRESS
+   ============================================================ */
 
 async function saveHolidayProgress(
     status
 ) {
 
+    const id =
+        String(
+            currentLesson?.id ||
+            currentLesson?.lessonId ||
+            currentLesson?.lesson_id ||
+            lessonId ||
+            ""
+        ).trim();
+
+
+    if (!id) {
+        return false;
+    }
+
+
+    const payload = {
+        action:
+            "saveHolidayProgress",
+
+        lessonId:
+            id,
+
+        status:
+            status
+    };
+
+
     try {
-
-        const payload = {
-
-            lessonId:
-                currentLesson?.lessonId ||
-                currentLesson?.lesson_id ||
-                currentLesson?.id ||
-                lessonId,
-
-            lesson_id:
-                currentLesson?.lessonId ||
-                currentLesson?.lesson_id ||
-                currentLesson?.id ||
-                lessonId,
-
-            status:
-                status || "completed"
-
-        };
-
 
         const response =
             await fetch(
@@ -2134,28 +2371,15 @@ async function saveHolidayProgress(
 
                     headers: {
                         "Content-Type":
-                            "application/json"
+                            "text/plain;charset=utf-8"
                     },
 
                     body:
-                        JSON.stringify({
-                            action:
-                                "saveHolidayProgress",
-
-                            data:
-                                payload
-                        })
+                        JSON.stringify(
+                            payload
+                        )
                 }
             );
-
-
-        if (!response.ok) {
-
-            throw new Error(
-                `HTTP ${response.status}`
-            );
-
-        }
 
 
         const data =
@@ -2169,102 +2393,156 @@ async function saveHolidayProgress(
 
             throw new Error(
                 data.message ||
-                "Progress could not be saved."
+                "Unable to save lesson progress."
             );
-
         }
 
 
         return true;
 
-    }
-    catch (error) {
+    } catch (error) {
 
         console.warn(
-            "Holiday progress save warning:",
+            "Unable to save Holiday Learning progress:",
             error
         );
 
 
+        /*
+           Keep local fallback.
+        */
+
         try {
 
             localStorage.setItem(
-                `afc_holiday_progress_${lessonId}`,
+                "afc_holiday_progress_" +
+                id,
+
                 JSON.stringify({
-
-                    lessonId:
-                        lessonId,
-
                     status:
-                        status ||
-                        "completed",
+                        status,
 
-                    completedAt:
+                    updatedAt:
                         new Date().toISOString()
-
                 })
             );
 
-        }
-        catch (storageError) {
+        } catch (storageError) {
 
             console.warn(
-                "Unable to save local lesson progress.",
+                "Unable to save local progress:",
                 storageError
             );
-
         }
 
 
         return false;
+    }
+}
 
+
+/* ============================================================
+   SHOW COMPLETED STATE
+   ============================================================ */
+
+function showLessonCompleted() {
+
+    const lessonReader =
+        getElement(
+            "lessonReader"
+        );
+
+    const lessonCompleted =
+        getElement(
+            "lessonCompleted"
+        );
+
+    const lessonCompletedMessage =
+        getElement(
+            "lessonCompletedMessage"
+        );
+
+
+    if (lessonReader) {
+
+        lessonReader.hidden =
+            true;
     }
 
+
+    if (lessonCompleted) {
+
+        lessonCompleted.hidden =
+            false;
+    }
+
+
+    if (lessonCompletedMessage) {
+
+        lessonCompletedMessage.textContent =
+            "You have completed this Holiday Learning lesson.";
+    }
+
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
 }
 
 
 /* ============================================================
    COMPLETE LESSON
-============================================================ */
+   ============================================================ */
 
 async function completeLesson() {
 
-    if (
-        isCompleting ||
-        !currentLesson
-    ) {
-
+    if (isCompleting) {
         return;
-
     }
 
 
-    isCompleting =
-        true;
+    if (!currentLesson) {
+        return;
+    }
 
 
-    const button =
-        lessonElement(
+    isCompleting = true;
+
+
+    const completeButton =
+        getElement(
             "completeLessonButton"
         );
 
-
     const finishButton =
-        lessonElement(
+        getElement(
             "lessonFinishButton"
         );
 
 
-    if (button) {
+    const originalCompleteText =
+        completeButton
+            ? completeButton.innerHTML
+            : "";
 
-        button.disabled =
+
+    const originalFinishText =
+        finishButton
+            ? finishButton.innerHTML
+            : "";
+
+
+    if (completeButton) {
+
+        completeButton.disabled =
             true;
 
-        button.innerHTML = `
-            <i class="fa-solid fa-spinner fa-spin"></i>
-            Saving...
-        `;
-
+        completeButton.innerHTML =
+            `
+                <i class="fa-solid fa-spinner fa-spin"></i>
+                Saving...
+            `;
     }
 
 
@@ -2273,52 +2551,78 @@ async function completeLesson() {
         finishButton.disabled =
             true;
 
+        finishButton.innerHTML =
+            `
+                <i class="fa-solid fa-spinner fa-spin"></i>
+                Saving...
+            `;
     }
 
 
-    await saveHolidayProgress(
-        "completed"
-    );
+    try {
+
+        await saveHolidayProgress(
+            "completed"
+        );
 
 
-    const reader =
-        lessonElement(
+        showLessonCompleted();
+
+    } finally {
+
+        isCompleting = false;
+
+
+        if (completeButton) {
+
+            completeButton.disabled =
+                false;
+
+            completeButton.innerHTML =
+                originalCompleteText;
+        }
+
+
+        if (finishButton) {
+
+            finishButton.disabled =
+                false;
+
+            finishButton.innerHTML =
+                originalFinishText;
+        }
+    }
+}
+
+
+/* ============================================================
+   READ AGAIN
+   ============================================================ */
+
+function readLessonAgain() {
+
+    const lessonCompleted =
+        getElement(
+            "lessonCompleted"
+        );
+
+    const lessonReader =
+        getElement(
             "lessonReader"
         );
 
 
-    const completed =
-        lessonElement(
-            "lessonCompleted"
-        );
+    if (lessonCompleted) {
 
-
-    const completedMessage =
-        lessonElement(
-            "lessonCompletedMessage"
-        );
-
-
-    const title =
-        currentLesson.title ||
-        "This lesson";
-
-
-    if (completedMessage) {
-
-        completedMessage.textContent =
-            `${title} has been marked as completed.`;
-
+        lessonCompleted.hidden =
+            true;
     }
 
 
-    if (reader) {
-        reader.hidden = true;
-    }
+    if (lessonReader) {
 
-
-    if (completed) {
-        completed.hidden = false;
+        lessonReader.hidden =
+            false;
     }
 
 
@@ -2326,34 +2630,27 @@ async function completeLesson() {
         top: 0,
         behavior: "smooth"
     });
-
-
-    isCompleting =
-        false;
-
 }
 
 
 /* ============================================================
-   BUTTONS
-============================================================ */
+   LESSON LISTENERS
+   ============================================================ */
 
 function setupLessonListeners() {
 
     const completeButton =
-        lessonElement(
+        getElement(
             "completeLessonButton"
         );
 
-
     const finishButton =
-        lessonElement(
+        getElement(
             "lessonFinishButton"
         );
 
-
     const readAgainButton =
-        lessonElement(
+        getElement(
             "readAgainButton"
         );
 
@@ -2364,7 +2661,6 @@ function setupLessonListeners() {
             "click",
             completeLesson
         );
-
     }
 
 
@@ -2374,7 +2670,6 @@ function setupLessonListeners() {
             "click",
             completeLesson
         );
-
     }
 
 
@@ -2382,65 +2677,229 @@ function setupLessonListeners() {
 
         readAgainButton.addEventListener(
             "click",
-            function () {
-
-                const completed =
-                    lessonElement(
-                        "lessonCompleted"
-                    );
-
-
-                const reader =
-                    lessonElement(
-                        "lessonReader"
-                    );
-
-
-                if (completed) {
-                    completed.hidden = true;
-                }
-
-
-                if (reader) {
-                    reader.hidden = false;
-                }
-
-
-                window.scrollTo({
-                    top: 0,
-                    behavior: "smooth"
-                });
-
-            }
+            readLessonAgain
         );
-
     }
-
 }
 
 
 /* ============================================================
-   INITIALIZE
-============================================================ */
+   SHOW ERROR
+   ============================================================ */
+
+function showLessonError(
+    message
+) {
+
+    const loading =
+        getElement(
+            "lessonLoading"
+        );
+
+    const errorBox =
+        getElement(
+            "lessonError"
+        );
+
+    const errorMessage =
+        getElement(
+            "lessonErrorMessage"
+        );
+
+
+    if (loading) {
+
+        loading.hidden =
+            true;
+    }
+
+
+    if (errorMessage) {
+
+        errorMessage.textContent =
+            message ||
+            "Unable to load this lesson.";
+    }
+
+
+    if (errorBox) {
+
+        errorBox.hidden =
+            false;
+    }
+}
+
+
+/* ============================================================
+   LOAD LESSON
+   ============================================================ */
+
+async function loadLesson() {
+
+    const loading =
+        getElement(
+            "lessonLoading"
+        );
+
+
+    lessonId =
+        getRequestedLessonId();
+
+
+    if (!lessonId) {
+
+        showLessonError(
+            "No lesson was selected. Please return to Holiday Learning and choose a lesson."
+        );
+
+        return;
+    }
+
+
+    try {
+
+        const response =
+            await fetchHolidayLessons();
+
+
+        const lesson =
+            findLessonInResponse(
+                response,
+                lessonId
+            );
+
+
+        if (!lesson) {
+
+            /*
+               Session fallback:
+               If the backend cannot find the lesson,
+               try the lesson already saved by the hub.
+            */
+
+            let fallbackLesson =
+                null;
+
+
+            try {
+
+                const saved =
+                    sessionStorage.getItem(
+                        "afc_holiday_selected_lesson_v1"
+                    );
+
+
+                if (saved) {
+
+                    const parsed =
+                        JSON.parse(
+                            saved
+                        );
+
+
+                    if (
+                        parsed &&
+                        String(
+                            parsed.id ||
+                            parsed.lessonId ||
+                            parsed.lesson_id ||
+                            ""
+                        ).trim().toLowerCase() ===
+                        String(
+                            lessonId
+                        ).trim().toLowerCase()
+                    ) {
+
+                        fallbackLesson =
+                            parsed;
+                    }
+                }
+
+            } catch (error) {
+
+                console.warn(
+                    "Unable to read saved lesson fallback:",
+                    error
+                );
+            }
+
+
+            if (!fallbackLesson) {
+
+                throw new Error(
+                    "The selected lesson could not be found."
+                );
+            }
+
+
+            renderLesson(
+                fallbackLesson
+            );
+
+        } else {
+
+            renderLesson(
+                lesson
+            );
+        }
+
+
+        if (loading) {
+
+            loading.hidden =
+                true;
+        }
+
+    } catch (error) {
+
+        console.error(
+            "Holiday lesson loading failed:",
+            error
+        );
+
+
+        if (loading) {
+
+            loading.hidden =
+                true;
+        }
+
+
+        showLessonError(
+            error.message ||
+            "Unable to load this lesson right now. Please try again."
+        );
+    }
+}
+
+
+/* ============================================================
+   CLEAN UP ON PAGE EXIT
+   ============================================================ */
+
+window.addEventListener(
+    "beforeunload",
+    function () {
+
+        destroyYouTubePlayer();
+
+    }
+);
+
+
+/* ============================================================
+   INITIALISE
+   ============================================================ */
 
 document.addEventListener(
     "DOMContentLoaded",
     function () {
 
-        /*
-           IMPORTANT:
-           The previous version defined the modal
-           initializer but never called it.
-        */
-
         initialiseLessonVideoModal();
 
-
         setupLessonListeners();
-
 
         loadLesson();
 
     }
 );
- 
