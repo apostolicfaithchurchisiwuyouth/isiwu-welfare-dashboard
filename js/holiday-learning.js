@@ -2,7 +2,7 @@
    AFC ISIU YOUTH PORTAL V2
    FILE: holiday-learning.js
    PURPOSE: HOLIDAY LEARNING HUB
-   STAGE 2
+   STAGE 2 — BACKEND CONNECTED
    ============================================================
 
    IMPORTANT:
@@ -10,11 +10,12 @@
    - This module is completely separate from Academic Help.
    - Academic Help remains untouched.
    - The Holiday Hub is fail-closed.
-   - The backend must confirm that the programme is open.
-   - Until the Holiday Hub backend is connected, the page
-     will safely show the closed state.
+   - The backend is the authority for programme availability.
+   - Lessons returned by the backend replace the local demo list.
+   - If the backend cannot be reached, the hub remains closed.
+   - No fake lesson page is opened at this stage.
 
-   EXPECTED FUTURE BACKEND ACTION:
+   BACKEND ACTION:
 
        GET ?action=getHolidayLearningStatus
 
@@ -25,7 +26,10 @@
            open: true,
            programmeName: "2026 Holiday Learning",
            message: "...",
-           categories: [...]
+           openingDate: "...",
+           closingDate: "...",
+           categories: [...],
+           lessons: [...]
        }
 
    ============================================================ */
@@ -39,12 +43,24 @@
 
 const HOLIDAY_LEARNING_CONFIG = {
 
+    /*
+     * Existing AFC Isiwu Youth Portal Apps Script deployment.
+     *
+     * The Holiday Learning backend is now connected through
+     * the same deployment.
+     */
     API:
-        "https://script.google.com/macros/s/AKfycbw1mVwpgAcIOSNbpgzy52TFyozEGMtWWwVWUDFaofGNpzsguBIaKR4q1dXVtgVHO2xZ1w/exec",
+        "https://script.google.com/macros/s/AKfycbw1mVwpgAcIOSNbpgzy52TFyozEGMtWWwVWUDFaofGNzpsguBIaKR4q1dXVtgVHO2xZ1w/exec",
 
     STATUS_ACTION:
         "getHolidayLearningStatus",
 
+    /*
+     * IMPORTANT:
+     *
+     * Never assume Holiday Learning is open if the backend
+     * cannot confirm its status.
+     */
     FAIL_CLOSED:
         true
 
@@ -60,28 +76,38 @@ let holidayProgrammeOpen = false;
 let holidayProgrammeName =
     "Holiday Learning";
 
+let holidayProgrammeMessage =
+    "";
+
 let holidayActiveFilter =
     "All";
 
+let holidayBackendLessonsLoaded =
+    false;
+
 
 /* ============================================================
-   DEMO LESSON DATA
+   LOCAL FALLBACK LESSON DATA
    ============================================================
 
-   These are the initial Stage 2 learning cards.
+   These are kept only as a safe structural fallback.
 
-   They are deliberately kept in the frontend for now so that
-   the complete hub structure can be built before the backend
-   lesson database is connected.
+   IMPORTANT:
+   They are NOT displayed while the programme is closed.
 
-   The backend can replace this list later.
+   Once the backend successfully returns published lessons,
+   the backend lesson list becomes authoritative and replaces
+   this list.
+
+   This also allows the page structure to remain functional
+   while the backend is being prepared.
    ============================================================ */
 
 const HOLIDAY_LESSONS = [
 
     {
         id:
-            "digital-canva",
+            "HL-DIG-001",
 
         category:
             "Digital Skills",
@@ -105,7 +131,7 @@ const HOLIDAY_LESSONS = [
 
     {
         id:
-            "digital-computer",
+            "HL-DIG-002",
 
         category:
             "Digital Skills",
@@ -129,7 +155,7 @@ const HOLIDAY_LESSONS = [
 
     {
         id:
-            "digital-internet",
+            "HL-DIG-003",
 
         category:
             "Digital Skills",
@@ -153,7 +179,7 @@ const HOLIDAY_LESSONS = [
 
     {
         id:
-            "career-discovery",
+            "HL-CAR-001",
 
         category:
             "Career & Future Skills",
@@ -177,7 +203,7 @@ const HOLIDAY_LESSONS = [
 
     {
         id:
-            "career-communication",
+            "HL-CAR-002",
 
         category:
             "Career & Future Skills",
@@ -201,7 +227,7 @@ const HOLIDAY_LESSONS = [
 
     {
         id:
-            "career-cv",
+            "HL-CAR-003",
 
         category:
             "Career & Future Skills",
@@ -225,7 +251,7 @@ const HOLIDAY_LESSONS = [
 
     {
         id:
-            "challenge-seven-day",
+            "HL-CHA-001",
 
         category:
             "Holiday Challenges",
@@ -249,7 +275,7 @@ const HOLIDAY_LESSONS = [
 
     {
         id:
-            "challenge-create",
+            "HL-CHA-002",
 
         category:
             "Holiday Challenges",
@@ -273,7 +299,7 @@ const HOLIDAY_LESSONS = [
 
     {
         id:
-            "creative-content",
+            "HL-CRE-001",
 
         category:
             "Creative Skills",
@@ -297,7 +323,7 @@ const HOLIDAY_LESSONS = [
 
     {
         id:
-            "creative-design",
+            "HL-CRE-002",
 
         category:
             "Creative Skills",
@@ -364,6 +390,42 @@ function escapeHolidayHTML(value) {
 
 
 /* ============================================================
+   SAFE ICON CLASS
+   ============================================================
+
+   Icon names come from the backend.
+
+   Only allow normal Font Awesome class characters so that
+   backend data cannot inject arbitrary HTML into the lesson
+   card.
+   ============================================================ */
+
+function getSafeHolidayIcon(icon) {
+
+    const value =
+        String(
+            icon ||
+            "fa-solid fa-book-open"
+        ).trim();
+
+
+    if (
+        !/^[a-zA-Z0-9\s-]+$/.test(
+            value
+        )
+    ) {
+
+        return "fa-solid fa-book-open";
+
+    }
+
+
+    return value;
+
+}
+
+
+/* ============================================================
    API GET
    ============================================================ */
 
@@ -374,10 +436,12 @@ async function holidayApiGet(action) {
             HOLIDAY_LEARNING_CONFIG.API
         );
 
+
     url.searchParams.set(
         "action",
         action
     );
+
 
     const response =
         await fetch(
@@ -432,17 +496,11 @@ document.addEventListener(
 
 async function initializeHolidayLearning() {
 
-    setupHolidayFilters();
-
-    setupHolidayCategoryCards();
-
-    setupHolidayClearFilter();
-
-    renderHolidayLessons();
-
-
     /*
-     * Always start safely closed.
+     * Always begin in the closed state.
+     *
+     * This prevents the user from seeing the learning
+     * content before the backend confirms availability.
      */
 
     setHolidayProgrammeState(
@@ -451,7 +509,28 @@ async function initializeHolidayLearning() {
 
 
     /*
-     * Ask backend whether the programme is open.
+     * Prepare the existing UI controls.
+     */
+
+    setupHolidayFilters();
+
+    setupHolidayCategoryCards();
+
+    setupHolidayClearFilter();
+
+
+    /*
+     * Render the initial local structure.
+     *
+     * It remains hidden until the backend confirms that
+     * the programme is open.
+     */
+
+    renderHolidayLessons();
+
+
+    /*
+     * Ask the backend for the real programme state.
      */
 
     await loadHolidayProgrammeStatus();
@@ -473,6 +552,10 @@ async function loadHolidayProgrammeStatus() {
 
     if (statusElement) {
 
+        statusElement.className =
+            "holiday-status is-checking";
+
+
         statusElement.innerHTML = `
             <span class="holiday-status-dot"></span>
             Checking programme...
@@ -489,6 +572,11 @@ async function loadHolidayProgrammeStatus() {
             );
 
 
+        /*
+         * A malformed or unsuccessful response must never
+         * be interpreted as an open programme.
+         */
+
         if (
             !response ||
             response.success === false
@@ -502,6 +590,10 @@ async function loadHolidayProgrammeStatus() {
         }
 
 
+        /*
+         * Backend is authoritative.
+         */
+
         holidayProgrammeOpen =
             response.open === true;
 
@@ -512,6 +604,17 @@ async function loadHolidayProgrammeStatus() {
                 "Holiday Learning"
             ).trim();
 
+
+        holidayProgrammeMessage =
+            String(
+                response.message ||
+                ""
+            ).trim();
+
+
+        /*
+         * Update programme name.
+         */
 
         const programmeNameElement =
             holidayElement(
@@ -527,51 +630,81 @@ async function loadHolidayProgrammeStatus() {
         }
 
 
-        if (response.message) {
+        /*
+         * Update closed message if the backend
+         * supplied one.
+         */
 
-            const closedMessage =
-                holidayElement(
-                    "holidayClosedMessage"
-                );
+        const closedMessage =
+            holidayElement(
+                "holidayClosedMessage"
+            );
 
-            if (closedMessage) {
 
-                closedMessage.textContent =
-                    String(
-                        response.message
-                    );
+        if (
+            closedMessage &&
+            holidayProgrammeMessage
+        ) {
 
-            }
+            closedMessage.textContent =
+                holidayProgrammeMessage;
 
         }
 
 
-        setHolidayProgrammeState(
-            holidayProgrammeOpen
-        );
-
-
         /*
-         * If backend eventually sends lessons,
-         * we can replace the local list here.
+         * Load backend lessons.
+         *
+         * IMPORTANT:
+         *
+         * If the backend supplies an array, that array becomes
+         * the authoritative lesson list.
          */
 
         if (
             Array.isArray(
                 response.lessons
-            ) &&
-            response.lessons.length
+            )
         ) {
 
-            HOLIDAY_LESSONS.splice(
-                0,
-                HOLIDAY_LESSONS.length,
-                ...response.lessons
+            replaceHolidayLessons(
+                response.lessons
             );
 
-            renderHolidayLessons();
+            holidayBackendLessonsLoaded =
+                true;
 
         }
+
+
+        /*
+         * Backend may also supply categories.
+         *
+         * We use them to update the filter buttons when
+         * possible, without breaking the existing HTML.
+         */
+
+        if (
+            Array.isArray(
+                response.categories
+            )
+        ) {
+
+            updateHolidayCategoryFilters(
+                response.categories
+            );
+
+        }
+
+
+        /*
+         * Finally expose or hide the hub according to
+         * the backend decision.
+         */
+
+        setHolidayProgrammeState(
+            holidayProgrammeOpen
+        );
 
 
     } catch (error) {
@@ -583,18 +716,19 @@ async function loadHolidayProgrammeStatus() {
 
 
         /*
-         * IMPORTANT:
+         * FAIL CLOSED
          *
-         * Never assume the programme is open if
-         * the backend cannot be reached.
+         * If the backend cannot be reached, the programme
+         * must remain closed.
          */
+
+        holidayProgrammeOpen =
+            false;
+
 
         if (
             HOLIDAY_LEARNING_CONFIG.FAIL_CLOSED
         ) {
-
-            holidayProgrammeOpen =
-                false;
 
             setHolidayProgrammeState(
                 false,
@@ -604,6 +738,267 @@ async function loadHolidayProgrammeStatus() {
         }
 
     }
+
+}
+
+
+/* ============================================================
+   REPLACE LESSONS WITH BACKEND DATA
+   ============================================================ */
+
+function replaceHolidayLessons(
+    lessons
+) {
+
+    /*
+     * Only accept valid lesson objects.
+     */
+
+    const validLessons =
+        lessons
+            .filter(
+                function(lesson) {
+
+                    return (
+                        lesson &&
+                        typeof lesson ===
+                            "object"
+                    );
+
+                }
+            )
+            .map(
+                function(lesson) {
+
+                    return {
+
+                        id:
+                            String(
+                                lesson.id ||
+                                lesson.lessonId ||
+                                ""
+                            ).trim(),
+
+                        category:
+                            String(
+                                lesson.category ||
+                                "Learning"
+                            ).trim(),
+
+                        title:
+                            String(
+                                lesson.title ||
+                                "Learning activity"
+                            ).trim(),
+
+                        description:
+                            String(
+                                lesson.description ||
+                                "A practical holiday learning activity."
+                            ).trim(),
+
+                        level:
+                            String(
+                                lesson.level ||
+                                "Beginner"
+                            ).trim(),
+
+                        duration:
+                            String(
+                                lesson.duration ||
+                                "Short lesson"
+                            ).trim(),
+
+                        icon:
+                            getSafeHolidayIcon(
+                                lesson.icon
+                            ),
+
+                        lessonUrl:
+                            String(
+                                lesson.lessonUrl ||
+                                lesson.lesson_url ||
+                                ""
+                            ).trim(),
+
+                        status:
+                            String(
+                                lesson.status ||
+                                "Published"
+                            ).trim()
+
+                    };
+
+                }
+            )
+            .filter(
+                function(lesson) {
+
+                    return (
+                        lesson.id &&
+                        lesson.title
+                    );
+
+                }
+            );
+
+
+    /*
+     * Replace the existing list only when the backend
+     * actually returned lessons.
+     *
+     * This prevents an empty backend array from accidentally
+     * destroying the local structure during early setup.
+     */
+
+    if (
+        validLessons.length
+    ) {
+
+        HOLIDAY_LESSONS.splice(
+            0,
+            HOLIDAY_LESSONS.length,
+            ...validLessons
+        );
+
+    }
+
+
+    /*
+     * Re-render using the current filter.
+     */
+
+    renderHolidayLessons();
+
+}
+
+
+/* ============================================================
+   UPDATE CATEGORY FILTERS
+   ============================================================ */
+
+function updateHolidayCategoryFilters(
+    categories
+) {
+
+    const filterRow =
+        holidayElement(
+            "holidayFilterRow"
+        );
+
+
+    if (!filterRow) {
+
+        return;
+
+    }
+
+
+    const existingAllButton =
+        filterRow.querySelector(
+            '[data-category="All"]'
+        );
+
+
+    /*
+     * Preserve the existing All button if it exists.
+     */
+
+    const allButtonHTML =
+        existingAllButton
+            ? existingAllButton.outerHTML
+            : `
+                <button
+                    type="button"
+                    class="holiday-filter active"
+                    data-category="All"
+                >
+                    All
+                </button>
+            `;
+
+
+    const categoryButtons =
+        categories
+            .filter(
+                function(category) {
+
+                    return (
+                        category &&
+                        typeof category ===
+                            "object"
+                    );
+
+                }
+            )
+            .map(
+                function(category) {
+
+                    const name =
+                        String(
+                            category.categoryName ||
+                            category.name ||
+                            category.category ||
+                            ""
+                        ).trim();
+
+
+                    if (!name) {
+
+                        return "";
+
+                    }
+
+
+                    return `
+                        <button
+                            type="button"
+                            class="holiday-filter"
+                            data-category="${escapeHolidayHTML(name)}"
+                        >
+                            ${escapeHolidayHTML(name)}
+                        </button>
+                    `;
+
+                }
+            )
+            .filter(Boolean)
+            .join("");
+
+
+    if (categoryButtons) {
+
+        filterRow.innerHTML =
+            allButtonHTML +
+            categoryButtons;
+
+    }
+
+
+    /*
+     * Keep All selected after the backend category list
+     * is refreshed.
+     */
+
+    holidayActiveFilter =
+        "All";
+
+
+    filterRow
+        .querySelectorAll(
+            ".holiday-filter"
+        )
+        .forEach(
+            function(button) {
+
+                button.classList.toggle(
+                    "active",
+                    button.dataset.category ===
+                        "All"
+                );
+
+            }
+        );
 
 }
 
@@ -632,6 +1027,10 @@ function setHolidayProgrammeState(
             "holidayHubContent"
         );
 
+
+    /*
+     * OPEN
+     */
 
     if (isOpen) {
 
@@ -670,13 +1069,14 @@ function setHolidayProgrammeState(
 
 
     /*
-     * CLOSED
+     * CLOSED / UNAVAILABLE
      */
 
     if (heroStatus) {
 
         heroStatus.className =
             "holiday-status is-closed";
+
 
         heroStatus.innerHTML = `
             <span class="holiday-status-dot"></span>
@@ -721,7 +1121,9 @@ function setupHolidayFilters() {
 
 
     if (!filterRow) {
+
         return;
+
     }
 
 
@@ -736,7 +1138,9 @@ function setupHolidayFilters() {
 
 
             if (!button) {
+
                 return;
+
             }
 
 
@@ -786,7 +1190,9 @@ function setupHolidayCategoryCards() {
 
 
     if (!grid) {
+
         return;
+
     }
 
 
@@ -801,7 +1207,9 @@ function setupHolidayCategoryCards() {
 
 
             if (!card) {
+
                 return;
+
             }
 
 
@@ -810,7 +1218,9 @@ function setupHolidayCategoryCards() {
 
 
             if (!category) {
+
                 return;
+
             }
 
 
@@ -877,7 +1287,9 @@ function setupHolidayClearFilter() {
 
 
     if (!button) {
+
         return;
+
     }
 
 
@@ -932,13 +1344,19 @@ function renderHolidayLessons() {
 
 
     if (!grid) {
+
         return;
+
     }
 
 
     let lessons =
         HOLIDAY_LESSONS.slice();
 
+
+    /*
+     * Apply active category filter.
+     */
 
     if (
         holidayActiveFilter !==
@@ -951,7 +1369,8 @@ function renderHolidayLessons() {
 
                     return (
                         String(
-                            lesson.category || ""
+                            lesson.category ||
+                            ""
                         ).trim() ===
                         holidayActiveFilter
                     );
@@ -962,10 +1381,15 @@ function renderHolidayLessons() {
     }
 
 
+    /*
+     * Empty state.
+     */
+
     if (!lessons.length) {
 
         grid.innerHTML =
             "";
+
 
         if (emptyState) {
 
@@ -973,6 +1397,7 @@ function renderHolidayLessons() {
                 false;
 
         }
+
 
         return;
 
@@ -986,6 +1411,10 @@ function renderHolidayLessons() {
 
     }
 
+
+    /*
+     * Render lesson cards.
+     */
 
     grid.innerHTML =
         lessons
@@ -1044,8 +1473,9 @@ function renderHolidayLessonCard(
 
 
     const icon =
-        lesson.icon ||
-        "fa-solid fa-book-open";
+        getSafeHolidayIcon(
+            lesson.icon
+        );
 
 
     const lessonId =
@@ -1169,19 +1599,30 @@ function startHolidayLesson(
 ) {
 
     /*
-     * This is intentionally a controlled
-     * placeholder for the next stage.
-     *
-     * We do NOT redirect to a fake lesson page.
+     * Do not allow a lesson to be opened when the backend
+     * has not confirmed that the programme is open.
      */
+
+    if (
+        !holidayProgrammeOpen
+    ) {
+
+        return;
+
+    }
+
 
     const lesson =
         HOLIDAY_LESSONS.find(
             function(item) {
 
                 return (
-                    String(item.id) ===
-                    String(lessonId)
+                    String(
+                        item.id
+                    ) ===
+                    String(
+                        lessonId
+                    )
                 );
 
             }
@@ -1196,9 +1637,7 @@ function startHolidayLesson(
 
 
     /*
-     * For now, make the selected lesson
-     * available to the next lesson-reader
-     * stage through sessionStorage.
+     * Save the selected lesson for the next stage.
      */
 
     try {
@@ -1221,13 +1660,94 @@ function startHolidayLesson(
 
 
     /*
-     * The actual lesson reader will be
-     * connected in the next stage.
+     * If the backend eventually provides a real lesson URL,
+     * use it.
+     *
+     * The lesson reader will be connected in the next stage.
+     */
+
+    if (
+        lesson.lessonUrl
+    ) {
+
+        /*
+         * Only allow normal same-site relative URLs.
+         *
+         * This prevents arbitrary backend data from becoming
+         * an external redirect.
+         */
+
+        if (
+            lesson.lessonUrl.startsWith("/")
+        ) {
+
+            window.location.href =
+                lesson.lessonUrl;
+
+            return;
+
+        }
+
+    }
+
+
+    /*
+     * Stage 2 placeholder.
+     *
+     * We deliberately do not redirect to a fake lesson page.
+     */
+
+    showHolidayLessonComingSoon(
+        lesson.title
+    );
+
+}
+
+
+/* ============================================================
+   LESSON COMING SOON MESSAGE
+   ============================================================ */
+
+function showHolidayLessonComingSoon(
+    lessonTitle
+) {
+
+    const title =
+        String(
+            lessonTitle ||
+            "This lesson"
+        );
+
+
+    /*
+     * Prefer the existing shared notification system if it
+     * exposes a notification helper.
+     */
+
+    if (
+        window.AFCNotification &&
+        typeof window.AFCNotification.show ===
+            "function"
+    ) {
+
+        window.AFCNotification.show(
+            "Holiday Learning",
+            title +
+            " is ready for the lesson reader. The reader will be connected in the next stage."
+        );
+
+        return;
+
+    }
+
+
+    /*
+     * Use a simple alert only as a final fallback.
      */
 
     alert(
-        lesson.title +
-        "\n\nThis lesson reader will be opened when the Holiday Learning lesson system is connected."
+        title +
+        "\n\nThe lesson reader will be connected in the next stage."
     );
 
 }
@@ -1250,6 +1770,32 @@ window.AFCHolidayLearning = {
 
             return HOLIDAY_LESSONS.slice();
 
+        },
+
+    isOpen:
+        function() {
+
+            return holidayProgrammeOpen;
+
+        },
+
+    getProgrammeName:
+        function() {
+
+            return holidayProgrammeName;
+
+        },
+
+    getActiveFilter:
+        function() {
+
+            return holidayActiveFilter;
+
         }
 
 };
+
+
+/* ============================================================
+   END OF FILE
+   ============================================================ */
