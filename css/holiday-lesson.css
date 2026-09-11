@@ -3923,3 +3923,353 @@
         transition: none;
     }
 }
+
+/* ============================================================
+   FINAL RESOURCE LAYOUT CORRECTION
+   ------------------------------------------------------------
+   Keep the existing Holiday Lesson design and IDs.
+   The resource wrapper is now only a container for one or
+   more .lesson-resource-item blocks. Each item keeps its icon,
+   text and button aligned instead of scattering them.
+============================================================ */
+
+.lesson-resource {
+    width: 100%;
+    margin: 18px 0 24px;
+    padding: 0;
+    display: block;
+    box-sizing: border-box;
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+.lesson-resource-list {
+    width: 100%;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+}
+
+.lesson-resource-item {
+    width: 100%;
+    min-width: 0;
+    min-height: 82px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 17px 19px;
+    box-sizing: border-box;
+    background: linear-gradient(
+        135deg,
+        #fff7ed 0%,
+        #ffffff 62%,
+        #faf7ff 100%
+    );
+    border: 1px solid rgba(234, 88, 12, .15);
+    border-radius: 18px;
+    box-shadow: 0 9px 28px rgba(67, 29, 10, .045);
+}
+
+.lesson-resource-item .lesson-resource-icon {
+    width: 52px;
+    height: 52px;
+    min-width: 52px;
+    flex: 0 0 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    border-radius: 15px;
+    color: #ea580c;
+    background: #ffedd5;
+    box-shadow: inset 0 0 0 1px rgba(234, 88, 12, .08);
+}
+
+.lesson-resource-item .lesson-resource-icon i {
+    font-size: 1.05rem;
+}
+
+.lesson-resource-item .lesson-resource-copy {
+    min-width: 0;
+    flex: 1 1 auto;
+    width: auto;
+    margin: 0;
+}
+
+.lesson-resource-item .lesson-resource-copy > span {
+    display: block;
+    margin: 0 0 4px;
+    font-size: .52rem;
+    font-weight: 800;
+    letter-spacing: .11em;
+    line-height: 1.2;
+    text-transform: uppercase;
+    color: #ea580c;
+}
+
+.lesson-resource-item .lesson-resource-copy h2 {
+    margin: 0 0 5px;
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-size: .94rem;
+    line-height: 1.25;
+    color: #2d1639;
+}
+
+.lesson-resource-item .lesson-resource-copy p {
+    margin: 4px 0 0;
+    font-size: .68rem;
+    line-height: 1.55;
+    color: #716a73;
+}
+
+.lesson-resource-complete {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 8px;
+    font-size: .7rem;
+    font-weight: 700;
+    line-height: 1.2;
+    color: #16a34a;
+}
+
+.lesson-resource-complete i {
+    font-size: .72rem;
+}
+
+.lesson-resource-item .lesson-resource-button {
+    flex: 0 0 auto;
+    width: auto;
+    min-width: 112px;
+    min-height: 42px;
+    margin: 0 0 0 auto;
+    padding: 0 16px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    box-sizing: border-box;
+    border: 0;
+    border-radius: 11px;
+    color: #fff;
+    background: linear-gradient(135deg, #ea580c, #f97316);
+    box-shadow: 0 7px 18px rgba(234, 88, 12, .15);
+    font-family: "DM Sans", sans-serif;
+    font-size: .63rem;
+    font-weight: 800;
+    line-height: 1;
+    text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
+    transition:
+        transform .2s ease,
+        box-shadow .2s ease,
+        background .2s ease;
+}
+
+.lesson-resource-item .lesson-resource-button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 9px 22px rgba(234, 88, 12, .20);
+    background: linear-gradient(135deg, #c2410c, #ea580c);
+}
+
+.lesson-resource-item .lesson-resource-button:focus-visible {
+    outline: 3px solid rgba(234, 88, 12, .22);
+    outline-offset: 3px;
+}
+
+.lesson-resource-item .lesson-resource-button i {
+    font-size: .65rem;
+}
+
+.lesson-resource-icon .fa-youtube {
+    color: #ea580c;
+}
+
+/* Video player remains contained inside the existing modal. */
+.lesson-video-player {
+    width: 100%;
+    height: 100%;
+}
+
+.lesson-video-player iframe {
+    width: 100%;
+    height: 100%;
+    display: block;
+    border: 0;
+}
+
+.lesson-video-player-error {
+    min-height: 240px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    text-align: center;
+}
+
+.lesson-video-player-error i {
+    font-size: 1.8rem;
+    color: #ea580c;
+}
+
+.lesson-video-player-error p {
+    margin: 0;
+    font-size: .82rem;
+    color: #666;
+}
+
+/* ------------------------------------------------------------
+   Resource layout on smaller screens
+------------------------------------------------------------ */
+
+@media (max-width: 768px) {
+
+    .lesson-resource {
+        margin: 14px 0 20px;
+    }
+
+    .lesson-resource-list {
+        gap: 10px;
+    }
+
+    .lesson-resource-item {
+        min-height: 0;
+        display: grid;
+        grid-template-columns: 48px minmax(0, 1fr);
+        align-items: center;
+        gap: 13px;
+        padding: 16px;
+    }
+
+    .lesson-resource-item .lesson-resource-icon {
+        width: 48px;
+        height: 48px;
+        min-width: 48px;
+        flex-basis: 48px;
+        border-radius: 13px;
+    }
+
+    .lesson-resource-item .lesson-resource-button {
+        grid-column: 1 / -1;
+        width: 100%;
+        min-width: 0;
+        min-height: 40px;
+        margin: 0;
+    }
+
+    .lesson-resource-item .lesson-resource-copy > span {
+        font-size: .50rem;
+    }
+
+    .lesson-resource-item .lesson-resource-copy h2 {
+        font-size: .88rem;
+    }
+
+    .lesson-resource-item .lesson-resource-copy p {
+        font-size: .64rem;
+        line-height: 1.5;
+    }
+}
+
+@media (max-width: 520px) {
+
+    .lesson-resource {
+        margin: 13px 0 18px;
+    }
+
+    .lesson-resource-item {
+        grid-template-columns: 44px minmax(0, 1fr);
+        padding: 14px;
+        gap: 11px;
+        border-radius: 15px;
+    }
+
+    .lesson-resource-item .lesson-resource-icon {
+        width: 44px;
+        height: 44px;
+        min-width: 44px;
+        flex-basis: 44px;
+        border-radius: 12px;
+    }
+
+    .lesson-resource-item .lesson-resource-icon i {
+        font-size: .90rem;
+    }
+
+    .lesson-resource-item .lesson-resource-copy h2 {
+        font-size: .84rem;
+    }
+
+    .lesson-resource-item .lesson-resource-copy p {
+        font-size: .61rem;
+    }
+
+    .lesson-resource-item .lesson-resource-button {
+        min-height: 39px;
+        font-size: .60rem;
+    }
+}
+
+/* ------------------------------------------------------------
+   Legacy single-resource markup compatibility
+   If the older direct-child markup is still present, keep it
+   aligned without affecting the new multiple-resource list.
+------------------------------------------------------------ */
+
+.lesson-resource:not(:has(.lesson-resource-list)) {
+    display: grid;
+    grid-template-columns: 52px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 15px;
+    padding: 19px 21px;
+    background: linear-gradient(
+        135deg,
+        #fff7ed 0%,
+        #ffffff 62%,
+        #faf7ff 100%
+    );
+    border: 1px solid rgba(234, 88, 12, .15);
+    border-radius: 18px;
+    box-shadow: 0 9px 28px rgba(67, 29, 10, .045);
+}
+
+.lesson-resource:not(:has(.lesson-resource-list)) .lesson-resource-icon {
+    margin: 0;
+}
+
+.lesson-resource:not(:has(.lesson-resource-list)) .lesson-resource-copy {
+    min-width: 0;
+}
+
+.lesson-resource:not(:has(.lesson-resource-list)) .lesson-resource-button {
+    margin-left: auto;
+}
+
+@media (max-width: 768px) {
+    .lesson-resource:not(:has(.lesson-resource-list)) {
+        grid-template-columns: 48px minmax(0, 1fr);
+        gap: 12px;
+        padding: 16px;
+    }
+
+    .lesson-resource:not(:has(.lesson-resource-list)) .lesson-resource-button {
+        grid-column: 1 / -1;
+        width: 100%;
+        margin-left: 0;
+    }
+}
+
+@media (max-width: 520px) {
+    .lesson-resource:not(:has(.lesson-resource-list)) {
+        grid-template-columns: 44px minmax(0, 1fr);
+        padding: 13px;
+    }
+}
+
+/* ============================================================
+   END OF FINAL RESOURCE LAYOUT CORRECTION
+============================================================ */
