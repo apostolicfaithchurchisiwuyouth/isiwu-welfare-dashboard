@@ -445,44 +445,44 @@
                         </a>
 
 
-                        <!-- =====================================
-                             ACADEMIC HELP
-                        ====================================== -->
+  <!-- =====================================
+     ACADEMIC HELP
+====================================== -->
 
-                        <a
-                            href="/pages/academichelp"
-                            class="hub-item"
-                            data-online-only
-                            data-feature="Academic"
-                        >
+<button
+    type="button"
+    class="hub-item academic-help-trigger"
+    id="academicHelpTrigger"
+    aria-haspopup="dialog"
+    aria-controls="academicHelpModal"
+>
 
-                            <div class="hub-header">
+    <div class="hub-header">
 
-                                <div
-                                    class="hub-icon academic-icon"
-                                >
+        <div
+            class="hub-icon academic-icon"
+        >
 
-                                    <i
-                                        class="fa-solid fa-graduation-cap"
-                                    ></i>
+            <i
+                class="fa-solid fa-graduation-cap"
+            ></i>
 
-                                </div>
+        </div>
 
-                            </div>
-
-
-                            <h4>
-                                Academic Help
-                            </h4>
+    </div>
 
 
-                            <p>
-                                Resources and practical support
-                                for your academic journey.
-                            </p>
+    <h4>
+        Academic Help
+    </h4>
 
-                        </a>
 
+    <p>
+        Questions, learning support and useful
+        opportunities for your academic journey.
+    </p>
+
+</button>
 
                     </div>
 
@@ -494,6 +494,328 @@
 
         </div>
 
+        <!-- =========================================================
+     ACADEMIC HELP OPTIONS MODAL
+========================================================= -->
+
+<div
+    class="academic-help-modal"
+    id="academicHelpModal"
+    aria-hidden="true"
+>
+
+    <div
+        class="academic-help-modal-backdrop"
+        id="academicHelpModalBackdrop"
+    ></div>
+
+
+    <section
+        class="academic-help-modal-panel"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="academicHelpModalTitle"
+    >
+
+
+        <!-- =================================================
+             HEADER
+        ================================================== -->
+
+        <div class="academic-help-modal-header">
+
+
+            <div class="academic-help-modal-heading">
+
+                <div class="academic-help-modal-icon">
+
+                    <i
+                        class="fa-solid fa-graduation-cap"
+                        aria-hidden="true"
+                    ></i>
+
+                </div>
+
+
+                <div>
+
+                    <span class="academic-help-modal-eyebrow">
+                        LEARNING SUPPORT
+                    </span>
+
+
+                    <h2 id="academicHelpModalTitle">
+                        Academic Help
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <button
+                type="button"
+                class="academic-help-modal-close"
+                id="academicHelpModalClose"
+                aria-label="Close Academic Help"
+            >
+
+                <i
+                    class="fa-solid fa-xmark"
+                    aria-hidden="true"
+                ></i>
+
+            </button>
+
+        </div>
+
+
+        <!-- =================================================
+             INTRO
+        ================================================== -->
+
+        <div class="academic-help-modal-intro">
+
+            <p>
+                Choose the kind of support you need.
+            </p>
+
+        </div>
+
+
+        <!-- =================================================
+             OPTIONS
+        ================================================== -->
+
+        <div class="academic-help-options">
+
+
+            <!-- =============================================
+                 ASK A QUESTION
+            ============================================== -->
+
+            <a
+                href="/pages/academichelp"
+                class="academic-help-option"
+            >
+
+                <div class="academic-help-option-icon">
+
+                    <i
+                        class="fa-solid fa-circle-question"
+                        aria-hidden="true"
+                    ></i>
+
+                </div>
+
+
+                <div class="academic-help-option-content">
+
+                    <h3>
+                        Ask a Question
+                    </h3>
+
+
+                    <p>
+                        Need help with a school or academic question?
+                        Send it in and get support.
+                    </p>
+
+                </div>
+
+
+                <div class="academic-help-option-arrow">
+
+                    <i
+                        class="fa-solid fa-arrow-right"
+                        aria-hidden="true"
+                    ></i>
+
+                </div>
+
+            </a>
+
+
+            <!-- =============================================
+                 STUDY SUPPORT
+            ============================================== -->
+
+            <a
+                href="/pages/studysupport"
+                class="academic-help-option"
+            >
+
+                <div class="academic-help-option-icon">
+
+                    <i
+                        class="fa-solid fa-book-open"
+                        aria-hidden="true"
+                    ></i>
+
+                </div>
+
+
+                <div class="academic-help-option-content">
+
+                    <h3>
+                        Study Support
+                    </h3>
+
+
+                    <p>
+                        Discover practical tips to study better,
+                        prepare and stay organised.
+                    </p>
+
+                </div>
+
+
+                <div class="academic-help-option-arrow">
+
+                    <i
+                        class="fa-solid fa-arrow-right"
+                        aria-hidden="true"
+                    ></i>
+
+                </div>
+
+            </a>
+
+
+            <!-- =============================================
+                 USEFUL RESOURCES
+            ============================================== -->
+
+            <a
+                href="/pages/academic-resources"
+                class="academic-help-option"
+            >
+
+                <div class="academic-help-option-icon">
+
+                    <i
+                        class="fa-solid fa-folder-open"
+                        aria-hidden="true"
+                    ></i>
+
+                </div>
+
+
+                <div class="academic-help-option-content">
+
+                    <h3>
+                        Useful Resources
+                    </h3>
+
+
+                    <p>
+                        Explore helpful materials, opportunities
+                        and resources for your learning journey.
+                    </p>
+
+                </div>
+
+
+                <div class="academic-help-option-arrow">
+
+                    <i
+                        class="fa-solid fa-arrow-right"
+                        aria-hidden="true"
+                    ></i>
+
+                </div>
+
+            </a>
+
+
+            <!-- =============================================
+                 HOLIDAY LEARNING HUB
+            ============================================== -->
+
+            <a
+                href="/pages/holiday-skills"
+                class="academic-help-option academic-help-holiday-option"
+                id="holidaySkillsOption"
+            >
+
+                <div class="academic-help-option-icon">
+
+                    <i
+                        class="fa-solid fa-lightbulb"
+                        aria-hidden="true"
+                    ></i>
+
+                </div>
+
+
+                <div class="academic-help-option-content">
+
+                    <div class="academic-help-option-title-row">
+
+                        <h3>
+                            Holiday Learning Hub
+                        </h3>
+
+
+                        <span
+                            class="academic-help-holiday-badge"
+                            id="holidaySkillsBadge"
+                        >
+                            HOLIDAYS
+                        </span>
+
+                    </div>
+
+
+                    <p id="holidaySkillsDescription">
+                        Use your school holiday to learn useful
+                        skills and discover new opportunities.
+                    </p>
+
+                </div>
+
+
+                <div class="academic-help-option-arrow">
+
+                    <i
+                        class="fa-solid fa-arrow-right"
+                        aria-hidden="true"
+                    ></i>
+
+                </div>
+
+            </a>
+
+
+        </div>
+
+
+        <!-- =================================================
+             FOOTER NOTE
+        ================================================== -->
+
+        <div
+            class="academic-help-holiday-note"
+            id="holidaySkillsNote"
+            hidden
+        >
+
+            <i
+                class="fa-solid fa-lock"
+                aria-hidden="true"
+            ></i>
+
+
+            <span>
+                Holiday Learning Hub is currently closed and
+                will open during the next school holiday.
+            </span>
+
+        </div>
+
+    </section>
+
+</div>
 
         <!-- =====================================================
              MOBILE BOTTOM NAVIGATION
