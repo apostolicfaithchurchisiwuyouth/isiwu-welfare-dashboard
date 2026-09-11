@@ -9,32 +9,22 @@
    FOUNDATION
 ============================================================ */
 
-.holiday-lesson-page {
+.dashboard-content.holiday-lesson-page {
+    width: min(100% - 32px, 1500px);
+    max-width: 1500px;
 
-    width:
-        min(
-            calc(100% - 32px),
-            1500px
-        );
+    margin-left: auto;
+    margin-right: auto;
 
-    max-width:
-        1500px;
+    padding-left: 0;
+    padding-right: 0;
+    padding-bottom: 70px;
 
-    margin:
-        0 auto;
+    box-sizing: border-box;
 
-    padding-bottom:
-        70px;
-
-    font-family:
-        "DM Sans",
-        sans-serif;
-
-    color:
-        #171717;
-
+    font-family: "DM Sans", sans-serif;
+    color: #171717;
 }
-
 
 /* ============================================================
    HIDDEN
@@ -2133,18 +2123,7 @@
 
 @media (max-width: 768px) {
 
-    .holiday-lesson-page {
-
-        width:
-            calc(100% - 28px);
-
-        max-width:
-            none;
-
-        padding-bottom:
-            42px;
-
-    }
+.dashboard-content.holiday-lesson-page { width: calc(100% - 28px); max-width: none; } }
 
 
     .lesson-reader-topbar {
@@ -2549,16 +2528,7 @@
 
 @media (max-width: 520px) {
 
-    .holiday-lesson-page {
-
-        width:
-            calc(100% - 20px);
-
-        max-width:
-            none;
-
-    }
-
+    .dashboard-content.holiday-lesson-page { width: calc(100% - 20px); max-width: none; } }
 
     .lesson-reader-topbar {
 
@@ -2724,12 +2694,7 @@
        competing width.
     */
 
-    .holiday-lesson-page {
-
-        width:
-            calc(100% - 20px);
-
-    }
+.dashboard-content.holiday-lesson-page { width: calc(100% - 20px); } }
 
 
     .lesson-reader-header {
