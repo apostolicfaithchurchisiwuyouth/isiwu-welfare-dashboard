@@ -1,4 +1,3 @@
- js
 /* ============================================================
    AFC ISIU YOUTH PORTAL V2
    FILE: academic-help-modal.js
@@ -94,8 +93,6 @@ document.addEventListener(
 
         /* ====================================================
            MODAL
-           
-           DO NOT CHANGE
            ==================================================== */
 
         function openAcademicHelpModal() {
@@ -208,97 +205,15 @@ document.addEventListener(
 
 
         /* ====================================================
-           HOLIDAY CHECKING STATE
-           
-           IMPORTANT:
-           We do NOT show LOCKED while the API is checking.
-
-           The existing HOLIDAYS badge remains visible until
-           the backend confirms OPEN or CLOSED.
-           ==================================================== */
-
-        function setHolidayCheckingState() {
-
-            if (!holidayOption) {
-                return;
-            }
-
-
-            /*
-             * Keep the option visually neutral while checking.
-             */
-
-            holidayOption.classList.remove(
-                "is-locked"
-            );
-
-
-            /*
-             * It must still be inaccessible until the
-             * backend confirms that it is open.
-             */
-
-            holidayOption.setAttribute(
-                "aria-disabled",
-                "true"
-            );
-
-
-            holidayOption.setAttribute(
-                "tabindex",
-                "-1"
-            );
-
-
-            holidayOption.dataset.holidayOpen =
-                "false";
-
-
-            /*
-             * Keep the original badge from index.html:
-             *
-             * HOLIDAYS
-             *
-             * Do NOT change it to LOCKED while checking.
-             */
-
-            if (holidayBadge) {
-
-                holidayBadge.textContent =
-                    "HOLIDAYS";
-
-            }
-
-
-            if (holidayDescription) {
-
-                holidayDescription.textContent =
-                    "Use your school holiday to learn useful skills and discover new opportunities.";
-
-            }
-
-
-            /*
-             * Do not show the closed note while checking.
-             */
-
-            if (holidayNote) {
-
-                holidayNote.hidden =
-                    true;
-
-            }
-
-        }
-
-
-        /* ====================================================
            HOLIDAY ACCESS
            
            IMPORTANT:
            The Google Apps Script backend is the authority.
 
-           We do NOT use a manual true/false switch here.
+           We do NOT use a manual true/false switch.
+
+           While the API is checking, the original neutral
+           HOLIDAYS state is preserved.
            ==================================================== */
 
         async function configureHolidaySkills() {
@@ -309,16 +224,21 @@ document.addEventListener(
 
 
             /*
-             * Start with a neutral state.
+             * DO NOT show LOCKED here.
              *
-             * This prevents:
+             * The HTML already starts with:
              *
-             * LOCKED → OPEN
+             * HOLIDAYS
              *
-             * flickering on page load.
+             * We leave that state alone while the backend
+             * checks whether the programme is open.
+             *
+             * Access is still blocked because the dataset
+             * has not been set to "true".
              */
 
-            setHolidayCheckingState();
+            holidayOption.dataset.holidayOpen =
+                "false";
 
 
             try {
@@ -413,6 +333,12 @@ document.addEventListener(
                 }
 
 
+                /*
+                 * This branch is intentionally available
+                 * for future configuration, but the current
+                 * setting keeps access safely locked.
+                 */
+
                 setHolidayLockedState(
                     "Holiday Learning is currently unavailable."
                 );
@@ -472,6 +398,13 @@ document.addEventListener(
 
             }
 
+
+            /*
+             * The option may previously have received the
+             * locked click handler. Removing the attribute
+             * above is enough for keyboard semantics, while
+             * the click handler below also checks the state.
+             */
 
             holidayOption.setAttribute(
                 "aria-label",
@@ -579,8 +512,6 @@ document.addEventListener(
 
         /* ====================================================
            EVENTS
-           
-           DO NOT CHANGE
            ==================================================== */
 
         trigger.addEventListener(
