@@ -12,6 +12,7 @@
 
     <title>Holiday Learning | AFC Isiu Youth Portal</title>
 
+
     <!-- =========================================================
          PWA
     ========================================================== -->
@@ -149,21 +150,34 @@
 
             <section class="holiday-hero">
 
+                <div class="holiday-hero-glow hero-glow-one"></div>
+
+                <div class="holiday-hero-glow hero-glow-two"></div>
+
+
                 <div class="holiday-hero-copy">
 
-                    <span class="holiday-eyebrow">
-                        HOLIDAY LEARNING
-                    </span>
+                    <div class="holiday-hero-label">
+
+                        <span class="holiday-hero-label-dot"></span>
+
+                        <span>
+                            HOLIDAY LEARNING HUB
+                        </span>
+
+                    </div>
+
 
                     <h1>
                         Learn something useful
                         <span>this holiday.</span>
                     </h1>
 
+
                     <p>
-                        Your school break can be more than just a time
-                        to rest. Explore practical skills, discover
-                        new interests and prepare yourself for the future.
+                        Use your school break to explore practical
+                        skills, discover new interests and build
+                        something useful for your future.
                     </p>
 
 
@@ -176,6 +190,7 @@
                             <span class="holiday-status-dot"></span>
                             Checking programme...
                         </span>
+
 
                         <span
                             class="holiday-season"
@@ -191,22 +206,56 @@
 
                 <div class="holiday-hero-visual">
 
-                    <div class="holiday-visual-orbit orbit-one"></div>
+                    <div class="holiday-visual-ring ring-one"></div>
 
-                    <div class="holiday-visual-orbit orbit-two"></div>
+                    <div class="holiday-visual-ring ring-two"></div>
+
+                    <div class="holiday-visual-ring ring-three"></div>
+
 
                     <div class="holiday-visual-icon">
+
                         <i class="fa-solid fa-lightbulb"></i>
+
                     </div>
+
 
                     <div class="holiday-floating-card card-one">
-                        <i class="fa-solid fa-laptop-code"></i>
-                        <span>Digital Skills</span>
+
+                        <span class="holiday-floating-icon digital">
+                            <i class="fa-solid fa-laptop-code"></i>
+                        </span>
+
+                        <span>
+                            Digital Skills
+                        </span>
+
                     </div>
 
+
                     <div class="holiday-floating-card card-two">
-                        <i class="fa-solid fa-compass"></i>
-                        <span>Future Skills</span>
+
+                        <span class="holiday-floating-icon career">
+                            <i class="fa-solid fa-compass"></i>
+                        </span>
+
+                        <span>
+                            Future Skills
+                        </span>
+
+                    </div>
+
+
+                    <div class="holiday-floating-card card-three">
+
+                        <span class="holiday-floating-icon creative">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i>
+                        </span>
+
+                        <span>
+                            Be Creative
+                        </span>
+
                     </div>
 
                 </div>
@@ -216,12 +265,16 @@
 
             <!-- =================================================
                  CLOSED STATE
+                 
+                 Kept as a JavaScript hook, but deliberately
+                 removed from the visual page design.
             ================================================== -->
 
             <section
                 class="holiday-closed-state"
                 id="holidayClosedState"
                 hidden
+                aria-hidden="true"
             >
 
                 <div class="holiday-closed-icon">
@@ -240,19 +293,10 @@
 
                     <p id="holidayClosedMessage">
                         This programme is available during approved
-                        school holiday periods. Please check back
-                        when the next holiday programme opens.
+                        school holiday periods.
                     </p>
 
                 </div>
-
-                <a
-                    href="/"
-                    class="holiday-back-button"
-                >
-                    <i class="fa-solid fa-arrow-left"></i>
-                    Back to Home
-                </a>
 
             </section>
 
@@ -268,14 +312,15 @@
 
 
                 <!-- =============================================
-                     FEATURED
+                     START HERE
                 ============================================== -->
 
-                <section class="holiday-section">
+                <section class="holiday-section holiday-start-section">
 
-                    <div class="holiday-section-heading">
+                    <div class="holiday-section-heading holiday-start-heading">
 
                         <div>
+
                             <span class="holiday-section-kicker">
                                 START HERE
                             </span>
@@ -283,11 +328,13 @@
                             <h2>
                                 Choose something to learn
                             </h2>
+
                         </div>
 
+
                         <p>
-                            Short, practical learning you can complete
-                            at your own pace.
+                            Short, practical learning designed to
+                            help you use your holiday well.
                         </p>
 
                     </div>
@@ -298,19 +345,27 @@
                         id="holidayCategoryGrid"
                     >
 
+
                         <!-- DIGITAL SKILLS -->
 
                         <button
                             type="button"
-                            class="holiday-category-card"
+                            class="holiday-category-card digital-category"
                             data-category="Digital Skills"
                         >
 
                             <span class="holiday-category-icon digital">
+
                                 <i class="fa-solid fa-laptop-code"></i>
+
                             </span>
 
+
                             <span class="holiday-category-copy">
+
+                                <span class="holiday-category-number">
+                                    01
+                                </span>
 
                                 <strong>
                                     Digital Skills
@@ -323,7 +378,12 @@
 
                             </span>
 
-                            <i class="fa-solid fa-arrow-right"></i>
+
+                            <span class="holiday-category-arrow">
+
+                                <i class="fa-solid fa-arrow-up-right-from-square"></i>
+
+                            </span>
 
                         </button>
 
@@ -332,15 +392,22 @@
 
                         <button
                             type="button"
-                            class="holiday-category-card"
+                            class="holiday-category-card career-category"
                             data-category="Career & Future Skills"
                         >
 
                             <span class="holiday-category-icon career">
+
                                 <i class="fa-solid fa-compass"></i>
+
                             </span>
 
+
                             <span class="holiday-category-copy">
+
+                                <span class="holiday-category-number">
+                                    02
+                                </span>
 
                                 <strong>
                                     Career & Future Skills
@@ -353,7 +420,12 @@
 
                             </span>
 
-                            <i class="fa-solid fa-arrow-right"></i>
+
+                            <span class="holiday-category-arrow">
+
+                                <i class="fa-solid fa-arrow-up-right-from-square"></i>
+
+                            </span>
 
                         </button>
 
@@ -362,28 +434,40 @@
 
                         <button
                             type="button"
-                            class="holiday-category-card"
+                            class="holiday-category-card challenge-category"
                             data-category="Holiday Challenges"
                         >
 
                             <span class="holiday-category-icon challenge">
+
                                 <i class="fa-solid fa-bolt"></i>
+
                             </span>
 
+
                             <span class="holiday-category-copy">
+
+                                <span class="holiday-category-number">
+                                    03
+                                </span>
 
                                 <strong>
                                     Holiday Challenges
                                 </strong>
 
                                 <small>
-                                    Take small challenges that help
-                                    you practise what you learn.
+                                    Take practical challenges and
+                                    practise what you learn.
                                 </small>
 
                             </span>
 
-                            <i class="fa-solid fa-arrow-right"></i>
+
+                            <span class="holiday-category-arrow">
+
+                                <i class="fa-solid fa-arrow-up-right-from-square"></i>
+
+                            </span>
 
                         </button>
 
@@ -392,15 +476,22 @@
 
                         <button
                             type="button"
-                            class="holiday-category-card"
+                            class="holiday-category-card creative-category"
                             data-category="Creative Skills"
                         >
 
                             <span class="holiday-category-icon creative">
+
                                 <i class="fa-solid fa-wand-magic-sparkles"></i>
+
                             </span>
 
+
                             <span class="holiday-category-copy">
+
+                                <span class="holiday-category-number">
+                                    04
+                                </span>
 
                                 <strong>
                                     Creative Skills
@@ -413,7 +504,12 @@
 
                             </span>
 
-                            <i class="fa-solid fa-arrow-right"></i>
+
+                            <span class="holiday-category-arrow">
+
+                                <i class="fa-solid fa-arrow-up-right-from-square"></i>
+
+                            </span>
 
                         </button>
 
@@ -423,38 +519,61 @@
 
 
                 <!-- =============================================
-                     LESSONS
+                     LEARNING LIBRARY
                 ============================================== -->
 
                 <section
-                    class="holiday-section"
+                    class="holiday-section holiday-library-section"
                     id="holidayLessonsSection"
                 >
 
-                    <div class="holiday-section-heading">
+                    <div class="holiday-library-header">
 
                         <div>
 
-                            <span class="holiday-section-kicker">
-                                LEARNING LIBRARY
-                            </span>
+                            <div class="holiday-library-title-row">
+
+                                <span class="holiday-section-kicker">
+                                    LEARNING LIBRARY
+                                </span>
+
+                                <span class="holiday-library-count">
+                                    Practical courses
+                                </span>
+
+                            </div>
+
 
                             <h2>
                                 Featured learning
                             </h2>
 
+
+                            <p>
+                                Pick a course, start learning and build
+                                a skill you can actually use.
+                            </p>
+
                         </div>
+
 
                         <button
                             type="button"
                             class="holiday-filter-button"
                             id="holidayClearFilter"
                         >
-                            Show all
+                            <span>
+                                Show all
+                            </span>
+
+                            <i class="fa-solid fa-arrow-right"></i>
+
                         </button>
 
                     </div>
 
+
+                    <!-- FILTERS -->
 
                     <div
                         class="holiday-filter-row"
@@ -469,6 +588,7 @@
                             All
                         </button>
 
+
                         <button
                             type="button"
                             class="holiday-filter"
@@ -476,6 +596,7 @@
                         >
                             Digital Skills
                         </button>
+
 
                         <button
                             type="button"
@@ -485,6 +606,7 @@
                             Future Skills
                         </button>
 
+
                         <button
                             type="button"
                             class="holiday-filter"
@@ -492,6 +614,7 @@
                         >
                             Challenges
                         </button>
+
 
                         <button
                             type="button"
@@ -504,11 +627,19 @@
                     </div>
 
 
-                    <div
-                        class="holiday-lesson-grid"
-                        id="holidayLessonGrid"
-                    ></div>
+                    <!-- COURSE SLIDER -->
 
+                    <div class="holiday-library-slider">
+
+                        <div
+                            class="holiday-lesson-grid"
+                            id="holidayLessonGrid"
+                        ></div>
+
+                    </div>
+
+
+                    <!-- EMPTY -->
 
                     <div
                         class="holiday-empty-state"
@@ -517,12 +648,16 @@
                     >
 
                         <div class="holiday-empty-icon">
+
                             <i class="fa-regular fa-folder-open"></i>
+
                         </div>
+
 
                         <h3>
                             Nothing here yet
                         </h3>
+
 
                         <p>
                             More learning activities will be added
@@ -535,12 +670,12 @@
 
 
                 <!-- =============================================
-                     YOUR LEARNING
+                     YOUR LEARNING / PROGRESS
                 ============================================== -->
 
-                <section class="holiday-section">
+                <section class="holiday-section holiday-progress-section">
 
-                    <div class="holiday-section-heading">
+                    <div class="holiday-progress-heading">
 
                         <div>
 
@@ -549,7 +684,7 @@
                             </span>
 
                             <h2>
-                                Keep track of your progress
+                                Track your progress
                             </h2>
 
                         </div>
@@ -559,113 +694,46 @@
 
                     <div class="holiday-progress-card">
 
-                        <div class="holiday-progress-icon">
-                            <i class="fa-solid fa-chart-line"></i>
+                        <div class="holiday-progress-visual">
+
+                            <div class="holiday-progress-icon">
+
+                                <i class="fa-solid fa-chart-line"></i>
+
+                            </div>
+
+                            <span class="holiday-progress-pulse"></span>
+
                         </div>
+
 
                         <div class="holiday-progress-copy">
 
+                            <span class="holiday-progress-label">
+                                YOUR JOURNEY
+                            </span>
+
                             <strong>
-                                Your learning journey
+                                Keep building your skills
                             </strong>
 
                             <p>
                                 Lessons you start or complete will
-                                appear here as we add progress tracking.
+                                appear here as progress tracking grows.
                             </p>
 
                         </div>
 
-                        <span class="holiday-progress-value">
-                            Coming soon
-                        </span>
 
-                    </div>
+                        <div class="holiday-progress-value">
 
-                </section>
+                            <strong>
+                                Coming soon
+                            </strong>
 
-
-                <!-- =============================================
-                     HOW IT WORKS
-                ============================================== -->
-
-                <section class="holiday-section">
-
-                    <div class="holiday-section-heading">
-
-                        <div>
-
-                            <span class="holiday-section-kicker">
-                                HOW IT WORKS
+                            <span>
+                                Progress tracking
                             </span>
-
-                            <h2>
-                                Learn at your own pace
-                            </h2>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="holiday-steps">
-
-                        <div class="holiday-step">
-
-                            <span class="holiday-step-number">
-                                01
-                            </span>
-
-                            <div>
-                                <strong>
-                                    Choose a skill
-                                </strong>
-
-                                <p>
-                                    Pick something useful that
-                                    interests you.
-                                </p>
-                            </div>
-
-                        </div>
-
-
-                        <div class="holiday-step">
-
-                            <span class="holiday-step-number">
-                                02
-                            </span>
-
-                            <div>
-                                <strong>
-                                    Learn
-                                </strong>
-
-                                <p>
-                                    Follow the short lesson and
-                                    practise what you learn.
-                                </p>
-                            </div>
-
-                        </div>
-
-
-                        <div class="holiday-step">
-
-                            <span class="holiday-step-number">
-                                03
-                            </span>
-
-                            <div>
-                                <strong>
-                                    Apply it
-                                </strong>
-
-                                <p>
-                                    Complete a challenge or use
-                                    the skill in a real situation.
-                                </p>
-                            </div>
 
                         </div>
 
@@ -686,9 +754,8 @@
                 <i class="fa-solid fa-circle-info"></i>
 
                 <span>
-                    Holiday Learning is designed to complement
-                    your school education with practical skills
-                    and personal development.
+                    Holiday Learning complements your school education
+                    with practical skills and personal development.
                 </span>
 
             </div>
@@ -748,3 +815,4 @@
 </body>
 
 </html>
+ 
