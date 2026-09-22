@@ -1,816 +1,1535 @@
 /* ============================================================
-   AFC ISIU YOUTH PORTAL V2
-   FILE: quiz-participation.css
-   PURPOSE: QUIZ PARTICIPATION PAGE
-   ============================================================ */
-
+AFC ISIU YOUTH PORTAL V2
+FILE: quiz-participation.css
+PURPOSE: QUIZ PARTICIPATION PAGE
+============================================================ */
 
 /* ============================================================
-   PAGE FOUNDATION
-   ============================================================ */
+PAGE FOUNDATION
+============================================================ */
 
 .quiz-participation-page {
-    width: min(100% - 32px, 1500px);
-    max-width: 1500px;
 
-    margin-left: auto;
-    margin-right: auto;
+ 
+width: min(100% - 32px, 1500px);
 
-    padding-top: 24px;
-    padding-bottom: 110px;
+max-width: 1500px;
+
+margin-left: auto;
+margin-right: auto;
+
+padding-top: 24px;
+padding-bottom: 110px;
+ 
+
 }
-
 
 /* ============================================================
-   HERO
-   ============================================================ */
+PAGE HEADER
+============================================================ */
 
-.participation-hero {
-    width: 100%;
+.participation-page-header {
 
-    margin-bottom: 24px;
+ 
+display: flex;
+
+align-items: flex-end;
+
+justify-content: space-between;
+
+gap: 28px;
+
+margin-bottom: 18px;
+ 
+
 }
 
+.participation-page-heading {
 
-.participation-hero-content {
-    padding: 10px 0 8px;
+ 
+min-width: 0;
+ 
+
 }
 
+.participation-page-kicker {
 
-.participation-hero .profile-eyebrow {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
+ 
+display: inline-flex;
 
-    margin-bottom: 10px;
+align-items: center;
 
-    font-family: "DM Sans", sans-serif;
-    font-size: 0.76rem;
-    font-weight: 700;
+gap: 7px;
 
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
+margin-bottom: 7px;
+
+font-family: "DM Sans", sans-serif;
+
+font-size: 0.68rem;
+
+font-weight: 800;
+
+letter-spacing: 0.09em;
+
+text-transform: uppercase;
+
+color: #4A0754;
+ 
+
 }
 
+.participation-page-kicker i {
 
-.participation-hero h1 {
-    margin: 0;
+ 
+font-size: 0.7rem;
+ 
 
-    font-family: "Bricolage Grotesque", sans-serif;
-    font-size: clamp(1.8rem, 4vw, 3rem);
-    line-height: 1.05;
-    font-weight: 750;
-
-    letter-spacing: -0.035em;
-
-    color: #0A0016;
 }
 
+.participation-page-heading h1 {
 
-.participation-hero h1 span {
-    display: block;
+ 
+margin: 0;
 
-    color: #4A0754;
+font-family: "Bricolage Grotesque", sans-serif;
+
+font-size: clamp(1.55rem, 3vw, 2.15rem);
+
+line-height: 1.1;
+
+font-weight: 750;
+
+letter-spacing: -0.025em;
+
+color: #0A0016;
+ 
+
 }
 
+.participation-page-heading p {
 
-.participation-hero p {
-    max-width: 650px;
+ 
+max-width: 580px;
 
-    margin: 12px 0 0;
+margin: 7px 0 0;
 
-    font-family: "DM Sans", sans-serif;
-    font-size: 0.92rem;
-    line-height: 1.65;
+font-family: "DM Sans", sans-serif;
 
-    color: #64748b;
+font-size: 0.8rem;
+
+line-height: 1.55;
+
+color: #64748b;
+ 
+
 }
-
 
 /* ============================================================
-   CONTROL CARD
-   ============================================================ */
+LESSON CONTROL
+============================================================ */
 
-.participation-control-card {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 24px;
+.participation-lesson-control {
 
-    width: 100%;
+ 
+flex: 0 0 230px;
+ 
 
-    padding: 20px 22px;
-
-    margin-bottom: 20px;
-
-    background: #ffffff;
-
-    border: 1px solid #eee8f1;
-    border-radius: 18px;
-
-    box-shadow:
-        0 8px 30px rgba(74, 7, 84, 0.06);
 }
 
+.participation-lesson-control label {
 
-.participation-control-copy {
-    min-width: 0;
+ 
+display: block;
+
+margin-bottom: 6px;
+
+font-family: "DM Sans", sans-serif;
+
+font-size: 0.68rem;
+
+font-weight: 700;
+
+color: #64748b;
+ 
+
 }
-
-
-.participation-section-label {
-    display: block;
-
-    margin-bottom: 5px;
-
-    font-family: "DM Sans", sans-serif;
-    font-size: 0.68rem;
-    font-weight: 800;
-
-    letter-spacing: 0.1em;
-
-    color: #4A0754;
-}
-
-
-.participation-control-copy h2 {
-    margin: 0;
-
-    font-family: "Bricolage Grotesque", sans-serif;
-    font-size: 1.12rem;
-    font-weight: 700;
-
-    color: #0A0016;
-}
-
-
-.participation-control-copy p {
-    margin: 4px 0 0;
-
-    font-family: "DM Sans", sans-serif;
-    font-size: 0.78rem;
-
-    color: #64748b;
-}
-
-
-.participation-select-wrap {
-    flex: 0 0 auto;
-
-    min-width: 230px;
-}
-
 
 .participation-lesson-select {
-    width: 100%;
 
-    min-height: 44px;
+ 
+width: 100%;
 
-    padding: 0 40px 0 14px;
+height: 42px;
 
-    font-family: "DM Sans", sans-serif;
-    font-size: 0.84rem;
-    font-weight: 650;
+padding: 0 38px 0 13px;
 
-    color: #0A0016;
+font-family: "DM Sans", sans-serif;
 
-    background-color: #ffffff;
+font-size: 0.8rem;
 
-    border: 1px solid #ddd5e1;
-    border-radius: 12px;
+font-weight: 650;
 
-    outline: none;
+color: #0A0016;
 
-    cursor: pointer;
+background: #ffffff;
+
+border: 1px solid #ddd5e1;
+
+border-radius: 11px;
+
+outline: none;
+
+cursor: pointer;
+ 
+
 }
-
 
 .participation-lesson-select:focus {
-    border-color: #4A0754;
 
-    box-shadow:
-        0 0 0 3px rgba(74, 7, 84, 0.08);
+ 
+border-color: #4A0754;
+
+box-shadow:
+    0 0 0 3px rgba(74, 7, 84, 0.08);
+ 
+
 }
 
+/* ============================================================
+CURRENT QUIZ BAR
+============================================================ */
+
+.participation-current-bar {
+
+ 
+display: flex;
+
+align-items: center;
+
+justify-content: space-between;
+
+gap: 20px;
+
+width: 100%;
+
+min-height: 68px;
+
+padding: 12px 16px;
+
+margin-bottom: 18px;
+
+background: #ffffff;
+
+border: 1px solid #eee8f1;
+
+border-radius: 15px;
+
+box-shadow:
+    0 5px 22px rgba(74, 7, 84, 0.04);
+ 
+
+}
+
+.participation-current-main {
+
+ 
+display: flex;
+
+align-items: center;
+
+gap: 11px;
+
+min-width: 0;
+ 
+
+}
+
+.participation-current-icon {
+
+ 
+display: grid;
+
+place-items: center;
+
+flex: 0 0 38px;
+
+width: 38px;
+
+height: 38px;
+
+border-radius: 10px;
+
+background: #f3edf5;
+
+color: #4A0754;
+
+font-size: 0.85rem;
+ 
+
+}
+
+.participation-current-copy {
+
+ 
+display: flex;
+
+flex-direction: column;
+
+min-width: 0;
+ 
+
+}
+
+.participation-current-copy > span {
+
+ 
+margin-bottom: 2px;
+
+font-family: "DM Sans", sans-serif;
+
+font-size: 0.6rem;
+
+font-weight: 800;
+
+letter-spacing: 0.09em;
+
+color: #94a3b8;
+ 
+
+}
+
+.participation-current-copy strong {
+
+ 
+overflow: hidden;
+
+font-family: "Bricolage Grotesque", sans-serif;
+
+font-size: 0.92rem;
+
+font-weight: 700;
+
+color: #0A0016;
+
+text-overflow: ellipsis;
+
+white-space: nowrap;
+ 
+
+}
 
 /* ============================================================
-   STATUS CARDS
-   ============================================================ */
+QUIZ STATUS
+============================================================ */
+
+.participation-quiz-status {
+
+ 
+display: inline-flex;
+
+align-items: center;
+
+gap: 7px;
+
+flex: 0 0 auto;
+
+padding: 7px 10px;
+
+border-radius: 9px;
+
+background: #f8f5f9;
+
+font-family: "DM Sans", sans-serif;
+
+font-size: 0.68rem;
+
+font-weight: 700;
+
+color: #64748b;
+ 
+
+}
+
+.participation-status-dot {
+
+ 
+width: 7px;
+
+height: 7px;
+
+border-radius: 50%;
+
+background: #94a3b8;
+ 
+
+}
+
+.participation-quiz-status.is-open {
+
+ 
+color: #166534;
+
+background: #f0fdf4;
+ 
+
+}
+
+.participation-quiz-status.is-open .participation-status-dot {
+
+ 
+background: #16a34a;
+ 
+
+}
+
+.participation-quiz-status.is-closed {
+
+ 
+color: #7c2d12;
+
+background: #fff7ed;
+ 
+
+}
+
+.participation-quiz-status.is-closed .participation-status-dot {
+
+ 
+background: #ea580c;
+ 
+
+}
+
+/* ============================================================
+STATUS CARDS
+============================================================ */
 
 .participation-status-card {
-    display: flex;
-    align-items: center;
-    gap: 12px;
 
-    width: 100%;
+ 
+display: flex;
 
-    padding: 18px 20px;
+align-items: center;
 
-    margin-bottom: 20px;
+gap: 11px;
 
-    background: #ffffff;
+width: 100%;
 
-    border: 1px solid #eee8f1;
-    border-radius: 16px;
+padding: 15px 17px;
 
-    font-family: "DM Sans", sans-serif;
-    font-size: 0.84rem;
-    font-weight: 600;
+margin-bottom: 18px;
 
-    color: #475569;
+background: #ffffff;
 
-    box-shadow:
-        0 6px 24px rgba(74, 7, 84, 0.04);
+border: 1px solid #eee8f1;
+
+border-radius: 14px;
+
+font-family: "DM Sans", sans-serif;
+
+font-size: 0.78rem;
+
+font-weight: 600;
+
+color: #475569;
+
+box-shadow:
+    0 5px 22px rgba(74, 7, 84, 0.04);
+ 
+
 }
-
 
 .participation-status-card > i {
-    color: #4A0754;
-}
 
+ 
+color: #4A0754;
+ 
+
+}
 
 .participation-status-error {
-    color: #991b1b;
 
-    border-color: #fecaca;
+ 
+color: #991b1b;
 
-    background: #fff7f7;
+border-color: #fecaca;
+
+background: #fff7f7;
+ 
+
 }
-
 
 .participation-status-error > i {
-    color: #dc2626;
-}
 
+ 
+color: #dc2626;
+ 
+
+}
 
 .participation-status-error div {
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
-}
 
+ 
+display: flex;
+
+flex-direction: column;
+
+gap: 2px;
+ 
+
+}
 
 .participation-status-error strong {
-    font-family: "Bricolage Grotesque", sans-serif;
-    font-size: 0.88rem;
 
-    color: #7f1d1d;
+ 
+font-family: "Bricolage Grotesque", sans-serif;
+
+font-size: 0.82rem;
+
+color: #7f1d1d;
+ 
+
 }
-
 
 .participation-status-error span {
-    font-size: 0.78rem;
 
-    color: #991b1b;
+ 
+font-size: 0.74rem;
+
+color: #991b1b;
+ 
+
 }
-
 
 /* ============================================================
-   SUMMARY GRID
-   ============================================================ */
+SUMMARY
+============================================================ */
 
 .participation-summary-grid {
-    display: grid;
 
-    grid-template-columns:
-        repeat(3, minmax(0, 1fr));
+ 
+display: grid;
 
-    gap: 16px;
+grid-template-columns:
+    repeat(4, minmax(0, 1fr));
 
-    margin-bottom: 18px;
+gap: 12px;
+
+margin-bottom: 16px;
+ 
+
 }
-
 
 .participation-summary-card {
-    display: flex;
-    align-items: center;
-    gap: 14px;
 
-    min-width: 0;
+ 
+display: flex;
 
-    padding: 18px;
+align-items: center;
 
-    background: #ffffff;
+gap: 11px;
 
-    border: 1px solid #eee8f1;
-    border-radius: 16px;
+min-width: 0;
 
-    box-shadow:
-        0 6px 24px rgba(74, 7, 84, 0.04);
+padding: 15px;
+
+background: #ffffff;
+
+border: 1px solid #eee8f1;
+
+border-radius: 14px;
+
+box-shadow:
+    0 5px 22px rgba(74, 7, 84, 0.035);
+ 
+
 }
-
 
 .participation-summary-icon {
-    display: grid;
-    place-items: center;
 
-    flex: 0 0 42px;
+ 
+display: grid;
 
-    width: 42px;
-    height: 42px;
+place-items: center;
 
-    border-radius: 12px;
+flex: 0 0 36px;
 
-    background: #f3edf5;
+width: 36px;
 
-    color: #4A0754;
+height: 36px;
 
-    font-size: 0.92rem;
+border-radius: 10px;
+
+background: #f3edf5;
+
+color: #4A0754;
+
+font-size: 0.78rem;
+ 
+
 }
-
 
 .participation-summary-card-success
 .participation-summary-icon {
-    background: #ecfdf5;
-    color: #15803d;
-}
 
+ 
+background: #ecfdf5;
+
+color: #15803d;
+ 
+
+}
 
 .participation-summary-card-pending
 .participation-summary-icon {
-    background: #fff7ed;
-    color: #c2410c;
+
+ 
+background: #fff7ed;
+
+color: #c2410c;
+ 
+
 }
 
+.participation-summary-card-rate
+.participation-summary-icon {
+
+ 
+background: #f5f3ff;
+
+color: #6d28d9;
+ 
+
+}
 
 .participation-summary-copy {
-    display: flex;
-    flex-direction: column;
 
-    min-width: 0;
+ 
+display: flex;
+
+flex-direction: column;
+
+min-width: 0;
+ 
+
 }
-
-
-.participation-summary-copy strong {
-    font-family: "Bricolage Grotesque", sans-serif;
-    font-size: 1.35rem;
-    line-height: 1;
-
-    color: #0A0016;
-}
-
 
 .participation-summary-copy span {
-    margin-top: 5px;
 
-    font-family: "DM Sans", sans-serif;
-    font-size: 0.73rem;
-    font-weight: 600;
+ 
+order: 2;
 
-    color: #64748b;
+margin-top: 3px;
+
+font-family: "DM Sans", sans-serif;
+
+font-size: 0.66rem;
+
+font-weight: 600;
+
+color: #64748b;
+ 
+
 }
 
+.participation-summary-copy strong {
+
+ 
+order: 1;
+
+font-family: "Bricolage Grotesque", sans-serif;
+
+font-size: 1.18rem;
+
+line-height: 1;
+
+font-weight: 750;
+
+color: #0A0016;
+ 
+
+}
 
 /* ============================================================
-   SEARCH
-   ============================================================ */
+TOOLBAR
+============================================================ */
 
-.participation-search-card {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+.participation-toolbar {
 
-    width: 100%;
+ 
+display: flex;
 
-    padding: 0 14px;
+align-items: center;
 
-    margin-bottom: 18px;
+justify-content: space-between;
 
-    background: #ffffff;
+gap: 15px;
 
-    border: 1px solid #eee8f1;
-    border-radius: 14px;
+margin-bottom: 14px;
+ 
 
-    box-shadow:
-        0 6px 24px rgba(74, 7, 84, 0.04);
 }
 
+.participation-search {
 
-.participation-search-icon {
-    display: grid;
-    place-items: center;
+ 
+display: flex;
 
-    flex: 0 0 30px;
+align-items: center;
 
-    width: 30px;
-    height: 30px;
+gap: 9px;
 
-    color: #64748b;
+width: min(100%, 360px);
 
-    font-size: 0.82rem;
+min-height: 42px;
+
+padding: 0 12px;
+
+background: #ffffff;
+
+border: 1px solid #eee8f1;
+
+border-radius: 11px;
+
+box-shadow:
+    0 4px 18px rgba(74, 7, 84, 0.025);
+ 
+
 }
 
+.participation-search i {
 
-.participation-search-card input {
-    width: 100%;
+ 
+flex: 0 0 auto;
 
-    min-height: 48px;
+color: #94a3b8;
 
-    padding: 0;
+font-size: 0.75rem;
+ 
 
-    font-family: "DM Sans", sans-serif;
-    font-size: 0.82rem;
-
-    color: #0A0016;
-
-    background: transparent;
-
-    border: 0;
-    outline: 0;
 }
 
+.participation-search input {
 
-.participation-search-card input::placeholder {
-    color: #94a3b8;
+ 
+width: 100%;
+
+min-height: 40px;
+
+padding: 0;
+
+font-family: "DM Sans", sans-serif;
+
+font-size: 0.77rem;
+
+color: #0A0016;
+
+background: transparent;
+
+border: 0;
+
+outline: 0;
+ 
+
 }
 
+.participation-search input::placeholder {
+
+ 
+color: #a1aab8;
+ 
+
+}
+
+.participation-toolbar-note {
+
+ 
+display: flex;
+
+align-items: center;
+
+gap: 6px;
+
+font-family: "DM Sans", sans-serif;
+
+font-size: 0.68rem;
+
+font-weight: 600;
+
+color: #94a3b8;
+ 
+
+}
+
+.participation-toolbar-note i {
+
+ 
+font-size: 0.7rem;
+ 
+
+}
 
 /* ============================================================
-   LISTS GRID
-   ============================================================ */
+LIST GRID
+============================================================ */
 
 .participation-lists-grid {
-    display: grid;
+
+ 
+display: grid;
+
+grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+gap: 16px;
+ 
+
+}
+
+.participation-list-card {
+
+ 
+min-width: 0;
+
+overflow: hidden;
+
+background: #ffffff;
+
+border: 1px solid #eee8f1;
+
+border-radius: 15px;
+
+box-shadow:
+    0 6px 25px rgba(74, 7, 84, 0.04);
+ 
+
+}
+
+/* ============================================================
+LIST HEADER
+============================================================ */
+
+.participation-list-header {
+
+ 
+display: flex;
+
+align-items: center;
+
+justify-content: space-between;
+
+gap: 14px;
+
+padding: 16px 17px;
+
+border-bottom: 1px solid #f0ebf2;
+ 
+
+}
+
+.participation-list-header h2 {
+
+ 
+margin: 4px 0 0;
+
+font-family: "Bricolage Grotesque", sans-serif;
+
+font-size: 0.94rem;
+
+font-weight: 700;
+
+color: #0A0016;
+ 
+
+}
+
+.participation-list-kicker {
+
+ 
+display: inline-flex;
+
+align-items: center;
+
+gap: 6px;
+
+font-family: "DM Sans", sans-serif;
+
+font-size: 0.59rem;
+
+font-weight: 800;
+
+letter-spacing: 0.09em;
+ 
+
+}
+
+.participation-list-kicker-success {
+
+ 
+color: #15803d;
+ 
+
+}
+
+.participation-list-kicker-pending {
+
+ 
+color: #c2410c;
+ 
+
+}
+
+.participation-list-dot {
+
+ 
+width: 6px;
+
+height: 6px;
+
+border-radius: 50%;
+
+background: currentColor;
+ 
+
+}
+
+.participation-list-count {
+
+ 
+display: grid;
+
+place-items: center;
+
+flex: 0 0 auto;
+
+min-width: 31px;
+
+height: 27px;
+
+padding: 0 8px;
+
+border-radius: 8px;
+
+font-family: "DM Sans", sans-serif;
+
+font-size: 0.68rem;
+
+font-weight: 800;
+ 
+
+}
+
+.participation-list-count-success {
+
+ 
+color: #166534;
+
+background: #dcfce7;
+ 
+
+}
+
+.participation-list-count-pending {
+
+ 
+color: #9a3412;
+
+background: #ffedd5;
+ 
+
+}
+
+/* ============================================================
+MEMBER LIST
+============================================================ */
+
+.participation-member-list {
+
+ 
+display: flex;
+
+flex-direction: column;
+
+padding: 2px 17px 5px;
+ 
+
+}
+
+.participation-member-item {
+
+ 
+display: flex;
+
+align-items: center;
+
+gap: 10px;
+
+min-width: 0;
+
+padding: 10px 0;
+
+border-bottom: 1px solid #f5f1f6;
+ 
+
+}
+
+.participation-member-item:last-child {
+
+ 
+border-bottom: 0;
+ 
+
+}
+
+/* ============================================================
+MEMBER AVATAR
+============================================================ */
+
+.participation-member-avatar {
+
+ 
+display: grid;
+
+place-items: center;
+
+flex: 0 0 36px;
+
+width: 36px;
+
+height: 36px;
+
+border-radius: 11px;
+
+background: #f3edf5;
+
+color: #4A0754;
+
+font-family: "Bricolage Grotesque", sans-serif;
+
+font-size: 0.68rem;
+
+font-weight: 750;
+ 
+
+}
+
+.participation-member-item.pending
+.participation-member-avatar {
+
+ 
+background: #fff7ed;
+
+color: #c2410c;
+ 
+
+}
+
+/* ============================================================
+MEMBER DETAILS
+============================================================ */
+
+.participation-member-details {
+
+ 
+display: flex;
+
+flex-direction: column;
+
+gap: 2px;
+
+min-width: 0;
+
+flex: 1;
+ 
+
+}
+
+.participation-member-name {
+
+ 
+overflow: hidden;
+
+font-family: "DM Sans", sans-serif;
+
+font-size: 0.76rem;
+
+font-weight: 700;
+
+color: #1e293b;
+
+text-overflow: ellipsis;
+
+white-space: nowrap;
+ 
+
+}
+
+.participation-member-meta {
+
+ 
+display: flex;
+
+align-items: center;
+
+gap: 7px;
+
+min-width: 0;
+
+font-family: "DM Sans", sans-serif;
+
+font-size: 0.62rem;
+
+color: #94a3b8;
+ 
+
+}
+
+.participation-member-id {
+
+ 
+overflow: hidden;
+
+text-overflow: ellipsis;
+
+white-space: nowrap;
+ 
+
+}
+
+.participation-member-meta-separator {
+
+ 
+flex: 0 0 auto;
+
+width: 3px;
+
+height: 3px;
+
+border-radius: 50%;
+
+background: #cbd5e1;
+ 
+
+}
+
+/* ============================================================
+MEMBER GROUP / ROLE
+============================================================ */
+
+.participation-member-tags {
+
+ 
+display: flex;
+
+align-items: center;
+
+gap: 5px;
+
+flex: 0 0 auto;
+ 
+
+}
+
+.participation-member-tag {
+
+ 
+padding: 4px 7px;
+
+border-radius: 6px;
+
+font-family: "DM Sans", sans-serif;
+
+font-size: 0.56rem;
+
+font-weight: 700;
+
+color: #64748b;
+
+background: #f8fafc;
+
+border: 1px solid #edf0f3;
+ 
+
+}
+
+/* ============================================================
+EMPTY STATE
+============================================================ */
+
+.participation-empty-state {
+
+ 
+display: flex;
+
+align-items: center;
+
+flex-direction: column;
+
+gap: 5px;
+
+padding: 34px 18px 30px;
+
+text-align: center;
+ 
+
+}
+
+.participation-empty-icon {
+
+ 
+display: grid;
+
+place-items: center;
+
+width: 36px;
+
+height: 36px;
+
+margin-bottom: 3px;
+
+border-radius: 10px;
+
+background: #f8fafc;
+
+color: #94a3b8;
+
+font-size: 0.8rem;
+ 
+
+}
+
+.participation-empty-state strong {
+
+ 
+font-family: "Bricolage Grotesque", sans-serif;
+
+font-size: 0.8rem;
+
+color: #334155;
+ 
+
+}
+
+.participation-empty-state span {
+
+ 
+max-width: 260px;
+
+font-family: "DM Sans", sans-serif;
+
+font-size: 0.68rem;
+
+line-height: 1.5;
+
+color: #94a3b8;
+ 
+
+}
+
+/* ============================================================
+ACCESSIBILITY
+============================================================ */
+
+.hidden {
+
+ 
+display: none !important;
+ 
+
+}
+
+.sr-only {
+
+ 
+position: absolute;
+
+width: 1px;
+
+height: 1px;
+
+padding: 0;
+
+margin: -1px;
+
+overflow: hidden;
+
+clip: rect(0, 0, 0, 0);
+
+white-space: nowrap;
+
+border: 0;
+ 
+
+}
+
+/* ============================================================
+TABLET
+============================================================ */
+
+@media (max-width: 900px) {
+
+ 
+.participation-page-header {
+
+    align-items: stretch;
+
+    flex-direction: column;
+
+    gap: 14px;
+
+}
+
+
+.participation-lesson-control {
+
+    width: 100%;
+
+    flex-basis: auto;
+
+}
+
+
+.participation-summary-grid {
 
     grid-template-columns:
         repeat(2, minmax(0, 1fr));
 
-    gap: 18px;
 }
+ 
 
-
-.participation-list-card {
-    min-width: 0;
-
-    padding: 20px;
-
-    background: #ffffff;
-
-    border: 1px solid #eee8f1;
-    border-radius: 18px;
-
-    box-shadow:
-        0 8px 30px rgba(74, 7, 84, 0.05);
 }
-
 
 /* ============================================================
-   LIST HEADER
-   ============================================================ */
-
-.participation-list-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 14px;
-
-    padding-bottom: 16px;
-
-    border-bottom: 1px solid #f0ebf2;
-}
-
-
-.participation-list-eyebrow {
-    display: block;
-
-    margin-bottom: 4px;
-
-    font-family: "DM Sans", sans-serif;
-    font-size: 0.65rem;
-    font-weight: 800;
-
-    letter-spacing: 0.1em;
-
-    color: #64748b;
-}
-
-
-.participation-list-header h2 {
-    margin: 0;
-
-    font-family: "Bricolage Grotesque", sans-serif;
-    font-size: 1.05rem;
-    font-weight: 700;
-
-    color: #0A0016;
-}
-
-
-.participation-list-count {
-    display: grid;
-    place-items: center;
-
-    flex: 0 0 auto;
-
-    min-width: 34px;
-    height: 30px;
-
-    padding: 0 9px;
-
-    border-radius: 9px;
-
-    font-family: "DM Sans", sans-serif;
-    font-size: 0.74rem;
-    font-weight: 800;
-}
-
-
-.participation-list-count-success {
-    color: #166534;
-    background: #dcfce7;
-}
-
-
-.participation-list-count-pending {
-    color: #9a3412;
-    background: #ffedd5;
-}
-
-
-/* ============================================================
-   MEMBER LIST
-   ============================================================ */
-
-.participation-member-list {
-    display: flex;
-    flex-direction: column;
-
-    margin-top: 6px;
-}
-
-
-.participation-member-item {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-
-    min-width: 0;
-
-    padding: 11px 2px;
-
-    border-bottom: 1px solid #f5f1f6;
-}
-
-
-.participation-member-item:last-child {
-    border-bottom: 0;
-}
-
-
-.participation-member-avatar {
-    display: grid;
-    place-items: center;
-
-    flex: 0 0 34px;
-
-    width: 34px;
-    height: 34px;
-
-    border-radius: 10px;
-
-    background: #f3edf5;
-
-    font-family: "Bricolage Grotesque", sans-serif;
-    font-size: 0.76rem;
-    font-weight: 750;
-
-    color: #4A0754;
-}
-
-
-.participation-member-item.pending
-.participation-member-avatar {
-    background: #fff7ed;
-    color: #c2410c;
-}
-
-
-.participation-member-name {
-    min-width: 0;
-
-    overflow: hidden;
-
-    font-family: "DM Sans", sans-serif;
-    font-size: 0.8rem;
-    font-weight: 650;
-
-    color: #1e293b;
-
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-
-/* ============================================================
-   EMPTY STATE
-   ============================================================ */
-
-.participation-empty-state {
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-
-    gap: 6px;
-
-    padding: 36px 20px 28px;
-
-    text-align: center;
-}
-
-
-.participation-empty-state > i {
-    margin-bottom: 4px;
-
-    font-size: 1.4rem;
-
-    color: #94a3b8;
-}
-
-
-.participation-empty-state strong {
-    font-family: "Bricolage Grotesque", sans-serif;
-    font-size: 0.88rem;
-
-    color: #334155;
-}
-
-
-.participation-empty-state span {
-    max-width: 260px;
-
-    font-family: "DM Sans", sans-serif;
-    font-size: 0.74rem;
-    line-height: 1.55;
-
-    color: #94a3b8;
-}
-
-
-/* ============================================================
-   ACCESSIBILITY
-   ============================================================ */
-
-.sr-only {
-    position: absolute;
-
-    width: 1px;
-    height: 1px;
-
-    padding: 0;
-    margin: -1px;
-
-    overflow: hidden;
-
-    clip: rect(0, 0, 0, 0);
-
-    white-space: nowrap;
-
-    border: 0;
-}
-
-
-.hidden {
-    display: none !important;
-}
-
-
-/* ============================================================
-   RESPONSIVE — TABLET
-   ============================================================ */
-
-@media (max-width: 900px) {
-
-    .participation-control-card {
-        align-items: flex-start;
-        flex-direction: column;
-    }
-
-
-    .participation-select-wrap {
-        width: 100%;
-        min-width: 0;
-    }
-
-
-    .participation-summary-grid {
-        grid-template-columns:
-            repeat(3, minmax(0, 1fr));
-    }
-
-}
-
-
-/* ============================================================
-   RESPONSIVE — MOBILE
-   ============================================================ */
+MOBILE
+============================================================ */
 
 @media (max-width: 700px) {
 
-    .quiz-participation-page {
-        width: min(100% - 24px, 1500px);
+ 
+.quiz-participation-page {
 
-        padding-top: 18px;
-        padding-bottom: 100px;
-    }
+    width: min(100% - 24px, 1500px);
 
+    padding-top: 18px;
 
-    .participation-hero {
-        margin-bottom: 18px;
-    }
-
-
-    .participation-hero h1 {
-        font-size: 1.75rem;
-    }
-
-
-    .participation-hero p {
-        font-size: 0.82rem;
-        line-height: 1.55;
-    }
-
-
-    .participation-control-card {
-        padding: 17px;
-
-        border-radius: 15px;
-    }
-
-
-    .participation-summary-grid {
-        grid-template-columns: 1fr;
-
-        gap: 10px;
-    }
-
-
-    .participation-summary-card {
-        padding: 15px;
-    }
-
-
-    .participation-summary-icon {
-        flex-basis: 38px;
-
-        width: 38px;
-        height: 38px;
-    }
-
-
-    .participation-summary-copy strong {
-        font-size: 1.2rem;
-    }
-
-
-    .participation-lists-grid {
-        grid-template-columns: 1fr;
-
-        gap: 14px;
-    }
-
-
-    .participation-list-card {
-        padding: 17px;
-
-        border-radius: 15px;
-    }
+    padding-bottom: 100px;
 
 }
 
 
+.participation-page-heading h1 {
+
+    font-size: 1.55rem;
+
+}
+
+
+.participation-page-heading p {
+
+    font-size: 0.76rem;
+
+}
+
+
+.participation-current-bar {
+
+    align-items: flex-start;
+
+    flex-direction: column;
+
+    gap: 10px;
+
+    padding: 13px;
+
+}
+
+
+.participation-quiz-status {
+
+    width: 100%;
+
+    justify-content: center;
+
+}
+
+
+.participation-summary-grid {
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 9px;
+
+}
+
+
+.participation-summary-card {
+
+    padding: 12px;
+
+}
+
+
+.participation-summary-icon {
+
+    flex-basis: 32px;
+
+    width: 32px;
+
+    height: 32px;
+
+    border-radius: 9px;
+
+}
+
+
+.participation-summary-copy strong {
+
+    font-size: 1.05rem;
+
+}
+
+
+.participation-summary-copy span {
+
+    font-size: 0.61rem;
+
+}
+
+
+.participation-toolbar {
+
+    align-items: stretch;
+
+    flex-direction: column;
+
+    gap: 8px;
+
+}
+
+
+.participation-search {
+
+    width: 100%;
+
+}
+
+
+.participation-toolbar-note {
+
+    justify-content: flex-end;
+
+}
+
+
+.participation-lists-grid {
+
+    grid-template-columns: 1fr;
+
+    gap: 12px;
+
+}
+
+
+.participation-list-header {
+
+    padding: 14px;
+
+}
+
+
+.participation-member-list {
+
+    padding-left: 14px;
+
+    padding-right: 14px;
+
+}
+
+
+.participation-member-tags {
+
+    display: none;
+
+}
+ 
+
+}
+
 /* ============================================================
-   SMALL MOBILE
-   ============================================================ */
+SMALL MOBILE
+============================================================ */
 
 @media (max-width: 420px) {
 
-    .quiz-participation-page {
-        width: min(100% - 20px, 1500px);
-    }
+ 
+.quiz-participation-page {
+
+    width: min(100% - 20px, 1500px);
+
+}
 
 
-    .participation-hero h1 {
-        font-size: 1.58rem;
-    }
+.participation-page-heading h1 {
+
+    font-size: 1.45rem;
+
+}
 
 
-    .participation-hero p {
-        font-size: 0.78rem;
-    }
+.participation-summary-grid {
+
+    gap: 7px;
+
+}
 
 
-    .participation-control-copy h2 {
-        font-size: 1rem;
-    }
+.participation-summary-card {
+
+    gap: 8px;
+
+    padding: 10px;
+
+}
 
 
-    .participation-lesson-select {
-        font-size: 0.8rem;
-    }
+.participation-summary-icon {
+
+    flex-basis: 29px;
+
+    width: 29px;
+
+    height: 29px;
+
+    font-size: 0.68rem;
+
+}
 
 
-    .participation-list-header h2 {
-        font-size: 0.96rem;
-    }
+.participation-summary-copy strong {
+
+    font-size: 0.98rem;
+
+}
+
+
+.participation-summary-copy span {
+
+    font-size: 0.57rem;
+
+}
+
+
+.participation-member-avatar {
+
+    flex-basis: 33px;
+
+    width: 33px;
+
+    height: 33px;
+
+    border-radius: 9px;
+
+}
+ 
 
 }
