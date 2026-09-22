@@ -7,105 +7,25 @@
 
 /* ============================================================
    PAGE FOUNDATION
-   MATCHES PROFILE / SLC QUIZ / ACADEMIC HELP WIDTH SYSTEM
+   PAGE-SPECIFIC STYLING ONLY
+   SHELL / BODY / LAYOUT HANDLED BY MAIN + LAYOUT CSS
    ============================================================ */
 
 .dashboard-content.quiz-participation-page {
 
-    width: min(100% - 32px, 1500px);
+    width: min(100% - 32px, 1320px);
 
-    max-width: 1500px;
+    max-width: 1320px;
 
     margin-left: auto;
     margin-right: auto;
 
-    padding-top: 28px;
+    padding-top: 26px;
     padding-bottom: 100px;
 
     font-family: "DM Sans", sans-serif;
 
     color: #0A0016;
-
-}
-
-
-/* ============================================================
-   PAGE HEADER
-   ============================================================ */
-
-.participation-page-header {
-
-    display: flex;
-
-    align-items: flex-end;
-
-    justify-content: space-between;
-
-    gap: 24px;
-
-    margin-bottom: 24px;
-
-}
-
-
-.participation-page-header-main {
-
-    min-width: 0;
-
-}
-
-
-.participation-page-header .section-kicker {
-
-    display: block;
-
-    margin-bottom: 7px;
-
-    font-family: "Bricolage Grotesque", sans-serif;
-
-    font-size: 0.68rem;
-
-    font-weight: 700;
-
-    letter-spacing: 0.12em;
-
-    line-height: 1.2;
-
-    color: #4A0754;
-
-}
-
-
-.participation-page-header h1 {
-
-    margin: 0;
-
-    font-family: "Bricolage Grotesque", sans-serif;
-
-    font-size: clamp(1.45rem, 2vw, 2rem);
-
-    font-weight: 700;
-
-    line-height: 1.15;
-
-    letter-spacing: -0.025em;
-
-    color: #0A0016;
-
-}
-
-
-.participation-page-header p {
-
-    max-width: 620px;
-
-    margin: 8px 0 0;
-
-    font-size: 0.86rem;
-
-    line-height: 1.6;
-
-    color: #6B6570;
 
 }
 
@@ -122,211 +42,6 @@
 
 
 /* ============================================================
-   CURRENT QUIZ
-   ============================================================ */
-
-.participation-current {
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: space-between;
-
-    gap: 24px;
-
-    padding: 18px 20px;
-
-    margin-bottom: 18px;
-
-    background: #FFFFFF;
-
-    border: 1px solid #E9E4EB;
-
-    border-radius: 14px;
-
-    box-shadow: 0 5px 18px rgba(10, 0, 22, 0.035);
-
-}
-
-
-.participation-current-main {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 14px;
-
-    min-width: 0;
-
-}
-
-
-.participation-current-icon {
-
-    flex: 0 0 42px;
-
-    width: 42px;
-
-    height: 42px;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    border-radius: 11px;
-
-    background: #F3EAF5;
-
-    color: #4A0754;
-
-    font-size: 1.2rem;
-
-}
-
-
-.participation-current-details {
-
-    min-width: 0;
-
-}
-
-
-.participation-current-label {
-
-    display: block;
-
-    margin-bottom: 3px;
-
-    font-size: 0.62rem;
-
-    font-weight: 700;
-
-    letter-spacing: 0.1em;
-
-    color: #8A818E;
-
-}
-
-
-.participation-current-details h2 {
-
-    margin: 0;
-
-    font-family: "Bricolage Grotesque", sans-serif;
-
-    font-size: 1rem;
-
-    font-weight: 700;
-
-    line-height: 1.3;
-
-    color: #0A0016;
-
-}
-
-
-.participation-current-details p {
-
-    margin: 3px 0 0;
-
-    font-size: 0.76rem;
-
-    line-height: 1.45;
-
-    color: #766E79;
-
-    white-space: nowrap;
-
-    overflow: hidden;
-
-    text-overflow: ellipsis;
-
-}
-
-
-.participation-current-status {
-
-    display: inline-flex;
-
-    align-items: center;
-
-    gap: 7px;
-
-    flex-shrink: 0;
-
-    padding: 7px 10px;
-
-    border: 1px solid #E9E4EB;
-
-    border-radius: 999px;
-
-    font-size: 0.7rem;
-
-    font-weight: 600;
-
-    color: #625B66;
-
-    background: #FBFAFC;
-
-}
-
-
-.participation-status-dot {
-
-    width: 7px;
-
-    height: 7px;
-
-    flex: 0 0 7px;
-
-    border-radius: 50%;
-
-    background: #9B939F;
-
-}
-
-
-.participation-current-status.is-open {
-
-    color: #23633C;
-
-    background: #F3FAF5;
-
-    border-color: #D8EBDD;
-
-}
-
-
-.participation-current-status.is-open .participation-status-dot {
-
-    background: #3A8D59;
-
-}
-
-
-.participation-current-status.is-closed {
-
-    color: #765A20;
-
-    background: #FCF8ED;
-
-    border-color: #EEE2BF;
-
-}
-
-
-.participation-current-status.is-closed .participation-status-dot {
-
-    background: #B58A31;
-
-}
-
-
-/* ============================================================
    LOADING / ERROR STATES
    ============================================================ */
 
@@ -338,15 +53,17 @@
 
     gap: 14px;
 
-    padding: 22px;
+    width: 100%;
 
-    margin-bottom: 20px;
+    padding: 20px;
+
+    margin-bottom: 18px;
 
     background: #FFFFFF;
 
     border: 1px solid #E9E4EB;
 
-    border-radius: 14px;
+    border-radius: 12px;
 
     color: #4A4450;
 
@@ -361,9 +78,11 @@
 
     font-family: "Bricolage Grotesque", sans-serif;
 
-    font-size: 0.88rem;
+    font-size: 0.86rem;
 
     font-weight: 700;
+
+    line-height: 1.3;
 
     color: #0A0016;
 
@@ -374,7 +93,7 @@
 
     margin: 0;
 
-    font-size: 0.78rem;
+    font-size: 0.76rem;
 
     line-height: 1.5;
 
@@ -385,11 +104,11 @@
 
 .participation-spinner {
 
-    width: 22px;
+    width: 21px;
 
-    height: 22px;
+    height: 21px;
 
-    flex: 0 0 22px;
+    flex: 0 0 21px;
 
     border: 2px solid #E5DCE8;
 
@@ -405,7 +124,9 @@
 @keyframes participationSpin {
 
     to {
+
         transform: rotate(360deg);
+
     }
 
 }
@@ -478,7 +199,7 @@
 
     font-family: "DM Sans", sans-serif;
 
-    font-size: 0.75rem;
+    font-size: 0.74rem;
 
     font-weight: 600;
 
@@ -495,6 +216,238 @@
 
 
 /* ============================================================
+   CURRENT QUIZ
+   ============================================================ */
+
+.participation-current {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 24px;
+
+    width: 100%;
+
+    padding: 17px 19px;
+
+    margin-bottom: 16px;
+
+    background: #FFFFFF;
+
+    border: 1px solid #E9E4EB;
+
+    border-radius: 12px;
+
+    box-shadow: 0 4px 14px rgba(10, 0, 22, 0.025);
+
+}
+
+
+.participation-current-main {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 13px;
+
+    min-width: 0;
+
+}
+
+
+.participation-current-icon {
+
+    width: 40px;
+
+    height: 40px;
+
+    flex: 0 0 40px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 10px;
+
+    background: #F3EAF5;
+
+    color: #4A0754;
+
+    font-size: 1.12rem;
+
+}
+
+
+.participation-current-details {
+
+    min-width: 0;
+
+}
+
+
+.participation-current-label {
+
+    display: block;
+
+    margin-bottom: 3px;
+
+    font-size: 0.61rem;
+
+    font-weight: 700;
+
+    letter-spacing: 0.1em;
+
+    line-height: 1.2;
+
+    color: #8A818E;
+
+}
+
+
+.participation-current-details h1 {
+
+    margin: 0;
+
+    font-family: "Bricolage Grotesque", sans-serif;
+
+    font-size: 0.98rem;
+
+    font-weight: 700;
+
+    line-height: 1.3;
+
+    color: #0A0016;
+
+}
+
+
+.participation-current-details p {
+
+    max-width: 650px;
+
+    margin: 3px 0 0;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+
+    font-size: 0.74rem;
+
+    line-height: 1.45;
+
+    color: #766E79;
+
+}
+
+
+.participation-current-status {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    flex: 0 0 auto;
+
+    padding: 6px 10px;
+
+    border: 1px solid #E5DEE7;
+
+    border-radius: 999px;
+
+    background: #FBFAFC;
+
+    color: #625B66;
+
+    font-size: 0.68rem;
+
+    font-weight: 600;
+
+}
+
+
+.participation-status-dot {
+
+    width: 7px;
+
+    height: 7px;
+
+    flex: 0 0 7px;
+
+    border-radius: 50%;
+
+    background: #9B939F;
+
+}
+
+
+.participation-current-status.is-open {
+
+    color: #23633C;
+
+    background: #F3FAF5;
+
+    border-color: #D8EBDD;
+
+}
+
+
+.participation-current-status.is-open
+.participation-status-dot {
+
+    background: #3A8D59;
+
+}
+
+
+.participation-current-status.is-closed {
+
+    color: #765A20;
+
+    background: #FCF8ED;
+
+    border-color: #EEE2BF;
+
+}
+
+
+.participation-current-status.is-closed
+.participation-status-dot {
+
+    background: #B58A31;
+
+}
+
+
+.participation-current-status.is-current {
+
+    color: #4A0754;
+
+    background: #F7F1F8;
+
+    border-color: #E3D5E6;
+
+}
+
+
+.participation-current-status.is-current
+.participation-status-dot {
+
+    background: #4A0754;
+
+}
+
+
+/* ============================================================
    SUMMARY
    ============================================================ */
 
@@ -502,19 +455,19 @@
 
     display: grid;
 
-    grid-template-columns: minmax(0, 1.35fr) minmax(420px, 1fr);
+    grid-template-columns: minmax(0, 1.45fr) minmax(390px, 1fr);
 
-    gap: 0;
+    width: 100%;
 
-    margin-bottom: 18px;
+    margin-bottom: 16px;
 
     background: #FFFFFF;
 
     border: 1px solid #E9E4EB;
 
-    border-radius: 14px;
+    border-radius: 12px;
 
-    box-shadow: 0 5px 18px rgba(10, 0, 22, 0.035);
+    box-shadow: 0 4px 14px rgba(10, 0, 22, 0.025);
 
     overflow: hidden;
 
@@ -523,7 +476,9 @@
 
 .participation-summary-primary {
 
-    padding: 22px;
+    min-width: 0;
+
+    padding: 20px 21px;
 
     border-right: 1px solid #EEE9EF;
 
@@ -534,13 +489,15 @@
 
     display: block;
 
-    margin-bottom: 6px;
+    margin-bottom: 5px;
 
-    font-size: 0.63rem;
+    font-size: 0.61rem;
 
     font-weight: 700;
 
     letter-spacing: 0.1em;
+
+    line-height: 1.2;
 
     color: #4A0754;
 
@@ -553,7 +510,7 @@
 
     font-family: "Bricolage Grotesque", sans-serif;
 
-    font-size: 1.05rem;
+    font-size: 1rem;
 
     font-weight: 700;
 
@@ -566,7 +523,7 @@
 
 .participation-progress-area {
 
-    margin-top: 22px;
+    margin-top: 20px;
 
 }
 
@@ -581,9 +538,9 @@
 
     gap: 12px;
 
-    margin-bottom: 8px;
+    margin-bottom: 7px;
 
-    font-size: 0.73rem;
+    font-size: 0.71rem;
 
     color: #736B77;
 
@@ -594,7 +551,7 @@
 
     font-family: "Bricolage Grotesque", sans-serif;
 
-    font-size: 0.78rem;
+    font-size: 0.76rem;
 
     color: #4A0754;
 
@@ -605,7 +562,7 @@
 
     width: 100%;
 
-    height: 7px;
+    height: 6px;
 
     overflow: hidden;
 
@@ -626,8 +583,6 @@
 
     background: #4A0754;
 
-    transition: width 0.2s ease;
-
 }
 
 
@@ -640,6 +595,8 @@
     display: grid;
 
     grid-template-columns: repeat(3, 1fr);
+
+    min-width: 0;
 
 }
 
@@ -654,7 +611,7 @@
 
     min-width: 0;
 
-    padding: 20px;
+    padding: 18px;
 
     border-left: 1px solid #EEE9EF;
 
@@ -672,9 +629,9 @@
 
     display: block;
 
-    margin-bottom: 7px;
+    margin-bottom: 6px;
 
-    font-size: 0.67rem;
+    font-size: 0.64rem;
 
     line-height: 1.35;
 
@@ -689,7 +646,7 @@
 
     font-family: "Bricolage Grotesque", sans-serif;
 
-    font-size: 1.35rem;
+    font-size: 1.28rem;
 
     font-weight: 700;
 
@@ -701,7 +658,7 @@
 
 
 /* ============================================================
-   SEARCH / TOOLS
+   SEARCH
    ============================================================ */
 
 .participation-tools {
@@ -710,7 +667,9 @@
 
     justify-content: flex-end;
 
-    margin-bottom: 14px;
+    width: 100%;
+
+    margin-bottom: 13px;
 
 }
 
@@ -719,7 +678,7 @@
 
     position: relative;
 
-    width: min(100%, 380px);
+    width: min(100%, 360px);
 
 }
 
@@ -736,7 +695,7 @@
 
     color: #8B828F;
 
-    font-size: 0.95rem;
+    font-size: 0.92rem;
 
     pointer-events: none;
 
@@ -747,13 +706,13 @@
 
     width: 100%;
 
-    height: 38px;
+    height: 37px;
 
-    padding: 0 13px 0 35px;
+    padding: 0 12px 0 34px;
 
     border: 1px solid #E4DEE6;
 
-    border-radius: 9px;
+    border-radius: 8px;
 
     outline: none;
 
@@ -763,7 +722,7 @@
 
     font-family: "DM Sans", sans-serif;
 
-    font-size: 0.76rem;
+    font-size: 0.74rem;
 
 }
 
@@ -779,7 +738,7 @@
 
     border-color: #BDA9C2;
 
-    box-shadow: 0 0 0 3px rgba(74, 7, 84, 0.06);
+    box-shadow: 0 0 0 3px rgba(74, 7, 84, 0.055);
 
 }
 
@@ -794,7 +753,9 @@
 
     grid-template-columns: repeat(2, minmax(0, 1fr));
 
-    gap: 18px;
+    gap: 16px;
+
+    width: 100%;
 
 }
 
@@ -807,11 +768,11 @@
 
     border: 1px solid #E9E4EB;
 
-    border-radius: 14px;
+    border-radius: 12px;
+
+    box-shadow: 0 4px 14px rgba(10, 0, 22, 0.025);
 
     overflow: hidden;
-
-    box-shadow: 0 5px 18px rgba(10, 0, 22, 0.035);
 
 }
 
@@ -824,9 +785,9 @@
 
     justify-content: space-between;
 
-    gap: 16px;
+    gap: 14px;
 
-    padding: 17px 18px;
+    padding: 15px 17px;
 
     border-bottom: 1px solid #EEE9EF;
 
@@ -839,7 +800,7 @@
 
     align-items: flex-start;
 
-    gap: 10px;
+    gap: 9px;
 
     min-width: 0;
 
@@ -854,7 +815,7 @@
 
     flex: 0 0 7px;
 
-    margin-top: 6px;
+    margin-top: 5px;
 
     border-radius: 50%;
 
@@ -881,7 +842,7 @@
 
     font-family: "Bricolage Grotesque", sans-serif;
 
-    font-size: 0.94rem;
+    font-size: 0.88rem;
 
     font-weight: 700;
 
@@ -896,9 +857,9 @@
 
     margin: 3px 0 0;
 
-    font-size: 0.69rem;
+    font-size: 0.66rem;
 
-    line-height: 1.45;
+    line-height: 1.4;
 
     color: #817984;
 
@@ -907,11 +868,11 @@
 
 .participation-section-badge {
 
-    min-width: 28px;
+    min-width: 27px;
 
-    height: 25px;
+    height: 24px;
 
-    padding: 0 8px;
+    padding: 0 7px;
 
     display: inline-flex;
 
@@ -919,7 +880,7 @@
 
     justify-content: center;
 
-    flex-shrink: 0;
+    flex: 0 0 auto;
 
     border: 1px solid #E5DEE7;
 
@@ -929,7 +890,7 @@
 
     color: #4A0754;
 
-    font-size: 0.68rem;
+    font-size: 0.66rem;
 
     font-weight: 700;
 
@@ -938,17 +899,32 @@
 
 /* ============================================================
    MEMBER TABLE
+   DESKTOP
    ============================================================ */
+
+.participation-member-table {
+
+    width: 100%;
+
+    min-width: 0;
+
+}
+
 
 .participation-member-columns {
 
     display: grid;
 
-    grid-template-columns: minmax(220px, 1.5fr) minmax(120px, 0.75fr) minmax(120px, 0.75fr);
+    grid-template-columns:
+        minmax(210px, 1.55fr)
+        minmax(110px, 0.75fr)
+        minmax(110px, 0.75fr);
 
-    gap: 16px;
+    column-gap: 14px;
 
-    padding: 10px 18px;
+    min-width: 0;
+
+    padding: 9px 17px;
 
     border-bottom: 1px solid #F0ECF1;
 
@@ -959,13 +935,21 @@
 
 .participation-member-columns span {
 
-    font-size: 0.61rem;
+    min-width: 0;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+
+    font-size: 0.59rem;
 
     font-weight: 700;
 
     line-height: 1.3;
 
-    letter-spacing: 0.04em;
+    letter-spacing: 0.045em;
 
     text-transform: uppercase;
 
@@ -978,6 +962,8 @@
 
     width: 100%;
 
+    min-width: 0;
+
 }
 
 
@@ -985,15 +971,20 @@
 
     display: grid;
 
-    grid-template-columns: minmax(220px, 1.5fr) minmax(120px, 0.75fr) minmax(120px, 0.75fr);
+    grid-template-columns:
+        minmax(210px, 1.55fr)
+        minmax(110px, 0.75fr)
+        minmax(110px, 0.75fr);
+
+    column-gap: 14px;
 
     align-items: center;
 
-    gap: 16px;
+    width: 100%;
 
-    min-height: 64px;
+    min-height: 61px;
 
-    padding: 10px 18px;
+    padding: 9px 17px;
 
     border-bottom: 1px solid #F1EDF2;
 
@@ -1013,7 +1004,7 @@
 
     align-items: center;
 
-    gap: 11px;
+    gap: 10px;
 
     min-width: 0;
 
@@ -1022,11 +1013,11 @@
 
 .participation-member-avatar {
 
-    width: 36px;
+    width: 35px;
 
-    height: 36px;
+    height: 35px;
 
-    flex: 0 0 36px;
+    flex: 0 0 35px;
 
     display: flex;
 
@@ -1042,7 +1033,7 @@
 
     font-family: "Bricolage Grotesque", sans-serif;
 
-    font-size: 0.68rem;
+    font-size: 0.66rem;
 
     font-weight: 700;
 
@@ -1058,13 +1049,15 @@
 
 .participation-member-name {
 
+    min-width: 0;
+
     overflow: hidden;
 
     text-overflow: ellipsis;
 
     white-space: nowrap;
 
-    font-size: 0.78rem;
+    font-size: 0.76rem;
 
     font-weight: 600;
 
@@ -1085,7 +1078,7 @@
 
     white-space: nowrap;
 
-    font-size: 0.64rem;
+    font-size: 0.61rem;
 
     line-height: 1.3;
 
@@ -1106,7 +1099,7 @@
 
     white-space: nowrap;
 
-    font-size: 0.71rem;
+    font-size: 0.69rem;
 
     line-height: 1.4;
 
@@ -1117,7 +1110,7 @@
 
 .participation-member-role {
 
-    font-weight: 500;
+    font-weight: 600;
 
     color: #4A0754;
 
@@ -1138,9 +1131,9 @@
 
     justify-content: center;
 
-    min-height: 150px;
+    min-height: 135px;
 
-    padding: 24px;
+    padding: 22px;
 
     text-align: center;
 
@@ -1149,9 +1142,9 @@
 
 .participation-empty > i {
 
-    margin-bottom: 8px;
+    margin-bottom: 7px;
 
-    font-size: 1.35rem;
+    font-size: 1.25rem;
 
     color: #A69DAA;
 
@@ -1162,7 +1155,7 @@
 
     font-family: "Bricolage Grotesque", sans-serif;
 
-    font-size: 0.8rem;
+    font-size: 0.77rem;
 
     font-weight: 700;
 
@@ -1173,11 +1166,11 @@
 
 .participation-empty p {
 
-    max-width: 260px;
+    max-width: 250px;
 
     margin: 4px 0 0;
 
-    font-size: 0.69rem;
+    font-size: 0.67rem;
 
     line-height: 1.5;
 
@@ -1187,10 +1180,55 @@
 
 
 /* ============================================================
-   MOBILE
+   TABLET
    ============================================================ */
 
-@media (max-width: 900px) {
+@media (max-width: 1050px) {
+
+    .dashboard-content.quiz-participation-page {
+
+        width: min(100% - 28px, 1180px);
+
+    }
+
+
+    .participation-summary {
+
+        grid-template-columns: minmax(0, 1.25fr) minmax(360px, 1fr);
+
+    }
+
+
+    .participation-member-columns,
+
+    .participation-member {
+
+        grid-template-columns:
+            minmax(190px, 1.45fr)
+            minmax(100px, 0.75fr)
+            minmax(100px, 0.75fr);
+
+    }
+
+}
+
+
+/* ============================================================
+   TABLET / MOBILE
+   ============================================================ */
+
+@media (max-width: 820px) {
+
+    .dashboard-content.quiz-participation-page {
+
+        width: min(100% - 24px, 760px);
+
+        padding-top: 20px;
+
+        padding-bottom: 88px;
+
+    }
+
 
     .participation-summary {
 
@@ -1215,9 +1253,32 @@
     }
 
 
+    .participation-stat {
+
+        padding: 16px;
+
+        border-left: 1px solid #EEE9EF;
+
+    }
+
+
+    .participation-stat:first-child {
+
+        border-left: 0;
+
+    }
+
+
     .participation-sections {
 
         grid-template-columns: 1fr;
+
+    }
+
+
+    .participation-section {
+
+        width: 100%;
 
     }
 
@@ -1225,39 +1286,22 @@
 
 
 /* ============================================================
-   TABLET / MOBILE
+   MOBILE
+   MEMBER RECORDS USE HORIZONTAL SWIPE
+   GROUP / FAMILY AND ROLE REMAIN AVAILABLE
    ============================================================ */
 
 @media (max-width: 680px) {
 
     .dashboard-content.quiz-participation-page {
 
-        width: min(100% - 22px, 1500px);
+        width: calc(100% - 20px);
 
-        padding-top: 20px;
+        max-width: none;
 
-        padding-bottom: 88px;
+        padding-top: 16px;
 
-    }
-
-
-    .participation-page-header {
-
-        margin-bottom: 18px;
-
-    }
-
-
-    .participation-page-header h1 {
-
-        font-size: 1.35rem;
-
-    }
-
-
-    .participation-page-header p {
-
-        font-size: 0.78rem;
+        padding-bottom: 82px;
 
     }
 
@@ -1268,9 +1312,9 @@
 
         flex-direction: column;
 
-        gap: 13px;
+        gap: 12px;
 
-        padding: 16px;
+        padding: 15px;
 
     }
 
@@ -1282,34 +1326,55 @@
     }
 
 
+    .participation-current-details p {
+
+        max-width: calc(100vw - 105px);
+
+    }
+
+
     .participation-summary-primary {
 
-        padding: 18px;
+        padding: 17px;
+
+    }
+
+
+    .participation-summary-heading h2 {
+
+        font-size: 0.94rem;
 
     }
 
 
     .participation-summary-stats {
 
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(3, 1fr);
 
     }
 
 
     .participation-stat {
 
-        padding: 14px 18px;
+        min-width: 0;
 
-        border-left: 0;
+        padding: 13px 11px;
 
-        border-top: 1px solid #EEE9EF;
+        border-top: 0;
 
     }
 
 
-    .participation-stat:first-child {
+    .participation-stat-label {
 
-        border-top: 0;
+        font-size: 0.59rem;
+
+    }
+
+
+    .participation-stat-value {
+
+        font-size: 1.12rem;
 
     }
 
@@ -1330,62 +1395,120 @@
 
     .participation-section-header {
 
-        padding: 15px;
+        padding: 14px;
+
+    }
+
+
+    .participation-section-title p {
+
+        font-size: 0.64rem;
+
+    }
+
+
+    /* ------------------------------------------------------------
+       HORIZONTAL MEMBER RECORD
+       ------------------------------------------------------------ */
+
+    .participation-member-table {
+
+        overflow-x: auto;
+
+        overflow-y: hidden;
+
+        -webkit-overflow-scrolling: touch;
+
+        scrollbar-width: thin;
 
     }
 
 
     .participation-member-columns {
 
-        display: none;
+        display: grid;
+
+        grid-template-columns:
+            235px
+            135px
+            135px;
+
+        width: max-content;
+
+        min-width: 505px;
+
+        column-gap: 14px;
+
+        padding: 9px 14px;
+
+    }
+
+
+    .participation-member-list {
+
+        width: max-content;
+
+        min-width: 100%;
 
     }
 
 
     .participation-member {
 
-        grid-template-columns: minmax(0, 1fr) auto;
+        display: grid;
 
-        gap: 10px;
+        grid-template-columns:
+            235px
+            135px
+            135px;
 
-        min-height: 0;
+        width: max-content;
 
-        padding: 13px 15px;
+        min-width: 505px;
+
+        column-gap: 14px;
+
+        min-height: 61px;
+
+        padding: 9px 14px;
 
     }
 
 
     .participation-member-identity {
 
-        min-width: 0;
+        width: 235px;
+
+        min-width: 235px;
+
+    }
+
+
+    .participation-member-group,
+
+    .participation-member-role {
+
+        display: block;
+
+        width: 135px;
+
+        min-width: 135px;
+
+        max-width: 135px;
 
     }
 
 
     .participation-member-group {
 
-        display: none;
+        color: #625B66;
 
     }
 
 
     .participation-member-role {
 
-        justify-self: end;
-
-        max-width: 105px;
-
-        padding: 4px 7px;
-
-        border: 1px solid #E5DEE7;
-
-        border-radius: 999px;
-
-        background: #FAF8FB;
-
-        text-align: center;
-
-        font-size: 0.62rem;
+        color: #4A0754;
 
     }
 
@@ -1400,48 +1523,119 @@
 
     .dashboard-content.quiz-participation-page {
 
-        width: min(100% - 18px, 1500px);
+        width: calc(100% - 16px);
 
     }
 
 
     .participation-current-main {
 
-        gap: 11px;
+        gap: 10px;
 
     }
 
 
     .participation-current-icon {
 
-        width: 38px;
+        width: 37px;
 
-        height: 38px;
+        height: 37px;
 
-        flex-basis: 38px;
+        flex-basis: 37px;
 
         font-size: 1rem;
 
     }
 
 
-    .participation-current-details h2 {
+    .participation-current-details h1 {
 
-        font-size: 0.91rem;
+        font-size: 0.9rem;
 
     }
 
 
     .participation-current-details p {
 
-        font-size: 0.69rem;
+        font-size: 0.68rem;
 
     }
 
 
+    .participation-summary-stats {
+
+        grid-template-columns: repeat(3, 1fr);
+
+    }
+
+
+    .participation-stat {
+
+        padding: 12px 8px;
+
+    }
+
+
+    .participation-stat-label {
+
+        font-size: 0.56rem;
+
+    }
+
+
+    .participation-stat-value {
+
+        font-size: 1.02rem;
+
+    }
+
+
+    .participation-section-title h2 {
+
+        font-size: 0.84rem;
+
+    }
+
+
+    .participation-section-title p {
+
+        font-size: 0.61rem;
+
+    }
+
+
+    .participation-member-columns,
+
     .participation-member {
 
-        padding: 12px;
+        grid-template-columns:
+            220px
+            125px
+            125px;
+
+        min-width: 470px;
+
+    }
+
+
+    .participation-member-identity {
+
+        width: 220px;
+
+        min-width: 220px;
+
+    }
+
+
+    .participation-member-group,
+
+    .participation-member-role {
+
+        width: 125px;
+
+        min-width: 125px;
+
+        max-width: 125px;
 
     }
 
@@ -1459,14 +1653,23 @@
 
     .participation-member-name {
 
-        font-size: 0.74rem;
+        font-size: 0.73rem;
 
     }
 
 
     .participation-member-id {
 
-        font-size: 0.61rem;
+        font-size: 0.59rem;
+
+    }
+
+
+    .participation-member-group,
+
+    .participation-member-role {
+
+        font-size: 0.66rem;
 
     }
 
