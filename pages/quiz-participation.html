@@ -3,6 +3,10 @@
 
 <head>
 
+    <!-- ============================================================
+         DOCUMENT
+         ============================================================ -->
+
     <meta charset="UTF-8">
 
     <meta
@@ -24,10 +28,7 @@
          FONTS
          ============================================================ -->
 
-    <link
-        rel="preconnect"
-        href="https://fonts.googleapis.com"
-    >
+    <link rel="preconnect" href="https://fonts.googleapis.com">
 
     <link
         rel="preconnect"
@@ -52,7 +53,7 @@
 
 
     <!-- ============================================================
-         STYLES
+         GLOBAL STYLES
          ============================================================ -->
 
     <link
@@ -64,6 +65,11 @@
         rel="stylesheet"
         href="../css/layout.css"
     >
+
+
+    <!-- ============================================================
+         PAGE STYLES
+         ============================================================ -->
 
     <link
         rel="stylesheet"
@@ -78,6 +84,7 @@
 
     <!-- ============================================================
          APP LAYOUT
+         DO NOT MODIFY THE EXISTING PORTAL SHELL
          ============================================================ -->
 
     <div class="app-layout">
@@ -85,13 +92,12 @@
 
         <!-- ========================================================
              SIDEBAR
+             EXISTING PORTAL SIDEBAR
              ======================================================== -->
 
         <aside class="app-sidebar">
 
-            <!--
-                Existing sidebar content is controlled by layout.js.
-            -->
+            <!-- Existing sidebar generated/managed by layout.js -->
 
         </aside>
 
@@ -105,20 +111,18 @@
 
             <!-- ====================================================
                  TOPBAR
+                 EXISTING PORTAL TOP HEADER
                  ==================================================== -->
 
             <header class="app-topbar">
 
-                <!--
-                    Existing topbar content is controlled by
-                    layout.js.
-                -->
+                <!-- Existing topbar generated/managed by layout.js -->
 
             </header>
 
 
             <!-- ====================================================
-                 PAGE CONTENT
+                 DASHBOARD CONTENT
                  ==================================================== -->
 
             <section class="dashboard-content quiz-participation-page">
@@ -128,11 +132,11 @@
                      PAGE HEADER
                      ================================================== -->
 
-                <div class="participation-page-header">
+                <div class="participation-header">
 
-                    <div class="participation-page-heading">
+                    <div class="participation-header-copy">
 
-                        <span class="section-kicker">
+                        <span class="participation-kicker">
                             WEEKLY SLC QUIZ
                         </span>
 
@@ -141,14 +145,14 @@
                         </h1>
 
                         <p>
-                            See who has taken this week's quiz and who is yet to participate.
+                            Track this week's quiz participation across the youth group.
                         </p>
 
                     </div>
 
 
                     <!-- ==================================================
-                         CURRENT LESSON
+                         CURRENT QUIZ
                          ================================================== -->
 
                     <div class="participation-current">
@@ -160,9 +164,9 @@
                         </div>
 
 
-                        <div class="participation-current-main">
+                        <div class="participation-current-details">
 
-                            <span class="participation-current-label">
+                            <span>
                                 CURRENT QUIZ
                             </span>
 
@@ -176,12 +180,12 @@
                         <div class="participation-current-status">
 
                             <span
-                                class="participation-status-dot"
                                 id="participationStatusDot"
+                                class="participation-status-dot"
                             ></span>
 
                             <span id="participationLessonStatus">
-                                Checking status...
+                                Checking...
                             </span>
 
                         </div>
@@ -197,7 +201,7 @@
 
                 <div
                     id="participationLoadingState"
-                    class="participation-state participation-loading-state hidden"
+                    class="participation-state participation-loading hidden"
                 >
 
                     <div class="participation-spinner"></div>
@@ -223,7 +227,7 @@
 
                 <div
                     id="participationErrorState"
-                    class="participation-state participation-error-state hidden"
+                    class="participation-state participation-error hidden"
                 >
 
                     <div class="participation-state-icon">
@@ -233,7 +237,7 @@
                     </div>
 
 
-                    <div>
+                    <div class="participation-error-content">
 
                         <strong>
                             Unable to load participation
@@ -262,7 +266,7 @@
 
 
                 <!-- ==================================================
-                     MAIN CONTENT
+                     PARTICIPATION CONTENT
                      ================================================== -->
 
                 <div
@@ -279,109 +283,104 @@
 
 
                         <!-- ==================================================
-                             PRIMARY PROGRESS
+                             SUMMARY HEADER
                              ================================================== -->
 
-                        <div class="participation-summary-primary">
+                        <div class="participation-summary-header">
 
-                            <div class="participation-summary-heading">
+                            <div>
 
-                                <div>
+                                <span class="participation-section-kicker">
+                                    PARTICIPATION OVERVIEW
+                                </span>
 
-                                    <span class="section-kicker">
-                                        PARTICIPATION
-                                    </span>
-
-                                    <h2>
-                                        This week's progress
-                                    </h2>
-
-                                </div>
-
-
-                                <div class="participation-percentage">
-
-                                    <strong id="participationPercentage">
-                                        0%
-                                    </strong>
-
-                                    <span>
-                                        participated
-                                    </span>
-
-                                </div>
+                                <h2>
+                                    This week's progress
+                                </h2>
 
                             </div>
 
 
-                            <!-- ==================================================
-                                 PROGRESS BAR
-                                 ================================================== -->
+                            <div class="participation-percentage">
 
-                            <div class="participation-progress">
+                                <strong id="participationPercentage">
+                                    0%
+                                </strong>
 
-                                <div class="participation-progress-track">
-
-                                    <div
-                                        id="participationProgressBar"
-                                        class="participation-progress-bar"
-                                    ></div>
-
-                                </div>
-
-                            </div>
-
-
-                            <!-- ==================================================
-                                 SUMMARY STATS
-                                 ================================================== -->
-
-                            <div class="participation-summary-stats">
-
-
-                                <div class="participation-stat">
-
-                                    <span class="participation-stat-label">
-                                        Total members
-                                    </span>
-
-                                    <strong id="participationTotalMembers">
-                                        —
-                                    </strong>
-
-                                </div>
-
-
-                                <div class="participation-stat">
-
-                                    <span class="participation-stat-label">
-                                        Took the quiz
-                                    </span>
-
-                                    <strong id="participationTakenCount">
-                                        —
-                                    </strong>
-
-                                </div>
-
-
-                                <div class="participation-stat">
-
-                                    <span class="participation-stat-label">
-                                        Yet to take it
-                                    </span>
-
-                                    <strong id="participationNotTakenCount">
-                                        —
-                                    </strong>
-
-                                </div>
-
+                                <span>
+                                    participated
+                                </span>
 
                             </div>
 
                         </div>
 
+
+                        <!-- ==================================================
+                             PROGRESS
+                             ================================================== -->
+
+                        <div class="participation-progress">
+
+                            <div class="participation-progress-track">
+
+                                <div
+                                    id="participationProgressBar"
+                                    class="participation-progress-bar"
+                                ></div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- ==================================================
+                             SUMMARY NUMBERS
+                             ================================================== -->
+
+                        <div class="participation-summary-stats">
+
+
+                            <div class="participation-summary-stat">
+
+                                <span>
+                                    Total members
+                                </span>
+
+                                <strong id="participationTotalMembers">
+                                    —
+                                </strong>
+
+                            </div>
+
+
+                            <div class="participation-summary-stat">
+
+                                <span>
+                                    Took the quiz
+                                </span>
+
+                                <strong id="participationTakenCount">
+                                    —
+                                </strong>
+
+                            </div>
+
+
+                            <div class="participation-summary-stat">
+
+                                <span>
+                                    Yet to take it
+                                </span>
+
+                                <strong id="participationNotTakenCount">
+                                    —
+                                </strong>
+
+                            </div>
+
+
+                        </div>
 
                     </section>
 
@@ -410,7 +409,7 @@
 
 
                     <!-- ==================================================
-                         PARTICIPATED SECTION
+                         PARTICIPATED
                          ================================================== -->
 
                     <section class="participation-section">
@@ -418,9 +417,9 @@
 
                         <div class="participation-section-header">
 
-                            <div class="participation-section-title">
+                            <div class="participation-section-heading">
 
-                                <span class="participation-section-indicator participated"></span>
+                                <span class="participation-indicator participated"></span>
 
                                 <div>
 
@@ -439,7 +438,7 @@
 
                             <span
                                 id="participationTakenBadge"
-                                class="participation-count-badge"
+                                class="participation-count"
                             >
                                 —
                             </span>
@@ -448,10 +447,13 @@
 
 
                         <!-- ==================================================
-                             MEMBER TABLE HEADER
+                             MEMBER TABLE
                              ================================================== -->
 
                         <div class="participation-member-table">
+
+
+                            <!-- TABLE HEADER -->
 
                             <div class="participation-member-columns">
 
@@ -470,9 +472,7 @@
                             </div>
 
 
-                            <!-- ==================================================
-                                 MEMBER LIST
-                                 ================================================== -->
+                            <!-- MEMBER LIST -->
 
                             <div
                                 id="participationTakenList"
@@ -480,9 +480,7 @@
                             ></div>
 
 
-                            <!-- ==================================================
-                                 EMPTY STATE
-                                 ================================================== -->
+                            <!-- EMPTY -->
 
                             <div
                                 id="participationTakenEmpty"
@@ -492,14 +490,15 @@
                                 <i class="ri-user-search-line"></i>
 
                                 <strong>
-                                    No one has participated yet
+                                    No participation yet
                                 </strong>
 
                                 <p>
-                                    Completed quiz participants will appear here.
+                                    Members who complete the quiz will appear here.
                                 </p>
 
                             </div>
+
 
                         </div>
 
@@ -507,7 +506,7 @@
 
 
                     <!-- ==================================================
-                         YET TO PARTICIPATE SECTION
+                         YET TO PARTICIPATE
                          ================================================== -->
 
                     <section class="participation-section">
@@ -515,9 +514,9 @@
 
                         <div class="participation-section-header">
 
-                            <div class="participation-section-title">
+                            <div class="participation-section-heading">
 
-                                <span class="participation-section-indicator pending"></span>
+                                <span class="participation-indicator pending"></span>
 
                                 <div>
 
@@ -536,7 +535,7 @@
 
                             <span
                                 id="participationNotTakenBadge"
-                                class="participation-count-badge"
+                                class="participation-count"
                             >
                                 —
                             </span>
@@ -545,10 +544,13 @@
 
 
                         <!-- ==================================================
-                             MEMBER TABLE HEADER
+                             MEMBER TABLE
                              ================================================== -->
 
                         <div class="participation-member-table">
+
+
+                            <!-- TABLE HEADER -->
 
                             <div class="participation-member-columns">
 
@@ -567,9 +569,7 @@
                             </div>
 
 
-                            <!-- ==================================================
-                                 MEMBER LIST
-                                 ================================================== -->
+                            <!-- MEMBER LIST -->
 
                             <div
                                 id="participationNotTakenList"
@@ -577,9 +577,7 @@
                             ></div>
 
 
-                            <!-- ==================================================
-                                 EMPTY STATE
-                                 ================================================== -->
+                            <!-- EMPTY -->
 
                             <div
                                 id="participationNotTakenEmpty"
@@ -598,6 +596,7 @@
 
                             </div>
 
+
                         </div>
 
                     </section>
@@ -611,14 +610,12 @@
 
             <!-- ====================================================
                  BOTTOM NAVIGATION
+                 EXISTING PORTAL BOTTOM NAVIGATION
                  ==================================================== -->
 
             <nav class="app-bottom-nav">
 
-                <!--
-                    Existing bottom navigation is controlled by
-                    layout.js.
-                -->
+                <!-- Existing bottom navigation generated/managed by layout.js -->
 
             </nav>
 
