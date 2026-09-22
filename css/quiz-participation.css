@@ -689,6 +689,11 @@
    SUMMARY STATISTICS
    ============================================================ */
 
+/* ============================================================
+   SUMMARY STATISTICS
+   CLEAN / MINIMAL
+   ============================================================ */
+
 .participation-summary-stats {
 
     display: grid;
@@ -702,8 +707,6 @@
 
 .participation-stat {
 
-    position: relative;
-
     display: flex;
 
     flex-direction: column;
@@ -712,11 +715,9 @@
 
     min-width: 0;
 
-    padding: 18px;
+    padding: 18px 20px;
 
     border-left: 1px solid #EEE9EF;
-
-    background: #FFFFFF;
 
 }
 
@@ -725,60 +726,6 @@
 
     border-left: 0;
 
-    background: #FCFAFD;
-
-}
-
-
-.participation-stat:nth-child(2) {
-
-    background: #F7FBF8;
-
-}
-
-
-.participation-stat:nth-child(3) {
-
-    background: #FFFBF2;
-
-}
-
-
-.participation-stat::before {
-
-    content: "";
-
-    position: absolute;
-
-    top: 0;
-
-    left: 0;
-
-    width: 3px;
-
-    height: 100%;
-
-}
-
-
-.participation-stat:nth-child(1)::before {
-
-    background: #7B2C83;
-
-}
-
-
-.participation-stat:nth-child(2)::before {
-
-    background: #299653;
-
-}
-
-
-.participation-stat:nth-child(3)::before {
-
-    background: #D59619;
-
 }
 
 
@@ -786,7 +733,7 @@
 
     display: block;
 
-    margin-bottom: 6px;
+    margin-bottom: 7px;
 
     font-size: 0.64rem;
 
@@ -814,10 +761,12 @@
 }
 
 
+/* INDIVIDUAL VALUE COLORS */
+
 .participation-stat:nth-child(1)
 .participation-stat-value {
 
-    color: #5B1D68;
+    color: #4A0754;
 
 }
 
@@ -825,7 +774,7 @@
 .participation-stat:nth-child(2)
 .participation-stat-value {
 
-    color: #247B45;
+    color: #2F855A;
 
 }
 
@@ -833,10 +782,9 @@
 .participation-stat:nth-child(3)
 .participation-stat-value {
 
-    color: #A66B00;
+    color: #D97706;
 
 }
-
 
 /* ============================================================
    SEARCH
