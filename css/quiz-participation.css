@@ -1,33 +1,142 @@
 /* ============================================================
-   AFC ISIU YOUTH PORTAL
-   QUIZ PARTICIPATION
+   AFC ISIU YOUTH PORTAL V2
+   FILE: quiz-participation.css
+   PURPOSE: WEEKLY QUIZ PARTICIPATION PAGE
    ============================================================ */
 
 
 /* ============================================================
    PAGE FOUNDATION
+   MATCHES PROFILE / SLC QUIZ / ACADEMIC HELP WIDTH SYSTEM
    ============================================================ */
 
-.quiz-participation-page {
+.dashboard-content.quiz-participation-page {
 
-    width: min(
-        100% - 32px,
-        1500px
-    );
+    width: min(100% - 32px, 1500px);
 
     max-width: 1500px;
 
     margin-left: auto;
+
     margin-right: auto;
 
-    padding-top: 18px;
-    padding-bottom: 40px;
+    padding-top: 28px;
 
-    font-family:
-        "DM Sans",
-        sans-serif;
+    padding-bottom: 48px;
 
-    color: #17121b;
+    font-family: "DM Sans", sans-serif;
+
+    color: #0A0016;
+
+}
+
+
+/* ============================================================
+   GENERAL RESET
+   ============================================================ */
+
+.quiz-participation-page *,
+.quiz-participation-page *::before,
+.quiz-participation-page *::after {
+
+    box-sizing: border-box;
+
+}
+
+
+.quiz-participation-page h1,
+.quiz-participation-page h2,
+.quiz-participation-page h3,
+.quiz-participation-page p {
+
+    margin-top: 0;
+
+}
+
+
+.quiz-participation-page button,
+.quiz-participation-page input {
+
+    font-family: inherit;
+
+}
+
+
+/* ============================================================
+   PAGE HEADER
+   ============================================================ */
+
+.participation-page-header {
+
+    display: flex;
+
+    align-items: flex-end;
+
+    justify-content: space-between;
+
+    gap: 28px;
+
+    margin-bottom: 28px;
+
+}
+
+
+.participation-page-heading {
+
+    min-width: 0;
+
+}
+
+
+.participation-page-heading .section-kicker {
+
+    display: block;
+
+    margin-bottom: 7px;
+
+    font-family: "Bricolage Grotesque", sans-serif;
+
+    font-size: 0.68rem;
+
+    font-weight: 700;
+
+    letter-spacing: 0.12em;
+
+    color: #6F4A78;
+
+}
+
+
+.participation-page-heading h1 {
+
+    margin-bottom: 7px;
+
+    font-family: "Bricolage Grotesque", sans-serif;
+
+    font-size: clamp(1.45rem, 2vw, 2rem);
+
+    line-height: 1.1;
+
+    font-weight: 700;
+
+    letter-spacing: -0.025em;
+
+    color: #0A0016;
+
+}
+
+
+.participation-page-heading p {
+
+    max-width: 620px;
+
+    margin-bottom: 0;
+
+    font-size: 0.88rem;
+
+    line-height: 1.6;
+
+    color: #706B75;
 
 }
 
@@ -38,30 +147,50 @@
 
 .participation-current {
 
-    min-height: 82px;
+    flex: 0 0 auto;
+
+    min-width: 290px;
 
     display: flex;
 
     align-items: center;
 
-    justify-content: space-between;
+    gap: 12px;
 
-    gap: 20px;
+    padding: 13px 16px;
 
-    padding: 18px 22px;
+    background: #FFFFFF;
 
-    background:
-        linear-gradient(
-            135deg,
-            #4A0754 0%,
-            #5b0a67 100%
-        );
+    border: 1px solid #E8E1EA;
 
     border-radius: 14px;
 
-    box-shadow:
-        0 10px 30px
-        rgba(74, 7, 84, 0.12);
+    box-shadow: 0 6px 20px rgba(10, 0, 22, 0.045);
+
+}
+
+
+.participation-current-icon {
+
+    width: 38px;
+
+    height: 38px;
+
+    flex: 0 0 38px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 10px;
+
+    background: #F2EAF4;
+
+    color: #4A0754;
+
+    font-size: 1.05rem;
 
 }
 
@@ -70,29 +199,66 @@
 
     min-width: 0;
 
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 2px;
+
 }
 
 
 .participation-current-label {
 
+    font-family: "Bricolage Grotesque", sans-serif;
+
+    font-size: 0.62rem;
+
+    font-weight: 700;
+
+    letter-spacing: 0.1em;
+
+    color: #8A818C;
+
+}
+
+
+.participation-current-main strong {
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+
+    font-family: "Bricolage Grotesque", sans-serif;
+
+    font-size: 0.9rem;
+
+    font-weight: 600;
+
+    color: #0A0016;
+
+}
+
+
+.participation-current-status {
+
+    margin-left: auto;
+
     display: flex;
 
     align-items: center;
 
-    gap: 8px;
+    gap: 6px;
 
-    margin-bottom: 5px;
+    white-space: nowrap;
 
     font-size: 0.72rem;
 
     font-weight: 600;
 
-    letter-spacing: 0.04em;
-
-    text-transform: uppercase;
-
-    color:
-        rgba(255, 255, 255, 0.72);
+    color: #625A65;
 
 }
 
@@ -100,42 +266,150 @@
 .participation-status-dot {
 
     width: 7px;
+
     height: 7px;
 
     flex: 0 0 7px;
 
     border-radius: 50%;
 
-    background: #ffffff;
+    background: #A9A3AB;
 
 }
 
 
-.participation-current-lesson {
+.participation-status-dot.open {
 
-    font-family:
-        "Bricolage Grotesque",
-        sans-serif;
+    background: #238636;
 
-    font-size: 1.35rem;
+}
 
-    line-height: 1.15;
+
+.participation-status-dot.closed {
+
+    background: #8A818C;
+
+}
+
+
+/* ============================================================
+   CONTENT STATES
+   ============================================================ */
+
+.participation-state {
+
+    width: 100%;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+
+    padding: 20px;
+
+    margin-bottom: 24px;
+
+    background: #FFFFFF;
+
+    border: 1px solid #E8E1EA;
+
+    border-radius: 14px;
+
+}
+
+
+.participation-state strong {
+
+    display: block;
+
+    margin-bottom: 3px;
+
+    font-family: "Bricolage Grotesque", sans-serif;
+
+    font-size: 0.86rem;
 
     font-weight: 600;
 
-    color: #ffffff;
+    color: #0A0016;
 
 }
 
 
-.participation-current-status {
+.participation-state p {
 
-    flex-shrink: 0;
+    margin-bottom: 0;
+
+    font-size: 0.78rem;
+
+    line-height: 1.5;
+
+    color: #746D77;
 
 }
 
 
-.participation-status-badge {
+.participation-loading-state {
+
+    justify-content: flex-start;
+
+}
+
+
+.participation-spinner {
+
+    width: 22px;
+
+    height: 22px;
+
+    flex: 0 0 22px;
+
+    border: 2px solid #E5DDE8;
+
+    border-top-color: #4A0754;
+
+    border-radius: 50%;
+
+}
+
+
+.participation-error-state {
+
+    border-color: #E9D5D5;
+
+    background: #FFF9F9;
+
+}
+
+
+.participation-state-icon {
+
+    width: 38px;
+
+    height: 38px;
+
+    flex: 0 0 38px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 10px;
+
+    background: #F8EAEA;
+
+    color: #A33A3A;
+
+    font-size: 1.1rem;
+
+}
+
+
+.participation-retry-button {
+
+    margin-left: auto;
 
     display: inline-flex;
 
@@ -143,35 +417,25 @@
 
     justify-content: center;
 
-    min-height: 31px;
+    gap: 7px;
 
-    padding: 0 12px;
+    min-height: 36px;
 
-    border-radius: 999px;
+    padding: 0 13px;
 
-    background:
-        rgba(255, 255, 255, 0.12);
+    border: 1px solid #DCCCDC;
 
-    border:
-        1px solid
-        rgba(255, 255, 255, 0.18);
+    border-radius: 9px;
 
-    color: #ffffff;
+    background: #FFFFFF;
 
-    font-size: 0.72rem;
+    color: #4A0754;
+
+    font-size: 0.76rem;
 
     font-weight: 600;
 
-}
-
-
-/* ============================================================
-   CONTENT
-   ============================================================ */
-
-.participation-content {
-
-    margin-top: 18px;
+    cursor: pointer;
 
 }
 
@@ -182,90 +446,119 @@
 
 .participation-summary {
 
-    display: grid;
+    width: 100%;
 
-    grid-template-columns:
-        minmax(250px, 1fr)
-        auto;
-
-    align-items: stretch;
-
-    gap: 26px;
-
-    padding: 20px 0 22px;
-
-    border-bottom:
-        1px solid
-        #e9e5eb;
+    margin-bottom: 24px;
 
 }
 
 
 .participation-summary-primary {
 
-    min-width: 0;
+    padding: 22px 24px;
 
-    display: flex;
+    background: #FFFFFF;
 
-    flex-direction: column;
+    border: 1px solid #E8E1EA;
 
-    justify-content: center;
+    border-radius: 16px;
+
+    box-shadow: 0 6px 22px rgba(10, 0, 22, 0.04);
 
 }
 
 
 .participation-summary-heading {
 
-    margin-bottom: 15px;
+    display: flex;
+
+    align-items: flex-end;
+
+    justify-content: space-between;
+
+    gap: 20px;
 
 }
 
 
-.section-kicker {
+.participation-summary-heading .section-kicker {
 
     display: block;
 
-    margin-bottom: 4px;
+    margin-bottom: 6px;
 
-    font-size: 0.68rem;
+    font-family: "Bricolage Grotesque", sans-serif;
 
-    line-height: 1;
+    font-size: 0.64rem;
 
     font-weight: 700;
 
-    letter-spacing: 0.08em;
+    letter-spacing: 0.1em;
 
-    text-transform: uppercase;
-
-    color: #7b687f;
+    color: #80618A;
 
 }
 
 
-.participation-summary-heading h1 {
+.participation-summary-heading h2 {
 
-    margin: 0;
+    margin-bottom: 0;
 
-    font-family:
-        "Bricolage Grotesque",
-        sans-serif;
+    font-family: "Bricolage Grotesque", sans-serif;
 
-    font-size: 1.18rem;
+    font-size: 1.15rem;
 
-    line-height: 1.25;
+    line-height: 1.2;
 
     font-weight: 600;
 
-    color: #201523;
+    letter-spacing: -0.015em;
+
+    color: #0A0016;
 
 }
 
 
+.participation-percentage {
+
+    display: flex;
+
+    align-items: baseline;
+
+    gap: 6px;
+
+}
+
+
+.participation-percentage strong {
+
+    font-family: "Bricolage Grotesque", sans-serif;
+
+    font-size: 1.3rem;
+
+    font-weight: 700;
+
+    color: #4A0754;
+
+}
+
+
+.participation-percentage span {
+
+    font-size: 0.7rem;
+
+    color: #837A86;
+
+}
+
+
+/* ============================================================
+   PROGRESS BAR
+   ============================================================ */
+
 .participation-progress {
 
-    width: 100%;
-
-    max-width: 460px;
+    margin-top: 20px;
 
 }
 
@@ -274,29 +567,26 @@
 
     width: 100%;
 
-    height: 6px;
+    height: 7px;
 
     overflow: hidden;
 
-    border-radius: 999px;
+    background: #EEE9F0;
 
-    background: #eee9f0;
+    border-radius: 20px;
 
 }
 
 
 .participation-progress-bar {
 
-    width: 0%;
+    width: 0;
 
     height: 100%;
 
-    border-radius: inherit;
-
     background: #4A0754;
 
-    transition:
-        width 0.4s ease;
+    border-radius: inherit;
 
 }
 
@@ -309,76 +599,59 @@
 
     display: grid;
 
-    grid-template-columns:
-        repeat(4, minmax(90px, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
 
-    align-items: stretch;
+    margin-top: 20px;
+
+    border-top: 1px solid #EEE9F0;
 
 }
 
 
 .participation-stat {
 
-    min-width: 105px;
+    min-width: 0;
 
     display: flex;
 
-    flex-direction: column;
+    align-items: center;
 
-    justify-content: center;
+    justify-content: space-between;
 
-    padding:
-        2px 20px;
+    gap: 12px;
 
-    border-left:
-        1px solid
-        #e9e5eb;
+    padding: 16px 18px 2px;
 
 }
 
 
-.participation-stat:first-child {
+.participation-stat + .participation-stat {
 
-    border-left: 0;
+    border-left: 1px solid #EEE9F0;
 
 }
 
 
 .participation-stat-label {
 
-    margin-bottom: 5px;
+    font-size: 0.76rem;
 
-    font-size: 0.68rem;
+    line-height: 1.4;
 
-    line-height: 1.2;
-
-    font-weight: 500;
-
-    color: #817584;
+    color: #766E79;
 
 }
 
 
 .participation-stat strong {
 
-    font-family:
-        "Bricolage Grotesque",
-        sans-serif;
+    font-family: "Bricolage Grotesque", sans-serif;
 
-    font-size: 1.25rem;
+    font-size: 1rem;
 
-    line-height: 1;
+    font-weight: 700;
 
-    font-weight: 600;
-
-    color: #211622;
-
-}
-
-
-.participation-stat-highlight strong {
-
-    color: #4A0754;
+    color: #0A0016;
 
 }
 
@@ -391,42 +664,45 @@
 
     display: flex;
 
+    align-items: center;
+
     justify-content: flex-end;
 
-    padding:
-        18px 0 12px;
+    margin-bottom: 18px;
 
 }
 
 
 .participation-search {
 
-    position: relative;
+    width: min(100%, 310px);
 
-    width: min(
-        100%,
-        280px
-    );
+    height: 40px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    padding: 0 12px;
+
+    background: #FFFFFF;
+
+    border: 1px solid #E3DDE5;
+
+    border-radius: 9px;
 
 }
 
 
 .participation-search i {
 
-    position: absolute;
+    flex: 0 0 auto;
 
-    left: 12px;
-
-    top: 50%;
-
-    transform:
-        translateY(-50%);
+    color: #817883;
 
     font-size: 0.95rem;
-
-    color: #8d8290;
-
-    pointer-events: none;
 
 }
 
@@ -435,80 +711,44 @@
 
     width: 100%;
 
-    height: 38px;
+    min-width: 0;
 
-    padding:
-        0 12px 0 35px;
+    height: 100%;
 
-    border:
-        1px solid
-        #e2dce4;
+    padding: 0;
 
-    border-radius: 8px;
+    border: 0;
 
     outline: none;
 
-    background: #ffffff;
+    background: transparent;
 
-    color: #201923;
-
-    font-family:
-        "DM Sans",
-        sans-serif;
+    color: #0A0016;
 
     font-size: 0.78rem;
-
-    transition:
-        border-color 0.2s ease,
-        box-shadow 0.2s ease;
 
 }
 
 
 .participation-search input::placeholder {
 
-    color: #a097a3;
-
-}
-
-
-.participation-search input:focus {
-
-    border-color: #8d5a96;
-
-    box-shadow:
-        0 0 0 3px
-        rgba(74, 7, 84, 0.07);
+    color: #9A929D;
 
 }
 
 
 /* ============================================================
-   MEMBER GROUPS
+   PARTICIPATION SECTION
    ============================================================ */
-
-.participation-groups {
-
-    display: grid;
-
-    grid-template-columns:
-        repeat(2, minmax(0, 1fr));
-
-    gap: 22px;
-
-}
-
 
 .participation-section {
 
-    min-width: 0;
+    margin-bottom: 26px;
 
 }
 
 
 .participation-section-header {
-
-    min-height: 58px;
 
     display: flex;
 
@@ -516,64 +756,35 @@
 
     justify-content: space-between;
 
-    gap: 15px;
+    gap: 18px;
 
-    padding:
-        0 2px 12px;
+    margin-bottom: 11px;
 
 }
 
 
 .participation-section-title {
 
+    min-width: 0;
+
     display: flex;
 
-    align-items: center;
+    align-items: flex-start;
 
-    gap: 9px;
-
-}
-
-
-.participation-section-title h2 {
-
-    margin: 0;
-
-    font-family:
-        "Bricolage Grotesque",
-        sans-serif;
-
-    font-size: 0.98rem;
-
-    line-height: 1.2;
-
-    font-weight: 600;
-
-    color: #241827;
-
-}
-
-
-.participation-section-header p {
-
-    margin: 4px 0 0;
-
-    font-size: 0.72rem;
-
-    line-height: 1.4;
-
-    color: #8a7e8c;
+    gap: 10px;
 
 }
 
 
 .participation-section-indicator {
 
-    width: 8px;
+    width: 7px;
 
-    height: 8px;
+    height: 7px;
 
-    flex: 0 0 8px;
+    flex: 0 0 7px;
+
+    margin-top: 6px;
 
     border-radius: 50%;
 
@@ -582,23 +793,53 @@
 
 .participation-section-indicator.participated {
 
-    background: #4A0754;
+    background: #238636;
 
 }
 
 
 .participation-section-indicator.pending {
 
-    background: #b8adb9;
+    background: #B68A26;
+
+}
+
+
+.participation-section-title h2 {
+
+    margin-bottom: 3px;
+
+    font-family: "Bricolage Grotesque", sans-serif;
+
+    font-size: 1rem;
+
+    line-height: 1.25;
+
+    font-weight: 600;
+
+    color: #0A0016;
+
+}
+
+
+.participation-section-title p {
+
+    margin-bottom: 0;
+
+    font-size: 0.73rem;
+
+    line-height: 1.45;
+
+    color: #807782;
 
 }
 
 
 .participation-count-badge {
 
-    min-width: 27px;
+    min-width: 28px;
 
-    height: 27px;
+    height: 25px;
 
     display: inline-flex;
 
@@ -606,15 +847,19 @@
 
     justify-content: center;
 
-    padding: 0 7px;
+    padding: 0 8px;
 
-    border-radius: 7px;
+    border: 1px solid #E0D8E2;
 
-    background: #f2edf3;
+    border-radius: 8px;
+
+    background: #FFFFFF;
 
     color: #4A0754;
 
-    font-size: 0.7rem;
+    font-family: "Bricolage Grotesque", sans-serif;
+
+    font-size: 0.72rem;
 
     font-weight: 700;
 
@@ -629,13 +874,11 @@
 
     overflow: hidden;
 
-    border:
-        1px solid
-        #e8e2e9;
+    background: #FFFFFF;
+
+    border: 1px solid #E6E0E8;
 
     border-radius: 12px;
-
-    background: #ffffff;
 
 }
 
@@ -645,39 +888,36 @@
     display: grid;
 
     grid-template-columns:
-        minmax(0, 1.8fr)
-        minmax(100px, 0.8fr)
-        minmax(100px, 0.8fr);
-
-    min-height: 37px;
+        minmax(300px, 1.8fr)
+        minmax(150px, 0.8fr)
+        minmax(150px, 0.7fr);
 
     align-items: center;
 
-    padding:
-        0 16px;
+    min-height: 40px;
 
-    background: #faf8fb;
+    padding: 0 18px;
 
-    border-bottom:
-        1px solid
-        #ebe6ed;
+    background: #FAF8FB;
+
+    border-bottom: 1px solid #E9E3EB;
 
 }
 
 
 .participation-member-columns span {
 
-    font-size: 0.64rem;
+    font-family: "Bricolage Grotesque", sans-serif;
 
-    line-height: 1;
+    font-size: 0.63rem;
 
     font-weight: 700;
 
-    letter-spacing: 0.055em;
+    letter-spacing: 0.06em;
 
     text-transform: uppercase;
 
-    color: #8b808e;
+    color: #837985;
 
 }
 
@@ -695,31 +935,20 @@
 
 .participation-member {
 
-    min-height: 67px;
-
     display: grid;
 
     grid-template-columns:
-        42px
-        minmax(0, 1.8fr)
-        minmax(100px, 0.8fr)
-        minmax(100px, 0.8fr);
+        minmax(300px, 1.8fr)
+        minmax(150px, 0.8fr)
+        minmax(150px, 0.7fr);
 
     align-items: center;
 
-    column-gap: 12px;
+    min-height: 68px;
 
-    padding:
-        10px 16px;
+    padding: 10px 18px;
 
-    border-bottom:
-        1px solid
-        #eee9ef;
-
-    background: #ffffff;
-
-    transition:
-        background 0.15s ease;
+    border-bottom: 1px solid #F0ECF1;
 
 }
 
@@ -727,55 +956,6 @@
 .participation-member:last-child {
 
     border-bottom: 0;
-
-}
-
-
-.participation-member:hover {
-
-    background: #fcfafd;
-
-}
-
-
-/* ============================================================
-   AVATAR
-   ============================================================ */
-
-.participation-member-avatar {
-
-    width: 38px;
-
-    height: 38px;
-
-    min-width: 38px;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    border-radius: 50%;
-
-    background:
-        #f0e7f2;
-
-    border:
-        1px solid
-        #e2d5e5;
-
-    color: #4A0754;
-
-    font-family:
-        "Bricolage Grotesque",
-        sans-serif;
-
-    font-size: 0.72rem;
-
-    font-weight: 700;
-
-    line-height: 1;
 
 }
 
@@ -788,6 +968,71 @@
 
     min-width: 0;
 
+    display: flex;
+
+    align-items: center;
+
+    gap: 11px;
+
+}
+
+
+.participation-member-avatar {
+
+    width: 38px;
+
+    height: 38px;
+
+    flex: 0 0 38px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    overflow: hidden;
+
+    border-radius: 50%;
+
+    background: #EEE7F0;
+
+    border: 1px solid #DDD3E0;
+
+    color: #4A0754;
+
+    font-family: "Bricolage Grotesque", sans-serif;
+
+    font-size: 0.72rem;
+
+    font-weight: 700;
+
+}
+
+
+.participation-member-avatar img {
+
+    width: 100%;
+
+    height: 100%;
+
+    display: block;
+
+    object-fit: cover;
+
+}
+
+
+.participation-member-info {
+
+    min-width: 0;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 2px;
+
 }
 
 
@@ -799,264 +1044,161 @@
 
     white-space: nowrap;
 
-    font-size: 0.81rem;
+    font-family: "Bricolage Grotesque", sans-serif;
 
-    line-height: 1.25;
+    font-size: 0.8rem;
+
+    line-height: 1.3;
 
     font-weight: 600;
 
-    color: #241a28;
+    color: #0A0016;
 
 }
 
 
 .participation-member-id {
 
-    margin-top: 3px;
-
     overflow: hidden;
 
     text-overflow: ellipsis;
 
     white-space: nowrap;
 
-    font-size: 0.65rem;
+    font-size: 0.66rem;
 
-    line-height: 1.2;
+    line-height: 1.3;
 
-    color: #948996;
+    color: #8A818D;
 
 }
 
 
 /* ============================================================
-   GROUP
+   MEMBER GROUP
    ============================================================ */
 
 .participation-member-group {
 
     min-width: 0;
 
+    padding-right: 14px;
+
+}
+
+
+.participation-member-group-name {
+
     overflow: hidden;
 
     text-overflow: ellipsis;
 
     white-space: nowrap;
 
-    font-size: 0.73rem;
-
-    line-height: 1.3;
+    font-size: 0.76rem;
 
     font-weight: 500;
 
-    color: #554858;
+    color: #514953;
 
 }
 
 
 /* ============================================================
-   ROLE
+   MEMBER ROLE
    ============================================================ */
 
 .participation-member-role {
 
     min-width: 0;
 
+}
+
+
+.participation-member-role-name {
+
     overflow: hidden;
 
     text-overflow: ellipsis;
 
     white-space: nowrap;
 
-    font-size: 0.7rem;
+    font-size: 0.74rem;
 
-    line-height: 1.3;
-
-    color: #817583;
+    color: #766E79;
 
 }
 
 
 /* ============================================================
-   EMPTY STATE
+   MEMBER EMPTY STATE
    ============================================================ */
 
-.participation-empty {
+.participation-member-empty {
 
-    min-height: 120px;
+    min-height: 150px;
 
     display: flex;
+
+    flex-direction: column;
 
     align-items: center;
 
     justify-content: center;
 
-    flex-direction: column;
-
-    gap: 7px;
-
-    padding: 20px;
-
-    color: #968b98;
+    padding: 30px 20px;
 
     text-align: center;
 
 }
 
 
-.participation-empty i {
+.participation-member-empty i {
+
+    margin-bottom: 9px;
 
     font-size: 1.35rem;
 
-    color: #b3a7b5;
+    color: #8A7B90;
 
 }
 
 
-.participation-empty span {
+.participation-member-empty strong {
 
-    font-size: 0.74rem;
+    margin-bottom: 4px;
 
-}
+    font-family: "Bricolage Grotesque", sans-serif;
 
+    font-size: 0.8rem;
 
-/* ============================================================
-   STATES
-   ============================================================ */
+    font-weight: 600;
 
-.participation-state {
-
-    min-height: 180px;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    gap: 12px;
-
-    color: #766a78;
-
-    font-size: 0.78rem;
+    color: #403941;
 
 }
 
 
-.participation-loading {
+.participation-member-empty p {
 
-    flex-direction: column;
+    max-width: 360px;
 
-}
-
-
-.participation-spinner {
-
-    width: 22px;
-
-    height: 22px;
-
-    border:
-        2px solid
-        #e4dce6;
-
-    border-top-color:
-        #4A0754;
-
-    border-radius: 50%;
-
-    animation:
-        participationSpin
-        0.7s linear infinite;
-
-}
-
-
-@keyframes participationSpin {
-
-    to {
-        transform: rotate(360deg);
-    }
-
-}
-
-
-.participation-error {
-
-    justify-content: flex-start;
-
-    padding:
-        20px;
-
-    border:
-        1px solid
-        #eadfe9;
-
-    border-radius: 12px;
-
-    background: #ffffff;
-
-}
-
-
-.participation-state-icon {
-
-    width: 36px;
-
-    height: 36px;
-
-    flex: 0 0 36px;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    border-radius: 50%;
-
-    background: #f4edf4;
-
-    color: #4A0754;
-
-    font-size: 1rem;
-
-}
-
-
-.participation-error strong {
-
-    display: block;
-
-    margin-bottom: 3px;
-
-    font-family:
-        "Bricolage Grotesque",
-        sans-serif;
-
-    font-size: 0.82rem;
-
-    color: #332437;
-
-}
-
-
-.participation-error p {
-
-    margin: 0;
+    margin-bottom: 0;
 
     font-size: 0.72rem;
 
-    color: #887b8b;
+    line-height: 1.5;
+
+    color: #8A818C;
 
 }
 
 
 /* ============================================================
-   HIDDEN
+   HIDDEN UTILITY
    ============================================================ */
 
-.hidden {
+.quiz-participation-page .hidden {
 
     display: none !important;
 
@@ -1067,37 +1209,33 @@
    TABLET
    ============================================================ */
 
-@media (max-width: 1050px) {
+@media (max-width: 900px) {
 
-    .participation-summary {
+    .participation-page-header {
 
-        grid-template-columns:
-            1fr;
+        align-items: stretch;
 
-        gap: 20px;
+        flex-direction: column;
+
+        gap: 18px;
 
     }
 
 
-    .participation-summary-stats {
+    .participation-current {
 
         width: 100%;
 
     }
 
 
-    .participation-stat {
-
-        padding-left: 15px;
-        padding-right: 15px;
-
-    }
-
-
-    .participation-groups {
+    .participation-member-columns,
+    .participation-member {
 
         grid-template-columns:
-            1fr;
+            minmax(260px, 1.7fr)
+            minmax(130px, 0.8fr)
+            minmax(130px, 0.7fr);
 
     }
 
@@ -1108,160 +1246,129 @@
    MOBILE
    ============================================================ */
 
-@media (max-width: 700px) {
+@media (max-width: 640px) {
 
-    .quiz-participation-page {
+    .dashboard-content.quiz-participation-page {
 
-        width:
-            min(
-                100% - 22px,
-                1500px
-            );
+        width: min(100% - 20px, 1500px);
 
-        padding-top: 10px;
+        padding-top: 20px;
 
-        padding-bottom: 30px;
+        padding-bottom: 36px;
 
     }
 
 
-    /* --------------------------------------------------------
-       CURRENT QUIZ
-       -------------------------------------------------------- */
+    .participation-page-header {
+
+        margin-bottom: 20px;
+
+    }
+
+
+    .participation-page-heading h1 {
+
+        font-size: 1.4rem;
+
+    }
+
+
+    .participation-page-heading p {
+
+        font-size: 0.8rem;
+
+    }
+
 
     .participation-current {
 
-        min-height: 70px;
+        min-width: 0;
 
-        padding:
-            15px 16px;
-
-        border-radius: 11px;
+        padding: 12px;
 
     }
 
 
-    .participation-current-label {
+    .participation-current-icon {
 
-        font-size: 0.63rem;
+        width: 34px;
 
-    }
+        height: 34px;
 
+        flex-basis: 34px;
 
-    .participation-current-lesson {
-
-        font-size: 1.05rem;
-
-    }
-
-
-    .participation-status-badge {
-
-        min-height: 27px;
-
-        padding:
-            0 9px;
-
-        font-size: 0.64rem;
+        border-radius: 9px;
 
     }
 
 
-    /* --------------------------------------------------------
-       SUMMARY
-       -------------------------------------------------------- */
+    .participation-current-status {
 
-    .participation-summary {
+        font-size: 0.65rem;
 
-        padding:
-            18px 0;
+    }
+
+
+    .participation-summary-primary {
+
+        padding: 18px 16px;
+
+        border-radius: 13px;
 
     }
 
 
     .participation-summary-heading {
 
-        margin-bottom: 13px;
+        align-items: flex-start;
+
+        flex-direction: column;
+
+        gap: 8px;
 
     }
 
 
-    .participation-summary-heading h1 {
+    .participation-summary-heading h2 {
 
         font-size: 1rem;
 
     }
 
 
+    .participation-percentage {
+
+        align-items: baseline;
+
+    }
+
+
     .participation-summary-stats {
 
-        grid-template-columns:
-            repeat(2, 1fr);
-
-        border:
-            1px solid
-            #e9e4eb;
-
-        border-radius: 10px;
-
-        overflow: hidden;
+        grid-template-columns: 1fr;
 
     }
 
 
     .participation-stat {
 
-        min-width: 0;
+        padding: 12px 0;
 
-        min-height: 62px;
+    }
 
-        padding:
-            11px 13px;
+
+    .participation-stat + .participation-stat {
 
         border-left: 0;
 
-        border-bottom:
-            1px solid
-            #e9e4eb;
+        border-top: 1px solid #EEE9F0;
 
     }
 
-
-    .participation-stat:nth-child(
-        odd
-    ) {
-
-        border-right:
-            1px solid
-            #e9e4eb;
-
-    }
-
-
-    .participation-stat:nth-last-child(
-        -n + 2
-    ) {
-
-        border-bottom: 0;
-
-    }
-
-
-    .participation-stat strong {
-
-        font-size: 1.05rem;
-
-    }
-
-
-    /* --------------------------------------------------------
-       SEARCH
-       -------------------------------------------------------- */
 
     .participation-toolbar {
 
-        padding:
-            13px 0 10px;
+        justify-content: stretch;
 
     }
 
@@ -1273,43 +1380,19 @@
     }
 
 
-    /* --------------------------------------------------------
-       SECTIONS
-       -------------------------------------------------------- */
-
-    .participation-groups {
-
-        gap: 18px;
-
-    }
-
-
     .participation-section-header {
 
-        min-height: auto;
-
-        padding-bottom: 9px;
+        align-items: flex-start;
 
     }
 
 
-    .participation-section-header p {
+    .participation-section-title p {
 
-        font-size: 0.67rem;
-
-    }
-
-
-    .participation-section-title h2 {
-
-        font-size: 0.9rem;
+        font-size: 0.68rem;
 
     }
 
-
-    /* --------------------------------------------------------
-       TABLE
-       -------------------------------------------------------- */
 
     .participation-member-table {
 
@@ -1318,6 +1401,11 @@
     }
 
 
+    /*
+     * On mobile the table becomes a clean member list.
+     * Group and role remain visible inside each member row.
+     */
+
     .participation-member-columns {
 
         display: none;
@@ -1325,28 +1413,90 @@
     }
 
 
-    /* --------------------------------------------------------
-       MEMBER ROW
-       -------------------------------------------------------- */
-
     .participation-member {
 
-        min-height: 70px;
+        grid-template-columns: 1fr;
 
-        grid-template-columns:
-            40px
-            minmax(0, 1fr);
+        gap: 8px;
 
-        grid-template-rows:
-            auto
-            auto;
+        min-height: auto;
 
-        column-gap: 11px;
+        padding: 13px 14px;
 
-        row-gap: 3px;
+    }
 
-        padding:
-            10px 12px;
+
+    .participation-member-identity {
+
+        width: 100%;
+
+    }
+
+
+    .participation-member-group,
+    .participation-member-role {
+
+        display: flex;
+
+        align-items: center;
+
+        gap: 8px;
+
+        padding-left: 49px;
+
+    }
+
+
+    .participation-member-group::before {
+
+        content: "Group";
+
+        width: 42px;
+
+        flex: 0 0 42px;
+
+        font-family: "Bricolage Grotesque", sans-serif;
+
+        font-size: 0.58rem;
+
+        font-weight: 700;
+
+        text-transform: uppercase;
+
+        letter-spacing: 0.04em;
+
+        color: #9A929D;
+
+    }
+
+
+    .participation-member-role::before {
+
+        content: "Role";
+
+        width: 42px;
+
+        flex: 0 0 42px;
+
+        font-family: "Bricolage Grotesque", sans-serif;
+
+        font-size: 0.58rem;
+
+        font-weight: 700;
+
+        text-transform: uppercase;
+
+        letter-spacing: 0.04em;
+
+        color: #9A929D;
+
+    }
+
+
+    .participation-member-group-name,
+    .participation-member-role-name {
+
+        font-size: 0.7rem;
 
     }
 
@@ -1357,64 +1507,41 @@
 
         height: 36px;
 
-        min-width: 36px;
-
-        grid-row:
-            1 / 3;
-
-        align-self: center;
-
-        font-size: 0.68rem;
-
-    }
-
-
-    .participation-member-identity {
-
-        min-width: 0;
-
-        display: flex;
-
-        align-items: baseline;
-
-        gap: 7px;
+        flex-basis: 36px;
 
     }
 
 
     .participation-member-name {
 
-        font-size: 0.76rem;
+        font-size: 0.77rem;
 
     }
 
 
     .participation-member-id {
 
-        flex-shrink: 0;
-
-        margin-top: 0;
-
-        font-size: 0.59rem;
+        font-size: 0.62rem;
 
     }
 
 
-    .participation-member-group {
+    .participation-state {
 
-        grid-column: 2;
+        align-items: flex-start;
 
-        font-size: 0.65rem;
-
-    }
-
-
-    .participation-member-role {
-
-        display: none;
+        padding: 16px;
 
     }
 
+
+    .participation-retry-button {
+
+        align-self: center;
+
+        margin-left: 0;
+
+    }
 
 }
 
@@ -1423,59 +1550,53 @@
    SMALL MOBILE
    ============================================================ */
 
-@media (max-width: 400px) {
+@media (max-width: 420px) {
+
+    .dashboard-content.quiz-participation-page {
+
+        width: min(100% - 16px, 1500px);
+
+    }
+
 
     .participation-current {
 
-        padding:
-            13px;
+        align-items: flex-start;
 
     }
 
 
-    .participation-current-lesson {
+    .participation-current-status {
 
-        font-size: 0.98rem;
-
-    }
-
-
-    .participation-summary-stats {
-
-        grid-template-columns:
-            repeat(2, 1fr);
+        margin-top: 3px;
 
     }
 
 
-    .participation-stat {
+    .participation-current-main strong {
 
-        min-height: 58px;
-
-        padding:
-            9px 10px;
+        font-size: 0.82rem;
 
     }
 
 
-    .participation-stat-label {
+    .participation-summary-primary {
 
-        font-size: 0.62rem;
+        padding: 16px 14px;
 
     }
 
 
-    .participation-stat strong {
+    .participation-section-title h2 {
 
-        font-size: 0.98rem;
+        font-size: 0.92rem;
 
     }
 
 
     .participation-member {
 
-        padding:
-            9px 10px;
+        padding: 12px;
 
     }
 
