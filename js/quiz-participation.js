@@ -6,7 +6,6 @@
 (function () {
     "use strict";
 
-
     /* ============================================================
        API
        ============================================================ */
@@ -22,7 +21,7 @@
     let currentLessonNo = "";
     let currentQuizData = null;
     let participationData = null;
-    let isLoading = false;
+    let loading = false;
 
 
     /* ============================================================
@@ -30,99 +29,64 @@
        ============================================================ */
 
     const loadingState =
-        document.getElementById(
-            "participationLoadingState"
-        );
+        document.getElementById("participationLoadingState");
 
     const errorState =
-        document.getElementById(
-            "participationErrorState"
-        );
+        document.getElementById("participationErrorState");
 
     const errorMessage =
-        document.getElementById(
-            "participationErrorMessage"
-        );
+        document.getElementById("participationErrorMessage");
 
     const retryButton =
-        document.getElementById(
-            "participationRetryButton"
-        );
+        document.getElementById("participationRetryButton");
 
     const content =
-        document.getElementById(
-            "participationContent"
-        );
+        document.getElementById("participationContent");
 
     const currentLessonNumber =
-        document.getElementById(
-            "participationCurrentLesson"
-        );
+        document.getElementById("participationCurrentLesson");
 
     const currentLessonStatus =
-        document.getElementById(
-            "participationLessonStatus"
-        );
+        document.getElementById("participationLessonStatus");
+
+    const currentLessonTitle =
+        document.getElementById("participationCurrentTitle");
 
     const totalMembers =
-        document.getElementById(
-            "participationTotalMembers"
-        );
+        document.getElementById("participationTotalMembers");
 
     const takenCount =
-        document.getElementById(
-            "participationTakenCount"
-        );
+        document.getElementById("participationTakenCount");
 
     const notTakenCount =
-        document.getElementById(
-            "participationNotTakenCount"
-        );
+        document.getElementById("participationNotTakenCount");
 
     const participationPercentage =
-        document.getElementById(
-            "participationPercentage"
-        );
+        document.getElementById("participationPercentage");
 
     const progressBar =
-        document.getElementById(
-            "participationProgressBar"
-        );
+        document.getElementById("participationProgressBar");
 
     const searchInput =
-        document.getElementById(
-            "participationSearchInput"
-        );
+        document.getElementById("participationSearchInput");
 
     const takenList =
-        document.getElementById(
-            "participationTakenList"
-        );
+        document.getElementById("participationTakenList");
 
     const takenEmpty =
-        document.getElementById(
-            "participationTakenEmpty"
-        );
+        document.getElementById("participationTakenEmpty");
 
     const takenBadge =
-        document.getElementById(
-            "participationTakenBadge"
-        );
+        document.getElementById("participationTakenBadge");
 
     const notTakenList =
-        document.getElementById(
-            "participationNotTakenList"
-        );
+        document.getElementById("participationNotTakenList");
 
     const notTakenEmpty =
-        document.getElementById(
-            "participationNotTakenEmpty"
-        );
+        document.getElementById("participationNotTakenEmpty");
 
     const notTakenBadge =
-        document.getElementById(
-            "participationNotTakenBadge"
-        );
+        document.getElementById("participationNotTakenBadge");
 
 
     /* ============================================================
@@ -139,21 +103,17 @@
 
         bindEvents();
 
-        resetParticipationView();
+        resetView();
 
         await loadCurrentQuiz();
     }
 
 
     /* ============================================================
-       EVENT BINDINGS
+       EVENTS
        ============================================================ */
 
     function bindEvents() {
-
-        /*
-         * Search
-         */
 
         if (searchInput) {
 
@@ -164,10 +124,6 @@
         }
 
 
-        /*
-         * Retry
-         */
-
         if (retryButton) {
 
             retryButton.addEventListener(
@@ -175,6 +131,7 @@
                 function () {
 
                     loadCurrentQuiz();
+
                 }
             );
         }
@@ -187,31 +144,20 @@
 
     async function loadCurrentQuiz() {
 
-        if (isLoading) {
+        if (loading) {
             return;
         }
 
-        isLoading = true;
+        loading = true;
 
         showLoading();
 
 
         try {
 
-            const url =
-                API_URL +
-                "?action=getQuiz";
-
-
-            console.log(
-                "Current Quiz API:",
-                url
-            );
-
-
             const response =
                 await fetch(
-                    url,
+                    API_URL + "?action=getQuiz",
                     {
                         method: "GET",
                         cache: "no-store"
@@ -232,12 +178,12 @@
 
 
             console.log(
-                "Current Quiz Data:",
+                "Current Quiz:",
                 data
             );
 
 
-            if (!data.success) {
+            if (data.success === false) {
 
                 throw new Error(
                     data.message ||
@@ -246,20 +192,17 @@
             }
 
 
-            currentQuizData =
-                data;
+            currentQuizData = data;
 
 
             const lessonNo =
-                extractLessonNumber(
-                    data
-                );
+                getLessonNumber(data);
 
 
             if (!lessonNo) {
 
                 throw new Error(
-                    "The current quiz does not have a valid lesson number."
+                    "The current quiz does not contain a valid lesson number."
                 );
             }
 
@@ -268,91 +211,47 @@
                 lessonNo;
 
 
-            updateCurrentQuizHeader(
-                data
-            );
+            updateQuizHeader(data);
 
-
-            /*
-             * Now load participation for the
-             * automatically detected current lesson.
-             */
 
             await loadParticipation(
-                lessonNo
+                currentLessonNo
             );
 
 
         } catch (error) {
 
             console.error(
-                "Current Quiz Error:",
+                "Quiz Participation:",
                 error
             );
 
 
             showError(
                 error.message ||
-                "Something went wrong while loading the current quiz."
+                "Something went wrong while loading quiz participation."
             );
 
         } finally {
 
-            isLoading = false;
+            loading = false;
         }
     }
 
 
     /* ============================================================
-       EXTRACT CURRENT LESSON NUMBER
+       GET LESSON NUMBER
        ============================================================ */
 
-    function extractLessonNumber(
-        data
-    ) {
+    function getLessonNumber(data) {
 
         if (!data) {
             return "";
         }
 
 
-        /*
-         * Direct fields
-         */
-
-        const directValues = [
-            data.lessonNo,
-            data.lessonNumber,
-            data.lesson,
-            data.currentLessonNo,
-            data.currentLessonNumber
-        ];
-
-
-        for (
-            let i = 0;
-            i < directValues.length;
-            i++
-        ) {
-
-            const lessonNo =
-                normalizeLessonNumber(
-                    directValues[i]
-                );
-
-
-            if (lessonNo) {
-                return lessonNo;
-            }
-        }
-
-
-        /*
-         * Some API responses place quiz information
-         * inside another object.
-         */
-
-        const nestedObjects = [
+        const objects = [
+            data,
             data.quiz,
             data.currentQuiz,
             data.data,
@@ -362,12 +261,12 @@
 
         for (
             let i = 0;
-            i < nestedObjects.length;
+            i < objects.length;
             i++
         ) {
 
             const object =
-                nestedObjects[i];
+                objects[i];
 
 
             if (
@@ -378,28 +277,31 @@
             }
 
 
-            const nestedValues = [
+            const values = [
                 object.lessonNo,
                 object.lessonNumber,
                 object.lesson,
                 object.currentLessonNo,
-                object.currentLessonNumber
+                object.currentLessonNumber,
+                object.lesson_id,
+                object.lessonId
             ];
 
 
             for (
                 let j = 0;
-                j < nestedValues.length;
+                j < values.length;
                 j++
             ) {
 
                 const lessonNo =
                     normalizeLessonNumber(
-                        nestedValues[j]
+                        values[j]
                     );
 
 
                 if (lessonNo) {
+
                     return lessonNo;
                 }
             }
@@ -411,17 +313,97 @@
 
 
     /* ============================================================
-       UPDATE CURRENT QUIZ HEADER
+       GET LESSON TITLE
        ============================================================ */
 
-    function updateCurrentQuizHeader(
-        data
-    ) {
+    function getLessonTitle(data) {
+
+        if (!data) {
+            return "";
+        }
+
+
+        const objects = [
+            data,
+            data.quiz,
+            data.currentQuiz,
+            data.data,
+            data.result
+        ];
+
+
+        for (
+            let i = 0;
+            i < objects.length;
+            i++
+        ) {
+
+            const object =
+                objects[i];
+
+
+            if (
+                !object ||
+                typeof object !== "object"
+            ) {
+                continue;
+            }
+
+
+            const values = [
+                object.lessonTitle,
+                object.title,
+                object.lessonName,
+                object.topic,
+                object.name
+            ];
+
+
+            for (
+                let j = 0;
+                j < values.length;
+                j++
+            ) {
+
+                const value =
+                    String(
+                        values[j] || ""
+                    ).trim();
+
+
+                if (value) {
+
+                    return value;
+                }
+            }
+        }
+
+
+        return "";
+    }
+
+
+    /* ============================================================
+       UPDATE QUIZ HEADER
+       ============================================================ */
+
+    function updateQuizHeader(data) {
 
         if (currentLessonNumber) {
 
             currentLessonNumber.textContent =
-                `Lesson ${currentLessonNo}`;
+                "Lesson " + currentLessonNo;
+        }
+
+
+        const title =
+            getLessonTitle(data);
+
+
+        if (currentLessonTitle) {
+
+            currentLessonTitle.textContent =
+                title || "Weekly SLC Quiz";
         }
 
 
@@ -431,21 +413,14 @@
 
 
         const status =
-            getQuizStatus(
-                data
-            );
+            getQuizStatus(data);
 
 
-        if (status === "closed") {
-
-            currentLessonStatus.textContent =
-                "Closed";
-
-            currentLessonStatus.dataset.status =
-                "closed";
-
-            return;
-        }
+        currentLessonStatus.classList.remove(
+            "is-open",
+            "is-closed",
+            "is-current"
+        );
 
 
         if (status === "open") {
@@ -456,20 +431,39 @@
             currentLessonStatus.dataset.status =
                 "open";
 
+            currentLessonStatus.classList.add(
+                "is-open"
+            );
+
             return;
         }
 
 
-        /*
-         * If the backend doesn't provide a clear
-         * open/closed value, use a neutral status.
-         */
+        if (status === "closed") {
+
+            currentLessonStatus.textContent =
+                "Closed";
+
+            currentLessonStatus.dataset.status =
+                "closed";
+
+            currentLessonStatus.classList.add(
+                "is-closed"
+            );
+
+            return;
+        }
+
 
         currentLessonStatus.textContent =
             "Current";
 
         currentLessonStatus.dataset.status =
             "current";
+
+        currentLessonStatus.classList.add(
+            "is-current"
+        );
     }
 
 
@@ -477,113 +471,130 @@
        GET QUIZ STATUS
        ============================================================ */
 
-    function getQuizStatus(
-        data
-    ) {
+    function getQuizStatus(data) {
 
         if (!data) {
             return "";
         }
 
 
-        /*
-         * Explicit boolean values first.
-         */
-
-        const booleanValues = [
-            data.isOpen,
-            data.open,
-            data.quizOpen,
-            data.isActive
+        const objects = [
+            data,
+            data.quiz,
+            data.currentQuiz,
+            data.data,
+            data.result
         ];
 
 
         for (
             let i = 0;
-            i < booleanValues.length;
+            i < objects.length;
             i++
         ) {
 
-            const value =
-                booleanValues[i];
+            const object =
+                objects[i];
 
 
             if (
-                value === true ||
-                value === "true" ||
-                value === "TRUE" ||
-                value === 1 ||
-                value === "1"
+                !object ||
+                typeof object !== "object"
             ) {
-
-                return "open";
-            }
-
-
-            if (
-                value === false ||
-                value === "false" ||
-                value === "FALSE" ||
-                value === 0 ||
-                value === "0"
-            ) {
-
-                return "closed";
-            }
-        }
-
-
-        /*
-         * Text status fields.
-         */
-
-        const statusValues = [
-            data.status,
-            data.quizStatus,
-            data.lessonStatus,
-            data.openStatus,
-            data.quizState
-        ];
-
-
-        for (
-            let i = 0;
-            i < statusValues.length;
-            i++
-        ) {
-
-            const status =
-                String(
-                    statusValues[i] ||
-                    ""
-                )
-                    .trim()
-                    .toLowerCase();
-
-
-            if (!status) {
                 continue;
             }
 
 
-            if (
-                status.includes("closed") ||
-                status === "close" ||
-                status === "ended" ||
-                status === "inactive"
+            const booleanValues = [
+                object.isOpen,
+                object.quizOpen,
+                object.open,
+                object.isActive
+            ];
+
+
+            for (
+                let j = 0;
+                j < booleanValues.length;
+                j++
             ) {
 
-                return "closed";
+                const value =
+                    booleanValues[j];
+
+
+                if (
+                    value === true ||
+                    value === "true" ||
+                    value === "TRUE" ||
+                    value === 1 ||
+                    value === "1"
+                ) {
+
+                    return "open";
+                }
+
+
+                if (
+                    value === false ||
+                    value === "false" ||
+                    value === "FALSE" ||
+                    value === 0 ||
+                    value === "0"
+                ) {
+
+                    return "closed";
+                }
             }
 
 
-            if (
-                status.includes("open") ||
-                status === "active" ||
-                status === "running"
+            const statusValues = [
+                object.status,
+                object.quizStatus,
+                object.lessonStatus,
+                object.openStatus,
+                object.quizState
+            ];
+
+
+            for (
+                let j = 0;
+                j < statusValues.length;
+                j++
             ) {
 
-                return "open";
+                const status =
+                    String(
+                        statusValues[j] || ""
+                    )
+                        .trim()
+                        .toLowerCase();
+
+
+                if (!status) {
+                    continue;
+                }
+
+
+                if (
+                    status.includes("closed") ||
+                    status === "close" ||
+                    status === "ended" ||
+                    status === "inactive"
+                ) {
+
+                    return "closed";
+                }
+
+
+                if (
+                    status.includes("open") ||
+                    status === "active" ||
+                    status === "running"
+                ) {
+
+                    return "open";
+                }
             }
         }
 
@@ -609,13 +620,9 @@
         if (!normalizedLesson) {
 
             throw new Error(
-                "A valid lesson number is required to load participation."
+                "A valid lesson number is required."
             );
         }
-
-
-        currentLessonNo =
-            normalizedLesson;
 
 
         try {
@@ -625,12 +632,12 @@
                 "?action=getQuizParticipation" +
                 "&lessonNo=" +
                 encodeURIComponent(
-                    currentLessonNo
+                    normalizedLesson
                 );
 
 
             console.log(
-                "Quiz Participation API:",
+                "Participation API:",
                 url
             );
 
@@ -648,7 +655,7 @@
             if (!response.ok) {
 
                 throw new Error(
-                    "Unable to connect to the quiz participation service."
+                    "Unable to connect to the participation service."
                 );
             }
 
@@ -658,12 +665,12 @@
 
 
             console.log(
-                "Quiz Participation Data:",
+                "Participation Data:",
                 data
             );
 
 
-            if (!data.success) {
+            if (data.success === false) {
 
                 throw new Error(
                     data.message ||
@@ -684,14 +691,14 @@
         } catch (error) {
 
             console.error(
-                "Quiz Participation Error:",
+                "Participation Error:",
                 error
             );
 
 
             showError(
                 error.message ||
-                "Something went wrong while loading quiz participation."
+                "Unable to load quiz participation."
             );
         }
     }
@@ -701,9 +708,7 @@
        RENDER PARTICIPATION
        ============================================================ */
 
-    function renderParticipation(
-        data
-    ) {
+    function renderParticipation(data) {
 
         hideAllStates();
 
@@ -717,16 +722,10 @@
 
 
         const members =
-            Array.isArray(
-                data.members
-            )
+            Array.isArray(data.members)
                 ? data.members
                 : [];
 
-
-        /*
-         * Separate members.
-         */
 
         const participated =
             members.filter(
@@ -735,6 +734,7 @@
                     return isCompletedMember(
                         member
                     );
+
                 }
             );
 
@@ -746,38 +746,34 @@
                     return !isCompletedMember(
                         member
                     );
+
                 }
             );
 
 
-        /*
-         * Backend counts remain the primary source.
-         * Local member counts are the fallback.
-         */
-
         const total =
-            getNumericValue(
+            getNumber(
                 data.totalMembers,
                 members.length
             );
 
 
         const taken =
-            getNumericValue(
+            getNumber(
                 data.completed,
                 participated.length
             );
 
 
         const notTaken =
-            getNumericValue(
+            getNumber(
                 data.notCompleted,
                 notParticipated.length
             );
 
 
         let percentage =
-            getNumericValue(
+            getNumber(
                 data.completionPercentage,
                 calculatePercentage(
                     taken,
@@ -785,10 +781,6 @@
                 )
             );
 
-
-        /*
-         * Keep percentage within 0–100.
-         */
 
         percentage =
             Math.max(
@@ -799,10 +791,6 @@
                 )
             );
 
-
-        /*
-         * Summary.
-         */
 
         if (totalMembers) {
 
@@ -828,33 +816,11 @@
         if (participationPercentage) {
 
             participationPercentage.textContent =
-                `${formatPercentage(
+                formatPercentage(
                     percentage
-                )}%`;
+                ) + "%";
         }
 
-
-        /*
-         * Progress bar.
-         */
-
-        if (progressBar) {
-
-            progressBar.style.width =
-                `${percentage}%`;
-
-            progressBar.setAttribute(
-                "aria-valuenow",
-                String(
-                    percentage
-                );
-            );
-        }
-
-
-        /*
-         * Badges.
-         */
 
         if (takenBadge) {
 
@@ -870,67 +836,24 @@
         }
 
 
-        /*
-         * Current lesson.
-         */
+        if (progressBar) {
+
+            progressBar.style.width =
+                percentage + "%";
+
+            progressBar.setAttribute(
+                "aria-valuenow",
+                String(percentage)
+            );
+        }
+
 
         if (currentLessonNumber) {
 
             currentLessonNumber.textContent =
-                `Lesson ${currentLessonNo}`;
+                "Lesson " + currentLessonNo;
         }
 
-
-        /*
-         * If participation endpoint gives a status,
-         * update the header only when the current quiz
-         * status was not already determined.
-         */
-
-        if (
-            currentLessonStatus &&
-            getQuizStatus(
-                currentQuizData
-            ) === ""
-        ) {
-
-            const participationStatus =
-                String(
-                    data.quizStatus ||
-                    data.lessonStatus ||
-                    data.statusText ||
-                    ""
-                )
-                    .trim()
-                    .toLowerCase();
-
-
-            if (
-                participationStatus.includes(
-                    "closed"
-                )
-            ) {
-
-                currentLessonStatus.textContent =
-                    "Closed";
-
-                currentLessonStatus.dataset.status =
-                    "closed";
-
-            } else {
-
-                currentLessonStatus.textContent =
-                    "Current";
-
-                currentLessonStatus.dataset.status =
-                    "current";
-            }
-        }
-
-
-        /*
-         * Member lists.
-         */
 
         renderMemberList(
             participated,
@@ -946,10 +869,6 @@
         );
 
 
-        /*
-         * Reset search when fresh data loads.
-         */
-
         if (searchInput) {
 
             searchInput.value = "";
@@ -958,147 +877,31 @@
 
 
     /* ============================================================
-       NUMERIC VALUE
+       CHECK COMPLETION
        ============================================================ */
 
-    function getNumericValue(
-        value,
-        fallback
-    ) {
-
-        const number =
-            Number(
-                value
-            );
-
-
-        return Number.isFinite(
-            number
-        )
-            ? number
-            : fallback;
-    }
-
-
-    /* ============================================================
-       CALCULATE PERCENTAGE
-       ============================================================ */
-
-    function calculatePercentage(
-        completed,
-        total
-    ) {
-
-        const completedNumber =
-            Number(
-                completed
-            );
-
-
-        const totalNumber =
-            Number(
-                total
-            );
-
-
-        if (
-            !Number.isFinite(
-                completedNumber
-            ) ||
-            !Number.isFinite(
-                totalNumber
-            ) ||
-            totalNumber <= 0
-        ) {
-
-            return 0;
-        }
-
-
-        return (
-            completedNumber /
-            totalNumber
-        ) * 100;
-    }
-
-
-    /* ============================================================
-       FORMAT PERCENTAGE
-       ============================================================ */
-
-    function formatPercentage(
-        percentage
-    ) {
-
-        const number =
-            Number(
-                percentage
-            );
-
-
-        if (
-            !Number.isFinite(
-                number
-            )
-        ) {
-
-            return "0";
-        }
-
-
-        if (
-            Number.isInteger(
-                number
-            )
-        ) {
-
-            return String(
-                number
-            );
-        }
-
-
-        return number
-            .toFixed(1)
-            .replace(
-                /\.0$/,
-                ""
-            );
-    }
-
-
-    /* ============================================================
-       CHECK MEMBER COMPLETION
-       ============================================================ */
-
-    function isCompletedMember(
-        member
-    ) {
+    function isCompletedMember(member) {
 
         if (!member) {
             return false;
         }
 
 
-        /*
-         * Explicit completion values.
-         */
+        const completed =
+            member.completed;
+
 
         if (
-            member.completed === true ||
-            member.completed === "true" ||
-            member.completed === "TRUE" ||
-            member.completed === 1 ||
-            member.completed === "1"
+            completed === true ||
+            completed === "true" ||
+            completed === "TRUE" ||
+            completed === 1 ||
+            completed === "1"
         ) {
 
             return true;
         }
 
-
-        /*
-         * Status values.
-         */
 
         const status =
             String(
@@ -1122,10 +925,6 @@
             return true;
         }
 
-
-        /*
-         * Alternative backend fields.
-         */
 
         if (
             member.hasCompleted === true ||
@@ -1179,9 +978,7 @@
 
 
         if (
-            !Array.isArray(
-                members
-            ) ||
+            !Array.isArray(members) ||
             members.length === 0
         ) {
 
@@ -1218,15 +1015,15 @@
                     );
 
 
+                if (!name) {
+                    return;
+                }
+
+
                 const memberId =
                     getMemberId(
                         member
                     );
-
-
-                if (!name) {
-                    return;
-                }
 
 
                 const group =
@@ -1241,10 +1038,6 @@
                     );
 
 
-                /*
-                 * Main row.
-                 */
-
                 const item =
                     document.createElement(
                         "div"
@@ -1254,10 +1047,6 @@
                 item.className =
                     "participation-member";
 
-
-                /*
-                 * Search data.
-                 */
 
                 item.dataset.name =
                     name.toLowerCase();
@@ -1276,7 +1065,21 @@
 
 
                 /*
-                 * Avatar.
+                 * Identity column
+                 */
+
+                const identity =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                identity.className =
+                    "participation-member-identity";
+
+
+                /*
+                 * Avatar
                  */
 
                 const avatar =
@@ -1289,30 +1092,30 @@
                     "participation-member-avatar";
 
 
-                avatar.setAttribute(
-                    "aria-hidden",
-                    "true"
-                );
-
-
                 avatar.textContent =
                     getInitials(
                         name
                     );
 
 
+                avatar.setAttribute(
+                    "aria-hidden",
+                    "true"
+                );
+
+
                 /*
-                 * Identity.
+                 * Member information
                  */
 
-                const identity =
+                const info =
                     document.createElement(
                         "div"
                     );
 
 
-                identity.className =
-                    "participation-member-identity";
+                info.className =
+                    "participation-member-info";
 
 
                 const nameElement =
@@ -1329,7 +1132,7 @@
                     name;
 
 
-                identity.appendChild(
+                info.appendChild(
                     nameElement
                 );
 
@@ -1350,14 +1153,24 @@
                         memberId;
 
 
-                    identity.appendChild(
+                    info.appendChild(
                         idElement
                     );
                 }
 
 
+                identity.appendChild(
+                    avatar
+                );
+
+
+                identity.appendChild(
+                    info
+                );
+
+
                 /*
-                 * Group.
+                 * Group
                  */
 
                 const groupElement =
@@ -1375,7 +1188,7 @@
 
 
                 /*
-                 * Role.
+                 * Role
                  */
 
                 const roleElement =
@@ -1393,13 +1206,8 @@
 
 
                 /*
-                 * Build row.
+                 * Complete row
                  */
-
-                item.appendChild(
-                    avatar
-                );
-
 
                 item.appendChild(
                     identity
@@ -1423,32 +1231,23 @@
         );
 
 
-        /*
-         * If all supplied records were invalid,
-         * show the empty state.
-         */
-
         if (
-            listElement.children.length === 0
+            listElement.children.length === 0 &&
+            emptyElement
         ) {
 
-            if (emptyElement) {
-
-                emptyElement.classList.remove(
-                    "hidden"
-                );
-            }
+            emptyElement.classList.remove(
+                "hidden"
+            );
         }
     }
 
 
     /* ============================================================
-       GET MEMBER NAME
+       MEMBER NAME
        ============================================================ */
 
-    function getMemberName(
-        member
-    ) {
+    function getMemberName(member) {
 
         return String(
             member.name ||
@@ -1461,12 +1260,10 @@
 
 
     /* ============================================================
-       GET MEMBER ID
+       MEMBER ID
        ============================================================ */
 
-    function getMemberId(
-        member
-    ) {
+    function getMemberId(member) {
 
         return String(
             member.memberId ||
@@ -1479,12 +1276,10 @@
 
 
     /* ============================================================
-       GET MEMBER GROUP
+       MEMBER GROUP
        ============================================================ */
 
-    function getMemberGroup(
-        member
-    ) {
+    function getMemberGroup(member) {
 
         return String(
             member.group ||
@@ -1497,12 +1292,10 @@
 
 
     /* ============================================================
-       GET MEMBER ROLE
+       MEMBER ROLE
        ============================================================ */
 
-    function getMemberRole(
-        member
-    ) {
+    function getMemberRole(member) {
 
         return String(
             member.groupRole ||
@@ -1518,14 +1311,11 @@
        SEARCH
        ============================================================ */
 
-    function handleSearch(
-        event
-    ) {
+    function handleSearch(event) {
 
         const searchTerm =
             String(
-                event.target.value ||
-                ""
+                event.target.value || ""
             )
                 .trim()
                 .toLowerCase();
@@ -1541,39 +1331,27 @@
             function (item) {
 
                 const name =
-                    item.dataset.name ||
-                    "";
+                    item.dataset.name || "";
 
 
                 const memberId =
-                    item.dataset.memberId ||
-                    "";
+                    item.dataset.memberId || "";
 
 
                 const group =
-                    item.dataset.group ||
-                    "";
+                    item.dataset.group || "";
 
 
                 const role =
-                    item.dataset.role ||
-                    "";
+                    item.dataset.role || "";
 
 
                 const matches =
                     !searchTerm ||
-                    name.includes(
-                        searchTerm
-                    ) ||
-                    memberId.includes(
-                        searchTerm
-                    ) ||
-                    group.includes(
-                        searchTerm
-                    ) ||
-                    role.includes(
-                        searchTerm
-                    );
+                    name.includes(searchTerm) ||
+                    memberId.includes(searchTerm) ||
+                    group.includes(searchTerm) ||
+                    role.includes(searchTerm);
 
 
                 item.style.display =
@@ -1586,13 +1364,10 @@
 
 
     /* ============================================================
-       RESET PAGE
+       RESET VIEW
        ============================================================ */
 
-    function resetParticipationView() {
-
-        hideAllStates();
-
+    function resetView() {
 
         if (content) {
 
@@ -1663,6 +1438,13 @@
         }
 
 
+        if (currentLessonTitle) {
+
+            currentLessonTitle.textContent =
+                "Weekly SLC Quiz";
+        }
+
+
         if (currentLessonStatus) {
 
             currentLessonStatus.textContent =
@@ -1670,6 +1452,12 @@
 
             currentLessonStatus.dataset.status =
                 "";
+
+            currentLessonStatus.classList.remove(
+                "is-open",
+                "is-closed",
+                "is-current"
+            );
         }
 
 
@@ -1712,7 +1500,7 @@
 
 
     /* ============================================================
-       LOADING
+       LOADING STATE
        ============================================================ */
 
     function showLoading() {
@@ -1730,12 +1518,10 @@
 
 
     /* ============================================================
-       ERROR
+       ERROR STATE
        ============================================================ */
 
-    function showError(
-        message
-    ) {
+    function showError(message) {
 
         hideAllStates();
 
@@ -1757,7 +1543,7 @@
 
 
     /* ============================================================
-       HIDE STATES
+       HIDE ALL STATES
        ============================================================ */
 
     function hideAllStates() {
@@ -1791,9 +1577,7 @@
        NORMALIZE LESSON NUMBER
        ============================================================ */
 
-    function normalizeLessonNumber(
-        value
-    ) {
+    function normalizeLessonNumber(value) {
 
         if (
             value === null ||
@@ -1851,12 +1635,130 @@
 
 
     /* ============================================================
-       GET INITIALS
+       NUMBER HELPER
        ============================================================ */
 
-    function getInitials(
-        name
+    function getNumber(
+        value,
+        fallback
     ) {
+
+        if (
+            value === null ||
+            value === undefined ||
+            String(value).trim() === ""
+        ) {
+
+            return fallback;
+        }
+
+
+        const number =
+            Number(
+                value
+            );
+
+
+        return Number.isFinite(
+            number
+        )
+            ? number
+            : fallback;
+    }
+
+
+    /* ============================================================
+       CALCULATE PERCENTAGE
+       ============================================================ */
+
+    function calculatePercentage(
+        completed,
+        total
+    ) {
+
+        const completedNumber =
+            Number(
+                completed
+            );
+
+
+        const totalNumber =
+            Number(
+                total
+            );
+
+
+        if (
+            !Number.isFinite(
+                completedNumber
+            ) ||
+            !Number.isFinite(
+                totalNumber
+            ) ||
+            totalNumber <= 0
+        ) {
+
+            return 0;
+        }
+
+
+        return (
+            completedNumber /
+            totalNumber
+        ) * 100;
+    }
+
+
+    /* ============================================================
+       FORMAT PERCENTAGE
+       ============================================================ */
+
+    function formatPercentage(
+        value
+    ) {
+
+        const number =
+            Number(
+                value
+            );
+
+
+        if (
+            !Number.isFinite(
+                number
+            )
+        ) {
+
+            return "0";
+        }
+
+
+        if (
+            Number.isInteger(
+                number
+            )
+        ) {
+
+            return String(
+                number
+            );
+        }
+
+
+        return number
+            .toFixed(1)
+            .replace(
+                /\.0$/,
+                ""
+            );
+    }
+
+
+    /* ============================================================
+       INITIALS
+       ============================================================ */
+
+    function getInitials(name) {
 
         const words =
             String(
