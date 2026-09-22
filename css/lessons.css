@@ -16,7 +16,7 @@
     min-height: 100%;
 
     font-family:
-        "Inter",
+        "Outfit",
         sans-serif;
 
     /* Keep this page light regardless of device preference */
@@ -246,14 +246,14 @@
     gap: 9px;
 
     font-family:
-        "Inter",
+        "Outfit",
         sans-serif;
 
     font-size: 0.84rem;
 
     font-weight: 750;
 
-    cursor: pointer;
+    cursor: poOutfit;
 
     transition:
         background 0.2s ease,
@@ -664,7 +664,7 @@
         #78350f;
 
     font-family:
-        "Inter",
+        "Outfit",
         sans-serif;
 
     font-size: 0.86rem;
@@ -1512,7 +1512,7 @@
         #ffffff;
 
     cursor:
-        pointer;
+        poOutfit;
 
     transition:
         transform 0.2s ease,
@@ -2778,7 +2778,7 @@
     background:
         rgba(234, 88, 12, 0.06);
 
-    pointer-events:
+    poOutfit-events:
         none;
 
 }
@@ -2875,7 +2875,7 @@
         #ea580c;
 
     font-family:
-        "Inter",
+        "Outfit",
         sans-serif;
 
     font-size:
@@ -2941,7 +2941,7 @@
         var(--text-secondary, #6b7280);
 
     font-family:
-        "Inter",
+        "Outfit",
         sans-serif;
 
     font-size:
@@ -3073,7 +3073,7 @@
 .lesson-rich-content {
 
     font-family:
-        "Inter",
+        "Outfit",
         sans-serif;
 
     font-size:
