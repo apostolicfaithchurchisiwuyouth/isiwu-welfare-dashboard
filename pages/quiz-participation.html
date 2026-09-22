@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    >
+
+    <title>Quiz Participation | AFC Isiu Youth Portal</title>
+
+
+    <!-- =====================================================
+         PWA
+    ====================================================== -->
+
+    <link
+        rel="manifest"
+        href="/manifest.json"
+    >
+
+    <meta
+        name="theme-color"
+        content="#ea580c"
+    >
+
+    <meta
+        name="mobile-web-app-capable"
+        content="yes"
+    >
+
+    <meta
+        name="apple-mobile-web-app-capable"
+        content="yes"
+    >
+
+    <meta
+        name="apple-mobile-web-app-status-bar-style"
+        content="default"
+    >
+
+    <meta
+        name="apple-mobile-web-app-title"
+        content="AFC Isiu"
+    >
+
+
+    <!-- =====================================================
+         ICONS
+    ====================================================== -->
+
+    <link
+        rel="icon"
+        type="image/png"
+        href="/images/logo.png"
+    >
+
+    <link
+        rel="apple-touch-icon"
+        href="/images/logo.png"
+    >
+
+
+    <!-- =====================================================
+         FONTS
+    ====================================================== -->
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap"
+        rel="stylesheet"
+    >
+
+
+    <!-- =====================================================
+         FONT AWESOME
+    ====================================================== -->
+
+    <link
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+        rel="stylesheet"
+    >
+
+
+    <!-- =====================================================
+         REMIX ICONS
+    ====================================================== -->
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/remixicon@4.6.0/fonts/remixicon.css"
+        rel="stylesheet"
+    >
+
+
+    <!-- =====================================================
+         PORTAL CSS
+    ====================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="../css/main.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="../css/layout.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="../css/quiz-participation.css"
+    >
+
+</head>
+
+
+<body>
+
+<div class="app-layout">
+
+
+    <!-- ======================================================
+         SIDEBAR
+    ======================================================= -->
+
+    <div id="app-sidebar"></div>
+
+
+    <!-- ======================================================
+         MAIN AREA
+    ======================================================= -->
+
+    <div class="main-area">
+
+
+        <!-- ==================================================
+             TOPBAR
+        =================================================== -->
+
+        <div id="app-topbar"></div>
+
+
+        <!-- ==================================================
+             PAGE CONTENT
+        =================================================== -->
+
+        <main class="dashboard-content quiz-participation-page">
+
+
+            <!-- ==================================================
+                 HERO
+            =================================================== -->
+
+            <section class="participation-hero">
+
+                <div class="participation-hero-content">
+
+                    <div class="profile-eyebrow">
+
+                        <i class="fa-solid fa-chart-column"></i>
+
+                        Quiz Participation
+
+                    </div>
+
+
+                    <h1>
+
+                        Who's taking part
+
+                        <span>
+                            this week?
+                        </span>
+
+                    </h1>
+
+
+                    <p>
+
+                        See who has completed the weekly SLC quiz
+                        and who is yet to participate.
+
+                    </p>
+
+                </div>
+
+            </section>
+
+
+            <!-- ==================================================
+                 LESSON SELECTOR
+            =================================================== -->
+
+            <section class="participation-control-card">
+
+                <div class="participation-control-copy">
+
+                    <span class="participation-section-label">
+
+                        WEEKLY QUIZ
+
+                    </span>
+
+
+                    <h2>
+                        Select a lesson
+                    </h2>
+
+
+                    <p>
+                        Choose the lesson you want to check.
+                    </p>
+
+                </div>
+
+
+                <div class="participation-select-wrap">
+
+                    <label
+                        for="participationLessonSelect"
+                        class="sr-only"
+                    >
+                        Select lesson
+                    </label>
+
+
+                    <select
+                        id="participationLessonSelect"
+                        class="participation-lesson-select"
+                    >
+
+                        <option value="">
+                            Loading lessons...
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </section>
+
+
+            <!-- ==================================================
+                 LOADING STATE
+            =================================================== -->
+
+            <section
+                id="participationLoadingState"
+                class="participation-status-card"
+            >
+
+                <i class="fa-solid fa-spinner fa-spin"></i>
+
+                <span>
+                    Loading quiz participation...
+                </span>
+
+            </section>
+
+
+            <!-- ==================================================
+                 ERROR STATE
+            =================================================== -->
+
+            <section
+                id="participationErrorState"
+                class="participation-status-card participation-status-error hidden"
+            >
+
+                <i class="fa-solid fa-circle-exclamation"></i>
+
+
+                <div>
+
+                    <strong>
+                        Something went wrong
+                    </strong>
+
+
+                    <span id="participationErrorMessage">
+                        Unable to load quiz participation right now.
+                    </span>
+
+                </div>
+
+            </section>
+
+
+            <!-- ==================================================
+                 MAIN PARTICIPATION CONTENT
+            =================================================== -->
+
+            <section
+                id="participationContent"
+                class="hidden"
+            >
+
+
+                <!-- ==============================================
+                     SUMMARY
+                =============================================== -->
+
+                <div class="participation-summary-grid">
+
+
+                    <!-- TOTAL MEMBERS -->
+
+                    <div class="participation-summary-card">
+
+                        <div class="participation-summary-icon">
+
+                            <i class="fa-solid fa-users"></i>
+
+                        </div>
+
+
+                        <div class="participation-summary-copy">
+
+                            <strong id="participationTotalMembers">
+                                0
+                            </strong>
+
+                            <span>
+                                Total Members
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- PARTICIPATED -->
+
+                    <div class="participation-summary-card participation-summary-card-success">
+
+                        <div class="participation-summary-icon">
+
+                            <i class="fa-solid fa-circle-check"></i>
+
+                        </div>
+
+
+                        <div class="participation-summary-copy">
+
+                            <strong id="participationTakenCount">
+                                0
+                            </strong>
+
+                            <span>
+                                Took the Quiz
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- NOT PARTICIPATED -->
+
+                    <div class="participation-summary-card participation-summary-card-pending">
+
+                        <div class="participation-summary-icon">
+
+                            <i class="fa-solid fa-clock"></i>
+
+                        </div>
+
+
+                        <div class="participation-summary-copy">
+
+                            <strong id="participationNotTakenCount">
+                                0
+                            </strong>
+
+                            <span>
+                                Yet to Take It
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ==============================================
+                     SEARCH
+                =============================================== -->
+
+                <div class="participation-search-card">
+
+                    <div class="participation-search-icon">
+
+                        <i class="fa-solid fa-magnifying-glass"></i>
+
+                    </div>
+
+
+                    <input
+                        type="search"
+                        id="participationSearchInput"
+                        placeholder="Search a member..."
+                        autocomplete="off"
+                    >
+
+                </div>
+
+
+                <!-- ==============================================
+                     PARTICIPATION COLUMNS
+                =============================================== -->
+
+                <div class="participation-lists-grid">
+
+
+                    <!-- ==========================================
+                         PARTICIPATED
+                    =========================================== -->
+
+                    <section class="participation-list-card">
+
+                        <div class="participation-list-header">
+
+                            <div>
+
+                                <span class="participation-list-eyebrow">
+
+                                    COMPLETED
+
+                                </span>
+
+
+                                <h2>
+                                    Took the quiz
+                                </h2>
+
+                            </div>
+
+
+                            <span
+                                id="participationTakenBadge"
+                                class="participation-list-count participation-list-count-success"
+                            >
+                                0
+                            </span>
+
+                        </div>
+
+
+                        <div
+                            id="participationTakenList"
+                            class="participation-member-list"
+                        ></div>
+
+
+                        <div
+                            id="participationTakenEmpty"
+                            class="participation-empty-state hidden"
+                        >
+
+                            <i class="fa-regular fa-circle-check"></i>
+
+
+                            <strong>
+                                No one yet
+                            </strong>
+
+
+                            <span>
+                                No member has completed this quiz yet.
+                            </span>
+
+                        </div>
+
+                    </section>
+
+
+                    <!-- ==========================================
+                         NOT PARTICIPATED
+                    =========================================== -->
+
+                    <section class="participation-list-card">
+
+                        <div class="participation-list-header">
+
+                            <div>
+
+                                <span class="participation-list-eyebrow">
+
+                                    PENDING
+
+                                </span>
+
+
+                                <h2>
+                                    Yet to take it
+                                </h2>
+
+                            </div>
+
+
+                            <span
+                                id="participationNotTakenBadge"
+                                class="participation-list-count participation-list-count-pending"
+                            >
+                                0
+                            </span>
+
+                        </div>
+
+
+                        <div
+                            id="participationNotTakenList"
+                            class="participation-member-list"
+                        ></div>
+
+
+                        <div
+                            id="participationNotTakenEmpty"
+                            class="participation-empty-state hidden"
+                        >
+
+                            <i class="fa-solid fa-users"></i>
+
+
+                            <strong>
+                                Everyone has participated
+                            </strong>
+
+
+                            <span>
+                                All listed members have completed this quiz.
+                            </span>
+
+                        </div>
+
+                    </section>
+
+                </div>
+
+
+            </section>
+
+
+        </main>
+
+    </div>
+
+
+    <!-- ======================================================
+         MOBILE BOTTOM NAV
+    ======================================================= -->
+
+    <div id="app-bottom-nav"></div>
+
+
+</div>
+
+
+<!-- =========================================================
+     JAVASCRIPT
+========================================================= -->
+
+<script src="../js/pwa.js"></script>
+
+<script src="../js/main.js"></script>
+
+<script src="../js/quiz-participation.js"></script>
+
+<script src="../js/layout.js"></script>
+
+
+</body>
+
+</html>
