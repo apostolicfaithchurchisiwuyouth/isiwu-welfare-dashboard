@@ -20,17 +20,14 @@
        ============================================================ */
 
     let currentLessonNo = "";
+    let currentQuizData = null;
     let participationData = null;
+    let isLoading = false;
 
 
     /* ============================================================
        DOM ELEMENTS
        ============================================================ */
-
-    const lessonSelect =
-        document.getElementById(
-            "participationLessonSelect"
-        );
 
     const loadingState =
         document.getElementById(
@@ -47,9 +44,24 @@
             "participationErrorMessage"
         );
 
+    const retryButton =
+        document.getElementById(
+            "participationRetryButton"
+        );
+
     const content =
         document.getElementById(
             "participationContent"
+        );
+
+    const currentLessonNumber =
+        document.getElementById(
+            "participationCurrentLesson"
+        );
+
+    const currentLessonStatus =
+        document.getElementById(
+            "participationLessonStatus"
         );
 
     const totalMembers =
@@ -70,6 +82,11 @@
     const participationPercentage =
         document.getElementById(
             "participationPercentage"
+        );
+
+    const progressBar =
+        document.getElementById(
+            "participationProgressBar"
         );
 
     const searchInput =
@@ -107,16 +124,6 @@
             "participationNotTakenBadge"
         );
 
-    const currentLessonNumber =
-        document.getElementById(
-            "participationCurrentLesson"
-        );
-
-    const currentLessonStatus =
-        document.getElementById(
-            "participationLessonStatus"
-        );
-
 
     /* ============================================================
        INITIALIZE
@@ -128,91 +135,21 @@
     );
 
 
-    function initialize() {
+    async function initialize() {
 
-        if (!lessonSelect) {
-
-            console.error(
-                "Quiz Participation: lesson select not found."
-            );
-
-            return;
-        }
-
+        bindEvents();
 
         resetParticipationView();
 
-
-        populateLessonSelect();
-
-
-        /*
-         * Direct lesson links:
-         *
-         * quiz-participation.html?lessonNo=89
-         */
-
-        const params =
-            new URLSearchParams(
-                window.location.search
-            );
+        await loadCurrentQuiz();
+    }
 
 
-        const urlLessonNo =
-            normalizeLessonNumber(
-                params.get("lessonNo")
-            );
+    /* ============================================================
+       EVENT BINDINGS
+       ============================================================ */
 
-
-        if (urlLessonNo) {
-
-            lessonSelect.value =
-                urlLessonNo;
-
-            loadParticipation(
-                urlLessonNo
-            );
-
-        } else {
-
-            /*
-             * Automatically load the latest recorded lesson.
-             */
-            loadLatestRecordedLesson();
-        }
-
-
-        /*
-         * Lesson selection
-         */
-
-        lessonSelect.addEventListener(
-            "change",
-            function (event) {
-
-                const lessonNo =
-                    normalizeLessonNumber(
-                        event.target.value
-                    );
-
-
-                if (!lessonNo) {
-
-                    currentLessonNo = "";
-                    participationData = null;
-
-                    resetParticipationView();
-
-                    return;
-                }
-
-
-                loadParticipation(
-                    lessonNo
-                );
-            }
-        );
-
+    function bindEvents() {
 
         /*
          * Search
@@ -225,14 +162,36 @@
                 handleSearch
             );
         }
+
+
+        /*
+         * Retry
+         */
+
+        if (retryButton) {
+
+            retryButton.addEventListener(
+                "click",
+                function () {
+
+                    loadCurrentQuiz();
+                }
+            );
+        }
     }
 
 
     /* ============================================================
-       LOAD LATEST RECORDED LESSON
+       LOAD CURRENT QUIZ
        ============================================================ */
 
-    async function loadLatestRecordedLesson() {
+    async function loadCurrentQuiz() {
+
+        if (isLoading) {
+            return;
+        }
+
+        isLoading = true;
 
         showLoading();
 
@@ -241,7 +200,13 @@
 
             const url =
                 API_URL +
-                "?action=getQuizParticipationLessons";
+                "?action=getQuiz";
+
+
+            console.log(
+                "Current Quiz API:",
+                url
+            );
 
 
             const response =
@@ -257,7 +222,7 @@
             if (!response.ok) {
 
                 throw new Error(
-                    "Unable to load recorded quiz lessons."
+                    "Unable to connect to the quiz service."
                 );
             }
 
@@ -267,7 +232,7 @@
 
 
             console.log(
-                "Quiz Participation Lessons:",
+                "Current Quiz Data:",
                 data
             );
 
@@ -276,259 +241,354 @@
 
                 throw new Error(
                     data.message ||
-                    "Unable to load recorded quiz lessons."
+                    "Unable to load the current quiz."
                 );
             }
 
 
-            const lessons =
-                extractLessonNumbers(
+            currentQuizData =
+                data;
+
+
+            const lessonNo =
+                extractLessonNumber(
                     data
                 );
 
 
-            /*
-             * If the backend gives us recorded lessons,
-             * populate the dropdown from those lessons.
-             */
+            if (!lessonNo) {
 
-            if (lessons.length) {
-
-                populateLessonSelect(
-                    lessons
+                throw new Error(
+                    "The current quiz does not have a valid lesson number."
                 );
-
-
-                const latestLesson =
-                    lessons
-                        .map(
-                            function (lesson) {
-                                return Number(lesson);
-                            }
-                        )
-                        .filter(
-                            function (lesson) {
-                                return Number.isFinite(
-                                    lesson
-                                );
-                            }
-                        )
-                        .sort(
-                            function (a, b) {
-                                return b - a;
-                            }
-                        )[0];
-
-
-                if (
-                    Number.isFinite(
-                        latestLesson
-                    )
-                ) {
-
-                    const lessonNo =
-                        String(
-                            latestLesson
-                        );
-
-
-                    lessonSelect.value =
-                        lessonNo;
-
-
-                    loadParticipation(
-                        lessonNo
-                    );
-
-
-                    return;
-                }
             }
 
 
+            currentLessonNo =
+                lessonNo;
+
+
+            updateCurrentQuizHeader(
+                data
+            );
+
+
             /*
-             * Fallback.
-             *
-             * If the lessons endpoint returns no usable
-             * list, we do not guess a lesson number.
+             * Now load participation for the
+             * automatically detected current lesson.
              */
 
-            showError(
-                "No recorded quiz participation lesson was found."
+            await loadParticipation(
+                lessonNo
             );
+
 
         } catch (error) {
 
             console.error(
-                "Latest Quiz Participation Error:",
+                "Current Quiz Error:",
                 error
             );
 
 
             showError(
                 error.message ||
-                "Something went wrong while loading quiz participation."
+                "Something went wrong while loading the current quiz."
             );
+
+        } finally {
+
+            isLoading = false;
         }
     }
 
 
     /* ============================================================
-       EXTRACT LESSON NUMBERS
+       EXTRACT CURRENT LESSON NUMBER
        ============================================================ */
 
-    function extractLessonNumbers(
+    function extractLessonNumber(
         data
     ) {
 
-        const source =
-            data.lessons ||
-            data.data ||
-            data.records ||
-            [];
-
-
-        if (!Array.isArray(source)) {
-
-            return [];
+        if (!data) {
+            return "";
         }
 
 
-        const lessonNumbers =
-            [];
+        /*
+         * Direct fields
+         */
+
+        const directValues = [
+            data.lessonNo,
+            data.lessonNumber,
+            data.lesson,
+            data.currentLessonNo,
+            data.currentLessonNumber
+        ];
 
 
-        source.forEach(
-            function (item) {
+        for (
+            let i = 0;
+            i < directValues.length;
+            i++
+        ) {
 
-                let value = "";
+            const lessonNo =
+                normalizeLessonNumber(
+                    directValues[i]
+                );
 
 
-                if (
-                    typeof item ===
-                    "object" &&
-                    item !== null
-                ) {
+            if (lessonNo) {
+                return lessonNo;
+            }
+        }
 
-                    value =
-                        item.lessonNo ||
-                        item.lessonNumber ||
-                        item.lesson ||
-                        item.id ||
-                        "";
 
-                } else {
+        /*
+         * Some API responses place quiz information
+         * inside another object.
+         */
 
-                    value =
-                        item;
-                }
+        const nestedObjects = [
+            data.quiz,
+            data.currentQuiz,
+            data.data,
+            data.result
+        ];
 
+
+        for (
+            let i = 0;
+            i < nestedObjects.length;
+            i++
+        ) {
+
+            const object =
+                nestedObjects[i];
+
+
+            if (
+                !object ||
+                typeof object !== "object"
+            ) {
+                continue;
+            }
+
+
+            const nestedValues = [
+                object.lessonNo,
+                object.lessonNumber,
+                object.lesson,
+                object.currentLessonNo,
+                object.currentLessonNumber
+            ];
+
+
+            for (
+                let j = 0;
+                j < nestedValues.length;
+                j++
+            ) {
 
                 const lessonNo =
                     normalizeLessonNumber(
-                        value
+                        nestedValues[j]
                     );
 
 
-                if (
-                    lessonNo &&
-                    !lessonNumbers.includes(
-                        lessonNo
-                    )
-                ) {
-
-                    lessonNumbers.push(
-                        lessonNo
-                    );
+                if (lessonNo) {
+                    return lessonNo;
                 }
             }
-        );
+        }
 
 
-        return lessonNumbers;
+        return "";
     }
 
 
     /* ============================================================
-       POPULATE LESSON SELECT
+       UPDATE CURRENT QUIZ HEADER
        ============================================================ */
 
-    function populateLessonSelect(
-        lessonNumbers
+    function updateCurrentQuizHeader(
+        data
     ) {
 
-        if (!lessonSelect) {
+        if (currentLessonNumber) {
+
+            currentLessonNumber.textContent =
+                `Lesson ${currentLessonNo}`;
+        }
+
+
+        if (!currentLessonStatus) {
             return;
         }
 
 
-        lessonSelect.innerHTML =
-            '<option value="">Select lesson</option>';
+        const status =
+            getQuizStatus(
+                data
+            );
+
+
+        if (status === "closed") {
+
+            currentLessonStatus.textContent =
+                "Closed";
+
+            currentLessonStatus.dataset.status =
+                "closed";
+
+            return;
+        }
+
+
+        if (status === "open") {
+
+            currentLessonStatus.textContent =
+                "Open";
+
+            currentLessonStatus.dataset.status =
+                "open";
+
+            return;
+        }
 
 
         /*
-         * Only use lessons actually returned by the backend.
-         *
-         * No hardcoded Lesson 1–89 list.
+         * If the backend doesn't provide a clear
+         * open/closed value, use a neutral status.
          */
 
-        const lessons =
-            Array.isArray(
-                lessonNumbers
-            )
-                ? lessonNumbers
-                : [];
+        currentLessonStatus.textContent =
+            "Current";
+
+        currentLessonStatus.dataset.status =
+            "current";
+    }
 
 
-        lessons
-            .map(
-                function (lesson) {
-                    return normalizeLessonNumber(
-                        lesson
-                    );
-                }
-            )
-            .filter(Boolean)
-            .filter(
-                function (
-                    lesson,
-                    index,
-                    array
-                ) {
-                    return (
-                        array.indexOf(
-                            lesson
-                        ) === index
-                    );
-                }
-            )
-            .sort(
-                function (a, b) {
-                    return Number(b) - Number(a);
-                }
-            )
-            .forEach(
-                function (lessonNo) {
+    /* ============================================================
+       GET QUIZ STATUS
+       ============================================================ */
 
-                    const option =
-                        document.createElement(
-                            "option"
-                        );
+    function getQuizStatus(
+        data
+    ) {
+
+        if (!data) {
+            return "";
+        }
 
 
-                    option.value =
-                        lessonNo;
+        /*
+         * Explicit boolean values first.
+         */
+
+        const booleanValues = [
+            data.isOpen,
+            data.open,
+            data.quizOpen,
+            data.isActive
+        ];
 
 
-                    option.textContent =
-                        `Lesson ${lessonNo}`;
+        for (
+            let i = 0;
+            i < booleanValues.length;
+            i++
+        ) {
+
+            const value =
+                booleanValues[i];
 
 
-                    lessonSelect.appendChild(
-                        option
-                    );
-                }
-            );
+            if (
+                value === true ||
+                value === "true" ||
+                value === "TRUE" ||
+                value === 1 ||
+                value === "1"
+            ) {
+
+                return "open";
+            }
+
+
+            if (
+                value === false ||
+                value === "false" ||
+                value === "FALSE" ||
+                value === 0 ||
+                value === "0"
+            ) {
+
+                return "closed";
+            }
+        }
+
+
+        /*
+         * Text status fields.
+         */
+
+        const statusValues = [
+            data.status,
+            data.quizStatus,
+            data.lessonStatus,
+            data.openStatus,
+            data.quizState
+        ];
+
+
+        for (
+            let i = 0;
+            i < statusValues.length;
+            i++
+        ) {
+
+            const status =
+                String(
+                    statusValues[i] ||
+                    ""
+                )
+                    .trim()
+                    .toLowerCase();
+
+
+            if (!status) {
+                continue;
+            }
+
+
+            if (
+                status.includes("closed") ||
+                status === "close" ||
+                status === "ended" ||
+                status === "inactive"
+            ) {
+
+                return "closed";
+            }
+
+
+            if (
+                status.includes("open") ||
+                status === "active" ||
+                status === "running"
+            ) {
+
+                return "open";
+            }
+        }
+
+
+        return "";
     }
 
 
@@ -540,21 +600,22 @@
         lessonNo
     ) {
 
-        currentLessonNo =
+        const normalizedLesson =
             normalizeLessonNumber(
                 lessonNo
             );
 
 
-        if (!currentLessonNo) {
+        if (!normalizedLesson) {
 
-            resetParticipationView();
-
-            return;
+            throw new Error(
+                "A valid lesson number is required to load participation."
+            );
         }
 
 
-        showLoading();
+        currentLessonNo =
+            normalizedLesson;
 
 
         try {
@@ -619,6 +680,7 @@
                 data
             );
 
+
         } catch (error) {
 
             console.error(
@@ -663,7 +725,7 @@
 
 
         /*
-         * Separate members according to backend status.
+         * Separate members.
          */
 
         const participated =
@@ -689,91 +751,127 @@
 
 
         /*
-         * Counts
+         * Backend counts remain the primary source.
+         * Local member counts are the fallback.
          */
 
         const total =
-            Number(
-                data.totalMembers
+            getNumericValue(
+                data.totalMembers,
+                members.length
             );
 
 
         const taken =
-            Number(
-                data.completed
+            getNumericValue(
+                data.completed,
+                participated.length
             );
 
 
         const notTaken =
-            Number(
-                data.notCompleted
+            getNumericValue(
+                data.notCompleted,
+                notParticipated.length
             );
 
 
-        const percentage =
-            Number(
-                data.completionPercentage
+        let percentage =
+            getNumericValue(
+                data.completionPercentage,
+                calculatePercentage(
+                    taken,
+                    total
+                )
             );
 
+
+        /*
+         * Keep percentage within 0–100.
+         */
+
+        percentage =
+            Math.max(
+                0,
+                Math.min(
+                    100,
+                    percentage
+                )
+            );
+
+
+        /*
+         * Summary.
+         */
 
         if (totalMembers) {
 
             totalMembers.textContent =
-                Number.isFinite(total)
-                    ? total
-                    : members.length;
+                total;
         }
 
 
         if (takenCount) {
 
             takenCount.textContent =
-                Number.isFinite(taken)
-                    ? taken
-                    : participated.length;
+                taken;
         }
 
 
         if (notTakenCount) {
 
             notTakenCount.textContent =
-                Number.isFinite(notTaken)
-                    ? notTaken
-                    : notParticipated.length;
+                notTaken;
         }
 
 
         if (participationPercentage) {
 
             participationPercentage.textContent =
-                Number.isFinite(
+                `${formatPercentage(
                     percentage
-                )
-                    ? `${percentage}%`
-                    : "0%";
+                )}%`;
         }
 
+
+        /*
+         * Progress bar.
+         */
+
+        if (progressBar) {
+
+            progressBar.style.width =
+                `${percentage}%`;
+
+            progressBar.setAttribute(
+                "aria-valuenow",
+                String(
+                    percentage
+                );
+            );
+        }
+
+
+        /*
+         * Badges.
+         */
 
         if (takenBadge) {
 
             takenBadge.textContent =
-                Number.isFinite(taken)
-                    ? taken
-                    : participated.length;
+                taken;
         }
 
 
         if (notTakenBadge) {
 
             notTakenBadge.textContent =
-                Number.isFinite(notTaken)
-                    ? notTaken
-                    : notParticipated.length;
+                notTaken;
         }
 
 
         /*
-         * Current lesson display
+         * Current lesson.
          */
 
         if (currentLessonNumber) {
@@ -783,19 +881,20 @@
         }
 
 
-        if (currentLessonStatus) {
+        /*
+         * If participation endpoint gives a status,
+         * update the header only when the current quiz
+         * status was not already determined.
+         */
 
-            /*
-             * The participation endpoint represents
-             * the selected lesson. We therefore show
-             * it as the selected/recorded lesson.
-             *
-             * Actual quiz open/closed state can be
-             * connected separately without affecting
-             * participation data.
-             */
+        if (
+            currentLessonStatus &&
+            getQuizStatus(
+                currentQuizData
+            ) === ""
+        ) {
 
-            const status =
+            const participationStatus =
                 String(
                     data.quizStatus ||
                     data.lessonStatus ||
@@ -807,8 +906,9 @@
 
 
             if (
-                status.includes("closed") ||
-                status.includes("close")
+                participationStatus.includes(
+                    "closed"
+                )
             ) {
 
                 currentLessonStatus.textContent =
@@ -820,16 +920,16 @@
             } else {
 
                 currentLessonStatus.textContent =
-                    "Recorded";
+                    "Current";
 
                 currentLessonStatus.dataset.status =
-                    "recorded";
+                    "current";
             }
         }
 
 
         /*
-         * Render member lists.
+         * Member lists.
          */
 
         renderMemberList(
@@ -847,7 +947,7 @@
 
 
         /*
-         * Clear search when changing lesson.
+         * Reset search when fresh data loads.
          */
 
         if (searchInput) {
@@ -858,7 +958,117 @@
 
 
     /* ============================================================
-       CHECK MEMBER COMPLETION STATUS
+       NUMERIC VALUE
+       ============================================================ */
+
+    function getNumericValue(
+        value,
+        fallback
+    ) {
+
+        const number =
+            Number(
+                value
+            );
+
+
+        return Number.isFinite(
+            number
+        )
+            ? number
+            : fallback;
+    }
+
+
+    /* ============================================================
+       CALCULATE PERCENTAGE
+       ============================================================ */
+
+    function calculatePercentage(
+        completed,
+        total
+    ) {
+
+        const completedNumber =
+            Number(
+                completed
+            );
+
+
+        const totalNumber =
+            Number(
+                total
+            );
+
+
+        if (
+            !Number.isFinite(
+                completedNumber
+            ) ||
+            !Number.isFinite(
+                totalNumber
+            ) ||
+            totalNumber <= 0
+        ) {
+
+            return 0;
+        }
+
+
+        return (
+            completedNumber /
+            totalNumber
+        ) * 100;
+    }
+
+
+    /* ============================================================
+       FORMAT PERCENTAGE
+       ============================================================ */
+
+    function formatPercentage(
+        percentage
+    ) {
+
+        const number =
+            Number(
+                percentage
+            );
+
+
+        if (
+            !Number.isFinite(
+                number
+            )
+        ) {
+
+            return "0";
+        }
+
+
+        if (
+            Number.isInteger(
+                number
+            )
+        ) {
+
+            return String(
+                number
+            );
+        }
+
+
+        return number
+            .toFixed(1)
+            .replace(
+                /\.0$/,
+                ""
+            );
+    }
+
+
+    /* ============================================================
+       CHECK MEMBER COMPLETION
        ============================================================ */
 
     function isCompletedMember(
@@ -869,6 +1079,10 @@
             return false;
         }
 
+
+        /*
+         * Explicit completion values.
+         */
 
         if (
             member.completed === true ||
@@ -881,6 +1095,10 @@
             return true;
         }
 
+
+        /*
+         * Status values.
+         */
 
         const status =
             String(
@@ -905,11 +1123,28 @@
         }
 
 
+        /*
+         * Alternative backend fields.
+         */
+
         if (
             member.hasCompleted === true ||
             member.hasCompleted === "true" ||
+            member.hasCompleted === "TRUE" ||
+            member.hasCompleted === 1 ||
+            member.hasCompleted === "1"
+        ) {
+
+            return true;
+        }
+
+
+        if (
             member.hasParticipated === true ||
-            member.hasParticipated === "true"
+            member.hasParticipated === "true" ||
+            member.hasParticipated === "TRUE" ||
+            member.hasParticipated === 1 ||
+            member.hasParticipated === "1"
         ) {
 
             return true;
@@ -944,7 +1179,9 @@
 
 
         if (
-            !Array.isArray(members) ||
+            !Array.isArray(
+                members
+            ) ||
             members.length === 0
         ) {
 
@@ -970,20 +1207,21 @@
         members.forEach(
             function (member) {
 
+                if (!member) {
+                    return;
+                }
+
+
                 const name =
-                    String(
-                        member.name ||
-                        member.memberName ||
-                        ""
-                    ).trim();
+                    getMemberName(
+                        member
+                    );
 
 
                 const memberId =
-                    String(
-                        member.memberId ||
-                        member.id ||
-                        ""
-                    ).trim();
+                    getMemberId(
+                        member
+                    );
 
 
                 if (!name) {
@@ -992,21 +1230,20 @@
 
 
                 const group =
-                    String(
-                        member.group ||
-                        member.memberGroup ||
-                        ""
-                    ).trim();
+                    getMemberGroup(
+                        member
+                    );
 
 
                 const role =
-                    String(
-                        member.groupRole ||
-                        member.role ||
-                        member.memberRole ||
-                        ""
-                    ).trim();
+                    getMemberRole(
+                        member
+                    );
 
+
+                /*
+                 * Main row.
+                 */
 
                 const item =
                     document.createElement(
@@ -1017,6 +1254,10 @@
                 item.className =
                     "participation-member";
 
+
+                /*
+                 * Search data.
+                 */
 
                 item.dataset.name =
                     name.toLowerCase();
@@ -1035,7 +1276,7 @@
 
 
                 /*
-                 * Circular avatar
+                 * Avatar.
                  */
 
                 const avatar =
@@ -1048,6 +1289,12 @@
                     "participation-member-avatar";
 
 
+                avatar.setAttribute(
+                    "aria-hidden",
+                    "true"
+                );
+
+
                 avatar.textContent =
                     getInitials(
                         name
@@ -1055,7 +1302,7 @@
 
 
                 /*
-                 * Main identity
+                 * Identity.
                  */
 
                 const identity =
@@ -1110,7 +1357,7 @@
 
 
                 /*
-                 * Group
+                 * Group.
                  */
 
                 const groupElement =
@@ -1128,7 +1375,7 @@
 
 
                 /*
-                 * Role
+                 * Role.
                  */
 
                 const roleElement =
@@ -1146,23 +1393,23 @@
 
 
                 /*
-                 * Build the row.
-                 *
-                 * CSS will control the exact desktop
-                 * and mobile alignment.
+                 * Build row.
                  */
 
                 item.appendChild(
                     avatar
                 );
 
+
                 item.appendChild(
                     identity
                 );
 
+
                 item.appendChild(
                     groupElement
                 );
+
 
                 item.appendChild(
                     roleElement
@@ -1174,6 +1421,96 @@
                 );
             }
         );
+
+
+        /*
+         * If all supplied records were invalid,
+         * show the empty state.
+         */
+
+        if (
+            listElement.children.length === 0
+        ) {
+
+            if (emptyElement) {
+
+                emptyElement.classList.remove(
+                    "hidden"
+                );
+            }
+        }
+    }
+
+
+    /* ============================================================
+       GET MEMBER NAME
+       ============================================================ */
+
+    function getMemberName(
+        member
+    ) {
+
+        return String(
+            member.name ||
+            member.memberName ||
+            member.fullName ||
+            member.displayName ||
+            ""
+        ).trim();
+    }
+
+
+    /* ============================================================
+       GET MEMBER ID
+       ============================================================ */
+
+    function getMemberId(
+        member
+    ) {
+
+        return String(
+            member.memberId ||
+            member.memberID ||
+            member.id ||
+            member.memberCode ||
+            ""
+        ).trim();
+    }
+
+
+    /* ============================================================
+       GET MEMBER GROUP
+       ============================================================ */
+
+    function getMemberGroup(
+        member
+    ) {
+
+        return String(
+            member.group ||
+            member.memberGroup ||
+            member.groupName ||
+            member.department ||
+            ""
+        ).trim();
+    }
+
+
+    /* ============================================================
+       GET MEMBER ROLE
+       ============================================================ */
+
+    function getMemberRole(
+        member
+    ) {
+
+        return String(
+            member.groupRole ||
+            member.memberRole ||
+            member.role ||
+            member.roleName ||
+            ""
+        ).trim();
     }
 
 
@@ -1259,7 +1596,7 @@
 
         if (content) {
 
-            content.classList.remove(
+            content.classList.add(
                 "hidden"
             );
         }
@@ -1290,6 +1627,18 @@
 
             participationPercentage.textContent =
                 "—";
+        }
+
+
+        if (progressBar) {
+
+            progressBar.style.width =
+                "0%";
+
+            progressBar.setAttribute(
+                "aria-valuenow",
+                "0"
+            );
         }
 
 
@@ -1326,13 +1675,15 @@
 
         if (takenList) {
 
-            takenList.innerHTML = "";
+            takenList.innerHTML =
+                "";
         }
 
 
         if (notTakenList) {
 
-            notTakenList.innerHTML = "";
+            notTakenList.innerHTML =
+                "";
         }
 
 
@@ -1352,58 +1703,11 @@
         }
 
 
-        showSelectionMessage();
-    }
+        if (searchInput) {
 
-
-    /* ============================================================
-       SELECTION MESSAGE
-       ============================================================ */
-
-    function showSelectionMessage() {
-
-        let message =
-            document.getElementById(
-                "participationSelectionMessage"
-            );
-
-
-        if (!message) {
-
-            message =
-                document.createElement(
-                    "div"
-                );
-
-
-            message.id =
-                "participationSelectionMessage";
-
-
-            message.className =
-                "participation-selection-message";
-
-
-            if (content) {
-
-                content.prepend(
-                    message
-                );
-            }
+            searchInput.value =
+                "";
         }
-
-
-        message.innerHTML = `
-            <div>
-                <strong>Select a lesson to view participation</strong>
-                <p>Choose a recorded lesson to see who participated.</p>
-            </div>
-        `;
-
-
-        message.classList.remove(
-            "hidden"
-        );
     }
 
 
@@ -1480,20 +1784,6 @@
                 "hidden"
             );
         }
-
-
-        const selectionMessage =
-            document.getElementById(
-                "participationSelectionMessage"
-            );
-
-
-        if (selectionMessage) {
-
-            selectionMessage.classList.add(
-                "hidden"
-            );
-        }
     }
 
 
@@ -1515,8 +1805,9 @@
 
 
         const text =
-            String(value)
-                .trim();
+            String(
+                value
+            ).trim();
 
 
         if (!text) {
@@ -1531,18 +1822,36 @@
             );
 
 
-        return match
-            ? String(
-                Number(
-                    match[1]
-                )
+        if (!match) {
+
+            return "";
+        }
+
+
+        const number =
+            Number(
+                match[1]
+            );
+
+
+        if (
+            !Number.isFinite(
+                number
             )
-            : "";
+        ) {
+
+            return "";
+        }
+
+
+        return String(
+            number
+        );
     }
 
 
     /* ============================================================
-       INITIALS
+       GET INITIALS
        ============================================================ */
 
     function getInitials(
@@ -1550,10 +1859,16 @@
     ) {
 
         const words =
-            String(name)
+            String(
+                name
+            )
                 .trim()
-                .split(/\s+/)
-                .filter(Boolean);
+                .split(
+                    /\s+/
+                )
+                .filter(
+                    Boolean
+                );
 
 
         if (!words.length) {
@@ -1562,7 +1877,9 @@
         }
 
 
-        if (words.length === 1) {
+        if (
+            words.length === 1
+        ) {
 
             return words[0]
                 .substring(
@@ -1582,4 +1899,3 @@
     }
 
 })();
- 
