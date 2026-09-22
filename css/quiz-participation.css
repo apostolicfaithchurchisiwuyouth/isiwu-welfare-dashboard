@@ -66,7 +66,7 @@
    PAGE HEADER
    ============================================================ */
 
-.participation-page-header {
+.participation-header {
 
     display: flex;
 
@@ -76,19 +76,19 @@
 
     gap: 28px;
 
-    margin-bottom: 28px;
+    margin-bottom: 26px;
 
 }
 
 
-.participation-page-heading {
+.participation-header-copy {
 
     min-width: 0;
 
 }
 
 
-.participation-page-heading .section-kicker {
+.participation-kicker {
 
     display: block;
 
@@ -96,26 +96,26 @@
 
     font-family: "Bricolage Grotesque", sans-serif;
 
-    font-size: 0.68rem;
+    font-size: 0.66rem;
 
     font-weight: 700;
 
-    letter-spacing: 0.12em;
+    letter-spacing: 0.11em;
 
-    color: #6F4A78;
+    color: #76537E;
 
 }
 
 
-.participation-page-heading h1 {
+.participation-header-copy h1 {
 
     margin-bottom: 7px;
 
     font-family: "Bricolage Grotesque", sans-serif;
 
-    font-size: clamp(1.45rem, 2vw, 2rem);
+    font-size: clamp(1.45rem, 2vw, 1.95rem);
 
-    line-height: 1.1;
+    line-height: 1.12;
 
     font-weight: 700;
 
@@ -126,17 +126,17 @@
 }
 
 
-.participation-page-heading p {
+.participation-header-copy p {
 
     max-width: 620px;
 
     margin-bottom: 0;
 
-    font-size: 0.88rem;
+    font-size: 0.84rem;
 
-    line-height: 1.6;
+    line-height: 1.55;
 
-    color: #706B75;
+    color: #746D78;
 
 }
 
@@ -147,36 +147,34 @@
 
 .participation-current {
 
-    flex: 0 0 auto;
-
-    min-width: 290px;
+    min-width: 310px;
 
     display: flex;
 
     align-items: center;
 
-    gap: 12px;
+    gap: 11px;
 
-    padding: 13px 16px;
+    padding: 12px 14px;
 
     background: #FFFFFF;
 
-    border: 1px solid #E8E1EA;
+    border: 1px solid #E7E0E9;
 
-    border-radius: 14px;
+    border-radius: 13px;
 
-    box-shadow: 0 6px 20px rgba(10, 0, 22, 0.045);
+    box-shadow: 0 5px 18px rgba(10, 0, 22, 0.035);
 
 }
 
 
 .participation-current-icon {
 
-    width: 38px;
+    width: 37px;
 
-    height: 38px;
+    height: 37px;
 
-    flex: 0 0 38px;
+    flex: 0 0 37px;
 
     display: flex;
 
@@ -184,18 +182,18 @@
 
     justify-content: center;
 
-    border-radius: 10px;
+    border-radius: 9px;
 
     background: #F2EAF4;
 
     color: #4A0754;
 
-    font-size: 1.05rem;
+    font-size: 1rem;
 
 }
 
 
-.participation-current-main {
+.participation-current-details {
 
     min-width: 0;
 
@@ -208,22 +206,22 @@
 }
 
 
-.participation-current-label {
+.participation-current-details span {
 
     font-family: "Bricolage Grotesque", sans-serif;
 
-    font-size: 0.62rem;
+    font-size: 0.59rem;
 
     font-weight: 700;
 
-    letter-spacing: 0.1em;
+    letter-spacing: 0.09em;
 
-    color: #8A818C;
+    color: #8A818D;
 
 }
 
 
-.participation-current-main strong {
+.participation-current-details strong {
 
     overflow: hidden;
 
@@ -233,7 +231,7 @@
 
     font-family: "Bricolage Grotesque", sans-serif;
 
-    font-size: 0.9rem;
+    font-size: 0.86rem;
 
     font-weight: 600;
 
@@ -254,11 +252,11 @@
 
     white-space: nowrap;
 
-    font-size: 0.72rem;
+    font-size: 0.69rem;
 
     font-weight: 600;
 
-    color: #625A65;
+    color: #69616C;
 
 }
 
@@ -273,7 +271,7 @@
 
     border-radius: 50%;
 
-    background: #A9A3AB;
+    background: #9A929D;
 
 }
 
@@ -287,7 +285,7 @@
 
 .participation-status-dot.closed {
 
-    background: #8A818C;
+    background: #817982;
 
 }
 
@@ -304,17 +302,17 @@
 
     align-items: center;
 
-    gap: 14px;
+    gap: 13px;
 
-    padding: 20px;
+    padding: 18px;
 
-    margin-bottom: 24px;
+    margin-bottom: 22px;
 
     background: #FFFFFF;
 
-    border: 1px solid #E8E1EA;
+    border: 1px solid #E7E0E9;
 
-    border-radius: 14px;
+    border-radius: 13px;
 
 }
 
@@ -327,7 +325,7 @@
 
     font-family: "Bricolage Grotesque", sans-serif;
 
-    font-size: 0.86rem;
+    font-size: 0.82rem;
 
     font-weight: 600;
 
@@ -340,31 +338,24 @@
 
     margin-bottom: 0;
 
-    font-size: 0.78rem;
+    font-size: 0.74rem;
 
     line-height: 1.5;
 
-    color: #746D77;
-
-}
-
-
-.participation-loading-state {
-
-    justify-content: flex-start;
+    color: #77707A;
 
 }
 
 
 .participation-spinner {
 
-    width: 22px;
+    width: 21px;
 
-    height: 22px;
+    height: 21px;
 
-    flex: 0 0 22px;
+    flex: 0 0 21px;
 
-    border: 2px solid #E5DDE8;
+    border: 2px solid #E4DDE6;
 
     border-top-color: #4A0754;
 
@@ -373,9 +364,9 @@
 }
 
 
-.participation-error-state {
+.participation-error {
 
-    border-color: #E9D5D5;
+    border-color: #E9D7D7;
 
     background: #FFF9F9;
 
@@ -384,11 +375,11 @@
 
 .participation-state-icon {
 
-    width: 38px;
+    width: 36px;
 
-    height: 38px;
+    height: 36px;
 
-    flex: 0 0 38px;
+    flex: 0 0 36px;
 
     display: flex;
 
@@ -396,13 +387,20 @@
 
     justify-content: center;
 
-    border-radius: 10px;
+    border-radius: 9px;
 
-    background: #F8EAEA;
+    background: #F7EAEA;
 
     color: #A33A3A;
 
-    font-size: 1.1rem;
+    font-size: 1rem;
+
+}
+
+
+.participation-error-content {
+
+    min-width: 0;
 
 }
 
@@ -417,25 +415,36 @@
 
     justify-content: center;
 
-    gap: 7px;
+    gap: 6px;
 
-    min-height: 36px;
+    min-height: 35px;
 
-    padding: 0 13px;
+    padding: 0 12px;
 
-    border: 1px solid #DCCCDC;
+    border: 1px solid #DCCEDC;
 
-    border-radius: 9px;
+    border-radius: 8px;
 
     background: #FFFFFF;
 
     color: #4A0754;
 
-    font-size: 0.76rem;
+    font-size: 0.73rem;
 
     font-weight: 600;
 
     cursor: pointer;
+
+}
+
+
+/* ============================================================
+   PARTICIPATION CONTENT
+   ============================================================ */
+
+.participation-content {
+
+    width: 100%;
 
 }
 
@@ -448,27 +457,22 @@
 
     width: 100%;
 
-    margin-bottom: 24px;
+    padding: 21px 23px;
 
-}
-
-
-.participation-summary-primary {
-
-    padding: 22px 24px;
+    margin-bottom: 21px;
 
     background: #FFFFFF;
 
-    border: 1px solid #E8E1EA;
+    border: 1px solid #E7E0E9;
 
-    border-radius: 16px;
+    border-radius: 14px;
 
-    box-shadow: 0 6px 22px rgba(10, 0, 22, 0.04);
+    box-shadow: 0 5px 20px rgba(10, 0, 22, 0.035);
 
 }
 
 
-.participation-summary-heading {
+.participation-summary-header {
 
     display: flex;
 
@@ -481,15 +485,15 @@
 }
 
 
-.participation-summary-heading .section-kicker {
+.participation-section-kicker {
 
     display: block;
 
-    margin-bottom: 6px;
+    margin-bottom: 5px;
 
     font-family: "Bricolage Grotesque", sans-serif;
 
-    font-size: 0.64rem;
+    font-size: 0.61rem;
 
     font-weight: 700;
 
@@ -500,13 +504,13 @@
 }
 
 
-.participation-summary-heading h2 {
+.participation-summary-header h2 {
 
     margin-bottom: 0;
 
     font-family: "Bricolage Grotesque", sans-serif;
 
-    font-size: 1.15rem;
+    font-size: 1.08rem;
 
     line-height: 1.2;
 
@@ -525,7 +529,7 @@
 
     align-items: baseline;
 
-    gap: 6px;
+    gap: 5px;
 
 }
 
@@ -534,7 +538,7 @@
 
     font-family: "Bricolage Grotesque", sans-serif;
 
-    font-size: 1.3rem;
+    font-size: 1.25rem;
 
     font-weight: 700;
 
@@ -545,7 +549,7 @@
 
 .participation-percentage span {
 
-    font-size: 0.7rem;
+    font-size: 0.68rem;
 
     color: #837A86;
 
@@ -553,12 +557,12 @@
 
 
 /* ============================================================
-   PROGRESS BAR
+   PROGRESS
    ============================================================ */
 
 .participation-progress {
 
-    margin-top: 20px;
+    margin-top: 18px;
 
 }
 
@@ -573,7 +577,7 @@
 
     background: #EEE9F0;
 
-    border-radius: 20px;
+    border-radius: 10px;
 
 }
 
@@ -599,18 +603,16 @@
 
     display: grid;
 
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(3, 1fr);
 
-    margin-top: 20px;
+    margin-top: 18px;
 
     border-top: 1px solid #EEE9F0;
 
 }
 
 
-.participation-stat {
-
-    min-width: 0;
+.participation-summary-stat {
 
     display: flex;
 
@@ -620,34 +622,32 @@
 
     gap: 12px;
 
-    padding: 16px 18px 2px;
+    padding: 14px 17px 1px;
 
 }
 
 
-.participation-stat + .participation-stat {
+.participation-summary-stat + .participation-summary-stat {
 
     border-left: 1px solid #EEE9F0;
 
 }
 
 
-.participation-stat-label {
+.participation-summary-stat span {
 
-    font-size: 0.76rem;
-
-    line-height: 1.4;
+    font-size: 0.73rem;
 
     color: #766E79;
 
 }
 
 
-.participation-stat strong {
+.participation-summary-stat strong {
 
     font-family: "Bricolage Grotesque", sans-serif;
 
-    font-size: 1rem;
+    font-size: 0.98rem;
 
     font-weight: 700;
 
@@ -664,34 +664,32 @@
 
     display: flex;
 
-    align-items: center;
-
     justify-content: flex-end;
 
-    margin-bottom: 18px;
+    margin-bottom: 15px;
 
 }
 
 
 .participation-search {
 
-    width: min(100%, 310px);
+    width: 300px;
 
-    height: 40px;
+    height: 39px;
 
     display: flex;
 
     align-items: center;
 
-    gap: 9px;
+    gap: 8px;
 
-    padding: 0 12px;
+    padding: 0 11px;
 
     background: #FFFFFF;
 
-    border: 1px solid #E3DDE5;
+    border: 1px solid #E2DBE4;
 
-    border-radius: 9px;
+    border-radius: 8px;
 
 }
 
@@ -700,9 +698,9 @@
 
     flex: 0 0 auto;
 
-    color: #817883;
+    color: #827984;
 
-    font-size: 0.95rem;
+    font-size: 0.9rem;
 
 }
 
@@ -725,7 +723,7 @@
 
     color: #0A0016;
 
-    font-size: 0.78rem;
+    font-size: 0.75rem;
 
 }
 
@@ -743,7 +741,7 @@
 
 .participation-section {
 
-    margin-bottom: 26px;
+    margin-bottom: 25px;
 
 }
 
@@ -756,14 +754,14 @@
 
     justify-content: space-between;
 
-    gap: 18px;
+    gap: 16px;
 
-    margin-bottom: 11px;
+    margin-bottom: 10px;
 
 }
 
 
-.participation-section-title {
+.participation-section-heading {
 
     min-width: 0;
 
@@ -771,12 +769,12 @@
 
     align-items: flex-start;
 
-    gap: 10px;
+    gap: 9px;
 
 }
 
 
-.participation-section-indicator {
+.participation-indicator {
 
     width: 7px;
 
@@ -791,27 +789,27 @@
 }
 
 
-.participation-section-indicator.participated {
+.participation-indicator.participated {
 
     background: #238636;
 
 }
 
 
-.participation-section-indicator.pending {
+.participation-indicator.pending {
 
     background: #B68A26;
 
 }
 
 
-.participation-section-title h2 {
+.participation-section-heading h2 {
 
-    margin-bottom: 3px;
+    margin-bottom: 2px;
 
     font-family: "Bricolage Grotesque", sans-serif;
 
-    font-size: 1rem;
+    font-size: 0.96rem;
 
     line-height: 1.25;
 
@@ -822,24 +820,24 @@
 }
 
 
-.participation-section-title p {
+.participation-section-heading p {
 
     margin-bottom: 0;
 
-    font-size: 0.73rem;
+    font-size: 0.7rem;
 
     line-height: 1.45;
 
-    color: #807782;
+    color: #817883;
 
 }
 
 
-.participation-count-badge {
+.participation-count {
 
-    min-width: 28px;
+    min-width: 27px;
 
-    height: 25px;
+    height: 24px;
 
     display: inline-flex;
 
@@ -847,11 +845,11 @@
 
     justify-content: center;
 
-    padding: 0 8px;
+    padding: 0 7px;
 
     border: 1px solid #E0D8E2;
 
-    border-radius: 8px;
+    border-radius: 7px;
 
     background: #FFFFFF;
 
@@ -859,7 +857,7 @@
 
     font-family: "Bricolage Grotesque", sans-serif;
 
-    font-size: 0.72rem;
+    font-size: 0.69rem;
 
     font-weight: 700;
 
@@ -876,9 +874,9 @@
 
     background: #FFFFFF;
 
-    border: 1px solid #E6E0E8;
+    border: 1px solid #E5DFE7;
 
-    border-radius: 12px;
+    border-radius: 11px;
 
 }
 
@@ -888,19 +886,19 @@
     display: grid;
 
     grid-template-columns:
-        minmax(300px, 1.8fr)
+        minmax(320px, 1.7fr)
         minmax(150px, 0.8fr)
         minmax(150px, 0.7fr);
 
     align-items: center;
 
-    min-height: 40px;
+    min-height: 39px;
 
-    padding: 0 18px;
+    padding: 0 17px;
 
     background: #FAF8FB;
 
-    border-bottom: 1px solid #E9E3EB;
+    border-bottom: 1px solid #E8E2EA;
 
 }
 
@@ -909,7 +907,7 @@
 
     font-family: "Bricolage Grotesque", sans-serif;
 
-    font-size: 0.63rem;
+    font-size: 0.59rem;
 
     font-weight: 700;
 
@@ -933,20 +931,24 @@
 }
 
 
+/* ============================================================
+   MEMBER ROW
+   ============================================================ */
+
 .participation-member {
 
     display: grid;
 
     grid-template-columns:
-        minmax(300px, 1.8fr)
+        minmax(320px, 1.7fr)
         minmax(150px, 0.8fr)
         minmax(150px, 0.7fr);
 
     align-items: center;
 
-    min-height: 68px;
+    min-height: 64px;
 
-    padding: 10px 18px;
+    padding: 9px 17px;
 
     border-bottom: 1px solid #F0ECF1;
 
@@ -972,18 +974,18 @@
 
     align-items: center;
 
-    gap: 11px;
+    gap: 10px;
 
 }
 
 
 .participation-member-avatar {
 
-    width: 38px;
+    width: 36px;
 
-    height: 38px;
+    height: 36px;
 
-    flex: 0 0 38px;
+    flex: 0 0 36px;
 
     display: flex;
 
@@ -993,17 +995,17 @@
 
     overflow: hidden;
 
+    border: 1px solid #DDD4E0;
+
     border-radius: 50%;
 
     background: #EEE7F0;
-
-    border: 1px solid #DDD3E0;
 
     color: #4A0754;
 
     font-family: "Bricolage Grotesque", sans-serif;
 
-    font-size: 0.72rem;
+    font-size: 0.68rem;
 
     font-weight: 700;
 
@@ -1046,7 +1048,7 @@
 
     font-family: "Bricolage Grotesque", sans-serif;
 
-    font-size: 0.8rem;
+    font-size: 0.78rem;
 
     line-height: 1.3;
 
@@ -1065,7 +1067,7 @@
 
     white-space: nowrap;
 
-    font-size: 0.66rem;
+    font-size: 0.63rem;
 
     line-height: 1.3;
 
@@ -1082,7 +1084,7 @@
 
     min-width: 0;
 
-    padding-right: 14px;
+    padding-right: 15px;
 
 }
 
@@ -1095,7 +1097,7 @@
 
     white-space: nowrap;
 
-    font-size: 0.76rem;
+    font-size: 0.73rem;
 
     font-weight: 500;
 
@@ -1123,7 +1125,7 @@
 
     white-space: nowrap;
 
-    font-size: 0.74rem;
+    font-size: 0.71rem;
 
     color: #766E79;
 
@@ -1131,12 +1133,12 @@
 
 
 /* ============================================================
-   MEMBER EMPTY STATE
+   EMPTY STATE
    ============================================================ */
 
 .participation-member-empty {
 
-    min-height: 150px;
+    min-height: 140px;
 
     display: flex;
 
@@ -1146,7 +1148,7 @@
 
     justify-content: center;
 
-    padding: 30px 20px;
+    padding: 28px 20px;
 
     text-align: center;
 
@@ -1155,22 +1157,22 @@
 
 .participation-member-empty i {
 
-    margin-bottom: 9px;
+    margin-bottom: 8px;
 
-    font-size: 1.35rem;
+    font-size: 1.25rem;
 
-    color: #8A7B90;
+    color: #897C8F;
 
 }
 
 
 .participation-member-empty strong {
 
-    margin-bottom: 4px;
+    margin-bottom: 3px;
 
     font-family: "Bricolage Grotesque", sans-serif;
 
-    font-size: 0.8rem;
+    font-size: 0.77rem;
 
     font-weight: 600;
 
@@ -1185,7 +1187,7 @@
 
     margin-bottom: 0;
 
-    font-size: 0.72rem;
+    font-size: 0.69rem;
 
     line-height: 1.5;
 
@@ -1195,7 +1197,7 @@
 
 
 /* ============================================================
-   HIDDEN UTILITY
+   HIDDEN
    ============================================================ */
 
 .quiz-participation-page .hidden {
@@ -1209,15 +1211,15 @@
    TABLET
    ============================================================ */
 
-@media (max-width: 900px) {
+@media (max-width: 950px) {
 
-    .participation-page-header {
+    .participation-header {
 
         align-items: stretch;
 
         flex-direction: column;
 
-        gap: 18px;
+        gap: 16px;
 
     }
 
@@ -1233,7 +1235,7 @@
     .participation-member {
 
         grid-template-columns:
-            minmax(260px, 1.7fr)
+            minmax(270px, 1.6fr)
             minmax(130px, 0.8fr)
             minmax(130px, 0.7fr);
 
@@ -1254,28 +1256,28 @@
 
         padding-top: 20px;
 
-        padding-bottom: 36px;
+        padding-bottom: 34px;
 
     }
 
 
-    .participation-page-header {
+    .participation-header {
 
         margin-bottom: 20px;
 
     }
 
 
-    .participation-page-heading h1 {
+    .participation-header-copy h1 {
 
         font-size: 1.4rem;
 
     }
 
 
-    .participation-page-heading p {
+    .participation-header-copy p {
 
-        font-size: 0.8rem;
+        font-size: 0.78rem;
 
     }
 
@@ -1284,7 +1286,7 @@
 
         min-width: 0;
 
-        padding: 12px;
+        padding: 11px 12px;
 
     }
 
@@ -1297,48 +1299,39 @@
 
         flex-basis: 34px;
 
-        border-radius: 9px;
-
     }
 
 
     .participation-current-status {
 
-        font-size: 0.65rem;
+        font-size: 0.63rem;
 
     }
 
 
-    .participation-summary-primary {
+    .participation-summary {
 
-        padding: 18px 16px;
+        padding: 17px 15px;
 
-        border-radius: 13px;
+        border-radius: 12px;
 
     }
 
 
-    .participation-summary-heading {
+    .participation-summary-header {
 
         align-items: flex-start;
 
         flex-direction: column;
 
-        gap: 8px;
+        gap: 7px;
 
     }
 
 
-    .participation-summary-heading h2 {
+    .participation-summary-header h2 {
 
         font-size: 1rem;
-
-    }
-
-
-    .participation-percentage {
-
-        align-items: baseline;
 
     }
 
@@ -1350,18 +1343,18 @@
     }
 
 
-    .participation-stat {
+    .participation-summary-stat {
 
-        padding: 12px 0;
+        padding: 11px 0;
 
     }
 
 
-    .participation-stat + .participation-stat {
-
-        border-left: 0;
+    .participation-summary-stat + .participation-summary-stat {
 
         border-top: 1px solid #EEE9F0;
+
+        border-left: 0;
 
     }
 
@@ -1387,9 +1380,9 @@
     }
 
 
-    .participation-section-title p {
+    .participation-section-heading p {
 
-        font-size: 0.68rem;
+        font-size: 0.67rem;
 
     }
 
@@ -1401,10 +1394,9 @@
     }
 
 
-    /*
-     * On mobile the table becomes a clean member list.
-     * Group and role remain visible inside each member row.
-     */
+    /* ------------------------------------------------------------
+       MOBILE MEMBER ROW
+       ------------------------------------------------------------ */
 
     .participation-member-columns {
 
@@ -1417,11 +1409,11 @@
 
         grid-template-columns: 1fr;
 
-        gap: 8px;
+        gap: 7px;
 
         min-height: auto;
 
-        padding: 13px 14px;
+        padding: 12px 13px;
 
     }
 
@@ -1442,7 +1434,7 @@
 
         gap: 8px;
 
-        padding-left: 49px;
+        padding-left: 46px;
 
     }
 
@@ -1451,19 +1443,19 @@
 
         content: "Group";
 
-        width: 42px;
+        width: 38px;
 
-        flex: 0 0 42px;
+        flex: 0 0 38px;
 
         font-family: "Bricolage Grotesque", sans-serif;
 
-        font-size: 0.58rem;
+        font-size: 0.55rem;
 
         font-weight: 700;
 
-        text-transform: uppercase;
-
         letter-spacing: 0.04em;
+
+        text-transform: uppercase;
 
         color: #9A929D;
 
@@ -1474,19 +1466,19 @@
 
         content: "Role";
 
-        width: 42px;
+        width: 38px;
 
-        flex: 0 0 42px;
+        flex: 0 0 38px;
 
         font-family: "Bricolage Grotesque", sans-serif;
 
-        font-size: 0.58rem;
+        font-size: 0.55rem;
 
         font-weight: 700;
 
-        text-transform: uppercase;
-
         letter-spacing: 0.04em;
+
+        text-transform: uppercase;
 
         color: #9A929D;
 
@@ -1496,32 +1488,32 @@
     .participation-member-group-name,
     .participation-member-role-name {
 
-        font-size: 0.7rem;
+        font-size: 0.68rem;
 
     }
 
 
     .participation-member-avatar {
 
-        width: 36px;
+        width: 35px;
 
-        height: 36px;
+        height: 35px;
 
-        flex-basis: 36px;
+        flex-basis: 35px;
 
     }
 
 
     .participation-member-name {
 
-        font-size: 0.77rem;
+        font-size: 0.76rem;
 
     }
 
 
     .participation-member-id {
 
-        font-size: 0.62rem;
+        font-size: 0.61rem;
 
     }
 
@@ -1530,7 +1522,7 @@
 
         align-items: flex-start;
 
-        padding: 16px;
+        padding: 15px;
 
     }
 
@@ -1573,30 +1565,30 @@
     }
 
 
-    .participation-current-main strong {
+    .participation-current-details strong {
 
-        font-size: 0.82rem;
-
-    }
-
-
-    .participation-summary-primary {
-
-        padding: 16px 14px;
+        font-size: 0.8rem;
 
     }
 
 
-    .participation-section-title h2 {
+    .participation-summary {
 
-        font-size: 0.92rem;
+        padding: 15px 13px;
+
+    }
+
+
+    .participation-section-heading h2 {
+
+        font-size: 0.91rem;
 
     }
 
 
     .participation-member {
 
-        padding: 12px;
+        padding: 11px;
 
     }
 
