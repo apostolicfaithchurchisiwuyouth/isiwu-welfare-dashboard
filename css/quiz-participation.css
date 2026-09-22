@@ -13,20 +13,16 @@
 
 .dashboard-content.quiz-participation-page {
 
-    width: min(100% - 32px, 1320px);
-
-    max-width: 1320px;
+   width: min(100% - 32px, 1500px);
+    max-width: 1500px;
 
     margin-left: auto;
     margin-right: auto;
 
-    padding-top: 26px;
-    padding-bottom: 100px;
+    padding-left: 0;
+    padding-right: 0;
 
-    font-family: "DM Sans", sans-serif;
-
-    color: #0A0016;
-
+    box-sizing: border-box;
 }
 
 
