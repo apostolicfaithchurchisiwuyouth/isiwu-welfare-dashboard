@@ -6,6 +6,7 @@
 (function () {
     "use strict";
 
+
     /* ============================================================
        API
        ============================================================ */
@@ -66,6 +67,11 @@
             "participationNotTakenCount"
         );
 
+    const participationPercentage =
+        document.getElementById(
+            "participationPercentage"
+        );
+
     const searchInput =
         document.getElementById(
             "participationSearchInput"
@@ -101,6 +107,16 @@
             "participationNotTakenBadge"
         );
 
+    const currentLessonNumber =
+        document.getElementById(
+            "participationCurrentLesson"
+        );
+
+    const currentLessonStatus =
+        document.getElementById(
+            "participationLessonStatus"
+        );
+
 
     /* ============================================================
        INITIALIZE
@@ -131,7 +147,7 @@
 
 
         /*
-         * Allow direct links such as:
+         * Direct lesson links:
          *
          * quiz-participation.html?lessonNo=89
          */
@@ -140,6 +156,7 @@
             new URLSearchParams(
                 window.location.search
             );
+
 
         const urlLessonNo =
             normalizeLessonNumber(
@@ -155,6 +172,13 @@
             loadParticipation(
                 urlLessonNo
             );
+
+        } else {
+
+            /*
+             * Automatically load the latest recorded lesson.
+             */
+            loadLatestRecordedLesson();
         }
 
 
@@ -205,45 +229,306 @@
 
 
     /* ============================================================
-       POPULATE LESSON SELECT
+       LOAD LATEST RECORDED LESSON
        ============================================================ */
 
-    function populateLessonSelect() {
+    async function loadLatestRecordedLesson() {
 
-        lessonSelect.innerHTML =
-            '<option value="">Select lesson number</option>';
+        showLoading();
 
 
-        /*
-         * Current lesson range.
-         *
-         * The quiz system is currently at Lesson 89.
-         */
+        try {
 
-        for (
-            let lessonNo = 1;
-            lessonNo <= 89;
-            lessonNo++
-        ) {
+            const url =
+                API_URL +
+                "?action=getQuizParticipationLessons";
 
-            const option =
-                document.createElement(
-                    "option"
+
+            const response =
+                await fetch(
+                    url,
+                    {
+                        method: "GET",
+                        cache: "no-store"
+                    }
                 );
 
 
-            option.value =
-                String(lessonNo);
+            if (!response.ok) {
+
+                throw new Error(
+                    "Unable to load recorded quiz lessons."
+                );
+            }
 
 
-            option.textContent =
-                `Lesson ${lessonNo}`;
+            const data =
+                await response.json();
 
 
-            lessonSelect.appendChild(
-                option
+            console.log(
+                "Quiz Participation Lessons:",
+                data
+            );
+
+
+            if (!data.success) {
+
+                throw new Error(
+                    data.message ||
+                    "Unable to load recorded quiz lessons."
+                );
+            }
+
+
+            const lessons =
+                extractLessonNumbers(
+                    data
+                );
+
+
+            /*
+             * If the backend gives us recorded lessons,
+             * populate the dropdown from those lessons.
+             */
+
+            if (lessons.length) {
+
+                populateLessonSelect(
+                    lessons
+                );
+
+
+                const latestLesson =
+                    lessons
+                        .map(
+                            function (lesson) {
+                                return Number(lesson);
+                            }
+                        )
+                        .filter(
+                            function (lesson) {
+                                return Number.isFinite(
+                                    lesson
+                                );
+                            }
+                        )
+                        .sort(
+                            function (a, b) {
+                                return b - a;
+                            }
+                        )[0];
+
+
+                if (
+                    Number.isFinite(
+                        latestLesson
+                    )
+                ) {
+
+                    const lessonNo =
+                        String(
+                            latestLesson
+                        );
+
+
+                    lessonSelect.value =
+                        lessonNo;
+
+
+                    loadParticipation(
+                        lessonNo
+                    );
+
+
+                    return;
+                }
+            }
+
+
+            /*
+             * Fallback.
+             *
+             * If the lessons endpoint returns no usable
+             * list, we do not guess a lesson number.
+             */
+
+            showError(
+                "No recorded quiz participation lesson was found."
+            );
+
+        } catch (error) {
+
+            console.error(
+                "Latest Quiz Participation Error:",
+                error
+            );
+
+
+            showError(
+                error.message ||
+                "Something went wrong while loading quiz participation."
             );
         }
+    }
+
+
+    /* ============================================================
+       EXTRACT LESSON NUMBERS
+       ============================================================ */
+
+    function extractLessonNumbers(
+        data
+    ) {
+
+        const source =
+            data.lessons ||
+            data.data ||
+            data.records ||
+            [];
+
+
+        if (!Array.isArray(source)) {
+
+            return [];
+        }
+
+
+        const lessonNumbers =
+            [];
+
+
+        source.forEach(
+            function (item) {
+
+                let value = "";
+
+
+                if (
+                    typeof item ===
+                    "object" &&
+                    item !== null
+                ) {
+
+                    value =
+                        item.lessonNo ||
+                        item.lessonNumber ||
+                        item.lesson ||
+                        item.id ||
+                        "";
+
+                } else {
+
+                    value =
+                        item;
+                }
+
+
+                const lessonNo =
+                    normalizeLessonNumber(
+                        value
+                    );
+
+
+                if (
+                    lessonNo &&
+                    !lessonNumbers.includes(
+                        lessonNo
+                    )
+                ) {
+
+                    lessonNumbers.push(
+                        lessonNo
+                    );
+                }
+            }
+        );
+
+
+        return lessonNumbers;
+    }
+
+
+    /* ============================================================
+       POPULATE LESSON SELECT
+       ============================================================ */
+
+    function populateLessonSelect(
+        lessonNumbers
+    ) {
+
+        if (!lessonSelect) {
+            return;
+        }
+
+
+        lessonSelect.innerHTML =
+            '<option value="">Select lesson</option>';
+
+
+        /*
+         * Only use lessons actually returned by the backend.
+         *
+         * No hardcoded Lesson 1–89 list.
+         */
+
+        const lessons =
+            Array.isArray(
+                lessonNumbers
+            )
+                ? lessonNumbers
+                : [];
+
+
+        lessons
+            .map(
+                function (lesson) {
+                    return normalizeLessonNumber(
+                        lesson
+                    );
+                }
+            )
+            .filter(Boolean)
+            .filter(
+                function (
+                    lesson,
+                    index,
+                    array
+                ) {
+                    return (
+                        array.indexOf(
+                            lesson
+                        ) === index
+                    );
+                }
+            )
+            .sort(
+                function (a, b) {
+                    return Number(b) - Number(a);
+                }
+            )
+            .forEach(
+                function (lessonNo) {
+
+                    const option =
+                        document.createElement(
+                            "option"
+                        );
+
+
+                    option.value =
+                        lessonNo;
+
+
+                    option.textContent =
+                        `Lesson ${lessonNo}`;
+
+
+                    lessonSelect.appendChild(
+                        option
+                    );
+                }
+            );
     }
 
 
@@ -326,17 +611,9 @@
             }
 
 
-            /*
-             * Save the complete backend response.
-             */
-
             participationData =
                 data;
 
-
-            /*
-             * Render it.
-             */
 
             renderParticipation(
                 data
@@ -377,34 +654,6 @@
         }
 
 
-        /*
-         * ========================================================
-         * IMPORTANT
-         * ========================================================
-         *
-         * The backend does NOT return:
-         *
-         * data.participated
-         * data.notParticipated
-         *
-         * Instead it returns:
-         *
-         * data.members
-         *
-         * Each member contains their participation/completion
-         * status.
-         *
-         * The backend also gives us:
-         *
-         * data.completed
-         * data.notCompleted
-         * data.totalMembers
-         *
-         * We therefore use those actual fields.
-         * ========================================================
-         */
-
-
         const members =
             Array.isArray(
                 data.members
@@ -413,17 +662,8 @@
                 : [];
 
 
-        console.log(
-            "All participation members:",
-            members
-        );
-
-
         /*
-         * Separate the members into two groups.
-         *
-         * We support several possible status property names
-         * so the frontend remains compatible with the backend.
+         * Separate members according to backend status.
          */
 
         const participated =
@@ -448,22 +688,8 @@
             );
 
 
-        console.log(
-            "People who participated:",
-            participated
-        );
-
-
-        console.log(
-            "People who have not participated:",
-            notParticipated
-        );
-
-
         /*
-         * ========================================================
-         * COUNTS
-         * ========================================================
+         * Counts
          */
 
         const total =
@@ -481,6 +707,12 @@
         const notTaken =
             Number(
                 data.notCompleted
+            );
+
+
+        const percentage =
+            Number(
+                data.completionPercentage
             );
 
 
@@ -511,6 +743,17 @@
         }
 
 
+        if (participationPercentage) {
+
+            participationPercentage.textContent =
+                Number.isFinite(
+                    percentage
+                )
+                    ? `${percentage}%`
+                    : "0%";
+        }
+
+
         if (takenBadge) {
 
             takenBadge.textContent =
@@ -530,7 +773,63 @@
 
 
         /*
-         * Render both groups.
+         * Current lesson display
+         */
+
+        if (currentLessonNumber) {
+
+            currentLessonNumber.textContent =
+                `Lesson ${currentLessonNo}`;
+        }
+
+
+        if (currentLessonStatus) {
+
+            /*
+             * The participation endpoint represents
+             * the selected lesson. We therefore show
+             * it as the selected/recorded lesson.
+             *
+             * Actual quiz open/closed state can be
+             * connected separately without affecting
+             * participation data.
+             */
+
+            const status =
+                String(
+                    data.quizStatus ||
+                    data.lessonStatus ||
+                    data.statusText ||
+                    ""
+                )
+                    .trim()
+                    .toLowerCase();
+
+
+            if (
+                status.includes("closed") ||
+                status.includes("close")
+            ) {
+
+                currentLessonStatus.textContent =
+                    "Closed";
+
+                currentLessonStatus.dataset.status =
+                    "closed";
+
+            } else {
+
+                currentLessonStatus.textContent =
+                    "Recorded";
+
+                currentLessonStatus.dataset.status =
+                    "recorded";
+            }
+        }
+
+
+        /*
+         * Render member lists.
          */
 
         renderMemberList(
@@ -548,7 +847,7 @@
 
 
         /*
-         * Clear search whenever a new lesson is selected.
+         * Clear search when changing lesson.
          */
 
         if (searchInput) {
@@ -571,10 +870,6 @@
         }
 
 
-        /*
-         * Most likely backend fields.
-         */
-
         if (
             member.completed === true ||
             member.completed === "true" ||
@@ -586,10 +881,6 @@
             return true;
         }
 
-
-        /*
-         * Other common status formats.
-         */
 
         const status =
             String(
@@ -613,11 +904,6 @@
             return true;
         }
 
-
-        /*
-         * If the backend uses a boolean field such as
-         * hasCompleted or hasParticipated.
-         */
 
         if (
             member.hasCompleted === true ||
@@ -656,10 +942,6 @@
 
         listElement.innerHTML = "";
 
-
-        /*
-         * No members.
-         */
 
         if (
             !Array.isArray(members) ||
@@ -704,14 +986,26 @@
                     ).trim();
 
 
-                /*
-                 * Do not create an empty card.
-                 */
-
                 if (!name) {
-
                     return;
                 }
+
+
+                const group =
+                    String(
+                        member.group ||
+                        member.memberGroup ||
+                        ""
+                    ).trim();
+
+
+                const role =
+                    String(
+                        member.groupRole ||
+                        member.role ||
+                        member.memberRole ||
+                        ""
+                    ).trim();
 
 
                 const item =
@@ -728,29 +1022,151 @@
                     name.toLowerCase();
 
 
-                item.innerHTML = `
-                    <div class="participation-member-avatar">
-                        ${getInitials(name)}
-                    </div>
+                item.dataset.memberId =
+                    memberId.toLowerCase();
 
-                    <div class="participation-member-info">
 
-                        <div class="participation-member-name">
-                            ${escapeHtml(name)}
-                        </div>
+                item.dataset.group =
+                    group.toLowerCase();
 
-                        ${
-                            memberId
-                                ? `
-                                    <div class="participation-member-id">
-                                        ${escapeHtml(memberId)}
-                                    </div>
-                                  `
-                                : ""
-                        }
 
-                    </div>
-                `;
+                item.dataset.role =
+                    role.toLowerCase();
+
+
+                /*
+                 * Circular avatar
+                 */
+
+                const avatar =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                avatar.className =
+                    "participation-member-avatar";
+
+
+                avatar.textContent =
+                    getInitials(
+                        name
+                    );
+
+
+                /*
+                 * Main identity
+                 */
+
+                const identity =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                identity.className =
+                    "participation-member-identity";
+
+
+                const nameElement =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                nameElement.className =
+                    "participation-member-name";
+
+
+                nameElement.textContent =
+                    name;
+
+
+                identity.appendChild(
+                    nameElement
+                );
+
+
+                if (memberId) {
+
+                    const idElement =
+                        document.createElement(
+                            "div"
+                        );
+
+
+                    idElement.className =
+                        "participation-member-id";
+
+
+                    idElement.textContent =
+                        memberId;
+
+
+                    identity.appendChild(
+                        idElement
+                    );
+                }
+
+
+                /*
+                 * Group
+                 */
+
+                const groupElement =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                groupElement.className =
+                    "participation-member-group";
+
+
+                groupElement.textContent =
+                    group || "—";
+
+
+                /*
+                 * Role
+                 */
+
+                const roleElement =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                roleElement.className =
+                    "participation-member-role";
+
+
+                roleElement.textContent =
+                    role || "—";
+
+
+                /*
+                 * Build the row.
+                 *
+                 * CSS will control the exact desktop
+                 * and mobile alignment.
+                 */
+
+                item.appendChild(
+                    avatar
+                );
+
+                item.appendChild(
+                    identity
+                );
+
+                item.appendChild(
+                    groupElement
+                );
+
+                item.appendChild(
+                    roleElement
+                );
 
 
                 listElement.appendChild(
@@ -792,9 +1208,39 @@
                     "";
 
 
-                item.style.display =
+                const memberId =
+                    item.dataset.memberId ||
+                    "";
+
+
+                const group =
+                    item.dataset.group ||
+                    "";
+
+
+                const role =
+                    item.dataset.role ||
+                    "";
+
+
+                const matches =
                     !searchTerm ||
-                    name.includes(searchTerm)
+                    name.includes(
+                        searchTerm
+                    ) ||
+                    memberId.includes(
+                        searchTerm
+                    ) ||
+                    group.includes(
+                        searchTerm
+                    ) ||
+                    role.includes(
+                        searchTerm
+                    );
+
+
+                item.style.display =
+                    matches
                         ? ""
                         : "none";
             }
@@ -840,6 +1286,13 @@
         }
 
 
+        if (participationPercentage) {
+
+            participationPercentage.textContent =
+                "—";
+        }
+
+
         if (takenBadge) {
 
             takenBadge.textContent =
@@ -851,6 +1304,23 @@
 
             notTakenBadge.textContent =
                 "—";
+        }
+
+
+        if (currentLessonNumber) {
+
+            currentLessonNumber.textContent =
+                "—";
+        }
+
+
+        if (currentLessonStatus) {
+
+            currentLessonStatus.textContent =
+                "—";
+
+            currentLessonStatus.dataset.status =
+                "";
         }
 
 
@@ -925,13 +1395,8 @@
 
         message.innerHTML = `
             <div>
-                <strong>
-                    Select a lesson number
-                </strong>
-
-                <p>
-                    Choose a lesson number to see quiz participation.
-                </p>
+                <strong>Select a lesson to view participation</strong>
+                <p>Choose a recorded lesson to see who participated.</p>
             </div>
         `;
 
@@ -1067,7 +1532,11 @@
 
 
         return match
-            ? match[1]
+            ? String(
+                Number(
+                    match[1]
+                )
+            )
             : "";
     }
 
@@ -1096,7 +1565,10 @@
         if (words.length === 1) {
 
             return words[0]
-                .substring(0, 2)
+                .substring(
+                    0,
+                    2
+                )
                 .toUpperCase();
         }
 
@@ -1107,38 +1579,6 @@
                 words.length - 1
             ].charAt(0)
         ).toUpperCase();
-    }
-
-
-    /* ============================================================
-       ESCAPE HTML
-       ============================================================ */
-
-    function escapeHtml(
-        value
-    ) {
-
-        return String(value)
-            .replace(
-                /&/g,
-                "&amp;"
-            )
-            .replace(
-                /</g,
-                "&lt;"
-            )
-            .replace(
-                />/g,
-                "&gt;"
-            )
-            .replace(
-                /"/g,
-                "&quot;"
-            )
-            .replace(
-                /'/g,
-                "&#039;"
-            );
     }
 
 })();
