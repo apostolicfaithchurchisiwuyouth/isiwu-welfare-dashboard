@@ -124,35 +124,18 @@
         }
 
 
-        /*
-         * Start with a clean page.
-         *
-         * We do NOT load participation automatically.
-         */
         resetParticipationView();
 
 
-        /*
-         * Build the lesson selector.
-         *
-         * We already know the available lesson numbers
-         * are stored in the Quiz Questions sheet.
-         *
-         * For now we populate the selector directly with
-         * Lesson 1 through the latest lesson.
-         *
-         * This avoids depending on another API endpoint.
-         */
         populateLessonSelect();
 
 
         /*
-         * Check whether a lesson number was supplied
-         * in the URL.
+         * Allow direct links such as:
          *
-         * Example:
          * quiz-participation.html?lessonNo=89
          */
+
         const params =
             new URLSearchParams(
                 window.location.search
@@ -176,8 +159,9 @@
 
 
         /*
-         * Lesson selection.
+         * Lesson selection
          */
+
         lessonSelect.addEventListener(
             "change",
             function (event) {
@@ -186,6 +170,7 @@
                     normalizeLessonNumber(
                         event.target.value
                     );
+
 
                 if (!lessonNo) {
 
@@ -197,6 +182,7 @@
                     return;
                 }
 
+
                 loadParticipation(
                     lessonNo
                 );
@@ -205,8 +191,9 @@
 
 
         /*
-         * Search.
+         * Search
          */
+
         if (searchInput) {
 
             searchInput.addEventListener(
@@ -228,15 +215,11 @@
 
 
         /*
-         * Your current quiz system is already at Lesson 89.
+         * Current lesson range.
          *
-         * We therefore create the selector from Lesson 1
-         * through Lesson 89.
-         *
-         * This is only the selector.
-         * Actual participation still comes directly
-         * from the backend.
+         * The quiz system is currently at Lesson 89.
          */
+
         for (
             let lessonNo = 1;
             lessonNo <= 89;
@@ -248,11 +231,14 @@
                     "option"
                 );
 
+
             option.value =
                 String(lessonNo);
 
+
             option.textContent =
                 `Lesson ${lessonNo}`;
+
 
             lessonSelect.appendChild(
                 option
@@ -288,10 +274,6 @@
 
         try {
 
-            /*
-             * THIS is the endpoint we have already tested
-             * successfully in Apps Script.
-             */
             const url =
                 API_URL +
                 "?action=getQuizParticipation" +
@@ -345,15 +327,17 @@
 
 
             /*
-             * Store the REAL backend response.
+             * Save the complete backend response.
              */
+
             participationData =
                 data;
 
 
             /*
-             * Render the REAL backend data.
+             * Render it.
              */
+
             renderParticipation(
                 data
             );
@@ -394,24 +378,74 @@
 
 
         /*
-         * IMPORTANT:
-         * These are the EXACT arrays returned by
-         * getQuizParticipation().
+         * ========================================================
+         * IMPORTANT
+         * ========================================================
+         *
+         * The backend does NOT return:
+         *
+         * data.participated
+         * data.notParticipated
+         *
+         * Instead it returns:
+         *
+         * data.members
+         *
+         * Each member contains their participation/completion
+         * status.
+         *
+         * The backend also gives us:
+         *
+         * data.completed
+         * data.notCompleted
+         * data.totalMembers
+         *
+         * We therefore use those actual fields.
+         * ========================================================
          */
-        const participated =
+
+
+        const members =
             Array.isArray(
-                data.participated
+                data.members
             )
-                ? data.participated
+                ? data.members
                 : [];
+
+
+        console.log(
+            "All participation members:",
+            members
+        );
+
+
+        /*
+         * Separate the members into two groups.
+         *
+         * We support several possible status property names
+         * so the frontend remains compatible with the backend.
+         */
+
+        const participated =
+            members.filter(
+                function (member) {
+
+                    return isCompletedMember(
+                        member
+                    );
+                }
+            );
 
 
         const notParticipated =
-            Array.isArray(
-                data.notParticipated
-            )
-                ? data.notParticipated
-                : [];
+            members.filter(
+                function (member) {
+
+                    return !isCompletedMember(
+                        member
+                    );
+                }
+            );
 
 
         console.log(
@@ -427,8 +461,11 @@
 
 
         /*
-         * Use backend counts directly.
+         * ========================================================
+         * COUNTS
+         * ========================================================
          */
+
         const total =
             Number(
                 data.totalMembers
@@ -437,13 +474,13 @@
 
         const taken =
             Number(
-                data.participatedCount
+                data.completed
             );
 
 
         const notTaken =
             Number(
-                data.notParticipatedCount
+                data.notCompleted
             );
 
 
@@ -452,8 +489,7 @@
             totalMembers.textContent =
                 Number.isFinite(total)
                     ? total
-                    : participated.length +
-                      notParticipated.length;
+                    : members.length;
         }
 
 
@@ -494,8 +530,9 @@
 
 
         /*
-         * Render the actual people.
+         * Render both groups.
          */
+
         renderMemberList(
             participated,
             takenList,
@@ -510,10 +547,90 @@
         );
 
 
+        /*
+         * Clear search whenever a new lesson is selected.
+         */
+
         if (searchInput) {
 
             searchInput.value = "";
         }
+    }
+
+
+    /* ============================================================
+       CHECK MEMBER COMPLETION STATUS
+       ============================================================ */
+
+    function isCompletedMember(
+        member
+    ) {
+
+        if (!member) {
+            return false;
+        }
+
+
+        /*
+         * Most likely backend fields.
+         */
+
+        if (
+            member.completed === true ||
+            member.completed === "true" ||
+            member.completed === "TRUE" ||
+            member.completed === 1 ||
+            member.completed === "1"
+        ) {
+
+            return true;
+        }
+
+
+        /*
+         * Other common status formats.
+         */
+
+        const status =
+            String(
+                member.status ||
+                member.completionStatus ||
+                member.participationStatus ||
+                ""
+            )
+                .trim()
+                .toLowerCase();
+
+
+        if (
+            status === "completed" ||
+            status === "complete" ||
+            status === "participated" ||
+            status === "taken" ||
+            status === "yes"
+        ) {
+
+            return true;
+        }
+
+
+        /*
+         * If the backend uses a boolean field such as
+         * hasCompleted or hasParticipated.
+         */
+
+        if (
+            member.hasCompleted === true ||
+            member.hasCompleted === "true" ||
+            member.hasParticipated === true ||
+            member.hasParticipated === "true"
+        ) {
+
+            return true;
+        }
+
+
+        return false;
     }
 
 
@@ -543,6 +660,7 @@
         /*
          * No members.
          */
+
         if (
             !Array.isArray(members) ||
             members.length === 0
@@ -570,17 +688,10 @@
         members.forEach(
             function (member) {
 
-                /*
-                 * Backend returns:
-                 *
-                 * {
-                 *   memberId: "...",
-                 *   name: "..."
-                 * }
-                 */
                 const name =
                     String(
                         member.name ||
+                        member.memberName ||
                         ""
                     ).trim();
 
@@ -588,9 +699,14 @@
                 const memberId =
                     String(
                         member.memberId ||
+                        member.id ||
                         ""
                     ).trim();
 
+
+                /*
+                 * Do not create an empty card.
+                 */
 
                 if (!name) {
 
@@ -703,9 +819,6 @@
         }
 
 
-        /*
-         * Do not show false zero values.
-         */
         if (totalMembers) {
 
             totalMembers.textContent =
