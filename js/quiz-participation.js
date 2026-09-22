@@ -1,973 +1,897 @@
 /* ============================================================
    AFC ISIU YOUTH PORTAL
-   FILE: quiz-participation.js
-   PURPOSE: WEEKLY QUIZ PARTICIPATION
+   QUIZ PARTICIPATION PAGE
    ============================================================ */
 
-const PARTICIPATION_API_URL =
-    "https://script.google.com/macros/s/AKfycbw1mVwpgAcIOSNbpgzy52TFyozEGMtWWwVWUDFaofGNzpsguBIaKR4q1dXVtgVHO2xZ1w/exec";
+(function () {
+    "use strict";
+
+    /* ============================================================
+       API
+       ============================================================ */
+
+    const API_URL =
+        "https://script.google.com/macros/s/AKfycbw1mVwpgAcIOSNbpgzy52TFyozEGMtWWwVWUDFaofGNzpsguBIaKR4q1dXVtgVHO2xZ1w/exec";
+
+    /* ============================================================
+       STATE
+       ============================================================ */
+
+    let currentLessonNo = "";
+    let participationData = null;
+
+    /* ============================================================
+       DOM
+       ============================================================ */
+
+    const lessonSelect =
+        document.getElementById("participationLessonSelect");
+
+    const loadingState =
+        document.getElementById("participationLoadingState");
+
+    const errorState =
+        document.getElementById("participationErrorState");
+
+    const errorMessage =
+        document.getElementById("participationErrorMessage");
+
+    const content =
+        document.getElementById("participationContent");
+
+    const totalMembers =
+        document.getElementById("participationTotalMembers");
+
+    const takenCount =
+        document.getElementById("participationTakenCount");
+
+    const notTakenCount =
+        document.getElementById("participationNotTakenCount");
+
+    const searchInput =
+        document.getElementById("participationSearchInput");
+
+    const takenList =
+        document.getElementById("participationTakenList");
+
+    const takenEmpty =
+        document.getElementById("participationTakenEmpty");
+
+    const takenBadge =
+        document.getElementById("participationTakenBadge");
+
+    const notTakenList =
+        document.getElementById("participationNotTakenList");
+
+    const notTakenEmpty =
+        document.getElementById("participationNotTakenEmpty");
+
+    const notTakenBadge =
+        document.getElementById("participationNotTakenBadge");
 
 
-/* ============================================================
-   PAGE STATE
-   ============================================================ */
+    /* ============================================================
+       INITIALIZE
+       ============================================================ */
 
-let participationData = null;
-let currentLessonNo = "";
-let lessonsData = [];
+    document.addEventListener("DOMContentLoaded", initialize);
 
 
-/* ============================================================
-   DOM ELEMENTS
-   ============================================================ */
+    async function initialize() {
 
-const lessonSelect =
-    document.getElementById("participationLessonSelect");
-
-const loadingState =
-    document.getElementById("participationLoadingState");
-
-const errorState =
-    document.getElementById("participationErrorState");
-
-const errorMessage =
-    document.getElementById("participationErrorMessage");
-
-const content =
-    document.getElementById("participationContent");
-
-const totalMembers =
-    document.getElementById("participationTotalMembers");
-
-const takenCount =
-    document.getElementById("participationTakenCount");
-
-const notTakenCount =
-    document.getElementById("participationNotTakenCount");
-
-const searchInput =
-    document.getElementById("participationSearchInput");
-
-const takenList =
-    document.getElementById("participationTakenList");
-
-const notTakenList =
-    document.getElementById("participationNotTakenList");
-
-const takenEmpty =
-    document.getElementById("participationTakenEmpty");
-
-const notTakenEmpty =
-    document.getElementById("participationNotTakenEmpty");
-
-const takenBadge =
-    document.getElementById("participationTakenBadge");
-
-const notTakenBadge =
-    document.getElementById("participationNotTakenBadge");
-
-
-/* ============================================================
-   INITIALIZE PAGE
-   ============================================================ */
-
-document.addEventListener(
-    "DOMContentLoaded",
-    initializeParticipationPage
-);
-
-
-async function initializeParticipationPage() {
-
-    showLoading("Loading quiz participation...");
-
-    try {
+        if (!lessonSelect) {
+            console.error(
+                "Quiz Participation: lesson select not found."
+            );
+            return;
+        }
 
         /*
-         * First check whether a lesson number was supplied
-         * in the page URL.
+         * IMPORTANT:
+         * The page must NOT automatically show
+         * "0 people participated".
          *
-         * Example:
-         * quiz-participation.html?lessonNo=89
+         * The user must first select a lesson.
          */
+
+        resetParticipationView();
+
+        /*
+         * If the URL contains ?lessonNo=89,
+         * select that lesson automatically.
+         */
+        const urlParams =
+            new URLSearchParams(window.location.search);
 
         const urlLessonNo =
-            new URLSearchParams(window.location.search)
-                .get("lessonNo");
-
-
-        if (urlLessonNo) {
-
-            currentLessonNo =
-                String(urlLessonNo).trim();
-
-            await loadParticipation(
-                currentLessonNo
+            normalizeLessonNumber(
+                urlParams.get("lessonNo")
             );
 
-            return;
-        }
-
-
         /*
-         * If there is no lessonNo in the URL,
-         * we still load the lessons endpoint.
-         *
-         * This keeps the page ready for future lesson
-         * selection when the backend provides lesson numbers.
+         * For now, load the lesson numbers from the
+         * Quiz Questions sheet through the backend.
          */
+        try {
 
-        await loadLessons();
+            await loadLessonNumbers();
 
+            if (urlLessonNo) {
 
-        /*
-         * Your current getLessons() response does not contain
-         * lesson numbers, so there may be no usable lesson
-         * number here.
-         */
+                const optionExists =
+                    Array.from(
+                        lessonSelect.options
+                    ).some(
+                        option =>
+                            option.value === urlLessonNo
+                    );
 
-        const initialLesson =
-            getInitialLessonNumber();
+                if (optionExists) {
 
+                    lessonSelect.value =
+                        urlLessonNo;
 
-        if (initialLesson) {
-
-            currentLessonNo =
-                String(initialLesson);
-
-            if (lessonSelect) {
-                lessonSelect.value =
-                    currentLessonNo;
+                    await loadParticipation(
+                        urlLessonNo
+                    );
+                }
             }
 
-            await loadParticipation(
-                currentLessonNo
+        } catch (error) {
+
+            console.error(
+                "Quiz Participation initialization error:",
+                error
             );
 
-            return;
+            showError(
+                error.message ||
+                "Unable to load lesson numbers."
+            );
         }
 
-
-        hideLoading();
-
-        showError(
-            "Please open this page with a lesson number, for example: ?lessonNo=89"
+        /*
+         * Listen for lesson selection.
+         */
+        lessonSelect.addEventListener(
+            "change",
+            handleLessonChange
         );
 
-    } catch (error) {
+        /*
+         * Search participants.
+         */
+        if (searchInput) {
 
-        console.error(
-            "Quiz participation initialization error:",
-            error
-        );
-
-        hideLoading();
-
-        showError(
-            error.message ||
-            "Unable to load quiz participation."
-        );
+            searchInput.addEventListener(
+                "input",
+                handleSearch
+            );
+        }
     }
-}
 
 
-/* ============================================================
-   LOAD LESSONS
-   ============================================================ */
+    /* ============================================================
+       LOAD LESSON NUMBERS
+       ============================================================ */
 
-async function loadLessons() {
+    async function loadLessonNumbers() {
 
-    try {
+        /*
+         * We use Quiz Questions because every quiz question
+         * has a lesson number in column A.
+         */
+        const url =
+            API_URL +
+            "?action=getQuizParticipationLessons";
 
         const response =
             await fetch(
-                PARTICIPATION_API_URL +
-                "?action=getLessons"
+                url,
+                {
+                    method: "GET",
+                    cache: "no-store"
+                }
             );
-
 
         if (!response.ok) {
             throw new Error(
-                "Unable to connect to the lessons service."
+                "Unable to load lesson numbers."
             );
         }
-
 
         const data =
             await response.json();
 
+        console.log(
+            "Quiz participation lessons:",
+            data
+        );
 
-        if (!data || data.success !== true) {
-
+        if (!data.success) {
             throw new Error(
-                data?.message ||
-                "Unable to load lessons."
+                data.message ||
+                "Unable to load lesson numbers."
             );
         }
-
-
-        lessonsData =
-            Array.isArray(data.lessons)
-                ? data.lessons
-                : [];
-
 
         populateLessonSelect(
-            lessonsData
+            data.lessons || []
         );
+    }
 
-    } catch (error) {
 
-        console.error(
-            "loadLessons error:",
-            error
-        );
+    /* ============================================================
+       POPULATE LESSON SELECT
+       ============================================================ */
+
+    function populateLessonSelect(lessons) {
 
         /*
-         * We don't immediately show the error here because
-         * the page may still work using ?lessonNo=89.
+         * Keep the first placeholder option.
          */
+        lessonSelect.innerHTML =
+            '<option value="">Select lesson number</option>';
 
-        lessonsData = [];
+        lessons
+            .map(normalizeLessonNumber)
+            .filter(Boolean)
+            .sort(
+                (a, b) =>
+                    Number(a) - Number(b)
+            )
+            .forEach(
+                lessonNo => {
 
-        if (lessonSelect) {
-            lessonSelect.innerHTML =
-                '<option value="">Select a lesson</option>';
-        }
-    }
-}
+                    const option =
+                        document.createElement(
+                            "option"
+                        );
 
+                    option.value =
+                        lessonNo;
 
-/* ============================================================
-   POPULATE LESSON SELECT
-   ============================================================ */
+                    option.textContent =
+                        `Lesson ${lessonNo}`;
 
-function populateLessonSelect(
-    lessons
-) {
-
-    if (!lessonSelect) {
-        return;
-    }
-
-
-    lessonSelect.innerHTML =
-        '<option value="">Select a lesson</option>';
-
-
-    lessons.forEach(
-        (lesson, index) => {
-
-            /*
-             * Your current getLessons() response does NOT
-             * provide lessonNo.
-             *
-             * Therefore we only use these fields if they
-             * are actually available.
-             */
-
-            const lessonNo =
-                lesson.lessonNo ??
-                lesson.lesson ??
-                lesson.number ??
-                lesson.lessonNumber ??
-                lesson.no ??
-                lesson.id;
-
-
-            if (
-                lessonNo === undefined ||
-                lessonNo === null ||
-                String(lessonNo).trim() === ""
-            ) {
-                return;
-            }
-
-
-            const topic =
-                lesson.topic ||
-                lesson.title ||
-                lesson.lessonTitle ||
-                `Lesson ${lessonNo}`;
-
-
-            const option =
-                document.createElement("option");
-
-
-            option.value =
-                String(lessonNo);
-
-
-            option.textContent =
-                `Lesson ${lessonNo} — ${topic}`;
-
-
-            lessonSelect.appendChild(
-                option
-            );
-        }
-    );
-
-
-    /*
-     * Listen for manual lesson selection.
-     */
-
-    lessonSelect.onchange =
-        async function () {
-
-            const selectedLesson =
-                String(
-                    this.value || ""
-                ).trim();
-
-
-            if (!selectedLesson) {
-                return;
-            }
-
-
-            currentLessonNo =
-                selectedLesson;
-
-
-            await loadParticipation(
-                currentLessonNo
-            );
-        };
-}
-
-
-/* ============================================================
-   DETERMINE INITIAL LESSON NUMBER
-   ============================================================ */
-
-function getInitialLessonNumber() {
-
-    /*
-     * 1. URL parameter
-     */
-
-    const urlLessonNo =
-        new URLSearchParams(
-            window.location.search
-        ).get("lessonNo");
-
-
-    if (urlLessonNo) {
-
-        return String(
-            urlLessonNo
-        ).trim();
-    }
-
-
-    /*
-     * 2. Look through getLessons() data in case
-     * a future backend version includes lessonNo.
-     */
-
-    const activeLesson =
-        lessonsData.find(
-            lesson => {
-
-                const lessonNo =
-                    lesson.lessonNo ??
-                    lesson.lesson ??
-                    lesson.number ??
-                    lesson.lessonNumber ??
-                    lesson.no ??
-                    lesson.id;
-
-
-                if (
-                    lessonNo === undefined ||
-                    lessonNo === null ||
-                    String(lessonNo).trim() === ""
-                ) {
-                    return false;
+                    lessonSelect.appendChild(
+                        option
+                    );
                 }
-
-
-                return (
-                    lesson.active === true ||
-                    lesson.isActive === true ||
-                    String(
-                        lesson.status || ""
-                    ).toLowerCase() === "active"
-                );
-            }
-        );
-
-
-    if (activeLesson) {
-
-        return String(
-            activeLesson.lessonNo ??
-            activeLesson.lesson ??
-            activeLesson.number ??
-            activeLesson.lessonNumber ??
-            activeLesson.no ??
-            activeLesson.id
-        ).trim();
+            );
     }
 
 
-    return "";
-}
+    /* ============================================================
+       LESSON CHANGE
+       ============================================================ */
 
+    async function handleLessonChange(event) {
 
-/* ============================================================
-   LOAD PARTICIPATION
-   ============================================================ */
+        const lessonNo =
+            normalizeLessonNumber(
+                event.target.value
+            );
 
-async function loadParticipation(
-    lessonNo
-) {
+        /*
+         * Nothing selected.
+         */
+        if (!lessonNo) {
 
-    if (!lessonNo) {
+            currentLessonNo = "";
+            participationData = null;
 
-        showError(
-            "No lesson number was provided."
+            resetParticipationView();
+
+            return;
+        }
+
+        await loadParticipation(
+            lessonNo
         );
-
-        return;
     }
 
 
-    showLoading(
-        `Loading participation for Lesson ${lessonNo}...`
-    );
+    /* ============================================================
+       LOAD PARTICIPATION
+       ============================================================ */
 
-
-    try {
-
-        const url =
-            PARTICIPATION_API_URL +
-            "?action=getQuizParticipation" +
-            "&lessonNo=" +
-            encodeURIComponent(
-                lessonNo
-            );
-
-
-        const response =
-            await fetch(url);
-
-
-        if (!response.ok) {
-
-            throw new Error(
-                "Unable to connect to the participation service."
-            );
-        }
-
-
-        const data =
-            await response.json();
-
-
-        if (!data || data.success !== true) {
-
-            throw new Error(
-                data?.message ||
-                "Unable to load quiz participation."
-            );
-        }
-
-
-        participationData =
-            data;
-
+    async function loadParticipation(
+        lessonNo
+    ) {
 
         currentLessonNo =
-            String(
-                data.lessonNo ??
+            normalizeLessonNumber(
                 lessonNo
             );
 
-
-        if (lessonSelect) {
-
-            lessonSelect.value =
-                currentLessonNo;
+        if (!currentLessonNo) {
+            resetParticipationView();
+            return;
         }
 
+        showLoading();
 
-        renderParticipation(
-            participationData
-        );
+        try {
 
+            const url =
+                API_URL +
+                "?action=getQuizParticipation" +
+                "&lessonNo=" +
+                encodeURIComponent(
+                    currentLessonNo
+                );
 
-        hideLoading();
+            console.log(
+                "Loading participation:",
+                url
+            );
 
-        showContent();
+            const response =
+                await fetch(
+                    url,
+                    {
+                        method: "GET",
+                        cache: "no-store"
+                    }
+                );
 
-    } catch (error) {
+            if (!response.ok) {
 
-        console.error(
-            "loadParticipation error:",
-            error
-        );
+                throw new Error(
+                    "Unable to connect to the participation service."
+                );
+            }
 
-        hideLoading();
+            const data =
+                await response.json();
 
-        showError(
-            error.message ||
-            "Unable to load quiz participation."
-        );
-    }
-}
+            console.log(
+                "Quiz participation response:",
+                data
+            );
 
+            if (!data.success) {
 
-/* ============================================================
-   RENDER PARTICIPATION
-   ============================================================ */
+                throw new Error(
+                    data.message ||
+                    "Unable to load quiz participation."
+                );
+            }
 
-function renderParticipation(
-    data
-) {
+            participationData =
+                data;
 
-    const participated =
-        Array.isArray(data.participated)
-            ? data.participated
-            : [];
+            renderParticipation(
+                data
+            );
 
+        } catch (error) {
 
-    const notParticipated =
-        Array.isArray(data.notParticipated)
-            ? data.notParticipated
-            : [];
+            console.error(
+                "Quiz participation error:",
+                error
+            );
 
-
-    const total =
-        Number(
-            data.totalMembers ??
-            participated.length +
-            notParticipated.length
-        );
-
-
-    const taken =
-        Number(
-            data.participatedCount ??
-            participated.length
-        );
-
-
-    const notTaken =
-        Number(
-            data.notParticipatedCount ??
-            notParticipated.length
-        );
-
-
-    /*
-     * Summary
-     */
-
-    if (totalMembers) {
-        totalMembers.textContent =
-            total;
+            showError(
+                error.message ||
+                "Something went wrong while loading quiz participation."
+            );
+        }
     }
 
 
-    if (takenCount) {
-        takenCount.textContent =
-            taken;
-    }
+    /* ============================================================
+       RENDER PARTICIPATION
+       ============================================================ */
 
+    function renderParticipation(data) {
 
-    if (notTakenCount) {
-        notTakenCount.textContent =
-            notTaken;
-    }
+        hideAllStates();
 
-
-    /*
-     * Badges
-     */
-
-    if (takenBadge) {
-        takenBadge.textContent =
-            taken;
-    }
-
-
-    if (notTakenBadge) {
-        notTakenBadge.textContent =
-            notTaken;
-    }
-
-
-    /*
-     * Member lists
-     */
-
-    renderMemberList(
-        takenList,
-        takenEmpty,
-        participated
-    );
-
-
-    renderMemberList(
-        notTakenList,
-        notTakenEmpty,
-        notParticipated
-    );
-
-
-    /*
-     * Search
-     */
-
-    if (searchInput) {
-
-        searchInput.value = "";
-
-        searchInput.oninput =
-            handleParticipationSearch;
-    }
-}
-
-
-/* ============================================================
-   RENDER MEMBER LIST
-   ============================================================ */
-
-function renderMemberList(
-    listElement,
-    emptyElement,
-    members
-) {
-
-    if (!listElement) {
-        return;
-    }
-
-
-    listElement.innerHTML = "";
-
-
-    if (!members.length) {
-
-        if (emptyElement) {
-            emptyElement.classList.remove(
+        if (content) {
+            content.classList.remove(
                 "hidden"
             );
         }
 
-        return;
-    }
+        const participated =
+            Array.isArray(
+                data.participated
+            )
+                ? data.participated
+                : [];
 
+        const notParticipated =
+            Array.isArray(
+                data.notParticipated
+            )
+                ? data.notParticipated
+                : [];
 
-    if (emptyElement) {
-        emptyElement.classList.add(
-            "hidden"
+        const total =
+            Number(
+                data.totalMembers
+            ) ||
+            (
+                participated.length +
+                notParticipated.length
+            );
+
+        const taken =
+            Number(
+                data.participatedCount
+            ) ||
+            participated.length;
+
+        const notTaken =
+            Number(
+                data.notParticipatedCount
+            ) ||
+            notParticipated.length;
+
+        if (totalMembers) {
+            totalMembers.textContent =
+                total;
+        }
+
+        if (takenCount) {
+            takenCount.textContent =
+                taken;
+        }
+
+        if (notTakenCount) {
+            notTakenCount.textContent =
+                notTaken;
+        }
+
+        if (takenBadge) {
+            takenBadge.textContent =
+                taken;
+        }
+
+        if (notTakenBadge) {
+            notTakenBadge.textContent =
+                notTaken;
+        }
+
+        renderMemberList(
+            participated,
+            takenList,
+            takenEmpty
         );
+
+        renderMemberList(
+            notParticipated,
+            notTakenList,
+            notTakenEmpty
+        );
+
+        if (searchInput) {
+            searchInput.value = "";
+        }
     }
 
 
-    members.forEach(
-        member => {
+    /* ============================================================
+       RENDER MEMBER LIST
+       ============================================================ */
 
-            const name =
-                member.name ||
-                "Unnamed member";
+    function renderMemberList(
+        members,
+        listElement,
+        emptyElement
+    ) {
 
+        if (!listElement) {
+            return;
+        }
 
-            const memberId =
-                member.memberId ||
-                member.id ||
-                "";
+        listElement.innerHTML = "";
 
+        if (!members.length) {
 
-            const item =
-                document.createElement("div");
+            if (emptyElement) {
+                emptyElement.classList.remove(
+                    "hidden"
+                );
+            }
 
+            return;
+        }
 
-            item.className =
-                "participation-member";
+        if (emptyElement) {
+            emptyElement.classList.add(
+                "hidden"
+            );
+        }
 
+        members.forEach(
+            member => {
 
-            item.dataset.name =
-                name.toLowerCase();
+                const name =
+                    String(
+                        member.name ||
+                        ""
+                    ).trim();
 
+                const memberId =
+                    String(
+                        member.memberId ||
+                        ""
+                    ).trim();
 
-            item.innerHTML = `
-                <div class="participation-member-avatar">
-                    ${getInitials(name)}
-                </div>
+                if (!name) {
+                    return;
+                }
 
-                <div class="participation-member-info">
-                    <div class="participation-member-name">
-                        ${escapeHtml(name)}
+                const item =
+                    document.createElement(
+                        "div"
+                    );
+
+                item.className =
+                    "participation-member";
+
+                item.dataset.name =
+                    name.toLowerCase();
+
+                item.innerHTML = `
+                    <div class="participation-member-avatar">
+                        ${getInitials(name)}
                     </div>
 
-                    ${
-                        memberId
-                            ? `
-                                <div class="participation-member-id">
-                                    ${escapeHtml(memberId)}
-                                </div>
-                              `
-                            : ""
-                    }
-                </div>
-            `;
+                    <div class="participation-member-info">
+                        <div class="participation-member-name">
+                            ${escapeHtml(name)}
+                        </div>
+
+                        ${
+                            memberId
+                                ? `
+                                    <div class="participation-member-id">
+                                        ${escapeHtml(memberId)}
+                                    </div>
+                                  `
+                                : ""
+                        }
+                    </div>
+                `;
+
+                listElement.appendChild(
+                    item
+                );
+            }
+        );
+    }
 
 
-            listElement.appendChild(
-                item
+    /* ============================================================
+       SEARCH
+       ============================================================ */
+
+    function handleSearch(event) {
+
+        const searchTerm =
+            String(
+                event.target.value ||
+                ""
+            )
+                .trim()
+                .toLowerCase();
+
+        const items =
+            document.querySelectorAll(
+                ".participation-member"
+            );
+
+        items.forEach(
+            item => {
+
+                const name =
+                    item.dataset.name ||
+                    "";
+
+                item.style.display =
+                    !searchTerm ||
+                    name.includes(searchTerm)
+                        ? ""
+                        : "none";
+            }
+        );
+    }
+
+
+    /* ============================================================
+       INITIAL / EMPTY STATE
+       ============================================================ */
+
+    function resetParticipationView() {
+
+        hideAllStates();
+
+        if (content) {
+
+            content.classList.remove(
+                "hidden"
             );
         }
-    );
-}
 
+        /*
+         * We intentionally do NOT show zero
+         * participation before a lesson is selected.
+         */
 
-/* ============================================================
-   SEARCH
-   ============================================================ */
-
-function handleParticipationSearch() {
-
-    const query =
-        String(
-            searchInput?.value || ""
-        )
-        .trim()
-        .toLowerCase();
-
-
-    filterMemberList(
-        takenList,
-        query
-    );
-
-
-    filterMemberList(
-        notTakenList,
-        query
-    );
-}
-
-
-function filterMemberList(
-    listElement,
-    query
-) {
-
-    if (!listElement) {
-        return;
-    }
-
-
-    const items =
-        listElement.querySelectorAll(
-            ".participation-member"
-        );
-
-
-    items.forEach(
-        item => {
-
-            const name =
-                item.dataset.name || "";
-
-
-            item.style.display =
-                !query ||
-                name.includes(query)
-                    ? ""
-                    : "none";
+        if (totalMembers) {
+            totalMembers.textContent = "—";
         }
-    );
-}
 
+        if (takenCount) {
+            takenCount.textContent = "—";
+        }
 
-/* ============================================================
-   INITIALS
-   ============================================================ */
+        if (notTakenCount) {
+            notTakenCount.textContent = "—";
+        }
 
-function getInitials(
-    name
-) {
+        if (takenBadge) {
+            takenBadge.textContent = "—";
+        }
 
-    const words =
-        String(name)
-            .trim()
-            .split(/\s+/)
-            .filter(Boolean);
+        if (notTakenBadge) {
+            notTakenBadge.textContent = "—";
+        }
 
+        if (takenList) {
+            takenList.innerHTML = "";
+        }
 
-    if (!words.length) {
-        return "?";
+        if (notTakenList) {
+            notTakenList.innerHTML = "";
+        }
+
+        if (takenEmpty) {
+            takenEmpty.classList.add(
+                "hidden"
+            );
+        }
+
+        if (notTakenEmpty) {
+            notTakenEmpty.classList.add(
+                "hidden"
+            );
+        }
+
+        /*
+         * Show a simple instruction.
+         */
+        showSelectionMessage();
     }
 
 
-    if (words.length === 1) {
+    /* ============================================================
+       SELECTION MESSAGE
+       ============================================================ */
 
-        return words[0]
-            .substring(0, 2)
-            .toUpperCase();
-    }
+    function showSelectionMessage() {
 
+        /*
+         * If the page already contains a suitable
+         * selection message, use it.
+         *
+         * Otherwise create one.
+         */
 
-    return (
-        words[0][0] +
-        words[words.length - 1][0]
-    ).toUpperCase();
-}
+        let message =
+            document.getElementById(
+                "participationSelectionMessage"
+            );
 
+        if (!message) {
 
-/* ============================================================
-   HTML ESCAPE
-   ============================================================ */
+            message =
+                document.createElement(
+                    "div"
+                );
 
-function escapeHtml(
-    value
-) {
+            message.id =
+                "participationSelectionMessage";
 
-    return String(value)
-        .replace(
-            /&/g,
-            "&amp;"
-        )
-        .replace(
-            /</g,
-            "&lt;"
-        )
-        .replace(
-            />/g,
-            "&gt;"
-        )
-        .replace(
-            /"/g,
-            "&quot;"
-        )
-        .replace(
-            /'/g,
-            "&#039;"
-        );
-}
+            message.className =
+                "participation-selection-message";
 
+            if (content) {
+                content.prepend(
+                    message
+                );
+            }
+        }
 
-/* ============================================================
-   LOADING
-   ============================================================ */
+        message.innerHTML = `
+            <div class="participation-selection-icon">
+                ✓
+            </div>
 
-function showLoading(
-    message
-) {
+            <div>
+                <strong>
+                    Select a lesson number
+                </strong>
 
-    if (loadingState) {
+                <p>
+                    Choose a lesson number above to see who participated in the quiz.
+                </p>
+            </div>
+        `;
 
-        loadingState.classList.remove(
+        message.classList.remove(
             "hidden"
         );
+    }
 
-        const messageElement =
-            loadingState.querySelector(
-                "[data-loading-message]"
+
+    /* ============================================================
+       STATE HELPERS
+       ============================================================ */
+
+    function showLoading() {
+
+        hideAllStates();
+
+        if (loadingState) {
+            loadingState.classList.remove(
+                "hidden"
             );
+        }
+    }
 
-        if (messageElement) {
-            messageElement.textContent =
+
+    function showError(message) {
+
+        hideAllStates();
+
+        if (errorState) {
+            errorState.classList.remove(
+                "hidden"
+            );
+        }
+
+        if (errorMessage) {
+            errorMessage.textContent =
                 message;
         }
     }
 
 
-    if (errorState) {
-        errorState.classList.add(
-            "hidden"
-        );
+    function hideAllStates() {
+
+        if (loadingState) {
+            loadingState.classList.add(
+                "hidden"
+            );
+        }
+
+        if (errorState) {
+            errorState.classList.add(
+                "hidden"
+            );
+        }
+
+        if (content) {
+            content.classList.add(
+                "hidden"
+            );
+        }
+
+        const selectionMessage =
+            document.getElementById(
+                "participationSelectionMessage"
+            );
+
+        if (selectionMessage) {
+            selectionMessage.classList.add(
+                "hidden"
+            );
+        }
     }
 
 
-    if (content) {
-        content.classList.add(
-            "hidden"
-        );
-    }
-}
+    /* ============================================================
+       NORMALIZE LESSON NUMBER
+       ============================================================ */
 
+    function normalizeLessonNumber(value) {
 
-/* ============================================================
-   HIDE LOADING
-   ============================================================ */
+        if (
+            value === null ||
+            value === undefined
+        ) {
+            return "";
+        }
 
-function hideLoading() {
+        const text =
+            String(value)
+                .trim();
 
-    if (loadingState) {
+        if (!text) {
+            return "";
+        }
 
-        loadingState.classList.add(
-            "hidden"
-        );
-    }
-}
+        /*
+         * Handles values such as:
+         * 89
+         * "89"
+         * "Lesson 89"
+         */
+        const match =
+            text.match(
+                /(\d+)/
+            );
 
-
-/* ============================================================
-   SHOW CONTENT
-   ============================================================ */
-
-function showContent() {
-
-    if (content) {
-
-        content.classList.remove(
-            "hidden"
-        );
-    }
-
-
-    if (errorState) {
-
-        errorState.classList.add(
-            "hidden"
-        );
-    }
-}
-
-
-/* ============================================================
-   SHOW ERROR
-   ============================================================ */
-
-function showError(
-    message
-) {
-
-    if (loadingState) {
-
-        loadingState.classList.add(
-            "hidden"
-        );
+        return match
+            ? match[1]
+            : "";
     }
 
 
-    if (content) {
+    /* ============================================================
+       INITIALS
+       ============================================================ */
 
-        content.classList.add(
-            "hidden"
-        );
+    function getInitials(name) {
+
+        const words =
+            String(name)
+                .trim()
+                .split(/\s+/)
+                .filter(Boolean);
+
+        if (!words.length) {
+            return "?";
+        }
+
+        if (words.length === 1) {
+
+            return words[0]
+                .substring(0, 2)
+                .toUpperCase();
+        }
+
+        return (
+            words[0].charAt(0) +
+            words[
+                words.length - 1
+            ].charAt(0)
+        ).toUpperCase();
     }
 
 
-    if (errorState) {
+    /* ============================================================
+       ESCAPE HTML
+       ============================================================ */
 
-        errorState.classList.remove(
-            "hidden"
-        );
+    function escapeHtml(value) {
+
+        return String(value)
+            .replace(
+                /&/g,
+                "&amp;"
+            )
+            .replace(
+                /</g,
+                "&lt;"
+            )
+            .replace(
+                />/g,
+                "&gt;"
+            )
+            .replace(
+                /"/g,
+                "&quot;"
+            )
+            .replace(
+                /'/g,
+                "&#039;"
+            );
     }
 
-
-    if (errorMessage) {
-
-        errorMessage.textContent =
-            message;
-    }
-}
+})();
