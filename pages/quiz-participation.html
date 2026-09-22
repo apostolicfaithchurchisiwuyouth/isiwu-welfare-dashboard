@@ -19,6 +19,7 @@
         Quiz Participation | AFC Isiu Youth Portal
     </title>
 
+
     <!-- ============================================================
          GOOGLE FONTS
          ============================================================ -->
@@ -39,6 +40,7 @@
         rel="stylesheet"
     >
 
+
     <!-- ============================================================
          ICONS
          ============================================================ -->
@@ -47,6 +49,7 @@
         href="https://cdn.jsdelivr.net/npm/remixicon@4.6.0/fonts/remixicon.css"
         rel="stylesheet"
     >
+
 
     <!-- ============================================================
          PORTAL CSS
@@ -72,18 +75,18 @@
 
 <body>
 
+
     <!-- ============================================================
          AFC PORTAL APPLICATION SHELL
-         These containers are required by layout.js.
+
+         DO NOT REMOVE THESE CONTAINERS.
+         layout.js uses them to load the shared portal interface.
          ============================================================ -->
 
     <div class="app-layout">
 
         <!-- SHARED SIDEBAR -->
-        <aside
-            id="app-sidebar"
-            class="app-sidebar"
-        ></aside>
+        <aside id="app-sidebar"></aside>
 
 
         <!-- ========================================================
@@ -93,10 +96,7 @@
         <main class="main-area">
 
             <!-- SHARED TOPBAR -->
-            <header
-                id="app-topbar"
-                class="app-topbar"
-            ></header>
+            <header id="app-topbar"></header>
 
 
             <!-- ====================================================
@@ -106,31 +106,6 @@
             <section
                 class="dashboard-content quiz-participation-page"
             >
-
-                <!-- =================================================
-                     PAGE HEADER
-                     ================================================= -->
-
-                <div class="participation-page-header">
-
-                    <div class="participation-page-header-main">
-
-                        <span class="section-kicker">
-                            WEEKLY SLC QUIZ
-                        </span>
-
-                        <h1>
-                            Quiz Participation
-                        </h1>
-
-                        <p>
-                            See who has completed this week's quiz
-                            and who is yet to participate.
-                        </p>
-
-                    </div>
-
-                </div>
 
 
                 <!-- =================================================
@@ -169,7 +144,9 @@
                 >
 
                     <div class="participation-state-icon">
+
                         <i class="ri-error-warning-line"></i>
+
                     </div>
 
                     <div class="participation-state-content">
@@ -188,8 +165,11 @@
                             id="participationRetryButton"
                             class="participation-retry-button"
                         >
+
                             <i class="ri-refresh-line"></i>
+
                             Try Again
+
                         </button>
 
                     </div>
@@ -205,6 +185,7 @@
                     id="participationContent"
                     class="participation-content hidden"
                 >
+
 
                     <!-- =============================================
                          CURRENT QUIZ
@@ -224,12 +205,12 @@
                             <div class="participation-current-details">
 
                                 <span class="participation-current-label">
-                                    CURRENT QUIZ
+                                    WEEKLY SLC QUIZ
                                 </span>
 
-                                <h2 id="participationCurrentLesson">
+                                <h1 id="participationCurrentLesson">
                                     —
-                                </h2>
+                                </h1>
 
                                 <p id="participationCurrentTitle">
                                     —
@@ -270,11 +251,11 @@
                             <div class="participation-summary-heading">
 
                                 <span class="section-kicker">
-                                    PARTICIPATION OVERVIEW
+                                    PARTICIPATION
                                 </span>
 
                                 <h2>
-                                    This week's progress
+                                    Weekly quiz progress
                                 </h2>
 
                             </div>
@@ -288,7 +269,9 @@
                                         Participation
                                     </span>
 
-                                    <strong id="participationPercentage">
+                                    <strong
+                                        id="participationPercentage"
+                                    >
                                         0%
                                     </strong>
 
@@ -310,6 +293,7 @@
 
 
                         <div class="participation-summary-stats">
+
 
                             <!-- TOTAL MEMBERS -->
 
@@ -382,7 +366,7 @@
                             <input
                                 type="search"
                                 id="participationSearchInput"
-                                placeholder="Search by name, ID, group or role..."
+                                placeholder="Search name, ID, group or role..."
                                 autocomplete="off"
                                 aria-label="Search quiz participation"
                             >
@@ -409,7 +393,9 @@
 
                                 <div class="participation-section-title">
 
-                                    <span class="participation-section-indicator participated"></span>
+                                    <span
+                                        class="participation-section-indicator participated"
+                                    ></span>
 
                                     <div>
 
@@ -446,11 +432,11 @@
                                     </span>
 
                                     <span>
-                                        Group
+                                        Group / Family
                                     </span>
 
                                     <span>
-                                        Role
+                                        Group Role
                                     </span>
 
                                 </div>
@@ -495,7 +481,9 @@
 
                                 <div class="participation-section-title">
 
-                                    <span class="participation-section-indicator pending"></span>
+                                    <span
+                                        class="participation-section-indicator pending"
+                                    ></span>
 
                                     <div>
 
@@ -532,11 +520,11 @@
                                     </span>
 
                                     <span>
-                                        Group
+                                        Group / Family
                                     </span>
 
                                     <span>
-                                        Role
+                                        Group Role
                                     </span>
 
                                 </div>
@@ -570,6 +558,7 @@
 
                         </section>
 
+
                     </div>
 
                 </div>
@@ -579,11 +568,11 @@
         </main>
 
 
-        <!-- SHARED BOTTOM NAVIGATION -->
-        <nav
-            id="app-bottom-nav"
-            class="app-bottom-nav"
-        ></nav>
+        <!-- ========================================================
+             SHARED BOTTOM NAVIGATION
+             ======================================================== -->
+
+        <nav id="app-bottom-nav"></nav>
 
     </div>
 
@@ -592,30 +581,20 @@
          SHARED NOTIFICATION PANEL
          ============================================================ -->
 
-    <div
-        id="notificationPanelContainer"
-    ></div>
+    <div id="notificationPanelContainer"></div>
 
 
     <!-- ============================================================
          PORTAL JAVASCRIPT
          ============================================================ -->
 
-    <script
-        src="../js/pwa.js"
-    ></script>
+    <script src="../js/pwa.js"></script>
 
-    <script
-        src="../js/main.js"
-    ></script>
+    <script src="../js/main.js"></script>
 
-    <script
-        src="../js/layout.js"
-    ></script>
+    <script src="../js/layout.js"></script>
 
-    <script
-        src="../js/quiz-participation.js"
-    ></script>
+    <script src="../js/quiz-participation.js"></script>
 
 </body>
 
