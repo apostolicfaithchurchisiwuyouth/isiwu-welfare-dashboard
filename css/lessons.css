@@ -869,7 +869,7 @@
 
 .lesson-content h1 {
 
-    font-size: 1.35rem;
+    font-size: 1rem;
 
 }
 
@@ -910,7 +910,7 @@
 .lesson-content p {
 
     font-size:
-        0.88rem;
+        0.95rem;
 
     margin:
         0 0 14px;
@@ -2118,7 +2118,7 @@
     .lesson-content h1 {
 
         font-size:
-            1.15rem;
+            1rem;
 
     }
 
@@ -2140,7 +2140,7 @@
 
 
     .lesson-content p {
-
+ font-size: .90rem;
         margin-bottom:
             12px;
 
