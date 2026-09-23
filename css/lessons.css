@@ -9,7 +9,7 @@
     min-height: 100%;
 
     font-family:
-        "Outfit",
+        "DM Sans",
         sans-serif;
 
     /* Keep this page light regardless of device preference */
@@ -239,14 +239,14 @@
     gap: 9px;
 
     font-family:
-        "Outfit",
+        "DM Sans",
         sans-serif;
 
     font-size: 0.84rem;
 
     font-weight: 750;
 
-    cursor: poOutfit;
+    cursor: poDM Sans;
 
     transition:
         background 0.2s ease,
@@ -657,7 +657,7 @@
         #78350f;
 
     font-family:
-        "Outfit",
+        "DM Sans",
         sans-serif;
 
     font-size: 0.86rem;
@@ -1505,7 +1505,7 @@
         #ffffff;
 
     cursor:
-        poOutfit;
+        poDM Sans;
 
     transition:
         transform 0.2s ease,
@@ -2771,7 +2771,7 @@
     background:
         rgba(234, 88, 12, 0.06);
 
-    poOutfit-events:
+    poDM Sans-events:
         none;
 
 }
@@ -2868,7 +2868,7 @@
         #ea580c;
 
     font-family:
-        "Outfit",
+        "DM Sans",
         sans-serif;
 
     font-size:
@@ -2934,7 +2934,7 @@
         var(--text-secondary, #6b7280);
 
     font-family:
-        "Outfit",
+        "DM Sans",
         sans-serif;
 
     font-size:
@@ -3066,7 +3066,7 @@
 .lesson-rich-content {
 
     font-family:
-        "Outfit",
+        "DM Sans",
         sans-serif;
 
     font-size:
