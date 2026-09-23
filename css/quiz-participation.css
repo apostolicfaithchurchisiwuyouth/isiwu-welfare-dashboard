@@ -7,8 +7,6 @@
 
 /* ============================================================
    PAGE FOUNDATION
-   PAGE-SPECIFIC STYLING ONLY
-   SHELL / BODY / LAYOUT HANDLED BY MAIN + LAYOUT CSS
    ============================================================ */
 
 .dashboard-content.quiz-participation-page {
@@ -55,17 +53,19 @@
 
     padding: 20px;
 
-    margin-bottom: 18px;
+    margin-bottom: 22px;
 
     background: #FFFFFF;
 
     border: 1px solid #E9E4EB;
 
-    border-radius: 12px;
+    border-radius: 14px;
 
     color: #4A4450;
 
-    box-shadow: 0 4px 14px rgba(10, 0, 22, 0.025);
+    box-shadow:
+        0 5px 18px
+        rgba(10, 0, 22, 0.025);
 
 }
 
@@ -76,7 +76,9 @@
 
     margin-bottom: 4px;
 
-    font-family: "Bricolage Grotesque", sans-serif;
+    font-family:
+        "Bricolage Grotesque",
+        sans-serif;
 
     font-size: 0.86rem;
 
@@ -118,7 +120,9 @@
 
     border-radius: 50%;
 
-    animation: participationSpin 0.8s linear infinite;
+    animation:
+        participationSpin
+        0.8s linear infinite;
 
 }
 
@@ -199,7 +203,9 @@
 
     color: #4A0754;
 
-    font-family: "DM Sans", sans-serif;
+    font-family:
+        "DM Sans",
+        sans-serif;
 
     font-size: 0.74rem;
 
@@ -237,23 +243,19 @@
 
     width: 100%;
 
-    padding: 17px 19px;
+    padding: 18px 20px;
 
-    margin-bottom: 16px;
+    margin-bottom: 24px;
 
-    background:
-        linear-gradient(
-            100deg,
-            #FFFFFF 0%,
-            #FFFBFF 72%,
-            #FFF8F2 100%
-        );
+    background: #FFFFFF;
 
     border: 1px solid #E8DDEB;
 
-    border-radius: 12px;
+    border-radius: 14px;
 
-    box-shadow: 0 4px 14px rgba(10, 0, 22, 0.025);
+    box-shadow:
+        0 6px 20px
+        rgba(10, 0, 22, 0.028);
 
     overflow: hidden;
 
@@ -270,7 +272,7 @@
 
     left: 0;
 
-    width: 4px;
+    width: 3px;
 
     height: 100%;
 
@@ -321,8 +323,6 @@
 
     font-size: 1.12rem;
 
-    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.65);
-
 }
 
 
@@ -356,7 +356,9 @@
 
     margin: 0;
 
-    font-family: "Bricolage Grotesque", sans-serif;
+    font-family:
+        "Bricolage Grotesque",
+        sans-serif;
 
     font-size: 0.98rem;
 
@@ -448,7 +450,8 @@
 
     background: #299653;
 
-    box-shadow: 0 0 0 3px #DDF3E4;
+    box-shadow:
+        0 0 0 3px #DDF3E4;
 
 }
 
@@ -469,7 +472,8 @@
 
     background: #D59619;
 
-    box-shadow: 0 0 0 3px #FFF0C9;
+    box-shadow:
+        0 0 0 3px #FFF0C9;
 
 }
 
@@ -490,7 +494,8 @@
 
     background: #4A0754;
 
-    box-shadow: 0 0 0 3px #E9DDF0;
+    box-shadow:
+        0 0 0 3px #E9DDF0;
 
 }
 
@@ -509,20 +514,26 @@
 
     width: 100%;
 
-    margin-bottom: 16px;
+    margin-bottom: 24px;
 
     background: #FFFFFF;
 
     border: 1px solid #E8E2EA;
 
-    border-radius: 12px;
+    border-radius: 14px;
 
-    box-shadow: 0 4px 14px rgba(10, 0, 22, 0.025);
+    box-shadow:
+        0 6px 22px
+        rgba(10, 0, 22, 0.028);
 
     overflow: hidden;
 
 }
 
+
+/* ============================================================
+   SUMMARY — PROGRESS SIDE
+   ============================================================ */
 
 .participation-summary-primary {
 
@@ -530,46 +541,29 @@
 
     min-width: 0;
 
-    padding: 20px 21px;
+    padding: 22px 23px;
 
-    border-right: 1px solid #EEE9EF;
-
-    background:
-        linear-gradient(
-            135deg,
-            #FFFFFF 0%,
-            #FFFCFF 68%,
-            #FFF9F4 100%
-        );
+    background: #FFFFFF;
 
 }
 
+
+/*
+   Removed the old thick colored divider.
+   The summary now relies on spacing and a very light
+   border rather than a strong visual split.
+*/
 
 .participation-summary-primary::after {
 
-    content: "";
-
-    position: absolute;
-
-    top: 0;
-
-    right: 0;
-
-    width: 3px;
-
-    height: 100%;
-
-    background:
-        linear-gradient(
-            to bottom,
-            #4A0754,
-            #EA580C
-        );
-
-    opacity: 0.8;
+    display: none;
 
 }
 
+
+/* ============================================================
+   SUMMARY HEADING
+   ============================================================ */
 
 .participation-summary-heading .section-kicker {
 
@@ -594,7 +588,9 @@
 
     margin: 0;
 
-    font-family: "Bricolage Grotesque", sans-serif;
+    font-family:
+        "Bricolage Grotesque",
+        sans-serif;
 
     font-size: 1rem;
 
@@ -607,9 +603,13 @@
 }
 
 
+/* ============================================================
+   PARTICIPATION PROGRESS
+   ============================================================ */
+
 .participation-progress-area {
 
-    margin-top: 20px;
+    margin-top: 22px;
 
 }
 
@@ -624,7 +624,7 @@
 
     gap: 12px;
 
-    margin-bottom: 7px;
+    margin-bottom: 8px;
 
     font-size: 0.71rem;
 
@@ -635,7 +635,9 @@
 
 .participation-progress-meta strong {
 
-    font-family: "Bricolage Grotesque", sans-serif;
+    font-family:
+        "Bricolage Grotesque",
+        sans-serif;
 
     font-size: 0.76rem;
 
@@ -680,7 +682,8 @@
         );
 
     box-shadow:
-        0 1px 4px rgba(74, 7, 84, 0.18);
+        0 1px 4px
+        rgba(74, 7, 84, 0.18);
 
 }
 
@@ -689,18 +692,21 @@
    SUMMARY STATISTICS
    ============================================================ */
 
-/* ============================================================
-   SUMMARY STATISTICS
-   CLEAN / MINIMAL
-   ============================================================ */
-
 .participation-summary-stats {
 
     display: grid;
 
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
 
     min-width: 0;
+
+    /*
+       Very light separation from the progress area.
+       No thick colored line.
+    */
+
+    border-left: 1px solid #F1EDF2;
 
 }
 
@@ -715,9 +721,9 @@
 
     min-width: 0;
 
-    padding: 18px 20px;
+    padding: 20px 21px;
 
-    border-left: 1px solid #EEE9EF;
+    border-left: 1px solid #F3EFF4;
 
 }
 
@@ -733,7 +739,7 @@
 
     display: block;
 
-    margin-bottom: 7px;
+    margin-bottom: 8px;
 
     font-size: 0.64rem;
 
@@ -748,7 +754,9 @@
 
     display: block;
 
-    font-family: "Bricolage Grotesque", sans-serif;
+    font-family:
+        "Bricolage Grotesque",
+        sans-serif;
 
     font-size: 1.28rem;
 
@@ -760,8 +768,6 @@
 
 }
 
-
-/* INDIVIDUAL VALUE COLORS */
 
 .participation-stat:nth-child(1)
 .participation-stat-value {
@@ -786,6 +792,7 @@
 
 }
 
+
 /* ============================================================
    SEARCH
    ============================================================ */
@@ -798,7 +805,7 @@
 
     width: 100%;
 
-    margin-bottom: 13px;
+    margin-bottom: 16px;
 
 }
 
@@ -835,13 +842,13 @@
 
     width: 100%;
 
-    height: 37px;
+    height: 38px;
 
     padding: 0 12px 0 34px;
 
     border: 1px solid #E2DCE4;
 
-    border-radius: 8px;
+    border-radius: 9px;
 
     outline: none;
 
@@ -849,7 +856,9 @@
 
     color: #0A0016;
 
-    font-family: "DM Sans", sans-serif;
+    font-family:
+        "DM Sans",
+        sans-serif;
 
     font-size: 0.74rem;
 
@@ -870,7 +879,8 @@
     border-color: #B89BC0;
 
     box-shadow:
-        0 0 0 3px rgba(74, 7, 84, 0.055);
+        0 0 0 3px
+        rgba(74, 7, 84, 0.055);
 
 }
 
@@ -886,7 +896,7 @@
     grid-template-columns:
         repeat(2, minmax(0, 1fr));
 
-    gap: 16px;
+    gap: 22px;
 
     width: 100%;
 
@@ -901,9 +911,11 @@
 
     border: 1px solid #E8E2EA;
 
-    border-radius: 12px;
+    border-radius: 14px;
 
-    box-shadow: 0 4px 14px rgba(10, 0, 22, 0.025);
+    box-shadow:
+        0 6px 22px
+        rgba(10, 0, 22, 0.028);
 
     overflow: hidden;
 
@@ -916,7 +928,7 @@
 
 .participation-section:first-child {
 
-    border-top: 2px solid #299653;
+    border-top: 0;
 
 }
 
@@ -927,10 +939,14 @@
 
 .participation-section:last-child {
 
-    border-top: 2px solid #D59619;
+    border-top: 0;
 
 }
 
+
+/* ============================================================
+   SECTION HEADER
+   ============================================================ */
 
 .participation-section-header {
 
@@ -942,9 +958,9 @@
 
     gap: 14px;
 
-    padding: 15px 17px;
+    padding: 16px 18px;
 
-    border-bottom: 1px solid #EEE9EF;
+    border-bottom: 1px solid #F0ECF1;
 
     background: #FFFFFF;
 
@@ -958,7 +974,7 @@
         linear-gradient(
             100deg,
             #FFFFFF 0%,
-            #FBFEFC 100%
+            #FCFEFD 100%
         );
 
 }
@@ -971,7 +987,7 @@
         linear-gradient(
             100deg,
             #FFFFFF 0%,
-            #FFFDF7 100%
+            #FFFDF9 100%
         );
 
 }
@@ -1009,7 +1025,8 @@
 
     background: #299653;
 
-    box-shadow: 0 0 0 3px #E0F2E5;
+    box-shadow:
+        0 0 0 3px #E0F2E5;
 
 }
 
@@ -1018,7 +1035,8 @@
 
     background: #D59619;
 
-    box-shadow: 0 0 0 3px #FFF0C9;
+    box-shadow:
+        0 0 0 3px #FFF0C9;
 
 }
 
@@ -1027,7 +1045,9 @@
 
     margin: 0;
 
-    font-family: "Bricolage Grotesque", sans-serif;
+    font-family:
+        "Bricolage Grotesque",
+        sans-serif;
 
     font-size: 0.88rem;
 
@@ -1120,7 +1140,6 @@
 
 /* ============================================================
    MEMBER TABLE
-   DESKTOP
    ============================================================ */
 
 .participation-member-table {
@@ -1141,11 +1160,11 @@
         minmax(110px, 0.75fr)
         minmax(110px, 0.75fr);
 
-    column-gap: 14px;
+    column-gap: 16px;
 
     min-width: 0;
 
-    padding: 9px 17px;
+    padding: 10px 18px;
 
     border-bottom: 1px solid #F0ECF1;
 
@@ -1218,17 +1237,17 @@
         minmax(110px, 0.75fr)
         minmax(110px, 0.75fr);
 
-    column-gap: 14px;
+    column-gap: 16px;
 
     align-items: center;
 
     width: 100%;
 
-    min-height: 61px;
+    min-height: 64px;
 
-    padding: 9px 17px;
+    padding: 10px 18px;
 
-    border-bottom: 1px solid #F1EDF2;
+    border-bottom: 1px solid #F3EFF4;
 
     background: #FFFFFF;
 
@@ -1239,7 +1258,7 @@
 
 .participation-member:hover {
 
-    background: #FCFAFD;
+    background: #FEFCFF;
 
 }
 
@@ -1290,7 +1309,9 @@
 
     color: #4A0754;
 
-    font-family: "Bricolage Grotesque", sans-serif;
+    font-family:
+        "Bricolage Grotesque",
+        sans-serif;
 
     font-size: 0.66rem;
 
@@ -1298,8 +1319,6 @@
 
 }
 
-
-/* Alternate avatar colors */
 
 .participation-member:nth-child(3n + 1)
 .participation-member-avatar {
@@ -1398,9 +1417,9 @@
 
     white-space: nowrap;
 
-    padding-left: 8px;
+    padding-left: 9px;
 
-    border-left: 2px solid #D7EEF0;
+    border-left: 1px solid #D7EEF0;
 
     font-size: 0.69rem;
 
@@ -1425,9 +1444,9 @@
 
     white-space: nowrap;
 
-    padding-left: 8px;
+    padding-left: 9px;
 
-    border-left: 2px solid #F2DFC0;
+    border-left: 1px solid #F2DFC0;
 
     font-size: 0.69rem;
 
@@ -1476,7 +1495,9 @@
 
 .participation-empty strong {
 
-    font-family: "Bricolage Grotesque", sans-serif;
+    font-family:
+        "Bricolage Grotesque",
+        sans-serif;
 
     font-size: 0.77rem;
 
@@ -1527,7 +1548,6 @@
 
 
     .participation-member-columns,
-
     .participation-member {
 
         grid-template-columns:
@@ -1566,40 +1586,26 @@
 
         border-right: 0;
 
-        border-bottom: 1px solid #EEE9EF;
-
-    }
-
-
-    .participation-summary-primary::after {
-
-        top: auto;
-
-        right: auto;
-
-        bottom: 0;
-
-        left: 0;
-
-        width: 100%;
-
-        height: 3px;
+        border-bottom: 1px solid #F1EDF2;
 
     }
 
 
     .participation-summary-stats {
 
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns:
+            repeat(3, minmax(0, 1fr));
+
+        border-left: 0;
 
     }
 
 
     .participation-stat {
 
-        padding: 16px;
+        padding: 17px 16px;
 
-        border-left: 1px solid #EEE9EF;
+        border-left: 1px solid #F3EFF4;
 
     }
 
@@ -1614,6 +1620,8 @@
     .participation-sections {
 
         grid-template-columns: 1fr;
+
+        gap: 20px;
 
     }
 
@@ -1630,7 +1638,6 @@
 /* ============================================================
    MOBILE
    MEMBER RECORDS USE HORIZONTAL SWIPE
-   GROUP / FAMILY AND ROLE REMAIN AVAILABLE
    ============================================================ */
 
 @media (max-width: 680px) {
@@ -1652,7 +1659,9 @@
 
         gap: 12px;
 
-        padding: 15px;
+        padding: 16px;
+
+        margin-bottom: 20px;
 
     }
 
@@ -1666,14 +1675,22 @@
 
     .participation-current-details p {
 
-        max-width: calc(100vw - 105px);
+        max-width:
+            calc(100vw - 105px);
+
+    }
+
+
+    .participation-summary {
+
+        margin-bottom: 22px;
 
     }
 
 
     .participation-summary-primary {
 
-        padding: 17px;
+        padding: 18px;
 
     }
 
@@ -1685,9 +1702,17 @@
     }
 
 
+    .participation-progress-area {
+
+        margin-top: 20px;
+
+    }
+
+
     .participation-summary-stats {
 
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns:
+            repeat(3, minmax(0, 1fr));
 
     }
 
@@ -1696,7 +1721,7 @@
 
         min-width: 0;
 
-        padding: 13px 11px;
+        padding: 15px 11px;
 
         border-top: 0;
 
@@ -1721,6 +1746,8 @@
 
         justify-content: stretch;
 
+        margin-bottom: 14px;
+
     }
 
 
@@ -1733,7 +1760,7 @@
 
     .participation-section-header {
 
-        padding: 14px;
+        padding: 15px;
 
     }
 
@@ -1759,7 +1786,9 @@
 
         scrollbar-width: thin;
 
-        scrollbar-color: #C9B5CE transparent;
+        scrollbar-color:
+            #C9B5CE
+            transparent;
 
     }
 
@@ -1825,7 +1854,6 @@
 
 
     .participation-member-group,
-
     .participation-member-role {
 
         display: block;
@@ -1904,14 +1932,15 @@
 
     .participation-summary-stats {
 
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns:
+            repeat(3, minmax(0, 1fr));
 
     }
 
 
     .participation-stat {
 
-        padding: 12px 8px;
+        padding: 13px 8px;
 
     }
 
@@ -1945,7 +1974,6 @@
 
 
     .participation-member-columns,
-
     .participation-member {
 
         grid-template-columns:
@@ -1968,7 +1996,6 @@
 
 
     .participation-member-group,
-
     .participation-member-role {
 
         width: 125px;
@@ -2006,7 +2033,6 @@
 
 
     .participation-member-group,
-
     .participation-member-role {
 
         font-size: 0.66rem;
@@ -2021,11 +2047,13 @@
    ============================================================ */
 
 .participation-retry-button:focus-visible,
-
 .participation-search input:focus-visible {
 
-    outline: 2px solid #4A0754;
+    outline:
+        2px solid
+        #4A0754;
 
-    outline-offset: 2px;
+    outline-offset:
+        2px;
 
 }
