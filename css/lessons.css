@@ -938,7 +938,9 @@
 .lesson-content strong,
 .lesson-rich-content strong,
 .lesson-rich-content b {
-     font-family:"Bricolage-Grotesque". sans-serif;
+        font-family:
+        "Bricolage Grotesque",
+        sans-serif;
     color:
         #4b5563;
 
