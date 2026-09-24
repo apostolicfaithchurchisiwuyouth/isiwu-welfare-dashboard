@@ -234,7 +234,19 @@ function setupLogin() {
 
                 sessionToken = result.token;
 
-                sessionStorage.setItem(
+                /*
+                 * IMPORTANT:
+                 *
+                 * Use localStorage instead of sessionStorage.
+                 *
+                 * This keeps the user logged in when the page
+                 * is refreshed.
+                 *
+                 * The session is removed only when the user
+                 * explicitly clicks Logout.
+                 */
+
+                localStorage.setItem(
                     SESSION_KEY,
                     JSON.stringify({
                         token: result.token,
@@ -306,8 +318,17 @@ function hideLoginError() {
 
 function restoreSession() {
 
+    /*
+     * IMPORTANT:
+     *
+     * localStorage is used here so refreshing the page does
+     * NOT log the user out.
+     *
+     * The saved session remains until Logout is clicked.
+     */
+
     const saved =
-        sessionStorage.getItem(SESSION_KEY);
+        localStorage.getItem(SESSION_KEY);
 
     if (!saved) return;
 
@@ -318,7 +339,7 @@ function restoreSession() {
 
         if (!parsed.token) {
 
-            sessionStorage.removeItem(
+            localStorage.removeItem(
                 SESSION_KEY
             );
 
@@ -338,7 +359,7 @@ function restoreSession() {
             error
         );
 
-        sessionStorage.removeItem(
+        localStorage.removeItem(
             SESSION_KEY
         );
 
@@ -385,11 +406,16 @@ function setupLogout() {
         "click",
         function () {
 
+            /*
+             * Logout is the ONLY action that removes the
+             * saved login session.
+             */
+
             sessionToken = "";
 
             currentLessonLoaded = null;
 
-            sessionStorage.removeItem(
+            localStorage.removeItem(
                 SESSION_KEY
             );
 
