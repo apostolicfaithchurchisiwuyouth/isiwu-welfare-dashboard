@@ -1,0 +1,1001 @@
+ html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    >
+
+    <title>SLC Report | AFC Isiu Youth Portal</title>
+
+    <!-- =====================================================
+         PWA
+    ====================================================== -->
+
+    <link rel="manifest" href="/manifest.json">
+
+    <meta name="theme-color" content="#ea580c">
+
+    <meta
+        name="mobile-web-app-capable"
+        content="yes"
+    >
+
+    <meta
+        name="apple-mobile-web-app-capable"
+        content="yes"
+    >
+
+    <meta
+        name="apple-mobile-web-app-status-bar-style"
+        content="default"
+    >
+
+    <meta
+        name="apple-mobile-web-app-title"
+        content="AFC Isiu"
+    >
+
+
+    <!-- =====================================================
+         ICONS
+    ====================================================== -->
+
+    <link
+        rel="icon"
+        type="image/png"
+        href="/images/logo.png"
+    >
+
+    <link
+        rel="apple-touch-icon"
+        href="/images/logo.png"
+    >
+
+
+    <!-- =====================================================
+         FONTS
+    ====================================================== -->
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap"
+        rel="stylesheet"
+    >
+
+
+    <!-- =====================================================
+         FONT AWESOME
+    ====================================================== -->
+
+    <link
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+        rel="stylesheet"
+    >
+
+
+    <!-- =====================================================
+         REMIX ICONS
+    ====================================================== -->
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/remixicon@4.6.0/fonts/remixicon.css"
+        rel="stylesheet"
+    >
+
+
+    <!-- =====================================================
+         PORTAL CSS
+    ====================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="../css/main.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="../css/layout.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="../css/slcreport.css"
+    >
+
+</head>
+
+
+<body>
+
+<div class="app-layout">
+
+
+    <!-- =====================================================
+         SIDEBAR
+    ====================================================== -->
+
+    <div id="app-sidebar"></div>
+
+
+    <!-- =====================================================
+         MAIN AREA
+    ====================================================== -->
+
+    <div class="main-area">
+
+
+        <!-- TOPBAR -->
+
+        <div id="app-topbar"></div>
+
+
+        <!-- =================================================
+             PAGE CONTENT
+        ================================================== -->
+
+        <main class="dashboard-content slcreport-page">
+
+
+            <!-- =================================================
+                 LOGIN SCREEN
+            ================================================== -->
+
+            <section
+                id="loginScreen"
+                class="report-login-screen"
+            >
+
+                <div class="report-hero report-login-hero">
+
+                    <div class="report-eyebrow">
+
+                        <i class="fa-solid fa-lock"></i>
+
+                        SLC Report
+
+                    </div>
+
+                    <h1>
+                        Weekly group report
+                    </h1>
+
+                    <p>
+                        Log in to submit and manage your group's
+                        weekly SLC quiz report.
+                    </p>
+
+                </div>
+
+
+                <form
+                    id="loginForm"
+                    class="report-card report-login-card"
+                >
+
+                    <div class="report-card-heading">
+
+                        <div class="report-section-icon purple">
+                            <i class="fa-solid fa-right-to-bracket"></i>
+                        </div>
+
+                        <div>
+
+                            <h2>
+                                Leader login
+                            </h2>
+
+                            <p>
+                                Enter your account details to continue.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="report-field">
+
+                        <label for="loginUsername">
+                            Username
+                        </label>
+
+                        <div class="report-input-wrap">
+
+                            <i class="fa-solid fa-user"></i>
+
+                            <input
+                                type="text"
+                                id="loginUsername"
+                                autocomplete="username"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="report-field">
+
+                        <label for="loginPassword">
+                            Password
+                        </label>
+
+                        <div class="report-input-wrap">
+
+                            <i class="fa-solid fa-lock"></i>
+
+                            <input
+                                type="password"
+                                id="loginPassword"
+                                autocomplete="current-password"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        id="loginError"
+                        class="report-banner error hidden"
+                    ></div>
+
+
+                    <button
+                        type="submit"
+                        class="report-primary-btn"
+                        id="loginButton"
+                    >
+
+                        <i class="fa-solid fa-arrow-right-to-bracket"></i>
+
+                        Log in
+
+                    </button>
+
+                </form>
+
+            </section>
+
+
+            <!-- =================================================
+                 REPORT SCREEN
+            ================================================== -->
+
+            <section
+                id="reportScreen"
+                class="hidden"
+            >
+
+
+                <!-- =================================================
+                     HERO
+                ================================================== -->
+
+                <section class="report-hero">
+
+                    <div class="report-hero-content">
+
+                        <div class="report-eyebrow">
+
+                            <i class="fa-solid fa-clipboard-check"></i>
+
+                            Weekly SLC Report
+
+                        </div>
+
+
+                        <h1>
+                            Keep your group
+                            <span>connected.</span>
+                        </h1>
+
+
+                        <p>
+                            Record your group's weekly participation,
+                            member contact, support and observations
+                            for the SLC quiz.
+                        </p>
+
+                    </div>
+
+
+                    <div class="report-hero-icon">
+
+                        <i class="fa-solid fa-file-circle-check"></i>
+
+                    </div>
+
+                </section>
+
+
+                <!-- =================================================
+                     TOP ACTIONS
+                ================================================== -->
+
+                <div class="report-top-actions">
+
+                    <button
+                        type="button"
+                        id="logoutButton"
+                        class="report-logout-btn"
+                    >
+
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+
+                        Log out
+
+                    </button>
+
+                </div>
+
+
+                <!-- =================================================
+                     STATUS
+                ================================================== -->
+
+                <div
+                    id="statusBanner"
+                    class="report-banner hidden"
+                    role="status"
+                ></div>
+
+
+                <!-- =================================================
+                     REPORT FORM
+                ================================================== -->
+
+                <form id="reportForm">
+
+
+                    <!-- =================================================
+                         GROUP & LESSON DETAILS
+                    ================================================== -->
+
+                    <section class="report-card">
+
+                        <div class="report-card-heading">
+
+                            <div class="report-section-icon orange">
+
+                                <i class="fa-solid fa-layer-group"></i>
+
+                            </div>
+
+                            <div>
+
+                                <h2>
+                                    Group &amp; lesson details
+                                </h2>
+
+                                <p>
+                                    Start by entering the details for this
+                                    week's report.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="report-grid report-grid-2">
+
+
+                            <div class="report-field">
+
+                                <label for="lessonNo">
+                                    Lesson No.
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="lessonNo"
+                                    required
+                                    placeholder="e.g. 89"
+                                >
+
+                            </div>
+
+
+                            <div class="report-field">
+
+                                <label for="reportDate">
+                                    Today's Date
+                                </label>
+
+                                <input
+                                    type="date"
+                                    id="reportDate"
+                                    required
+                                >
+
+                            </div>
+
+
+                        </div>
+
+
+                        <div class="report-field">
+
+                            <label for="groupName">
+                                Group Name
+                            </label>
+
+                            <input
+                                type="text"
+                                id="groupName"
+                                required
+                                placeholder="Enter your group name"
+                            >
+
+                        </div>
+
+
+                        <div class="report-field">
+
+                            <label for="groupLeaderName">
+                                Group Leader's Name
+                            </label>
+
+                            <input
+                                type="text"
+                                id="groupLeaderName"
+                                required
+                                placeholder="Enter group leader's name"
+                            >
+
+                        </div>
+
+
+                        <div class="report-grid report-grid-3">
+
+
+                            <div class="report-field">
+
+                                <label for="totalMembers">
+                                    Total Members
+                                </label>
+
+                                <input
+                                    type="number"
+                                    id="totalMembers"
+                                    min="0"
+                                    required
+                                    inputmode="numeric"
+                                    placeholder="0"
+                                >
+
+                            </div>
+
+
+                            <div class="report-field">
+
+                                <label for="participated">
+                                    Participated
+                                </label>
+
+                                <input
+                                    type="number"
+                                    id="participated"
+                                    min="0"
+                                    required
+                                    inputmode="numeric"
+                                    placeholder="0"
+                                >
+
+                            </div>
+
+
+                            <div class="report-field">
+
+                                <label for="notParticipated">
+                                    Did Not Participate
+                                </label>
+
+                                <input
+                                    type="number"
+                                    id="notParticipated"
+                                    min="0"
+                                    readonly
+                                >
+
+                            </div>
+
+
+                        </div>
+
+
+                        <div class="report-helper">
+
+                            <i class="fa-solid fa-circle-info"></i>
+
+                            <span>
+                                This is calculated automatically from
+                                Total Members minus Participated.
+                            </span>
+
+                        </div>
+
+                    </section>
+
+
+                    <!-- =================================================
+                         NON PARTICIPANTS
+                    ================================================== -->
+
+                    <section class="report-card">
+
+                        <div class="report-card-heading">
+
+                            <div class="report-section-icon purple">
+
+                                <i class="fa-solid fa-user-clock"></i>
+
+                            </div>
+
+                            <div>
+
+                                <h2>
+                                    Members who did not participate
+                                </h2>
+
+                                <p>
+                                    List the members who missed this week's
+                                    quiz. Leave blank if not applicable.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div
+                            id="nonParticipantsList"
+                            class="report-name-list"
+                        ></div>
+
+                    </section>
+
+
+                    <!-- =================================================
+                         MEMBER CONTACT
+                    ================================================== -->
+
+                    <section class="report-card">
+
+                        <div class="report-card-heading">
+
+                            <div class="report-section-icon cyan">
+
+                                <i class="fa-solid fa-phone"></i>
+
+                            </div>
+
+                            <div>
+
+                                <h2>
+                                    Member contact
+                                </h2>
+
+                                <p>
+                                    Record whether you contacted each member
+                                    this week and their response.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="report-table-wrap">
+
+                            <table
+                                class="contact-table"
+                                id="contactTable"
+                            >
+
+                                <thead>
+
+                                    <tr>
+
+                                        <th>#</th>
+
+                                        <th>
+                                            Member Name
+                                        </th>
+
+                                        <th>
+                                            Contacted?
+                                        </th>
+
+                                        <th>
+                                            Reason / Response
+                                        </th>
+
+                                    </tr>
+
+                                </thead>
+
+
+                                <tbody id="contactTableBody"></tbody>
+
+                            </table>
+
+                        </div>
+
+                    </section>
+
+
+                    <!-- =================================================
+                         SUPPORT
+                    ================================================== -->
+
+                    <section class="report-card">
+
+                        <div class="report-card-heading">
+
+                            <div class="report-section-icon orange">
+
+                                <i class="fa-solid fa-hand-holding-heart"></i>
+
+                            </div>
+
+                            <div>
+
+                                <h2>
+                                    Support given this week
+                                </h2>
+
+                                <p>
+                                    Select the ways you supported your
+                                    members.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="support-options">
+
+
+                            <label class="support-option">
+
+                                <input
+                                    type="checkbox"
+                                    class="supportCheck"
+                                    value="I sent reminders to them"
+                                >
+
+                                <span class="support-check-icon">
+                                    <i class="fa-solid fa-check"></i>
+                                </span>
+
+                                <span>
+                                    I sent reminders to them
+                                </span>
+
+                            </label>
+
+
+                            <label class="support-option">
+
+                                <input
+                                    type="checkbox"
+                                    class="supportCheck"
+                                    value="I encouraged them to take the quiz"
+                                >
+
+                                <span class="support-check-icon">
+                                    <i class="fa-solid fa-check"></i>
+                                </span>
+
+                                <span>
+                                    I encouraged them to take the quiz
+                                </span>
+
+                            </label>
+
+
+                            <label class="support-option">
+
+                                <input
+                                    type="checkbox"
+                                    class="supportCheck"
+                                    value="I guided them on how to take the quiz"
+                                >
+
+                                <span class="support-check-icon">
+                                    <i class="fa-solid fa-check"></i>
+                                </span>
+
+                                <span>
+                                    I guided them on how to take the quiz
+                                </span>
+
+                            </label>
+
+
+                            <label class="support-option">
+
+                                <input
+                                    type="checkbox"
+                                    class="supportCheck"
+                                    value="I answered their questions"
+                                >
+
+                                <span class="support-check-icon">
+                                    <i class="fa-solid fa-check"></i>
+                                </span>
+
+                                <span>
+                                    I answered their questions
+                                </span>
+
+                            </label>
+
+
+                            <label class="support-option">
+
+                                <input
+                                    type="checkbox"
+                                    class="supportCheck"
+                                    value="I resolved a difficulty for my members"
+                                >
+
+                                <span class="support-check-icon">
+                                    <i class="fa-solid fa-check"></i>
+                                </span>
+
+                                <span>
+                                    I resolved a difficulty for my members
+                                </span>
+
+                            </label>
+
+                        </div>
+
+
+                        <div class="report-field report-field-spaced">
+
+                            <label for="otherSupport">
+                                Other Support
+                            </label>
+
+                            <input
+                                type="text"
+                                id="otherSupport"
+                                placeholder="Describe any other support given"
+                            >
+
+                        </div>
+
+                    </section>
+
+
+                    <!-- =================================================
+                         OBSERVATIONS
+                    ================================================== -->
+
+                    <section class="report-card">
+
+                        <div class="report-card-heading">
+
+                            <div class="report-section-icon purple">
+
+                                <i class="fa-solid fa-message"></i>
+
+                            </div>
+
+                            <div>
+
+                                <h2>
+                                    General observations
+                                </h2>
+
+                                <p>
+                                    Share anything important you noticed
+                                    about your group this week.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="report-field">
+
+                            <textarea
+                                id="observations"
+                                rows="5"
+                                placeholder="Write your observations as the leader of the group..."
+                            ></textarea>
+
+                        </div>
+
+                    </section>
+
+
+                    <!-- =================================================
+                         COORDINATOR
+                    ================================================== -->
+
+                    <section class="report-card">
+
+                        <div class="report-card-heading">
+
+                            <div class="report-section-icon cyan">
+
+                                <i class="fa-solid fa-user-check"></i>
+
+                            </div>
+
+                            <div>
+
+                                <h2>
+                                    Quiz coordinator
+                                </h2>
+
+                                <p>
+                                    Coordinator details are attached
+                                    automatically to your report.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="report-grid report-grid-2">
+
+
+                            <div class="report-field">
+
+                                <label for="coordinatorName">
+                                    Quiz Coordinator's Name
+                                </label>
+
+                                <div class="report-readonly-wrap">
+
+                                    <i class="fa-solid fa-user-shield"></i>
+
+                                    <input
+                                        type="text"
+                                        id="coordinatorName"
+                                        value="Olajimbiti Molayo"
+                                        readonly
+                                        aria-readonly="true"
+                                    >
+
+                                </div>
+
+                                <p class="report-readonly-note">
+
+                                    <i class="fa-solid fa-lock"></i>
+
+                                    This field is fixed and cannot be edited.
+
+                                </p>
+
+                            </div>
+
+
+                            <div class="report-field">
+
+                                <label for="coordinatorDate">
+                                    Date
+                                </label>
+
+                                <input
+                                    type="date"
+                                    id="coordinatorDate"
+                                >
+
+                            </div>
+
+
+                        </div>
+
+
+                        <div class="report-field">
+
+                            <label for="note">
+                                Note
+                            </label>
+
+                            <textarea
+                                id="note"
+                                rows="4"
+                                placeholder="Any additional note for the coordinator..."
+                            ></textarea>
+
+                        </div>
+
+                    </section>
+
+
+                    <!-- =================================================
+                         SUBMIT
+                    ================================================== -->
+
+                    <div class="report-submit-area">
+
+                        <button
+                            type="submit"
+                            class="report-submit-btn"
+                            id="submitButton"
+                        >
+
+                            <i class="fa-solid fa-paper-plane"></i>
+
+                            <span>
+                                Submit Report
+                            </span>
+
+                        </button>
+
+
+                        <p>
+
+                            <i class="fa-solid fa-shield-halved"></i>
+
+                            Your report will be securely saved to the
+                            SLC records.
+
+                        </p>
+
+                    </div>
+
+
+                </form>
+
+            </section>
+
+        </main>
+
+    </div>
+
+
+    <!-- =====================================================
+         MOBILE BOTTOM NAV
+    ====================================================== -->
+
+    <div id="app-bottom-nav"></div>
+
+</div>
+
+
+<!-- =========================================================
+     JAVASCRIPT
+========================================================= -->
+
+<script src="../js/pwa.js"></script>
+
+<script src="../js/main.js"></script>
+
+<script src="../js/slcreport.js"></script>
+
+<script src="../js/layout.js"></script>
+
+</body>
+
+</html>
+ 
