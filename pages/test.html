@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>SLC Quiz - Weekly Group Report</title>
+<style>
+  :root {
+    --primary: #7a1f2b;
+    --primary-dark: #5c1720;
+    --bg: #f4f1ee;
+    --card: #ffffff;
+    --border: #ddd6d0;
+    --text: #2b2320;
+    --muted: #756a63;
+    --danger: #b3261e;
+    --success: #1e7a3d;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    padding: 24px 16px 80px;
+  }
+  .wrap { max-width: 760px; margin: 0 auto; }
+  header.top {
+    text-align: center;
+    margin-bottom: 24px;
+  }
+  header.top h1 {
+    font-size: 1.3rem;
+    margin: 8px 0 2px;
+    color: var(--primary-dark);
+  }
+  header.top p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.9rem;
+  }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+  .card h2 {
+    font-size: 1rem;
+    margin: 0 0 14px;
+    color: var(--primary-dark);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 8px;
+  }
+  label {
+    display: block;
+    font-size: 0.82rem;
+    font-weight: 600;
+    margin-bottom: 4px;
+    color: var(--text);
+  }
+  input[type="text"],
+  input[type="number"],
+  input[type="date"],
+  input[type="password"],
+  textarea,
+  select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-family: inherit;
+    background: #fff;
+    color: var(--text);
+  }
+  textarea { resize: vertical; min-height: 70px; }
+  .field { margin-bottom: 14px; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+  @media (max-width: 560px) {
+    .grid3 { grid-template-columns: 1fr; }
+  }
+  .checkbox-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+  }
+  .checkbox-row input { margin-top: 3px; }
+  table.contact-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+  }
+  table.contact-table th, table.contact-table td {
+    border: 1px solid var(--border);
+    padding: 6px;
+    text-align: left;
+  }
+  table.contact-table th { background: #f7f2ef; font-weight: 600; }
+  table.contact-table td select,
+  table.contact-table td input {
+    padding: 6px;
+    font-size: 0.85rem;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 20px;
+    border-radius: 8px;
+    border: none;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .btn-primary { background: var(--primary); color: #fff; width: 100%; }
+  .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
+  .btn-secondary { background: transparent; color: var(--primary); border: 1px solid var(--primary); }
+  .helper { font-size: 0.78rem; color: var(--muted); margin-top: 4px; }
+  .banner {
+    padding: 12px 14px;
+    border-radius: 8px;
+    font-size: 0.88rem;
+    margin-bottom: 16px;
+  }
+  .banner.warn { background: #fdf1e0; color: #8a5a12; border: 1px solid #f0d3a0; }
+  .banner.error { background: #fbe9e8; color: var(--danger); border: 1px solid #f3c3c0; }
+  .banner.success { background: #e8f5ec; color: var(--success); border: 1px solid #bfe3ca; }
+  .hidden { display: none !important; }
+  #loginScreen { max-width: 380px; margin: 60px auto 0; }
+  #loginScreen h1 { text-align: center; font-size: 1.2rem; color: var(--primary-dark); }
+  .field-error { color: var(--danger); font-size: 0.78rem; margin-top: 4px; display: none; }
+  .top-actions { display: flex; justify-content: flex-end; margin-bottom: 12px; }
+  .link-btn {
+    background: none; border: none; color: var(--muted); font-size: 0.82rem;
+    text-decoration: underline; cursor: pointer; padding: 4px;
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <!-- ============ LOGIN SCREEN ============ -->
+  <div id="loginScreen">
+    <h1>SLC Quiz Group Report</h1>
+    <form id="loginForm" class="card">
+      <div class="field">
+        <label for="loginUsername">Username</label>
+        <input type="text" id="loginUsername" autocomplete="username" required />
+      </div>
+      <div class="field">
+        <label for="loginPassword">Password</label>
+        <input type="password" id="loginPassword" autocomplete="current-password" required />
+      </div>
+      <div id="loginError" class="banner error hidden"></div>
+      <button type="submit" class="btn btn-primary" id="loginButton">Log in</button>
+    </form>
+  </div>
+
+  <!-- ============ REPORT SCREEN ============ -->
+  <div id="reportScreen" class="hidden">
+
+    <header class="top">
+      <h1>APOSTOLIC FAITH CHURCH</h1>
+      <p>Youth Development Department, Isiu Branch</p>
+      <p><strong>SLC Quiz &mdash; Weekly Group Report</strong></p>
+    </header>
+
+    <div class="top-actions">
+      <button class="link-btn" id="logoutButton">Log out</button>
+    </div>
+
+    <div id="statusBanner" class="banner hidden"></div>
+
+    <form id="reportForm">
+
+      <!-- LESSON + GROUP INFO -->
+      <div class="card">
+        <h2>Group &amp; Lesson Details</h2>
+
+        <div class="grid2">
+          <div class="field">
+            <label for="lessonNo">Lesson No.</label>
+            <input type="text" id="lessonNo" required />
+          </div>
+          <div class="field">
+            <label for="reportDate">Today's Date</label>
+            <input type="date" id="reportDate" required />
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="groupName">Group Name</label>
+          <input type="text" id="groupName" required />
+        </div>
+
+        <div class="field">
+          <label for="groupLeaderName">Group Leader's Name</label>
+          <input type="text" id="groupLeaderName" required />
+        </div>
+
+        <div class="grid3">
+          <div class="field">
+            <label for="totalMembers">Total Members</label>
+            <input type="number" id="totalMembers" min="0" required />
+          </div>
+          <div class="field">
+            <label for="participated">Participated</label>
+            <input type="number" id="participated" min="0" required />
+          </div>
+          <div class="field">
+            <label for="notParticipated">Did Not Participate</label>
+            <input type="number" id="notParticipated" min="0" required readonly />
+          </div>
+        </div>
+        <p class="helper">"Did Not Participate" is calculated automatically from Total Members minus Participated.</p>
+      </div>
+
+      <!-- NON-PARTICIPANTS -->
+      <div class="card">
+        <h2>Members/Leader Who Did Not Participate</h2>
+        <p class="helper">List up to 6 names. Leave blank if not applicable.</p>
+        <div id="nonParticipantsList"></div>
+      </div>
+
+      <!-- CONTACTED TABLE -->
+      <div class="card">
+        <h2>Did You Contact Your Members This Week?</h2>
+        <p class="helper">One row is added automatically for each Total Member entered above (minimum 1).</p>
+        <div style="overflow-x:auto;">
+          <table class="contact-table" id="contactTable">
+            <thead>
+              <tr>
+                <th style="width:5%">#</th>
+                <th style="width:30%">Member Name</th>
+                <th style="width:20%">Contacted?</th>
+                <th>Reason / Response From Member</th>
+              </tr>
+            </thead>
+            <tbody id="contactTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- SUPPORT GIVEN -->
+      <div class="card">
+        <h2>Support You Gave Your Members This Week</h2>
+
+        <label class="checkbox-row">
+          <input type="checkbox" class="supportCheck" value="I sent reminders to them" />
+          <span>I sent reminders to them</span>
+        </label>
+        <label class="checkbox-row">
+          <input type="checkbox" class="supportCheck" value="I encouraged them to take the quiz" />
+          <span>I encouraged them to take the quiz</span>
+        </label>
+        <label class="checkbox-row">
+          <input type="checkbox" class="supportCheck" value="I guided them on how to take the quiz" />
+          <span>I guided them on how to take the quiz</span>
+        </label>
+        <label class="checkbox-row">
+          <input type="checkbox" class="supportCheck" value="I answered their questions" />
+          <span>I answered their questions</span>
+        </label>
+        <label class="checkbox-row">
+          <input type="checkbox" class="supportCheck" value="I resolved a difficulty for my members" />
+          <span>I resolved a difficulty for my members</span>
+        </label>
+
+        <div class="field" style="margin-top:10px;">
+          <label for="otherSupport">Other Support</label>
+          <input type="text" id="otherSupport" placeholder="Describe any other support given" />
+        </div>
+      </div>
+
+      <!-- OBSERVATIONS -->
+      <div class="card">
+        <h2>General Observations</h2>
+        <div class="field">
+          <textarea id="observations" placeholder="Write your observations as the leader of the group..."></textarea>
+        </div>
+      </div>
+
+      <!-- COORDINATOR -->
+      <div class="card">
+        <h2>Quiz Coordinator</h2>
+        <div class="grid2">
+          <div class="field">
+            <label for="coordinatorName">Quiz Coordinator's Name</label>
+            <input type="text" id="coordinatorName" />
+          </div>
+          <div class="field">
+            <label for="coordinatorDate">Date</label>
+            <input type="date" id="coordinatorDate" />
+          </div>
+        </div>
+        <div class="field">
+          <label for="note">Note</label>
+          <textarea id="note" placeholder="Any additional note"></textarea>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary" id="submitButton">Submit Report</button>
+
+    </form>
+
+  </div>
+
+</div>
+
+<script>
+"use strict";
+
+/* ============================================================
+   CONFIG — update this to your Apps Script /exec URL
+   ============================================================ */
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw1mVwpgAcIOSNbpgzy52TFyozEGMtWWwVWUDFaofGNzpsguBIaKR4q1dXVtgVHO2xZ1w/exec";
+const SESSION_KEY = "afc_isiu_slc_leader_session";
+
+const $ = (id) => document.getElementById(id);
+
+let sessionToken = "";
+let currentLessonLoaded = null;
+let deadlineInfo = { isOpen: true, deadline: null };
+
+/* ============================================================
+   API HELPERS
+   ============================================================ */
+
+async function callAppsScript(payload) {
+  const form = new URLSearchParams();
+  form.set("payload", JSON.stringify(payload));
+
+  const response = await fetch(APPS_SCRIPT_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8" },
+    body: form.toString()
+  });
+
+  const text = await response.text();
+
+  let data;
+  try {
+    data = JSON.parse(text);
+  } catch (e) {
+    throw new Error("The server returned an invalid response.");
+  }
+
+  return data;
+}
+
+/* ============================================================
+   LOGIN
+   ============================================================ */
+
+document.addEventListener("DOMContentLoaded", function () {
+  setupLogin();
+  setupLogout();
+  setupForm();
+  restoreSession();
+});
+
+function setupLogin() {
+  $("loginForm").addEventListener("submit", async function (event) {
+    event.preventDefault();
+
+    const username = $("loginUsername").value.trim();
+    const password = $("loginPassword").value.trim();
+
+    if (!username || !password) return;
+
+    $("loginButton").disabled = true;
+    $("loginButton").textContent = "Logging in...";
+    $("loginError").classList.add("hidden");
+
+    try {
+      const result = await callAppsScript({ action: "login", username, password });
+
+      if (!result.success) {
+        throw new Error(result.message || "Login failed.");
+      }
+
+      sessionToken = result.token;
+      sessionStorage.setItem(SESSION_KEY, JSON.stringify({
+        token: result.token,
+        user: result.user,
+        role: result.role
+      }));
+
+      showReportScreen();
+
+    } catch (error) {
+      $("loginError").textContent = error.message;
+      $("loginError").classList.remove("hidden");
+    } finally {
+      $("loginButton").disabled = false;
+      $("loginButton").textContent = "Log in";
+    }
+  });
+}
+
+function restoreSession() {
+  const saved = sessionStorage.getItem(SESSION_KEY);
+  if (!saved) return;
+
+  try {
+    const parsed = JSON.parse(saved);
+    sessionToken = parsed.token;
+    showReportScreen();
+  } catch (e) {
+    sessionStorage.removeItem(SESSION_KEY);
+  }
+}
+
+function setupLogout() {
+  $("logoutButton").addEventListener("click", function () {
+    sessionToken = "";
+    sessionStorage.removeItem(SESSION_KEY);
+    $("reportScreen").classList.add("hidden");
+    $("loginScreen").classList.remove("hidden");
+    $("loginForm").reset();
+  });
+}
+
+function showReportScreen() {
+  $("loginScreen").classList.add("hidden");
+  $("reportScreen").classList.remove("hidden");
+  $("reportDate").valueAsDate = new Date();
+  $("coordinatorDate").valueAsDate = new Date();
+  renderNonParticipantFields(6);
+  renderContactTable(1);
+}
+
+/* ============================================================
+   DYNAMIC FIELDS
+   ============================================================ */
+
+function renderNonParticipantFields(count) {
+  const container = $("nonParticipantsList");
+  container.innerHTML = "";
+
+  for (let i = 1; i <= count; i++) {
+    const div = document.createElement("div");
+    div.className = "field";
+    div.innerHTML = `
+      <label for="nonParticipant${i}">${i}.</label>
+      <input type="text" id="nonParticipant${i}" class="nonParticipantInput" placeholder="Full name" />
+    `;
+    container.appendChild(div);
+  }
+}
+
+function renderContactTable(rowCount) {
+  const tbody = $("contactTableBody");
+  const existing = collectContactTable();
+  tbody.innerHTML = "";
+
+  const n = Math.max(1, Math.min(rowCount || 1, 60));
+
+  for (let i = 1; i <= n; i++) {
+    const prior = existing[i - 1] || { name: "", contacted: "", reason: "" };
+
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${i}</td>
+      <td><input type="text" class="contactName" value="${escapeAttr(prior.name)}" placeholder="Member name" /></td>
+      <td>
+        <select class="contactStatus">
+          <option value="">--</option>
+          <option value="Yes" ${prior.contacted === "Yes" ? "selected" : ""}>Yes</option>
+          <option value="No" ${prior.contacted === "No" ? "selected" : ""}>No</option>
+        </select>
+      </td>
+      <td><input type="text" class="contactReason" value="${escapeAttr(prior.reason)}" placeholder="Reason / response" /></td>
+    `;
+    tbody.appendChild(tr);
+  }
+}
+
+function collectContactTable() {
+  const rows = [];
+  document.querySelectorAll("#contactTableBody tr").forEach(function (tr) {
+    rows.push({
+      name: tr.querySelector(".contactName")?.value.trim() || "",
+      contacted: tr.querySelector(".contactStatus")?.value || "",
+      reason: tr.querySelector(".contactReason")?.value.trim() || ""
+    });
+  });
+  return rows;
+}
+
+function escapeAttr(value) {
+  return String(value ?? "").replace(/"/g, "&quot;");
+}
+
+/* ============================================================
+   AUTO-CALCULATE "DID NOT PARTICIPATE" + SYNC CONTACT ROWS
+   ============================================================ */
+
+function setupForm() {
+  $("totalMembers").addEventListener("input", syncCalculations);
+  $("participated").addEventListener("input", syncCalculations);
+  $("lessonNo").addEventListener("blur", loadExistingReportForLesson);
+
+  $("reportForm").addEventListener("submit", submitReport);
+}
+
+function syncCalculations() {
+  const total = Number($("totalMembers").value) || 0;
+  const participated = Number($("participated").value) || 0;
+  const notParticipated = Math.max(total - participated, 0);
+
+  $("notParticipated").value = notParticipated;
+
+  if (total > 0) {
+    renderContactTable(total);
+  }
+}
+
+/* ============================================================
+   LOAD EXISTING REPORT (edit/resubmit flow) + DEADLINE CHECK
+   ============================================================ */
+
+async function loadExistingReportForLesson() {
+  const lessonNo = $("lessonNo").value.trim();
+  if (!lessonNo || lessonNo === currentLessonLoaded) return;
+
+  currentLessonLoaded = lessonNo;
+
+  try {
+    const result = await callAppsScript({ action: "getMySLCReport", token: sessionToken, lessonNo });
+
+    if (!result.success) {
+      showBanner("error", result.message || "Unable to check existing report.");
+      return;
+    }
+
+    deadlineInfo = { isOpen: result.isOpen !== false, deadline: result.deadline };
+
+    applyDeadlineState();
+
+    if (result.exists && result.report) {
+      fillFormFromReport(result.report);
+      showBanner("warn", `You already submitted a report for Lesson ${lessonNo} (version ${result.report.version}). Editing will save a new version.`);
+    } else {
+      showBanner("", "");
+      hideBanner();
+    }
+
+  } catch (error) {
+    showBanner("error", error.message || "Unable to check existing report.");
+  }
+}
+
+function applyDeadlineState() {
+  const submitBtn = $("submitButton");
+  if (!deadlineInfo.isOpen) {
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Deadline Passed \u2014 Editing Closed";
+    showBanner("error", `The deadline for this lesson's report has passed${deadlineInfo.deadline ? " (" + new Date(deadlineInfo.deadline).toLocaleString() + ")" : ""}.`);
+  } else {
+    submitBtn.disabled = false;
+    submitBtn.textContent = "Submit Report";
+  }
+}
+
+function fillFormFromReport(report) {
+  $("groupName").value = report.groupName || "";
+  $("groupLeaderName").value = report.groupLeaderName || "";
+  $("totalMembers").value = report.totalMembers || 0;
+  $("participated").value = report.participated || 0;
+  $("notParticipated").value = report.notParticipated || 0;
+
+  renderNonParticipantFields(6);
+  (report.nonParticipants || []).forEach(function (name, index) {
+    const input = $("nonParticipant" + (index + 1));
+    if (input) input.value = name;
+  });
+
+  renderContactTable(Math.max(report.totalMembers || 1, 1));
+  const rows = document.querySelectorAll("#contactTableBody tr");
+  (report.contactedTable || []).forEach(function (entry, index) {
+    const tr = rows[index];
+    if (!tr) return;
+    tr.querySelector(".contactName").value = entry.name || "";
+    tr.querySelector(".contactStatus").value = entry.contacted || "";
+    tr.querySelector(".contactReason").value = entry.reason || "";
+  });
+
+  document.querySelectorAll(".supportCheck").forEach(function (box) {
+    box.checked = (report.supportGiven || []).includes(box.value);
+  });
+
+  $("otherSupport").value = report.otherSupport || "";
+  $("observations").value = report.observations || "";
+  $("coordinatorName").value = report.coordinatorName || "";
+  if (report.coordinatorDate) {
+    $("coordinatorDate").valueAsDate = new Date(report.coordinatorDate);
+  }
+  $("note").value = report.note || "";
+}
+
+/* ============================================================
+   SUBMIT
+   ============================================================ */
+
+async function submitReport(event) {
+  event.preventDefault();
+
+  if (!deadlineInfo.isOpen) {
+    showBanner("error", "The deadline for this lesson's report has passed.");
+    return;
+  }
+
+  const nonParticipants = [];
+  document.querySelectorAll(".nonParticipantInput").forEach(function (input) {
+    const value = input.value.trim();
+    if (value) nonParticipants.push(value);
+  });
+
+  const supportGiven = [];
+  document.querySelectorAll(".supportCheck:checked").forEach(function (box) {
+    supportGiven.push(box.value);
+  });
+
+  const payload = {
+    action: "submitSLCReport",
+    token: sessionToken,
+    lessonNo: $("lessonNo").value.trim(),
+    reportDate: $("reportDate").value,
+    groupName: $("groupName").value.trim(),
+    groupLeaderName: $("groupLeaderName").value.trim(),
+    totalMembers: $("totalMembers").value,
+    participated: $("participated").value,
+    notParticipated: $("notParticipated").value,
+    nonParticipants: nonParticipants,
+    contactedTable: collectContactTable(),
+    supportGiven: supportGiven,
+    otherSupport: $("otherSupport").value.trim(),
+    observations: $("observations").value.trim(),
+    coordinatorName: $("coordinatorName").value.trim(),
+    coordinatorDate: $("coordinatorDate").value,
+    note: $("note").value.trim()
+  };
+
+  const submitBtn = $("submitButton");
+  submitBtn.disabled = true;
+  submitBtn.textContent = "Submitting...";
+
+  try {
+    const result = await callAppsScript(payload);
+
+    if (!result.success) {
+      if (result.status === "deadline_passed") {
+        deadlineInfo.isOpen = false;
+        applyDeadlineState();
+      }
+      throw new Error(result.message || "Submission failed.");
+    }
+
+    showBanner("success", `Report submitted successfully (version ${result.version}).`);
+    submitBtn.textContent = "Submit Report";
+    submitBtn.disabled = false;
+
+  } catch (error) {
+    showBanner("error", error.message || "Something went wrong.");
+    submitBtn.textContent = "Submit Report";
+    submitBtn.disabled = false;
+  }
+}
+
+/* ============================================================
+   BANNER
+   ============================================================ */
+
+function showBanner(type, message) {
+  const banner = $("statusBanner");
+  if (!message) {
+    banner.classList.add("hidden");
+    return;
+  }
+  banner.className = "banner " + type;
+  banner.textContent = message;
+  banner.classList.remove("hidden");
+}
+
+function hideBanner() {
+  $("statusBanner").classList.add("hidden");
+}
+</script>
+
+</body>
+</html>
