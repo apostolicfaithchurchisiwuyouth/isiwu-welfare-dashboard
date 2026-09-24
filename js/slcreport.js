@@ -1,1271 +1,1435 @@
+"use strict";
+
 /* ============================================================
    AFC ISIU YOUTH PORTAL V2
-   SLC REPORT
    FILE: slcreport.js
+   PURPOSE: SLC WEEKLY GROUP REPORT
    ============================================================ */
 
-(function () {
-  "use strict";
 
-  /* ==========================================================
-     CONFIGURATION
-  ========================================================== */
+/* ============================================================
+   CONFIG
+   ============================================================ */
 
-  const API_URL =
-    window.AFC_API_URL ||
+const APPS_SCRIPT_URL =
     "https://script.google.com/macros/s/AKfycbw1mVwpgAcIOSNbpgzy52TFyozEGMtWWwVWUDFaofGNzpsguBIaKR4q1dXVtgVHO2xZ1w/exec";
 
-  const SESSION_KEY = "afc_isiu_slc_leader_session";
+const SESSION_KEY =
+    "afc_isiu_slc_leader_session";
 
-  /*
-   * IMPORTANT:
-   * localStorage is intentionally used here.
-   *
-   * sessionStorage is NOT used because it is cleared when the
-   * browsing session/page session ends.
-   *
-   * With localStorage:
-   * - Refresh = user remains logged in
-   * - Closing/reopening browser = session remains
-   * - Only Logout removes the saved session
-   */
+const COORDINATOR_NAME =
+    "Olajimbiti Molayo";
 
-  const COORDINATOR_NAME = "Monayo Olajimbiti";
-  const COORDINATOR_DISPLAY_NAME = "OLA JIMBITI MONAYO";
 
-  /* ==========================================================
-     DOM
-  ========================================================== */
+/* ============================================================
+   HELPERS
+   ============================================================ */
 
-  const $ = (id) => document.getElementById(id);
+const $ = (id) => document.getElementById(id);
 
-  const loginSection = $("loginSection");
-  const reportApplication = $("reportApplication");
-  const loginForm = $("loginForm");
-  const loginBtn = $("loginBtn");
+let sessionToken = "";
 
-  const loginUsername = $("loginUsername");
-  const loginPassword = $("loginPassword");
+let currentLessonLoaded = null;
 
-  const togglePassword = $("togglePassword");
+let deadlineInfo = {
+    isOpen: true,
+    deadline: null
+};
 
-  const logoutBtn = $("logoutBtn");
-  const topbarLogoutBtn = $("topbarLogoutBtn");
 
-  const slcReportForm = $("slcReportForm");
-  const submitReportBtn = $("submitReportBtn");
+/* ============================================================
+   INITIALISE
+   ============================================================ */
 
-  const reportStatus = $("reportStatus");
+document.addEventListener("DOMContentLoaded", function () {
 
-  const existingReportSection = $("existingReportSection");
-  const deadlineSection = $("deadlineSection");
+    setupLogin();
 
-  const reportWeekBadge = $("reportWeekBadge");
-  const reportWeekText = $("reportWeekText");
-  const currentReportWeek = $("currentReportWeek");
+    setupLogout();
 
-  const coordinatorName = $("coordinatorName");
-  const reportCurrentStatus = $("reportCurrentStatus");
+    setupForm();
 
-  const totalMembers = $("totalMembers");
-  const participatedMembers = $("participatedMembers");
-  const notParticipatedMembers = $("notParticipatedMembers");
-  const participationPercentage = $("participationPercentage");
+    setDefaultDates();
 
-  const mobileMenuBtn = $("mobileMenuBtn");
-  const sidebar = $("sidebar");
+    setCoordinatorName();
 
-  /* ==========================================================
-     STATE
-  ========================================================== */
+    restoreSession();
 
-  let currentSession = null;
-  let currentReport = null;
-  let isSubmitting = false;
+});
 
-  /* ==========================================================
-     INITIALIZATION
-  ========================================================== */
 
-  document.addEventListener("DOMContentLoaded", init);
+/* ============================================================
+   DEFAULT VALUES
+   ============================================================ */
 
-  async function init() {
+function setDefaultDates() {
 
-    initIcons();
-    initPasswordToggle();
-    initMobileMenu();
-    initLogoutButtons();
+    const today = new Date();
 
-    coordinatorName.textContent = COORDINATOR_NAME;
+    if ($("reportDate")) {
 
-    setCurrentWeekDisplay();
+        $("reportDate").valueAsDate = today;
+
+    }
+
+    if ($("coordinatorDate")) {
+
+        $("coordinatorDate").valueAsDate = today;
+
+    }
+
+}
+
+
+/* ============================================================
+   COORDINATOR
+   ============================================================ */
+
+function setCoordinatorName() {
+
+    const field = $("coordinatorName");
+
+    if (!field) return;
 
     /*
-     * RESTORE SESSION BEFORE SHOWING LOGIN.
-     *
-     * This is the major refresh-login fix.
+     * The coordinator is intentionally fixed.
+     * The user cannot edit this field.
      */
-    const savedSession = loadSession();
 
-    if (savedSession) {
+    field.value = COORDINATOR_NAME;
 
-      currentSession = savedSession;
+    field.readOnly = true;
 
-      showReportApplication();
+}
 
-      await loadReportData();
 
-      return;
-    }
+/* ============================================================
+   API HELPER
+   ============================================================ */
 
-    showLogin();
+async function callAppsScript(payload) {
 
-  }
-
-  /* ==========================================================
-     ICONS
-  ========================================================== */
-
-  function initIcons() {
-
-    if (window.lucide) {
-      window.lucide.createIcons();
-    }
-
-  }
-
-  /* ==========================================================
-     SESSION MANAGEMENT
-  ========================================================== */
-
-  function saveSession(session) {
-
-    try {
-
-      localStorage.setItem(
-        SESSION_KEY,
-        JSON.stringify(session)
-      );
-
-    } catch (error) {
-
-      console.error(
-        "Unable to save SLC session:",
-        error
-      );
-
-    }
-
-  }
-
-  function loadSession() {
-
-    try {
-
-      const rawSession =
-        localStorage.getItem(SESSION_KEY);
-
-      if (!rawSession) {
-        return null;
-      }
-
-      const session =
-        JSON.parse(rawSession);
-
-      if (!session || typeof session !== "object") {
-
-        localStorage.removeItem(SESSION_KEY);
-
-        return null;
-      }
-
-      return session;
-
-    } catch (error) {
-
-      console.error(
-        "Unable to restore SLC session:",
-        error
-      );
-
-      localStorage.removeItem(SESSION_KEY);
-
-      return null;
-    }
-
-  }
-
-  function clearSession() {
-
-    /*
-     * ONLY the explicit Logout action calls this.
-     */
-    localStorage.removeItem(SESSION_KEY);
-
-    currentSession = null;
-
-  }
-
-  /* ==========================================================
-     LOGIN
-  ========================================================== */
-
-  loginForm.addEventListener("submit", async function (event) {
-
-    event.preventDefault();
-
-    if (!loginUsername.value.trim()) {
-
-      showStatus(
-        "Please enter your username.",
-        "error"
-      );
-
-      loginUsername.focus();
-
-      return;
-    }
-
-    if (!loginPassword.value) {
-
-      showStatus(
-        "Please enter your password.",
-        "error"
-      );
-
-      loginPassword.focus();
-
-      return;
-    }
-
-    setButtonLoading(
-      loginBtn,
-      true,
-      "Signing in..."
-    );
-
-    hideStatus();
-
-    try {
-
-      const response = await apiRequest(
-        "POST",
-        {
-          action: "login",
-          username: loginUsername.value.trim(),
-          password: loginPassword.value
-        }
-      );
-
-      if (!response || response.success !== true) {
+    if (!APPS_SCRIPT_URL ||
+        APPS_SCRIPT_URL.includes("PASTE_YOUR")) {
 
         throw new Error(
-          response?.message ||
-          "Invalid username or password."
+            "The Apps Script URL has not been configured yet."
         );
 
-      }
-
-      /*
-       * Save the complete successful session.
-       *
-       * This is what makes refresh persistence work.
-       */
-      currentSession = {
-        ...response,
-        username:
-          response.username ||
-          loginUsername.value.trim(),
-
-        loggedInAt:
-          response.loggedInAt ||
-          new Date().toISOString()
-      };
-
-      saveSession(currentSession);
-
-      loginForm.reset();
-
-      showReportApplication();
-
-      await loadReportData();
-
-      showStatus(
-        "Login successful.",
-        "success"
-      );
-
-    } catch (error) {
-
-      console.error("SLC login error:", error);
-
-      showStatus(
-        error.message ||
-        "Unable to log in. Please try again.",
-        "error"
-      );
-
-    } finally {
-
-      setButtonLoading(
-        loginBtn,
-        false,
-        "Login"
-      );
-
     }
 
-  });
+    const form = new URLSearchParams();
 
-  /* ==========================================================
-     LOGOUT
-  ========================================================== */
+    form.set(
+        "payload",
+        JSON.stringify(payload)
+    );
 
-  function handleLogout() {
-
-    /*
-     * Do NOT log the user out on page refresh.
-     *
-     * This function is only called when the user explicitly
-     * presses a Logout button.
-     */
-
-    clearSession();
-
-    showLogin();
-
-    loginUsername.value = "";
-    loginPassword.value = "";
-
-    hideStatus();
-
-    hideElement(existingReportSection);
-    hideElement(deadlineSection);
-
-    if (slcReportForm) {
-      slcReportForm.reset();
-    }
-
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth"
-    });
-
-  }
-
-  function initLogoutButtons() {
-
-    if (logoutBtn) {
-      logoutBtn.addEventListener(
-        "click",
-        handleLogout
-      );
-    }
-
-    if (topbarLogoutBtn) {
-      topbarLogoutBtn.addEventListener(
-        "click",
-        handleLogout
-      );
-    }
-
-  }
-
-  /* ==========================================================
-     UI STATE
-  ========================================================== */
-
-  function showLogin() {
-
-    showElement(loginSection);
-    hideElement(reportApplication);
-
-  }
-
-  function showReportApplication() {
-
-    hideElement(loginSection);
-    showElement(reportApplication);
-
-  }
-
-  /* ==========================================================
-     REPORT DATA
-  ========================================================== */
-
-  async function loadReportData() {
-
-    if (!currentSession) {
-      showLogin();
-      return;
-    }
-
-    try {
-
-      reportCurrentStatus.textContent = "Loading...";
-
-      const response = await apiRequest(
-        "GET",
+    const response = await fetch(
+        APPS_SCRIPT_URL,
         {
-          action: "getMySLCReport",
-          username:
-            currentSession.username ||
-            currentSession.user?.username ||
-            ""
+            method: "POST",
+
+            headers: {
+                "Content-Type":
+                    "application/x-www-form-urlencoded;charset=UTF-8"
+            },
+
+            body: form.toString()
         }
-      );
-
-      if (!response || response.success === false) {
-
-        /*
-         * If the server says the saved session is no longer
-         * valid, then and only then do we clear it.
-         */
-        if (
-          response?.code === "AUTH_REQUIRED" ||
-          response?.code === "SESSION_EXPIRED"
-        ) {
-
-          clearSession();
-          showLogin();
-
-          showStatus(
-            "Your login session has expired. Please log in again.",
-            "error"
-          );
-
-          return;
-        }
-
-        throw new Error(
-          response?.message ||
-          "Unable to load the SLC report."
-        );
-
-      }
-
-      currentReport = response;
-
-      populateReport(response);
-
-    } catch (error) {
-
-      console.error(
-        "Unable to load SLC report:",
-        error
-      );
-
-      reportCurrentStatus.textContent =
-        "Unable to load";
-
-      showStatus(
-        error.message ||
-        "Unable to load the report. Please refresh and try again.",
-        "error"
-      );
-
-    }
-
-  }
-
-  /* ==========================================================
-     POPULATE REPORT
-  ========================================================== */
-
-  function populateReport(data) {
-
-    const report =
-      data.report ||
-      data.data ||
-      data;
-
-    /*
-     * Coordinator remains fixed/read-only.
-     */
-    coordinatorName.textContent =
-      COORDINATOR_NAME;
-
-    /*
-     * Week
-     */
-    const week =
-      report.week ||
-      report.weekNumber ||
-      report.lessonNo ||
-      data.week ||
-      "";
-
-    if (week) {
-
-      const weekText =
-        String(week).toLowerCase().includes("week")
-          ? String(week)
-          : `Week ${week}`;
-
-      reportWeekText.textContent = weekText;
-      currentReportWeek.textContent = weekText;
-
-    }
-
-    /*
-     * Participation
-     */
-    const participation =
-      data.participation ||
-      report.participation ||
-      {};
-
-    const total =
-      toNumber(
-        participation.totalMembers ??
-        participation.total ??
-        report.totalMembers
-      );
-
-    const participated =
-      toNumber(
-        participation.participatedMembers ??
-        participation.participated ??
-        report.participatedMembers
-      );
-
-    const yetToParticipate =
-      Math.max(
-        total - participated,
-        0
-      );
-
-    const percentage =
-      total > 0
-        ? Math.round(
-            (participated / total) * 100
-          )
-        : 0;
-
-    totalMembers.textContent =
-      total;
-
-    participatedMembers.textContent =
-      participated;
-
-    notParticipatedMembers.textContent =
-      yetToParticipate;
-
-    participationPercentage.textContent =
-      `${percentage}%`;
-
-    /*
-     * Existing report
-     */
-    const existing =
-      Boolean(
-        data.existingReport ??
-        report.existingReport ??
-        data.submitted ??
-        report.submitted
-      );
-
-    const deadlinePassed =
-      Boolean(
-        data.deadlinePassed ??
-        report.deadlinePassed ??
-        data.closed ??
-        report.closed
-      );
-
-    if (existing) {
-
-      showElement(existingReportSection);
-
-      hideElement(deadlineSection);
-
-      reportCurrentStatus.textContent =
-        "Submitted";
-
-      disableReportForm();
-
-      const existingMessage =
-        $("existingReportMessage");
-
-      if (existingMessage) {
-
-        existingMessage.textContent =
-          data.existingReportMessage ||
-          report.existingReportMessage ||
-          "Your SLC report for this week is already on record.";
-
-      }
-
-      return;
-    }
-
-    if (deadlinePassed) {
-
-      hideElement(existingReportSection);
-
-      showElement(deadlineSection);
-
-      reportCurrentStatus.textContent =
-        "Closed";
-
-      disableReportForm();
-
-      return;
-    }
-
-    hideElement(existingReportSection);
-    hideElement(deadlineSection);
-
-    reportCurrentStatus.textContent =
-      "Ready";
-
-    enableReportForm();
-
-    /*
-     * Prefill returned report values where available.
-     */
-    fillIfPresent(
-      "activities",
-      report.activities
     );
-
-    fillIfPresent(
-      "achievements",
-      report.achievements
-    );
-
-    fillIfPresent(
-      "challenges",
-      report.challenges
-    );
-
-    fillIfPresent(
-      "supportNeeded",
-      report.supportNeeded
-    );
-
-    fillIfPresent(
-      "observations",
-      report.observations
-    );
-
-    fillIfPresent(
-      "contactName",
-      report.contactName
-    );
-
-    fillIfPresent(
-      "contactPhone",
-      report.contactPhone
-    );
-
-  }
-
-  /* ==========================================================
-     SUBMIT REPORT
-  ========================================================== */
-
-  slcReportForm.addEventListener(
-    "submit",
-    async function (event) {
-
-      event.preventDefault();
-
-      if (isSubmitting) {
-        return;
-      }
-
-      if (!currentSession) {
-
-        showStatus(
-          "Please log in before submitting the report.",
-          "error"
-        );
-
-        showLogin();
-
-        return;
-      }
-
-      if (!validateReportForm()) {
-        return;
-      }
-
-      isSubmitting = true;
-
-      setButtonLoading(
-        submitReportBtn,
-        true,
-        "Submitting..."
-      );
-
-      hideStatus();
-
-      try {
-
-        const formData = {
-
-          action: "submitSLCReport",
-
-          username:
-            currentSession.username ||
-            currentSession.user?.username ||
-            "",
-
-          coordinator:
-            COORDINATOR_DISPLAY_NAME,
-
-          coordinatorName:
-            COORDINATOR_NAME,
-
-          activities:
-            getValue("activities"),
-
-          achievements:
-            getValue("achievements"),
-
-          challenges:
-            getValue("challenges"),
-
-          supportNeeded:
-            getValue("supportNeeded"),
-
-          observations:
-            getValue("observations"),
-
-          contactName:
-            getValue("contactName"),
-
-          contactPhone:
-            getValue("contactPhone")
-
-        };
-
-        const response =
-          await apiRequest(
-            "POST",
-            formData
-          );
-
-        if (
-          !response ||
-          response.success !== true
-        ) {
-
-          throw new Error(
-            response?.message ||
-            "Unable to submit the report."
-          );
-
-        }
-
-        showStatus(
-          response.message ||
-          "SLC report submitted successfully.",
-          "success"
-        );
-
-        reportCurrentStatus.textContent =
-          "Submitted";
-
-        disableReportForm();
-
-        showElement(
-          existingReportSection
-        );
-
-        const existingMessage =
-          $("existingReportMessage");
-
-        if (existingMessage) {
-
-          existingMessage.textContent =
-            "Your SLC report for this week has been submitted successfully.";
-
-        }
-
-        window.scrollTo({
-          top: 0,
-          behavior: "smooth"
-        });
-
-      } catch (error) {
-
-        console.error(
-          "SLC report submission error:",
-          error
-        );
-
-        showStatus(
-          error.message ||
-          "Unable to submit the report. Please try again.",
-          "error"
-        );
-
-      } finally {
-
-        isSubmitting = false;
-
-        setButtonLoading(
-          submitReportBtn,
-          false,
-          "Submit SLC Report"
-        );
-
-      }
-
-    }
-  );
-
-  /* ==========================================================
-     FORM VALIDATION
-  ========================================================== */
-
-  function validateReportForm() {
-
-    const activities =
-      getValue("activities");
-
-    const achievements =
-      getValue("achievements");
-
-    if (!activities) {
-
-      showStatus(
-        "Please enter the activities held.",
-        "error"
-      );
-
-      $("activities").focus();
-
-      return false;
-    }
-
-    if (!achievements) {
-
-      showStatus(
-        "Please enter the major achievements.",
-        "error"
-      );
-
-      $("achievements").focus();
-
-      return false;
-    }
-
-    return true;
-
-  }
-
-  /* ==========================================================
-     DISABLE / ENABLE FORM
-  ========================================================== */
-
-  function disableReportForm() {
-
-    if (!slcReportForm) {
-      return;
-    }
-
-    const controls =
-      slcReportForm.querySelectorAll(
-        "input, textarea, select, button"
-      );
-
-    controls.forEach(
-      (control) => {
-        control.disabled = true;
-      }
-    );
-
-  }
-
-  function enableReportForm() {
-
-    if (!slcReportForm) {
-      return;
-    }
-
-    const controls =
-      slcReportForm.querySelectorAll(
-        "input, textarea, select, button"
-      );
-
-    controls.forEach(
-      (control) => {
-        control.disabled = false;
-      }
-    );
-
-  }
-
-  /* ==========================================================
-     API
-  ========================================================== */
-
-  async function apiRequest(
-    method,
-    payload
-  ) {
-
-    let url = API_URL;
-
-    if (
-      !url ||
-      url === "YOUR_APPS_SCRIPT_WEB_APP_URL"
-    ) {
-
-      throw new Error(
-        "Apps Script API URL has not been configured."
-      );
-
-    }
-
-    let response;
-
-    if (method === "GET") {
-
-      const params =
-        new URLSearchParams();
-
-      Object.entries(
-        payload || {}
-      ).forEach(
-        ([key, value]) => {
-
-          if (
-            value !== undefined &&
-            value !== null
-          ) {
-
-            params.set(
-              key,
-              String(value)
-            );
-
-          }
-
-        }
-      );
-
-      url +=
-        (url.includes("?") ? "&" : "?") +
-        params.toString();
-
-      response =
-        await fetch(url, {
-          method: "GET",
-          cache: "no-store"
-        });
-
-    } else {
-
-      response =
-        await fetch(url, {
-          method: "POST",
-          headers: {
-            "Content-Type":
-              "text/plain;charset=utf-8"
-          },
-          body: JSON.stringify(
-            payload || {}
-          )
-        });
-
-    }
 
     if (!response.ok) {
 
-      throw new Error(
-        `Server error (${response.status}).`
-      );
+        throw new Error(
+            `Server error (${response.status}). Please try again.`
+        );
 
     }
 
-    const text =
-      await response.text();
+    const text = await response.text();
+
+    let data;
 
     try {
 
-      return JSON.parse(text);
+        data = JSON.parse(text);
 
     } catch (error) {
 
-      console.error(
-        "Invalid API response:",
-        text
-      );
+        console.error(
+            "Invalid Apps Script response:",
+            text
+        );
 
-      throw new Error(
-        "The server returned an invalid response."
-      );
+        throw new Error(
+            "The server returned an invalid response."
+        );
 
     }
 
-  }
+    return data;
 
-  /* ==========================================================
-     WEEK DISPLAY
-  ========================================================== */
+}
 
-  function setCurrentWeekDisplay() {
 
-    const now = new Date();
+/* ============================================================
+   LOGIN
+   ============================================================ */
 
-    const start =
-      getWeekStart(now);
+function setupLogin() {
 
-    const end =
-      new Date(start);
+    const form = $("loginForm");
 
-    end.setDate(
-      end.getDate() + 6
-    );
+    if (!form) return;
 
-    const formatter =
-      new Intl.DateTimeFormat(
-        "en-NG",
-        {
-          day: "numeric",
-          month: "short"
+    form.addEventListener(
+        "submit",
+        async function (event) {
+
+            event.preventDefault();
+
+            const username =
+                $("loginUsername").value.trim();
+
+            const password =
+                $("loginPassword").value.trim();
+
+            if (!username || !password) {
+
+                showLoginError(
+                    "Please enter your username and password."
+                );
+
+                return;
+
+            }
+
+            const button = $("loginButton");
+
+            button.disabled = true;
+
+            button.innerHTML =
+                '<i class="fa-solid fa-spinner fa-spin"></i> Logging in...';
+
+            hideLoginError();
+
+            try {
+
+                const result =
+                    await callAppsScript({
+                        action: "login",
+                        username: username,
+                        password: password
+                    });
+
+                if (!result.success) {
+
+                    throw new Error(
+                        result.message ||
+                        "Login failed."
+                    );
+
+                }
+
+                sessionToken = result.token;
+
+                sessionStorage.setItem(
+                    SESSION_KEY,
+                    JSON.stringify({
+                        token: result.token,
+                        user: result.user,
+                        role: result.role
+                    })
+                );
+
+                showReportScreen();
+
+            } catch (error) {
+
+                console.error(
+                    "SLC report login error:",
+                    error
+                );
+
+                showLoginError(
+                    error.message ||
+                    "Unable to log in right now."
+                );
+
+            } finally {
+
+                button.disabled = false;
+
+                button.innerHTML =
+                    '<i class="fa-solid fa-arrow-right-to-bracket"></i> Log in';
+
+            }
+
         }
-      );
-
-    const text =
-      `${formatter.format(start)} – ${formatter.format(end)}`;
-
-    reportWeekText.textContent = text;
-    currentReportWeek.textContent = text;
-
-  }
-
-  function getWeekStart(date) {
-
-    const result =
-      new Date(date);
-
-    const day =
-      result.getDay();
-
-    /*
-     * Monday = start of week.
-     */
-    const difference =
-      day === 0
-        ? -6
-        : 1 - day;
-
-    result.setDate(
-      result.getDate() + difference
     );
 
-    result.setHours(
-      0,
-      0,
-      0,
-      0
-    );
+}
 
-    return result;
 
-  }
+/* ============================================================
+   LOGIN ERROR
+   ============================================================ */
 
-  /* ==========================================================
-     PASSWORD TOGGLE
-  ========================================================== */
+function showLoginError(message) {
 
-  function initPasswordToggle() {
+    const errorBox = $("loginError");
 
-    if (!togglePassword) {
-      return;
-    }
+    if (!errorBox) return;
 
-    togglePassword.addEventListener(
-      "click",
-      function () {
+    errorBox.textContent = message;
 
-        const isPassword =
-          loginPassword.type === "password";
+    errorBox.className =
+        "report-banner error";
 
-        loginPassword.type =
-          isPassword
-            ? "text"
-            : "password";
+}
 
-        togglePassword.innerHTML =
-          isPassword
-            ? '<i data-lucide="eye-off"></i>'
-            : '<i data-lucide="eye"></i>';
+function hideLoginError() {
 
-        togglePassword.setAttribute(
-          "aria-label",
-          isPassword
-            ? "Hide password"
-            : "Show password"
+    const errorBox = $("loginError");
+
+    if (!errorBox) return;
+
+    errorBox.classList.add("hidden");
+
+}
+
+
+/* ============================================================
+   RESTORE SESSION
+   ============================================================ */
+
+function restoreSession() {
+
+    const saved =
+        sessionStorage.getItem(SESSION_KEY);
+
+    if (!saved) return;
+
+    try {
+
+        const parsed =
+            JSON.parse(saved);
+
+        if (!parsed.token) {
+
+            sessionStorage.removeItem(
+                SESSION_KEY
+            );
+
+            return;
+
+        }
+
+        sessionToken =
+            parsed.token;
+
+        showReportScreen();
+
+    } catch (error) {
+
+        console.error(
+            "Unable to restore SLC report session:",
+            error
         );
 
-        initIcons();
-
-      }
-    );
-
-  }
-
-  /* ==========================================================
-     MOBILE MENU
-  ========================================================== */
-
-  function initMobileMenu() {
-
-    if (!mobileMenuBtn || !sidebar) {
-      return;
-    }
-
-    mobileMenuBtn.addEventListener(
-      "click",
-      function () {
-
-        sidebar.classList.toggle(
-          "sidebar-open"
+        sessionStorage.removeItem(
+            SESSION_KEY
         );
 
-      }
+    }
+
+}
+
+
+/* ============================================================
+   SHOW REPORT SCREEN
+   ============================================================ */
+
+function showReportScreen() {
+
+    $("loginScreen")
+        .classList.add("hidden");
+
+    $("reportScreen")
+        .classList.remove("hidden");
+
+    setDefaultDates();
+
+    setCoordinatorName();
+
+    renderNonParticipantFields(6);
+
+    renderContactTable(1);
+
+}
+
+
+/* ============================================================
+   LOGOUT
+   ============================================================ */
+
+function setupLogout() {
+
+    const button =
+        $("logoutButton");
+
+    if (!button) return;
+
+    button.addEventListener(
+        "click",
+        function () {
+
+            sessionToken = "";
+
+            currentLessonLoaded = null;
+
+            sessionStorage.removeItem(
+                SESSION_KEY
+            );
+
+            $("reportScreen")
+                .classList.add("hidden");
+
+            $("loginScreen")
+                .classList.remove("hidden");
+
+            $("loginForm").reset();
+
+            hideBanner();
+
+            setDefaultDates();
+
+            setCoordinatorName();
+
+        }
     );
 
-  }
+}
 
-  /* ==========================================================
-     STATUS
-  ========================================================== */
 
-  function showStatus(
-    message,
-    type = "info"
-  ) {
+/* ============================================================
+   FORM SETUP
+   ============================================================ */
 
-    if (!reportStatus) {
-      return;
+function setupForm() {
+
+    const totalMembers =
+        $("totalMembers");
+
+    const participated =
+        $("participated");
+
+    const lessonNo =
+        $("lessonNo");
+
+    const form =
+        $("reportForm");
+
+    if (totalMembers) {
+
+        totalMembers.addEventListener(
+            "input",
+            syncCalculations
+        );
+
     }
 
-    reportStatus.textContent =
-      message;
+    if (participated) {
 
-    reportStatus.className =
-      `report-status ${type}`;
+        participated.addEventListener(
+            "input",
+            syncCalculations
+        );
 
-    reportStatus.hidden = false;
-
-  }
-
-  function hideStatus() {
-
-    if (!reportStatus) {
-      return;
     }
 
-    reportStatus.hidden = true;
-    reportStatus.textContent = "";
-    reportStatus.className =
-      "report-status";
+    if (lessonNo) {
 
-  }
+        lessonNo.addEventListener(
+            "blur",
+            loadExistingReportForLesson
+        );
 
-  /* ==========================================================
-     HELPERS
-  ========================================================== */
-
-  function showElement(element) {
-
-    if (element) {
-      element.hidden = false;
     }
 
-  }
+    if (form) {
 
-  function hideElement(element) {
+        form.addEventListener(
+            "submit",
+            submitReport
+        );
 
-    if (element) {
-      element.hidden = true;
     }
 
-  }
+}
 
-  function getValue(id) {
 
-    const element = $(id);
+/* ============================================================
+   NON-PARTICIPANT FIELDS
+   ============================================================ */
 
-    return element
-      ? element.value.trim()
-      : "";
+function renderNonParticipantFields(count) {
 
-  }
+    const container =
+        $("nonParticipantsList");
 
-  function fillIfPresent(
-    id,
-    value
-  ) {
+    if (!container) return;
 
-    const element = $(id);
+    container.innerHTML = "";
 
-    if (
-      element &&
-      value !== undefined &&
-      value !== null &&
-      String(value).trim() !== ""
+    for (
+        let i = 1;
+        i <= count;
+        i++
     ) {
 
-      element.value =
-        String(value);
+        const field =
+            document.createElement("div");
+
+        field.className =
+            "report-name-field";
+
+        field.innerHTML = `
+
+            <span class="report-name-number">
+                ${i}
+            </span>
+
+            <input
+                type="text"
+                id="nonParticipant${i}"
+                class="nonParticipantInput"
+                placeholder="Member's full name"
+            >
+
+        `;
+
+        container.appendChild(
+            field
+        );
 
     }
 
-  }
+}
 
-  function toNumber(value) {
 
-    const number =
-      Number(value);
+/* ============================================================
+   CONTACT TABLE
+   ============================================================ */
 
-    return Number.isFinite(number)
-      ? number
-      : 0;
+function renderContactTable(rowCount) {
 
-  }
+    const tbody =
+        $("contactTableBody");
 
-  function setButtonLoading(
-    button,
-    loading,
-    loadingText
-  ) {
+    if (!tbody) return;
 
-    if (!button) {
-      return;
+    const existing =
+        collectContactTable();
+
+    tbody.innerHTML = "";
+
+    const n =
+        Math.max(
+            1,
+            Math.min(
+                Number(rowCount) || 1,
+                60
+            )
+        );
+
+    for (
+        let i = 1;
+        i <= n;
+        i++
+    ) {
+
+        const prior =
+            existing[i - 1] || {
+                name: "",
+                contacted: "",
+                reason: ""
+            };
+
+        const tr =
+            document.createElement("tr");
+
+        tr.innerHTML = `
+
+            <td>
+                ${i}
+            </td>
+
+            <td>
+
+                <input
+                    type="text"
+                    class="contactName"
+                    value="${escapeAttr(prior.name)}"
+                    placeholder="Member name"
+                >
+
+            </td>
+
+            <td>
+
+                <select class="contactStatus">
+
+                    <option value="">
+                        --
+                    </option>
+
+                    <option
+                        value="Yes"
+                        ${prior.contacted === "Yes" ? "selected" : ""}
+                    >
+                        Yes
+                    </option>
+
+                    <option
+                        value="No"
+                        ${prior.contacted === "No" ? "selected" : ""}
+                    >
+                        No
+                    </option>
+
+                </select>
+
+            </td>
+
+            <td>
+
+                <input
+                    type="text"
+                    class="contactReason"
+                    value="${escapeAttr(prior.reason)}"
+                    placeholder="Reason / response"
+                >
+
+            </td>
+
+        `;
+
+        tbody.appendChild(
+            tr
+        );
+
     }
 
-    if (loading) {
+}
 
-      button.disabled = true;
 
-      button.dataset.originalText =
-        button.textContent.trim();
+/* ============================================================
+   COLLECT CONTACT TABLE
+   ============================================================ */
 
-      button.innerHTML =
-        `<span>${loadingText}</span>`;
+function collectContactTable() {
+
+    const rows = [];
+
+    document
+        .querySelectorAll(
+            "#contactTableBody tr"
+        )
+        .forEach(function (tr) {
+
+            rows.push({
+
+                name:
+                    tr.querySelector(
+                        ".contactName"
+                    )?.value.trim() || "",
+
+                contacted:
+                    tr.querySelector(
+                        ".contactStatus"
+                    )?.value || "",
+
+                reason:
+                    tr.querySelector(
+                        ".contactReason"
+                    )?.value.trim() || ""
+
+            });
+
+        });
+
+    return rows;
+
+}
+
+
+/* ============================================================
+   ESCAPE HTML ATTRIBUTE
+   ============================================================ */
+
+function escapeAttr(value) {
+
+    return String(
+        value ?? ""
+    )
+        .replace(/&/g, "&amp;")
+        .replace(/"/g, "&quot;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+
+}
+
+
+/* ============================================================
+   CALCULATIONS
+   ============================================================ */
+
+function syncCalculations() {
+
+    const total =
+        Math.max(
+            Number(
+                $("totalMembers").value
+            ) || 0,
+            0
+        );
+
+    let participated =
+        Math.max(
+            Number(
+                $("participated").value
+            ) || 0,
+            0
+        );
+
+    /*
+     * Participated should never exceed total members.
+     */
+
+    if (
+        total > 0 &&
+        participated > total
+    ) {
+
+        participated = total;
+
+        $("participated").value =
+            total;
+
+    }
+
+    const notParticipated =
+        Math.max(
+            total - participated,
+            0
+        );
+
+    $("notParticipated").value =
+        notParticipated;
+
+    if (total > 0) {
+
+        renderContactTable(
+            total
+        );
 
     } else {
 
-      button.disabled = false;
-
-      const originalText =
-        button.dataset.originalText ||
-        loadingText;
-
-      button.innerHTML =
-        `<span>${originalText}</span>`;
+        renderContactTable(
+            1
+        );
 
     }
 
-  }
+}
 
-})();
+
+/* ============================================================
+   LOAD EXISTING REPORT
+   ============================================================ */
+
+async function loadExistingReportForLesson() {
+
+    const lessonNo =
+        $("lessonNo").value.trim();
+
+    if (
+        !lessonNo ||
+        lessonNo === currentLessonLoaded
+    ) {
+
+        return;
+
+    }
+
+    currentLessonLoaded =
+        lessonNo;
+
+    try {
+
+        const result =
+            await callAppsScript({
+                action: "getMySLCReport",
+                token: sessionToken,
+                lessonNo: lessonNo
+            });
+
+        if (!result.success) {
+
+            showBanner(
+                "error",
+                result.message ||
+                "Unable to check existing report."
+            );
+
+            return;
+
+        }
+
+        deadlineInfo = {
+
+            isOpen:
+                result.isOpen !== false,
+
+            deadline:
+                result.deadline || null
+
+        };
+
+        applyDeadlineState();
+
+        if (
+            result.exists &&
+            result.report
+        ) {
+
+            fillFormFromReport(
+                result.report
+            );
+
+            showBanner(
+                "warn",
+                `You already submitted a report for Lesson ${lessonNo} (version ${result.report.version}). Editing will save a new version.`
+            );
+
+        } else {
+
+            hideBanner();
+
+        }
+
+    } catch (error) {
+
+        console.error(
+            "Load report error:",
+            error
+        );
+
+        showBanner(
+            "error",
+            error.message ||
+            "Unable to check existing report."
+        );
+
+    }
+
+}
+
+
+/* ============================================================
+   DEADLINE STATE
+   ============================================================ */
+
+function applyDeadlineState() {
+
+    const submitButton =
+        $("submitButton");
+
+    if (!submitButton) return;
+
+    if (!deadlineInfo.isOpen) {
+
+        submitButton.disabled =
+            true;
+
+        submitButton.innerHTML =
+            '<i class="fa-solid fa-lock"></i><span>Deadline Passed — Editing Closed</span>';
+
+        showBanner(
+            "error",
+            `The deadline for this lesson's report has passed${
+                deadlineInfo.deadline
+                    ? " (" +
+                      new Date(
+                          deadlineInfo.deadline
+                      ).toLocaleString() +
+                      ")"
+                    : ""
+            }.`
+        );
+
+    } else {
+
+        submitButton.disabled =
+            false;
+
+        submitButton.innerHTML =
+            '<i class="fa-solid fa-paper-plane"></i><span>Submit Report</span>';
+
+    }
+
+}
+
+
+/* ============================================================
+   FILL FORM FROM EXISTING REPORT
+   ============================================================ */
+
+function fillFormFromReport(report) {
+
+    $("reportDate").value =
+        report.reportDate ||
+        $("reportDate").value;
+
+    $("groupName").value =
+        report.groupName || "";
+
+    $("groupLeaderName").value =
+        report.groupLeaderName || "";
+
+    $("totalMembers").value =
+        report.totalMembers ?? 0;
+
+    $("participated").value =
+        report.participated ?? 0;
+
+    $("notParticipated").value =
+        report.notParticipated ?? 0;
+
+
+    /* --------------------------------------------------------
+       NON PARTICIPANTS
+       -------------------------------------------------------- */
+
+    renderNonParticipantFields(6);
+
+    (
+        report.nonParticipants ||
+        []
+    ).forEach(
+        function (name, index) {
+
+            const input =
+                $("nonParticipant" + (
+                    index + 1
+                ));
+
+            if (input) {
+
+                input.value =
+                    name || "";
+
+            }
+
+        }
+    );
+
+
+    /* --------------------------------------------------------
+       CONTACT TABLE
+       -------------------------------------------------------- */
+
+    const total =
+        Math.max(
+            Number(
+                report.totalMembers
+            ) || 1,
+            1
+        );
+
+    renderContactTable(
+        total
+    );
+
+    const rows =
+        document.querySelectorAll(
+            "#contactTableBody tr"
+        );
+
+    (
+        report.contactedTable ||
+        []
+    ).forEach(
+        function (entry, index) {
+
+            const tr =
+                rows[index];
+
+            if (!tr) return;
+
+            const name =
+                tr.querySelector(
+                    ".contactName"
+                );
+
+            const status =
+                tr.querySelector(
+                    ".contactStatus"
+                );
+
+            const reason =
+                tr.querySelector(
+                    ".contactReason"
+                );
+
+            if (name) {
+
+                name.value =
+                    entry.name || "";
+
+            }
+
+            if (status) {
+
+                status.value =
+                    entry.contacted || "";
+
+            }
+
+            if (reason) {
+
+                reason.value =
+                    entry.reason || "";
+
+            }
+
+        }
+    );
+
+
+    /* --------------------------------------------------------
+       SUPPORT
+       -------------------------------------------------------- */
+
+    document
+        .querySelectorAll(
+            ".supportCheck"
+        )
+        .forEach(
+            function (box) {
+
+                box.checked =
+                    (
+                        report.supportGiven ||
+                        []
+                    ).includes(
+                        box.value
+                    );
+
+            }
+        );
+
+
+    $("otherSupport").value =
+        report.otherSupport || "";
+
+    $("observations").value =
+        report.observations || "";
+
+
+    /* --------------------------------------------------------
+       COORDINATOR
+       -------------------------------------------------------- */
+
+    /*
+     * Do not trust or allow the stored coordinator name
+     * to overwrite the fixed coordinator.
+     */
+
+    setCoordinatorName();
+
+    if (
+        report.coordinatorDate
+    ) {
+
+        const coordinatorDate =
+            new Date(
+                report.coordinatorDate
+            );
+
+        if (
+            !Number.isNaN(
+                coordinatorDate.getTime()
+            )
+        ) {
+
+            $("coordinatorDate")
+                .valueAsDate =
+                coordinatorDate;
+
+        }
+
+    }
+
+    $("note").value =
+        report.note || "";
+
+}
+
+
+/* ============================================================
+   SUBMIT REPORT
+   ============================================================ */
+
+async function submitReport(event) {
+
+    event.preventDefault();
+
+    if (!deadlineInfo.isOpen) {
+
+        showBanner(
+            "error",
+            "The deadline for this lesson's report has passed."
+        );
+
+        return;
+
+    }
+
+
+    const lessonNo =
+        $("lessonNo").value.trim();
+
+    if (!lessonNo) {
+
+        showBanner(
+            "error",
+            "Please enter the lesson number."
+        );
+
+        $("lessonNo").focus();
+
+        return;
+
+    }
+
+
+    const totalMembers =
+        Math.max(
+            Number(
+                $("totalMembers").value
+            ) || 0,
+            0
+        );
+
+    const participated =
+        Math.min(
+            Math.max(
+                Number(
+                    $("participated").value
+                ) || 0,
+                0
+            ),
+            totalMembers
+        );
+
+
+    /*
+     * Keep the calculated value authoritative on the frontend.
+     */
+
+    const notParticipated =
+        Math.max(
+            totalMembers -
+            participated,
+            0
+        );
+
+    $("notParticipated").value =
+        notParticipated;
+
+
+    /* --------------------------------------------------------
+       NON PARTICIPANTS
+       -------------------------------------------------------- */
+
+    const nonParticipants = [];
+
+    document
+        .querySelectorAll(
+            ".nonParticipantInput"
+        )
+        .forEach(
+            function (input) {
+
+                const value =
+                    input.value.trim();
+
+                if (value) {
+
+                    nonParticipants.push(
+                        value
+                    );
+
+                }
+
+            }
+        );
+
+
+    /* --------------------------------------------------------
+       SUPPORT
+       -------------------------------------------------------- */
+
+    const supportGiven = [];
+
+    document
+        .querySelectorAll(
+            ".supportCheck:checked"
+        )
+        .forEach(
+            function (box) {
+
+                supportGiven.push(
+                    box.value
+                );
+
+            }
+        );
+
+
+    /* --------------------------------------------------------
+       COORDINATOR
+       -------------------------------------------------------- */
+
+    /*
+     * Always use the fixed coordinator constant.
+     * This prevents accidental editing through the browser.
+     */
+
+    setCoordinatorName();
+
+
+    /* --------------------------------------------------------
+       PAYLOAD
+       -------------------------------------------------------- */
+
+    const payload = {
+
+        action:
+            "submitSLCReport",
+
+        token:
+            sessionToken,
+
+        lessonNo:
+            lessonNo,
+
+        reportDate:
+            $("reportDate").value,
+
+        groupName:
+            $("groupName").value.trim(),
+
+        groupLeaderName:
+            $("groupLeaderName").value.trim(),
+
+        totalMembers:
+            String(totalMembers),
+
+        participated:
+            String(participated),
+
+        notParticipated:
+            String(notParticipated),
+
+        nonParticipants:
+            nonParticipants,
+
+        contactedTable:
+            collectContactTable(),
+
+        supportGiven:
+            supportGiven,
+
+        otherSupport:
+            $("otherSupport").value.trim(),
+
+        observations:
+            $("observations").value.trim(),
+
+        coordinatorName:
+            COORDINATOR_NAME,
+
+        coordinatorDate:
+            $("coordinatorDate").value,
+
+        note:
+            $("note").value.trim()
+
+    };
+
+
+    /* --------------------------------------------------------
+       SUBMIT BUTTON
+       -------------------------------------------------------- */
+
+    const submitButton =
+        $("submitButton");
+
+    submitButton.disabled =
+        true;
+
+    submitButton.innerHTML =
+        '<i class="fa-solid fa-spinner fa-spin"></i><span>Submitting...</span>';
+
+    hideBanner();
+
+
+    try {
+
+        const result =
+            await callAppsScript(
+                payload
+            );
+
+
+        if (!result.success) {
+
+            if (
+                result.status ===
+                "deadline_passed"
+            ) {
+
+                deadlineInfo.isOpen =
+                    false;
+
+                applyDeadlineState();
+
+            }
+
+            throw new Error(
+                result.message ||
+                "Submission failed."
+            );
+
+        }
+
+
+        showBanner(
+            "success",
+            `Report submitted successfully (version ${result.version}).`
+        );
+
+
+        submitButton.disabled =
+            false;
+
+        submitButton.innerHTML =
+            '<i class="fa-solid fa-check"></i><span>Report Submitted</span>';
+
+
+        /*
+         * Keep the success state visible briefly,
+         * then restore the normal button text.
+         */
+
+        setTimeout(
+            function () {
+
+                if (
+                    deadlineInfo.isOpen
+                ) {
+
+                    submitButton.innerHTML =
+                        '<i class="fa-solid fa-paper-plane"></i><span>Submit Report</span>';
+
+                }
+
+            },
+            2500
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "SLC report submission error:",
+            error
+        );
+
+        showBanner(
+            "error",
+            error.message ||
+            "Something went wrong while submitting the report."
+        );
+
+
+        submitButton.disabled =
+            false;
+
+        if (
+            deadlineInfo.isOpen
+        ) {
+
+            submitButton.innerHTML =
+                '<i class="fa-solid fa-paper-plane"></i><span>Submit Report</span>';
+
+        }
+
+    }
+
+}
+
+
+/* ============================================================
+   BANNER
+   ============================================================ */
+
+function showBanner(
+    type,
+    message
+) {
+
+    const banner =
+        $("statusBanner");
+
+    if (!banner) return;
+
+    if (!message) {
+
+        hideBanner();
+
+        return;
+
+    }
+
+    banner.className =
+        "report-banner " +
+        type;
+
+    banner.textContent =
+        message;
+
+    banner.classList.remove(
+        "hidden"
+    );
+
+}
+
+
+function hideBanner() {
+
+    const banner =
+        $("statusBanner");
+
+    if (!banner) return;
+
+    banner.classList.add(
+        "hidden"
+    );
+
+}
  
