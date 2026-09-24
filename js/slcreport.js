@@ -18,7 +18,7 @@ const SESSION_KEY =
     "afc_isiu_slc_leader_session";
 
 const COORDINATOR_NAME =
-    "Monayo Olajimbiti";
+    "Olajimbiti Molayo";
 
 
 /* ============================================================
