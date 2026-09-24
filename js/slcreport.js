@@ -227,14 +227,27 @@ function setupLogin() {
 
                     throw new Error(
                         result.message ||
+                        result.error ||
                         "Login failed."
                     );
 
                 }
 
-                sessionToken = result.token;
+                sessionToken =
+                    result.token;
 
-                sessionStorage.setItem(
+                /*
+                 * IMPORTANT:
+                 * Use localStorage instead of sessionStorage.
+                 *
+                 * This keeps the SLC report login available
+                 * after the page is refreshed.
+                 *
+                 * The session is removed only when the user
+                 * clicks the Logout button.
+                 */
+
+                localStorage.setItem(
                     SESSION_KEY,
                     JSON.stringify({
                         token: result.token,
@@ -306,8 +319,14 @@ function hideLoginError() {
 
 function restoreSession() {
 
+    /*
+     * IMPORTANT:
+     * Read from localStorage so the session survives
+     * a page refresh.
+     */
+
     const saved =
-        sessionStorage.getItem(SESSION_KEY);
+        localStorage.getItem(SESSION_KEY);
 
     if (!saved) return;
 
@@ -318,7 +337,7 @@ function restoreSession() {
 
         if (!parsed.token) {
 
-            sessionStorage.removeItem(
+            localStorage.removeItem(
                 SESSION_KEY
             );
 
@@ -338,7 +357,7 @@ function restoreSession() {
             error
         );
 
-        sessionStorage.removeItem(
+        localStorage.removeItem(
             SESSION_KEY
         );
 
@@ -389,7 +408,12 @@ function setupLogout() {
 
             currentLessonLoaded = null;
 
-            sessionStorage.removeItem(
+            /*
+             * Explicit logout:
+             * remove the persistent login session.
+             */
+
+            localStorage.removeItem(
                 SESSION_KEY
             );
 
