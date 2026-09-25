@@ -12,6 +12,7 @@
  * - Add Question
  * - Edit Question
  * - Delete Question
+ * - Quiz Attempts
  *
  * IMPORTANT:
  * - Uses the existing dashboard session.
@@ -138,7 +139,9 @@ function setupDashboardNavigation() {
                     const section =
                         button.dataset.dashboardSection;
 
-                    if (!section) return;
+                    if (!section) {
+                        return;
+                    }
 
                     activateDashboardSection(
                         section
@@ -155,10 +158,6 @@ function setupDashboardNavigation() {
 
 /**
  * Activate a dashboard section.
- *
- * The HTML also contains a lightweight navigation
- * fallback. This function keeps navigation working
- * when this JS file is loaded independently.
  */
 function activateDashboardSection(
     sectionName
@@ -209,8 +208,7 @@ function activateDashboardSection(
 
 
     /*
-     * When Questions is opened, make sure the
-     * latest question data is available.
+     * Load Questions when opened.
      */
     if (
         sectionName === "questions" &&
@@ -221,12 +219,19 @@ function activateDashboardSection(
 
     }
 
-   if (
-    sectionName === "attempts" &&
-    dashboardSession
-) {
-    loadQuizAttempts();
-}
+
+    /*
+     * Load Attempts when opened.
+     */
+    if (
+        sectionName === "attempts" &&
+        dashboardSession
+    ) {
+
+        loadQuizAttempts();
+
+    }
+
 }
 
 
@@ -322,11 +327,13 @@ async function verifyDashboardAccess() {
 
         const response =
             await dashboardGet({
+
                 action:
                     "getSLCAdminOverview",
 
                 token:
                     dashboardSession.token
+
             });
 
 
@@ -351,8 +358,7 @@ async function verifyDashboardAccess() {
 
 
         /*
-         * Load questions after access has been
-         * successfully verified.
+         * Load questions after access is verified.
          */
         if (
             document.getElementById(
@@ -517,7 +523,7 @@ async function loadDashboardOverview() {
 
             button.innerHTML =
                 button.dataset.originalText ||
-                '<i class="fa-solid fa-rotate"></i><span>Load Dashboard</span>';
+                '<i class="fa-solid fa-rotate"></i><span>Load Report</span>';
 
         }
 
@@ -825,7 +831,9 @@ function renderNonParticipants(
     }
 
 
-    if (!list) return;
+    if (!list) {
+        return;
+    }
 
 
     if (!members.length) {
@@ -858,6 +866,7 @@ function renderNonParticipants(
 
                     return `
                         <div class="slc-member-item">
+
                             <span class="slc-member-number">
                                 ${index + 1}
                             </span>
@@ -865,6 +874,7 @@ function renderNonParticipants(
                             <span>
                                 ${escapeHtml(name)}
                             </span>
+
                         </div>
                     `;
 
@@ -941,10 +951,6 @@ function setupQuestionsControls() {
     }
 
 
-    /*
-     * Event delegation for Edit/Delete buttons
-     * generated inside the questions table.
-     */
     const tableBody =
         document.getElementById(
             "questionsTableBody"
@@ -963,7 +969,9 @@ function setupQuestionsControls() {
                     );
 
 
-                if (!actionButton) return;
+                if (!actionButton) {
+                    return;
+                }
 
 
                 const action =
@@ -981,7 +989,9 @@ function setupQuestionsControls() {
                         rowNumber
                     )
                 ) {
+
                     return;
+
                 }
 
 
@@ -1148,7 +1158,9 @@ function renderQuizQuestions() {
         );
 
 
-    if (!tableBody) return;
+    if (!tableBody) {
+        return;
+    }
 
 
     const questions =
@@ -1274,8 +1286,13 @@ function renderQuizQuestions() {
                                             item.rowNumber
                                         )}"
                                     >
+
                                         <i class="fa-solid fa-pen"></i>
-                                        <span>Edit</span>
+
+                                        <span>
+                                            Edit
+                                        </span>
+
                                     </button>
 
 
@@ -1287,8 +1304,13 @@ function renderQuizQuestions() {
                                             item.rowNumber
                                         )}"
                                     >
+
                                         <i class="fa-solid fa-trash"></i>
-                                        <span>Delete</span>
+
+                                        <span>
+                                            Delete
+                                        </span>
+
                                     </button>
 
                                 </div>
@@ -1374,7 +1396,9 @@ function updateQuestionsCount(
         );
 
 
-    if (!element) return;
+    if (!element) {
+        return;
+    }
 
 
     element.textContent =
@@ -1420,7 +1444,9 @@ function setupQuestionEditor() {
                 );
 
 
-            if (!closeButton) return;
+            if (!closeButton) {
+                return;
+            }
 
 
             closeQuestionEditor();
@@ -1436,7 +1462,9 @@ function setupQuestionEditor() {
             if (
                 event.key !== "Escape"
             ) {
+
                 return;
+
             }
 
 
@@ -1464,17 +1492,24 @@ function openQuestionEditor(
         );
 
 
-    if (!modal) return;
+    if (!modal) {
+        return;
+    }
 
 
     questionBeingEdited =
         null;
 
 
+    const numericRow =
+        Number(rowNumber);
+
+
     const isEditing =
         Number.isInteger(
-            Number(rowNumber)
-        );
+            numericRow
+        ) &&
+        numericRow >= 2;
 
 
     if (isEditing) {
@@ -1485,9 +1520,7 @@ function openQuestionEditor(
 
                     return Number(
                         item.rowNumber
-                    ) === Number(
-                        rowNumber
-                    );
+                    ) === numericRow;
 
                 }
             );
@@ -1613,13 +1646,13 @@ function closeQuestionEditor() {
         );
 
 
-    if (!modal) return;
+    if (!modal) {
+        return;
+    }
 
 
     if (questionSaveInProgress) {
-
         return;
-
     }
 
 
@@ -1760,6 +1793,19 @@ async function handleQuestionFormSubmit(
 
 
     if (questionSaveInProgress) {
+        return;
+    }
+
+
+    if (
+        !dashboardSession ||
+        !dashboardSession.token
+    ) {
+
+        setQuestionEditorStatus(
+            "Your session has expired. Please log in again.",
+            "error"
+        );
 
         return;
 
@@ -2055,7 +2101,9 @@ function setupQuestionDeleteModal() {
                 );
 
 
-            if (!closeButton) return;
+            if (!closeButton) {
+                return;
+            }
 
 
             closeQuestionDeleteModal();
@@ -2148,7 +2196,9 @@ function openQuestionDeleteModal(
         );
 
 
-    if (!modal) return;
+    if (!modal) {
+        return;
+    }
 
 
     modal.classList.add(
@@ -2181,13 +2231,13 @@ function closeQuestionDeleteModal() {
         );
 
 
-    if (!modal) return;
+    if (!modal) {
+        return;
+    }
 
 
     if (questionDeleteInProgress) {
-
         return;
-
     }
 
 
@@ -2361,6 +2411,542 @@ async function handleQuestionDelete() {
 
 
 /* ============================================================
+   QUIZ ATTEMPTS — CONTROLS
+============================================================ */
+
+function setupAttemptsControls() {
+
+    const refreshButton =
+        document.getElementById(
+            "refreshAttemptsButton"
+        );
+
+
+    const lessonFilter =
+        document.getElementById(
+            "attemptsLessonFilter"
+        );
+
+
+    const searchInput =
+        document.getElementById(
+            "attemptsSearchInput"
+        );
+
+
+    if (refreshButton) {
+
+        refreshButton.addEventListener(
+            "click",
+            function () {
+
+                if (
+                    !dashboardSession ||
+                    !dashboardSession.token
+                ) {
+
+                    return;
+
+                }
+
+
+                loadQuizAttempts();
+
+            }
+        );
+
+    }
+
+
+    if (lessonFilter) {
+
+        lessonFilter.addEventListener(
+            "input",
+            filterQuizAttempts
+        );
+
+    }
+
+
+    if (searchInput) {
+
+        searchInput.addEventListener(
+            "input",
+            filterQuizAttempts
+        );
+
+    }
+
+}
+
+
+/* ============================================================
+   LOAD QUIZ ATTEMPTS
+============================================================ */
+
+async function loadQuizAttempts() {
+
+    if (
+        !dashboardSession ||
+        !dashboardSession.token
+    ) {
+
+        return;
+
+    }
+
+
+    setAttemptsStatus(
+        "Loading quiz attempts..."
+    );
+
+
+    const tableBody =
+        document.getElementById(
+            "attemptsTableBody"
+        );
+
+
+    const refreshButton =
+        document.getElementById(
+            "refreshAttemptsButton"
+        );
+
+
+    if (refreshButton) {
+
+        refreshButton.disabled = true;
+
+        refreshButton.innerHTML =
+            '<i class="fa-solid fa-spinner fa-spin"></i><span>Loading...</span>';
+
+    }
+
+
+    if (tableBody) {
+
+        tableBody.innerHTML = `
+            <tr>
+                <td
+                    colspan="5"
+                    class="attempts-empty-cell"
+                >
+                    Loading quiz attempts...
+                </td>
+            </tr>
+        `;
+
+    }
+
+
+    try {
+
+        const response =
+            await dashboardGet({
+
+                action:
+                    "getSLCAdminQuizAttempts",
+
+                token:
+                    dashboardSession.token
+
+            });
+
+
+        if (
+            !response
+        ) {
+
+            throw new Error(
+                "No response was received from the server."
+            );
+
+        }
+
+
+        if (
+            response.success === false
+        ) {
+
+            throw new Error(
+                response.message ||
+                response.error ||
+                "Unable to load quiz attempts."
+            );
+
+        }
+
+
+        dashboardAttempts =
+            Array.isArray(
+                response.attempts
+            )
+                ? response.attempts
+                : [];
+
+
+        renderQuizAttempts(
+            dashboardAttempts
+        );
+
+
+        setAttemptsStatus(
+            dashboardAttempts.length +
+            " attempt" +
+            (
+                dashboardAttempts.length === 1
+                    ? ""
+                    : "s"
+            ) +
+            " found."
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Load quiz attempts error:",
+            error
+        );
+
+
+        dashboardAttempts =
+            [];
+
+
+        if (tableBody) {
+
+            tableBody.innerHTML = `
+                <tr>
+                    <td
+                        colspan="5"
+                        class="attempts-empty-cell"
+                    >
+                        Unable to load quiz attempts.
+                    </td>
+                </tr>
+            `;
+
+        }
+
+
+        updateAttemptsCount(
+            0
+        );
+
+
+        setAttemptsStatus(
+            error.message ||
+            "Unable to load quiz attempts."
+        );
+
+
+    } finally {
+
+        if (refreshButton) {
+
+            refreshButton.disabled = false;
+
+            refreshButton.innerHTML =
+                '<i class="fa-solid fa-rotate"></i><span>Refresh</span>';
+
+        }
+
+    }
+
+}
+
+
+/* ============================================================
+   FILTER QUIZ ATTEMPTS
+============================================================ */
+
+function filterQuizAttempts() {
+
+    const lessonInput =
+        document.getElementById(
+            "attemptsLessonFilter"
+        );
+
+
+    const searchInput =
+        document.getElementById(
+            "attemptsSearchInput"
+        );
+
+
+    const lessonValue =
+        lessonInput
+            ? String(
+                lessonInput.value || ""
+              )
+                .trim()
+                .toLowerCase()
+            : "";
+
+
+    const searchValue =
+        searchInput
+            ? String(
+                searchInput.value || ""
+              )
+                .trim()
+                .toLowerCase()
+            : "";
+
+
+    const filtered =
+        dashboardAttempts.filter(
+            function (attempt) {
+
+                const lesson =
+                    String(
+                        attempt.lessonNo || ""
+                    )
+                        .toLowerCase();
+
+
+                const name =
+                    String(
+                        attempt.name || ""
+                    )
+                        .toLowerCase();
+
+
+                const memberId =
+                    String(
+                        attempt.memberId || ""
+                    )
+                        .toLowerCase();
+
+
+                const matchesLesson =
+                    !lessonValue ||
+                    lesson === lessonValue;
+
+
+                const matchesSearch =
+                    !searchValue ||
+                    name.includes(
+                        searchValue
+                    ) ||
+                    memberId.includes(
+                        searchValue
+                    );
+
+
+                return (
+                    matchesLesson &&
+                    matchesSearch
+                );
+
+            }
+        );
+
+
+    renderQuizAttempts(
+        filtered
+    );
+
+
+    setAttemptsStatus(
+        filtered.length +
+        " matching attempt" +
+        (
+            filtered.length === 1
+                ? ""
+                : "s"
+        ) +
+        "."
+    );
+
+}
+
+
+/* ============================================================
+   RENDER QUIZ ATTEMPTS
+============================================================ */
+
+function renderQuizAttempts(
+    attempts
+) {
+
+    const tableBody =
+        document.getElementById(
+            "attemptsTableBody"
+        );
+
+
+    if (!tableBody) {
+        return;
+    }
+
+
+    const safeAttempts =
+        Array.isArray(
+            attempts
+        )
+            ? attempts
+            : [];
+
+
+    updateAttemptsCount(
+        safeAttempts.length
+    );
+
+
+    if (!safeAttempts.length) {
+
+        tableBody.innerHTML = `
+            <tr>
+                <td
+                    colspan="5"
+                    class="attempts-empty-cell"
+                >
+                    No quiz attempts found.
+                </td>
+            </tr>
+        `;
+
+        return;
+
+    }
+
+
+    tableBody.innerHTML =
+        safeAttempts
+            .map(
+                function (attempt) {
+
+                    return `
+                        <tr>
+
+                            <td>
+
+                                <div class="attempt-participant">
+
+                                    <strong>
+                                        ${escapeHtml(
+                                            attempt.name ||
+                                            "Unknown"
+                                        )}
+                                    </strong>
+
+                                    ${
+                                        attempt.memberId
+                                            ? `
+                                                <small>
+                                                    ${escapeHtml(
+                                                        attempt.memberId
+                                                    )}
+                                                </small>
+                                            `
+                                            : ""
+                                    }
+
+                                </div>
+
+                            </td>
+
+
+                            <td>
+                                ${escapeHtml(
+                                    attempt.lessonNo ??
+                                    ""
+                                )}
+                            </td>
+
+
+                            <td>
+                                ${escapeHtml(
+                                    attempt.score ??
+                                    0
+                                )}
+                            </td>
+
+
+                            <td>
+                                ${escapeHtml(
+                                    attempt.pointsEarned ??
+                                    0
+                                )}
+                            </td>
+
+
+                            <td>
+                                ${escapeHtml(
+                                    attempt.date ||
+                                    ""
+                                )}
+                            </td>
+
+                        </tr>
+                    `;
+
+                }
+            )
+            .join("");
+
+}
+
+
+/* ============================================================
+   ATTEMPTS COUNT
+============================================================ */
+
+function updateAttemptsCount(
+    count
+) {
+
+    const element =
+        document.getElementById(
+            "attemptsCount"
+        );
+
+
+    if (!element) {
+        return;
+    }
+
+
+    element.textContent =
+        count +
+        (
+            count === 1
+                ? " attempt"
+                : " attempts"
+        );
+
+}
+
+
+/* ============================================================
+   ATTEMPTS STATUS
+============================================================ */
+
+function setAttemptsStatus(
+    message
+) {
+
+    const status =
+        document.getElementById(
+            "attemptsStatus"
+        );
+
+
+    if (!status) {
+        return;
+    }
+
+
+    status.textContent =
+        message ||
+        "";
+
+}
+
+
+/* ============================================================
    API GET
 ============================================================ */
 
@@ -2421,7 +3007,20 @@ async function dashboardGet(
     }
 
 
-    return response.json();
+    const data =
+        await response.json();
+
+
+    if (!data) {
+
+        throw new Error(
+            "No response was received from the server."
+        );
+
+    }
+
+
+    return data;
 
 }
 
@@ -2464,7 +3063,20 @@ async function dashboardPost(
     }
 
 
-    return response.json();
+    const result =
+        await response.json();
+
+
+    if (!result) {
+
+        throw new Error(
+            "No response was received from the server."
+        );
+
+    }
+
+
+    return result;
 
 }
 
@@ -2484,11 +3096,14 @@ function setDashboardStatus(
         );
 
 
-    if (!element) return;
+    if (!element) {
+        return;
+    }
 
 
     element.textContent =
-        message || "";
+        message ||
+        "";
 
 
     element.className =
@@ -2521,11 +3136,14 @@ function setQuestionsStatus(
         );
 
 
-    if (!element) return;
+    if (!element) {
+        return;
+    }
 
 
     element.textContent =
-        message || "";
+        message ||
+        "";
 
 
     element.className =
@@ -2558,11 +3176,14 @@ function setQuestionEditorStatus(
         );
 
 
-    if (!element) return;
+    if (!element) {
+        return;
+    }
 
 
     element.textContent =
-        message || "";
+        message ||
+        "";
 
 
     element.className =
@@ -2599,11 +3220,14 @@ function setQuestionDeleteStatus(
         );
 
 
-    if (!element) return;
+    if (!element) {
+        return;
+    }
 
 
     element.textContent =
-        message || "";
+        message ||
+        "";
 
 
     element.className =
@@ -2621,465 +3245,6 @@ function setQuestionDeleteStatus(
         );
 
     }
-
-}
-
-/* ============================================================
-   QUIZ ATTEMPTS — ADMIN DASHBOARD
-   ============================================================ */
-
-function setupAttemptsControls() {
-
-    const refreshButton =
-        document.getElementById(
-            "refreshAttemptsButton"
-        );
-
-    const lessonFilter =
-        document.getElementById(
-            "attemptsLessonFilter"
-        );
-
-    const searchInput =
-        document.getElementById(
-            "attemptsSearchInput"
-        );
-
-
-    if (refreshButton) {
-
-        refreshButton.addEventListener(
-            "click",
-            function () {
-
-                if (!dashboardSession) {
-                    return;
-                }
-
-                loadQuizAttempts();
-
-            }
-        );
-
-    }
-
-
-    if (lessonFilter) {
-
-        lessonFilter.addEventListener(
-            "input",
-            filterQuizAttempts
-        );
-
-    }
-
-
-    if (searchInput) {
-
-        searchInput.addEventListener(
-            "input",
-            filterQuizAttempts
-        );
-
-    }
-
-}
-
-
-/* ============================================================
-   LOAD QUIZ ATTEMPTS
-   ============================================================ */
-
-async function loadQuizAttempts() {
-
-    if (!dashboardSession) {
-        return;
-    }
-
-
-    setAttemptsStatus(
-        "Loading quiz attempts..."
-    );
-
-
-    const tableBody =
-        document.getElementById(
-            "attemptsTableBody"
-        );
-
-
-    if (tableBody) {
-
-        tableBody.innerHTML = `
-            <tr>
-                <td
-                    colspan="5"
-                    class="dashboard-table-empty"
-                >
-                    Loading quiz attempts...
-                </td>
-            </tr>
-        `;
-
-    }
-
-
-    try {
-
-        const params =
-            new URLSearchParams({
-
-                action:
-                    "getSLCAdminQuizAttempts",
-
-                token:
-                    dashboardSession.token
-
-            });
-
-
-        const response =
-            await fetch(
-                API_URL + "?" + params.toString(),
-                {
-                    method: "GET"
-                }
-            );
-
-
-        if (!response.ok) {
-
-            throw new Error(
-                "Server returned HTTP " +
-                response.status +
-                "."
-            );
-
-        }
-
-
-        const data =
-            await response.json();
-
-
-        if (!data) {
-
-            throw new Error(
-                "No response was received from the server."
-            );
-
-        }
-
-
-        if (data.success === false) {
-
-            throw new Error(
-                data.message ||
-                data.error ||
-                "Unable to load quiz attempts."
-            );
-
-        }
-
-
-        dashboardAttempts =
-            Array.isArray(data.attempts)
-                ? data.attempts
-                : [];
-
-
-        renderQuizAttempts(
-            dashboardAttempts
-        );
-
-
-        setAttemptsStatus(
-            dashboardAttempts.length +
-            " attempt" +
-            (
-                dashboardAttempts.length === 1
-                    ? ""
-                    : "s"
-            ) +
-            " found."
-        );
-
-
-    } catch (error) {
-
-        console.error(
-            "Load quiz attempts error:",
-            error
-        );
-
-
-        dashboardAttempts = [];
-
-
-        const tableBody =
-            document.getElementById(
-                "attemptsTableBody"
-            );
-
-
-        if (tableBody) {
-
-            tableBody.innerHTML = `
-                <tr>
-                    <td
-                        colspan="5"
-                        class="dashboard-table-empty"
-                    >
-                        Unable to load quiz attempts.
-                    </td>
-                </tr>
-            `;
-
-        }
-
-
-        setAttemptsStatus(
-            error.message ||
-            "Unable to load quiz attempts."
-        );
-
-    }
-
-}
-
-
-/* ============================================================
-   FILTER QUIZ ATTEMPTS
-   ============================================================ */
-
-function filterQuizAttempts() {
-
-    const lessonInput =
-        document.getElementById(
-            "attemptsLessonFilter"
-        );
-
-    const searchInput =
-        document.getElementById(
-            "attemptsSearchInput"
-        );
-
-
-    const lessonValue =
-        lessonInput
-            ? String(
-                lessonInput.value || ""
-            ).trim().toLowerCase()
-            : "";
-
-
-    const searchValue =
-        searchInput
-            ? String(
-                searchInput.value || ""
-            ).trim().toLowerCase()
-            : "";
-
-
-    const filtered =
-        dashboardAttempts.filter(
-            function (attempt) {
-
-                const lesson =
-                    String(
-                        attempt.lessonNo || ""
-                    ).toLowerCase();
-
-
-                const name =
-                    String(
-                        attempt.name || ""
-                    ).toLowerCase();
-
-
-                const memberId =
-                    String(
-                        attempt.memberId || ""
-                    ).toLowerCase();
-
-
-                const matchesLesson =
-                    !lessonValue ||
-                    lesson === lessonValue;
-
-
-                const matchesSearch =
-                    !searchValue ||
-                    name.includes(searchValue) ||
-                    memberId.includes(searchValue);
-
-
-                return (
-                    matchesLesson &&
-                    matchesSearch
-                );
-
-            }
-        );
-
-
-    renderQuizAttempts(filtered);
-
-
-    setAttemptsStatus(
-        filtered.length +
-        " matching attempt" +
-        (
-            filtered.length === 1
-                ? ""
-                : "s"
-        ) +
-        "."
-    );
-
-}
-
-
-/* ============================================================
-   RENDER QUIZ ATTEMPTS
-   ============================================================ */
-
-function renderQuizAttempts(
-    attempts
-) {
-
-    const tableBody =
-        document.getElementById(
-            "attemptsTableBody"
-        );
-
-
-    const emptyState =
-        document.getElementById(
-            "attemptsEmpty"
-        );
-
-
-    if (!tableBody) {
-        return;
-    }
-
-
-    if (
-        !Array.isArray(attempts) ||
-        attempts.length === 0
-    ) {
-
-        tableBody.innerHTML = `
-            <tr>
-                <td
-                    colspan="5"
-                    class="dashboard-table-empty"
-                >
-                    No quiz attempts found.
-                </td>
-            </tr>
-        `;
-
-
-        if (emptyState) {
-            emptyState.hidden = false;
-        }
-
-
-        return;
-
-    }
-
-
-    if (emptyState) {
-        emptyState.hidden = true;
-    }
-
-
-    tableBody.innerHTML =
-        attempts.map(
-            function (attempt) {
-
-                return `
-                    <tr>
-
-                        <td>
-                            <div class="attempt-participant">
-                                <strong>
-                                    ${escapeHtml(
-                                        attempt.name || "Unknown"
-                                    )}
-                                </strong>
-
-                                ${
-                                    attempt.memberId
-                                        ? `
-                                            <small>
-                                                ${escapeHtml(
-                                                    attempt.memberId
-                                                )}
-                                            </small>
-                                        `
-                                        : ""
-                                }
-                            </div>
-                        </td>
-
-                        <td>
-                            ${escapeHtml(
-                                attempt.lessonNo ?? ""
-                            )}
-                        </td>
-
-                        <td>
-                            ${escapeHtml(
-                                attempt.score ?? 0
-                            )}
-                        </td>
-
-                        <td>
-                            ${escapeHtml(
-                                attempt.pointsEarned ?? 0
-                            )}
-                        </td>
-
-                        <td>
-                            ${escapeHtml(
-                                attempt.date || ""
-                            )}
-                        </td>
-
-                    </tr>
-                `;
-
-            }
-        ).join("");
-
-}
-
-
-/* ============================================================
-   ATTEMPTS STATUS
-   ============================================================ */
-
-function setAttemptsStatus(
-    message
-) {
-
-    const status =
-        document.getElementById(
-            "attemptsStatus"
-        );
-
-
-    if (!status) {
-        return;
-    }
-
-
-    status.textContent =
-        message || "";
 
 }
 
@@ -3232,7 +3397,9 @@ function setText(
         );
 
 
-    if (!element) return;
+    if (!element) {
+        return;
+    }
 
 
     element.textContent =
@@ -3256,7 +3423,9 @@ function setInputValue(
         );
 
 
-    if (!element) return;
+    if (!element) {
+        return;
+    }
 
 
     element.value =
@@ -3328,4 +3497,3 @@ function escapeHtml(
         );
 
 }
- 
