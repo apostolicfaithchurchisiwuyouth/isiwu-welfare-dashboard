@@ -227,7 +227,7 @@ function activateDashboardSection(
 ) {
     loadQuizAttempts();
 }
-
+}
 
 
 /* ============================================================
