@@ -4,15 +4,15 @@
 
 <head>
 
- 
 <meta charset="UTF-8">
 
 <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+name="viewport"
+content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+
 >
 
-<title>SLC Report Dashboard | AFC Isiu Youth Portal</title>
+<title>Quiz Coordinator Dashboard | AFC Isiu Youth Portal</title>
 
 <!-- =====================================================
      PWA
@@ -23,25 +23,28 @@
 <meta name="theme-color" content="#4A0754">
 
 <meta
-    name="mobile-web-app-capable"
-    content="yes"
+name="mobile-web-app-capable"
+content="yes"
+
 >
 
 <meta
-    name="apple-mobile-web-app-capable"
-    content="yes"
+name="apple-mobile-web-app-capable"
+content="yes"
+
 >
 
 <meta
-    name="apple-mobile-web-app-status-bar-style"
-    content="default"
+name="apple-mobile-web-app-status-bar-style"
+content="default"
+
 >
 
 <meta
-    name="apple-mobile-web-app-title"
-    content="AFC Isiu"
->
+name="apple-mobile-web-app-title"
+content="AFC Isiu"
 
+>
 
 <!-- =====================================================
      ICONS
@@ -58,7 +61,6 @@
     href="/images/logo.png"
 >
 
-
 <!-- =====================================================
      FONTS
 ====================================================== -->
@@ -70,7 +72,7 @@
 
 <link
     rel="preconnect"
-    href="https://fonts.gstatic.com"
+    href="https://fonts.googleapis.com"
     crossorigin
 >
 
@@ -78,7 +80,6 @@
     href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap"
     rel="stylesheet"
 >
-
 
 <!-- =====================================================
      FONT AWESOME
@@ -89,7 +90,6 @@
     rel="stylesheet"
 >
 
-
 <!-- =====================================================
      REMIX ICONS
 ====================================================== -->
@@ -98,7 +98,6 @@
     href="https://cdn.jsdelivr.net/npm/remixicon@4.6.0/fonts/remixicon.css"
     rel="stylesheet"
 >
-
 
 <!-- =====================================================
      PORTAL CSS
@@ -118,7 +117,491 @@
     rel="stylesheet"
     href="../css/slcreport-dashboard.css"
 >
- 
+
+<style>
+
+/* =========================================================
+   QUIZ COORDINATOR DASHBOARD
+   PAGE-SPECIFIC STRUCTURE
+========================================================= */
+
+.quiz-coordinator-page {
+    width: 100%;
+    max-width: 1500px;
+    margin: 0 auto;
+    padding: 24px 20px 50px;
+}
+
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.quiz-coordinator-hero {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+
+    padding: 28px;
+    margin-bottom: 22px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #4A0754 0%,
+            #31043A 100%
+        );
+
+    border-radius: 20px;
+
+    color: #ffffff;
+
+    overflow: hidden;
+}
+
+.quiz-coordinator-hero-content {
+    min-width: 0;
+}
+
+.quiz-coordinator-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    margin-bottom: 10px;
+
+    font-family: "DM Sans", sans-serif;
+    font-size: .72rem;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+
+    opacity: .82;
+}
+
+.quiz-coordinator-hero h1 {
+    margin: 0;
+
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-size: clamp(1.45rem, 3vw, 2.2rem);
+    line-height: 1.05;
+    font-weight: 700;
+}
+
+.quiz-coordinator-hero h1 span {
+    opacity: .72;
+}
+
+.quiz-coordinator-hero p {
+    max-width: 680px;
+
+    margin: 10px 0 0;
+
+    font-family: "DM Sans", sans-serif;
+    font-size: .86rem;
+    line-height: 1.6;
+
+    opacity: .82;
+}
+
+.quiz-coordinator-hero-icon {
+    width: 68px;
+    height: 68px;
+
+    flex: 0 0 68px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid rgba(255,255,255,.18);
+    border-radius: 18px;
+
+    background: rgba(255,255,255,.08);
+
+    font-size: 1.45rem;
+}
+
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+.quiz-coordinator-nav {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    margin-bottom: 24px;
+    padding: 6px;
+
+    overflow-x: auto;
+
+    background: #ffffff;
+    border: 1px solid #ece7ef;
+    border-radius: 14px;
+
+    scrollbar-width: none;
+}
+
+.quiz-coordinator-nav::-webkit-scrollbar {
+    display: none;
+}
+
+.quiz-nav-button {
+    flex: 0 0 auto;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    min-height: 40px;
+    padding: 0 14px;
+
+    border: 0;
+    border-radius: 9px;
+
+    background: transparent;
+    color: #665d69;
+
+    font-family: "DM Sans", sans-serif;
+    font-size: .76rem;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        background .2s ease,
+        color .2s ease;
+}
+
+.quiz-nav-button:hover {
+    background: #f6f1f7;
+    color: #4A0754;
+}
+
+.quiz-nav-button.active {
+    background: #4A0754;
+    color: #ffffff;
+}
+
+
+/* =========================================================
+   PAGE SECTIONS
+========================================================= */
+
+.quiz-dashboard-section {
+    display: none;
+}
+
+.quiz-dashboard-section.active {
+    display: block;
+}
+
+
+/* =========================================================
+   SECTION HEADING
+========================================================= */
+
+.quiz-coordinator-section-heading {
+    margin-bottom: 18px;
+}
+
+.quiz-coordinator-section-heading span {
+    display: block;
+
+    margin-bottom: 5px;
+
+    font-family: "DM Sans", sans-serif;
+    font-size: .68rem;
+    font-weight: 800;
+    letter-spacing: .08em;
+
+    color: #7d7280;
+}
+
+.quiz-coordinator-section-heading h2 {
+    margin: 0;
+
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-size: 1.25rem;
+    line-height: 1.2;
+
+    color: #1d1720;
+}
+
+.quiz-coordinator-section-heading p {
+    margin: 6px 0 0;
+
+    max-width: 700px;
+
+    font-family: "DM Sans", sans-serif;
+    font-size: .78rem;
+    line-height: 1.55;
+
+    color: #756c78;
+}
+
+
+/* =========================================================
+   CONTROLS
+========================================================= */
+
+.slc-dashboard-controls {
+    display: flex;
+    align-items: flex-end;
+    gap: 12px;
+
+    margin-bottom: 20px;
+}
+
+.slc-control-field {
+    flex: 1;
+    max-width: 300px;
+}
+
+.slc-control-field label {
+    display: block;
+
+    margin-bottom: 6px;
+
+    font-family: "DM Sans", sans-serif;
+    font-size: .72rem;
+    font-weight: 700;
+
+    color: #554b59;
+}
+
+.slc-control-input {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+
+    height: 42px;
+    padding: 0 12px;
+
+    background: #ffffff;
+    border: 1px solid #e5dfe8;
+    border-radius: 10px;
+}
+
+.slc-control-input i {
+    color: #4A0754;
+    font-size: .78rem;
+}
+
+.slc-control-input input {
+    width: 100%;
+
+    border: 0;
+    outline: 0;
+
+    background: transparent;
+
+    font-family: "DM Sans", sans-serif;
+    font-size: .78rem;
+    color: #241e26;
+}
+
+.slc-dashboard-load-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    height: 42px;
+    padding: 0 17px;
+
+    border: 0;
+    border-radius: 10px;
+
+    background: #4A0754;
+    color: #ffffff;
+
+    font-family: "DM Sans", sans-serif;
+    font-size: .76rem;
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+
+/* =========================================================
+   QUICK AREA CARDS
+========================================================= */
+
+.quiz-quick-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+
+    gap: 12px;
+
+    margin-bottom: 24px;
+}
+
+.quiz-quick-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    min-height: 78px;
+    padding: 14px;
+
+    background: #ffffff;
+
+    border: 1px solid #ece7ef;
+    border-radius: 13px;
+
+    cursor: pointer;
+
+    transition:
+        transform .18s ease,
+        border-color .18s ease;
+}
+
+.quiz-quick-card:hover {
+    transform: translateY(-1px);
+    border-color: #d9c9dc;
+}
+
+.quiz-quick-icon {
+    width: 38px;
+    height: 38px;
+
+    flex: 0 0 38px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 10px;
+
+    background: #f5edf7;
+    color: #4A0754;
+
+    font-size: .82rem;
+}
+
+.quiz-quick-card span {
+    display: block;
+
+    margin-bottom: 3px;
+
+    font-family: "DM Sans", sans-serif;
+    font-size: .67rem;
+    color: #766d79;
+}
+
+.quiz-quick-card strong {
+    display: block;
+
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-size: .92rem;
+
+    color: #241d27;
+}
+
+
+/* =========================================================
+   MANAGEMENT PLACEHOLDER
+========================================================= */
+
+.quiz-management-panel {
+    padding: 24px;
+
+    background: #ffffff;
+
+    border: 1px solid #ece7ef;
+    border-radius: 16px;
+}
+
+.quiz-management-panel-inner {
+    min-height: 180px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+}
+
+.quiz-management-panel-inner i {
+    margin-bottom: 12px;
+
+    font-size: 1.35rem;
+    color: #4A0754;
+}
+
+.quiz-management-panel-inner h3 {
+    margin: 0;
+
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-size: 1rem;
+
+    color: #251e28;
+}
+
+.quiz-management-panel-inner p {
+    max-width: 560px;
+
+    margin: 7px 0 0;
+
+    font-family: "DM Sans", sans-serif;
+    font-size: .76rem;
+    line-height: 1.55;
+
+    color: #776d7b;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 900px) {
+
+    .quiz-quick-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+}
+
+@media (max-width: 640px) {
+
+    .quiz-coordinator-page {
+        padding: 18px 14px 40px;
+    }
+
+    .quiz-coordinator-hero {
+        padding: 22px;
+    }
+
+    .quiz-coordinator-hero-icon {
+        display: none;
+    }
+
+    .slc-dashboard-controls {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .slc-control-field {
+        max-width: none;
+    }
+
+    .quiz-quick-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+</style>
 
 </head>
 
@@ -126,13 +609,11 @@
 
 <div class="app-layout">
 
- 
 <!-- =====================================================
      SIDEBAR
 ====================================================== -->
 
 <div id="app-sidebar"></div>
-
 
 <!-- =====================================================
      MAIN AREA
@@ -140,529 +621,1064 @@
 
 <div class="main-area">
 
+<!-- =====================================================
+     TOPBAR
+====================================================== -->
 
-    <!-- =================================================
-         TOPBAR
-    ================================================== -->
+<div id="app-topbar"></div>
 
-    <div id="app-topbar"></div>
+<!-- =====================================================
+     PAGE CONTENT
+====================================================== -->
 
+<main class="dashboard-content quiz-coordinator-page">
 
-    <!-- =================================================
-         PAGE CONTENT
-    ================================================== -->
+<!-- =====================================================
+     HERO
+====================================================== -->
 
-    <main class="dashboard-content slc-dashboard-page">
+<section class="quiz-coordinator-hero">
 
+ 
+<div class="quiz-coordinator-hero-content">
 
-        <!-- =================================================
-             HERO
-        ================================================== -->
+    <div class="quiz-coordinator-eyebrow">
 
-        <section class="slc-dashboard-hero">
+        <i class="fa-solid fa-shield-halved"></i>
 
-            <div class="slc-dashboard-hero-content">
+        Quiz Coordinator Area
 
-                <div class="slc-dashboard-eyebrow">
+    </div>
 
-                    <i class="fa-solid fa-chart-column"></i>
+    <h1>
+        Weekly quiz
+        <span>control centre.</span>
+    </h1>
 
-                    SLC Report Dashboard
-
-                </div>
-
-
-                <h1>
-                    Weekly quiz
-                    <span>participation.</span>
-                </h1>
-
-
-                <p>
-                    Monitor your group's weekly SLC quiz
-                    participation and follow up with members
-                    who have not participated.
-                </p>
-
-            </div>
-
-
-            <div class="slc-dashboard-hero-icon">
-
-                <i class="fa-solid fa-chart-line"></i>
-
-            </div>
-
-        </section>
-
-
-        <!-- =================================================
-             CONTROLS
-        ================================================== -->
-
-        <section class="slc-dashboard-controls">
-
-            <div class="slc-control-field">
-
-                <label for="dashboardLessonNo">
-                    Lesson
-                </label>
-
-                <div class="slc-control-input">
-
-                    <i class="fa-solid fa-book-open"></i>
-
-                    <input
-                        type="text"
-                        id="dashboardLessonNo"
-                        placeholder="e.g. 89"
-                        inputmode="numeric"
-                    >
-
-                </div>
-
-            </div>
-
-
-            <button
-                type="button"
-                id="loadDashboardButton"
-                class="slc-dashboard-load-btn"
-            >
-
-                <i class="fa-solid fa-rotate"></i>
-
-                <span>
-                    Load Report
-                </span>
-
-            </button>
-
-        </section>
-
-
-        <!-- =================================================
-             STATUS
-        ================================================== -->
-
-        <div
-            id="dashboardStatus"
-            class="slc-dashboard-status hidden"
-            role="status"
-        ></div>
-
-
-        <!-- =================================================
-             SUMMARY
-        ================================================== -->
-
-        <section
-            id="dashboardSummary"
-            class="hidden"
-        >
-
-
-            <!-- =================================================
-                 LESSON HEADER
-            ================================================== -->
-
-            <div class="slc-dashboard-section-heading">
-
-                <div>
-
-                    <span class="slc-dashboard-section-label">
-                        CURRENT REPORT
-                    </span>
-
-                    <h2 id="dashboardLessonTitle">
-                        Weekly SLC Report
-                    </h2>
-
-                </div>
-
-                <div
-                    id="dashboardReportDate"
-                    class="slc-dashboard-date"
-                >
-                    —
-                </div>
-
-            </div>
-
-
-            <!-- =================================================
-                 STATISTICS
-            ================================================== -->
-
-            <section class="slc-stat-grid">
-
-
-                <!-- TOTAL -->
-
-                <article class="slc-stat-card">
-
-                    <div class="slc-stat-icon purple">
-
-                        <i class="fa-solid fa-users"></i>
-
-                    </div>
-
-                    <div class="slc-stat-content">
-
-                        <span>
-                            Total Members
-                        </span>
-
-                        <strong id="statTotalMembers">
-                            0
-                        </strong>
-
-                    </div>
-
-                </article>
-
-
-                <!-- PARTICIPATED -->
-
-                <article class="slc-stat-card">
-
-                    <div class="slc-stat-icon green">
-
-                        <i class="fa-solid fa-circle-check"></i>
-
-                    </div>
-
-                    <div class="slc-stat-content">
-
-                        <span>
-                            Participated
-                        </span>
-
-                        <strong id="statParticipated">
-                            0
-                        </strong>
-
-                    </div>
-
-                </article>
-
-
-                <!-- NOT PARTICIPATED -->
-
-                <article class="slc-stat-card">
-
-                    <div class="slc-stat-icon orange">
-
-                        <i class="fa-solid fa-user-clock"></i>
-
-                    </div>
-
-                    <div class="slc-stat-content">
-
-                        <span>
-                            Yet to Participate
-                        </span>
-
-                        <strong id="statNotParticipated">
-                            0
-                        </strong>
-
-                    </div>
-
-                </article>
-
-
-                <!-- RATE -->
-
-                <article class="slc-stat-card">
-
-                    <div class="slc-stat-icon cyan">
-
-                        <i class="fa-solid fa-chart-pie"></i>
-
-                    </div>
-
-                    <div class="slc-stat-content">
-
-                        <span>
-                            Participation Rate
-                        </span>
-
-                        <strong id="statParticipationRate">
-                            0%
-                        </strong>
-
-                    </div>
-
-                </article>
-
-            </section>
-
-
-            <!-- =================================================
-                 PARTICIPATION PROGRESS
-            ================================================== -->
-
-            <section class="slc-progress-card">
-
-                <div class="slc-progress-header">
-
-                    <div>
-
-                        <span>
-                            Participation progress
-                        </span>
-
-                        <strong id="progressPercentage">
-                            0%
-                        </strong>
-
-                    </div>
-
-                </div>
-
-
-                <div class="slc-progress-track">
-
-                    <div
-                        id="participationProgress"
-                        class="slc-progress-fill"
-                        style="width: 0%;"
-                    ></div>
-
-                </div>
-
-
-                <p id="progressDescription">
-                    No participation data loaded yet.
-                </p>
-
-            </section>
-
-
-            <!-- =================================================
-                 GROUP INFORMATION
-            ================================================== -->
-
-            <section class="slc-group-card">
-
-                <div class="slc-group-card-heading">
-
-                    <div class="slc-group-icon">
-
-                        <i class="fa-solid fa-layer-group"></i>
-
-                    </div>
-
-                    <div>
-
-                        <h2>
-                            Group information
-                        </h2>
-
-                        <p>
-                            Details from the submitted weekly report.
-                        </p>
-
-                    </div>
-
-                </div>
-
-
-                <div class="slc-group-grid">
-
-                    <div class="slc-group-item">
-
-                        <span>
-                            Group Name
-                        </span>
-
-                        <strong id="groupNameDisplay">
-                            —
-                        </strong>
-
-                    </div>
-
-
-                    <div class="slc-group-item">
-
-                        <span>
-                            Group Leader
-                        </span>
-
-                        <strong id="groupLeaderDisplay">
-                            —
-                        </strong>
-
-                    </div>
-
-
-                    <div class="slc-group-item">
-
-                        <span>
-                            Report Version
-                        </span>
-
-                        <strong id="reportVersionDisplay">
-                            —
-                        </strong>
-
-                    </div>
-
-
-                    <div class="slc-group-item">
-
-                        <span>
-                            Report Date
-                        </span>
-
-                        <strong id="reportDateDisplay">
-                            —
-                        </strong>
-
-                    </div>
-
-                </div>
-
-            </section>
-
-
-            <!-- =================================================
-                 NON PARTICIPANTS
-            ================================================== -->
-
-            <section class="slc-members-card">
-
-                <div class="slc-members-heading">
-
-                    <div>
-
-                        <span class="slc-dashboard-section-label">
-                            FOLLOW-UP
-                        </span>
-
-                        <h2>
-                            Members yet to participate
-                        </h2>
-
-                        <p>
-                            These members were listed as not having
-                            participated in the selected lesson.
-                        </p>
-
-                    </div>
-
-
-                    <div
-                        id="nonParticipantCount"
-                        class="slc-count-badge"
-                    >
-                        0
-                    </div>
-
-                </div>
-
-
-                <div
-                    id="nonParticipantsDisplay"
-                    class="slc-member-list"
-                >
-
-                    <div class="slc-empty-state">
-
-                        <i class="fa-solid fa-users"></i>
-
-                        <h3>
-                            No members listed
-                        </h3>
-
-                        <p>
-                            Load a report to see members who have
-                            not participated.
-                        </p>
-
-                    </div>
-
-                </div>
-
-            </section>
-
-
-            <!-- =================================================
-                 OBSERVATIONS
-            ================================================== -->
-
-            <section
-                id="observationsCard"
-                class="slc-observation-card hidden"
-            >
-
-                <div class="slc-observation-icon">
-
-                    <i class="fa-solid fa-message"></i>
-
-                </div>
-
-                <div>
-
-                    <span>
-                        GROUP OBSERVATION
-                    </span>
-
-                    <p id="observationsDisplay"></p>
-
-                </div>
-
-            </section>
-
-
-        </section>
-
-
-        <!-- =================================================
-             EMPTY STATE
-        ================================================== -->
-
-        <section
-            id="dashboardEmpty"
-            class="slc-dashboard-empty"
-        >
-
-            <div class="slc-empty-icon">
-
-                <i class="fa-solid fa-chart-column"></i>
-
-            </div>
-
-            <h2>
-                Select a lesson report
-            </h2>
-
-            <p>
-                Enter a lesson number above and load the report
-                to view the group's weekly participation.
-            </p>
-
-        </section>
-
-
-    </main>
+    <p>
+        Manage quiz questions, attempts, reviews, settings,
+        members and SLC reports from one secure administration
+        area.
+    </p>
 
 </div>
 
+
+<div class="quiz-coordinator-hero-icon">
+
+    <i class="fa-solid fa-sliders"></i>
+
+</div>
+ 
+
+</section>
+
+<!-- =====================================================
+     NAVIGATION
+====================================================== -->
+
+<nav
+    class="quiz-coordinator-nav"
+    aria-label="Quiz coordinator navigation"
+>
+
+ 
+<button
+    type="button"
+    class="quiz-nav-button active"
+    data-dashboard-section="overview"
+>
+
+    <i class="fa-solid fa-chart-column"></i>
+
+    Overview
+
+</button>
+
+
+<button
+    type="button"
+    class="quiz-nav-button"
+    data-dashboard-section="questions"
+>
+
+    <i class="fa-solid fa-circle-question"></i>
+
+    Questions
+
+</button>
+
+
+<button
+    type="button"
+    class="quiz-nav-button"
+    data-dashboard-section="attempts"
+>
+
+    <i class="fa-solid fa-file-circle-check"></i>
+
+    Attempts
+
+</button>
+
+
+<button
+    type="button"
+    class="quiz-nav-button"
+    data-dashboard-section="reviews"
+>
+
+    <i class="fa-solid fa-comments"></i>
+
+    Reviews
+
+</button>
+
+
+<button
+    type="button"
+    class="quiz-nav-button"
+    data-dashboard-section="settings"
+>
+
+    <i class="fa-solid fa-gear"></i>
+
+    Settings
+
+</button>
+
+
+<button
+    type="button"
+    class="quiz-nav-button"
+    data-dashboard-section="members"
+>
+
+    <i class="fa-solid fa-users"></i>
+
+    Members
+
+</button>
+
+
+<button
+    type="button"
+    class="quiz-nav-button"
+    data-dashboard-section="reports"
+>
+
+    <i class="fa-solid fa-file-lines"></i>
+
+    SLC Reports
+
+</button>
+ 
+
+</nav>
+
+<!-- =====================================================
+     STATUS
+====================================================== -->
+
+<div
+    id="dashboardStatus"
+    class="slc-dashboard-status hidden"
+    role="status"
+></div>
+
+<!-- =====================================================
+     OVERVIEW
+====================================================== -->
+
+<section
+    id="dashboardSectionOverview"
+    class="quiz-dashboard-section active"
+>
+
+ 
+<div class="quiz-coordinator-section-heading">
+
+    <span>
+        OVERVIEW
+    </span>
+
+    <h2>
+        Quiz activity at a glance
+    </h2>
+
+    <p>
+        Monitor the current quiz and quickly move into any
+        area that needs attention.
+    </p>
+
+</div>
+
+
+<!-- =================================================
+     LESSON CONTROL
+================================================== -->
+
+<section class="slc-dashboard-controls">
+
+    <div class="slc-control-field">
+
+        <label for="dashboardLessonNo">
+            Lesson
+        </label>
+
+        <div class="slc-control-input">
+
+            <i class="fa-solid fa-book-open"></i>
+
+            <input
+                type="text"
+                id="dashboardLessonNo"
+                placeholder="e.g. 89"
+                inputmode="numeric"
+            >
+
+        </div>
+
+    </div>
+
+
+    <button
+        type="button"
+        id="loadDashboardButton"
+        class="slc-dashboard-load-btn"
+    >
+
+        <i class="fa-solid fa-rotate"></i>
+
+        <span>
+            Load Report
+        </span>
+
+    </button>
+
+</section>
+
+
+<!-- =================================================
+     QUICK LINKS
+================================================== -->
+
+<div class="quiz-quick-grid">
+
+
+    <article
+        class="quiz-quick-card"
+        data-dashboard-section="questions"
+    >
+
+        <div class="quiz-quick-icon">
+
+            <i class="fa-solid fa-circle-question"></i>
+
+        </div>
+
+        <div>
+
+            <span>
+                Manage
+            </span>
+
+            <strong>
+                Quiz Questions
+            </strong>
+
+        </div>
+
+    </article>
+
+
+    <article
+        class="quiz-quick-card"
+        data-dashboard-section="attempts"
+    >
+
+        <div class="quiz-quick-icon">
+
+            <i class="fa-solid fa-file-circle-check"></i>
+
+        </div>
+
+        <div>
+
+            <span>
+                Review
+            </span>
+
+            <strong>
+                Quiz Attempts
+            </strong>
+
+        </div>
+
+    </article>
+
+
+    <article
+        class="quiz-quick-card"
+        data-dashboard-section="settings"
+    >
+
+        <div class="quiz-quick-icon">
+
+            <i class="fa-solid fa-gear"></i>
+
+        </div>
+
+        <div>
+
+            <span>
+                Configure
+            </span>
+
+            <strong>
+                Quiz Settings
+            </strong>
+
+        </div>
+
+    </article>
+
+
+    <article
+        class="quiz-quick-card"
+        data-dashboard-section="reports"
+    >
+
+        <div class="quiz-quick-icon">
+
+            <i class="fa-solid fa-file-lines"></i>
+
+        </div>
+
+        <div>
+
+            <span>
+                View
+            </span>
+
+            <strong>
+                SLC Reports
+            </strong>
+
+        </div>
+
+    </article>
+
+
+</div>
+
+
+<!-- =================================================
+     EXISTING WORKING SUMMARY
+================================================== -->
+
+<section
+    id="dashboardSummary"
+    class="hidden"
+>
+
+
+    <div class="slc-dashboard-section-heading">
+
+        <div>
+
+            <span class="slc-dashboard-section-label">
+                CURRENT QUIZ
+            </span>
+
+            <h2 id="dashboardLessonTitle">
+                Weekly SLC Quiz
+            </h2>
+
+        </div>
+
+        <div
+            id="dashboardReportDate"
+            class="slc-dashboard-date"
+        >
+            —
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         STATISTICS
+    ================================================== -->
+
+    <section class="slc-stat-grid">
+
+
+        <article class="slc-stat-card">
+
+            <div class="slc-stat-icon purple">
+
+                <i class="fa-solid fa-users"></i>
+
+            </div>
+
+            <div class="slc-stat-content">
+
+                <span>
+                    Total Members
+                </span>
+
+                <strong id="statTotalMembers">
+                    0
+                </strong>
+
+            </div>
+
+        </article>
+
+
+        <article class="slc-stat-card">
+
+            <div class="slc-stat-icon green">
+
+                <i class="fa-solid fa-circle-check"></i>
+
+            </div>
+
+            <div class="slc-stat-content">
+
+                <span>
+                    Participated
+                </span>
+
+                <strong id="statParticipated">
+                    0
+                </strong>
+
+            </div>
+
+        </article>
+
+
+        <article class="slc-stat-card">
+
+            <div class="slc-stat-icon orange">
+
+                <i class="fa-solid fa-user-clock"></i>
+
+            </div>
+
+            <div class="slc-stat-content">
+
+                <span>
+                    Yet to Participate
+                </span>
+
+                <strong id="statNotParticipated">
+                    0
+                </strong>
+
+            </div>
+
+        </article>
+
+
+        <article class="slc-stat-card">
+
+            <div class="slc-stat-icon cyan">
+
+                <i class="fa-solid fa-chart-pie"></i>
+
+            </div>
+
+            <div class="slc-stat-content">
+
+                <span>
+                    Participation Rate
+                </span>
+
+                <strong id="statParticipationRate">
+                    0%
+                </strong>
+
+            </div>
+
+        </article>
+
+    </section>
+
+
+    <!-- =================================================
+         PROGRESS
+    ================================================== -->
+
+    <section class="slc-progress-card">
+
+        <div class="slc-progress-header">
+
+            <div>
+
+                <span>
+                    Participation progress
+                </span>
+
+                <strong id="progressPercentage">
+                    0%
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="slc-progress-track">
+
+            <div
+                id="participationProgress"
+                class="slc-progress-fill"
+                style="width: 0%;"
+            ></div>
+
+        </div>
+
+
+        <p id="progressDescription">
+            No participation data loaded yet.
+        </p>
+
+    </section>
+
+
+    <!-- =================================================
+         GROUP INFORMATION
+    ================================================== -->
+
+    <section class="slc-group-card">
+
+        <div class="slc-group-card-heading">
+
+            <div class="slc-group-icon">
+
+                <i class="fa-solid fa-layer-group"></i>
+
+            </div>
+
+            <div>
+
+                <h2>
+                    Group information
+                </h2>
+
+                <p>
+                    Details from the submitted weekly report.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="slc-group-grid">
+
+            <div class="slc-group-item">
+
+                <span>
+                    Group Name
+                </span>
+
+                <strong id="groupNameDisplay">
+                    —
+                </strong>
+
+            </div>
+
+
+            <div class="slc-group-item">
+
+                <span>
+                    Group Leader
+                </span>
+
+                <strong id="groupLeaderDisplay">
+                    —
+                </strong>
+
+            </div>
+
+
+            <div class="slc-group-item">
+
+                <span>
+                    Report Version
+                </span>
+
+                <strong id="reportVersionDisplay">
+                    —
+                </strong>
+
+            </div>
+
+
+            <div class="slc-group-item">
+
+                <span>
+                    Report Date
+                </span>
+
+                <strong id="reportDateDisplay">
+                    —
+                </strong>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =================================================
+         NON PARTICIPANTS
+    ================================================== -->
+
+    <section class="slc-members-card">
+
+        <div class="slc-members-heading">
+
+            <div>
+
+                <span class="slc-dashboard-section-label">
+                    FOLLOW-UP
+                </span>
+
+                <h2>
+                    Members yet to participate
+                </h2>
+
+                <p>
+                    These members were listed as not having
+                    participated in the selected lesson.
+                </p>
+
+            </div>
+
+
+            <div
+                id="nonParticipantCount"
+                class="slc-count-badge"
+            >
+                0
+            </div>
+
+        </div>
+
+
+        <div
+            id="nonParticipantsDisplay"
+            class="slc-member-list"
+        >
+
+            <div class="slc-empty-state">
+
+                <i class="fa-solid fa-users"></i>
+
+                <h3>
+                    No members listed
+                </h3>
+
+                <p>
+                    Load a report to see members who have
+                    not participated.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =================================================
+         OBSERVATIONS
+    ================================================== -->
+
+    <section
+        id="observationsCard"
+        class="slc-observation-card hidden"
+    >
+
+        <div class="slc-observation-icon">
+
+            <i class="fa-solid fa-message"></i>
+
+        </div>
+
+        <div>
+
+            <span>
+                GROUP OBSERVATION
+            </span>
+
+            <p id="observationsDisplay"></p>
+
+        </div>
+
+    </section>
+
+
+</section>
+
+
+<!-- =================================================
+     EMPTY STATE
+================================================== -->
+
+<section
+    id="dashboardEmpty"
+    class="slc-dashboard-empty"
+>
+
+    <div class="slc-empty-icon">
+
+        <i class="fa-solid fa-chart-column"></i>
+
+    </div>
+
+    <h2>
+        Quiz coordinator overview
+    </h2>
+
+    <p>
+        Load a lesson report above to view participation,
+        group information and follow-up details.
+    </p>
+
+</section>
+ 
+
+</section>
+
+<!-- =====================================================
+     QUIZ QUESTIONS
+====================================================== -->
+
+<section
+    id="dashboardSectionQuestions"
+    class="quiz-dashboard-section"
+>
+
+ 
+<div class="quiz-coordinator-section-heading">
+
+    <span>
+        QUIZ MANAGEMENT
+    </span>
+
+    <h2>
+        Quiz Questions
+    </h2>
+
+    <p>
+        View and manage the questions used by the weekly SLC
+        quiz. Editing and deletion will be connected to the
+        secure backend in the next stage.
+    </p>
+
+</div>
+
+
+<div class="quiz-management-panel">
+
+    <div class="quiz-management-panel-inner">
+
+        <i class="fa-solid fa-circle-question"></i>
+
+        <h3>
+            Questions management
+        </h3>
+
+        <p>
+            This area is ready for the existing
+            <strong>Quiz Questions</strong> data to be connected.
+            We will add viewing, adding, editing and controlled
+            deletion without changing the public quiz.
+        </p>
+
+    </div>
+
+</div>
+ 
+
+</section>
+
+<!-- =====================================================
+     QUIZ ATTEMPTS
+====================================================== -->
+
+<section
+    id="dashboardSectionAttempts"
+    class="quiz-dashboard-section"
+>
+
+ 
+<div class="quiz-coordinator-section-heading">
+
+    <span>
+        PARTICIPATION
+    </span>
+
+    <h2>
+        Quiz Attempts
+    </h2>
+
+    <p>
+        View submitted quiz attempts, participants, scores and
+        submission information.
+    </p>
+
+</div>
+
+
+<div class="quiz-management-panel">
+
+    <div class="quiz-management-panel-inner">
+
+        <i class="fa-solid fa-file-circle-check"></i>
+
+        <h3>
+            Quiz attempts
+        </h3>
+
+        <p>
+            The existing <strong>Quiz Attempts</strong> data will
+            be connected here so coordinators can inspect
+            individual submissions and scores.
+        </p>
+
+    </div>
+
+</div>
+ 
+
+</section>
+
+<!-- =====================================================
+     QUIZ REVIEWS
+====================================================== -->
+
+<section
+    id="dashboardSectionReviews"
+    class="quiz-dashboard-section"
+>
+
+ 
+<div class="quiz-coordinator-section-heading">
+
+    <span>
+        ANSWER REVIEW
+    </span>
+
+    <h2>
+        Quiz Reviews
+    </h2>
+
+    <p>
+        Review submitted quiz answers and feedback connected
+        to members' completed quizzes.
+    </p>
+
+</div>
+
+
+<div class="quiz-management-panel">
+
+    <div class="quiz-management-panel-inner">
+
+        <i class="fa-solid fa-comments"></i>
+
+        <h3>
+            Quiz reviews
+        </h3>
+
+        <p>
+            The existing review information will be connected
+            here after the attempts section is confirmed.
+        </p>
+
+    </div>
+
+</div>
+ 
+
+</section>
+
+<!-- =====================================================
+     QUIZ SETTINGS
+====================================================== -->
+
+<section
+    id="dashboardSectionSettings"
+    class="quiz-dashboard-section"
+>
+
+ 
+<div class="quiz-coordinator-section-heading">
+
+    <span>
+        QUIZ CONFIGURATION
+    </span>
+
+    <h2>
+        Quiz Settings
+    </h2>
+
+    <p>
+        View and manage the settings that control the current
+        weekly quiz.
+    </p>
+
+</div>
+
+
+<div class="quiz-management-panel">
+
+    <div class="quiz-management-panel-inner">
+
+        <i class="fa-solid fa-gear"></i>
+
+        <h3>
+            Quiz settings
+        </h3>
+
+        <p>
+            The existing <strong>Quiz Settings</strong> sheet and
+            its backend functions will be connected here. We will
+            preserve the current public quiz behaviour.
+        </p>
+
+    </div>
+
+</div>
+ 
+
+</section>
+
+<!-- =====================================================
+     MEMBERS
+====================================================== -->
+
+<section
+    id="dashboardSectionMembers"
+    class="quiz-dashboard-section"
+>
+
+ 
+<div class="quiz-coordinator-section-heading">
+
+    <span>
+        MEMBERS
+    </span>
+
+    <h2>
+        Quiz Members
+    </h2>
+
+    <p>
+        View members and their quiz participation history.
+    </p>
+
+</div>
+
+
+<div class="quiz-management-panel">
+
+    <div class="quiz-management-panel-inner">
+
+        <i class="fa-solid fa-users"></i>
+
+        <h3>
+            Members and quiz history
+        </h3>
+
+        <p>
+            The existing <strong>Members</strong> and quiz-history
+            functions will be connected here so coordinators can
+            inspect individual participation records.
+        </p>
+
+    </div>
+
+</div>
+ 
+
+</section>
+
+<!-- =====================================================
+     SLC REPORTS
+====================================================== -->
+
+<section
+    id="dashboardSectionReports"
+    class="quiz-dashboard-section"
+>
+
+ 
+<div class="quiz-coordinator-section-heading">
+
+    <span>
+        WEEKLY REPORTING
+    </span>
+
+    <h2>
+        SLC Reports
+    </h2>
+
+    <p>
+        View the weekly SLC reports and their participation
+        information.
+    </p>
+
+</div>
+
+
+<div class="quiz-management-panel">
+
+    <div class="quiz-management-panel-inner">
+
+        <i class="fa-solid fa-file-lines"></i>
+
+        <h3>
+            SLC Reports
+        </h3>
+
+        <p>
+            The working SLC report system remains part of this
+            dashboard. Report viewing and controlled editing will
+            be connected after the core quiz management sections
+            are stable.
+        </p>
+
+    </div>
+
+</div>
+ 
+
+</section>
+
+</main>
+
+</div>
 
 <!-- =====================================================
      MOBILE BOTTOM NAV
 ====================================================== -->
 
 <div id="app-bottom-nav"></div>
- 
 
 </div>
 
-<!-- =========================================================
+<!-- =====================================================
      JAVASCRIPT
-========================================================= -->
+====================================================== -->
 
 <script src="../js/pwa.js"></script>
 
@@ -671,6 +1687,88 @@
 <script src="../js/slcreport-dashboard.js"></script>
 
 <script src="../js/layout.js"></script>
+
+<script>
+
+/* =========================================================
+   QUIZ COORDINATOR NAVIGATION
+========================================================= */
+
+(function () {
+
+    function activateSection(sectionName) {
+
+        const buttons =
+            document.querySelectorAll(
+                ".quiz-nav-button"
+            );
+
+        const sections =
+            document.querySelectorAll(
+                ".quiz-dashboard-section"
+            );
+
+
+        buttons.forEach(function (button) {
+
+            button.classList.toggle(
+                "active",
+                button.dataset.dashboardSection === sectionName
+            );
+
+        });
+
+
+        sections.forEach(function (section) {
+
+            section.classList.toggle(
+                "active",
+                section.id ===
+                    "dashboardSection" +
+                    sectionName.charAt(0).toUpperCase() +
+                    sectionName.slice(1)
+            );
+
+        });
+
+    }
+
+
+    document.addEventListener(
+        "click",
+        function (event) {
+
+            const target =
+                event.target.closest(
+                    "[data-dashboard-section]"
+                );
+
+
+            if (!target) {
+                return;
+            }
+
+
+            const sectionName =
+                target.dataset.dashboardSection;
+
+
+            if (!sectionName) {
+                return;
+            }
+
+
+            activateSection(
+                sectionName
+            );
+
+        }
+    );
+
+
+})();
+
+</script>
 
 </body>
 
