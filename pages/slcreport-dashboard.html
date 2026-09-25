@@ -1832,52 +1832,106 @@ content="AFC Isiu"
 ====================================================== -->
 
 <section
-    id="dashboardSectionAttempts"
     class="quiz-dashboard-section"
+    id="dashboardSectionAttempts"
 >
+    <div class="dashboard-section-header">
+        <div>
+            <h2>Quiz Attempts</h2>
+            <p>
+                View members who have completed the weekly quiz.
+            </p>
+        </div>
 
- 
-<div class="quiz-coordinator-section-heading">
+        <button
+            type="button"
+            class="dashboard-secondary-button"
+            id="refreshAttemptsButton"
+        >
+            <i class="ri-refresh-line"></i>
+            <span>Refresh</span>
+        </button>
+    </div>
 
-    <span>
-        PARTICIPATION
-    </span>
+    <div class="dashboard-section-toolbar">
 
-    <h2>
-        Quiz Attempts
-    </h2>
+        <div class="dashboard-filter-field">
+            <label for="attemptsLessonFilter">
+                Lesson
+            </label>
 
-    <p>
-        View submitted quiz attempts, participants, scores and
-        submission information.
-    </p>
+            <input
+                type="text"
+                id="attemptsLessonFilter"
+                inputmode="numeric"
+                placeholder="All lessons"
+                autocomplete="off"
+            >
+        </div>
 
-</div>
+        <div class="dashboard-filter-field dashboard-search-field">
+            <label for="attemptsSearchInput">
+                Search
+            </label>
 
-
-<div class="quiz-management-panel">
-
-    <div class="quiz-management-panel-inner">
-
-        <i class="fa-solid fa-file-circle-check"></i>
-
-        <h3>
-            Quiz attempts
-        </h3>
-
-        <p>
-            The existing <strong>Quiz Attempts</strong> data will
-            be connected here so coordinators can inspect
-            individual submissions and scores.
-        </p>
+            <input
+                type="search"
+                id="attemptsSearchInput"
+                placeholder="Search member name or ID..."
+                autocomplete="off"
+            >
+        </div>
 
     </div>
 
-</div>
- 
+    <div
+        class="dashboard-status"
+        id="attemptsStatus"
+        aria-live="polite"
+    ></div>
+
+    <div class="dashboard-table-wrapper">
+        <table class="dashboard-data-table attempts-table">
+
+            <thead>
+                <tr>
+                    <th>Participant</th>
+                    <th>Lesson</th>
+                    <th>Score</th>
+                    <th>Points Earned</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+
+            <tbody id="attemptsTableBody">
+                <tr>
+                    <td
+                        colspan="5"
+                        class="dashboard-table-empty"
+                    >
+                        No quiz attempts loaded yet.
+                    </td>
+                </tr>
+            </tbody>
+
+        </table>
+    </div>
+
+    <div
+        class="dashboard-empty-state"
+        id="attemptsEmpty"
+        hidden
+    >
+        <i class="ri-file-list-3-line"></i>
+
+        <h3>No quiz attempts found</h3>
+
+        <p>
+            There are no quiz attempts matching the current filters.
+        </p>
+    </div>
 
 </section>
-
 <!-- =====================================================
      QUIZ REVIEWS
 ====================================================== -->
