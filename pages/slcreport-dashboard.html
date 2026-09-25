@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+ 
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+>
+
+<title>SLC Report Dashboard | AFC Isiu Youth Portal</title>
+
+<!-- =====================================================
+     PWA
+====================================================== -->
+
+<link rel="manifest" href="/manifest.json">
+
+<meta name="theme-color" content="#4A0754">
+
+<meta
+    name="mobile-web-app-capable"
+    content="yes"
+>
+
+<meta
+    name="apple-mobile-web-app-capable"
+    content="yes"
+>
+
+<meta
+    name="apple-mobile-web-app-status-bar-style"
+    content="default"
+>
+
+<meta
+    name="apple-mobile-web-app-title"
+    content="AFC Isiu"
+>
+
+
+<!-- =====================================================
+     ICONS
+====================================================== -->
+
+<link
+    rel="icon"
+    type="image/png"
+    href="/images/logo.png"
+>
+
+<link
+    rel="apple-touch-icon"
+    href="/images/logo.png"
+>
+
+
+<!-- =====================================================
+     FONTS
+====================================================== -->
+
+<link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+>
+
+<link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+>
+
+<link
+    href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap"
+    rel="stylesheet"
+>
+
+
+<!-- =====================================================
+     FONT AWESOME
+====================================================== -->
+
+<link
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    rel="stylesheet"
+>
+
+
+<!-- =====================================================
+     REMIX ICONS
+====================================================== -->
+
+<link
+    href="https://cdn.jsdelivr.net/npm/remixicon@4.6.0/fonts/remixicon.css"
+    rel="stylesheet"
+>
+
+
+<!-- =====================================================
+     PORTAL CSS
+====================================================== -->
+
+<link
+    rel="stylesheet"
+    href="../css/main.css"
+>
+
+<link
+    rel="stylesheet"
+    href="../css/layout.css"
+>
+
+<link
+    rel="stylesheet"
+    href="../css/slcreport-dashboard.css"
+>
+ 
+
+</head>
+
+<body>
+
+<div class="app-layout">
+
+ 
+<!-- =====================================================
+     SIDEBAR
+====================================================== -->
+
+<div id="app-sidebar"></div>
+
+
+<!-- =====================================================
+     MAIN AREA
+====================================================== -->
+
+<div class="main-area">
+
+
+    <!-- =================================================
+         TOPBAR
+    ================================================== -->
+
+    <div id="app-topbar"></div>
+
+
+    <!-- =================================================
+         PAGE CONTENT
+    ================================================== -->
+
+    <main class="dashboard-content slc-dashboard-page">
+
+
+        <!-- =================================================
+             HERO
+        ================================================== -->
+
+        <section class="slc-dashboard-hero">
+
+            <div class="slc-dashboard-hero-content">
+
+                <div class="slc-dashboard-eyebrow">
+
+                    <i class="fa-solid fa-chart-column"></i>
+
+                    SLC Report Dashboard
+
+                </div>
+
+
+                <h1>
+                    Weekly quiz
+                    <span>participation.</span>
+                </h1>
+
+
+                <p>
+                    Monitor your group's weekly SLC quiz
+                    participation and follow up with members
+                    who have not participated.
+                </p>
+
+            </div>
+
+
+            <div class="slc-dashboard-hero-icon">
+
+                <i class="fa-solid fa-chart-line"></i>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             CONTROLS
+        ================================================== -->
+
+        <section class="slc-dashboard-controls">
+
+            <div class="slc-control-field">
+
+                <label for="dashboardLessonNo">
+                    Lesson
+                </label>
+
+                <div class="slc-control-input">
+
+                    <i class="fa-solid fa-book-open"></i>
+
+                    <input
+                        type="text"
+                        id="dashboardLessonNo"
+                        placeholder="e.g. 89"
+                        inputmode="numeric"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <button
+                type="button"
+                id="loadDashboardButton"
+                class="slc-dashboard-load-btn"
+            >
+
+                <i class="fa-solid fa-rotate"></i>
+
+                <span>
+                    Load Report
+                </span>
+
+            </button>
+
+        </section>
+
+
+        <!-- =================================================
+             STATUS
+        ================================================== -->
+
+        <div
+            id="dashboardStatus"
+            class="slc-dashboard-status hidden"
+            role="status"
+        ></div>
+
+
+        <!-- =================================================
+             SUMMARY
+        ================================================== -->
+
+        <section
+            id="dashboardSummary"
+            class="hidden"
+        >
+
+
+            <!-- =================================================
+                 LESSON HEADER
+            ================================================== -->
+
+            <div class="slc-dashboard-section-heading">
+
+                <div>
+
+                    <span class="slc-dashboard-section-label">
+                        CURRENT REPORT
+                    </span>
+
+                    <h2 id="dashboardLessonTitle">
+                        Weekly SLC Report
+                    </h2>
+
+                </div>
+
+                <div
+                    id="dashboardReportDate"
+                    class="slc-dashboard-date"
+                >
+                    —
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 STATISTICS
+            ================================================== -->
+
+            <section class="slc-stat-grid">
+
+
+                <!-- TOTAL -->
+
+                <article class="slc-stat-card">
+
+                    <div class="slc-stat-icon purple">
+
+                        <i class="fa-solid fa-users"></i>
+
+                    </div>
+
+                    <div class="slc-stat-content">
+
+                        <span>
+                            Total Members
+                        </span>
+
+                        <strong id="statTotalMembers">
+                            0
+                        </strong>
+
+                    </div>
+
+                </article>
+
+
+                <!-- PARTICIPATED -->
+
+                <article class="slc-stat-card">
+
+                    <div class="slc-stat-icon green">
+
+                        <i class="fa-solid fa-circle-check"></i>
+
+                    </div>
+
+                    <div class="slc-stat-content">
+
+                        <span>
+                            Participated
+                        </span>
+
+                        <strong id="statParticipated">
+                            0
+                        </strong>
+
+                    </div>
+
+                </article>
+
+
+                <!-- NOT PARTICIPATED -->
+
+                <article class="slc-stat-card">
+
+                    <div class="slc-stat-icon orange">
+
+                        <i class="fa-solid fa-user-clock"></i>
+
+                    </div>
+
+                    <div class="slc-stat-content">
+
+                        <span>
+                            Yet to Participate
+                        </span>
+
+                        <strong id="statNotParticipated">
+                            0
+                        </strong>
+
+                    </div>
+
+                </article>
+
+
+                <!-- RATE -->
+
+                <article class="slc-stat-card">
+
+                    <div class="slc-stat-icon cyan">
+
+                        <i class="fa-solid fa-chart-pie"></i>
+
+                    </div>
+
+                    <div class="slc-stat-content">
+
+                        <span>
+                            Participation Rate
+                        </span>
+
+                        <strong id="statParticipationRate">
+                            0%
+                        </strong>
+
+                    </div>
+
+                </article>
+
+            </section>
+
+
+            <!-- =================================================
+                 PARTICIPATION PROGRESS
+            ================================================== -->
+
+            <section class="slc-progress-card">
+
+                <div class="slc-progress-header">
+
+                    <div>
+
+                        <span>
+                            Participation progress
+                        </span>
+
+                        <strong id="progressPercentage">
+                            0%
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="slc-progress-track">
+
+                    <div
+                        id="participationProgress"
+                        class="slc-progress-fill"
+                        style="width: 0%;"
+                    ></div>
+
+                </div>
+
+
+                <p id="progressDescription">
+                    No participation data loaded yet.
+                </p>
+
+            </section>
+
+
+            <!-- =================================================
+                 GROUP INFORMATION
+            ================================================== -->
+
+            <section class="slc-group-card">
+
+                <div class="slc-group-card-heading">
+
+                    <div class="slc-group-icon">
+
+                        <i class="fa-solid fa-layer-group"></i>
+
+                    </div>
+
+                    <div>
+
+                        <h2>
+                            Group information
+                        </h2>
+
+                        <p>
+                            Details from the submitted weekly report.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="slc-group-grid">
+
+                    <div class="slc-group-item">
+
+                        <span>
+                            Group Name
+                        </span>
+
+                        <strong id="groupNameDisplay">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="slc-group-item">
+
+                        <span>
+                            Group Leader
+                        </span>
+
+                        <strong id="groupLeaderDisplay">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="slc-group-item">
+
+                        <span>
+                            Report Version
+                        </span>
+
+                        <strong id="reportVersionDisplay">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="slc-group-item">
+
+                        <span>
+                            Report Date
+                        </span>
+
+                        <strong id="reportDateDisplay">
+                            —
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 NON PARTICIPANTS
+            ================================================== -->
+
+            <section class="slc-members-card">
+
+                <div class="slc-members-heading">
+
+                    <div>
+
+                        <span class="slc-dashboard-section-label">
+                            FOLLOW-UP
+                        </span>
+
+                        <h2>
+                            Members yet to participate
+                        </h2>
+
+                        <p>
+                            These members were listed as not having
+                            participated in the selected lesson.
+                        </p>
+
+                    </div>
+
+
+                    <div
+                        id="nonParticipantCount"
+                        class="slc-count-badge"
+                    >
+                        0
+                    </div>
+
+                </div>
+
+
+                <div
+                    id="nonParticipantsDisplay"
+                    class="slc-member-list"
+                >
+
+                    <div class="slc-empty-state">
+
+                        <i class="fa-solid fa-users"></i>
+
+                        <h3>
+                            No members listed
+                        </h3>
+
+                        <p>
+                            Load a report to see members who have
+                            not participated.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 OBSERVATIONS
+            ================================================== -->
+
+            <section
+                id="observationsCard"
+                class="slc-observation-card hidden"
+            >
+
+                <div class="slc-observation-icon">
+
+                    <i class="fa-solid fa-message"></i>
+
+                </div>
+
+                <div>
+
+                    <span>
+                        GROUP OBSERVATION
+                    </span>
+
+                    <p id="observationsDisplay"></p>
+
+                </div>
+
+            </section>
+
+
+        </section>
+
+
+        <!-- =================================================
+             EMPTY STATE
+        ================================================== -->
+
+        <section
+            id="dashboardEmpty"
+            class="slc-dashboard-empty"
+        >
+
+            <div class="slc-empty-icon">
+
+                <i class="fa-solid fa-chart-column"></i>
+
+            </div>
+
+            <h2>
+                Select a lesson report
+            </h2>
+
+            <p>
+                Enter a lesson number above and load the report
+                to view the group's weekly participation.
+            </p>
+
+        </section>
+
+
+    </main>
+
+</div>
+
+
+<!-- =====================================================
+     MOBILE BOTTOM NAV
+====================================================== -->
+
+<div id="app-bottom-nav"></div>
+ 
+
+</div>
+
+<!-- =========================================================
+     JAVASCRIPT
+========================================================= -->
+
+<script src="../js/pwa.js"></script>
+
+<script src="../js/main.js"></script>
+
+<script src="../js/slcreport-dashboard.js"></script>
+
+<script src="../js/layout.js"></script>
+
+</body>
+
+</html>
