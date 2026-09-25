@@ -51,6 +51,10 @@ let questionSaveInProgress = false;
 
 let questionDeleteInProgress = false;
 
+let quizSettingsLoading = false;
+
+let quizSettingsSaving = false;
+
 
 /* ============================================================
    DOM READY
@@ -83,6 +87,8 @@ function setupDashboard() {
     setupQuestionDeleteModal();
 
     setupAttemptsControls();
+
+    setupQuizSettingsControls();
 
     setupDashboardNavigation();
 
@@ -231,6 +237,12 @@ function activateDashboardSection(
         loadQuizAttempts();
 
     }
+
+   if (
+    sectionName === "settings"
+) {
+    loadQuizSettings();
+}
 
 }
 
@@ -3077,6 +3089,624 @@ async function dashboardPost(
 
 
     return result;
+
+}
+
+/* ============================================================
+   QUIZ SETTINGS
+   ============================================================ */
+
+function setupQuizSettingsControls() {
+
+    const form =
+        document.getElementById(
+            "quizSettingsForm"
+        );
+
+    if (!form) {
+        return;
+    }
+
+
+    form.addEventListener(
+        "submit",
+        function (event) {
+
+            event.preventDefault();
+
+            saveQuizSettings();
+
+        }
+    );
+
+}
+
+
+/* ============================================================
+   LOAD QUIZ SETTINGS
+   ============================================================ */
+
+async function loadQuizSettings() {
+
+    if (quizSettingsLoading) {
+        return;
+    }
+
+
+    const lessonInput =
+        document.getElementById(
+            "quizSettingsLesson"
+        );
+
+    const openInput =
+        document.getElementById(
+            "quizSettingsOpen"
+        );
+
+    const closeInput =
+        document.getElementById(
+            "quizSettingsClose"
+        );
+
+
+    if (
+        !lessonInput ||
+        !openInput ||
+        !closeInput
+    ) {
+        return;
+    }
+
+
+    quizSettingsLoading = true;
+
+
+    setQuizSettingsStatus(
+        "Loading quiz settings..."
+    );
+
+
+    try {
+
+        if (
+            !dashboardSession ||
+            !dashboardSession.token
+        ) {
+
+            throw new Error(
+                "Your dashboard session has expired. Please log in again."
+            );
+
+        }
+
+
+        const result =
+            await dashboardGet(
+                "getSLCAdminQuizSettings",
+                {
+                    token:
+                        dashboardSession.token
+                }
+            );
+
+
+        if (
+            !result ||
+            !result.success
+        ) {
+
+            throw new Error(
+                result &&
+                result.message
+                    ? result.message
+                    : "Unable to load quiz settings."
+            );
+
+        }
+
+
+        const settings =
+            result.settings || {};
+
+
+        lessonInput.value =
+            settings.lesson || "";
+
+
+        openInput.value =
+            convertApiDateToLocalInput(
+                settings.open
+            );
+
+
+        closeInput.value =
+            convertApiDateToLocalInput(
+                settings.close
+            );
+
+
+        setQuizSettingsStatus(
+            "Quiz settings loaded."
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Quiz settings load error:",
+            error
+        );
+
+
+        setQuizSettingsStatus(
+            error.message ||
+            "Unable to load quiz settings.",
+            true
+        );
+
+    }
+
+    finally {
+
+        quizSettingsLoading = false;
+
+    }
+
+}
+
+
+/* ============================================================
+   SAVE QUIZ SETTINGS
+   ============================================================ */
+
+async function saveQuizSettings() {
+
+    if (quizSettingsSaving) {
+        return;
+    }
+
+
+    const lessonInput =
+        document.getElementById(
+            "quizSettingsLesson"
+        );
+
+    const openInput =
+        document.getElementById(
+            "quizSettingsOpen"
+        );
+
+    const closeInput =
+        document.getElementById(
+            "quizSettingsClose"
+        );
+
+
+    const saveButton =
+        document.getElementById(
+            "saveQuizSettingsButton"
+        );
+
+
+    if (
+        !lessonInput ||
+        !openInput ||
+        !closeInput
+    ) {
+        return;
+    }
+
+
+    const lesson =
+        String(
+            lessonInput.value || ""
+        ).trim();
+
+
+    const open =
+        String(
+            openInput.value || ""
+        ).trim();
+
+
+    const close =
+        String(
+            closeInput.value || ""
+        ).trim();
+
+
+    /* ========================================================
+       VALIDATION
+       ======================================================== */
+
+    if (!lesson) {
+
+        setQuizSettingsStatus(
+            "Please enter the current lesson.",
+            true
+        );
+
+        lessonInput.focus();
+
+        return;
+
+    }
+
+
+    if (
+        !/^\d+$/.test(
+            lesson
+        )
+    ) {
+
+        setQuizSettingsStatus(
+            "Current lesson must be a valid lesson number.",
+            true
+        );
+
+        lessonInput.focus();
+
+        return;
+
+    }
+
+
+    if (!open) {
+
+        setQuizSettingsStatus(
+            "Please select when the quiz should open.",
+            true
+        );
+
+        openInput.focus();
+
+        return;
+
+    }
+
+
+    if (!close) {
+
+        setQuizSettingsStatus(
+            "Please select when the quiz should close.",
+            true
+        );
+
+        closeInput.focus();
+
+        return;
+
+    }
+
+
+    const openDate =
+        new Date(
+            open
+        );
+
+
+    const closeDate =
+        new Date(
+            close
+        );
+
+
+    if (
+        isNaN(
+            openDate.getTime()
+        )
+    ) {
+
+        setQuizSettingsStatus(
+            "The opening date and time is invalid.",
+            true
+        );
+
+        openInput.focus();
+
+        return;
+
+    }
+
+
+    if (
+        isNaN(
+            closeDate.getTime()
+        )
+    ) {
+
+        setQuizSettingsStatus(
+            "The closing date and time is invalid.",
+            true
+        );
+
+        closeInput.focus();
+
+        return;
+
+    }
+
+
+    if (
+        closeDate <= openDate
+    ) {
+
+        setQuizSettingsStatus(
+            "The closing time must be later than the opening time.",
+            true
+        );
+
+        closeInput.focus();
+
+        return;
+
+    }
+
+
+    quizSettingsSaving = true;
+
+
+    if (saveButton) {
+
+        saveButton.disabled = true;
+
+        saveButton.classList.add(
+            "is-loading"
+        );
+
+        saveButton.innerHTML =
+            `
+                <i class="ri-loader-4-line ri-spin"></i>
+                <span>Saving...</span>
+            `;
+
+    }
+
+
+    setQuizSettingsStatus(
+        "Saving quiz settings..."
+    );
+
+
+    try {
+
+        if (
+            !dashboardSession ||
+            !dashboardSession.token
+        ) {
+
+            throw new Error(
+                "Your dashboard session has expired. Please log in again."
+            );
+
+        }
+
+
+        const result =
+            await dashboardPost(
+                "updateSLCAdminQuizSettings",
+                {
+                    token:
+                        dashboardSession.token,
+
+                    lesson:
+                        lesson,
+
+                    open:
+                        open,
+
+                    close:
+                        close
+                }
+            );
+
+
+        if (
+            !result ||
+            !result.success
+        ) {
+
+            throw new Error(
+                result &&
+                result.message
+                    ? result.message
+                    : "Unable to save quiz settings."
+            );
+
+        }
+
+
+        setQuizSettingsStatus(
+            "Quiz settings saved successfully."
+        );
+
+
+        /* ====================================================
+           Refresh values from the server
+           ==================================================== */
+
+        if (
+            result.settings
+        ) {
+
+            lessonInput.value =
+                result.settings.lesson || "";
+
+
+            openInput.value =
+                convertApiDateToLocalInput(
+                    result.settings.open
+                );
+
+
+            closeInput.value =
+                convertApiDateToLocalInput(
+                    result.settings.close
+                );
+
+        }
+
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Quiz settings save error:",
+            error
+        );
+
+
+        setQuizSettingsStatus(
+            error.message ||
+            "Unable to save quiz settings.",
+            true
+        );
+
+    }
+
+    finally {
+
+        quizSettingsSaving = false;
+
+
+        if (saveButton) {
+
+            saveButton.disabled = false;
+
+            saveButton.classList.remove(
+                "is-loading"
+            );
+
+            saveButton.innerHTML =
+                `
+                    <i class="ri-save-3-line"></i>
+                    <span>Save Quiz Settings</span>
+                `;
+
+        }
+
+    }
+
+}
+
+
+/* ============================================================
+   CONVERT API DATE TO DATETIME-LOCAL
+   ============================================================ */
+
+function convertApiDateToLocalInput(
+    value
+) {
+
+    if (!value) {
+        return "";
+    }
+
+
+    const date =
+        new Date(
+            value
+        );
+
+
+    if (
+        isNaN(
+            date.getTime()
+        )
+    ) {
+        return "";
+    }
+
+
+    const year =
+        date.getFullYear();
+
+
+    const month =
+        String(
+            date.getMonth() + 1
+        ).padStart(
+            2,
+            "0"
+        );
+
+
+    const day =
+        String(
+            date.getDate()
+        ).padStart(
+            2,
+            "0"
+        );
+
+
+    const hours =
+        String(
+            date.getHours()
+        ).padStart(
+            2,
+            "0"
+        );
+
+
+    const minutes =
+        String(
+            date.getMinutes()
+        ).padStart(
+            2,
+            "0"
+        );
+
+
+    return (
+        `${year}-${month}-${day}` +
+        `T${hours}:${minutes}`
+    );
+
+}
+
+
+/* ============================================================
+   QUIZ SETTINGS STATUS
+   ============================================================ */
+
+function setQuizSettingsStatus(
+    message,
+    isError = false
+) {
+
+    const status =
+        document.getElementById(
+            "quizSettingsStatus"
+        );
+
+
+    if (!status) {
+        return;
+    }
+
+
+    status.textContent =
+        message || "";
+
+
+    status.classList.toggle(
+        "is-error",
+        Boolean(
+            isError
+        )
+    );
+
+
+    status.classList.toggle(
+        "is-success",
+        Boolean(
+            message &&
+            !isError
+        )
+    );
 
 }
 
