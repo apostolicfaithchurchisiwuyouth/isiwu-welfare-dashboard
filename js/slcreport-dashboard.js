@@ -23,2010 +23,1234 @@
  * ============================================================
  */
 
-
-/* ============================================================
-   CONFIG
-============================================================ */
-
 const API_URL =
     "https://script.google.com/macros/s/AKfycbw1mVwpgAcIOSNbpgzy52TFyozEGMtWWwVWUDFaofGNzpsguBIaKR4q1dXVtgVHO2xZ1w/exec";
 
 const SESSION_KEY =
     "afc_isiu_slc_leader_session";
 
-
 /* ============================================================
    STATE
-============================================================ */
+   ============================================================ */
 
 let dashboardSession = null;
-
 let dashboardQuestions = [];
-
 let dashboardAttempts = [];
-
 let dashboardReports = [];
 
 let questionBeingEdited = null;
-
 let questionBeingDeleted = null;
 
 let questionSaveInProgress = false;
-
 let questionDeleteInProgress = false;
 
 let quizSettingsLoading = false;
-
 let quizSettingsSaving = false;
 
 let reportsLoading = false;
-
 let reportBeingViewed = null;
 
 
 /* ============================================================
-   DOM READY
-============================================================ */
+   INITIALIZATION
+   ============================================================ */
 
-document.addEventListener(
-    "DOMContentLoaded",
-    function () {
+document.addEventListener("DOMContentLoaded", function () {
+    setupDashboard();
+    restoreDashboardSession();
+});
 
-        setupDashboard();
-
-        restoreDashboardSession();
-
-    }
-);
-
-
-/* ============================================================
-   DASHBOARD SETUP
-============================================================ */
 
 function setupDashboard() {
-
     setupDashboardControls();
-
     setupQuestionsControls();
-
     setupQuestionEditor();
-
     setupQuestionDeleteModal();
-
     setupAttemptsControls();
-
     setupQuizSettingsControls();
-
     setupReportsControls();
-
     setupReportDetailsModal();
-
     setupDashboardNavigation();
-
-}
-
-
-/* ============================================================
-   DASHBOARD CONTROLS
-============================================================ */
-
-function setupDashboardControls() {
-
-    const loadButton =
-        document.getElementById(
-            "loadDashboardButton"
-        );
-
-
-    if (loadButton) {
-
-        loadButton.addEventListener(
-            "click",
-            function () {
-
-                loadDashboardOverview();
-
-            }
-        );
-
-    }
-
 }
 
 
 /* ============================================================
    DASHBOARD NAVIGATION
-============================================================ */
+   ============================================================ */
 
 function setupDashboardNavigation() {
-
     const buttons =
-        document.querySelectorAll(
-            "[data-dashboard-section]"
-        );
+        document.querySelectorAll("[data-dashboard-section]");
 
+    buttons.forEach(function (button) {
+        button.addEventListener("click", function () {
+            const section =
+                button.dataset.dashboardSection;
 
-    buttons.forEach(
-        function (button) {
+            if (!section) {
+                return;
+            }
 
-            button.addEventListener(
-                "click",
-                function () {
-
-                    const section =
-                        button.dataset.dashboardSection;
-
-                    if (!section) {
-                        return;
-                    }
-
-                    activateDashboardSection(
-                        section
-                    );
-
-                }
-            );
-
-        }
-    );
-
+            activateDashboardSection(section);
+        });
+    });
 }
 
 
-/**
- * Activate a dashboard section.
- *
- * Existing navigation behavior is preserved.
- * SLC Reports is simply added as another section.
- */
-function activateDashboardSection(
-    sectionName
-) {
-
+function activateDashboardSection(sectionName) {
     const buttons =
-        document.querySelectorAll(
-            ".quiz-nav-button"
+        document.querySelectorAll("[data-dashboard-section]");
+
+    buttons.forEach(function (button) {
+        button.classList.toggle(
+            "active",
+            button.dataset.dashboardSection === sectionName
         );
+    });
 
     const sections =
-        document.querySelectorAll(
-            ".quiz-dashboard-section"
+        document.querySelectorAll(".quiz-dashboard-section");
+
+    sections.forEach(function (section) {
+        section.classList.toggle(
+            "active",
+            section.dataset.dashboardSection === sectionName
         );
+    });
 
+    if (!dashboardSession) {
+        return;
+    }
 
-    buttons.forEach(
-        function (button) {
+    if (sectionName === "overview") {
+        loadDashboardOverview();
+    }
 
-            button.classList.toggle(
-                "active",
-                button.dataset.dashboardSection ===
-                    sectionName
-            );
-
-        }
-    );
-
-
-    sections.forEach(
-        function (section) {
-
-            const expectedId =
-                "dashboardSection" +
-                sectionName
-                    .charAt(0)
-                    .toUpperCase() +
-                sectionName.slice(1);
-
-
-            section.classList.toggle(
-                "active",
-                section.id === expectedId
-            );
-
-        }
-    );
-
-
-    /*
-     * Load Questions when opened.
-     */
-    if (
-        sectionName === "questions" &&
-        dashboardSession
-    ) {
-
+    if (sectionName === "questions") {
         loadQuizQuestions();
-
     }
 
-
-    /*
-     * Load Attempts when opened.
-     */
-    if (
-        sectionName === "attempts" &&
-        dashboardSession
-    ) {
-
+    if (sectionName === "attempts") {
         loadQuizAttempts();
-
     }
 
-
-    /*
-     * Load Quiz Settings when opened.
-     */
-    if (
-        sectionName === "settings" &&
-        dashboardSession
-    ) {
-
+    if (sectionName === "settings") {
         loadQuizSettings();
-
     }
 
-
-    /*
-     * Load SLC Reports when opened.
-     */
-    if (
-        sectionName === "reports" &&
-        dashboardSession
-    ) {
-
+    if (sectionName === "reports") {
         loadSLCReports();
-
     }
-
 }
 
 
 /* ============================================================
-   RESTORE DASHBOARD SESSION
-============================================================ */
+   DASHBOARD CONTROLS
+   ============================================================ */
+
+function setupDashboardControls() {
+    const loadButton =
+        document.getElementById("loadDashboardButton");
+
+    if (loadButton) {
+        loadButton.addEventListener("click", function () {
+            loadDashboardOverview();
+        });
+    }
+}
+
+
+/* ============================================================
+   SESSION
+   ============================================================ */
 
 function restoreDashboardSession() {
+    const storedSession =
+        localStorage.getItem(SESSION_KEY);
 
-    const rawSession =
-        localStorage.getItem(
-            SESSION_KEY
-        );
-
-
-    if (!rawSession) {
-
+    if (!storedSession) {
         showDashboardEmpty(
-            "Please log in to access the Quiz Coordinator Dashboard."
+            "Please log in as a Quiz Coordinator to access this dashboard."
         );
-
         return;
-
     }
 
-
     try {
-
         dashboardSession =
-            JSON.parse(
-                rawSession
-            );
-
+            JSON.parse(storedSession);
     } catch (error) {
-
         console.error(
             "Invalid dashboard session:",
             error
         );
 
-
-        localStorage.removeItem(
-            SESSION_KEY
-        );
-
+        localStorage.removeItem(SESSION_KEY);
+        dashboardSession = null;
 
         showDashboardEmpty(
             "Your dashboard session is invalid. Please log in again."
         );
 
         return;
-
     }
-
 
     if (
         !dashboardSession ||
         !dashboardSession.token
     ) {
-
-        localStorage.removeItem(
-            SESSION_KEY
-        );
-
+        localStorage.removeItem(SESSION_KEY);
+        dashboardSession = null;
 
         showDashboardEmpty(
             "Your dashboard session is invalid. Please log in again."
         );
 
         return;
-
     }
 
-
     verifyDashboardAccess();
-
 }
 
 
-/* ============================================================
-   VERIFY DASHBOARD ACCESS
-============================================================ */
-
 async function verifyDashboardAccess() {
-
     setDashboardStatus(
         "Checking dashboard access...",
         "loading"
     );
 
-
     try {
-
         const response =
             await dashboardGet({
-
-                action:
-                    "getSLCAdminOverview",
-
-                token:
-                    dashboardSession.token
-
+                action: "getSLCAdminOverview",
+                token: dashboardSession.token
             });
 
-
-        if (
-            !response ||
-            response.success === false
-        ) {
-
+        if (!response || !response.success) {
             throw new Error(
-                response &&
-                response.message
+                response && response.message
                     ? response.message
-                    : "Unable to verify dashboard access."
+                    : "Dashboard access could not be verified."
             );
-
         }
 
+        renderDashboardOverview(response);
 
-        renderDashboardOverview(
-            response
+        setDashboardStatus(
+            "Dashboard ready.",
+            "success"
         );
 
-
-        /*
-         * Load questions after access is verified.
-         */
-        if (
-            document.getElementById(
-                "questionsTableBody"
-            )
-        ) {
-
-            loadQuizQuestions();
-
-        }
-
+        await loadQuizQuestions();
 
     } catch (error) {
-
         console.error(
-            "Dashboard access error:",
+            "Dashboard verification failed:",
             error
         );
 
-
         setDashboardStatus(
             error.message ||
-                "Unable to load dashboard.",
+                "Unable to access the dashboard.",
             "error"
         );
-
     }
-
 }
 
 
 /* ============================================================
-   LOAD OVERVIEW
-============================================================ */
+   DASHBOARD OVERVIEW
+   ============================================================ */
 
 async function loadDashboardOverview() {
-
-    if (
-        !dashboardSession ||
-        !dashboardSession.token
-    ) {
-
-        setDashboardStatus(
-            "Please log in again.",
-            "error"
-        );
-
+    if (!dashboardSession) {
         return;
-
     }
-
-
-    const button =
-        document.getElementById(
-            "loadDashboardButton"
-        );
-
-
-    if (button) {
-
-        button.disabled = true;
-
-        const originalText =
-            button.innerHTML;
-
-        button.dataset.originalText =
-            originalText;
-
-        button.innerHTML =
-            '<i class="fa-solid fa-spinner fa-spin"></i><span>Loading...</span>';
-
-    }
-
 
     setDashboardStatus(
         "Loading dashboard...",
         "loading"
     );
 
-
     try {
-
-        const lessonInput =
-            document.getElementById(
-                "dashboardLessonNo"
-            );
-
-
-        const lessonNo =
-            lessonInput
-                ? String(
-                    lessonInput.value || ""
-                  ).trim()
-                : "";
-
-
-        const params = {
-
-            action:
-                "getSLCAdminOverview",
-
-            token:
-                dashboardSession.token
-
-        };
-
-
-        if (lessonNo) {
-
-            params.lessonNo =
-                lessonNo;
-
-        }
-
-
         const response =
-            await dashboardGet(
-                params
-            );
+            await dashboardGet({
+                action: "getSLCAdminOverview",
+                token: dashboardSession.token
+            });
 
-
-        if (
-            !response ||
-            response.success === false
-        ) {
-
+        if (!response || !response.success) {
             throw new Error(
-                response &&
-                response.message
+                response && response.message
                     ? response.message
                     : "Unable to load dashboard."
             );
-
         }
 
+        renderDashboardOverview(response);
 
-        renderDashboardOverview(
-            response
+        setDashboardStatus(
+            "Dashboard updated.",
+            "success"
         );
 
-
     } catch (error) {
-
         console.error(
             "Dashboard overview error:",
             error
         );
-
 
         setDashboardStatus(
             error.message ||
                 "Unable to load dashboard.",
             "error"
         );
-
-
-    } finally {
-
-        if (button) {
-
-            button.disabled = false;
-
-            button.innerHTML =
-                button.dataset.originalText ||
-                '<i class="fa-solid fa-rotate"></i><span>Load Report</span>';
-
-        }
-
     }
-
 }
 
 
-/* ============================================================
-   RENDER OVERVIEW
-============================================================ */
-
-function renderDashboardOverview(
-    data
-) {
-
-    const overview =
+function renderDashboardOverview(data) {
+    const summary =
+        data.summary ||
         data.overview ||
         data;
 
-
     const totalMembers =
         Number(
-            overview.totalMembers || 0
+            summary.totalMembers ??
+            summary.members ??
+            0
         );
-
 
     const participated =
         Number(
-            overview.participated || 0
+            summary.participated ??
+            summary.participating ??
+            0
         );
-
 
     const notParticipated =
         Number(
-            overview.notParticipated || 0
+            summary.notParticipated ??
+            summary.notParticipating ??
+            Math.max(
+                0,
+                totalMembers - participated
+            )
         );
-
 
     let participationRate =
         Number(
-            overview.participationRate || 0
+            summary.participationRate ??
+            0
         );
 
-
     if (
-        !Number.isFinite(
-            participationRate
-        )
+        !participationRate &&
+        totalMembers > 0
     ) {
-
-        participationRate = 0;
-
+        participationRate =
+            (participated / totalMembers) * 100;
     }
 
-
-    participationRate =
+    const percentage =
         Math.max(
             0,
             Math.min(
                 100,
-                participationRate
+                Math.round(participationRate)
             )
         );
-
-
-    const progressPercentage =
-        Number(
-            overview.progressPercentage ||
-            participationRate ||
-            0
-        );
-
 
     setText(
         "statTotalMembers",
         totalMembers
     );
 
-
     setText(
         "statParticipated",
         participated
     );
-
 
     setText(
         "statNotParticipated",
         notParticipated
     );
 
-
     setText(
         "statParticipationRate",
-        Math.round(
-            participationRate
-        ) + "%"
+        percentage + "%"
     );
-
 
     setText(
         "progressPercentage",
-        Math.round(
-            progressPercentage
-        ) + "%"
+        percentage + "%"
     );
 
-
-    const progressFill =
+    const progress =
         document.getElementById(
             "participationProgress"
         );
 
-
-    if (progressFill) {
-
-        progressFill.style.width =
-            Math.max(
-                0,
-                Math.min(
-                    100,
-                    progressPercentage
-                )
-            ) + "%";
-
+    if (progress) {
+        progress.style.width =
+            percentage + "%";
     }
-
 
     setText(
         "progressDescription",
-        overview.progressDescription ||
-            getParticipationDescription(
-                participationRate
-            )
-    );
-
-
-    setText(
-        "dashboardLessonTitle",
-        overview.lessonTitle ||
-            overview.currentQuizTitle ||
-            "Weekly SLC Quiz"
-    );
-
-
-    setText(
-        "dashboardReportDate",
-        formatDashboardDate(
-            overview.reportDate ||
-            overview.quizDate ||
-            ""
+        getParticipationDescription(
+            percentage
         )
     );
 
-
     setText(
         "groupNameDisplay",
-        overview.groupName ||
+        summary.groupName ||
+            summary.group ||
             "—"
     );
-
 
     setText(
         "groupLeaderDisplay",
-        overview.groupLeaderName ||
+        summary.groupLeader ||
+            summary.leaderName ||
             "—"
     );
-
 
     setText(
         "reportVersionDisplay",
-        overview.reportVersion ||
+        summary.version ??
             "—"
     );
-
 
     setText(
         "reportDateDisplay",
         formatDashboardDate(
-            overview.reportDate ||
-            ""
+            summary.reportDate ||
+            summary.date ||
+            summary.updatedAt
         )
     );
 
-
     renderNonParticipants(
-        overview.nonParticipants ||
-            []
+        summary.nonParticipants ||
+        data.nonParticipants ||
+        []
     );
 
-
     const observations =
-        String(
-            overview.observations || ""
-        ).trim();
+        summary.observations ||
+        data.observations ||
+        "";
 
+    setText(
+        "observationsDisplay",
+        observations || "No observations recorded."
+    );
 
-    const observationCard =
-        document.getElementById(
-            "observationsCard"
-        );
+    setText(
+        "nonParticipantCount",
+        notParticipated
+    );
 
-
-    const observationDisplay =
-        document.getElementById(
-            "observationsDisplay"
-        );
-
-
-    if (
-        observationCard &&
-        observationDisplay
-    ) {
-
-        if (observations) {
-
-            observationDisplay.textContent =
-                observations;
-
-            observationCard.classList.remove(
-                "hidden"
-            );
-
-        } else {
-
-            observationCard.classList.add(
-                "hidden"
-            );
-
-        }
-
-    }
-
-
-    const summary =
+    const summaryElement =
         document.getElementById(
             "dashboardSummary"
         );
 
-
-    const empty =
-        document.getElementById(
-            "dashboardEmpty"
-        );
-
-
-    if (summary) {
-
-        summary.classList.remove(
-            "hidden"
-        );
-
+    if (summaryElement) {
+        summaryElement.hidden = false;
     }
-
-
-    if (empty) {
-
-        empty.classList.add(
-            "hidden"
-        );
-
-    }
-
-
-    setDashboardStatus(
-        "Dashboard loaded successfully.",
-        "success"
-    );
-
 }
 
 
-/* ============================================================
-   NON-PARTICIPANTS
-============================================================ */
-
-function renderNonParticipants(
-    members
-) {
-
-    const list =
+function renderNonParticipants(items) {
+    const container =
         document.getElementById(
             "nonParticipantsDisplay"
         );
 
-
-    const count =
-        document.getElementById(
-            "nonParticipantCount"
-        );
-
-
-    if (!Array.isArray(members)) {
-
-        members = [];
-
-    }
-
-
-    if (count) {
-
-        count.textContent =
-            members.length;
-
-    }
-
-
-    if (!list) {
+    if (!container) {
         return;
     }
 
-
-    if (!members.length) {
-
-        list.innerHTML =
-            '<div class="slc-empty-state">Everyone has participated.</div>';
-
+    if (!Array.isArray(items) || !items.length) {
+        container.innerHTML =
+            '<div class="empty-state-small">Everyone has participated.</div>';
         return;
-
     }
 
+    container.innerHTML =
+        items
+            .map(function (item) {
+                const name =
+                    typeof item === "string"
+                        ? item
+                        : (
+                            item.name ||
+                            item.fullName ||
+                            item.memberName ||
+                            "Unnamed member"
+                        );
 
-    list.innerHTML =
-        members
-            .map(
-                function (
-                    member,
-                    index
-                ) {
-
-                    const name =
-                        typeof member === "string"
-                            ? member
-                            : (
-                                member.name ||
-                                member.fullName ||
-                                "Unnamed member"
-                            );
-
-
-                    return `
-                        <div class="slc-member-item">
-
-                            <span class="slc-member-number">
-                                ${index + 1}
-                            </span>
-
-                            <span>
-                                ${escapeHtml(name)}
-                            </span>
-
-                        </div>
-                    `;
-
-                }
-            )
+                return (
+                    '<div class="non-participant-item">' +
+                        escapeHtml(name) +
+                    "</div>"
+                );
+            })
             .join("");
-
 }
 
 
 /* ============================================================
-   QUESTIONS CONTROLS
-============================================================ */
+   QUESTIONS
+   ============================================================ */
 
 function setupQuestionsControls() {
+    const addButton =
+        document.getElementById(
+            "addQuestionButton"
+        );
+
+    if (addButton) {
+        addButton.addEventListener(
+            "click",
+            function () {
+                openQuestionEditor();
+            }
+        );
+    }
 
     const refreshButton =
         document.getElementById(
             "refreshQuestionsButton"
         );
 
-
     if (refreshButton) {
-
         refreshButton.addEventListener(
             "click",
             function () {
-
                 loadQuizQuestions();
-
             }
         );
-
     }
-
 
     const lessonFilter =
         document.getElementById(
             "questionsLessonFilter"
         );
 
-
     if (lessonFilter) {
-
         lessonFilter.addEventListener(
             "input",
             function () {
-
                 filterQuizQuestions();
-
             }
         );
 
-    }
-
-
-    const addButton =
-        document.getElementById(
-            "addQuestionButton"
-        );
-
-
-    if (addButton) {
-
-        addButton.addEventListener(
-            "click",
+        lessonFilter.addEventListener(
+            "change",
             function () {
-
-                openQuestionEditor();
-
+                filterQuizQuestions();
             }
         );
-
     }
-
-
-    const tableBody =
-        document.getElementById(
-            "questionsTableBody"
-        );
-
-
-    if (tableBody) {
-
-        tableBody.addEventListener(
-            "click",
-            function (event) {
-
-                const actionButton =
-                    event.target.closest(
-                        "[data-question-action]"
-                    );
-
-
-                if (!actionButton) {
-                    return;
-                }
-
-
-                const action =
-                    actionButton.dataset.questionAction;
-
-
-                const rowNumber =
-                    Number(
-                        actionButton.dataset.rowNumber
-                    );
-
-
-                if (
-                    !Number.isInteger(
-                        rowNumber
-                    )
-                ) {
-
-                    return;
-
-                }
-
-
-                if (action === "edit") {
-
-                    openQuestionEditor(
-                        rowNumber
-                    );
-
-                }
-
-
-                if (action === "delete") {
-
-                    openQuestionDeleteModal(
-                        rowNumber
-                    );
-
-                }
-
-            }
-        );
-
-    }
-
 }
 
 
-/* ============================================================
-   LOAD QUESTIONS
-============================================================ */
-
 async function loadQuizQuestions() {
-
-    if (
-        !dashboardSession ||
-        !dashboardSession.token
-    ) {
-
-        setQuestionsStatus(
-            "Please log in again.",
-            "error"
-        );
-
+    if (!dashboardSession) {
         return;
-
     }
 
-
     setQuestionsStatus(
-        "Loading quiz questions...",
+        "Loading questions...",
         "loading"
     );
 
-
-    const refreshButton =
-        document.getElementById(
-            "refreshQuestionsButton"
-        );
-
-
-    if (refreshButton) {
-
-        refreshButton.disabled = true;
-
-        refreshButton.innerHTML =
-            '<i class="fa-solid fa-spinner fa-spin"></i><span>Loading...</span>';
-
-    }
-
-
     try {
-
         const response =
             await dashboardGet({
-
                 action:
                     "getSLCAdminQuizQuestions",
-
                 token:
                     dashboardSession.token
-
             });
 
-
-        if (
-            !response ||
-            response.success === false
-        ) {
-
+        if (!response || !response.success) {
             throw new Error(
-                response &&
-                response.message
+                response && response.message
                     ? response.message
                     : "Unable to load quiz questions."
             );
-
         }
 
-
         dashboardQuestions =
-            Array.isArray(
-                response.questions
-            )
+            Array.isArray(response.questions)
                 ? response.questions
                 : [];
 
-
         renderQuizQuestions();
-
 
         setQuestionsStatus(
             dashboardQuestions.length +
+                " question" +
                 (
                     dashboardQuestions.length === 1
-                        ? " question"
-                        : " questions"
+                        ? ""
+                        : "s"
                 ) +
                 " loaded.",
             "success"
         );
 
-
     } catch (error) {
-
         console.error(
             "Quiz questions error:",
             error
         );
 
-
         setQuestionsStatus(
             error.message ||
-                "Unable to load quiz questions.",
+                "Unable to load questions.",
             "error"
         );
-
-
-    } finally {
-
-        if (refreshButton) {
-
-            refreshButton.disabled = false;
-
-            refreshButton.innerHTML =
-                '<i class="fa-solid fa-rotate"></i><span>Refresh</span>';
-
-        }
-
     }
-
 }
 
 
-/* ============================================================
-   RENDER QUESTIONS
-============================================================ */
-
 function renderQuizQuestions() {
-
-    const tableBody =
+    const tbody =
         document.getElementById(
             "questionsTableBody"
         );
 
-
-    if (!tableBody) {
+    if (!tbody) {
         return;
     }
 
-
     const questions =
         getFilteredQuestions();
-
 
     updateQuestionsCount(
         questions.length
     );
 
-
     if (!questions.length) {
-
-        tableBody.innerHTML = `
-            <tr>
-                <td
-                    colspan="6"
-                    class="questions-empty-cell"
-                >
-                    No quiz questions found.
-                </td>
-            </tr>
-        `;
-
+        tbody.innerHTML =
+            '<tr><td colspan="8" class="table-empty">No quiz questions found.</td></tr>';
         return;
-
     }
 
-
-    tableBody.innerHTML =
+    tbody.innerHTML =
         questions
-            .map(
-                function (item) {
+            .map(function (question, index) {
+                const rowNumber =
+                    question.rowNumber ??
+                    question.row ??
+                    question.id ??
+                    "";
 
-                    return `
-                        <tr>
+                const lessonNo =
+                    question.lessonNo ??
+                    question.lesson ??
+                    "";
 
-                            <td>
-                                <span class="question-lesson-badge">
-                                    ${escapeHtml(
-                                        item.lessonNo
-                                    )}
-                                </span>
-                            </td>
+                const questionText =
+                    question.question ??
+                    question.questionText ??
+                    "";
 
+                const optionA =
+                    question.optionA ?? "";
 
-                            <td>
-                                <div class="admin-question-text">
-                                    ${escapeHtml(
-                                        item.question
-                                    )}
-                                </div>
-                            </td>
+                const optionB =
+                    question.optionB ?? "";
 
+                const optionC =
+                    question.optionC ?? "";
 
-                            <td>
+                const optionD =
+                    question.optionD ?? "";
 
-                                <div class="question-options">
+                const correctOption =
+                    question.correctOption ??
+                    question.correctAnswer ??
+                    "";
 
-                                    <div>
-                                        <strong>A.</strong>
-                                        ${escapeHtml(
-                                            item.optionA
-                                        )}
-                                    </div>
+                const points =
+                    question.points ??
+                    200;
 
-                                    <div>
-                                        <strong>B.</strong>
-                                        ${escapeHtml(
-                                            item.optionB
-                                        )}
-                                    </div>
+                return (
+                    "<tr>" +
 
-                                    <div>
-                                        <strong>C.</strong>
-                                        ${escapeHtml(
-                                            item.optionC
-                                        )}
-                                    </div>
+                    "<td>" +
+                        escapeHtml(
+                            String(
+                                index + 1
+                            )
+                        ) +
+                    "</td>" +
 
-                                    <div>
-                                        <strong>D.</strong>
-                                        ${escapeHtml(
-                                            item.optionD
-                                        )}
-                                    </div>
+                    "<td>" +
+                        escapeHtml(
+                            String(
+                                lessonNo
+                            )
+                        ) +
+                    "</td>" +
 
-                                </div>
+                    "<td class=\"question-cell\">" +
+                        escapeHtml(
+                            String(
+                                questionText
+                            )
+                        ) +
+                    "</td>" +
 
-                            </td>
+                    "<td>" +
+                        escapeHtml(
+                            String(optionA)
+                        ) +
+                    "</td>" +
 
+                    "<td>" +
+                        escapeHtml(
+                            String(optionB)
+                        ) +
+                    "</td>" +
 
-                            <td>
+                    "<td>" +
+                        escapeHtml(
+                            String(optionC)
+                        ) +
+                    "</td>" +
 
-                                <span
-                                    class="correct-answer-badge"
-                                    title="Correct answer"
-                                >
-                                    ${escapeHtml(
-                                        item.correctOption
-                                    )}
-                                </span>
+                    "<td>" +
+                        escapeHtml(
+                            String(optionD)
+                        ) +
+                    "</td>" +
 
-                            </td>
+                    "<td>" +
+                        escapeHtml(
+                            String(correctOption)
+                        ) +
+                    "</td>" +
 
+                    "<td>" +
+                        escapeHtml(
+                            String(points)
+                        ) +
+                    "</td>" +
 
-                            <td>
-                                ${escapeHtml(
-                                    item.points
-                                )}
-                            </td>
+                    "<td>" +
+                        '<div class="table-actions">' +
 
+                            '<button type="button" class="table-action-button" data-question-edit="' +
+                                escapeHtml(
+                                    String(
+                                        rowNumber
+                                    )
+                                ) +
+                            '">' +
+                                "Edit" +
+                            "</button>" +
 
-                            <td>
+                            '<button type="button" class="table-action-button danger" data-question-delete="' +
+                                escapeHtml(
+                                    String(
+                                        rowNumber
+                                    )
+                                ) +
+                            '">' +
+                                "Delete" +
+                            "</button>" +
 
-                                <div class="question-action-group">
+                        "</div>" +
+                    "</td>" +
 
-                                    <button
-                                        type="button"
-                                        class="question-action-button edit"
-                                        data-question-action="edit"
-                                        data-row-number="${escapeHtml(
-                                            item.rowNumber
-                                        )}"
-                                    >
-
-                                        <i class="fa-solid fa-pen"></i>
-
-                                        <span>
-                                            Edit
-                                        </span>
-
-                                    </button>
-
-
-                                    <button
-                                        type="button"
-                                        class="question-action-button delete"
-                                        data-question-action="delete"
-                                        data-row-number="${escapeHtml(
-                                            item.rowNumber
-                                        )}"
-                                    >
-
-                                        <i class="fa-solid fa-trash"></i>
-
-                                        <span>
-                                            Delete
-                                        </span>
-
-                                    </button>
-
-                                </div>
-
-                            </td>
-
-                        </tr>
-                    `;
-
-                }
-            )
+                    "</tr>"
+                );
+            })
             .join("");
 
+    tbody.querySelectorAll(
+        "[data-question-edit]"
+    ).forEach(function (button) {
+        button.addEventListener(
+            "click",
+            function () {
+                const rowNumber =
+                    button.dataset.questionEdit;
+
+                const question =
+                    dashboardQuestions.find(
+                        function (item) {
+                            return String(
+                                item.rowNumber ??
+                                item.row ??
+                                item.id ??
+                                ""
+                            ) ===
+                            String(rowNumber);
+                        }
+                    );
+
+                if (question) {
+                    openQuestionEditor(
+                        question
+                    );
+                }
+            }
+        );
+    });
+
+    tbody.querySelectorAll(
+        "[data-question-delete]"
+    ).forEach(function (button) {
+        button.addEventListener(
+            "click",
+            function () {
+                const rowNumber =
+                    button.dataset.questionDelete;
+
+                const question =
+                    dashboardQuestions.find(
+                        function (item) {
+                            return String(
+                                item.rowNumber ??
+                                item.row ??
+                                item.id ??
+                                ""
+                            ) ===
+                            String(rowNumber);
+                        }
+                    );
+
+                if (question) {
+                    openQuestionDeleteModal(
+                        question
+                    );
+                }
+            }
+        );
+    });
 }
 
-
-/* ============================================================
-   FILTER QUESTIONS
-============================================================ */
 
 function filterQuizQuestions() {
-
     renderQuizQuestions();
-
 }
 
 
-/* ============================================================
-   GET FILTERED QUESTIONS
-============================================================ */
-
 function getFilteredQuestions() {
-
-    const filterInput =
+    const input =
         document.getElementById(
             "questionsLessonFilter"
         );
 
-
     const filter =
-        filterInput
-            ? String(
-                filterInput.value || ""
-              )
+        input
+            ? String(input.value || "")
                 .trim()
                 .toLowerCase()
             : "";
 
-
     if (!filter) {
-
         return dashboardQuestions;
-
     }
 
-
     return dashboardQuestions.filter(
-        function (item) {
+        function (question) {
+            const lessonNo =
+                question.lessonNo ??
+                question.lesson ??
+                "";
 
             return String(
-                item.lessonNo || ""
+                lessonNo
             )
                 .toLowerCase()
                 .includes(filter);
-
         }
     );
+}
 
+
+function updateQuestionsCount(count) {
+    setText(
+        "questionsCount",
+        count
+    );
 }
 
 
 /* ============================================================
-   QUESTION COUNT
-============================================================ */
-
-function updateQuestionsCount(
-    count
-) {
-
-    const element =
-        document.getElementById(
-            "questionsCount"
-        );
-
-
-    if (!element) {
-        return;
-    }
-
-
-    element.textContent =
-        count +
-        (
-            count === 1
-                ? " question"
-                : " questions"
-        );
-
-}
-
-
-/* ============================================================
-   QUESTION EDITOR SETUP
-============================================================ */
+   QUESTION EDITOR
+   ============================================================ */
 
 function setupQuestionEditor() {
-
     const form =
         document.getElementById(
             "questionEditorForm"
         );
 
-
     if (form) {
-
         form.addEventListener(
             "submit",
-            handleQuestionFormSubmit
+            function (event) {
+                event.preventDefault();
+                submitQuestionEditor();
+            }
         );
-
     }
 
-
-    document.addEventListener(
-        "click",
-        function (event) {
-
-            const closeButton =
-                event.target.closest(
-                    "[data-close-question-editor]"
-                );
-
-
-            if (!closeButton) {
-                return;
+    document.querySelectorAll(
+        "[data-close-question-editor]"
+    ).forEach(function (button) {
+        button.addEventListener(
+            "click",
+            function (event) {
+                event.preventDefault();
+                closeQuestionEditor();
             }
-
-
-            closeQuestionEditor();
-
-        }
-    );
-
-
-    document.addEventListener(
-        "keydown",
-        function (event) {
-
-            if (
-                event.key !== "Escape"
-            ) {
-
-                return;
-
-            }
-
-
-            closeQuestionEditor();
-
-            closeQuestionDeleteModal();
-
-            closeSlcReportModal();
-
-        }
-    );
-
+        );
+    });
 }
 
 
-/* ============================================================
-   OPEN QUESTION EDITOR
-============================================================ */
-
-function openQuestionEditor(
-    rowNumber
-) {
+function openQuestionEditor(question) {
+    questionBeingEdited =
+        question || null;
 
     const modal =
         document.getElementById(
             "questionEditorModal"
         );
 
-
     if (!modal) {
         return;
     }
 
-
-    questionBeingEdited =
-        null;
-
-
-    const numericRow =
-        Number(rowNumber);
-
-
-    const isEditing =
-        Number.isInteger(
-            numericRow
-        ) &&
-        numericRow >= 2;
-
-
-    if (isEditing) {
-
-        const question =
-            dashboardQuestions.find(
-                function (item) {
-
-                    return Number(
-                        item.rowNumber
-                    ) === numericRow;
-
-                }
-            );
-
-
-        if (!question) {
-
-            setQuestionsStatus(
-                "That question could not be found. Please refresh the list.",
-                "error"
-            );
-
-            return;
-
-        }
-
-
-        questionBeingEdited =
-            question;
-
-
+    if (question) {
         setText(
             "questionEditorEyebrow",
             "Edit Question"
         );
-
 
         setText(
             "questionEditorTitle",
             "Edit Quiz Question"
         );
 
-
         setText(
             "questionEditorDescription",
-            "Update this question and save your changes."
+            "Update the question and save your changes."
         );
-
 
         fillQuestionEditor(
             question
         );
 
-
     } else {
-
         setText(
             "questionEditorEyebrow",
             "New Question"
         );
-
 
         setText(
             "questionEditorTitle",
             "Add Quiz Question"
         );
 
-
         setText(
             "questionEditorDescription",
             "Create a new question for the SLC quiz."
         );
 
-
         clearQuestionEditor();
-
     }
-
 
     setQuestionEditorStatus(
         "",
         ""
     );
 
-
-    modal.classList.add(
-        "active"
-    );
-
+    modal.classList.add("active");
 
     modal.setAttribute(
         "aria-hidden",
         "false"
     );
 
-
     document.body.classList.add(
         "question-modal-open"
     );
-
-
-    const firstInput =
-        document.getElementById(
-            "questionEditorLessonNo"
-        );
-
-
-    if (firstInput) {
-
-        window.setTimeout(
-            function () {
-
-                firstInput.focus();
-
-            },
-            100
-        );
-
-    }
-
 }
 
 
-/* ============================================================
-   CLOSE QUESTION EDITOR
-============================================================ */
-
 function closeQuestionEditor() {
-
     const modal =
         document.getElementById(
             "questionEditorModal"
         );
 
-
     if (!modal) {
         return;
     }
 
-
-    if (questionSaveInProgress) {
-        return;
-    }
-
-
     modal.classList.remove(
         "active"
     );
-
 
     modal.setAttribute(
         "aria-hidden",
         "true"
     );
 
-
     document.body.classList.remove(
         "question-modal-open"
     );
 
-
     questionBeingEdited =
         null;
 
+    questionSaveInProgress =
+        false;
 }
 
 
-/* ============================================================
-   FILL EDITOR
-============================================================ */
-
-function fillQuestionEditor(
-    question
-) {
-
+function fillQuestionEditor(question) {
     setInputValue(
         "questionEditorRowNumber",
-        question.rowNumber
+        question.rowNumber ??
+        question.row ??
+        question.id ??
+        ""
     );
-
 
     setInputValue(
         "questionEditorLessonNo",
-        question.lessonNo
+        question.lessonNo ??
+        question.lesson ??
+        ""
     );
-
-
-    setInputValue(
-        "questionEditorQuestion",
-        question.question
-    );
-
-
-    setInputValue(
-        "questionEditorOptionA",
-        question.optionA
-    );
-
-
-    setInputValue(
-        "questionEditorOptionB",
-        question.optionB
-    );
-
-
-    setInputValue(
-        "questionEditorOptionC",
-        question.optionC
-    );
-
-
-    setInputValue(
-        "questionEditorOptionD",
-        question.optionD
-    );
-
-
-    setInputValue(
-        "questionEditorCorrectOption",
-        question.correctOption
-    );
-
 
     setInputValue(
         "questionEditorPoints",
-        question.points
+        question.points ??
+        200
     );
 
+    setInputValue(
+        "questionEditorQuestion",
+        question.question ??
+        question.questionText ??
+        ""
+    );
+
+    setInputValue(
+        "questionEditorOptionA",
+        question.optionA ??
+        ""
+    );
+
+    setInputValue(
+        "questionEditorOptionB",
+        question.optionB ??
+        ""
+    );
+
+    setInputValue(
+        "questionEditorOptionC",
+        question.optionC ??
+        ""
+    );
+
+    setInputValue(
+        "questionEditorOptionD",
+        question.optionD ??
+        ""
+    );
+
+    setInputValue(
+        "questionEditorCorrectOption",
+        question.correctOption ??
+        question.correctAnswer ??
+        ""
+    );
 }
 
 
-/* ============================================================
-   CLEAR EDITOR
-============================================================ */
-
 function clearQuestionEditor() {
-
-    const form =
-        document.getElementById(
-            "questionEditorForm"
-        );
-
-
-    if (form) {
-
-        form.reset();
-
-    }
-
-
     setInputValue(
         "questionEditorRowNumber",
         ""
     );
 
-
     setInputValue(
-        "questionEditorCorrectOption",
+        "questionEditorLessonNo",
         ""
     );
-
 
     setInputValue(
         "questionEditorPoints",
         "200"
     );
 
+    setInputValue(
+        "questionEditorQuestion",
+        ""
+    );
+
+    setInputValue(
+        "questionEditorOptionA",
+        ""
+    );
+
+    setInputValue(
+        "questionEditorOptionB",
+        ""
+    );
+
+    setInputValue(
+        "questionEditorOptionC",
+        ""
+    );
+
+    setInputValue(
+        "questionEditorOptionD",
+        ""
+    );
+
+    setInputValue(
+        "questionEditorCorrectOption",
+        ""
+    );
 }
 
 
-/* ============================================================
-   QUESTION FORM SUBMIT
-============================================================ */
+function validateQuestionEditor() {
+    const lessonNo =
+        getInputValue(
+            "questionEditorLessonNo"
+        );
 
-async function handleQuestionFormSubmit(
-    event
-) {
+    const points =
+        getInputValue(
+            "questionEditorPoints"
+        );
 
-    event.preventDefault();
+    const question =
+        getInputValue(
+            "questionEditorQuestion"
+        );
+
+    const optionA =
+        getInputValue(
+            "questionEditorOptionA"
+        );
+
+    const optionB =
+        getInputValue(
+            "questionEditorOptionB"
+        );
+
+    const optionC =
+        getInputValue(
+            "questionEditorOptionC"
+        );
+
+    const optionD =
+        getInputValue(
+            "questionEditorOptionD"
+        );
+
+    const correctOption =
+        getInputValue(
+            "questionEditorCorrectOption"
+        ).toUpperCase();
+
+    if (!lessonNo) {
+        return "Please enter the lesson number.";
+    }
+
+    if (!points) {
+        return "Please enter the question points.";
+    }
+
+    if (!question) {
+        return "Please enter the question.";
+    }
+
+    if (
+        !optionA ||
+        !optionB ||
+        !optionC ||
+        !optionD
+    ) {
+        return "Please enter all four answer options.";
+    }
+
+    if (
+        !["A", "B", "C", "D"].includes(
+            correctOption
+        )
+    ) {
+        return "Correct option must be A, B, C, or D.";
+    }
+
+    return "";
+}
 
 
+async function submitQuestionEditor() {
     if (questionSaveInProgress) {
         return;
     }
 
+    const validation =
+        validateQuestionEditor();
 
-    if (
-        !dashboardSession ||
-        !dashboardSession.token
-    ) {
-
+    if (validation) {
         setQuestionEditorStatus(
-            "Your session has expired. Please log in again.",
+            validation,
             "error"
         );
 
         return;
-
     }
-
-
-    const data =
-        collectQuestionFormData();
-
-
-    const validationError =
-        validateQuestionFormData(
-            data
-        );
-
-
-    if (validationError) {
-
-        setQuestionEditorStatus(
-            validationError,
-            "error"
-        );
-
-        return;
-
-    }
-
 
     questionSaveInProgress =
         true;
 
-
-    const saveButton =
-        document.getElementById(
-            "saveQuestionButton"
+    const isEditing =
+        Boolean(
+            questionBeingEdited
         );
 
-
-    if (saveButton) {
-
-        saveButton.disabled = true;
-
-        saveButton.innerHTML =
-            '<i class="fa-solid fa-spinner fa-spin"></i><span>Saving...</span>';
-
-    }
-
-
     setQuestionEditorStatus(
-        questionBeingEdited
-            ? "Saving your changes..."
-            : "Adding the question...",
+        isEditing
+            ? "Updating question..."
+            : "Adding question...",
         "loading"
     );
 
-
-    try {
-
-        const action =
-            questionBeingEdited
-                ? "updateSLCAdminQuizQuestion"
-                : "addSLCAdminQuizQuestion";
-
-
-        if (
-            questionBeingEdited
-        ) {
-
-            data.rowNumber =
-                Number(
-                    questionBeingEdited.rowNumber
-                );
-
-        }
-
-
-        const response =
-            await dashboardPost({
-
-                action:
-                    action,
-
-                token:
-                    dashboardSession.token,
-
-                ...data
-
-            });
-
-
-        if (
-            !response ||
-            response.success === false
-        ) {
-
-            throw new Error(
-                response &&
-                response.message
-                    ? response.message
-                    : "Unable to save quiz question."
-            );
-
-        }
-
-
-        setQuestionEditorStatus(
-            response.message ||
-                "Question saved successfully.",
-            "success"
-        );
-
-
-        await loadQuizQuestions();
-
-
-        window.setTimeout(
-            function () {
-
-                closeQuestionEditor();
-
-            },
-            450
-        );
-
-
-    } catch (error) {
-
-        console.error(
-            "Save question error:",
-            error
-        );
-
-
-        setQuestionEditorStatus(
-            error.message ||
-                "Unable to save quiz question.",
-            "error"
-        );
-
-
-    } finally {
-
-        questionSaveInProgress =
-            false;
-
-
-        if (saveButton) {
-
-            saveButton.disabled =
-                false;
-
-            saveButton.innerHTML =
-                '<i class="fa-solid fa-floppy-disk"></i><span>Save Question</span>';
-
-        }
-
-    }
-
-}
-
-
-/* ============================================================
-   COLLECT FORM DATA
-============================================================ */
-
-function collectQuestionFormData() {
-
-    return {
+    const data = {
+        token:
+            dashboardSession.token,
 
         lessonNo:
             getInputValue(
                 "questionEditorLessonNo"
+            ),
+
+        points:
+            getInputValue(
+                "questionEditorPoints"
             ),
 
         question:
@@ -2057,323 +1281,216 @@ function collectQuestionFormData() {
         correctOption:
             getInputValue(
                 "questionEditorCorrectOption"
-            )
-                .toUpperCase(),
-
-        points:
-            Number(
-                getInputValue(
-                    "questionEditorPoints"
-                )
-            )
-
+            ).toUpperCase()
     };
 
-}
+    try {
+        let response;
 
+        if (isEditing) {
+            data.action =
+                "updateSLCAdminQuizQuestion";
 
-/* ============================================================
-   VALIDATE FORM
-============================================================ */
-
-function validateQuestionFormData(
-    data
-) {
-
-    if (!data.lessonNo) {
-
-        return "Lesson number is required.";
-
-    }
-
-
-    if (!data.question) {
-
-        return "Question is required.";
-
-    }
-
-
-    if (
-        !data.optionA ||
-        !data.optionB ||
-        !data.optionC ||
-        !data.optionD
-    ) {
-
-        return "Please provide all four answer options.";
-
-    }
-
-
-    if (
-        ["A", "B", "C", "D"].indexOf(
-            data.correctOption
-        ) === -1
-    ) {
-
-        return "Please select the correct answer.";
-
-    }
-
-
-    if (
-        !Number.isFinite(
-            data.points
-        ) ||
-        data.points <= 0
-    ) {
-
-        return "Points must be greater than zero.";
-
-    }
-
-
-    return "";
-
-}
-
-
-/* ============================================================
-   QUESTION DELETE MODAL
-============================================================ */
-
-function setupQuestionDeleteModal() {
-
-    document.addEventListener(
-        "click",
-        function (event) {
-
-            const closeButton =
-                event.target.closest(
-                    "[data-close-question-delete]"
+            data.rowNumber =
+                getInputValue(
+                    "questionEditorRowNumber"
                 );
 
+            response =
+                await dashboardPost(
+                    data
+                );
 
-            if (!closeButton) {
-                return;
-            }
+        } else {
+            data.action =
+                "addSLCAdminQuizQuestion";
 
-
-            closeQuestionDeleteModal();
-
+            response =
+                await dashboardPost(
+                    data
+                );
         }
-    );
 
+        if (!response || !response.success) {
+            throw new Error(
+                response && response.message
+                    ? response.message
+                    : (
+                        isEditing
+                            ? "Unable to update question."
+                            : "Unable to add question."
+                    )
+            );
+        }
+
+        setQuestionEditorStatus(
+            isEditing
+                ? "Question updated successfully."
+                : "Question added successfully.",
+            "success"
+        );
+
+        await loadQuizQuestions();
+
+        window.setTimeout(
+            function () {
+                closeQuestionEditor();
+            },
+            500
+        );
+
+    } catch (error) {
+        console.error(
+            "Question save error:",
+            error
+        );
+
+        setQuestionEditorStatus(
+            error.message ||
+                "Unable to save question.",
+            "error"
+        );
+
+    } finally {
+        questionSaveInProgress =
+            false;
+    }
+}
+
+
+/* ============================================================
+   QUESTION DELETE
+   ============================================================ */
+
+function setupQuestionDeleteModal() {
+    document.querySelectorAll(
+        "[data-close-question-delete]"
+    ).forEach(function (button) {
+        button.addEventListener(
+            "click",
+            function (event) {
+                event.preventDefault();
+                closeQuestionDeleteModal();
+            }
+        );
+    });
 
     const confirmButton =
         document.getElementById(
             "confirmDeleteQuestionButton"
         );
 
-
     if (confirmButton) {
-
         confirmButton.addEventListener(
             "click",
-            handleQuestionDelete
+            function () {
+                deleteQuestion();
+            }
         );
-
     }
-
 }
 
 
-/* ============================================================
-   OPEN DELETE MODAL
-============================================================ */
-
-function openQuestionDeleteModal(
-    rowNumber
-) {
-
-    const question =
-        dashboardQuestions.find(
-            function (item) {
-
-                return Number(
-                    item.rowNumber
-                ) === Number(
-                    rowNumber
-                );
-
-            }
-        );
-
-
-    if (!question) {
-
-        setQuestionsStatus(
-            "That question could not be found. Please refresh the list.",
-            "error"
-        );
-
-        return;
-
-    }
-
-
+function openQuestionDeleteModal(question) {
     questionBeingDeleted =
-        question;
+        question || null;
 
-
-    const message =
+    const modal =
         document.getElementById(
-            "questionDeleteMessage"
+            "questionDeleteModal"
         );
 
-
-    if (message) {
-
-        message.textContent =
-            "You are about to permanently delete this question: “" +
-            question.question +
-            "”";
-
+    if (!modal) {
+        return;
     }
 
+    const questionText =
+        question.question ??
+        question.questionText ??
+        "this question";
+
+    setText(
+        "questionDeleteMessage",
+        "Are you sure you want to delete this question?\n\n" +
+        questionText
+    );
 
     setQuestionDeleteStatus(
         "",
         ""
     );
 
-
-    const modal =
-        document.getElementById(
-            "questionDeleteModal"
-        );
-
-
-    if (!modal) {
-        return;
-    }
-
-
     modal.classList.add(
         "active"
     );
-
 
     modal.setAttribute(
         "aria-hidden",
         "false"
     );
 
-
     document.body.classList.add(
         "question-modal-open"
     );
-
 }
 
 
-/* ============================================================
-   CLOSE DELETE MODAL
-============================================================ */
-
 function closeQuestionDeleteModal() {
-
     const modal =
         document.getElementById(
             "questionDeleteModal"
         );
 
-
     if (!modal) {
         return;
     }
 
-
-    if (questionDeleteInProgress) {
-        return;
-    }
-
-
     modal.classList.remove(
         "active"
     );
-
 
     modal.setAttribute(
         "aria-hidden",
         "true"
     );
 
-
     document.body.classList.remove(
         "question-modal-open"
     );
 
-
     questionBeingDeleted =
         null;
 
+    questionDeleteInProgress =
+        false;
 }
 
 
-/* ============================================================
-   DELETE QUESTION
-============================================================ */
-
-async function handleQuestionDelete() {
-
+async function deleteQuestion() {
     if (
         questionDeleteInProgress ||
         !questionBeingDeleted
     ) {
-
         return;
-
     }
-
-
-    if (
-        !dashboardSession ||
-        !dashboardSession.token
-    ) {
-
-        setQuestionDeleteStatus(
-            "Your session has expired. Please log in again.",
-            "error"
-        );
-
-        return;
-
-    }
-
 
     questionDeleteInProgress =
         true;
-
-
-    const button =
-        document.getElementById(
-            "confirmDeleteQuestionButton"
-        );
-
-
-    if (button) {
-
-        button.disabled = true;
-
-        button.innerHTML =
-            '<i class="fa-solid fa-spinner fa-spin"></i><span>Deleting...</span>';
-
-    }
-
 
     setQuestionDeleteStatus(
         "Deleting question...",
         "loading"
     );
 
-
     try {
+        const rowNumber =
+            questionBeingDeleted.rowNumber ??
+            questionBeingDeleted.row ??
+            questionBeingDeleted.id ??
+            "";
 
         const response =
             await dashboardPost({
-
                 action:
                     "deleteSLCAdminQuizQuestion",
 
@@ -2381,360 +1498,194 @@ async function handleQuestionDelete() {
                     dashboardSession.token,
 
                 rowNumber:
-                    Number(
-                        questionBeingDeleted.rowNumber
-                    )
-
+                    rowNumber
             });
 
-
-        if (
-            !response ||
-            response.success === false
-        ) {
-
+        if (!response || !response.success) {
             throw new Error(
-                response &&
-                response.message
+                response && response.message
                     ? response.message
-                    : "Unable to delete quiz question."
+                    : "Unable to delete question."
             );
-
         }
 
-
         setQuestionDeleteStatus(
-            response.message ||
-                "Question deleted successfully.",
+            "Question deleted successfully.",
             "success"
         );
 
-
         await loadQuizQuestions();
-
 
         window.setTimeout(
             function () {
-
                 closeQuestionDeleteModal();
-
             },
-            400
+            500
         );
 
-
     } catch (error) {
-
         console.error(
-            "Delete question error:",
+            "Question delete error:",
             error
         );
 
-
         setQuestionDeleteStatus(
             error.message ||
-                "Unable to delete quiz question.",
+                "Unable to delete question.",
             "error"
         );
 
-
     } finally {
-
         questionDeleteInProgress =
             false;
-
-
-        if (button) {
-
-            button.disabled =
-                false;
-
-            button.innerHTML =
-                '<i class="fa-solid fa-trash"></i><span>Delete Question</span>';
-
-        }
-
     }
-
 }
 
 
 /* ============================================================
-   QUIZ ATTEMPTS — CONTROLS
-============================================================ */
+   QUIZ ATTEMPTS
+   ============================================================ */
 
 function setupAttemptsControls() {
-
     const refreshButton =
         document.getElementById(
             "refreshAttemptsButton"
         );
 
+    if (refreshButton) {
+        refreshButton.addEventListener(
+            "click",
+            function () {
+                loadQuizAttempts();
+            }
+        );
+    }
+
+    const searchInput =
+        document.getElementById(
+            "attemptsSearchInput"
+        );
+
+    if (searchInput) {
+        searchInput.addEventListener(
+            "input",
+            function () {
+                filterQuizAttempts();
+            }
+        );
+    }
 
     const lessonFilter =
         document.getElementById(
             "attemptsLessonFilter"
         );
 
-
-    const searchInput =
-        document.getElementById(
-            "attemptsSearchInput"
-        );
-
-
-    if (refreshButton) {
-
-        refreshButton.addEventListener(
-            "click",
+    if (lessonFilter) {
+        lessonFilter.addEventListener(
+            "input",
             function () {
-
-                if (
-                    !dashboardSession ||
-                    !dashboardSession.token
-                ) {
-
-                    return;
-
-                }
-
-
-                loadQuizAttempts();
-
+                filterQuizAttempts();
             }
         );
 
-    }
-
-
-    if (lessonFilter) {
-
         lessonFilter.addEventListener(
-            "input",
-            filterQuizAttempts
+            "change",
+            function () {
+                filterQuizAttempts();
+            }
         );
-
     }
-
-
-    if (searchInput) {
-
-        searchInput.addEventListener(
-            "input",
-            filterQuizAttempts
-        );
-
-    }
-
 }
 
 
-/* ============================================================
-   LOAD QUIZ ATTEMPTS
-============================================================ */
-
 async function loadQuizAttempts() {
-
-    if (
-        !dashboardSession ||
-        !dashboardSession.token
-    ) {
-
+    if (!dashboardSession) {
         return;
-
     }
-
 
     setAttemptsStatus(
-        "Loading quiz attempts..."
+        "Loading quiz attempts...",
+        "loading"
     );
 
-
-    const tableBody =
-        document.getElementById(
-            "attemptsTableBody"
-        );
-
-
-    const refreshButton =
-        document.getElementById(
-            "refreshAttemptsButton"
-        );
-
-
-    if (refreshButton) {
-
-        refreshButton.disabled = true;
-
-        refreshButton.innerHTML =
-            '<i class="fa-solid fa-spinner fa-spin"></i><span>Loading...</span>';
-
-    }
-
-
-    if (tableBody) {
-
-        tableBody.innerHTML = `
-            <tr>
-                <td
-                    colspan="6"
-                    class="attempts-empty-cell"
-                >
-                    Loading quiz attempts...
-                </td>
-            </tr>
-        `;
-
-    }
-
-
     try {
-
         const response =
             await dashboardGet({
-
                 action:
                     "getSLCAdminQuizAttempts",
 
                 token:
                     dashboardSession.token
-
             });
 
-
-        if (
-            !response
-        ) {
-
+        if (!response || !response.success) {
             throw new Error(
-                "No response was received from the server."
+                response && response.message
+                    ? response.message
+                    : "Unable to load quiz attempts."
             );
-
         }
-
-
-        if (
-            response.success === false
-        ) {
-
-            throw new Error(
-                response.message ||
-                response.error ||
-                "Unable to load quiz attempts."
-            );
-
-        }
-
 
         dashboardAttempts =
-            Array.isArray(
-                response.attempts
-            )
+            Array.isArray(response.attempts)
                 ? response.attempts
                 : [];
 
-
-        renderQuizAttempts(
-            dashboardAttempts
-        );
-
+        renderQuizAttempts();
 
         setAttemptsStatus(
             dashboardAttempts.length +
-            " attempt" +
-            (
-                dashboardAttempts.length === 1
-                    ? ""
-                    : "s"
-            ) +
-            " found."
+                " attempt" +
+                (
+                    dashboardAttempts.length === 1
+                        ? ""
+                        : "s"
+                ) +
+                " loaded.",
+            "success"
         );
 
-
     } catch (error) {
-
         console.error(
-            "Load quiz attempts error:",
+            "Quiz attempts error:",
             error
         );
 
-
-        dashboardAttempts =
-            [];
-
-
-        if (tableBody) {
-
-            tableBody.innerHTML = `
-                <tr>
-                    <td
-                        colspan="6"
-                        class="attempts-empty-cell"
-                    >
-                        Unable to load quiz attempts.
-                    </td>
-                </tr>
-            `;
-
-        }
-
-
-        updateAttemptsCount(
-            0
-        );
-
-
         setAttemptsStatus(
             error.message ||
-            "Unable to load quiz attempts."
+                "Unable to load quiz attempts.",
+            "error"
         );
-
-
-    } finally {
-
-        if (refreshButton) {
-
-            refreshButton.disabled = false;
-
-            refreshButton.innerHTML =
-                '<i class="fa-solid fa-rotate"></i><span>Refresh</span>';
-
-        }
-
     }
-
 }
 
 
-/* ============================================================
-   FILTER QUIZ ATTEMPTS
-============================================================ */
-
 function filterQuizAttempts() {
+    renderQuizAttempts();
+}
+
+
+function renderQuizAttempts() {
+    const tbody =
+        document.getElementById(
+            "attemptsTableBody"
+        );
+
+    if (!tbody) {
+        return;
+    }
+
+    const searchInput =
+        document.getElementById(
+            "attemptsSearchInput"
+        );
 
     const lessonInput =
         document.getElementById(
             "attemptsLessonFilter"
         );
 
-
-    const searchInput =
-        document.getElementById(
-            "attemptsSearchInput"
-        );
-
-
-    const lessonValue =
-        lessonInput
-            ? String(
-                lessonInput.value || ""
-              )
-                .trim()
-                .toLowerCase()
-            : "";
-
-
-    const searchValue =
+    const search =
         searchInput
             ? String(
                 searchInput.value || ""
@@ -2743,457 +1694,478 @@ function filterQuizAttempts() {
                 .toLowerCase()
             : "";
 
+    const lesson =
+        lessonInput
+            ? String(
+                lessonInput.value || ""
+              )
+                .trim()
+                .toLowerCase()
+            : "";
 
     const filtered =
         dashboardAttempts.filter(
             function (attempt) {
-
-                const lesson =
+                const memberName =
                     String(
-                        attempt.lessonNo || ""
-                    )
-                        .toLowerCase();
+                        attempt.memberName ||
+                        attempt.name ||
+                        attempt.fullName ||
+                        ""
+                    ).toLowerCase();
 
-
-                const name =
+                const lessonNo =
                     String(
-                        attempt.name || ""
-                    )
-                        .toLowerCase();
-
+                        attempt.lessonNo ||
+                        attempt.lesson ||
+                        ""
+                    ).toLowerCase();
 
                 const memberId =
                     String(
-                        attempt.memberId || ""
-                    )
-                        .toLowerCase();
-
-
-                const matchesLesson =
-                    !lessonValue ||
-                    lesson === lessonValue;
-
+                        attempt.memberId ||
+                        ""
+                    ).toLowerCase();
 
                 const matchesSearch =
-                    !searchValue ||
-                    name.includes(
-                        searchValue
-                    ) ||
-                    memberId.includes(
-                        searchValue
-                    );
+                    !search ||
+                    memberName.includes(search) ||
+                    memberId.includes(search);
 
+                const matchesLesson =
+                    !lesson ||
+                    lessonNo.includes(lesson);
 
                 return (
-                    matchesLesson &&
-                    matchesSearch
+                    matchesSearch &&
+                    matchesLesson
                 );
-
             }
         );
 
-
-    renderQuizAttempts(
-        filtered
-    );
-
-
-    setAttemptsStatus(
-        filtered.length +
-        " matching attempt" +
-        (
-            filtered.length === 1
-                ? ""
-                : "s"
-        ) +
-        "."
-    );
-
-}
-
-
-/* ============================================================
-   RENDER QUIZ ATTEMPTS
-============================================================ */
-
-function renderQuizAttempts(
-    attempts
-) {
-
-    const tableBody =
-        document.getElementById(
-            "attemptsTableBody"
-        );
-
-
-    if (!tableBody) {
-        return;
-    }
-
-
-    const safeAttempts =
-        Array.isArray(
-            attempts
-        )
-            ? attempts
-            : [];
-
-
     updateAttemptsCount(
-        safeAttempts.length
+        filtered.length
     );
 
-
-    if (!safeAttempts.length) {
-
-        tableBody.innerHTML = `
-            <tr>
-                <td
-                    colspan="6"
-                    class="attempts-empty-cell"
-                >
-                    No quiz attempts found.
-                </td>
-            </tr>
-        `;
+    if (!filtered.length) {
+        tbody.innerHTML =
+            '<tr><td colspan="8" class="table-empty">No quiz attempts found.</td></tr>';
 
         return;
-
     }
 
+    tbody.innerHTML =
+        filtered
+            .map(function (attempt) {
+                return (
+                    "<tr>" +
 
-    tableBody.innerHTML =
-        safeAttempts
-            .map(
-                function (attempt) {
+                    "<td>" +
+                        escapeHtml(
+                            String(
+                                attempt.lessonNo ??
+                                attempt.lesson ??
+                                "—"
+                            )
+                        ) +
+                    "</td>" +
 
-                    return `
-                        <tr>
+                    "<td>" +
+                        escapeHtml(
+                            String(
+                                attempt.memberName ??
+                                attempt.name ??
+                                attempt.fullName ??
+                                "—"
+                            )
+                        ) +
+                    "</td>" +
 
-                            <td>
-                                ${escapeHtml(
-                                    attempt.lessonNo ??
-                                    ""
-                                )}
-                            </td>
+                    "<td>" +
+                        escapeHtml(
+                            String(
+                                attempt.memberId ??
+                                "—"
+                            )
+                        ) +
+                    "</td>" +
 
-                            <td>
+                    "<td>" +
+                        escapeHtml(
+                            String(
+                                attempt.score ??
+                                attempt.totalScore ??
+                                "—"
+                            )
+                        ) +
+                    "</td>" +
 
-                                <div class="attempt-participant">
+                    "<td>" +
+                        escapeHtml(
+                            String(
+                                attempt.totalPoints ??
+                                attempt.maxScore ??
+                                "—"
+                            )
+                        ) +
+                    "</td>" +
 
-                                    <strong>
-                                        ${escapeHtml(
-                                            attempt.name ||
-                                            "Unknown"
-                                        )}
-                                    </strong>
+                    "<td>" +
+                        escapeHtml(
+                            String(
+                                attempt.percentage ??
+                                "—"
+                            )
+                        ) +
+                    "</td>" +
 
-                                    ${
-                                        attempt.memberId
-                                            ? `
-                                                <small>
-                                                    ${escapeHtml(
-                                                        attempt.memberId
-                                                    )}
-                                                </small>
-                                            `
-                                            : ""
-                                    }
+                    "<td>" +
+                        escapeHtml(
+                            String(
+                                attempt.status ??
+                                "Completed"
+                            )
+                        ) +
+                    "</td>" +
 
-                                </div>
+                    "<td>" +
+                        escapeHtml(
+                            formatDashboardDateTime(
+                                attempt.submittedAt ||
+                                attempt.timestamp ||
+                                attempt.date
+                            )
+                        ) +
+                    "</td>" +
 
-                            </td>
-
-
-                            <td>
-                                ${escapeHtml(
-                                    attempt.score ??
-                                    0
-                                )}
-                            </td>
-
-
-                            <td>
-                                ${escapeHtml(
-                                    attempt.pointsEarned ??
-                                    0
-                                )}
-                            </td>
-
-
-                            <td>
-                                ${escapeHtml(
-                                    attempt.percentage ??
-                                    attempt.scorePercentage ??
-                                    ""
-                                )}
-                            </td>
-
-
-                            <td>
-                                ${escapeHtml(
-                                    attempt.date ||
-                                    ""
-                                )}
-                            </td>
-
-                        </tr>
-                    `;
-
-                }
-            )
+                    "</tr>"
+                );
+            })
             .join("");
+}
 
+
+function updateAttemptsCount(count) {
+    setText(
+        "attemptsCount",
+        count
+    );
 }
 
 
 /* ============================================================
-   ATTEMPTS COUNT
-============================================================ */
+   QUIZ SETTINGS
+   ============================================================ */
 
-function updateAttemptsCount(
-    count
-) {
-
-    const element =
+function setupQuizSettingsControls() {
+    const form =
         document.getElementById(
-            "attemptsCount"
+            "quizSettingsForm"
         );
 
+    if (form) {
+        form.addEventListener(
+            "submit",
+            function (event) {
+                event.preventDefault();
+                saveQuizSettings();
+            }
+        );
+    }
+}
 
-    if (!element) {
+
+async function loadQuizSettings() {
+    if (
+        !dashboardSession ||
+        quizSettingsLoading
+    ) {
         return;
     }
 
+    quizSettingsLoading =
+        true;
 
-    element.textContent =
-        count +
-        (
-            count === 1
-                ? " attempt"
-                : " attempts"
+    setQuizSettingsStatus(
+        "Loading quiz settings...",
+        "loading"
+    );
+
+    try {
+        const response =
+            await dashboardGet({
+                action:
+                    "getSLCAdminQuizSettings",
+
+                token:
+                    dashboardSession.token
+            });
+
+        if (!response || !response.success) {
+            throw new Error(
+                response && response.message
+                    ? response.message
+                    : "Unable to load quiz settings."
+            );
+        }
+
+        const settings =
+            response.settings ||
+            response.data ||
+            response;
+
+        setInputValue(
+            "quizSettingsLesson",
+            settings.lessonNo ??
+            settings.lesson ??
+            ""
         );
 
+        setInputValue(
+            "quizSettingsOpen",
+            convertApiDateToLocalInput(
+                settings.openDate ||
+                settings.openAt ||
+                settings.openTime
+            )
+        );
+
+        setInputValue(
+            "quizSettingsClose",
+            convertApiDateToLocalInput(
+                settings.closeDate ||
+                settings.closeAt ||
+                settings.closeTime
+            )
+        );
+
+        setQuizSettingsStatus(
+            "Quiz settings loaded.",
+            "success"
+        );
+
+    } catch (error) {
+        console.error(
+            "Quiz settings load error:",
+            error
+        );
+
+        setQuizSettingsStatus(
+            error.message ||
+                "Unable to load quiz settings.",
+            "error"
+        );
+
+    } finally {
+        quizSettingsLoading =
+            false;
+    }
 }
 
 
-/* ============================================================
-   ATTEMPTS STATUS
-============================================================ */
-
-function setAttemptsStatus(
-    message
-) {
-
-    const status =
-        document.getElementById(
-            "attemptsStatus"
-        );
-
-
-    if (!status) {
+async function saveQuizSettings() {
+    if (
+        quizSettingsSaving ||
+        !dashboardSession
+    ) {
         return;
     }
 
+    quizSettingsSaving =
+        true;
 
-    status.textContent =
-        message ||
-        "";
+    setQuizSettingsStatus(
+        "Saving quiz settings...",
+        "loading"
+    );
 
+    try {
+        const response =
+            await dashboardPost({
+                action:
+                    "updateSLCAdminQuizSettings",
+
+                token:
+                    dashboardSession.token,
+
+                lessonNo:
+                    getInputValue(
+                        "quizSettingsLesson"
+                    ),
+
+                openDate:
+                    getInputValue(
+                        "quizSettingsOpen"
+                    ),
+
+                closeDate:
+                    getInputValue(
+                        "quizSettingsClose"
+                    )
+            });
+
+        if (!response || !response.success) {
+            throw new Error(
+                response && response.message
+                    ? response.message
+                    : "Unable to save quiz settings."
+            );
+        }
+
+        setQuizSettingsStatus(
+            "Quiz settings saved successfully.",
+            "success"
+        );
+
+    } catch (error) {
+        console.error(
+            "Quiz settings save error:",
+            error
+        );
+
+        setQuizSettingsStatus(
+            error.message ||
+                "Unable to save quiz settings.",
+            "error"
+        );
+
+    } finally {
+        quizSettingsSaving =
+            false;
+    }
+}
+
+
+function convertApiDateToLocalInput(value) {
+    if (!value) {
+        return "";
+    }
+
+    const date =
+        new Date(value);
+
+    if (Number.isNaN(date.getTime())) {
+        return String(value);
+    }
+
+    const pad =
+        function (number) {
+            return String(number)
+                .padStart(2, "0");
+        };
+
+    return (
+        date.getFullYear() +
+        "-" +
+        pad(date.getMonth() + 1) +
+        "-" +
+        pad(date.getDate()) +
+        "T" +
+        pad(date.getHours()) +
+        ":" +
+        pad(date.getMinutes())
+    );
 }
 
 
 /* ============================================================
-   SLC REPORTS — CONTROLS
-============================================================ */
+   SLC REPORTS
+   ============================================================ */
 
 function setupReportsControls() {
-
     const refreshButton =
         document.getElementById(
             "refreshReportsButton"
         );
 
+    if (refreshButton) {
+        refreshButton.addEventListener(
+            "click",
+            function () {
+                loadSLCReports();
+            }
+        );
+    }
 
     const lessonFilter =
         document.getElementById(
             "reportsLessonFilter"
         );
 
-
-    if (refreshButton) {
-
-        refreshButton.addEventListener(
-            "click",
-            function () {
-
-                if (
-                    !dashboardSession ||
-                    !dashboardSession.token
-                ) {
-
-                    setReportsStatus(
-                        "Please log in again.",
-                        "error"
-                    );
-
-                    return;
-
-                }
-
-
-                loadSLCReports();
-
-            }
-        );
-
-    }
-
-
     if (lessonFilter) {
-
         lessonFilter.addEventListener(
             "input",
             function () {
-
                 renderSLCReports();
-
             }
         );
 
+        lessonFilter.addEventListener(
+            "change",
+            function () {
+                renderSLCReports();
+            }
+        );
     }
 
+    setupReportTableActionDelegation();
 }
 
 
-/* ============================================================
-   LOAD SLC REPORTS
-============================================================ */
-
 async function loadSLCReports() {
-
-    if (reportsLoading) {
-        return;
-    }
-
-
     if (
         !dashboardSession ||
-        !dashboardSession.token
+        reportsLoading
     ) {
-
-        setReportsStatus(
-            "Please log in again.",
-            "error"
-        );
-
         return;
-
     }
 
-
-    reportsLoading = true;
-
+    reportsLoading =
+        true;
 
     setReportsStatus(
         "Loading SLC reports...",
         "loading"
     );
 
-
-    const refreshButton =
-        document.getElementById(
-            "refreshReportsButton"
-        );
-
-
-    const tableBody =
-        document.getElementById(
-            "reportsTableBody"
-        );
-
-
-    if (refreshButton) {
-
-        refreshButton.disabled = true;
-
-        refreshButton.innerHTML =
-            '<i class="fa-solid fa-spinner fa-spin"></i><span>Loading...</span>';
-
-    }
-
-
-    if (tableBody) {
-
-        tableBody.innerHTML = `
-            <tr>
-                <td
-                    colspan="9"
-                    class="slc-reports-empty-cell"
-                >
-                    Loading SLC reports...
-                </td>
-            </tr>
-        `;
-
-    }
-
-
     try {
-
-        const lessonInput =
+        const lessonFilter =
             document.getElementById(
                 "reportsLessonFilter"
             );
 
-
         const lessonNo =
-            lessonInput
+            lessonFilter
                 ? String(
-                    lessonInput.value || ""
+                    lessonFilter.value || ""
                   ).trim()
                 : "";
 
-
         const params = {
-
             action:
                 "getSLCReports",
 
             token:
                 dashboardSession.token
-
         };
 
-
         if (lessonNo) {
-
             params.lessonNo =
                 lessonNo;
-
         }
-
 
         const response =
             await dashboardGet(
                 params
             );
 
-
-        if (
-            !response ||
-            response.success === false
-        ) {
-
+        if (!response || !response.success) {
             throw new Error(
-                response &&
-                response.message
+                response && response.message
                     ? response.message
                     : "Unable to load SLC reports."
             );
-
         }
-
 
         dashboardReports =
             Array.isArray(
@@ -3202,37 +2174,30 @@ async function loadSLCReports() {
                 ? response.reports
                 : [];
 
-
         renderSLCReports();
-
 
         setReportsStatus(
             dashboardReports.length +
-            " current report" +
-            (
-                dashboardReports.length === 1
-                    ? ""
-                    : "s"
-            ) +
-            " found.",
+                " report" +
+                (
+                    dashboardReports.length === 1
+                        ? ""
+                        : "s"
+                ) +
+                " loaded.",
             "success"
         );
 
-
     } catch (error) {
-
         console.error(
             "SLC reports error:",
             error
         );
 
-
         dashboardReports =
             [];
 
-
         renderSLCReports();
-
 
         setReportsStatus(
             error.message ||
@@ -3240,1262 +2205,964 @@ async function loadSLCReports() {
             "error"
         );
 
-
     } finally {
-
-        reportsLoading = false;
-
-
-        if (refreshButton) {
-
-            refreshButton.disabled = false;
-
-            refreshButton.innerHTML =
-                '<i class="ri-refresh-line"></i><span>Refresh Reports</span>';
-
-        }
-
+        reportsLoading =
+            false;
     }
-
 }
 
 
-/* ============================================================
-   FILTER REPORTS
-============================================================ */
-
 function getFilteredSLCReports() {
-
-    const lessonInput =
+    const input =
         document.getElementById(
             "reportsLessonFilter"
         );
 
-
-    const lessonFilter =
-        lessonInput
+    const filter =
+        input
             ? String(
-                lessonInput.value || ""
-              ).trim()
+                input.value || ""
+              )
+                .trim()
+                .toLowerCase()
             : "";
 
-
-    if (!lessonFilter) {
-
+    if (!filter) {
         return dashboardReports;
-
     }
-
 
     return dashboardReports.filter(
         function (report) {
-
             return String(
-                report.lessonNo || ""
-            ).trim() === lessonFilter;
-
+                report.lessonNo ??
+                report.lesson ??
+                ""
+            )
+                .toLowerCase()
+                .includes(filter);
         }
     );
-
 }
 
 
-/* ============================================================
-   RENDER REPORTS
-============================================================ */
-
 function renderSLCReports() {
-
-    const tableBody =
+    const tbody =
         document.getElementById(
             "reportsTableBody"
         );
-
-
-    const tableContainer =
-        document.getElementById(
-            "reportsTableContainer"
-        );
-
 
     const emptyState =
         document.getElementById(
             "reportsEmpty"
         );
 
+    if (!tbody) {
+        return;
+    }
 
     const reports =
         getFilteredSLCReports();
-
 
     updateReportsCount(
         reports.length
     );
 
-
-    if (!tableBody) {
-        return;
-    }
-
-
     if (!reports.length) {
-
-        tableBody.innerHTML = "";
-
-
-        if (tableContainer) {
-
-            tableContainer.classList.add(
-                "hidden"
-            );
-
-        }
-
+        tbody.innerHTML = "";
 
         if (emptyState) {
-
-            emptyState.classList.remove(
-                "hidden"
-            );
-
+            emptyState.hidden = false;
         }
 
-
         return;
-
     }
-
-
-    if (tableContainer) {
-
-        tableContainer.classList.remove(
-            "hidden"
-        );
-
-    }
-
 
     if (emptyState) {
-
-        emptyState.classList.add(
-            "hidden"
-        );
-
+        emptyState.hidden = true;
     }
 
-
-    tableBody.innerHTML =
+    tbody.innerHTML =
         reports
-            .map(
-                function (report, index) {
+            .map(function (report, index) {
+                const totalMembers =
+                    report.totalMembers ??
+                    report.members ??
+                    0;
 
-                    const rowKey =
-                        String(
-                            report.reportId ||
-                            index
-                        );
+                const participated =
+                    report.participated ??
+                    0;
 
+                const notParticipated =
+                    report.notParticipated ??
+                    Math.max(
+                        0,
+                        Number(totalMembers) -
+                        Number(participated)
+                    );
 
-                    return `
-                        <tr>
+                return (
+                    "<tr>" +
 
-                            <td>
-                                <span class="question-lesson-badge">
-                                    ${escapeHtml(
-                                        report.lessonNo
-                                    )}
-                                </span>
-                            </td>
+                    "<td>" +
+                        escapeHtml(
+                            String(
+                                report.lessonNo ??
+                                report.lesson ??
+                                "—"
+                            )
+                        ) +
+                    "</td>" +
 
+                    "<td>" +
+                        escapeHtml(
+                            String(
+                                report.groupName ??
+                                report.group ??
+                                "—"
+                            )
+                        ) +
+                    "</td>" +
 
-                            <td>
-                                <strong>
-                                    ${escapeHtml(
-                                        report.groupName ||
-                                        "—"
-                                    )}
-                                </strong>
-                            </td>
+                    "<td>" +
+                        escapeHtml(
+                            String(
+                                totalMembers
+                            )
+                        ) +
+                    "</td>" +
 
+                    "<td>" +
+                        escapeHtml(
+                            String(
+                                participated
+                            )
+                        ) +
+                    "</td>" +
 
-                            <td>
-                                ${escapeHtml(
-                                    report.totalMembers ??
-                                    0
-                                )}
-                            </td>
+                    "<td>" +
+                        escapeHtml(
+                            String(
+                                notParticipated
+                            )
+                        ) +
+                    "</td>" +
 
+                    "<td>" +
+                        escapeHtml(
+                            formatDashboardDateTime(
+                                report.reportDate ||
+                                report.submittedAt ||
+                                report.createdAt ||
+                                report.date
+                            )
+                        ) +
+                    "</td>" +
 
-                            <td>
-                                ${escapeHtml(
-                                    report.participated ??
-                                    0
-                                )}
-                            </td>
+                    "<td>" +
+                        escapeHtml(
+                            String(
+                                report.submittedBy ||
+                                report.submittedByName ||
+                                report.createdBy ||
+                                "—"
+                            )
+                        ) +
+                    "</td>" +
 
+                    "<td>" +
+                        escapeHtml(
+                            String(
+                                report.version ??
+                                "—"
+                            )
+                        ) +
+                    "</td>" +
 
-                            <td>
-                                ${escapeHtml(
-                                    report.notParticipated ??
-                                    0
-                                )}
-                            </td>
+                    "<td>" +
 
+                        '<button type="button" class="table-action-button" data-report-action="view" data-report-index="' +
+                            index +
+                            '"' +
+                            (
+                                report.id
+                                    ? ' data-report-id="' +
+                                      escapeHtml(
+                                          String(
+                                              report.id
+                                          )
+                                      ) +
+                                      '"'
+                                    : ""
+                            ) +
+                        ">" +
+                            "View" +
+                        "</button>" +
 
-                            <td>
-                                ${escapeHtml(
-                                    formatDashboardDate(
-                                        report.reportDate
-                                    )
-                                )}
-                            </td>
+                    "</td>" +
 
-
-                            <td>
-                                ${escapeHtml(
-                                    report.submittedBy ||
-                                    "—"
-                                )}
-                            </td>
-
-
-                            <td>
-                                ${escapeHtml(
-                                    report.version ??
-                                    "—"
-                                )}
-                            </td>
-
-
-                            <td>
-
-                                <button
-                                    type="button"
-                                    class="question-action-button edit"
-                                    data-report-action="view"
-                                    data-report-index="${escapeHtml(
-                                        index
-                                    )}"
-                                    data-report-id="${escapeHtml(
-                                        rowKey
-                                    )}"
-                                >
-                                    <i class="ri-eye-line"></i>
-                                    <span>View</span>
-                                </button>
-
-                            </td>
-
-                        </tr>
-                    `;
-
-                }
-            )
+                    "</tr>"
+                );
+            })
             .join("");
-
-
-    /*
-     * The table body is wired once here through event
-     * delegation. This keeps dynamically rendered View
-     * buttons working without adding listeners repeatedly.
-     */
-    setupReportTableActionDelegation();
-
 }
 
 
-/* ============================================================
-   REPORT TABLE ACTION DELEGATION
-============================================================ */
-
-let reportTableDelegationReady = false;
-
-
 function setupReportTableActionDelegation() {
-
-    if (reportTableDelegationReady) {
-        return;
-    }
-
-
-    const tableBody =
+    const tbody =
         document.getElementById(
             "reportsTableBody"
         );
 
-
-    if (!tableBody) {
+    if (!tbody) {
         return;
     }
 
+    if (
+        tbody.dataset.reportActionsBound ===
+        "true"
+    ) {
+        return;
+    }
 
-    reportTableDelegationReady = true;
+    tbody.dataset.reportActionsBound =
+        "true";
 
-
-    tableBody.addEventListener(
+    tbody.addEventListener(
         "click",
         function (event) {
-
             const button =
                 event.target.closest(
-                    "[data-report-action]"
+                    "[data-report-action='view']"
                 );
-
 
             if (!button) {
                 return;
             }
 
-
-            const action =
-                button.dataset.reportAction;
-
-
-            if (action !== "view") {
-                return;
-            }
-
+            event.preventDefault();
+            event.stopPropagation();
 
             const index =
                 Number(
                     button.dataset.reportIndex
                 );
 
-
-            if (
-                !Number.isInteger(
-                    index
-                )
-            ) {
-
-                return;
-
-            }
-
+            const reports =
+                getFilteredSLCReports();
 
             const report =
-                getFilteredSLCReports()[index];
-
+                reports[index];
 
             if (!report) {
-
-                setReportsStatus(
-                    "That report could not be found. Please refresh the list.",
-                    "error"
-                );
-
                 return;
-
             }
-
 
             openSlcReportModal(
                 report
             );
-
         }
     );
+}
 
+
+function updateReportsCount(count) {
+    setText(
+        "reportsCount",
+        count
+    );
 }
 
 
 /* ============================================================
-   REPORT COUNT
-============================================================ */
-
-function updateReportsCount(
-    count
-) {
-
-    const element =
-        document.getElementById(
-            "reportsCount"
-        );
-
-
-    if (!element) {
-        return;
-    }
-
-
-    element.textContent =
-        count;
-
-}
-
-
-/* ============================================================
-   REPORT STATUS
-============================================================ */
-
-function setReportsStatus(
-    message,
-    type
-) {
-
-    const element =
-        document.getElementById(
-            "reportsStatus"
-        );
-
-
-    if (!element) {
-        return;
-    }
-
-
-    element.textContent =
-        message ||
-        "";
-
-
-    element.className =
-        "slc-reports-status";
-
-
-    if (type) {
-
-        element.classList.add(
-            type
-        );
-
-    }
-
-}
-
-
-/* ============================================================
-   REPORT DETAILS MODAL SETUP
-============================================================ */
+   SLC REPORT DETAILS MODAL
+   ============================================================ */
 
 function setupReportDetailsModal() {
-
-    const closeButton =
-        document.getElementById(
-            "closeSlcReportModalButton"
-        );
-
-
-    if (closeButton) {
-
-        closeButton.addEventListener(
-            "click",
-            function () {
-
-                closeSlcReportModal();
-
-            }
-        );
-
-    }
-
-
-    document.addEventListener(
-        "click",
-        function (event) {
-
-            const closeElement =
-                event.target.closest(
-                    "[data-close-report-modal]"
-                );
-
-
-            if (!closeElement) {
-                return;
-            }
-
-
-            closeSlcReportModal();
-
-        }
-    );
-
-}
-
-
-/* ============================================================
-   OPEN REPORT DETAILS MODAL
-============================================================ */
-
-function openSlcReportModal(
-    report
-) {
-
     const modal =
         document.getElementById(
             "slcReportModal"
         );
 
+    if (!modal) {
+        return;
+    }
+
+    /*
+     * Bind every close element inside the modal.
+     * This includes the close icon/button and
+     * any overlay element carrying
+     * data-close-report-modal.
+     */
+    const closeButtons =
+        modal.querySelectorAll(
+            "[data-close-report-modal]"
+        );
+
+    closeButtons.forEach(
+        function (button) {
+            button.addEventListener(
+                "click",
+                function (event) {
+                    event.preventDefault();
+                    event.stopPropagation();
+
+                    closeSlcReportModal();
+                }
+            );
+        }
+    );
+
+    /*
+     * Explicitly bind the known close button.
+     * The dataset flag prevents accidental
+     * duplicate listeners.
+     */
+    const closeButton =
+        document.getElementById(
+            "closeSlcReportModalButton"
+        );
+
+    if (
+        closeButton &&
+        !closeButton.dataset.reportCloseBound
+    ) {
+        closeButton.dataset.reportCloseBound =
+            "true";
+
+        closeButton.addEventListener(
+            "click",
+            function (event) {
+                event.preventDefault();
+                event.stopPropagation();
+
+                closeSlcReportModal();
+            }
+        );
+    }
+
+    /*
+     * Modal overlay click.
+     *
+     * Clicking the dark overlay closes the modal,
+     * but clicking inside the modal content does not.
+     */
+    modal.addEventListener(
+        "click",
+        function (event) {
+            if (
+                event.target === modal ||
+                event.target.closest(
+                    "[data-close-report-modal]"
+                )
+            ) {
+                event.preventDefault();
+                event.stopPropagation();
+
+                closeSlcReportModal();
+            }
+        }
+    );
+
+    /*
+     * Escape key support.
+     */
+    if (
+        !document.body.dataset
+            .slcReportEscapeBound
+    ) {
+        document.body.dataset
+            .slcReportEscapeBound =
+            "true";
+
+        document.addEventListener(
+            "keydown",
+            function (event) {
+                if (
+                    event.key !== "Escape" &&
+                    event.key !== "Esc"
+                ) {
+                    return;
+                }
+
+                const reportModal =
+                    document.getElementById(
+                        "slcReportModal"
+                    );
+
+                if (
+                    reportModal &&
+                    (
+                        reportModal.classList.contains(
+                            "active"
+                        ) ||
+                        reportModal.getAttribute(
+                            "aria-hidden"
+                        ) === "false"
+                    )
+                ) {
+                    closeSlcReportModal();
+                }
+            }
+        );
+    }
+}
+
+
+function openSlcReportModal(report) {
+    const modal =
+        document.getElementById(
+            "slcReportModal"
+        );
 
     const details =
         document.getElementById(
             "slcReportDetails"
         );
 
-
-    if (
-        !modal ||
-        !details
-    ) {
-
+    if (!modal || !details) {
         return;
-
     }
-
 
     reportBeingViewed =
         report;
 
-
     setText(
         "slcReportModalTitle",
         report.groupName
-            ? report.groupName + " — SLC Report"
+            ? report.groupName +
+              " — SLC Report"
             : "SLC Report"
     );
-
 
     setText(
         "slcReportModalSubtitle",
         "Lesson " +
-            String(
-                report.lessonNo ||
-                "—"
-            ) +
-            " · Report version " +
-            String(
-                report.version ??
-                "—"
-            )
+        String(
+            report.lessonNo ||
+            "—"
+        ) +
+        " · Report version " +
+        String(
+            report.version ??
+            "—"
+        )
     );
-
 
     details.innerHTML =
         buildSlcReportDetailsHtml(
             report
         );
 
+    /*
+     * Reset any explicit hidden/display
+     * state that may have been applied when
+     * the previous report was closed.
+     */
+    modal.hidden =
+        false;
+
+    modal.style.display =
+        "";
+
+    modal.style.visibility =
+        "visible";
+
+    modal.style.pointerEvents =
+        "auto";
 
     modal.classList.add(
         "active"
     );
-
 
     modal.setAttribute(
         "aria-hidden",
         "false"
     );
 
-
     document.body.classList.add(
         "question-modal-open"
     );
 
-
     window.setTimeout(
         function () {
-
             const closeButton =
                 document.getElementById(
                     "closeSlcReportModalButton"
                 );
 
-
             if (closeButton) {
-
                 closeButton.focus();
-
             }
-
         },
         100
     );
-
 }
 
 
-/* ============================================================
-   CLOSE REPORT DETAILS MODAL
-============================================================ */
-
 function closeSlcReportModal() {
-
     const modal =
         document.getElementById(
             "slcReportModal"
         );
 
-
     if (!modal) {
         return;
     }
 
-
+    /*
+     * Remove the active state used by
+     * the dashboard CSS.
+     */
     modal.classList.remove(
         "active"
     );
 
+    /*
+     * Explicitly hide the modal so that
+     * no invisible overlay can remain on top
+     * of the dashboard and block clicks.
+     */
+    modal.hidden =
+        true;
 
     modal.setAttribute(
         "aria-hidden",
         "true"
     );
 
+    modal.style.display =
+        "none";
+
+    modal.style.visibility =
+        "hidden";
+
+    modal.style.pointerEvents =
+        "none";
 
     document.body.classList.remove(
         "question-modal-open"
     );
 
-
     reportBeingViewed =
         null;
-
 }
 
 
 /* ============================================================
-   BUILD REPORT DETAILS
-============================================================ */
+   REPORT DETAILS HTML
+   ============================================================ */
 
-function buildSlcReportDetailsHtml(
-    report
-) {
-
+function buildSlcReportDetailsHtml(report) {
     const nonParticipants =
         normalizeReportArray(
             report.nonParticipants
         );
 
-
     const contactedTable =
         normalizeReportArray(
-            report.contactedTable
+            report.contactedTable ||
+            report.contacted ||
+            report.followUp
         );
-
 
     const supportGiven =
         normalizeReportArray(
-            report.supportGiven
+            report.supportGiven ||
+            report.support ||
+            report.supportNotes
         );
 
+    const notes =
+        report.observations ||
+        report.notes ||
+        report.additionalNotes ||
+        "";
 
-    return `
+    const totalMembers =
+        report.totalMembers ??
+        report.members ??
+        0;
 
-        <div class="slc-report-detail-summary">
+    const participated =
+        report.participated ??
+        0;
 
-            <div class="slc-report-detail-item">
-                <span>Lesson</span>
-                <strong>
-                    ${escapeHtml(
-                        report.lessonNo ||
-                        "—"
-                    )}
-                </strong>
-            </div>
+    const notParticipated =
+        report.notParticipated ??
+        Math.max(
+            0,
+            Number(totalMembers) -
+            Number(participated)
+        );
 
+    const participationRate =
+        totalMembers > 0
+            ? Math.round(
+                (
+                    Number(participated) /
+                    Number(totalMembers)
+                ) *
+                100
+            )
+            : 0;
 
-            <div class="slc-report-detail-item">
-                <span>Group</span>
-                <strong>
-                    ${escapeHtml(
-                        report.groupName ||
-                        "—"
-                    )}
-                </strong>
-            </div>
+    return (
+        '<div class="slc-report-detail-grid">' +
 
-
-            <div class="slc-report-detail-item">
-                <span>Group Leader</span>
-                <strong>
-                    ${escapeHtml(
-                        report.groupLeaderName ||
-                        "—"
-                    )}
-                </strong>
-            </div>
-
-
-            <div class="slc-report-detail-item">
-                <span>Report Date</span>
-                <strong>
-                    ${escapeHtml(
-                        formatDashboardDate(
-                            report.reportDate
+            '<div class="slc-report-detail-card">' +
+                "<span>Total Members</span>" +
+                "<strong>" +
+                    escapeHtml(
+                        String(
+                            totalMembers
                         )
-                    )}
-                </strong>
-            </div>
+                    ) +
+                "</strong>" +
+            "</div>" +
 
+            '<div class="slc-report-detail-card">' +
+                "<span>Participated</span>" +
+                "<strong>" +
+                    escapeHtml(
+                        String(
+                            participated
+                        )
+                    ) +
+                "</strong>" +
+            "</div>" +
 
-            <div class="slc-report-detail-item">
-                <span>Total Members</span>
-                <strong>
-                    ${escapeHtml(
-                        report.totalMembers ??
-                        0
-                    )}
-                </strong>
-            </div>
+            '<div class="slc-report-detail-card">' +
+                "<span>Not Participated</span>" +
+                "<strong>" +
+                    escapeHtml(
+                        String(
+                            notParticipated
+                        )
+                    ) +
+                "</strong>" +
+            "</div>" +
 
+            '<div class="slc-report-detail-card">' +
+                "<span>Participation Rate</span>" +
+                "<strong>" +
+                    escapeHtml(
+                        String(
+                            participationRate
+                        )
+                    ) +
+                    "%" +
+                "</strong>" +
+            "</div>" +
 
-            <div class="slc-report-detail-item">
-                <span>Participated</span>
-                <strong>
-                    ${escapeHtml(
-                        report.participated ??
-                        0
-                    )}
-                </strong>
-            </div>
+        "</div>" +
 
+        '<div class="slc-report-detail-section">' +
+            "<h4>Submission</h4>" +
 
-            <div class="slc-report-detail-item">
-                <span>Not Participated</span>
-                <strong>
-                    ${escapeHtml(
-                        report.notParticipated ??
-                        0
-                    )}
-                </strong>
-            </div>
+            '<div class="slc-report-detail-list">' +
 
+                "<div>" +
+                    "<span>Lesson</span>" +
+                    "<strong>" +
+                        escapeHtml(
+                            String(
+                                report.lessonNo ??
+                                report.lesson ??
+                                "—"
+                            )
+                        ) +
+                    "</strong>" +
+                "</div>" +
 
-            <div class="slc-report-detail-item">
-                <span>Version</span>
-                <strong>
-                    ${escapeHtml(
-                        report.version ??
-                        "—"
-                    )}
-                </strong>
-            </div>
+                "<div>" +
+                    "<span>Group</span>" +
+                    "<strong>" +
+                        escapeHtml(
+                            String(
+                                report.groupName ??
+                                report.group ??
+                                "—"
+                            )
+                        ) +
+                    "</strong>" +
+                "</div>" +
 
-        </div>
+                "<div>" +
+                    "<span>Submitted By</span>" +
+                    "<strong>" +
+                        escapeHtml(
+                            String(
+                                report.submittedBy ||
+                                report.submittedByName ||
+                                report.createdBy ||
+                                "—"
+                            )
+                        ) +
+                    "</strong>" +
+                "</div>" +
 
-
-        <div class="slc-report-detail-section">
-
-            <div class="slc-report-detail-section-heading">
-                <span>
-                    SUBMISSION
-                </span>
-            </div>
-
-
-            <div class="slc-report-detail-list">
-
-                <div>
-                    <span>Submitted By</span>
-                    <strong>
-                        ${escapeHtml(
-                            report.submittedBy ||
-                            "—"
-                        )}
-                    </strong>
-                </div>
-
-
-                <div>
-                    <span>Submitted At</span>
-                    <strong>
-                        ${escapeHtml(
+                "<div>" +
+                    "<span>Report Date</span>" +
+                    "<strong>" +
+                        escapeHtml(
                             formatDashboardDateTime(
-                                report.submittedAt
+                                report.reportDate ||
+                                report.submittedAt ||
+                                report.createdAt ||
+                                report.date
                             )
-                        )}
-                    </strong>
-                </div>
+                        ) +
+                    "</strong>" +
+                "</div>" +
 
-
-                <div>
-                    <span>Coordinator</span>
-                    <strong>
-                        ${escapeHtml(
-                            report.coordinatorName ||
-                            "—"
-                        )}
-                    </strong>
-                </div>
-
-
-                <div>
-                    <span>Coordinator Date</span>
-                    <strong>
-                        ${escapeHtml(
-                            formatDashboardDate(
-                                report.coordinatorDate
+                "<div>" +
+                    "<span>Version</span>" +
+                    "<strong>" +
+                        escapeHtml(
+                            String(
+                                report.version ??
+                                "—"
                             )
-                        )}
-                    </strong>
-                </div>
+                        ) +
+                    "</strong>" +
+                "</div>" +
 
-            </div>
+            "</div>" +
 
-        </div>
+        "</div>" +
 
+        '<div class="slc-report-detail-section">' +
+            "<h4>Participation Follow-up</h4>" +
 
-        <div class="slc-report-detail-section">
+            buildReportArrayList(
+                contactedTable,
+                "No follow-up records were submitted."
+            ) +
 
-            <div class="slc-report-detail-section-heading">
-                <span>
-                    PARTICIPATION FOLLOW-UP
-                </span>
-            </div>
+        "</div>" +
 
+        '<div class="slc-report-detail-section">' +
+            "<h4>Non-Participants</h4>" +
 
-            <div class="slc-report-detail-block">
+            buildReportArrayList(
+                nonParticipants,
+                "No non-participants were recorded."
+            ) +
 
-                <strong>
-                    Members Yet to Participate
-                </strong>
+        "</div>" +
 
-                ${buildReportArrayList(
-                    nonParticipants,
-                    "No non-participants were recorded."
-                )}
+        '<div class="slc-report-detail-section">' +
+            "<h4>Support Given</h4>" +
 
-            </div>
+            buildReportArrayList(
+                supportGiven,
+                "No support records were submitted."
+            ) +
 
+        "</div>" +
 
-            <div class="slc-report-detail-block">
+        '<div class="slc-report-detail-section">' +
+            "<h4>Notes & Observations</h4>" +
 
-                <strong>
-                    Contacted Members
-                </strong>
+            '<div class="slc-report-notes">' +
+                escapeHtml(
+                    notes ||
+                    "No additional notes were recorded."
+                ) +
+            "</div>" +
 
-                ${buildReportArrayList(
-                    contactedTable,
-                    "No contact information was recorded."
-                )}
-
-            </div>
-
-
-            <div class="slc-report-detail-block">
-
-                <strong>
-                    Support Given
-                </strong>
-
-                ${buildReportArrayList(
-                    supportGiven,
-                    "No support information was recorded."
-                )}
-
-            </div>
-
-        </div>
-
-
-        <div class="slc-report-detail-section">
-
-            <div class="slc-report-detail-section-heading">
-                <span>
-                    NOTES
-                </span>
-            </div>
-
-
-            <div class="slc-report-detail-note">
-
-                <span>
-                    Other Support
-                </span>
-
-                <p>
-                    ${escapeHtml(
-                        report.otherSupport ||
-                        "No other support was recorded."
-                    )}
-                </p>
-
-            </div>
-
-
-            <div class="slc-report-detail-note">
-
-                <span>
-                    Observations
-                </span>
-
-                <p>
-                    ${escapeHtml(
-                        report.observations ||
-                        "No observations were recorded."
-                    )}
-                </p>
-
-            </div>
-
-
-            <div class="slc-report-detail-note">
-
-                <span>
-                    Note
-                </span>
-
-                <p>
-                    ${escapeHtml(
-                        report.note ||
-                        "No additional note was recorded."
-                    )}
-                </p>
-
-            </div>
-
-        </div>
-
-    `;
-
+        "</div>"
+    );
 }
 
 
-/* ============================================================
-   NORMALIZE REPORT ARRAY
-============================================================ */
-
-function normalizeReportArray(
-    value
-) {
-
-    if (
-        Array.isArray(
-            value
-        )
-    ) {
-
+function normalizeReportArray(value) {
+    if (Array.isArray(value)) {
         return value;
-
     }
 
-
     if (
-        typeof value === "string"
+        value === null ||
+        value === undefined ||
+        value === ""
     ) {
+        return [];
+    }
 
-        try {
+    if (typeof value === "string") {
+        const trimmed =
+            value.trim();
 
-            const parsed =
-                JSON.parse(
-                    value
-                );
-
-
-            return Array.isArray(
-                parsed
-            )
-                ? parsed
-                : [];
-
-        } catch (error) {
-
-            return value.trim()
-                ? [value.trim()]
-                : [];
-
+        if (!trimmed) {
+            return [];
         }
 
+        try {
+            const parsed =
+                JSON.parse(trimmed);
+
+            if (Array.isArray(parsed)) {
+                return parsed;
+            }
+        } catch (error) {
+            /* Not JSON. Treat as plain text. */
+        }
+
+        return trimmed
+            .split(/\r?\n/)
+            .map(function (item) {
+                return item.trim();
+            })
+            .filter(Boolean);
     }
 
-
-    return [];
-
+    return [value];
 }
 
-
-/* ============================================================
-   REPORT ARRAY LIST
-============================================================ */
 
 function buildReportArrayList(
     items,
     emptyMessage
 ) {
-
     if (
-        !Array.isArray(
-            items
-        ) ||
+        !Array.isArray(items) ||
         !items.length
     ) {
-
-        return `
-            <p class="slc-report-detail-empty">
-                ${escapeHtml(
+        return (
+            '<div class="slc-report-empty-list">' +
+                escapeHtml(
                     emptyMessage
-                )}
-            </p>
-        `;
-
+                ) +
+            "</div>"
+        );
     }
 
+    return (
+        '<ul class="slc-report-detail-items">' +
 
-    return `
-        <div class="slc-report-detail-array-list">
+            items
+                .map(function (item) {
+                    let text = "";
 
-            ${items
-                .map(
-                    function (item, index) {
+                    if (
+                        typeof item === "string" ||
+                        typeof item === "number"
+                    ) {
+                        text =
+                            String(item);
 
-                        let displayValue = "";
-
-
-                        if (
-                            typeof item === "string"
-                        ) {
-
-                            displayValue =
-                                item;
-
-                        } else if (
-                            item &&
-                            typeof item === "object"
-                        ) {
-
-                            const preferredKeys = [
-                                "name",
-                                "memberName",
-                                "fullName",
-                                "member",
-                                "text",
-                                "reason",
-                                "support",
-                                "note",
-                                "description"
-                            ];
-
-
-                            for (
-                                let i = 0;
-                                i < preferredKeys.length;
-                                i++
-                            ) {
-
-                                const key =
-                                    preferredKeys[i];
-
-
-                                if (
-                                    item[key] !==
-                                    undefined &&
-                                    item[key] !==
-                                    null &&
-                                    String(
-                                        item[key]
-                                    ).trim()
-                                ) {
-
-                                    displayValue =
-                                        String(
-                                            item[key]
-                                        );
-
-                                    break;
-
-                                }
-
-                            }
-
-
-                            if (
-                                !displayValue
-                            ) {
-
-                                displayValue =
-                                    Object.keys(
-                                        item
-                                    )
-                                        .map(
-                                            function (key) {
-
-                                                return (
-                                                    key +
-                                                    ": " +
-                                                    item[key]
-                                                );
-
-                                            }
-                                        )
-                                        .join(
-                                            " · "
-                                        );
-
-                            }
-
-                        } else {
-
-                            displayValue =
-                                String(
-                                    item ??
-                                    ""
-                                );
-
-                        }
-
-
-                        return `
-                            <div class="slc-report-detail-array-item">
-
-                                <span>
-                                    ${index + 1}
-                                </span>
-
-                                <p>
-                                    ${escapeHtml(
-                                        displayValue ||
-                                        "—"
-                                    )}
-                                </p>
-
-                            </div>
-                        `;
-
+                    } else if (
+                        item &&
+                        typeof item === "object"
+                    ) {
+                        text =
+                            item.name ||
+                            item.memberName ||
+                            item.text ||
+                            item.note ||
+                            item.description ||
+                            item.reason ||
+                            JSON.stringify(item);
+                    } else {
+                        text =
+                            String(item);
                     }
-                )
-                .join("")}
 
-        </div>
-    `;
+                    return (
+                        "<li>" +
+                            escapeHtml(
+                                text
+                            ) +
+                        "</li>"
+                    );
+                })
+                .join("") +
 
+        "</ul>"
+    );
 }
 
 
-/* ============================================================
-   REPORT DATE + TIME
-============================================================ */
-
-function formatDashboardDateTime(
-    value
-) {
-
+function formatDashboardDateTime(value) {
     if (!value) {
-
         return "—";
-
     }
 
-
     const date =
-        new Date(
-            value
-        );
-
+        new Date(value);
 
     if (
         Number.isNaN(
             date.getTime()
         )
     ) {
-
-        return String(
-            value
-        );
-
+        return String(value);
     }
-
 
     return date.toLocaleString(
         "en-NG",
         {
-            day: "numeric",
-            month: "short",
             year: "numeric",
+            month: "short",
+            day: "numeric",
             hour: "numeric",
             minute: "2-digit"
         }
     );
-
 }
 
 
 /* ============================================================
-   API GET
-============================================================ */
+   API HELPERS
+   ============================================================ */
 
-async function dashboardGet(
-    params
-) {
-
+async function dashboardGet(params) {
     const query =
         new URLSearchParams();
 
-
-    Object.keys(
-        params || {}
-    ).forEach(
-        function (key) {
-
+    Object.keys(params || {})
+        .forEach(function (key) {
             const value =
                 params[key];
 
-
             if (
                 value !== undefined &&
-                value !== null &&
-                value !== ""
+                value !== null
             ) {
-
                 query.set(
                     key,
                     String(value)
                 );
-
             }
+        });
 
-        }
-    );
-
+    const url =
+        API_URL +
+        "?" +
+        query.toString();
 
     const response =
         await fetch(
-            API_URL +
-            "?" +
-            query.toString(),
+            url,
             {
                 method: "GET",
                 cache: "no-store"
             }
         );
 
-
     if (!response.ok) {
-
         throw new Error(
-            "Server returned HTTP " +
-            response.status +
-            "."
+            "Network error: " +
+            response.status
         );
-
     }
 
-
-    const data =
-        await response.json();
-
-
-    if (!data) {
-
-        throw new Error(
-            "No response was received from the server."
-        );
-
-    }
-
-
-    return data;
-
+    return response.json();
 }
 
 
-/* ============================================================
-   API POST
-============================================================ */
-
-async function dashboardPost(
-    data
-) {
-
+async function dashboardPost(data) {
     const response =
         await fetch(
             API_URL,
@@ -4514,980 +3181,302 @@ async function dashboardPost(
             }
         );
 
-
     if (!response.ok) {
-
         throw new Error(
-            "Server returned HTTP " +
-            response.status +
-            "."
+            "Network error: " +
+            response.status
         );
-
     }
 
-
-    const result =
-        await response.json();
-
-
-    if (!result) {
-
-        throw new Error(
-            "No response was received from the server."
-        );
-
-    }
-
-
-    return result;
-
+    return response.json();
 }
 
 
 /* ============================================================
-   QUIZ SETTINGS
-============================================================ */
-
-function setupQuizSettingsControls() {
-
-    const form =
-        document.getElementById(
-            "quizSettingsForm"
-        );
-
-
-    if (!form) {
-        return;
-    }
-
-
-    form.addEventListener(
-        "submit",
-        function (event) {
-
-            event.preventDefault();
-
-            saveQuizSettings();
-
-        }
-    );
-
-}
-
-
-/* ============================================================
-   LOAD QUIZ SETTINGS
-============================================================ */
-
-async function loadQuizSettings() {
-
-    if (quizSettingsLoading) {
-        return;
-    }
-
-
-    const lessonInput =
-        document.getElementById(
-            "quizSettingsLesson"
-        );
-
-    const openInput =
-        document.getElementById(
-            "quizSettingsOpen"
-        );
-
-    const closeInput =
-        document.getElementById(
-            "quizSettingsClose"
-        );
-
-
-    if (
-        !lessonInput ||
-        !openInput ||
-        !closeInput
-    ) {
-        return;
-    }
-
-
-    quizSettingsLoading = true;
-
-
-    setQuizSettingsStatus(
-        "Loading quiz settings..."
-    );
-
-
-    try {
-
-        if (
-            !dashboardSession ||
-            !dashboardSession.token
-        ) {
-
-            throw new Error(
-                "Your dashboard session has expired. Please log in again."
-            );
-
-        }
-
-
-        const result =
-            await dashboardGet({
-
-                action:
-                    "getSLCAdminQuizSettings",
-
-                token:
-                    dashboardSession.token
-
-            });
-
-
-        if (
-            !result ||
-            result.success === false
-        ) {
-
-            throw new Error(
-                result &&
-                result.message
-                    ? result.message
-                    : "Unable to load quiz settings."
-            );
-
-        }
-
-
-        const settings =
-            result.settings || {};
-
-
-        lessonInput.value =
-            settings.lesson || "";
-
-
-        openInput.value =
-            convertApiDateToLocalInput(
-                settings.open
-            );
-
-
-        closeInput.value =
-            convertApiDateToLocalInput(
-                settings.close
-            );
-
-
-        setQuizSettingsStatus(
-            "Quiz settings loaded."
-        );
-
-    }
-
-    catch (error) {
-
-        console.error(
-            "Quiz settings load error:",
-            error
-        );
-
-
-        setQuizSettingsStatus(
-            error.message ||
-            "Unable to load quiz settings.",
-            true
-        );
-
-    }
-
-    finally {
-
-        quizSettingsLoading = false;
-
-    }
-
-}
-
-
-/* ============================================================
-   SAVE QUIZ SETTINGS
-============================================================ */
-
-async function saveQuizSettings() {
-
-    if (quizSettingsSaving) {
-        return;
-    }
-
-
-    const lessonInput =
-        document.getElementById(
-            "quizSettingsLesson"
-        );
-
-    const openInput =
-        document.getElementById(
-            "quizSettingsOpen"
-        );
-
-    const closeInput =
-        document.getElementById(
-            "quizSettingsClose"
-        );
-
-
-    const saveButton =
-        document.getElementById(
-            "saveQuizSettingsButton"
-        );
-
-
-    if (
-        !lessonInput ||
-        !openInput ||
-        !closeInput
-    ) {
-        return;
-    }
-
-
-    const lesson =
-        String(
-            lessonInput.value || ""
-        ).trim();
-
-
-    const open =
-        String(
-            openInput.value || ""
-        ).trim();
-
-
-    const close =
-        String(
-            closeInput.value || ""
-        ).trim();
-
-
-    if (!lesson) {
-
-        setQuizSettingsStatus(
-            "Please enter the current lesson.",
-            true
-        );
-
-        lessonInput.focus();
-
-        return;
-
-    }
-
-
-    if (
-        !/^\d+$/.test(
-            lesson
-        )
-    ) {
-
-        setQuizSettingsStatus(
-            "Current lesson must be a valid lesson number.",
-            true
-        );
-
-        lessonInput.focus();
-
-        return;
-
-    }
-
-
-    if (!open) {
-
-        setQuizSettingsStatus(
-            "Please select when the quiz should open.",
-            true
-        );
-
-        openInput.focus();
-
-        return;
-
-    }
-
-
-    if (!close) {
-
-        setQuizSettingsStatus(
-            "Please select when the quiz should close.",
-            true
-        );
-
-        closeInput.focus();
-
-        return;
-
-    }
-
-
-    const openDate =
-        new Date(
-            open
-        );
-
-
-    const closeDate =
-        new Date(
-            close
-        );
-
-
-    if (
-        isNaN(
-            openDate.getTime()
-        )
-    ) {
-
-        setQuizSettingsStatus(
-            "The opening date and time is invalid.",
-            true
-        );
-
-        openInput.focus();
-
-        return;
-
-    }
-
-
-    if (
-        isNaN(
-            closeDate.getTime()
-        )
-    ) {
-
-        setQuizSettingsStatus(
-            "The closing date and time is invalid.",
-            true
-        );
-
-        closeInput.focus();
-
-        return;
-
-    }
-
-
-    if (
-        closeDate <= openDate
-    ) {
-
-        setQuizSettingsStatus(
-            "The closing time must be later than the opening time.",
-            true
-        );
-
-        closeInput.focus();
-
-        return;
-
-    }
-
-
-    quizSettingsSaving = true;
-
-
-    if (saveButton) {
-
-        saveButton.disabled = true;
-
-        saveButton.classList.add(
-            "is-loading"
-        );
-
-        saveButton.innerHTML =
-            `
-                <i class="ri-loader-4-line ri-spin"></i>
-                <span>Saving...</span>
-            `;
-
-    }
-
-
-    setQuizSettingsStatus(
-        "Saving quiz settings..."
-    );
-
-
-    try {
-
-        if (
-            !dashboardSession ||
-            !dashboardSession.token
-        ) {
-
-            throw new Error(
-                "Your dashboard session has expired. Please log in again."
-            );
-
-        }
-
-
-        const result =
-            await dashboardPost({
-
-                action:
-                    "updateSLCAdminQuizSettings",
-
-                token:
-                    dashboardSession.token,
-
-                lesson:
-                    lesson,
-
-                open:
-                    open,
-
-                close:
-                    close
-
-            });
-
-
-        if (
-            !result ||
-            result.success === false
-        ) {
-
-            throw new Error(
-                result &&
-                result.message
-                    ? result.message
-                    : "Unable to save quiz settings."
-            );
-
-        }
-
-
-        setQuizSettingsStatus(
-            "Quiz settings saved successfully."
-        );
-
-
-        if (
-            result.settings
-        ) {
-
-            lessonInput.value =
-                result.settings.lesson || "";
-
-
-            openInput.value =
-                convertApiDateToLocalInput(
-                    result.settings.open
-                );
-
-
-            closeInput.value =
-                convertApiDateToLocalInput(
-                    result.settings.close
-                );
-
-        }
-
-
-    }
-
-    catch (error) {
-
-        console.error(
-            "Quiz settings save error:",
-            error
-        );
-
-
-        setQuizSettingsStatus(
-            error.message ||
-            "Unable to save quiz settings.",
-            true
-        );
-
-    }
-
-    finally {
-
-        quizSettingsSaving = false;
-
-
-        if (saveButton) {
-
-            saveButton.disabled = false;
-
-            saveButton.classList.remove(
-                "is-loading"
-            );
-
-            saveButton.innerHTML =
-                `
-                    <i class="ri-save-3-line"></i>
-                    <span>Save Quiz Settings</span>
-                `;
-
-        }
-
-    }
-
-}
-
-
-/* ============================================================
-   CONVERT API DATE TO DATETIME-LOCAL
-============================================================ */
-
-function convertApiDateToLocalInput(
-    value
-) {
-
-    if (!value) {
-        return "";
-    }
-
-
-    const date =
-        new Date(
-            value
-        );
-
-
-    if (
-        isNaN(
-            date.getTime()
-        )
-    ) {
-        return "";
-    }
-
-
-    const year =
-        date.getFullYear();
-
-
-    const month =
-        String(
-            date.getMonth() + 1
-        ).padStart(
-            2,
-            "0"
-        );
-
-
-    const day =
-        String(
-            date.getDate()
-        ).padStart(
-            2,
-            "0"
-        );
-
-
-    const hours =
-        String(
-            date.getHours()
-        ).padStart(
-            2,
-            "0"
-        );
-
-
-    const minutes =
-        String(
-            date.getMinutes()
-        ).padStart(
-            2,
-            "0"
-        );
-
-
-    return (
-        `${year}-${month}-${day}` +
-        `T${hours}:${minutes}`
-    );
-
-}
-
-
-/* ============================================================
-   QUIZ SETTINGS STATUS
-============================================================ */
-
-function setQuizSettingsStatus(
-    message,
-    isError = false
-) {
-
-    const status =
-        document.getElementById(
-            "quizSettingsStatus"
-        );
-
-
-    if (!status) {
-        return;
-    }
-
-
-    status.textContent =
-        message || "";
-
-
-    status.classList.toggle(
-        "is-error",
-        Boolean(
-            isError
-        )
-    );
-
-
-    status.classList.toggle(
-        "is-success",
-        Boolean(
-            message &&
-            !isError
-        )
-    );
-
-}
-
-
-/* ============================================================
-   DASHBOARD STATUS
-============================================================ */
+   STATUS HELPERS
+   ============================================================ */
 
 function setDashboardStatus(
     message,
     type
 ) {
-
     const element =
         document.getElementById(
             "dashboardStatus"
         );
 
-
     if (!element) {
         return;
     }
 
-
     element.textContent =
-        message ||
-        "";
-
+        message || "";
 
     element.className =
-        "slc-dashboard-status";
-
+        "dashboard-status";
 
     if (type) {
-
         element.classList.add(
             type
         );
-
     }
-
 }
 
-
-/* ============================================================
-   QUESTIONS STATUS
-============================================================ */
 
 function setQuestionsStatus(
     message,
     type
 ) {
-
     const element =
         document.getElementById(
             "questionsStatus"
         );
 
-
     if (!element) {
         return;
     }
 
-
     element.textContent =
-        message ||
-        "";
-
+        message || "";
 
     element.className =
-        "questions-status";
-
+        "dashboard-status";
 
     if (type) {
-
         element.classList.add(
             type
         );
-
     }
-
 }
 
-
-/* ============================================================
-   EDITOR STATUS
-============================================================ */
 
 function setQuestionEditorStatus(
     message,
     type
 ) {
-
     const element =
         document.getElementById(
             "questionEditorStatus"
         );
 
-
     if (!element) {
         return;
     }
 
-
     element.textContent =
-        message ||
-        "";
-
+        message || "";
 
     element.className =
-        "question-editor-status";
+        "dashboard-status";
 
-
-    if (
-        message &&
-        type
-    ) {
-
+    if (type) {
         element.classList.add(
-            "show",
             type
         );
-
     }
-
 }
 
-
-/* ============================================================
-   DELETE STATUS
-============================================================ */
 
 function setQuestionDeleteStatus(
     message,
     type
 ) {
-
     const element =
         document.getElementById(
             "questionDeleteStatus"
         );
 
+    if (!element) {
+        return;
+    }
+
+    element.textContent =
+        message || "";
+
+    element.className =
+        "dashboard-status";
+
+    if (type) {
+        element.classList.add(
+            type
+        );
+    }
+}
+
+
+function setAttemptsStatus(
+    message,
+    type
+) {
+    const element =
+        document.getElementById(
+            "attemptsStatus"
+        );
 
     if (!element) {
         return;
     }
 
-
     element.textContent =
-        message ||
-        "";
-
+        message || "";
 
     element.className =
-        "question-editor-status";
+        "dashboard-status";
 
-
-    if (
-        message &&
-        type
-    ) {
-
+    if (type) {
         element.classList.add(
-            "show",
             type
         );
+    }
+}
 
+
+function setQuizSettingsStatus(
+    message,
+    type
+) {
+    const element =
+        document.getElementById(
+            "quizSettingsStatus"
+        );
+
+    if (!element) {
+        return;
     }
 
+    element.textContent =
+        message || "";
+
+    element.className =
+        "dashboard-status";
+
+    if (type) {
+        element.classList.add(
+            type
+        );
+    }
+}
+
+
+function setReportsStatus(
+    message,
+    type
+) {
+    const element =
+        document.getElementById(
+            "reportsStatus"
+        );
+
+    if (!element) {
+        return;
+    }
+
+    element.textContent =
+        message || "";
+
+    element.className =
+        "dashboard-status";
+
+    if (type) {
+        element.classList.add(
+            type
+        );
+    }
 }
 
 
 /* ============================================================
-   EMPTY DASHBOARD
-============================================================ */
+   GENERAL HELPERS
+   ============================================================ */
 
 function showDashboardEmpty(
     message
 ) {
-
-    const summary =
-        document.getElementById(
-            "dashboardSummary"
-        );
-
-
-    const empty =
+    const element =
         document.getElementById(
             "dashboardEmpty"
         );
 
-
-    if (summary) {
-
-        summary.classList.add(
-            "hidden"
-        );
-
+    if (!element) {
+        return;
     }
 
+    element.hidden =
+        false;
 
-    if (empty) {
-
-        empty.classList.remove(
-            "hidden"
-        );
-
-    }
-
-
-    setDashboardStatus(
-        message,
-        "error"
-    );
-
+    element.textContent =
+        message || "";
 }
 
-
-/* ============================================================
-   PARTICIPATION DESCRIPTION
-============================================================ */
 
 function getParticipationDescription(
-    rate
+    percentage
 ) {
-
-    if (rate >= 100) {
-
-        return "Everyone has participated in this week's quiz.";
-
+    if (percentage >= 90) {
+        return "Excellent participation this week.";
     }
 
-
-    if (rate >= 75) {
-
-        return "Most members have participated in this week's quiz.";
-
+    if (percentage >= 75) {
+        return "Strong participation this week.";
     }
 
-
-    if (rate >= 50) {
-
-        return "Participation is above half of the group.";
-
+    if (percentage >= 50) {
+        return "Participation is progressing well.";
     }
 
-
-    if (rate > 0) {
-
-        return "There are still members who need to participate.";
-
+    if (percentage > 0) {
+        return "Participation still needs attention.";
     }
 
-
-    return "No quiz participation has been recorded yet.";
-
+    return "No participation has been recorded yet.";
 }
 
-
-/* ============================================================
-   DATE FORMAT
-============================================================ */
 
 function formatDashboardDate(
     value
 ) {
-
     if (!value) {
-
         return "—";
-
     }
 
-
     const date =
-        new Date(
-            value
-        );
-
+        new Date(value);
 
     if (
         Number.isNaN(
             date.getTime()
         )
     ) {
-
-        return String(
-            value
-        );
-
+        return String(value);
     }
-
 
     return date.toLocaleDateString(
         "en-NG",
         {
-            day: "numeric",
+            year: "numeric",
             month: "short",
-            year: "numeric"
+            day: "numeric"
         }
     );
-
 }
 
-
-/* ============================================================
-   GENERIC HELPERS
-============================================================ */
 
 function setText(
     id,
     value
 ) {
-
     const element =
-        document.getElementById(
-            id
-        );
-
+        document.getElementById(id);
 
     if (!element) {
         return;
     }
 
-
     element.textContent =
         value === undefined ||
-        value === null ||
-        value === ""
-            ? "—"
+        value === null
+            ? ""
             : String(value);
-
 }
 
 
@@ -5495,59 +3484,40 @@ function setInputValue(
     id,
     value
 ) {
-
     const element =
-        document.getElementById(
-            id
-        );
-
+        document.getElementById(id);
 
     if (!element) {
         return;
     }
-
 
     element.value =
         value === undefined ||
         value === null
             ? ""
             : String(value);
-
 }
 
 
 function getInputValue(
     id
 ) {
-
     const element =
-        document.getElementById(
-            id
-        );
-
+        document.getElementById(id);
 
     if (!element) {
-
         return "";
-
     }
-
 
     return String(
         element.value || ""
     ).trim();
-
 }
 
 
-/**
- * Escape HTML before inserting server data
- * into generated table markup.
- */
 function escapeHtml(
     value
 ) {
-
     return String(
         value === undefined ||
         value === null
@@ -5574,5 +3544,4 @@ function escapeHtml(
             /'/g,
             "&#039;"
         );
-
 }
