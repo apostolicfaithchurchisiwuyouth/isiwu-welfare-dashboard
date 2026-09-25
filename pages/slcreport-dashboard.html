@@ -768,15 +768,6 @@
     </button>
 
 
-    <button
-        type="button"
-        class="quiz-nav-button"
-        data-dashboard-section="reviews"
-    >
-        <i class="fa-solid fa-comments"></i>
-        <span>Reviews</span>
-    </button>
-
 
     <button
         type="button"
@@ -785,16 +776,6 @@
     >
         <i class="fa-solid fa-gear"></i>
         <span>Settings</span>
-    </button>
-
-
-    <button
-        type="button"
-        class="quiz-nav-button"
-        data-dashboard-section="members"
-    >
-        <i class="fa-solid fa-users"></i>
-        <span>Members</span>
     </button>
 
 
@@ -2040,160 +2021,157 @@
 </section>
 
 
-<!-- =====================================================
-     QUIZ REVIEWS
-====================================================== -->
 
-<section
-    id="dashboardSectionReviews"
-    class="quiz-dashboard-section"
->
-
-
-    <div class="quiz-coordinator-section-heading">
-
-        <span>
-            ANSWER REVIEW
-        </span>
-
-        <h2>
-            Quiz Reviews
-        </h2>
-
-        <p>
-            Review submitted quiz answers and feedback connected
-            to members' completed quizzes.
-        </p>
-
-    </div>
-
-
-    <div class="quiz-management-panel">
-
-        <div class="quiz-management-panel-inner">
-
-            <i class="fa-solid fa-comments"></i>
-
-            <h3>
-                Quiz reviews
-            </h3>
-
-            <p>
-                The existing review information will be connected
-                here after the attempts section is confirmed.
-            </p>
-
-        </div>
-
-    </div>
-
-
-</section>
-
-
-<!-- =====================================================
+<!-- =========================================================
      QUIZ SETTINGS
-====================================================== -->
+     ========================================================= -->
 
 <section
+    class="quiz-dashboard-section"
     id="dashboardSectionSettings"
-    class="quiz-dashboard-section"
+    data-dashboard-section="settings"
 >
 
+    <div class="quiz-section-header">
 
-    <div class="quiz-coordinator-section-heading">
+        <div class="quiz-section-heading">
 
-        <span>
-            QUIZ CONFIGURATION
-        </span>
+            <div class="quiz-section-icon">
+                <i class="ri-settings-3-line"></i>
+            </div>
 
-        <h2>
-            Quiz Settings
-        </h2>
+            <div>
+                <h2>Quiz Settings</h2>
 
-        <p>
-            View and manage the settings that control the current
-            weekly quiz.
-        </p>
-
-    </div>
-
-
-    <div class="quiz-management-panel">
-
-        <div class="quiz-management-panel-inner">
-
-            <i class="fa-solid fa-gear"></i>
-
-            <h3>
-                Quiz settings
-            </h3>
-
-            <p>
-                The existing <strong>Quiz Settings</strong> sheet
-                and its backend functions will be connected here.
-                We will preserve the current public quiz behaviour.
-            </p>
+                <p>
+                    Control the current weekly quiz lesson,
+                    opening time, and closing time.
+                </p>
+            </div>
 
         </div>
 
     </div>
 
 
-</section>
+    <div
+        class="quiz-settings-card"
+        id="quizSettingsCard"
+    >
+
+        <form
+            id="quizSettingsForm"
+            novalidate
+        >
+
+            <div class="quiz-settings-grid">
+
+                <!-- Current Lesson -->
+
+                <div class="quiz-settings-field">
+
+                    <label
+                        for="quizSettingsLesson"
+                    >
+                        Current Lesson
+                    </label>
+
+                    <input
+                        type="number"
+                        id="quizSettingsLesson"
+                        name="lesson"
+                        min="1"
+                        step="1"
+                        placeholder="e.g. 90"
+                        required
+                    >
+
+                    <small>
+                        This is the lesson currently used
+                        by the weekly SLC quiz.
+                    </small>
+
+                </div>
 
 
-<!-- =====================================================
-     MEMBERS
-====================================================== -->
+                <!-- Open Date/Time -->
 
-<section
-    id="dashboardSectionMembers"
-    class="quiz-dashboard-section"
->
+                <div class="quiz-settings-field">
+
+                    <label
+                        for="quizSettingsOpen"
+                    >
+                        Open Date &amp; Time
+                    </label>
+
+                    <input
+                        type="datetime-local"
+                        id="quizSettingsOpen"
+                        name="open"
+                        required
+                    >
+
+                    <small>
+                        Participants can access the quiz
+                        from this time.
+                    </small>
+
+                </div>
 
 
-    <div class="quiz-coordinator-section-heading">
+                <!-- Close Date/Time -->
 
-        <span>
-            MEMBERS
-        </span>
+                <div class="quiz-settings-field">
 
-        <h2>
-            Quiz Members
-        </h2>
+                    <label
+                        for="quizSettingsClose"
+                    >
+                        Close Date &amp; Time
+                    </label>
 
-        <p>
-            View members and their quiz participation history.
-        </p>
+                    <input
+                        type="datetime-local"
+                        id="quizSettingsClose"
+                        name="close"
+                        required
+                    >
+
+                    <small>
+                        Participants can no longer access
+                        the quiz after this time.
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <div
+                class="quiz-settings-status"
+                id="quizSettingsStatus"
+                aria-live="polite"
+            ></div>
+
+
+            <div class="quiz-settings-actions">
+
+                <button
+                    type="submit"
+                    class="dashboard-primary-button"
+                    id="saveQuizSettingsButton"
+                >
+                    <i class="ri-save-3-line"></i>
+                    <span>Save Quiz Settings</span>
+                </button>
+
+            </div>
+
+        </form>
 
     </div>
 
-
-    <div class="quiz-management-panel">
-
-        <div class="quiz-management-panel-inner">
-
-            <i class="fa-solid fa-users"></i>
-
-            <h3>
-                Members and quiz history
-            </h3>
-
-            <p>
-                The existing <strong>Members</strong> and
-                quiz-history functions will be connected here
-                so coordinators can inspect individual
-                participation records.
-            </p>
-
-        </div>
-
-    </div>
-
-
 </section>
-
+    
 
 <!-- =====================================================
      SLC REPORTS
