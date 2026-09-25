@@ -13,6 +13,7 @@
  * - Edit Question
  * - Delete Question
  * - Quiz Attempts
+ * - Quiz Settings
  *
  * IMPORTANT:
  * - Uses the existing dashboard session.
@@ -238,11 +239,18 @@ function activateDashboardSection(
 
     }
 
-   if (
-    sectionName === "settings"
-) {
-    loadQuizSettings();
-}
+
+    /*
+     * Load Quiz Settings when opened.
+     */
+    if (
+        sectionName === "settings" &&
+        dashboardSession
+    ) {
+
+        loadQuizSettings();
+
+    }
 
 }
 
@@ -3092,9 +3100,10 @@ async function dashboardPost(
 
 }
 
+
 /* ============================================================
    QUIZ SETTINGS
-   ============================================================ */
+============================================================ */
 
 function setupQuizSettingsControls() {
 
@@ -3102,6 +3111,7 @@ function setupQuizSettingsControls() {
         document.getElementById(
             "quizSettingsForm"
         );
+
 
     if (!form) {
         return;
@@ -3124,7 +3134,7 @@ function setupQuizSettingsControls() {
 
 /* ============================================================
    LOAD QUIZ SETTINGS
-   ============================================================ */
+============================================================ */
 
 async function loadQuizSettings() {
 
@@ -3180,19 +3190,30 @@ async function loadQuizSettings() {
         }
 
 
+        /*
+         * IMPORTANT:
+         * dashboardGet() accepts ONE object containing
+         * all query parameters.
+         *
+         * The previous version incorrectly passed the
+         * action as a separate argument. That meant the
+         * action never reached Apps Script.
+         */
         const result =
-            await dashboardGet(
-                "getSLCAdminQuizSettings",
-                {
-                    token:
-                        dashboardSession.token
-                }
-            );
+            await dashboardGet({
+
+                action:
+                    "getSLCAdminQuizSettings",
+
+                token:
+                    dashboardSession.token
+
+            });
 
 
         if (
             !result ||
-            !result.success
+            result.success === false
         ) {
 
             throw new Error(
@@ -3258,7 +3279,7 @@ async function loadQuizSettings() {
 
 /* ============================================================
    SAVE QUIZ SETTINGS
-   ============================================================ */
+============================================================ */
 
 async function saveQuizSettings() {
 
@@ -3318,7 +3339,7 @@ async function saveQuizSettings() {
 
     /* ========================================================
        VALIDATION
-       ======================================================== */
+    ======================================================== */
 
     if (!lesson) {
 
@@ -3483,28 +3504,38 @@ async function saveQuizSettings() {
         }
 
 
+        /*
+         * IMPORTANT:
+         * dashboardPost() also accepts ONE object.
+         *
+         * The previous version incorrectly passed the
+         * action separately, so the POST action would not
+         * have been sent correctly.
+         */
         const result =
-            await dashboardPost(
-                "updateSLCAdminQuizSettings",
-                {
-                    token:
-                        dashboardSession.token,
+            await dashboardPost({
 
-                    lesson:
-                        lesson,
+                action:
+                    "updateSLCAdminQuizSettings",
 
-                    open:
-                        open,
+                token:
+                    dashboardSession.token,
 
-                    close:
-                        close
-                }
-            );
+                lesson:
+                    lesson,
+
+                open:
+                    open,
+
+                close:
+                    close
+
+            });
 
 
         if (
             !result ||
-            !result.success
+            result.success === false
         ) {
 
             throw new Error(
@@ -3524,7 +3555,7 @@ async function saveQuizSettings() {
 
         /* ====================================================
            Refresh values from the server
-           ==================================================== */
+        ==================================================== */
 
         if (
             result.settings
@@ -3594,7 +3625,7 @@ async function saveQuizSettings() {
 
 /* ============================================================
    CONVERT API DATE TO DATETIME-LOCAL
-   ============================================================ */
+============================================================ */
 
 function convertApiDateToLocalInput(
     value
@@ -3670,7 +3701,7 @@ function convertApiDateToLocalInput(
 
 /* ============================================================
    QUIZ SETTINGS STATUS
-   ============================================================ */
+============================================================ */
 
 function setQuizSettingsStatus(
     message,
