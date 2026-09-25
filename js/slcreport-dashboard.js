@@ -40,6 +40,8 @@ let dashboardSession = null;
 
 let dashboardQuestions = [];
 
+let dashboardAttempts = [];
+
 let questionBeingEdited = null;
 
 let questionBeingDeleted = null;
@@ -78,6 +80,8 @@ function setupDashboard() {
     setupQuestionEditor();
 
     setupQuestionDeleteModal();
+
+    setupAttemptsControls();
 
     setupDashboardNavigation();
 
@@ -216,6 +220,13 @@ function activateDashboardSection(
         loadQuizQuestions();
 
     }
+
+   if (
+    sectionName === "attempts" &&
+    dashboardSession
+) {
+    loadQuizAttempts();
+}
 
 }
 
@@ -2611,6 +2622,465 @@ function setQuestionDeleteStatus(
         );
 
     }
+
+}
+
+/* ============================================================
+   QUIZ ATTEMPTS — ADMIN DASHBOARD
+   ============================================================ */
+
+function setupAttemptsControls() {
+
+    const refreshButton =
+        document.getElementById(
+            "refreshAttemptsButton"
+        );
+
+    const lessonFilter =
+        document.getElementById(
+            "attemptsLessonFilter"
+        );
+
+    const searchInput =
+        document.getElementById(
+            "attemptsSearchInput"
+        );
+
+
+    if (refreshButton) {
+
+        refreshButton.addEventListener(
+            "click",
+            function () {
+
+                if (!dashboardSession) {
+                    return;
+                }
+
+                loadQuizAttempts();
+
+            }
+        );
+
+    }
+
+
+    if (lessonFilter) {
+
+        lessonFilter.addEventListener(
+            "input",
+            filterQuizAttempts
+        );
+
+    }
+
+
+    if (searchInput) {
+
+        searchInput.addEventListener(
+            "input",
+            filterQuizAttempts
+        );
+
+    }
+
+}
+
+
+/* ============================================================
+   LOAD QUIZ ATTEMPTS
+   ============================================================ */
+
+async function loadQuizAttempts() {
+
+    if (!dashboardSession) {
+        return;
+    }
+
+
+    setAttemptsStatus(
+        "Loading quiz attempts..."
+    );
+
+
+    const tableBody =
+        document.getElementById(
+            "attemptsTableBody"
+        );
+
+
+    if (tableBody) {
+
+        tableBody.innerHTML = `
+            <tr>
+                <td
+                    colspan="5"
+                    class="dashboard-table-empty"
+                >
+                    Loading quiz attempts...
+                </td>
+            </tr>
+        `;
+
+    }
+
+
+    try {
+
+        const params =
+            new URLSearchParams({
+
+                action:
+                    "getSLCAdminQuizAttempts",
+
+                token:
+                    dashboardSession.token
+
+            });
+
+
+        const response =
+            await fetch(
+                API_URL + "?" + params.toString(),
+                {
+                    method: "GET"
+                }
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Server returned HTTP " +
+                response.status +
+                "."
+            );
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        if (!data) {
+
+            throw new Error(
+                "No response was received from the server."
+            );
+
+        }
+
+
+        if (data.success === false) {
+
+            throw new Error(
+                data.message ||
+                data.error ||
+                "Unable to load quiz attempts."
+            );
+
+        }
+
+
+        dashboardAttempts =
+            Array.isArray(data.attempts)
+                ? data.attempts
+                : [];
+
+
+        renderQuizAttempts(
+            dashboardAttempts
+        );
+
+
+        setAttemptsStatus(
+            dashboardAttempts.length +
+            " attempt" +
+            (
+                dashboardAttempts.length === 1
+                    ? ""
+                    : "s"
+            ) +
+            " found."
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Load quiz attempts error:",
+            error
+        );
+
+
+        dashboardAttempts = [];
+
+
+        const tableBody =
+            document.getElementById(
+                "attemptsTableBody"
+            );
+
+
+        if (tableBody) {
+
+            tableBody.innerHTML = `
+                <tr>
+                    <td
+                        colspan="5"
+                        class="dashboard-table-empty"
+                    >
+                        Unable to load quiz attempts.
+                    </td>
+                </tr>
+            `;
+
+        }
+
+
+        setAttemptsStatus(
+            error.message ||
+            "Unable to load quiz attempts."
+        );
+
+    }
+
+}
+
+
+/* ============================================================
+   FILTER QUIZ ATTEMPTS
+   ============================================================ */
+
+function filterQuizAttempts() {
+
+    const lessonInput =
+        document.getElementById(
+            "attemptsLessonFilter"
+        );
+
+    const searchInput =
+        document.getElementById(
+            "attemptsSearchInput"
+        );
+
+
+    const lessonValue =
+        lessonInput
+            ? String(
+                lessonInput.value || ""
+            ).trim().toLowerCase()
+            : "";
+
+
+    const searchValue =
+        searchInput
+            ? String(
+                searchInput.value || ""
+            ).trim().toLowerCase()
+            : "";
+
+
+    const filtered =
+        dashboardAttempts.filter(
+            function (attempt) {
+
+                const lesson =
+                    String(
+                        attempt.lessonNo || ""
+                    ).toLowerCase();
+
+
+                const name =
+                    String(
+                        attempt.name || ""
+                    ).toLowerCase();
+
+
+                const memberId =
+                    String(
+                        attempt.memberId || ""
+                    ).toLowerCase();
+
+
+                const matchesLesson =
+                    !lessonValue ||
+                    lesson === lessonValue;
+
+
+                const matchesSearch =
+                    !searchValue ||
+                    name.includes(searchValue) ||
+                    memberId.includes(searchValue);
+
+
+                return (
+                    matchesLesson &&
+                    matchesSearch
+                );
+
+            }
+        );
+
+
+    renderQuizAttempts(filtered);
+
+
+    setAttemptsStatus(
+        filtered.length +
+        " matching attempt" +
+        (
+            filtered.length === 1
+                ? ""
+                : "s"
+        ) +
+        "."
+    );
+
+}
+
+
+/* ============================================================
+   RENDER QUIZ ATTEMPTS
+   ============================================================ */
+
+function renderQuizAttempts(
+    attempts
+) {
+
+    const tableBody =
+        document.getElementById(
+            "attemptsTableBody"
+        );
+
+
+    const emptyState =
+        document.getElementById(
+            "attemptsEmpty"
+        );
+
+
+    if (!tableBody) {
+        return;
+    }
+
+
+    if (
+        !Array.isArray(attempts) ||
+        attempts.length === 0
+    ) {
+
+        tableBody.innerHTML = `
+            <tr>
+                <td
+                    colspan="5"
+                    class="dashboard-table-empty"
+                >
+                    No quiz attempts found.
+                </td>
+            </tr>
+        `;
+
+
+        if (emptyState) {
+            emptyState.hidden = false;
+        }
+
+
+        return;
+
+    }
+
+
+    if (emptyState) {
+        emptyState.hidden = true;
+    }
+
+
+    tableBody.innerHTML =
+        attempts.map(
+            function (attempt) {
+
+                return `
+                    <tr>
+
+                        <td>
+                            <div class="attempt-participant">
+                                <strong>
+                                    ${escapeHtml(
+                                        attempt.name || "Unknown"
+                                    )}
+                                </strong>
+
+                                ${
+                                    attempt.memberId
+                                        ? `
+                                            <small>
+                                                ${escapeHtml(
+                                                    attempt.memberId
+                                                )}
+                                            </small>
+                                        `
+                                        : ""
+                                }
+                            </div>
+                        </td>
+
+                        <td>
+                            ${escapeHtml(
+                                attempt.lessonNo ?? ""
+                            )}
+                        </td>
+
+                        <td>
+                            ${escapeHtml(
+                                attempt.score ?? 0
+                            )}
+                        </td>
+
+                        <td>
+                            ${escapeHtml(
+                                attempt.pointsEarned ?? 0
+                            )}
+                        </td>
+
+                        <td>
+                            ${escapeHtml(
+                                attempt.date || ""
+                            )}
+                        </td>
+
+                    </tr>
+                `;
+
+            }
+        ).join("");
+
+}
+
+
+/* ============================================================
+   ATTEMPTS STATUS
+   ============================================================ */
+
+function setAttemptsStatus(
+    message
+) {
+
+    const status =
+        document.getElementById(
+            "attemptsStatus"
+        );
+
+
+    if (!status) {
+        return;
+    }
+
+
+    status.textContent =
+        message || "";
 
 }
 
