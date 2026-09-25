@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 
 <head>
@@ -7,9 +6,8 @@
 <meta charset="UTF-8">
 
 <meta
-name="viewport"
-content="width=device-width, initial-scale=1.0, viewport-fit=cover"
-
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
 >
 
 <title>Quiz Coordinator Dashboard | AFC Isiu Youth Portal</title>
@@ -23,27 +21,23 @@ content="width=device-width, initial-scale=1.0, viewport-fit=cover"
 <meta name="theme-color" content="#EA580C">
 
 <meta
-name="mobile-web-app-capable"
-content="yes"
-
+    name="mobile-web-app-capable"
+    content="yes"
 >
 
 <meta
-name="apple-mobile-web-app-capable"
-content="yes"
-
+    name="apple-mobile-web-app-capable"
+    content="yes"
 >
 
 <meta
-name="apple-mobile-web-app-status-bar-style"
-content="default"
-
+    name="apple-mobile-web-app-status-bar-style"
+    content="default"
 >
 
 <meta
-name="apple-mobile-web-app-title"
-content="AFC Isiu"
-
+    name="apple-mobile-web-app-title"
+    content="AFC Isiu"
 >
 
 <!-- =====================================================
@@ -125,102 +119,19 @@ content="AFC Isiu"
    PAGE-SPECIFIC STRUCTURE
 ========================================================= */
 
+/*
+ * IMPORTANT:
+ * The main dashboard now uses:
+ *
+ * .dashboard-content.slc-dashboard-page
+ *
+ * This matches the responsive width rules in
+ * slcreport-dashboard.css.
+ */
+
 .quiz-coordinator-page {
     width: 100%;
-    max-width: 1500px;
-    margin: 0 auto;
-    padding: 24px 20px 50px;
-}
-
-
-/* =========================================================
-   HERO
-========================================================= */
-
-.quiz-coordinator-hero {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 24px;
-
-    padding: 28px;
-    margin-bottom: 22px;
-
-    background:
-        linear-gradient(
-            135deg,
-            #4A0754 0%,
-            #31043A 100%
-        );
-
-    border-radius: 20px;
-
-    color: #ffffff;
-
-    overflow: hidden;
-}
-
-.quiz-coordinator-hero-content {
-    min-width: 0;
-}
-
-.quiz-coordinator-eyebrow {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-
-    margin-bottom: 10px;
-
-    font-family: "DM Sans", sans-serif;
-    font-size: .72rem;
-    font-weight: 700;
-    letter-spacing: .08em;
-    text-transform: uppercase;
-
-    opacity: .82;
-}
-
-.quiz-coordinator-hero h1 {
-    margin: 0;
-
-    font-family: "Bricolage Grotesque", sans-serif;
-    font-size: clamp(1.45rem, 3vw, 2.2rem);
-    line-height: 1.05;
-    font-weight: 700;
-}
-
-.quiz-coordinator-hero h1 span {
-    opacity: .72;
-}
-
-.quiz-coordinator-hero p {
-    max-width: 680px;
-
-    margin: 10px 0 0;
-
-    font-family: "DM Sans", sans-serif;
-    font-size: .86rem;
-    line-height: 1.6;
-
-    opacity: .82;
-}
-
-.quiz-coordinator-hero-icon {
-    width: 68px;
-    height: 68px;
-
-    flex: 0 0 68px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    border: 1px solid rgba(255,255,255,.18);
-    border-radius: 18px;
-
-    background: rgba(255,255,255,.08);
-
-    font-size: 1.45rem;
+    box-sizing: border-box;
 }
 
 
@@ -232,6 +143,8 @@ content="AFC Isiu"
     display: flex;
     align-items: center;
     gap: 6px;
+
+    width: 100%;
 
     margin-bottom: 24px;
     padding: 6px;
@@ -302,7 +215,7 @@ content="AFC Isiu"
 
 
 /* =========================================================
-   SECTION HEADING
+   COORDINATOR SECTION HEADING
 ========================================================= */
 
 .quiz-coordinator-section-heading {
@@ -427,9 +340,14 @@ content="AFC Isiu"
     cursor: pointer;
 }
 
+.slc-dashboard-load-btn:disabled {
+    opacity: .65;
+    cursor: wait;
+}
+
 
 /* =========================================================
-   QUICK AREA CARDS
+   QUICK AREA
 ========================================================= */
 
 .quiz-quick-grid {
@@ -507,7 +425,7 @@ content="AFC Isiu"
 
 
 /* =========================================================
-   MANAGEMENT PLACEHOLDER
+   MANAGEMENT PANEL
 ========================================================= */
 
 .quiz-management-panel {
@@ -560,6 +478,166 @@ content="AFC Isiu"
 
 
 /* =========================================================
+   QUIZ ATTEMPTS
+========================================================= */
+
+.attempts-toolbar {
+    display: flex;
+    align-items: flex-end;
+    gap: 12px;
+
+    margin-bottom: 14px;
+}
+
+.attempts-filter {
+    flex: 0 0 180px;
+}
+
+.attempts-search {
+    flex: 1;
+    max-width: 420px;
+}
+
+.attempts-filter label,
+.attempts-search label {
+    display: block;
+
+    margin-bottom: 6px;
+
+    font-family: "DM Sans", sans-serif;
+    font-size: .72rem;
+    font-weight: 700;
+
+    color: #554b59;
+}
+
+.attempts-filter input,
+.attempts-search input {
+    width: 100%;
+    height: 42px;
+
+    padding: 0 12px;
+
+    box-sizing: border-box;
+
+    background: #ffffff;
+
+    border: 1px solid #e5dfe8;
+    border-radius: 10px;
+
+    outline: none;
+
+    font-family: "DM Sans", sans-serif;
+    font-size: .78rem;
+
+    color: #241e26;
+
+    transition:
+        border-color .18s ease,
+        box-shadow .18s ease;
+}
+
+.attempts-filter input:focus,
+.attempts-search input:focus {
+    border-color: #4A0754;
+    box-shadow: 0 0 0 3px rgba(74, 7, 84, .08);
+}
+
+.attempts-table-wrapper {
+    width: 100%;
+
+    overflow-x: auto;
+
+    background: #ffffff;
+
+    border: 1px solid #ece7ef;
+    border-radius: 14px;
+}
+
+.attempts-table {
+    width: 100%;
+    min-width: 720px;
+
+    border-collapse: collapse;
+
+    font-family: "DM Sans", sans-serif;
+}
+
+.attempts-table th {
+    padding: 13px 14px;
+
+    background: #faf8fb;
+
+    border-bottom: 1px solid #ece7ef;
+
+    text-align: left;
+
+    font-size: .69rem;
+    font-weight: 800;
+    letter-spacing: .02em;
+
+    color: #6d6470;
+}
+
+.attempts-table td {
+    padding: 14px;
+
+    border-bottom: 1px solid #f0ebf2;
+
+    vertical-align: middle;
+
+    font-size: .76rem;
+
+    color: #332c35;
+}
+
+.attempts-table tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+.attempts-table tbody tr:hover {
+    background: #fcfafc;
+}
+
+.attempt-participant {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.attempt-participant strong {
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-weight: 600;
+    color: #241d27;
+}
+
+.attempt-participant small {
+    font-family: "DM Sans", sans-serif;
+    font-size: .69rem;
+    color: #737373;
+}
+
+.attempts-empty-cell {
+    padding: 38px 20px !important;
+
+    text-align: center;
+
+    color: #837986 !important;
+}
+
+.attempts-status {
+    min-height: 20px;
+
+    margin-bottom: 10px;
+
+    font-family: "DM Sans", sans-serif;
+    font-size: .72rem;
+
+    color: #756c78;
+}
+
+
+/* =========================================================
    MOBILE
 ========================================================= */
 
@@ -572,18 +650,25 @@ content="AFC Isiu"
 
 }
 
+@media (max-width: 700px) {
+
+    .attempts-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .attempts-filter,
+    .attempts-search {
+        flex: 1 1 auto;
+        max-width: none;
+    }
+
+}
+
 @media (max-width: 640px) {
 
-    .quiz-coordinator-page {
-        padding: 18px 14px 40px;
-    }
-
-    .quiz-coordinator-hero {
-        padding: 22px;
-    }
-
-    .quiz-coordinator-hero-icon {
-        display: none;
+    .quiz-coordinator-nav {
+        margin-bottom: 18px;
     }
 
     .slc-dashboard-controls {
@@ -599,11 +684,16 @@ content="AFC Isiu"
         grid-template-columns: 1fr;
     }
 
+    .quiz-management-panel {
+        padding: 18px;
+    }
+
 }
 
 </style>
 
 </head>
+
 
 <body>
 
@@ -615,11 +705,13 @@ content="AFC Isiu"
 
 <div id="app-sidebar"></div>
 
+
 <!-- =====================================================
      MAIN AREA
 ====================================================== -->
 
 <div class="main-area">
+
 
 <!-- =====================================================
      TOPBAR
@@ -627,11 +719,14 @@ content="AFC Isiu"
 
 <div id="app-topbar"></div>
 
+
 <!-- =====================================================
      PAGE CONTENT
 ====================================================== -->
 
-<main class="dashboard-content quiz-coordinator-page">
+<main
+    class="dashboard-content slc-dashboard-page quiz-coordinator-page"
+>
 
 
 <!-- =====================================================
@@ -643,99 +738,77 @@ content="AFC Isiu"
     aria-label="Quiz coordinator navigation"
 >
 
- 
-<button
-    type="button"
-    class="quiz-nav-button active"
-    data-dashboard-section="overview"
->
-
-    <i class="fa-solid fa-chart-column"></i>
-
-    Overview
-
-</button>
+    <button
+        type="button"
+        class="quiz-nav-button active"
+        data-dashboard-section="overview"
+    >
+        <i class="fa-solid fa-chart-column"></i>
+        <span>Overview</span>
+    </button>
 
 
-<button
-    type="button"
-    class="quiz-nav-button"
-    data-dashboard-section="questions"
->
-
-    <i class="fa-solid fa-circle-question"></i>
-
-    Questions
-
-</button>
+    <button
+        type="button"
+        class="quiz-nav-button"
+        data-dashboard-section="questions"
+    >
+        <i class="fa-solid fa-circle-question"></i>
+        <span>Questions</span>
+    </button>
 
 
-<button
-    type="button"
-    class="quiz-nav-button"
-    data-dashboard-section="attempts"
->
-
-    <i class="fa-solid fa-file-circle-check"></i>
-
-    Attempts
-
-</button>
+    <button
+        type="button"
+        class="quiz-nav-button"
+        data-dashboard-section="attempts"
+    >
+        <i class="fa-solid fa-file-circle-check"></i>
+        <span>Attempts</span>
+    </button>
 
 
-<button
-    type="button"
-    class="quiz-nav-button"
-    data-dashboard-section="reviews"
->
-
-    <i class="fa-solid fa-comments"></i>
-
-    Reviews
-
-</button>
+    <button
+        type="button"
+        class="quiz-nav-button"
+        data-dashboard-section="reviews"
+    >
+        <i class="fa-solid fa-comments"></i>
+        <span>Reviews</span>
+    </button>
 
 
-<button
-    type="button"
-    class="quiz-nav-button"
-    data-dashboard-section="settings"
->
-
-    <i class="fa-solid fa-gear"></i>
-
-    Settings
-
-</button>
+    <button
+        type="button"
+        class="quiz-nav-button"
+        data-dashboard-section="settings"
+    >
+        <i class="fa-solid fa-gear"></i>
+        <span>Settings</span>
+    </button>
 
 
-<button
-    type="button"
-    class="quiz-nav-button"
-    data-dashboard-section="members"
->
-
-    <i class="fa-solid fa-users"></i>
-
-    Members
-
-</button>
+    <button
+        type="button"
+        class="quiz-nav-button"
+        data-dashboard-section="members"
+    >
+        <i class="fa-solid fa-users"></i>
+        <span>Members</span>
+    </button>
 
 
-<button
-    type="button"
-    class="quiz-nav-button"
-    data-dashboard-section="reports"
->
-
-    <i class="fa-solid fa-file-lines"></i>
-
-    SLC Reports
-
-</button>
- 
+    <button
+        type="button"
+        class="quiz-nav-button"
+        data-dashboard-section="reports"
+    >
+        <i class="fa-solid fa-file-lines"></i>
+        <span>SLC Reports</span>
+    </button>
 
 </nav>
+
 
 <!-- =====================================================
      STATUS
@@ -745,7 +818,9 @@ content="AFC Isiu"
     id="dashboardStatus"
     class="slc-dashboard-status hidden"
     role="status"
+    aria-live="polite"
 ></div>
+
 
 <!-- =====================================================
      OVERVIEW
@@ -756,565 +831,523 @@ content="AFC Isiu"
     class="quiz-dashboard-section active"
 >
 
- 
-<div class="quiz-coordinator-section-heading">
 
-    <span>
-        OVERVIEW
-    </span>
+    <div class="quiz-coordinator-section-heading">
 
-    <h2>
-        Quiz activity at a glance
-    </h2>
+        <span>OVERVIEW</span>
 
-    <p>
-        Monitor the current quiz and quickly move into any
-        area that needs attention.
-    </p>
+        <h2>
+            Quiz activity at a glance
+        </h2>
 
-</div>
-
-
-<!-- =================================================
-     LESSON CONTROL
-================================================== -->
-
-<section class="slc-dashboard-controls">
-
-    <div class="slc-control-field">
-
-        <label for="dashboardLessonNo">
-            Lesson
-        </label>
-
-        <div class="slc-control-input">
-
-            <i class="fa-solid fa-book-open"></i>
-
-            <input
-                type="text"
-                id="dashboardLessonNo"
-                placeholder="e.g. 89"
-                inputmode="numeric"
-            >
-
-        </div>
-
-    </div>
-
-
-    <button
-        type="button"
-        id="loadDashboardButton"
-        class="slc-dashboard-load-btn"
-    >
-
-        <i class="fa-solid fa-rotate"></i>
-
-        <span>
-            Load Report
-        </span>
-
-    </button>
-
-</section>
-
-
-<!-- =================================================
-     QUICK LINKS
-================================================== -->
-
-<div class="quiz-quick-grid">
-
-
-    <article
-        class="quiz-quick-card"
-        data-dashboard-section="questions"
-    >
-
-        <div class="quiz-quick-icon">
-
-            <i class="fa-solid fa-circle-question"></i>
-
-        </div>
-
-        <div>
-
-            <span>
-                Manage
-            </span>
-
-            <strong>
-                Quiz Questions
-            </strong>
-
-        </div>
-
-    </article>
-
-
-    <article
-        class="quiz-quick-card"
-        data-dashboard-section="attempts"
-    >
-
-        <div class="quiz-quick-icon">
-
-            <i class="fa-solid fa-file-circle-check"></i>
-
-        </div>
-
-        <div>
-
-            <span>
-                Review
-            </span>
-
-            <strong>
-                Quiz Attempts
-            </strong>
-
-        </div>
-
-    </article>
-
-
-    <article
-        class="quiz-quick-card"
-        data-dashboard-section="settings"
-    >
-
-        <div class="quiz-quick-icon">
-
-            <i class="fa-solid fa-gear"></i>
-
-        </div>
-
-        <div>
-
-            <span>
-                Configure
-            </span>
-
-            <strong>
-                Quiz Settings
-            </strong>
-
-        </div>
-
-    </article>
-
-
-    <article
-        class="quiz-quick-card"
-        data-dashboard-section="reports"
-    >
-
-        <div class="quiz-quick-icon">
-
-            <i class="fa-solid fa-file-lines"></i>
-
-        </div>
-
-        <div>
-
-            <span>
-                View
-            </span>
-
-            <strong>
-                SLC Reports
-            </strong>
-
-        </div>
-
-    </article>
-
-
-</div>
-
-
-<!-- =================================================
-     EXISTING WORKING SUMMARY
-================================================== -->
-
-<section
-    id="dashboardSummary"
-    class="hidden"
->
-
-
-    <div class="slc-dashboard-section-heading">
-
-        <div>
-
-            <span class="slc-dashboard-section-label">
-                CURRENT QUIZ
-            </span>
-
-            <h2 id="dashboardLessonTitle">
-                Weekly SLC Quiz
-            </h2>
-
-        </div>
-
-        <div
-            id="dashboardReportDate"
-            class="slc-dashboard-date"
-        >
-            —
-        </div>
-
-    </div>
-
-
-    <!-- =================================================
-         STATISTICS
-    ================================================== -->
-
-    <section class="slc-stat-grid">
-
-
-        <article class="slc-stat-card">
-
-            <div class="slc-stat-icon purple">
-
-                <i class="fa-solid fa-users"></i>
-
-            </div>
-
-            <div class="slc-stat-content">
-
-                <span>
-                    Total Members
-                </span>
-
-                <strong id="statTotalMembers">
-                    0
-                </strong>
-
-            </div>
-
-        </article>
-
-
-        <article class="slc-stat-card">
-
-            <div class="slc-stat-icon green">
-
-                <i class="fa-solid fa-circle-check"></i>
-
-            </div>
-
-            <div class="slc-stat-content">
-
-                <span>
-                    Participated
-                </span>
-
-                <strong id="statParticipated">
-                    0
-                </strong>
-
-            </div>
-
-        </article>
-
-
-        <article class="slc-stat-card">
-
-            <div class="slc-stat-icon orange">
-
-                <i class="fa-solid fa-user-clock"></i>
-
-            </div>
-
-            <div class="slc-stat-content">
-
-                <span>
-                    Yet to Participate
-                </span>
-
-                <strong id="statNotParticipated">
-                    0
-                </strong>
-
-            </div>
-
-        </article>
-
-
-        <article class="slc-stat-card">
-
-            <div class="slc-stat-icon cyan">
-
-                <i class="fa-solid fa-chart-pie"></i>
-
-            </div>
-
-            <div class="slc-stat-content">
-
-                <span>
-                    Participation Rate
-                </span>
-
-                <strong id="statParticipationRate">
-                    0%
-                </strong>
-
-            </div>
-
-        </article>
-
-    </section>
-
-
-    <!-- =================================================
-         PROGRESS
-    ================================================== -->
-
-    <section class="slc-progress-card">
-
-        <div class="slc-progress-header">
-
-            <div>
-
-                <span>
-                    Participation progress
-                </span>
-
-                <strong id="progressPercentage">
-                    0%
-                </strong>
-
-            </div>
-
-        </div>
-
-
-        <div class="slc-progress-track">
-
-            <div
-                id="participationProgress"
-                class="slc-progress-fill"
-                style="width: 0%;"
-            ></div>
-
-        </div>
-
-
-        <p id="progressDescription">
-            No participation data loaded yet.
+        <p>
+            Monitor the current quiz and quickly move into
+            any area that needs attention.
         </p>
 
+    </div>
+
+
+    <!-- =================================================
+         LESSON CONTROL
+    ================================================== -->
+
+    <section class="slc-dashboard-controls">
+
+        <div class="slc-control-field">
+
+            <label for="dashboardLessonNo">
+                Lesson
+            </label>
+
+            <div class="slc-control-input">
+
+                <i class="fa-solid fa-book-open"></i>
+
+                <input
+                    type="text"
+                    id="dashboardLessonNo"
+                    placeholder="e.g. 89"
+                    inputmode="numeric"
+                    autocomplete="off"
+                >
+
+            </div>
+
+        </div>
+
+
+        <button
+            type="button"
+            id="loadDashboardButton"
+            class="slc-dashboard-load-btn"
+        >
+
+            <i class="fa-solid fa-rotate"></i>
+
+            <span>
+                Load Report
+            </span>
+
+        </button>
+
     </section>
 
 
     <!-- =================================================
-         GROUP INFORMATION
+         QUICK LINKS
     ================================================== -->
 
-    <section class="slc-group-card">
+    <div class="quiz-quick-grid">
 
-        <div class="slc-group-card-heading">
 
-            <div class="slc-group-icon">
+        <article
+            class="quiz-quick-card"
+            data-dashboard-section="questions"
+        >
 
-                <i class="fa-solid fa-layer-group"></i>
-
+            <div class="quiz-quick-icon">
+                <i class="fa-solid fa-circle-question"></i>
             </div>
 
             <div>
 
-                <h2>
-                    Group information
-                </h2>
+                <span>Manage</span>
 
-                <p>
-                    Details from the submitted weekly report.
-                </p>
-
-            </div>
-
-        </div>
-
-
-        <div class="slc-group-grid">
-
-            <div class="slc-group-item">
-
-                <span>
-                    Group Name
-                </span>
-
-                <strong id="groupNameDisplay">
-                    —
+                <strong>
+                    Quiz Questions
                 </strong>
 
             </div>
 
+        </article>
 
-            <div class="slc-group-item">
 
-                <span>
-                    Group Leader
-                </span>
+        <article
+            class="quiz-quick-card"
+            data-dashboard-section="attempts"
+        >
 
-                <strong id="groupLeaderDisplay">
-                    —
+            <div class="quiz-quick-icon">
+                <i class="fa-solid fa-file-circle-check"></i>
+            </div>
+
+            <div>
+
+                <span>Review</span>
+
+                <strong>
+                    Quiz Attempts
                 </strong>
 
             </div>
 
+        </article>
 
-            <div class="slc-group-item">
 
-                <span>
-                    Report Version
-                </span>
+        <article
+            class="quiz-quick-card"
+            data-dashboard-section="settings"
+        >
 
-                <strong id="reportVersionDisplay">
-                    —
+            <div class="quiz-quick-icon">
+                <i class="fa-solid fa-gear"></i>
+            </div>
+
+            <div>
+
+                <span>Configure</span>
+
+                <strong>
+                    Quiz Settings
                 </strong>
 
             </div>
 
+        </article>
 
-            <div class="slc-group-item">
 
-                <span>
-                    Report Date
-                </span>
+        <article
+            class="quiz-quick-card"
+            data-dashboard-section="reports"
+        >
 
-                <strong id="reportDateDisplay">
-                    —
+            <div class="quiz-quick-icon">
+                <i class="fa-solid fa-file-lines"></i>
+            </div>
+
+            <div>
+
+                <span>View</span>
+
+                <strong>
+                    SLC Reports
                 </strong>
 
             </div>
 
-        </div>
+        </article>
 
-    </section>
+
+    </div>
 
 
     <!-- =================================================
-         NON PARTICIPANTS
+         EXISTING WORKING SUMMARY
     ================================================== -->
 
-    <section class="slc-members-card">
+    <section
+        id="dashboardSummary"
+        class="hidden"
+    >
 
-        <div class="slc-members-heading">
+
+        <div class="slc-dashboard-section-heading">
 
             <div>
 
                 <span class="slc-dashboard-section-label">
-                    FOLLOW-UP
+                    CURRENT QUIZ
                 </span>
 
-                <h2>
-                    Members yet to participate
+                <h2 id="dashboardLessonTitle">
+                    Weekly SLC Quiz
                 </h2>
 
-                <p>
-                    These members were listed as not having
-                    participated in the selected lesson.
-                </p>
+            </div>
+
+            <div
+                id="dashboardReportDate"
+                class="slc-dashboard-date"
+            >
+                —
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             STATISTICS
+        ================================================== -->
+
+        <section class="slc-stat-grid">
+
+
+            <article class="slc-stat-card">
+
+                <div class="slc-stat-icon purple">
+                    <i class="fa-solid fa-users"></i>
+                </div>
+
+                <div class="slc-stat-content">
+
+                    <span>Total Members</span>
+
+                    <strong id="statTotalMembers">
+                        0
+                    </strong>
+
+                </div>
+
+            </article>
+
+
+            <article class="slc-stat-card">
+
+                <div class="slc-stat-icon green">
+                    <i class="fa-solid fa-circle-check"></i>
+                </div>
+
+                <div class="slc-stat-content">
+
+                    <span>Participated</span>
+
+                    <strong id="statParticipated">
+                        0
+                    </strong>
+
+                </div>
+
+            </article>
+
+
+            <article class="slc-stat-card">
+
+                <div class="slc-stat-icon orange">
+                    <i class="fa-solid fa-user-clock"></i>
+                </div>
+
+                <div class="slc-stat-content">
+
+                    <span>Yet to Participate</span>
+
+                    <strong id="statNotParticipated">
+                        0
+                    </strong>
+
+                </div>
+
+            </article>
+
+
+            <article class="slc-stat-card">
+
+                <div class="slc-stat-icon cyan">
+                    <i class="fa-solid fa-chart-pie"></i>
+                </div>
+
+                <div class="slc-stat-content">
+
+                    <span>Participation Rate</span>
+
+                    <strong id="statParticipationRate">
+                        0%
+                    </strong>
+
+                </div>
+
+            </article>
+
+
+        </section>
+
+
+        <!-- =================================================
+             PROGRESS
+        ================================================== -->
+
+        <section class="slc-progress-card">
+
+            <div class="slc-progress-header">
+
+                <div>
+
+                    <span>
+                        Participation progress
+                    </span>
+
+                    <strong id="progressPercentage">
+                        0%
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div class="slc-progress-track">
+
+                <div
+                    id="participationProgress"
+                    class="slc-progress-fill"
+                    style="width: 0%;"
+                ></div>
+
+            </div>
+
+
+            <p id="progressDescription">
+                No participation data loaded yet.
+            </p>
+
+        </section>
+
+
+        <!-- =================================================
+             GROUP INFORMATION
+        ================================================== -->
+
+        <section class="slc-group-card">
+
+            <div class="slc-group-card-heading">
+
+                <div class="slc-group-icon">
+
+                    <i class="fa-solid fa-layer-group"></i>
+
+                </div>
+
+                <div>
+
+                    <h2>
+                        Group information
+                    </h2>
+
+                    <p>
+                        Details from the submitted weekly report.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="slc-group-grid">
+
+                <div class="slc-group-item">
+
+                    <span>Group Name</span>
+
+                    <strong id="groupNameDisplay">
+                        —
+                    </strong>
+
+                </div>
+
+
+                <div class="slc-group-item">
+
+                    <span>Group Leader</span>
+
+                    <strong id="groupLeaderDisplay">
+                        —
+                    </strong>
+
+                </div>
+
+
+                <div class="slc-group-item">
+
+                    <span>Report Version</span>
+
+                    <strong id="reportVersionDisplay">
+                        —
+                    </strong>
+
+                </div>
+
+
+                <div class="slc-group-item">
+
+                    <span>Report Date</span>
+
+                    <strong id="reportDateDisplay">
+                        —
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             NON PARTICIPANTS
+        ================================================== -->
+
+        <section class="slc-members-card">
+
+            <div class="slc-members-heading">
+
+                <div>
+
+                    <span class="slc-dashboard-section-label">
+                        FOLLOW-UP
+                    </span>
+
+                    <h2>
+                        Members yet to participate
+                    </h2>
+
+                    <p>
+                        These members were listed as not having
+                        participated in the selected lesson.
+                    </p>
+
+                </div>
+
+
+                <div
+                    id="nonParticipantCount"
+                    class="slc-count-badge"
+                >
+                    0
+                </div>
 
             </div>
 
 
             <div
-                id="nonParticipantCount"
-                class="slc-count-badge"
+                id="nonParticipantsDisplay"
+                class="slc-member-list"
             >
-                0
+
+                <div class="slc-empty-state">
+
+                    <i class="fa-solid fa-users"></i>
+
+                    <h3>
+                        No members listed
+                    </h3>
+
+                    <p>
+                        Load a report to see members who have
+                        not participated.
+                    </p>
+
+                </div>
+
             </div>
 
-        </div>
+        </section>
 
 
-        <div
-            id="nonParticipantsDisplay"
-            class="slc-member-list"
+        <!-- =================================================
+             OBSERVATIONS
+        ================================================== -->
+
+        <section
+            id="observationsCard"
+            class="slc-observation-card hidden"
         >
 
-            <div class="slc-empty-state">
+            <div class="slc-observation-icon">
 
-                <i class="fa-solid fa-users"></i>
-
-                <h3>
-                    No members listed
-                </h3>
-
-                <p>
-                    Load a report to see members who have
-                    not participated.
-                </p>
+                <i class="fa-solid fa-message"></i>
 
             </div>
 
-        </div>
+            <div>
+
+                <span>
+                    GROUP OBSERVATION
+                </span>
+
+                <p id="observationsDisplay"></p>
+
+            </div>
+
+        </section>
+
 
     </section>
 
 
     <!-- =================================================
-         OBSERVATIONS
+         EMPTY STATE
     ================================================== -->
 
     <section
-        id="observationsCard"
-        class="slc-observation-card hidden"
+        id="dashboardEmpty"
+        class="slc-dashboard-empty"
     >
 
-        <div class="slc-observation-icon">
-
-            <i class="fa-solid fa-message"></i>
-
+        <div class="slc-empty-icon">
+            <i class="fa-solid fa-chart-column"></i>
         </div>
 
-        <div>
+        <h2>
+            Quiz coordinator overview
+        </h2>
 
-            <span>
-                GROUP OBSERVATION
-            </span>
-
-            <p id="observationsDisplay"></p>
-
-        </div>
+        <p>
+            Load a lesson report above to view participation,
+            group information and follow-up details.
+        </p>
 
     </section>
 
-
-</section>
-
-
-<!-- =================================================
-     EMPTY STATE
-================================================== -->
-
-<section
-    id="dashboardEmpty"
-    class="slc-dashboard-empty"
->
-
-    <div class="slc-empty-icon">
-
-        <i class="fa-solid fa-chart-column"></i>
-
-    </div>
-
-    <h2>
-        Quiz coordinator overview
-    </h2>
-
-    <p>
-        Load a lesson report above to view participation,
-        group information and follow-up details.
-    </p>
-
-</section>
- 
 
 </section>
 
@@ -1322,10 +1355,12 @@ content="AFC Isiu"
 <!-- =========================================================
      QUIZ QUESTIONS
 ========================================================== -->
+
 <section
     id="dashboardSectionQuestions"
     class="quiz-dashboard-section"
 >
+
 
     <div class="quiz-section-header">
 
@@ -1336,12 +1371,16 @@ content="AFC Isiu"
             </div>
 
             <div>
-                <h2>Quiz Questions</h2>
+
+                <h2>
+                    Quiz Questions
+                </h2>
 
                 <p>
                     View, add, edit, and manage the questions
                     used for the weekly SLC quiz.
                 </p>
+
             </div>
 
         </div>
@@ -1361,8 +1400,13 @@ content="AFC Isiu"
                 id="addQuestionButton"
                 class="dashboard-primary-button"
             >
+
                 <i class="fa-solid fa-plus"></i>
-                <span>Add Question</span>
+
+                <span>
+                    Add Question
+                </span>
+
             </button>
 
         </div>
@@ -1373,6 +1417,7 @@ content="AFC Isiu"
     <!-- =====================================================
          QUESTIONS TOOLBAR
     ====================================================== -->
+
     <div class="questions-toolbar">
 
         <div class="questions-filter">
@@ -1396,8 +1441,13 @@ content="AFC Isiu"
             id="refreshQuestionsButton"
             class="dashboard-secondary-button"
         >
+
             <i class="fa-solid fa-rotate"></i>
-            <span>Refresh</span>
+
+            <span>
+                Refresh
+            </span>
+
         </button>
 
     </div>
@@ -1406,6 +1456,7 @@ content="AFC Isiu"
     <!-- =====================================================
          QUESTIONS STATUS
     ====================================================== -->
+
     <div
         id="questionsStatus"
         class="questions-status"
@@ -1416,6 +1467,7 @@ content="AFC Isiu"
     <!-- =====================================================
          QUESTIONS TABLE
     ====================================================== -->
+
     <div class="questions-table-wrapper">
 
         <table class="questions-table">
@@ -1464,12 +1516,16 @@ content="AFC Isiu"
     <!-- =====================================================
          INFORMATION NOTE
     ====================================================== -->
+
     <div class="questions-info-note">
 
         <i class="fa-solid fa-circle-info"></i>
 
         <div>
-            <strong>Question management</strong>
+
+            <strong>
+                Question management
+            </strong>
 
             <p>
                 Changes made here are saved directly to the
@@ -1477,9 +1533,11 @@ content="AFC Isiu"
                 weekly quizzes. Review a question carefully
                 before saving changes.
             </p>
+
         </div>
 
     </div>
+
 
 </section>
 
@@ -1487,6 +1545,7 @@ content="AFC Isiu"
 <!-- =========================================================
      QUESTION EDITOR MODAL
 ========================================================== -->
+
 <div
     id="questionEditorModal"
     class="question-editor-modal"
@@ -1506,7 +1565,6 @@ content="AFC Isiu"
         aria-labelledby="questionEditorTitle"
     >
 
-        <!-- Header -->
         <div class="question-editor-header">
 
             <div>
@@ -1535,13 +1593,14 @@ content="AFC Isiu"
                 data-question-modal-close
                 aria-label="Close question editor"
             >
+
                 <i class="fa-solid fa-xmark"></i>
+
             </button>
 
         </div>
 
 
-        <!-- Form -->
         <form
             id="questionEditorForm"
             class="question-editor-form"
@@ -1554,7 +1613,6 @@ content="AFC Isiu"
             >
 
 
-            <!-- Lesson + Points -->
             <div class="question-form-grid two-columns">
 
                 <div class="question-form-field">
@@ -1593,7 +1651,6 @@ content="AFC Isiu"
             </div>
 
 
-            <!-- Question -->
             <div class="question-form-field">
 
                 <label for="questionEditorQuestion">
@@ -1610,7 +1667,6 @@ content="AFC Isiu"
             </div>
 
 
-            <!-- Option A -->
             <div class="question-form-field">
 
                 <label for="questionEditorOptionA">
@@ -1627,7 +1683,6 @@ content="AFC Isiu"
             </div>
 
 
-            <!-- Option B -->
             <div class="question-form-field">
 
                 <label for="questionEditorOptionB">
@@ -1644,7 +1699,6 @@ content="AFC Isiu"
             </div>
 
 
-            <!-- Option C -->
             <div class="question-form-field">
 
                 <label for="questionEditorOptionC">
@@ -1661,7 +1715,6 @@ content="AFC Isiu"
             </div>
 
 
-            <!-- Option D -->
             <div class="question-form-field">
 
                 <label for="questionEditorOptionD">
@@ -1678,7 +1731,6 @@ content="AFC Isiu"
             </div>
 
 
-            <!-- Correct Answer -->
             <div class="question-form-field">
 
                 <label for="questionEditorCorrectOption">
@@ -1694,28 +1746,16 @@ content="AFC Isiu"
                         Select correct option
                     </option>
 
-                    <option value="A">
-                        A
-                    </option>
-
-                    <option value="B">
-                        B
-                    </option>
-
-                    <option value="C">
-                        C
-                    </option>
-
-                    <option value="D">
-                        D
-                    </option>
+                    <option value="A">A</option>
+                    <option value="B">B</option>
+                    <option value="C">C</option>
+                    <option value="D">D</option>
 
                 </select>
 
             </div>
 
 
-            <!-- Form Status -->
             <div
                 id="questionEditorStatus"
                 class="question-editor-status"
@@ -1723,7 +1763,6 @@ content="AFC Isiu"
             ></div>
 
 
-            <!-- Actions -->
             <div class="question-editor-actions">
 
                 <button
@@ -1740,8 +1779,13 @@ content="AFC Isiu"
                     id="saveQuestionButton"
                     class="dashboard-primary-button"
                 >
+
                     <i class="fa-solid fa-floppy-disk"></i>
-                    <span>Save Question</span>
+
+                    <span>
+                        Save Question
+                    </span>
+
                 </button>
 
             </div>
@@ -1756,6 +1800,7 @@ content="AFC Isiu"
 <!-- =========================================================
      DELETE CONFIRMATION MODAL
 ========================================================== -->
+
 <div
     id="questionDeleteModal"
     class="question-editor-modal"
@@ -1814,8 +1859,13 @@ content="AFC Isiu"
                 id="confirmDeleteQuestionButton"
                 class="dashboard-danger-button"
             >
+
                 <i class="fa-solid fa-trash"></i>
-                <span>Delete Question</span>
+
+                <span>
+                    Delete Question
+                </span>
+
             </button>
 
         </div>
@@ -1824,38 +1874,76 @@ content="AFC Isiu"
 
 </div>
 
- 
-
 
 <!-- =====================================================
      QUIZ ATTEMPTS
 ====================================================== -->
 
 <section
-    class="quiz-dashboard-section"
     id="dashboardSectionAttempts"
+    class="quiz-dashboard-section"
 >
-    <div class="dashboard-section-header">
-        <div>
-            <h2>Quiz Attempts</h2>
-            <p>
-                View members who have completed the weekly quiz.
-            </p>
+
+
+    <div class="quiz-section-header">
+
+        <div class="quiz-section-heading">
+
+            <div class="quiz-section-icon">
+                <i class="fa-solid fa-file-circle-check"></i>
+            </div>
+
+            <div>
+
+                <h2>
+                    Quiz Attempts
+                </h2>
+
+                <p>
+                    View members who have completed the weekly quiz.
+                </p>
+
+            </div>
+
         </div>
 
-        <button
-            type="button"
-            class="dashboard-secondary-button"
-            id="refreshAttemptsButton"
-        >
-            <i class="ri-refresh-line"></i>
-            <span>Refresh</span>
-        </button>
+
+        <div class="quiz-section-actions">
+
+            <span
+                id="attemptsCount"
+                class="quiz-section-count"
+            >
+                0 attempts
+            </span>
+
+            <button
+                type="button"
+                id="refreshAttemptsButton"
+                class="dashboard-secondary-button"
+            >
+
+                <i class="fa-solid fa-rotate"></i>
+
+                <span>
+                    Refresh
+                </span>
+
+            </button>
+
+        </div>
+
     </div>
 
-    <div class="dashboard-section-toolbar">
 
-        <div class="dashboard-filter-field">
+    <!-- =====================================================
+         ATTEMPTS TOOLBAR
+    ====================================================== -->
+
+    <div class="attempts-toolbar">
+
+        <div class="attempts-filter">
+
             <label for="attemptsLessonFilter">
                 Lesson
             </label>
@@ -1867,9 +1955,12 @@ content="AFC Isiu"
                 placeholder="All lessons"
                 autocomplete="off"
             >
+
         </div>
 
-        <div class="dashboard-filter-field dashboard-search-field">
+
+        <div class="attempts-search">
+
             <label for="attemptsSearchInput">
                 Search
             </label>
@@ -1880,58 +1971,75 @@ content="AFC Isiu"
                 placeholder="Search member name or ID..."
                 autocomplete="off"
             >
+
         </div>
 
     </div>
 
+
     <div
-        class="dashboard-status"
         id="attemptsStatus"
+        class="attempts-status"
         aria-live="polite"
     ></div>
 
-    <div class="dashboard-table-wrapper">
-        <table class="dashboard-data-table attempts-table">
+
+    <div class="attempts-table-wrapper">
+
+        <table class="attempts-table">
 
             <thead>
+
                 <tr>
-                    <th>Participant</th>
-                    <th>Lesson</th>
-                    <th>Score</th>
-                    <th>Points Earned</th>
-                    <th>Date</th>
+
+                    <th>
+                        Participant
+                    </th>
+
+                    <th>
+                        Lesson
+                    </th>
+
+                    <th>
+                        Score
+                    </th>
+
+                    <th>
+                        Points Earned
+                    </th>
+
+                    <th>
+                        Date
+                    </th>
+
                 </tr>
+
             </thead>
 
+
             <tbody id="attemptsTableBody">
+
                 <tr>
+
                     <td
                         colspan="5"
-                        class="dashboard-table-empty"
+                        class="attempts-empty-cell"
                     >
                         No quiz attempts loaded yet.
                     </td>
+
                 </tr>
+
             </tbody>
 
         </table>
+
     </div>
 
-    <div
-        class="dashboard-empty-state"
-        id="attemptsEmpty"
-        hidden
-    >
-        <i class="ri-file-list-3-line"></i>
-
-        <h3>No quiz attempts found</h3>
-
-        <p>
-            There are no quiz attempts matching the current filters.
-        </p>
-    </div>
 
 </section>
+
+
 <!-- =====================================================
      QUIZ REVIEWS
 ====================================================== -->
@@ -1941,46 +2049,47 @@ content="AFC Isiu"
     class="quiz-dashboard-section"
 >
 
- 
-<div class="quiz-coordinator-section-heading">
 
-    <span>
-        ANSWER REVIEW
-    </span>
+    <div class="quiz-coordinator-section-heading">
 
-    <h2>
-        Quiz Reviews
-    </h2>
+        <span>
+            ANSWER REVIEW
+        </span>
 
-    <p>
-        Review submitted quiz answers and feedback connected
-        to members' completed quizzes.
-    </p>
-
-</div>
-
-
-<div class="quiz-management-panel">
-
-    <div class="quiz-management-panel-inner">
-
-        <i class="fa-solid fa-comments"></i>
-
-        <h3>
-            Quiz reviews
-        </h3>
+        <h2>
+            Quiz Reviews
+        </h2>
 
         <p>
-            The existing review information will be connected
-            here after the attempts section is confirmed.
+            Review submitted quiz answers and feedback connected
+            to members' completed quizzes.
         </p>
 
     </div>
 
-</div>
- 
+
+    <div class="quiz-management-panel">
+
+        <div class="quiz-management-panel-inner">
+
+            <i class="fa-solid fa-comments"></i>
+
+            <h3>
+                Quiz reviews
+            </h3>
+
+            <p>
+                The existing review information will be connected
+                here after the attempts section is confirmed.
+            </p>
+
+        </div>
+
+    </div>
+
 
 </section>
+
 
 <!-- =====================================================
      QUIZ SETTINGS
@@ -1991,47 +2100,48 @@ content="AFC Isiu"
     class="quiz-dashboard-section"
 >
 
- 
-<div class="quiz-coordinator-section-heading">
 
-    <span>
-        QUIZ CONFIGURATION
-    </span>
+    <div class="quiz-coordinator-section-heading">
 
-    <h2>
-        Quiz Settings
-    </h2>
+        <span>
+            QUIZ CONFIGURATION
+        </span>
 
-    <p>
-        View and manage the settings that control the current
-        weekly quiz.
-    </p>
-
-</div>
-
-
-<div class="quiz-management-panel">
-
-    <div class="quiz-management-panel-inner">
-
-        <i class="fa-solid fa-gear"></i>
-
-        <h3>
-            Quiz settings
-        </h3>
+        <h2>
+            Quiz Settings
+        </h2>
 
         <p>
-            The existing <strong>Quiz Settings</strong> sheet and
-            its backend functions will be connected here. We will
-            preserve the current public quiz behaviour.
+            View and manage the settings that control the current
+            weekly quiz.
         </p>
 
     </div>
 
-</div>
- 
+
+    <div class="quiz-management-panel">
+
+        <div class="quiz-management-panel-inner">
+
+            <i class="fa-solid fa-gear"></i>
+
+            <h3>
+                Quiz settings
+            </h3>
+
+            <p>
+                The existing <strong>Quiz Settings</strong> sheet
+                and its backend functions will be connected here.
+                We will preserve the current public quiz behaviour.
+            </p>
+
+        </div>
+
+    </div>
+
 
 </section>
+
 
 <!-- =====================================================
      MEMBERS
@@ -2042,46 +2152,48 @@ content="AFC Isiu"
     class="quiz-dashboard-section"
 >
 
- 
-<div class="quiz-coordinator-section-heading">
 
-    <span>
-        MEMBERS
-    </span>
+    <div class="quiz-coordinator-section-heading">
 
-    <h2>
-        Quiz Members
-    </h2>
+        <span>
+            MEMBERS
+        </span>
 
-    <p>
-        View members and their quiz participation history.
-    </p>
-
-</div>
-
-
-<div class="quiz-management-panel">
-
-    <div class="quiz-management-panel-inner">
-
-        <i class="fa-solid fa-users"></i>
-
-        <h3>
-            Members and quiz history
-        </h3>
+        <h2>
+            Quiz Members
+        </h2>
 
         <p>
-            The existing <strong>Members</strong> and quiz-history
-            functions will be connected here so coordinators can
-            inspect individual participation records.
+            View members and their quiz participation history.
         </p>
 
     </div>
 
-</div>
- 
+
+    <div class="quiz-management-panel">
+
+        <div class="quiz-management-panel-inner">
+
+            <i class="fa-solid fa-users"></i>
+
+            <h3>
+                Members and quiz history
+            </h3>
+
+            <p>
+                The existing <strong>Members</strong> and
+                quiz-history functions will be connected here
+                so coordinators can inspect individual
+                participation records.
+            </p>
+
+        </div>
+
+    </div>
+
 
 </section>
+
 
 <!-- =====================================================
      SLC REPORTS
@@ -2092,52 +2204,52 @@ content="AFC Isiu"
     class="quiz-dashboard-section"
 >
 
- 
-<div class="quiz-coordinator-section-heading">
 
-    <span>
-        WEEKLY REPORTING
-    </span>
+    <div class="quiz-coordinator-section-heading">
 
-    <h2>
-        SLC Reports
-    </h2>
+        <span>
+            WEEKLY REPORTING
+        </span>
 
-    <p>
-        View the weekly SLC reports and their participation
-        information.
-    </p>
-
-</div>
-
-
-<div class="quiz-management-panel">
-
-    <div class="quiz-management-panel-inner">
-
-        <i class="fa-solid fa-file-lines"></i>
-
-        <h3>
+        <h2>
             SLC Reports
-        </h3>
+        </h2>
 
         <p>
-            The working SLC report system remains part of this
-            dashboard. Report viewing and controlled editing will
-            be connected after the core quiz management sections
-            are stable.
+            View the weekly SLC reports and their participation
+            information.
         </p>
 
     </div>
 
-</div>
- 
+
+    <div class="quiz-management-panel">
+
+        <div class="quiz-management-panel-inner">
+
+            <i class="fa-solid fa-file-lines"></i>
+
+            <h3>
+                SLC Reports
+            </h3>
+
+            <p>
+                The working SLC report system remains part of this
+                dashboard. Report viewing and controlled editing
+                will be connected after the core quiz management
+                sections are stable.
+            </p>
+
+        </div>
+
+    </div>
+
 
 </section>
 
+
 </main>
 
-</div>
 
 <!-- =====================================================
      MOBILE BOTTOM NAV
@@ -2145,7 +2257,9 @@ content="AFC Isiu"
 
 <div id="app-bottom-nav"></div>
 
+
 </div>
+
 
 <!-- =====================================================
      JAVASCRIPT
@@ -2159,87 +2273,6 @@ content="AFC Isiu"
 
 <script src="../js/layout.js"></script>
 
-<script>
-
-/* =========================================================
-   QUIZ COORDINATOR NAVIGATION
-========================================================= */
-
-(function () {
-
-    function activateSection(sectionName) {
-
-        const buttons =
-            document.querySelectorAll(
-                ".quiz-nav-button"
-            );
-
-        const sections =
-            document.querySelectorAll(
-                ".quiz-dashboard-section"
-            );
-
-
-        buttons.forEach(function (button) {
-
-            button.classList.toggle(
-                "active",
-                button.dataset.dashboardSection === sectionName
-            );
-
-        });
-
-
-        sections.forEach(function (section) {
-
-            section.classList.toggle(
-                "active",
-                section.id ===
-                    "dashboardSection" +
-                    sectionName.charAt(0).toUpperCase() +
-                    sectionName.slice(1)
-            );
-
-        });
-
-    }
-
-
-    document.addEventListener(
-        "click",
-        function (event) {
-
-            const target =
-                event.target.closest(
-                    "[data-dashboard-section]"
-                );
-
-
-            if (!target) {
-                return;
-            }
-
-
-            const sectionName =
-                target.dataset.dashboardSection;
-
-
-            if (!sectionName) {
-                return;
-            }
-
-
-            activateSection(
-                sectionName
-            );
-
-        }
-    );
-
-
-})();
-
-</script>
 
 </body>
 
