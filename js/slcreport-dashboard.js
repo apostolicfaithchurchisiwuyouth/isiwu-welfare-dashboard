@@ -3,7 +3,7 @@
 /* ============================================================
 AFC ISIU YOUTH PORTAL V2
 FILE: slcreport-dashboard.js
-PURPOSE: SLC REPORT DASHBOARD
+PURPOSE: SECURE SLC ADMIN DASHBOARD
 ============================================================ */
 
 /* ============================================================
@@ -13,14 +13,15 @@ CONFIG
 const APPS_SCRIPT_URL =
 "https://script.google.com/macros/s/AKfycbw1mVwpgAcIOSNbpgzy52TFyozEGMtWWwVWUDFaofGNzpsguBIaKR4q1dXVtgVHO2xZ1w/exec";
 
+const SESSION_KEY =
+"afc_isiu_slc_leader_session";
+
 /* ============================================================
 HELPERS
 ============================================================ */
 
 const $ = (id) =>
 document.getElementById(id);
-
-let currentReport = null;
 
 /* ============================================================
 INITIALISE
@@ -32,6 +33,8 @@ function () {
 
  
     setupDashboard();
+
+    restoreDashboardSession();
 
 }
  
@@ -51,6 +54,7 @@ const button =
 const lessonInput =
     $("dashboardLessonNo");
 
+
 if (button) {
 
     button.addEventListener(
@@ -59,6 +63,7 @@ if (button) {
     );
 
 }
+
 
 if (lessonInput) {
 
@@ -85,33 +90,198 @@ if (lessonInput) {
 }
 
 /* ============================================================
-API
+RESTORE LOGIN SESSION
 ============================================================ */
 
-async function callAppsScript(payload) {
+function restoreDashboardSession() {
 
  
-const form =
+const saved =
+    localStorage.getItem(
+        SESSION_KEY
+    );
+
+
+if (!saved) {
+
+    showStatus(
+        "error",
+        "Please log in to the SLC Report page first."
+    );
+
+    disableDashboard();
+
+    return;
+
+}
+
+
+try {
+
+    const session =
+        JSON.parse(saved);
+
+
+    if (
+        !session ||
+        !session.token
+    ) {
+
+        throw new Error(
+            "Invalid saved session."
+        );
+
+    }
+
+
+    /*
+     * The token is not trusted simply because it exists
+     * in localStorage.
+     *
+     * The Apps Script backend will verify it and check
+     * the user's authorized SLC role.
+     */
+
+    verifyDashboardAccess(
+        session.token
+    );
+
+
+} catch (error) {
+
+    console.error(
+        "Dashboard session error:",
+        error
+    );
+
+
+    localStorage.removeItem(
+        SESSION_KEY
+    );
+
+
+    disableDashboard();
+
+
+    showStatus(
+        "error",
+        "Your login session could not be restored. Please log in again."
+    );
+
+}
+ 
+
+}
+
+/* ============================================================
+VERIFY SERVER-SIDE ACCESS
+============================================================ */
+
+async function verifyDashboardAccess(
+token
+) {
+
+ 
+try {
+
+    const result =
+        await callDashboardAPI(
+            {
+                action:
+                    "getSLCAdminOverview",
+
+                token:
+                    token
+            }
+        );
+
+
+    if (!result.success) {
+
+        throw new Error(
+            result.message ||
+            "You are not authorized to access this dashboard."
+        );
+
+    }
+
+
+    /*
+     * The overview endpoint has already passed the
+     * server-side authorization check.
+     *
+     * Display the returned data immediately.
+     */
+
+    renderDashboard(
+        result
+    );
+
+
+} catch (error) {
+
+    console.error(
+        "Dashboard authorization error:",
+        error
+    );
+
+
+    disableDashboard();
+
+
+    showStatus(
+        "error",
+        error.message ||
+        "Unable to verify your dashboard access."
+    );
+
+}
+ 
+
+}
+
+/* ============================================================
+DASHBOARD API
+============================================================ */
+
+async function callDashboardAPI(
+payload
+) {
+
+ 
+const params =
     new URLSearchParams();
 
-form.set(
-    "payload",
-    JSON.stringify(payload)
-);
+
+Object.keys(payload)
+    .forEach(
+        function (key) {
+
+            const value =
+                payload[key];
+
+
+            if (
+                value !== undefined &&
+                value !== null
+            ) {
+
+                params.set(
+                    key,
+                    String(value)
+                );
+
+            }
+
+        }
+    );
+
 
 const response =
     await fetch(
-        APPS_SCRIPT_URL,
+        `${APPS_SCRIPT_URL}?${params.toString()}`,
         {
-            method: "POST",
-
-            headers: {
-                "Content-Type":
-                    "application/x-www-form-urlencoded;charset=UTF-8"
-            },
-
-            body:
-                form.toString()
+            method: "GET"
         }
     );
 
@@ -163,31 +333,24 @@ LOAD DASHBOARD
 async function loadDashboard() {
 
  
-const lessonInput =
-    $("dashboardLessonNo");
-
 const button =
     $("loadDashboardButton");
 
+const lessonInput =
+    $("dashboardLessonNo");
+
+
+/*
+ * The current backend overview uses the active/current
+ * Quiz Settings row.
+ *
+ * Therefore the lesson input is optional for now.
+ */
 
 const lessonNo =
     lessonInput
-        ?.value
-        .trim();
-
-
-if (!lessonNo) {
-
-    showStatus(
-        "error",
-        "Please enter a lesson number first."
-    );
-
-    lessonInput?.focus();
-
-    return;
-
-}
+        ? lessonInput.value.trim()
+        : "";
 
 
 button.disabled =
@@ -203,33 +366,57 @@ hideStatus();
 
 try {
 
-    /*
-     * This action reads the report already submitted
-     * through the SLC Report page.
-     */
+    const saved =
+        localStorage.getItem(
+            SESSION_KEY
+        );
+
+
+    if (!saved) {
+
+        throw new Error(
+            "Your login session is missing. Please log in again."
+        );
+
+    }
+
+
+    const session =
+        JSON.parse(saved);
+
+
+    if (
+        !session ||
+        !session.token
+    ) {
+
+        throw new Error(
+            "Your login session is invalid. Please log in again."
+        );
+
+    }
+
 
     const result =
-        await callAppsScript({
-            action:
-                "getSLCReportDashboard",
+        await callDashboardAPI(
+            {
+                action:
+                    "getSLCAdminOverview",
 
-            lessonNo:
-                lessonNo
-        });
+                token:
+                    session.token
+            }
+        );
 
 
     if (!result.success) {
 
         throw new Error(
             result.message ||
-            "Unable to load the SLC report."
+            "Unable to load the SLC dashboard."
         );
 
     }
-
-
-    currentReport =
-        result;
 
 
     renderDashboard(
@@ -237,10 +424,33 @@ try {
     );
 
 
-    showStatus(
-        "success",
-        `Lesson ${lessonNo} report loaded successfully.`
-    );
+    const currentLesson =
+        result.data &&
+        result.data.currentQuiz
+            ? result.data.currentQuiz.lessonNo
+            : "";
+
+
+    if (
+        lessonNo &&
+        currentLesson &&
+        String(lessonNo) !==
+        String(currentLesson)
+    ) {
+
+        showStatus(
+            "success",
+            `Dashboard loaded. The active quiz is Lesson ${currentLesson}.`
+        );
+
+    } else {
+
+        showStatus(
+            "success",
+            "SLC dashboard loaded successfully."
+        );
+
+    }
 
 
 } catch (error) {
@@ -254,11 +464,8 @@ try {
     showStatus(
         "error",
         error.message ||
-        "Unable to load the report."
+        "Unable to load the dashboard."
     );
-
-
-    hideDashboard();
 
 
 } finally {
@@ -279,65 +486,69 @@ try {
 RENDER DASHBOARD
 ============================================================ */
 
-function renderDashboard(data) {
+function renderDashboard(
+result
+) {
 
  
-const report =
-    data.report ||
-    data.data ||
-    data;
+const data =
+    result.data ||
+    {};
 
 
-const total =
-    Number(
-        report.totalMembers
-    ) || 0;
+const statistics =
+    data.statistics ||
+    {};
 
 
-const participated =
-    Number(
-        report.participated
-    ) || 0;
+const currentQuiz =
+    data.currentQuiz ||
+    {};
 
 
-const notParticipated =
-    Number(
-        report.notParticipated
-    );
-
-
-const calculatedNotParticipated =
-    Math.max(
-        total - participated,
-        0
-    );
-
-
-const finalNotParticipated =
-    Number.isFinite(
-        notParticipated
+const participants =
+    Array.isArray(
+        data.participants
     )
-        ? Math.max(
-            notParticipated,
-            0
-        )
-        : calculatedNotParticipated;
+        ? data.participants
+        : [];
 
 
-const percentage =
-    total > 0
-        ? Math.round(
-            (
-                participated /
-                total
-            ) * 100
-        )
-        : 0;
+const nonParticipants =
+    Array.isArray(
+        data.nonParticipants
+    )
+        ? data.nonParticipants
+        : [];
 
 
 /* --------------------------------------------------------
    STATISTICS
 -------------------------------------------------------- */
+
+const total =
+    Number(
+        statistics.totalMembers
+    ) || 0;
+
+
+const participated =
+    Number(
+        statistics.participated
+    ) || 0;
+
+
+const notParticipated =
+    Number(
+        statistics.notParticipated
+    ) || 0;
+
+
+const percentage =
+    Number(
+        statistics.participationPercentage
+    ) || 0;
+
 
 setText(
     "statTotalMembers",
@@ -353,7 +564,7 @@ setText(
 
 setText(
     "statNotParticipated",
-    finalNotParticipated
+    notParticipated
 );
 
 
@@ -376,7 +587,13 @@ const progress =
 if (progress) {
 
     progress.style.width =
-        `${percentage}%`;
+        `${Math.max(
+            0,
+            Math.min(
+                percentage,
+                100
+            )
+        )}%`;
 
 }
 
@@ -386,60 +603,72 @@ setText(
     buildProgressDescription(
         total,
         participated,
-        finalNotParticipated,
-        percentage
+        notParticipated
     )
 );
 
 
 /* --------------------------------------------------------
-   LESSON
+   CURRENT QUIZ
 -------------------------------------------------------- */
+
+const lessonNo =
+    currentQuiz.lessonNo ||
+    "—";
+
 
 setText(
     "dashboardLessonTitle",
-    `Lesson ${report.lessonNo || ""}`
+    lessonNo === "—"
+        ? "Weekly SLC Report"
+        : `Lesson ${lessonNo}`
 );
 
 
 setText(
     "dashboardReportDate",
-    formatDate(
-        report.reportDate
-    )
+    currentQuiz.closeTime
+        ? `Closes ${formatDateTime(
+            currentQuiz.closeTime
+        )}`
+        : "Active quiz"
 );
 
 
 /* --------------------------------------------------------
-   GROUP
+   GROUP INFORMATION
 -------------------------------------------------------- */
+
+/*
+ * The overview endpoint is a participation overview,
+ * not the submitted report itself.
+ *
+ * Therefore these fields remain clearly marked when
+ * no report-specific data has been supplied.
+ */
 
 setText(
     "groupNameDisplay",
-    report.groupName ||
-    "—"
+    "All SLC members"
 );
 
 
 setText(
     "groupLeaderDisplay",
-    report.groupLeaderName ||
     "—"
 );
 
 
 setText(
     "reportVersionDisplay",
-    report.version
-        ? `Version ${report.version}`
-        : "—"
+    "Live overview"
 );
 
 
 setText(
     "reportDateDisplay",
     formatDate(
-        report.reportDate
+        new Date()
     )
 );
 
@@ -449,8 +678,7 @@ setText(
 -------------------------------------------------------- */
 
 renderNonParticipants(
-    report.nonParticipants ||
-    []
+    nonParticipants
 );
 
 
@@ -458,14 +686,11 @@ renderNonParticipants(
    OBSERVATIONS
 -------------------------------------------------------- */
 
-renderObservations(
-    report.observations ||
-    ""
-);
+hideObservations();
 
 
 /* --------------------------------------------------------
-   SHOW
+   SHOW DASHBOARD
 -------------------------------------------------------- */
 
 $("dashboardSummary")
@@ -489,14 +714,13 @@ PROGRESS DESCRIPTION
 function buildProgressDescription(
 total,
 participated,
-notParticipated,
-percentage
+notParticipated
 ) {
 
  
 if (!total) {
 
-    return "No members have been recorded for this report.";
+    return "No active members were found.";
 
 }
 
@@ -505,12 +729,12 @@ if (
     participated === total
 ) {
 
-    return "All recorded members participated in this week's quiz.";
+    return "All active members have participated in this week's quiz.";
 
 }
 
 
-return `${participated} of ${total} members participated. ${notParticipated} member${notParticipated === 1 ? "" : "s"} ${notParticipated === 1 ? "is" : "are"} yet to participate.`;
+return `${participated} of ${total} active members have participated. ${notParticipated} member${notParticipated === 1 ? "" : "s"} ${notParticipated === 1 ? "is" : "are"} yet to participate.`;
  
 
 }
@@ -520,7 +744,7 @@ NON PARTICIPANTS
 ============================================================ */
 
 function renderNonParticipants(
-names
+members
 ) {
 
  
@@ -529,12 +753,18 @@ const container =
 
 
 const count =
-    Array.isArray(names)
-        ? names.filter(
-            name =>
-                String(
-                    name || ""
-                ).trim()
+    Array.isArray(members)
+        ? members.filter(
+            function (member) {
+
+                return (
+                    member &&
+                    String(
+                        member.name || ""
+                    ).trim()
+                );
+
+            }
         )
         : [];
 
@@ -561,8 +791,8 @@ if (!count.length) {
             </h3>
 
             <p>
-                No non-participating members were listed
-                in this report.
+                All active members have participated
+                in the selected quiz.
             </p>
 
         </div>
@@ -578,9 +808,14 @@ container.innerHTML =
     count
         .map(
             function (
-                name,
+                member,
                 index
             ) {
+
+                const name =
+                    member.name ||
+                    "Unnamed member";
+
 
                 return `
 
@@ -609,69 +844,53 @@ container.innerHTML =
 OBSERVATIONS
 ============================================================ */
 
-function renderObservations(
-text
-) {
+function hideObservations() {
 
  
 const card =
     $("observationsCard");
 
+
 const content =
     $("observationsDisplay");
 
 
-if (!card || !content) return;
-
-
-const value =
-    String(
-        text || ""
-    ).trim();
-
-
-if (!value) {
+if (card) {
 
     card.classList.add(
         "hidden"
     );
 
-    content.textContent =
-        "";
-
-    return;
-
 }
 
 
-content.textContent =
-    value;
+if (content) {
 
+    content.textContent =
+        "";
 
-card.classList.remove(
-    "hidden"
-);
+}
  
 
 }
 
 /* ============================================================
-HIDE DASHBOARD
+DISABLE DASHBOARD
 ============================================================ */
 
-function hideDashboard() {
+function disableDashboard() {
 
  
-$("dashboardSummary")
-    ?.classList.add(
-        "hidden"
-    );
+const button =
+    $("loadDashboardButton");
 
 
-$("dashboardEmpty")
-    ?.classList.remove(
-        "hidden"
-    );
+if (button) {
+
+    button.disabled =
+        true;
+
+}
  
 
 }
@@ -785,6 +1004,47 @@ return date.toLocaleDateString(
         day: "numeric",
         month: "short",
         year: "numeric"
+    }
+);
+ 
+
+}
+
+function formatDateTime(
+value
+) {
+
+ 
+if (!value) {
+
+    return "—";
+
+}
+
+
+const date =
+    new Date(value);
+
+
+if (
+    Number.isNaN(
+        date.getTime()
+    )
+) {
+
+    return String(value);
+
+}
+
+
+return date.toLocaleString(
+    "en-NG",
+    {
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+        hour: "numeric",
+        minute: "2-digit"
     }
 );
  
