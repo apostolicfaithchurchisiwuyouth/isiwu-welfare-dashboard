@@ -1357,58 +1357,204 @@ content="AFC Isiu"
 
 </section>
 
-<!-- =====================================================
+ html
+<!-- =========================================================
      QUIZ QUESTIONS
-====================================================== -->
+========================================================= -->
 
 <section
     id="dashboardSectionQuestions"
     class="quiz-dashboard-section"
 >
 
- 
-<div class="quiz-coordinator-section-heading">
+    <div class="quiz-section-header">
 
-    <span>
-        QUIZ MANAGEMENT
-    </span>
+        <div class="quiz-section-heading">
 
-    <h2>
-        Quiz Questions
-    </h2>
+            <span class="quiz-section-icon">
+                <i class="fa-solid fa-circle-question"></i>
+            </span>
 
-    <p>
-        View and manage the questions used by the weekly SLC
-        quiz. Editing and deletion will be connected to the
-        secure backend in the next stage.
-    </p>
+            <div>
 
-</div>
+                <h2>
+                    Quiz Questions
+                </h2>
+
+                <p>
+                    View and manage the questions used for the weekly SLC quiz.
+                </p>
+
+            </div>
+
+        </div>
 
 
-<div class="quiz-management-panel">
+        <div class="quiz-section-count">
 
-    <div class="quiz-management-panel-inner">
+            <strong id="questionsCount">
+                0
+            </strong>
 
-        <i class="fa-solid fa-circle-question"></i>
+            <span>
+                Questions
+            </span>
 
-        <h3>
-            Questions management
-        </h3>
-
-        <p>
-            This area is ready for the existing
-            <strong>Quiz Questions</strong> data to be connected.
-            We will add viewing, adding, editing and controlled
-            deletion without changing the public quiz.
-        </p>
+        </div>
 
     </div>
 
-</div>
- 
+
+    <!-- =====================================================
+         QUESTION CONTROLS
+    ====================================================== -->
+
+    <div class="questions-toolbar">
+
+        <div class="questions-filter">
+
+            <i class="fa-solid fa-filter"></i>
+
+            <input
+                type="text"
+                id="questionsLessonFilter"
+                placeholder="Filter by lesson number..."
+                autocomplete="off"
+            >
+
+        </div>
+
+
+        <button
+            type="button"
+            id="refreshQuestionsButton"
+            class="dashboard-secondary-button"
+        >
+
+            <i class="fa-solid fa-rotate"></i>
+
+            <span>
+                Refresh
+            </span>
+
+        </button>
+
+    </div>
+
+
+    <!-- =====================================================
+         STATUS
+    ====================================================== -->
+
+    <div
+        id="questionsStatus"
+        class="questions-status hidden"
+        role="status"
+        aria-live="polite"
+    ></div>
+
+
+    <!-- =====================================================
+         QUESTIONS TABLE
+    ====================================================== -->
+
+    <div class="questions-table-wrapper">
+
+        <table class="questions-table">
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Lesson
+                    </th>
+
+                    <th>
+                        Question
+                    </th>
+
+                    <th>
+                        Options
+                    </th>
+
+                    <th>
+                        Answer
+                    </th>
+
+                    <th>
+                        Points
+                    </th>
+
+                    <th>
+                        Action
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody id="questionsTableBody">
+
+                <tr>
+
+                    <td
+                        colspan="6"
+                        class="questions-empty-cell"
+                    >
+
+                        <div class="slc-empty-state">
+
+                            <i class="fa-solid fa-circle-info"></i>
+
+                            <h3>
+                                Loading questions
+                            </h3>
+
+                            <p>
+                                Your quiz questions will appear here.
+                            </p>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+
+    <!-- =====================================================
+         INFORMATION NOTE
+    ====================================================== -->
+
+    <div class="questions-info-note">
+
+        <i class="fa-solid fa-shield-halved"></i>
+
+        <div>
+
+            <strong>
+                Secure question management
+            </strong>
+
+            <p>
+                Only authorized Quiz Coordinator and Admin users
+                can access this question bank.
+            </p>
+
+        </div>
+
+    </div>
 
 </section>
+ 
+
 
 <!-- =====================================================
      QUIZ ATTEMPTS
