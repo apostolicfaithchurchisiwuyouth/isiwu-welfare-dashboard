@@ -2293,3 +2293,839 @@
     }
 
 }
+
+
+
+/* ============================================================
+   SLC REPORTS
+============================================================ */
+
+.slc-reports-toolbar {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 14px;
+
+    margin-bottom: 14px;
+}
+
+
+.slc-reports-filter {
+    display: flex;
+    align-items: flex-end;
+    gap: 10px;
+
+    flex: 1;
+
+    max-width: 520px;
+}
+
+
+.slc-reports-filter-field {
+    flex: 1;
+    min-width: 0;
+}
+
+
+.slc-reports-filter-field label {
+    display: block;
+
+    margin-bottom: 7px;
+
+    font-family: "DM Sans", sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+
+    color: #403843;
+}
+
+
+.slc-reports-filter-field input {
+    width: 100%;
+
+    min-height: 40px;
+
+    padding: 0 11px;
+
+    box-sizing: border-box;
+
+    border: 1px solid #e2dce5;
+    border-radius: 10px;
+
+    background: #ffffff;
+    color: #0A0016;
+
+    font-family: "DM Sans", sans-serif;
+    font-size: 0.78rem;
+
+    outline: none;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.slc-reports-filter-field input:focus {
+    border-color: #4A0754;
+
+    box-shadow:
+        0 0 0 3px rgba(74, 7, 84, 0.08);
+}
+
+
+.slc-reports-filter-field input::placeholder {
+    color: #aaa3ad;
+}
+
+
+.slc-reports-count {
+    display: flex;
+    align-items: baseline;
+    gap: 5px;
+
+    min-height: 40px;
+
+    padding: 0 4px;
+
+    white-space: nowrap;
+
+    color: #6b6470;
+
+    font-family: "DM Sans", sans-serif;
+    font-size: 0.74rem;
+}
+
+
+.slc-reports-count strong {
+    color: #4A0754;
+
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-size: 1.2rem;
+}
+
+
+.slc-reports-status {
+    display: none;
+
+    margin-bottom: 12px;
+
+    padding: 9px 11px;
+
+    border-radius: 9px;
+
+    font-family: "DM Sans", sans-serif;
+    font-size: 0.74rem;
+    line-height: 1.45;
+}
+
+
+.slc-reports-status.show {
+    display: block;
+}
+
+
+.slc-reports-status.loading {
+    background: #f7f4f8;
+    color: #665d69;
+}
+
+
+.slc-reports-status.success {
+    background: #f0f8f3;
+    color: #28633e;
+}
+
+
+.slc-reports-status.error {
+    background: #fff4f4;
+    color: #9c3030;
+}
+
+
+/* ============================================================
+   REPORTS TABLE
+============================================================ */
+
+.slc-reports-table-wrapper {
+    width: 100%;
+
+    overflow-x: auto;
+
+    border: 1px solid #e9e4eb;
+    border-radius: 12px;
+
+    background: #ffffff;
+
+    -webkit-overflow-scrolling: touch;
+}
+
+
+.slc-reports-table {
+    width: 100%;
+
+    min-width: 980px;
+
+    border-collapse: collapse;
+
+    table-layout: fixed;
+}
+
+
+.slc-reports-table th {
+    padding: 0.75rem 0.8rem;
+
+    border-bottom: 1px solid #e9e4eb;
+
+    background: #faf9fb;
+    color: #665d69;
+
+    font-family: "DM Sans", sans-serif;
+    font-size: 0.67rem;
+    font-weight: 700;
+
+    text-align: left;
+    text-transform: uppercase;
+    letter-spacing: 0.035em;
+}
+
+
+.slc-reports-table td {
+    padding: 0.8rem;
+
+    border-bottom: 1px solid #eeeaf0;
+
+    vertical-align: middle;
+
+    color: #302b33;
+
+    font-family: "DM Sans", sans-serif;
+    font-size: 0.75rem;
+    line-height: 1.45;
+}
+
+
+.slc-reports-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+
+.slc-reports-table tbody tr:hover {
+    background: #fffaf7;
+}
+
+
+/* ============================================================
+   REPORT TABLE CONTENT
+============================================================ */
+
+.slc-report-lesson {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 38px;
+    min-height: 25px;
+
+    padding: 0 7px;
+
+    border-radius: 7px;
+
+    background: #f3e8ff;
+    color: #4A0754;
+
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+}
+
+
+.slc-report-group {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+
+    min-width: 0;
+}
+
+
+.slc-report-group strong {
+    overflow: hidden;
+
+    color: #211c24;
+
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-size: 0.76rem;
+    font-weight: 600;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+.slc-report-group small {
+    overflow: hidden;
+
+    color: #77717b;
+
+    font-family: "DM Sans", sans-serif;
+    font-size: 0.68rem;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+.slc-report-number {
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-size: 0.82rem;
+    font-weight: 700;
+
+    color: #302b33;
+}
+
+
+.slc-report-number.participated {
+    color: #166534;
+}
+
+
+.slc-report-number.not-participated {
+    color: #b45309;
+}
+
+
+.slc-report-date {
+    color: #625b65;
+
+    font-size: 0.7rem;
+}
+
+
+.slc-report-submitter {
+    display: block;
+
+    overflow: hidden;
+
+    max-width: 140px;
+
+    color: #625b65;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+.slc-report-version {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 28px;
+    height: 25px;
+
+    padding: 0 7px;
+
+    border-radius: 7px;
+
+    background: #f7f4f8;
+    color: #665d69;
+
+    font-family: "DM Sans", sans-serif;
+    font-size: 0.68rem;
+    font-weight: 700;
+}
+
+
+.slc-report-view-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+
+    min-height: 32px;
+
+    padding: 0 10px;
+
+    border: 1px solid #ded6e1;
+    border-radius: 8px;
+
+    background: #ffffff;
+    color: #4A0754;
+
+    font-family: "DM Sans", sans-serif;
+    font-size: 0.69rem;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease;
+}
+
+
+.slc-report-view-button:hover {
+    background: #fff8f4;
+    border-color: #f1cbb9;
+    color: #EA580C;
+}
+
+
+/* ============================================================
+   REPORTS EMPTY STATE
+============================================================ */
+
+.slc-reports-empty {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+
+    padding: 50px 24px;
+
+    text-align: center;
+}
+
+
+.slc-reports-empty-icon {
+    width: 48px;
+    height: 48px;
+
+    display: grid;
+    place-items: center;
+
+    margin-bottom: 12px;
+
+    border-radius: 13px;
+
+    background: #f3e8ff;
+    color: #4A0754;
+
+    font-size: 1rem;
+}
+
+
+.slc-reports-empty h3 {
+    margin: 0;
+
+    color: #0A0016;
+
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-size: 1rem;
+}
+
+
+.slc-reports-empty p {
+    max-width: 420px;
+
+    margin: 6px 0 0;
+
+    color: #6b6470;
+
+    font-family: "DM Sans", sans-serif;
+    font-size: 0.74rem;
+    line-height: 1.5;
+}
+
+
+/* ============================================================
+   REPORT DETAILS MODAL
+============================================================ */
+
+.slc-report-modal {
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 10000;
+
+    display: none;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+
+    box-sizing: border-box;
+}
+
+
+.slc-report-modal.active {
+    display: flex;
+}
+
+
+.slc-report-modal-overlay {
+    position: absolute;
+
+    inset: 0;
+
+    background: rgba(10, 0, 22, 0.48);
+
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+
+    cursor: pointer;
+}
+
+
+.slc-report-modal-dialog {
+    position: relative;
+
+    z-index: 1;
+
+    width: min(100%, 760px);
+    max-height: calc(100vh - 40px);
+
+    overflow-y: auto;
+
+    border: 1px solid #ebe5ee;
+    border-radius: 18px;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 20px 60px rgba(10, 0, 22, 0.18);
+
+    animation: slcReportModalIn 0.2s ease;
+}
+
+
+@keyframes slcReportModalIn {
+
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+}
+
+
+.slc-report-modal-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+
+    padding: 20px;
+
+    border-bottom: 1px solid #eeeaf0;
+}
+
+
+.slc-report-modal-header h2 {
+    margin: 0;
+
+    color: #0A0016;
+
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-size: 1.25rem;
+}
+
+
+.slc-report-modal-header p {
+    margin: 5px 0 0;
+
+    color: #6b6470;
+
+    font-family: "DM Sans", sans-serif;
+    font-size: 0.74rem;
+}
+
+
+.slc-report-modal-close {
+    width: 34px;
+    height: 34px;
+
+    flex: 0 0 34px;
+
+    display: grid;
+    place-items: center;
+
+    border: 1px solid #e5dfe8;
+    border-radius: 9px;
+
+    background: #ffffff;
+    color: #665d69;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        border-color 0.2s ease;
+}
+
+
+.slc-report-modal-close:hover {
+    background: #fff8f4;
+    border-color: #f1cbb9;
+    color: #EA580C;
+}
+
+
+/* ============================================================
+   REPORT DETAILS
+============================================================ */
+
+.slc-report-details {
+    padding: 20px;
+}
+
+
+.slc-report-summary-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+
+    gap: 10px;
+
+    margin-bottom: 18px;
+}
+
+
+.slc-report-summary-item {
+    padding: 12px;
+
+    border-radius: 10px;
+
+    background: #f8f8f8;
+}
+
+
+.slc-report-summary-item span {
+    display: block;
+
+    margin-bottom: 4px;
+
+    color: #77717b;
+
+    font-family: "DM Sans", sans-serif;
+    font-size: 0.65rem;
+}
+
+
+.slc-report-summary-item strong {
+    display: block;
+
+    color: #302b33;
+
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-size: 0.9rem;
+}
+
+
+.slc-report-detail-section {
+    margin-top: 18px;
+    padding-top: 18px;
+
+    border-top: 1px solid #eeeaf0;
+}
+
+
+.slc-report-detail-section:first-child {
+    margin-top: 0;
+    padding-top: 0;
+
+    border-top: 0;
+}
+
+
+.slc-report-detail-section h3 {
+    margin: 0 0 8px;
+
+    color: #4A0754;
+
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-size: 0.86rem;
+}
+
+
+.slc-report-detail-section p {
+    margin: 0;
+
+    color: #4b5563;
+
+    font-family: "DM Sans", sans-serif;
+    font-size: 0.76rem;
+    line-height: 1.6;
+
+    white-space: pre-wrap;
+}
+
+
+.slc-report-detail-list {
+    display: grid;
+
+    gap: 7px;
+
+    margin: 0;
+    padding: 0;
+
+    list-style: none;
+}
+
+
+.slc-report-detail-list li {
+    padding: 9px 11px;
+
+    border: 1px solid #eeeaf0;
+    border-radius: 9px;
+
+    background: #fafafa;
+
+    color: #4b5563;
+
+    font-family: "DM Sans", sans-serif;
+    font-size: 0.74rem;
+    line-height: 1.5;
+}
+
+
+.slc-report-detail-list li strong {
+    color: #302b33;
+}
+
+
+.slc-report-meta-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 10px;
+}
+
+
+.slc-report-meta-item {
+    padding: 11px 12px;
+
+    border-radius: 10px;
+
+    background: #f8f8f8;
+}
+
+
+.slc-report-meta-item span {
+    display: block;
+
+    margin-bottom: 4px;
+
+    color: #77717b;
+
+    font-family: "DM Sans", sans-serif;
+    font-size: 0.65rem;
+}
+
+
+.slc-report-meta-item strong {
+    display: block;
+
+    color: #302b33;
+
+    font-family: "DM Sans", sans-serif;
+    font-size: 0.74rem;
+    font-weight: 600;
+}
+
+
+/* ============================================================
+   REPORT MODAL MOBILE
+============================================================ */
+
+@media (max-width: 700px) {
+
+    .slc-reports-toolbar {
+        align-items: stretch;
+
+        flex-direction: column;
+    }
+
+
+    .slc-reports-filter {
+        max-width: none;
+    }
+
+
+    .slc-reports-count {
+        min-height: auto;
+    }
+
+
+    .slc-reports-toolbar .dashboard-secondary-button {
+        width: 100%;
+    }
+
+
+    .slc-reports-table-wrapper {
+        border-radius: 10px;
+    }
+
+
+    .slc-report-modal {
+        padding: 10px;
+    }
+
+
+    .slc-report-modal-dialog {
+        max-height: calc(100vh - 20px);
+
+        border-radius: 15px;
+    }
+
+
+    .slc-report-modal-header {
+        padding: 17px 16px 14px;
+    }
+
+
+    .slc-report-details {
+        padding: 16px;
+    }
+
+
+    .slc-report-summary-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+
+    .slc-report-meta-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+
+@media (max-width: 420px) {
+
+    .slc-reports-filter {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+
+    .slc-reports-filter .dashboard-secondary-button {
+        width: 100%;
+    }
+
+
+    .slc-report-summary-grid {
+        grid-template-columns: 1fr 1fr;
+
+        gap: 7px;
+    }
+
+
+    .slc-report-summary-item {
+        padding: 10px;
+    }
+
+}
