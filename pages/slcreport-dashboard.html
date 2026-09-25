@@ -1357,11 +1357,10 @@ content="AFC Isiu"
 
 </section>
 
- html
+
 <!-- =========================================================
      QUIZ QUESTIONS
-========================================================= -->
-
+========================================================== -->
 <section
     id="dashboardSectionQuestions"
     class="quiz-dashboard-section"
@@ -1371,34 +1370,39 @@ content="AFC Isiu"
 
         <div class="quiz-section-heading">
 
-            <span class="quiz-section-icon">
+            <div class="quiz-section-icon">
                 <i class="fa-solid fa-circle-question"></i>
-            </span>
+            </div>
 
             <div>
-
-                <h2>
-                    Quiz Questions
-                </h2>
+                <h2>Quiz Questions</h2>
 
                 <p>
-                    View and manage the questions used for the weekly SLC quiz.
+                    View, add, edit, and manage the questions
+                    used for the weekly SLC quiz.
                 </p>
-
             </div>
 
         </div>
 
 
-        <div class="quiz-section-count">
+        <div class="quiz-section-actions">
 
-            <strong id="questionsCount">
-                0
-            </strong>
-
-            <span>
-                Questions
+            <span
+                id="questionsCount"
+                class="quiz-section-count"
+            >
+                0 questions
             </span>
+
+            <button
+                type="button"
+                id="addQuestionButton"
+                class="dashboard-primary-button"
+            >
+                <i class="fa-solid fa-plus"></i>
+                <span>Add Question</span>
+            </button>
 
         </div>
 
@@ -1406,19 +1410,20 @@ content="AFC Isiu"
 
 
     <!-- =====================================================
-         QUESTION CONTROLS
+         QUESTIONS TOOLBAR
     ====================================================== -->
-
     <div class="questions-toolbar">
 
         <div class="questions-filter">
 
-            <i class="fa-solid fa-filter"></i>
+            <label for="questionsLessonFilter">
+                Lesson
+            </label>
 
             <input
                 type="text"
                 id="questionsLessonFilter"
-                placeholder="Filter by lesson number..."
+                placeholder="Filter by lesson number"
                 autocomplete="off"
             >
 
@@ -1430,26 +1435,19 @@ content="AFC Isiu"
             id="refreshQuestionsButton"
             class="dashboard-secondary-button"
         >
-
             <i class="fa-solid fa-rotate"></i>
-
-            <span>
-                Refresh
-            </span>
-
+            <span>Refresh</span>
         </button>
 
     </div>
 
 
     <!-- =====================================================
-         STATUS
+         QUESTIONS STATUS
     ====================================================== -->
-
     <div
         id="questionsStatus"
-        class="questions-status hidden"
-        role="status"
+        class="questions-status"
         aria-live="polite"
     ></div>
 
@@ -1457,7 +1455,6 @@ content="AFC Isiu"
     <!-- =====================================================
          QUESTIONS TABLE
     ====================================================== -->
-
     <div class="questions-table-wrapper">
 
         <table class="questions-table">
@@ -1466,29 +1463,17 @@ content="AFC Isiu"
 
                 <tr>
 
-                    <th>
-                        Lesson
-                    </th>
+                    <th>Lesson</th>
 
-                    <th>
-                        Question
-                    </th>
+                    <th>Question</th>
 
-                    <th>
-                        Options
-                    </th>
+                    <th>Options</th>
 
-                    <th>
-                        Answer
-                    </th>
+                    <th>Answer</th>
 
-                    <th>
-                        Points
-                    </th>
+                    <th>Points</th>
 
-                    <th>
-                        Action
-                    </th>
+                    <th>Action</th>
 
                 </tr>
 
@@ -1503,21 +1488,7 @@ content="AFC Isiu"
                         colspan="6"
                         class="questions-empty-cell"
                     >
-
-                        <div class="slc-empty-state">
-
-                            <i class="fa-solid fa-circle-info"></i>
-
-                            <h3>
-                                Loading questions
-                            </h3>
-
-                            <p>
-                                Your quiz questions will appear here.
-                            </p>
-
-                        </div>
-
+                        Loading quiz questions...
                     </td>
 
                 </tr>
@@ -1532,27 +1503,366 @@ content="AFC Isiu"
     <!-- =====================================================
          INFORMATION NOTE
     ====================================================== -->
-
     <div class="questions-info-note">
 
-        <i class="fa-solid fa-shield-halved"></i>
+        <i class="fa-solid fa-circle-info"></i>
 
         <div>
-
-            <strong>
-                Secure question management
-            </strong>
+            <strong>Question management</strong>
 
             <p>
-                Only authorized Quiz Coordinator and Admin users
-                can access this question bank.
+                Changes made here are saved directly to the
+                Quiz Questions sheet and can affect future
+                weekly quizzes. Review a question carefully
+                before saving changes.
             </p>
-
         </div>
 
     </div>
 
 </section>
+
+
+<!-- =========================================================
+     QUESTION EDITOR MODAL
+========================================================== -->
+<div
+    id="questionEditorModal"
+    class="question-editor-modal"
+    aria-hidden="true"
+>
+
+    <div
+        class="question-editor-overlay"
+        data-question-modal-close
+    ></div>
+
+
+    <div
+        class="question-editor-dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="questionEditorTitle"
+    >
+
+        <!-- Header -->
+        <div class="question-editor-header">
+
+            <div>
+
+                <span
+                    id="questionEditorEyebrow"
+                    class="question-editor-eyebrow"
+                >
+                    New Question
+                </span>
+
+                <h2 id="questionEditorTitle">
+                    Add Quiz Question
+                </h2>
+
+                <p id="questionEditorDescription">
+                    Create a new question for the SLC quiz.
+                </p>
+
+            </div>
+
+
+            <button
+                type="button"
+                class="question-editor-close"
+                data-question-modal-close
+                aria-label="Close question editor"
+            >
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+        </div>
+
+
+        <!-- Form -->
+        <form
+            id="questionEditorForm"
+            class="question-editor-form"
+        >
+
+            <input
+                type="hidden"
+                id="questionEditorRowNumber"
+                value=""
+            >
+
+
+            <!-- Lesson + Points -->
+            <div class="question-form-grid two-columns">
+
+                <div class="question-form-field">
+
+                    <label for="questionEditorLessonNo">
+                        Lesson Number
+                    </label>
+
+                    <input
+                        type="text"
+                        id="questionEditorLessonNo"
+                        placeholder="e.g. 89"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="question-form-field">
+
+                    <label for="questionEditorPoints">
+                        Points
+                    </label>
+
+                    <input
+                        type="number"
+                        id="questionEditorPoints"
+                        placeholder="e.g. 200"
+                        min="1"
+                        step="1"
+                        required
+                    >
+
+                </div>
+
+            </div>
+
+
+            <!-- Question -->
+            <div class="question-form-field">
+
+                <label for="questionEditorQuestion">
+                    Question
+                </label>
+
+                <textarea
+                    id="questionEditorQuestion"
+                    rows="4"
+                    placeholder="Enter the quiz question..."
+                    required
+                ></textarea>
+
+            </div>
+
+
+            <!-- Option A -->
+            <div class="question-form-field">
+
+                <label for="questionEditorOptionA">
+                    Option A
+                </label>
+
+                <input
+                    type="text"
+                    id="questionEditorOptionA"
+                    placeholder="Enter option A"
+                    required
+                >
+
+            </div>
+
+
+            <!-- Option B -->
+            <div class="question-form-field">
+
+                <label for="questionEditorOptionB">
+                    Option B
+                </label>
+
+                <input
+                    type="text"
+                    id="questionEditorOptionB"
+                    placeholder="Enter option B"
+                    required
+                >
+
+            </div>
+
+
+            <!-- Option C -->
+            <div class="question-form-field">
+
+                <label for="questionEditorOptionC">
+                    Option C
+                </label>
+
+                <input
+                    type="text"
+                    id="questionEditorOptionC"
+                    placeholder="Enter option C"
+                    required
+                >
+
+            </div>
+
+
+            <!-- Option D -->
+            <div class="question-form-field">
+
+                <label for="questionEditorOptionD">
+                    Option D
+                </label>
+
+                <input
+                    type="text"
+                    id="questionEditorOptionD"
+                    placeholder="Enter option D"
+                    required
+                >
+
+            </div>
+
+
+            <!-- Correct Answer -->
+            <div class="question-form-field">
+
+                <label for="questionEditorCorrectOption">
+                    Correct Answer
+                </label>
+
+                <select
+                    id="questionEditorCorrectOption"
+                    required
+                >
+
+                    <option value="">
+                        Select correct option
+                    </option>
+
+                    <option value="A">
+                        A
+                    </option>
+
+                    <option value="B">
+                        B
+                    </option>
+
+                    <option value="C">
+                        C
+                    </option>
+
+                    <option value="D">
+                        D
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- Form Status -->
+            <div
+                id="questionEditorStatus"
+                class="question-editor-status"
+                aria-live="polite"
+            ></div>
+
+
+            <!-- Actions -->
+            <div class="question-editor-actions">
+
+                <button
+                    type="button"
+                    class="dashboard-secondary-button"
+                    data-question-modal-close
+                >
+                    Cancel
+                </button>
+
+
+                <button
+                    type="submit"
+                    id="saveQuestionButton"
+                    class="dashboard-primary-button"
+                >
+                    <i class="fa-solid fa-floppy-disk"></i>
+                    <span>Save Question</span>
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     DELETE CONFIRMATION MODAL
+========================================================== -->
+<div
+    id="questionDeleteModal"
+    class="question-editor-modal"
+    aria-hidden="true"
+>
+
+    <div
+        class="question-editor-overlay"
+        data-delete-modal-close
+    ></div>
+
+
+    <div
+        class="question-delete-dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="questionDeleteTitle"
+    >
+
+        <div class="question-delete-icon">
+            <i class="fa-solid fa-trash"></i>
+        </div>
+
+
+        <h2 id="questionDeleteTitle">
+            Delete Question?
+        </h2>
+
+
+        <p id="questionDeleteMessage">
+            This will permanently remove this question from
+            the Quiz Questions sheet.
+        </p>
+
+
+        <div
+            id="questionDeleteStatus"
+            class="question-editor-status"
+            aria-live="polite"
+        ></div>
+
+
+        <div class="question-editor-actions">
+
+            <button
+                type="button"
+                class="dashboard-secondary-button"
+                data-delete-modal-close
+            >
+                Cancel
+            </button>
+
+
+            <button
+                type="button"
+                id="confirmDeleteQuestionButton"
+                class="dashboard-danger-button"
+            >
+                <i class="fa-solid fa-trash"></i>
+                <span>Delete Question</span>
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
  
 
 
