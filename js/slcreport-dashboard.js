@@ -26,7 +26,7 @@
 ============================================================ */
 
 const API_URL =
-    "https://script.google.com/macros/s/AKfycbx4YhK2K4l7M5K8YQv8h8mM4mM8wV5V7V8V9V0V1V2V3V4V5V6V7V8V9V0/exec";
+    "https://script.google.com/macros/s/AKfycbw1mVwpgAcIOSNbpgzy52TFyozEGMtWWwVWUDFaofGNzpsguBIaKR4q1dXVtgVHO2xZ1w/exec";
 
 const SESSION_KEY =
     "afc_isiu_slc_leader_session";
