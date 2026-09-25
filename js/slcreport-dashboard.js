@@ -1,154 +1,242 @@
-"use strict";
+/**
+ * ============================================================
+ * AFC ISIU YOUTH PORTAL V2
+ * FILE: slcreport-dashboard.js
+ * PURPOSE: QUIZ COORDINATOR DASHBOARD
+ * ============================================================
+ *
+ * Handles:
+ * - Dashboard authentication
+ * - Dashboard overview
+ * - Quiz Questions
+ * - Add Question
+ * - Edit Question
+ * - Delete Question
+ *
+ * IMPORTANT:
+ * - Uses the existing dashboard session.
+ * - Does not change participant quiz logic.
+ * - Does not change scoreQuiz().
+ * ============================================================
+ */
+
 
 /* ============================================================
-AFC ISIU YOUTH PORTAL V2
-FILE: slcreport-dashboard.js
-PURPOSE: SECURE QUIZ COORDINATOR DASHBOARD
+   CONFIG
 ============================================================ */
 
-/* ============================================================
-CONFIG
-============================================================ */
-
-const APPS_SCRIPT_URL =
-"https://script.google.com/macros/s/AKfycbw1mVwpgAcIOSNbpgzy52TFyozEGMtWWwVWUDFaofGNzpsguBIaKR4q1dXVtgVHO2xZ1w/exec";
+const API_URL =
+    "https://script.google.com/macros/s/AKfycbx4YhK2K4l7M5K8YQv8h8mM4mM8wV5V7V8V9V0V1V2V3V4V5V6V7V8V9V0/exec";
 
 const SESSION_KEY =
-"afc_isiu_slc_leader_session";
+    "afc_isiu_slc_leader_session";
+
 
 /* ============================================================
-HELPERS
-============================================================ */
-
-const $ = (id) =>
-document.getElementById(id);
-
-/* ============================================================
-STATE
+   STATE
 ============================================================ */
 
 let dashboardSession = null;
 
 let dashboardQuestions = [];
 
+let questionBeingEdited = null;
+
+let questionBeingDeleted = null;
+
+let questionSaveInProgress = false;
+
+let questionDeleteInProgress = false;
+
+
 /* ============================================================
-INITIALISE
+   DOM READY
 ============================================================ */
 
 document.addEventListener(
-"DOMContentLoaded",
-function () {
+    "DOMContentLoaded",
+    function () {
 
-    setupDashboard();
+        setupDashboard();
 
-    restoreDashboardSession();
+        restoreDashboardSession();
 
-}
+    }
 );
 
+
 /* ============================================================
-SETUP
+   DASHBOARD SETUP
 ============================================================ */
 
 function setupDashboard() {
 
-    const button =
-        $("loadDashboardButton");
+    setupDashboardControls();
 
-    const lessonInput =
-        $("dashboardLessonNo");
+    setupQuestionsControls();
+
+    setupQuestionEditor();
+
+    setupQuestionDeleteModal();
+
+    setupDashboardNavigation();
+
+}
 
 
-    if (button) {
+/* ============================================================
+   DASHBOARD CONTROLS
+============================================================ */
 
-        button.addEventListener(
-            "click",
-            loadDashboard
+function setupDashboardControls() {
+
+    const loadButton =
+        document.getElementById(
+            "loadDashboardButton"
         );
 
-    }
 
+    if (loadButton) {
 
-    if (lessonInput) {
+        loadButton.addEventListener(
+            "click",
+            function () {
 
-        lessonInput.addEventListener(
-            "keydown",
-            function (event) {
-
-                if (
-                    event.key === "Enter"
-                ) {
-
-                    event.preventDefault();
-
-                    loadDashboard();
-
-                }
+                loadDashboardOverview();
 
             }
         );
 
     }
 
-
-    setupQuestionsControls();
-
 }
 
+
 /* ============================================================
-QUESTIONS CONTROLS
+   DASHBOARD NAVIGATION
 ============================================================ */
 
-function setupQuestionsControls() {
+function setupDashboardNavigation() {
 
-    const refreshButton =
-        $("refreshQuestionsButton");
-
-    const filterInput =
-        $("questionsLessonFilter");
-
-
-    if (refreshButton) {
-
-        refreshButton.addEventListener(
-            "click",
-            loadQuizQuestions
+    const buttons =
+        document.querySelectorAll(
+            "[data-dashboard-section]"
         );
 
-    }
+
+    buttons.forEach(
+        function (button) {
+
+            button.addEventListener(
+                "click",
+                function () {
+
+                    const section =
+                        button.dataset.dashboardSection;
+
+                    if (!section) return;
+
+                    activateDashboardSection(
+                        section
+                    );
+
+                }
+            );
+
+        }
+    );
+
+}
 
 
-    if (filterInput) {
+/**
+ * Activate a dashboard section.
+ *
+ * The HTML also contains a lightweight navigation
+ * fallback. This function keeps navigation working
+ * when this JS file is loaded independently.
+ */
+function activateDashboardSection(
+    sectionName
+) {
 
-        filterInput.addEventListener(
-            "input",
-            filterQuizQuestions
+    const buttons =
+        document.querySelectorAll(
+            ".quiz-nav-button"
         );
+
+    const sections =
+        document.querySelectorAll(
+            ".quiz-dashboard-section"
+        );
+
+
+    buttons.forEach(
+        function (button) {
+
+            button.classList.toggle(
+                "active",
+                button.dataset.dashboardSection ===
+                    sectionName
+            );
+
+        }
+    );
+
+
+    sections.forEach(
+        function (section) {
+
+            const expectedId =
+                "dashboardSection" +
+                sectionName
+                    .charAt(0)
+                    .toUpperCase() +
+                sectionName.slice(1);
+
+
+            section.classList.toggle(
+                "active",
+                section.id === expectedId
+            );
+
+        }
+    );
+
+
+    /*
+     * When Questions is opened, make sure the
+     * latest question data is available.
+     */
+    if (
+        sectionName === "questions" &&
+        dashboardSession
+    ) {
+
+        loadQuizQuestions();
 
     }
 
 }
 
+
 /* ============================================================
-RESTORE LOGIN SESSION
+   RESTORE DASHBOARD SESSION
 ============================================================ */
 
 function restoreDashboardSession() {
 
-    const saved =
+    const rawSession =
         localStorage.getItem(
             SESSION_KEY
         );
 
 
-    if (!saved) {
+    if (!rawSession) {
 
-        showStatus(
-            "error",
-            "Please log in to the SLC Report page first."
+        showDashboardEmpty(
+            "Please log in to access the Quiz Coordinator Dashboard."
         );
-
-        disableDashboard();
 
         return;
 
@@ -157,43 +245,15 @@ function restoreDashboardSession() {
 
     try {
 
-        const session =
-            JSON.parse(saved);
-
-
-        if (
-            !session ||
-            !session.token
-        ) {
-
-            throw new Error(
-                "Invalid saved session."
-            );
-
-        }
-
-
         dashboardSession =
-            session;
-
-
-        /*
-         * The token is not trusted simply because it exists
-         * in localStorage.
-         *
-         * The Apps Script backend verifies the token and
-         * checks the user's authorized SLC role.
-         */
-
-        verifyDashboardAccess(
-            session.token
-        );
-
+            JSON.parse(
+                rawSession
+            );
 
     } catch (error) {
 
         console.error(
-            "Dashboard session error:",
+            "Invalid dashboard session:",
             error
         );
 
@@ -203,73 +263,92 @@ function restoreDashboardSession() {
         );
 
 
-        dashboardSession =
-            null;
-
-
-        disableDashboard();
-
-
-        showStatus(
-            "error",
-            "Your login session could not be restored. Please log in again."
+        showDashboardEmpty(
+            "Your dashboard session is invalid. Please log in again."
         );
+
+        return;
 
     }
 
+
+    if (
+        !dashboardSession ||
+        !dashboardSession.token
+    ) {
+
+        localStorage.removeItem(
+            SESSION_KEY
+        );
+
+
+        showDashboardEmpty(
+            "Your dashboard session is invalid. Please log in again."
+        );
+
+        return;
+
+    }
+
+
+    verifyDashboardAccess();
+
 }
 
+
 /* ============================================================
-VERIFY SERVER-SIDE ACCESS
+   VERIFY DASHBOARD ACCESS
 ============================================================ */
 
-async function verifyDashboardAccess(
-token
-) {
+async function verifyDashboardAccess() {
+
+    setDashboardStatus(
+        "Checking dashboard access...",
+        "loading"
+    );
+
 
     try {
 
-        const result =
-            await callDashboardAPI(
-                {
-                    action:
-                        "getSLCAdminOverview",
+        const response =
+            await dashboardGet({
+                action:
+                    "getSLCAdminOverview",
 
-                    token:
-                        token
-                }
-            );
+                token:
+                    dashboardSession.token
+            });
 
 
-        if (!result.success) {
+        if (
+            !response ||
+            response.success === false
+        ) {
 
             throw new Error(
-                result.message ||
-                "You are not authorized to access this dashboard."
+                response &&
+                response.message
+                    ? response.message
+                    : "Unable to verify dashboard access."
             );
 
         }
 
 
-        /*
-         * The overview endpoint has already passed the
-         * server-side authorization check.
-         */
-
-        renderDashboard(
-            result
+        renderDashboardOverview(
+            response
         );
 
 
         /*
-         * Load Questions after the dashboard session
-         * has been verified.
-         *
-         * If the Questions section is not present on the
-         * current HTML, nothing happens.
+         * Load questions after access has been
+         * successfully verified.
          */
-
-        if ($("questionsTableBody")) {
+        if (
+            document.getElementById(
+                "questionsTableBody"
+            )
+        ) {
 
             loadQuizQuestions();
 
@@ -279,143 +358,58 @@ token
     } catch (error) {
 
         console.error(
-            "Dashboard authorization error:",
+            "Dashboard access error:",
             error
         );
 
 
-        dashboardSession =
-            null;
-
-
-        disableDashboard();
-
-
-        showStatus(
-            "error",
+        setDashboardStatus(
             error.message ||
-            "Unable to verify your dashboard access."
+                "Unable to load dashboard.",
+            "error"
         );
 
     }
 
 }
 
+
 /* ============================================================
-DASHBOARD API
+   LOAD OVERVIEW
 ============================================================ */
 
-async function callDashboardAPI(
-payload
-) {
+async function loadDashboardOverview() {
 
-    const params =
-        new URLSearchParams();
+    if (
+        !dashboardSession ||
+        !dashboardSession.token
+    ) {
 
-
-    Object.keys(payload)
-        .forEach(
-            function (key) {
-
-                const value =
-                    payload[key];
-
-
-                if (
-                    value !== undefined &&
-                    value !== null
-                ) {
-
-                    params.set(
-                        key,
-                        String(value)
-                    );
-
-                }
-
-            }
+        setDashboardStatus(
+            "Please log in again.",
+            "error"
         );
 
-
-    const response =
-        await fetch(
-            `${APPS_SCRIPT_URL}?${params.toString()}`,
-            {
-                method: "GET"
-            }
-        );
-
-
-    if (!response.ok) {
-
-        throw new Error(
-            `Server error (${response.status}). Please try again.`
-        );
+        return;
 
     }
 
-
-    const text =
-        await response.text();
-
-
-    let data;
-
-
-    try {
-
-        data =
-            JSON.parse(text);
-
-    } catch (error) {
-
-        console.error(
-            "Invalid Apps Script response:",
-            text
-        );
-
-        throw new Error(
-            "The server returned an invalid response."
-        );
-
-    }
-
-
-    return data;
-
-}
-
-/* ============================================================
-LOAD DASHBOARD
-============================================================ */
-
-async function loadDashboard() {
 
     const button =
-        $("loadDashboardButton");
-
-    const lessonInput =
-        $("dashboardLessonNo");
-
-
-    /*
-     * The current backend overview uses the active/current
-     * Quiz Settings row.
-     *
-     * Therefore the lesson input remains optional for now.
-     */
-
-    const lessonNo =
-        lessonInput
-            ? lessonInput.value.trim()
-            : "";
+        document.getElementById(
+            "loadDashboardButton"
+        );
 
 
     if (button) {
 
-        button.disabled =
-            true;
+        button.disabled = true;
 
+        const originalText =
+            button.innerHTML;
+
+        button.dataset.originalText =
+            originalText;
 
         button.innerHTML =
             '<i class="fa-solid fa-spinner fa-spin"></i><span>Loading...</span>';
@@ -423,114 +417,85 @@ async function loadDashboard() {
     }
 
 
-    hideStatus();
+    setDashboardStatus(
+        "Loading dashboard...",
+        "loading"
+    );
 
 
     try {
 
-        const saved =
-            localStorage.getItem(
-                SESSION_KEY
+        const lessonInput =
+            document.getElementById(
+                "dashboardLessonNo"
             );
 
 
-        if (!saved) {
-
-            throw new Error(
-                "Your login session is missing. Please log in again."
-            );
-
-        }
-
-
-        const session =
-            JSON.parse(saved);
-
-
-        if (
-            !session ||
-            !session.token
-        ) {
-
-            throw new Error(
-                "Your login session is invalid. Please log in again."
-            );
-
-        }
-
-
-        dashboardSession =
-            session;
-
-
-        const result =
-            await callDashboardAPI(
-                {
-                    action:
-                        "getSLCAdminOverview",
-
-                    token:
-                        session.token
-                }
-            );
-
-
-        if (!result.success) {
-
-            throw new Error(
-                result.message ||
-                "Unable to load the SLC dashboard."
-            );
-
-        }
-
-
-        renderDashboard(
-            result
-        );
-
-
-        const currentLesson =
-            result.data &&
-            result.data.currentQuiz
-                ? result.data.currentQuiz.lessonNo
+        const lessonNo =
+            lessonInput
+                ? String(
+                    lessonInput.value || ""
+                  ).trim()
                 : "";
 
 
-        if (
-            lessonNo &&
-            currentLesson &&
-            String(lessonNo) !==
-            String(currentLesson)
-        ) {
+        const params = {
 
-            showStatus(
-                "success",
-                `Dashboard loaded. The active quiz is Lesson ${currentLesson}.`
+            action:
+                "getSLCAdminOverview",
+
+            token:
+                dashboardSession.token
+
+        };
+
+
+        if (lessonNo) {
+
+            params.lessonNo =
+                lessonNo;
+
+        }
+
+
+        const response =
+            await dashboardGet(
+                params
             );
 
-        } else {
 
-            showStatus(
-                "success",
-                "SLC dashboard loaded successfully."
+        if (
+            !response ||
+            response.success === false
+        ) {
+
+            throw new Error(
+                response &&
+                response.message
+                    ? response.message
+                    : "Unable to load dashboard."
             );
 
         }
+
+
+        renderDashboardOverview(
+            response
+        );
 
 
     } catch (error) {
 
         console.error(
-            "SLC dashboard error:",
+            "Dashboard overview error:",
             error
         );
 
 
-        showStatus(
-            "error",
+        setDashboardStatus(
             error.message ||
-            "Unable to load the dashboard."
+                "Unable to load dashboard.",
+            "error"
         );
 
 
@@ -538,12 +503,11 @@ async function loadDashboard() {
 
         if (button) {
 
-            button.disabled =
-                false;
-
+            button.disabled = false;
 
             button.innerHTML =
-                '<i class="fa-solid fa-rotate"></i><span>Load Report</span>';
+                button.dataset.originalText ||
+                '<i class="fa-solid fa-rotate"></i><span>Load Dashboard</span>';
 
         }
 
@@ -551,76 +515,76 @@ async function loadDashboard() {
 
 }
 
+
 /* ============================================================
-RENDER DASHBOARD
+   RENDER OVERVIEW
 ============================================================ */
 
-function renderDashboard(
-result
+function renderDashboardOverview(
+    data
 ) {
 
-    const data =
-        result.data ||
-        {};
+    const overview =
+        data.overview ||
+        data;
 
 
-    const statistics =
-        data.statistics ||
-        {};
-
-
-    const currentQuiz =
-        data.currentQuiz ||
-        {};
-
-
-    const participants =
-        Array.isArray(
-            data.participants
-        )
-            ? data.participants
-            : [];
-
-
-    const nonParticipants =
-        Array.isArray(
-            data.nonParticipants
-        )
-            ? data.nonParticipants
-            : [];
-
-
-    /* --------------------------------------------------------
-       STATISTICS
-    -------------------------------------------------------- */
-
-    const total =
+    const totalMembers =
         Number(
-            statistics.totalMembers
-        ) || 0;
+            overview.totalMembers || 0
+        );
 
 
     const participated =
         Number(
-            statistics.participated
-        ) || 0;
+            overview.participated || 0
+        );
 
 
     const notParticipated =
         Number(
-            statistics.notParticipated
-        ) || 0;
+            overview.notParticipated || 0
+        );
 
 
-    const percentage =
+    let participationRate =
         Number(
-            statistics.participationPercentage
-        ) || 0;
+            overview.participationRate || 0
+        );
+
+
+    if (
+        !Number.isFinite(
+            participationRate
+        )
+    ) {
+
+        participationRate = 0;
+
+    }
+
+
+    participationRate =
+        Math.max(
+            0,
+            Math.min(
+                100,
+                participationRate
+            )
+        );
+
+
+    const progressPercentage =
+        Number(
+            overview.progressPercentage ||
+            participationRate ||
+            0
+        );
 
 
     setText(
         "statTotalMembers",
-        total
+        totalMembers
     );
 
 
@@ -638,230 +602,234 @@ result
 
     setText(
         "statParticipationRate",
-        `${percentage}%`
+        Math.round(
+            participationRate
+        ) + "%"
     );
 
 
     setText(
         "progressPercentage",
-        `${percentage}%`
+        Math.round(
+            progressPercentage
+        ) + "%"
     );
 
 
-    const progress =
-        $("participationProgress");
+    const progressFill =
+        document.getElementById(
+            "participationProgress"
+        );
 
 
-    if (progress) {
+    if (progressFill) {
 
-        progress.style.width =
-            `${Math.max(
+        progressFill.style.width =
+            Math.max(
                 0,
                 Math.min(
-                    percentage,
-                    100
+                    100,
+                    progressPercentage
                 )
-            )}%`;
+            ) + "%";
 
     }
 
 
     setText(
         "progressDescription",
-        buildProgressDescription(
-            total,
-            participated,
-            notParticipated
-        )
+        overview.progressDescription ||
+            getParticipationDescription(
+                participationRate
+            )
     );
-
-
-    /* --------------------------------------------------------
-       CURRENT QUIZ
-    -------------------------------------------------------- */
-
-    const lessonNo =
-        currentQuiz.lessonNo ||
-        "—";
 
 
     setText(
         "dashboardLessonTitle",
-        lessonNo === "—"
-            ? "Weekly SLC Report"
-            : `Lesson ${lessonNo}`
+        overview.lessonTitle ||
+            overview.currentQuizTitle ||
+            "Weekly SLC Quiz"
     );
 
 
     setText(
         "dashboardReportDate",
-        currentQuiz.closeTime
-            ? `Closes ${formatDateTime(
-                currentQuiz.closeTime
-            )}`
-            : "Active quiz"
+        formatDashboardDate(
+            overview.reportDate ||
+            overview.quizDate ||
+            ""
+        )
     );
 
 
-    /* --------------------------------------------------------
-       GROUP INFORMATION
-    -------------------------------------------------------- */
-
     setText(
         "groupNameDisplay",
-        "All SLC members"
+        overview.groupName ||
+            "—"
     );
 
 
     setText(
         "groupLeaderDisplay",
-        "—"
+        overview.groupLeaderName ||
+            "—"
     );
 
 
     setText(
         "reportVersionDisplay",
-        "Live overview"
+        overview.reportVersion ||
+            "—"
     );
 
 
     setText(
         "reportDateDisplay",
-        formatDate(
-            new Date()
+        formatDashboardDate(
+            overview.reportDate ||
+            ""
         )
     );
 
 
-    /* --------------------------------------------------------
-       NON PARTICIPANTS
-    -------------------------------------------------------- */
-
     renderNonParticipants(
-        nonParticipants
+        overview.nonParticipants ||
+            []
     );
 
 
-    /* --------------------------------------------------------
-       OBSERVATIONS
-    -------------------------------------------------------- */
+    const observations =
+        String(
+            overview.observations || ""
+        ).trim();
 
-    hideObservations();
 
-
-    /* --------------------------------------------------------
-       SHOW DASHBOARD
-    -------------------------------------------------------- */
-
-    $("dashboardSummary")
-        ?.classList.remove(
-            "hidden"
+    const observationCard =
+        document.getElementById(
+            "observationsCard"
         );
 
 
-    $("dashboardEmpty")
-        ?.classList.add(
-            "hidden"
+    const observationDisplay =
+        document.getElementById(
+            "observationsDisplay"
         );
-
-}
-
-/* ============================================================
-PROGRESS DESCRIPTION
-============================================================ */
-
-function buildProgressDescription(
-total,
-participated,
-notParticipated
-) {
-
-    if (!total) {
-
-        return "No active members were found.";
-
-    }
 
 
     if (
-        participated === total
+        observationCard &&
+        observationDisplay
     ) {
 
-        return "All active members have participated in this week's quiz.";
+        if (observations) {
+
+            observationDisplay.textContent =
+                observations;
+
+            observationCard.classList.remove(
+                "hidden"
+            );
+
+        } else {
+
+            observationCard.classList.add(
+                "hidden"
+            );
+
+        }
 
     }
 
 
-    return `${participated} of ${total} active members have participated. ${notParticipated} member${notParticipated === 1 ? "" : "s"} ${notParticipated === 1 ? "is" : "are"} yet to participate.`;
+    const summary =
+        document.getElementById(
+            "dashboardSummary"
+        );
+
+
+    const empty =
+        document.getElementById(
+            "dashboardEmpty"
+        );
+
+
+    if (summary) {
+
+        summary.classList.remove(
+            "hidden"
+        );
+
+    }
+
+
+    if (empty) {
+
+        empty.classList.add(
+            "hidden"
+        );
+
+    }
+
+
+    setDashboardStatus(
+        "Dashboard loaded successfully.",
+        "success"
+    );
 
 }
 
+
 /* ============================================================
-NON PARTICIPANTS
+   NON-PARTICIPANTS
 ============================================================ */
 
 function renderNonParticipants(
-members
+    members
 ) {
 
-    const container =
-        $("nonParticipantsDisplay");
+    const list =
+        document.getElementById(
+            "nonParticipantsDisplay"
+        );
 
 
     const count =
-        Array.isArray(members)
-            ? members.filter(
-                function (member) {
-
-                    return (
-                        member &&
-                        String(
-                            member.name || ""
-                        ).trim()
-                    );
-
-                }
-            )
-            : [];
+        document.getElementById(
+            "nonParticipantCount"
+        );
 
 
-    setText(
-        "nonParticipantCount",
-        count.length
-    );
+    if (!Array.isArray(members)) {
+
+        members = [];
+
+    }
 
 
-    if (!container) return;
+    if (count) {
+
+        count.textContent =
+            members.length;
+
+    }
 
 
-    if (!count.length) {
+    if (!list) return;
 
-        container.innerHTML = `
 
-            <div class="slc-empty-state">
+    if (!members.length) {
 
-                <i class="fa-solid fa-circle-check"></i>
-
-                <h3>
-                    Everyone participated
-                </h3>
-
-                <p>
-                    All active members have participated
-                    in the selected quiz.
-                </p>
-
-            </div>
-
-        `;
+        list.innerHTML =
+            '<div class="slc-empty-state">Everyone has participated.</div>';
 
         return;
 
     }
 
 
-    container.innerHTML =
-        count
+    list.innerHTML =
+        members
             .map(
                 function (
                     member,
@@ -869,14 +837,17 @@ members
                 ) {
 
                     const name =
-                        member.name ||
-                        "Unnamed member";
+                        typeof member === "string"
+                            ? member
+                            : (
+                                member.name ||
+                                member.fullName ||
+                                "Unnamed member"
+                            );
 
 
                     return `
-
                         <div class="slc-member-item">
-
                             <span class="slc-member-number">
                                 ${index + 1}
                             </span>
@@ -884,9 +855,7 @@ members
                             <span>
                                 ${escapeHtml(name)}
                             </span>
-
                         </div>
-
                     `;
 
                 }
@@ -895,44 +864,178 @@ members
 
 }
 
+
 /* ============================================================
-QUIZ QUESTIONS
+   QUESTIONS CONTROLS
 ============================================================ */
 
-/*
- * This section reads from the existing
- * "Quiz Questions" sheet through the secure
- * Apps Script admin endpoint.
- *
- * It does NOT modify the public quiz.
- */
+function setupQuestionsControls() {
 
-async function loadQuizQuestions() {
+    const refreshButton =
+        document.getElementById(
+            "refreshQuestionsButton"
+        );
 
-    const container =
-        $("questionsTableBody");
+
+    if (refreshButton) {
+
+        refreshButton.addEventListener(
+            "click",
+            function () {
+
+                loadQuizQuestions();
+
+            }
+        );
+
+    }
+
+
+    const lessonFilter =
+        document.getElementById(
+            "questionsLessonFilter"
+        );
+
+
+    if (lessonFilter) {
+
+        lessonFilter.addEventListener(
+            "input",
+            function () {
+
+                filterQuizQuestions();
+
+            }
+        );
+
+    }
+
+
+    const addButton =
+        document.getElementById(
+            "addQuestionButton"
+        );
+
+
+    if (addButton) {
+
+        addButton.addEventListener(
+            "click",
+            function () {
+
+                openQuestionEditor();
+
+            }
+        );
+
+    }
 
 
     /*
-     * If the Questions section has not yet been
-     * added to the HTML, simply do nothing.
+     * Event delegation for Edit/Delete buttons
+     * generated inside the questions table.
      */
+    const tableBody =
+        document.getElementById(
+            "questionsTableBody"
+        );
 
-    if (!container) {
+
+    if (tableBody) {
+
+        tableBody.addEventListener(
+            "click",
+            function (event) {
+
+                const actionButton =
+                    event.target.closest(
+                        "[data-question-action]"
+                    );
+
+
+                if (!actionButton) return;
+
+
+                const action =
+                    actionButton.dataset.questionAction;
+
+
+                const rowNumber =
+                    Number(
+                        actionButton.dataset.rowNumber
+                    );
+
+
+                if (
+                    !Number.isInteger(
+                        rowNumber
+                    )
+                ) {
+                    return;
+                }
+
+
+                if (action === "edit") {
+
+                    openQuestionEditor(
+                        rowNumber
+                    );
+
+                }
+
+
+                if (action === "delete") {
+
+                    openQuestionDeleteModal(
+                        rowNumber
+                    );
+
+                }
+
+            }
+        );
+
+    }
+
+}
+
+
+/* ============================================================
+   LOAD QUESTIONS
+============================================================ */
+
+async function loadQuizQuestions() {
+
+    if (
+        !dashboardSession ||
+        !dashboardSession.token
+    ) {
+
+        setQuestionsStatus(
+            "Please log in again.",
+            "error"
+        );
 
         return;
 
     }
 
 
+    setQuestionsStatus(
+        "Loading quiz questions...",
+        "loading"
+    );
+
+
     const refreshButton =
-        $("refreshQuestionsButton");
+        document.getElementById(
+            "refreshQuestionsButton"
+        );
 
 
     if (refreshButton) {
 
-        refreshButton.disabled =
-            true;
+        refreshButton.disabled = true;
 
         refreshButton.innerHTML =
             '<i class="fa-solid fa-spinner fa-spin"></i><span>Loading...</span>';
@@ -940,66 +1043,30 @@ async function loadQuizQuestions() {
     }
 
 
-    setQuestionsStatus(
-        "loading",
-        "Loading quiz questions..."
-    );
-
-
     try {
 
-        const saved =
-            localStorage.getItem(
-                SESSION_KEY
-            );
+        const response =
+            await dashboardGet({
 
+                action:
+                    "getSLCAdminQuizQuestions",
 
-        if (!saved) {
+                token:
+                    dashboardSession.token
 
-            throw new Error(
-                "Your login session is missing. Please log in again."
-            );
-
-        }
-
-
-        const session =
-            JSON.parse(saved);
+            });
 
 
         if (
-            !session ||
-            !session.token
+            !response ||
+            response.success === false
         ) {
 
             throw new Error(
-                "Your login session is invalid. Please log in again."
-            );
-
-        }
-
-
-        dashboardSession =
-            session;
-
-
-        const result =
-            await callDashboardAPI(
-                {
-                    action:
-                        "getSLCAdminQuizQuestions",
-
-                    token:
-                        session.token
-                }
-            );
-
-
-        if (!result.success) {
-
-            throw new Error(
-                result.message ||
-                "Unable to load quiz questions."
+                response &&
+                response.message
+                    ? response.message
+                    : "Unable to load quiz questions."
             );
 
         }
@@ -1007,20 +1074,24 @@ async function loadQuizQuestions() {
 
         dashboardQuestions =
             Array.isArray(
-                result.questions
+                response.questions
             )
-                ? result.questions
+                ? response.questions
                 : [];
 
 
-        renderQuizQuestions(
-            dashboardQuestions
-        );
+        renderQuizQuestions();
 
 
         setQuestionsStatus(
-            "success",
-            `${dashboardQuestions.length} question${dashboardQuestions.length === 1 ? "" : "s"} loaded.`
+            dashboardQuestions.length +
+                (
+                    dashboardQuestions.length === 1
+                        ? " question"
+                        : " questions"
+                ) +
+                " loaded.",
+            "success"
         );
 
 
@@ -1032,19 +1103,10 @@ async function loadQuizQuestions() {
         );
 
 
-        dashboardQuestions =
-            [];
-
-
-        renderQuizQuestions(
-            []
-        );
-
-
         setQuestionsStatus(
-            "error",
             error.message ||
-            "Unable to load quiz questions."
+                "Unable to load quiz questions.",
+            "error"
         );
 
 
@@ -1052,8 +1114,7 @@ async function loadQuizQuestions() {
 
         if (refreshButton) {
 
-            refreshButton.disabled =
-                false;
+            refreshButton.disabled = false;
 
             refreshButton.innerHTML =
                 '<i class="fa-solid fa-rotate"></i><span>Refresh</span>';
@@ -1064,93 +1125,74 @@ async function loadQuizQuestions() {
 
 }
 
+
 /* ============================================================
-RENDER QUIZ QUESTIONS
+   RENDER QUESTIONS
 ============================================================ */
 
-function renderQuizQuestions(
-questions
-) {
+function renderQuizQuestions() {
 
-    const container =
-        $("questionsTableBody");
-
-
-    if (!container) {
-
-        return;
-
-    }
-
-
-    const filtered =
-        getFilteredQuestions(
-            questions
+    const tableBody =
+        document.getElementById(
+            "questionsTableBody"
         );
 
 
-    if (!filtered.length) {
+    if (!tableBody) return;
 
-        container.innerHTML = `
 
+    const questions =
+        getFilteredQuestions();
+
+
+    updateQuestionsCount(
+        questions.length
+    );
+
+
+    if (!questions.length) {
+
+        tableBody.innerHTML = `
             <tr>
-
                 <td
                     colspan="6"
                     class="questions-empty-cell"
                 >
-
-                    <div class="slc-empty-state">
-
-                        <i class="fa-solid fa-circle-question"></i>
-
-                        <h3>
-                            No questions found
-                        </h3>
-
-                        <p>
-                            There are no quiz questions matching the current filter.
-                        </p>
-
-                    </div>
-
+                    No quiz questions found.
                 </td>
-
             </tr>
-
         `;
-
-        updateQuestionsCount(
-            0
-        );
 
         return;
 
     }
 
 
-    container.innerHTML =
-        filtered
+    tableBody.innerHTML =
+        questions
             .map(
-                function (
-                    item
-                ) {
+                function (item) {
 
                     return `
-
                         <tr>
 
                             <td>
                                 <span class="question-lesson-badge">
-                                    ${escapeHtml(item.lessonNo)}
+                                    ${escapeHtml(
+                                        item.lessonNo
+                                    )}
                                 </span>
                             </td>
 
+
                             <td>
                                 <div class="admin-question-text">
-                                    ${escapeHtml(item.question)}
+                                    ${escapeHtml(
+                                        item.question
+                                    )}
                                 </div>
                             </td>
+
 
                             <td>
 
@@ -1158,292 +1200,1514 @@ questions
 
                                     <div>
                                         <strong>A.</strong>
-                                        ${escapeHtml(item.optionA)}
+                                        ${escapeHtml(
+                                            item.optionA
+                                        )}
                                     </div>
 
                                     <div>
                                         <strong>B.</strong>
-                                        ${escapeHtml(item.optionB)}
+                                        ${escapeHtml(
+                                            item.optionB
+                                        )}
                                     </div>
 
                                     <div>
                                         <strong>C.</strong>
-                                        ${escapeHtml(item.optionC)}
+                                        ${escapeHtml(
+                                            item.optionC
+                                        )}
                                     </div>
 
                                     <div>
                                         <strong>D.</strong>
-                                        ${escapeHtml(item.optionD)}
+                                        ${escapeHtml(
+                                            item.optionD
+                                        )}
                                     </div>
 
                                 </div>
 
                             </td>
 
-                            <td>
-                                <span class="correct-answer-badge">
-                                    ${escapeHtml(item.correctOption)}
-                                </span>
-                            </td>
-
-                            <td>
-                                ${escapeHtml(item.points)}
-                            </td>
 
                             <td>
 
-                                <button
-                                    type="button"
-                                    class="question-action-button edit"
-                                    data-question-action="edit"
-                                    data-row-number="${escapeHtml(item.rowNumber)}"
+                                <span
+                                    class="correct-answer-badge"
+                                    title="Correct answer"
                                 >
-                                    <i class="fa-solid fa-pen"></i>
-                                    <span>Edit</span>
-                                </button>
+                                    ${escapeHtml(
+                                        item.correctOption
+                                    )}
+                                </span>
+
+                            </td>
+
+
+                            <td>
+                                ${escapeHtml(
+                                    item.points
+                                )}
+                            </td>
+
+
+                            <td>
+
+                                <div class="question-action-group">
+
+                                    <button
+                                        type="button"
+                                        class="question-action-button edit"
+                                        data-question-action="edit"
+                                        data-row-number="${escapeHtml(
+                                            item.rowNumber
+                                        )}"
+                                    >
+                                        <i class="fa-solid fa-pen"></i>
+                                        <span>Edit</span>
+                                    </button>
+
+
+                                    <button
+                                        type="button"
+                                        class="question-action-button delete"
+                                        data-question-action="delete"
+                                        data-row-number="${escapeHtml(
+                                            item.rowNumber
+                                        )}"
+                                    >
+                                        <i class="fa-solid fa-trash"></i>
+                                        <span>Delete</span>
+                                    </button>
+
+                                </div>
 
                             </td>
 
                         </tr>
-
                     `;
 
                 }
             )
             .join("");
 
-
-    updateQuestionsCount(
-        filtered.length
-    );
-
 }
 
+
 /* ============================================================
-FILTER QUESTIONS
+   FILTER QUESTIONS
 ============================================================ */
 
 function filterQuizQuestions() {
 
-    renderQuizQuestions(
-        dashboardQuestions
-    );
+    renderQuizQuestions();
 
 }
 
+
 /* ============================================================
-GET FILTERED QUESTIONS
+   GET FILTERED QUESTIONS
 ============================================================ */
 
-function getFilteredQuestions(
-questions
-) {
+function getFilteredQuestions() {
 
     const filterInput =
-        $("questionsLessonFilter");
+        document.getElementById(
+            "questionsLessonFilter"
+        );
 
 
     const filter =
         filterInput
-            ? filterInput.value.trim().toLowerCase()
+            ? String(
+                filterInput.value || ""
+              )
+                .trim()
+                .toLowerCase()
             : "";
 
 
     if (!filter) {
 
-        return questions;
+        return dashboardQuestions;
 
     }
 
 
-    return questions.filter(
+    return dashboardQuestions.filter(
         function (item) {
 
             return String(
                 item.lessonNo || ""
             )
-            .toLowerCase()
-            .includes(
-                filter
-            );
+                .toLowerCase()
+                .includes(filter);
 
         }
     );
 
 }
 
-/* ============================================================
-QUESTIONS STATUS
-============================================================ */
-
-function setQuestionsStatus(
-type,
-message
-) {
-
-    const box =
-        $("questionsStatus");
-
-
-    if (!box) {
-
-        return;
-
-    }
-
-
-    box.className =
-        `questions-status ${type}`;
-
-
-    box.textContent =
-        message;
-
-
-    box.classList.remove(
-        "hidden"
-    );
-
-}
 
 /* ============================================================
-QUESTIONS COUNT
+   QUESTION COUNT
 ============================================================ */
 
 function updateQuestionsCount(
-count
-) {
-
-    setText(
-        "questionsCount",
-        count
-    );
-
-}
-
-/* ============================================================
-OBSERVATIONS
-============================================================ */
-
-function hideObservations() {
-
-    const card =
-        $("observationsCard");
-
-
-    const content =
-        $("observationsDisplay");
-
-
-    if (card) {
-
-        card.classList.add(
-            "hidden"
-        );
-
-    }
-
-
-    if (content) {
-
-        content.textContent =
-            "";
-
-    }
-
-}
-
-/* ============================================================
-DISABLE DASHBOARD
-============================================================ */
-
-function disableDashboard() {
-
-    const button =
-        $("loadDashboardButton");
-
-
-    if (button) {
-
-        button.disabled =
-            true;
-
-    }
-
-}
-
-/* ============================================================
-STATUS
-============================================================ */
-
-function showStatus(
-type,
-message
-) {
-
-    const box =
-        $("dashboardStatus");
-
-
-    if (!box) return;
-
-
-    box.className =
-        `slc-dashboard-status ${type}`;
-
-
-    box.textContent =
-        message;
-
-
-    box.classList.remove(
-        "hidden"
-    );
-
-}
-
-function hideStatus() {
-
-    const box =
-        $("dashboardStatus");
-
-
-    if (!box) return;
-
-
-    box.classList.add(
-        "hidden"
-    );
-
-}
-
-/* ============================================================
-TEXT
-============================================================ */
-
-function setText(
-id,
-value
+    count
 ) {
 
     const element =
-        $(id);
+        document.getElementById(
+            "questionsCount"
+        );
 
 
     if (!element) return;
 
 
     element.textContent =
-        value ?? "—";
+        count +
+        (
+            count === 1
+                ? " question"
+                : " questions"
+        );
 
 }
 
+
 /* ============================================================
-DATE
+   QUESTION EDITOR SETUP
 ============================================================ */
 
-function formatDate(
-value
+function setupQuestionEditor() {
+
+    const form =
+        document.getElementById(
+            "questionEditorForm"
+        );
+
+
+    if (form) {
+
+        form.addEventListener(
+            "submit",
+            handleQuestionFormSubmit
+        );
+
+    }
+
+
+    document.addEventListener(
+        "click",
+        function (event) {
+
+            const closeButton =
+                event.target.closest(
+                    "[data-question-modal-close]"
+                );
+
+
+            if (!closeButton) return;
+
+
+            closeQuestionEditor();
+
+        }
+    );
+
+
+    document.addEventListener(
+        "keydown",
+        function (event) {
+
+            if (
+                event.key !== "Escape"
+            ) {
+                return;
+            }
+
+
+            closeQuestionEditor();
+
+            closeQuestionDeleteModal();
+
+        }
+    );
+
+}
+
+
+/* ============================================================
+   OPEN QUESTION EDITOR
+============================================================ */
+
+function openQuestionEditor(
+    rowNumber
+) {
+
+    const modal =
+        document.getElementById(
+            "questionEditorModal"
+        );
+
+
+    if (!modal) return;
+
+
+    questionBeingEdited =
+        null;
+
+
+    const isEditing =
+        Number.isInteger(
+            Number(rowNumber)
+        );
+
+
+    if (isEditing) {
+
+        const question =
+            dashboardQuestions.find(
+                function (item) {
+
+                    return Number(
+                        item.rowNumber
+                    ) === Number(
+                        rowNumber
+                    );
+
+                }
+            );
+
+
+        if (!question) {
+
+            setQuestionsStatus(
+                "That question could not be found. Please refresh the list.",
+                "error"
+            );
+
+            return;
+
+        }
+
+
+        questionBeingEdited =
+            question;
+
+
+        setText(
+            "questionEditorEyebrow",
+            "Edit Question"
+        );
+
+
+        setText(
+            "questionEditorTitle",
+            "Edit Quiz Question"
+        );
+
+
+        setText(
+            "questionEditorDescription",
+            "Update this question and save your changes."
+        );
+
+
+        fillQuestionEditor(
+            question
+        );
+
+
+    } else {
+
+        setText(
+            "questionEditorEyebrow",
+            "New Question"
+        );
+
+
+        setText(
+            "questionEditorTitle",
+            "Add Quiz Question"
+        );
+
+
+        setText(
+            "questionEditorDescription",
+            "Create a new question for the SLC quiz."
+        );
+
+
+        clearQuestionEditor();
+
+    }
+
+
+    setQuestionEditorStatus(
+        "",
+        ""
+    );
+
+
+    modal.classList.add(
+        "active"
+    );
+
+
+    modal.setAttribute(
+        "aria-hidden",
+        "false"
+    );
+
+
+    document.body.classList.add(
+        "question-modal-open"
+    );
+
+
+    const firstInput =
+        document.getElementById(
+            "questionEditorLessonNo"
+        );
+
+
+    if (firstInput) {
+
+        window.setTimeout(
+            function () {
+
+                firstInput.focus();
+
+            },
+            100
+        );
+
+    }
+
+}
+
+
+/* ============================================================
+   CLOSE QUESTION EDITOR
+============================================================ */
+
+function closeQuestionEditor() {
+
+    const modal =
+        document.getElementById(
+            "questionEditorModal"
+        );
+
+
+    if (!modal) return;
+
+
+    if (questionSaveInProgress) {
+
+        return;
+
+    }
+
+
+    modal.classList.remove(
+        "active"
+    );
+
+
+    modal.setAttribute(
+        "aria-hidden",
+        "true"
+    );
+
+
+    document.body.classList.remove(
+        "question-modal-open"
+    );
+
+
+    questionBeingEdited =
+        null;
+
+}
+
+
+/* ============================================================
+   FILL EDITOR
+============================================================ */
+
+function fillQuestionEditor(
+    question
+) {
+
+    setInputValue(
+        "questionEditorRowNumber",
+        question.rowNumber
+    );
+
+
+    setInputValue(
+        "questionEditorLessonNo",
+        question.lessonNo
+    );
+
+
+    setInputValue(
+        "questionEditorQuestion",
+        question.question
+    );
+
+
+    setInputValue(
+        "questionEditorOptionA",
+        question.optionA
+    );
+
+
+    setInputValue(
+        "questionEditorOptionB",
+        question.optionB
+    );
+
+
+    setInputValue(
+        "questionEditorOptionC",
+        question.optionC
+    );
+
+
+    setInputValue(
+        "questionEditorOptionD",
+        question.optionD
+    );
+
+
+    setInputValue(
+        "questionEditorCorrectOption",
+        question.correctOption
+    );
+
+
+    setInputValue(
+        "questionEditorPoints",
+        question.points
+    );
+
+}
+
+
+/* ============================================================
+   CLEAR EDITOR
+============================================================ */
+
+function clearQuestionEditor() {
+
+    const form =
+        document.getElementById(
+            "questionEditorForm"
+        );
+
+
+    if (form) {
+
+        form.reset();
+
+    }
+
+
+    setInputValue(
+        "questionEditorRowNumber",
+        ""
+    );
+
+
+    setInputValue(
+        "questionEditorCorrectOption",
+        ""
+    );
+
+
+    setInputValue(
+        "questionEditorPoints",
+        "200"
+    );
+
+}
+
+
+/* ============================================================
+   QUESTION FORM SUBMIT
+============================================================ */
+
+async function handleQuestionFormSubmit(
+    event
+) {
+
+    event.preventDefault();
+
+
+    if (questionSaveInProgress) {
+
+        return;
+
+    }
+
+
+    const data =
+        collectQuestionFormData();
+
+
+    const validationError =
+        validateQuestionFormData(
+            data
+        );
+
+
+    if (validationError) {
+
+        setQuestionEditorStatus(
+            validationError,
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    questionSaveInProgress =
+        true;
+
+
+    const saveButton =
+        document.getElementById(
+            "saveQuestionButton"
+        );
+
+
+    if (saveButton) {
+
+        saveButton.disabled = true;
+
+        saveButton.innerHTML =
+            '<i class="fa-solid fa-spinner fa-spin"></i><span>Saving...</span>';
+
+    }
+
+
+    setQuestionEditorStatus(
+        questionBeingEdited
+            ? "Saving your changes..."
+            : "Adding the question...",
+        "loading"
+    );
+
+
+    try {
+
+        const action =
+            questionBeingEdited
+                ? "updateSLCAdminQuizQuestion"
+                : "addSLCAdminQuizQuestion";
+
+
+        if (
+            questionBeingEdited
+        ) {
+
+            data.rowNumber =
+                Number(
+                    questionBeingEdited.rowNumber
+                );
+
+        }
+
+
+        const response =
+            await dashboardPost({
+
+                action:
+                    action,
+
+                token:
+                    dashboardSession.token,
+
+                ...data
+
+            });
+
+
+        if (
+            !response ||
+            response.success === false
+        ) {
+
+            throw new Error(
+                response &&
+                response.message
+                    ? response.message
+                    : "Unable to save quiz question."
+            );
+
+        }
+
+
+        setQuestionEditorStatus(
+            response.message ||
+                "Question saved successfully.",
+            "success"
+        );
+
+
+        await loadQuizQuestions();
+
+
+        window.setTimeout(
+            function () {
+
+                closeQuestionEditor();
+
+            },
+            450
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Save question error:",
+            error
+        );
+
+
+        setQuestionEditorStatus(
+            error.message ||
+                "Unable to save quiz question.",
+            "error"
+        );
+
+
+    } finally {
+
+        questionSaveInProgress =
+            false;
+
+
+        if (saveButton) {
+
+            saveButton.disabled =
+                false;
+
+            saveButton.innerHTML =
+                '<i class="fa-solid fa-floppy-disk"></i><span>Save Question</span>';
+
+        }
+
+    }
+
+}
+
+
+/* ============================================================
+   COLLECT FORM DATA
+============================================================ */
+
+function collectQuestionFormData() {
+
+    return {
+
+        lessonNo:
+            getInputValue(
+                "questionEditorLessonNo"
+            ),
+
+        question:
+            getInputValue(
+                "questionEditorQuestion"
+            ),
+
+        optionA:
+            getInputValue(
+                "questionEditorOptionA"
+            ),
+
+        optionB:
+            getInputValue(
+                "questionEditorOptionB"
+            ),
+
+        optionC:
+            getInputValue(
+                "questionEditorOptionC"
+            ),
+
+        optionD:
+            getInputValue(
+                "questionEditorOptionD"
+            ),
+
+        correctOption:
+            getInputValue(
+                "questionEditorCorrectOption"
+            )
+                .toUpperCase(),
+
+        points:
+            Number(
+                getInputValue(
+                    "questionEditorPoints"
+                )
+            )
+
+    };
+
+}
+
+
+/* ============================================================
+   VALIDATE FORM
+============================================================ */
+
+function validateQuestionFormData(
+    data
+) {
+
+    if (!data.lessonNo) {
+
+        return "Lesson number is required.";
+
+    }
+
+
+    if (!data.question) {
+
+        return "Question is required.";
+
+    }
+
+
+    if (
+        !data.optionA ||
+        !data.optionB ||
+        !data.optionC ||
+        !data.optionD
+    ) {
+
+        return "Please provide all four answer options.";
+
+    }
+
+
+    if (
+        ["A", "B", "C", "D"].indexOf(
+            data.correctOption
+        ) === -1
+    ) {
+
+        return "Please select the correct answer.";
+
+    }
+
+
+    if (
+        !Number.isFinite(
+            data.points
+        ) ||
+        data.points <= 0
+    ) {
+
+        return "Points must be greater than zero.";
+
+    }
+
+
+    return "";
+
+}
+
+
+/* ============================================================
+   QUESTION DELETE MODAL
+============================================================ */
+
+function setupQuestionDeleteModal() {
+
+    document.addEventListener(
+        "click",
+        function (event) {
+
+            const closeButton =
+                event.target.closest(
+                    "[data-delete-modal-close]"
+                );
+
+
+            if (!closeButton) return;
+
+
+            closeQuestionDeleteModal();
+
+        }
+    );
+
+
+    const confirmButton =
+        document.getElementById(
+            "confirmDeleteQuestionButton"
+        );
+
+
+    if (confirmButton) {
+
+        confirmButton.addEventListener(
+            "click",
+            handleQuestionDelete
+        );
+
+    }
+
+}
+
+
+/* ============================================================
+   OPEN DELETE MODAL
+============================================================ */
+
+function openQuestionDeleteModal(
+    rowNumber
+) {
+
+    const question =
+        dashboardQuestions.find(
+            function (item) {
+
+                return Number(
+                    item.rowNumber
+                ) === Number(
+                    rowNumber
+                );
+
+            }
+        );
+
+
+    if (!question) {
+
+        setQuestionsStatus(
+            "That question could not be found. Please refresh the list.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    questionBeingDeleted =
+        question;
+
+
+    const message =
+        document.getElementById(
+            "questionDeleteMessage"
+        );
+
+
+    if (message) {
+
+        message.textContent =
+            "You are about to permanently delete this question: “" +
+            question.question +
+            "”";
+
+    }
+
+
+    setQuestionDeleteStatus(
+        "",
+        ""
+    );
+
+
+    const modal =
+        document.getElementById(
+            "questionDeleteModal"
+        );
+
+
+    if (!modal) return;
+
+
+    modal.classList.add(
+        "active"
+    );
+
+
+    modal.setAttribute(
+        "aria-hidden",
+        "false"
+    );
+
+
+    document.body.classList.add(
+        "question-modal-open"
+    );
+
+}
+
+
+/* ============================================================
+   CLOSE DELETE MODAL
+============================================================ */
+
+function closeQuestionDeleteModal() {
+
+    const modal =
+        document.getElementById(
+            "questionDeleteModal"
+        );
+
+
+    if (!modal) return;
+
+
+    if (questionDeleteInProgress) {
+
+        return;
+
+    }
+
+
+    modal.classList.remove(
+        "active"
+    );
+
+
+    modal.setAttribute(
+        "aria-hidden",
+        "true"
+    );
+
+
+    document.body.classList.remove(
+        "question-modal-open"
+    );
+
+
+    questionBeingDeleted =
+        null;
+
+}
+
+
+/* ============================================================
+   DELETE QUESTION
+============================================================ */
+
+async function handleQuestionDelete() {
+
+    if (
+        questionDeleteInProgress ||
+        !questionBeingDeleted
+    ) {
+
+        return;
+
+    }
+
+
+    if (
+        !dashboardSession ||
+        !dashboardSession.token
+    ) {
+
+        setQuestionDeleteStatus(
+            "Your session has expired. Please log in again.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    questionDeleteInProgress =
+        true;
+
+
+    const button =
+        document.getElementById(
+            "confirmDeleteQuestionButton"
+        );
+
+
+    if (button) {
+
+        button.disabled = true;
+
+        button.innerHTML =
+            '<i class="fa-solid fa-spinner fa-spin"></i><span>Deleting...</span>';
+
+    }
+
+
+    setQuestionDeleteStatus(
+        "Deleting question...",
+        "loading"
+    );
+
+
+    try {
+
+        const response =
+            await dashboardPost({
+
+                action:
+                    "deleteSLCAdminQuizQuestion",
+
+                token:
+                    dashboardSession.token,
+
+                rowNumber:
+                    Number(
+                        questionBeingDeleted.rowNumber
+                    )
+
+            });
+
+
+        if (
+            !response ||
+            response.success === false
+        ) {
+
+            throw new Error(
+                response &&
+                response.message
+                    ? response.message
+                    : "Unable to delete quiz question."
+            );
+
+        }
+
+
+        setQuestionDeleteStatus(
+            response.message ||
+                "Question deleted successfully.",
+            "success"
+        );
+
+
+        await loadQuizQuestions();
+
+
+        window.setTimeout(
+            function () {
+
+                closeQuestionDeleteModal();
+
+            },
+            400
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Delete question error:",
+            error
+        );
+
+
+        setQuestionDeleteStatus(
+            error.message ||
+                "Unable to delete quiz question.",
+            "error"
+        );
+
+
+    } finally {
+
+        questionDeleteInProgress =
+            false;
+
+
+        if (button) {
+
+            button.disabled =
+                false;
+
+            button.innerHTML =
+                '<i class="fa-solid fa-trash"></i><span>Delete Question</span>';
+
+        }
+
+    }
+
+}
+
+
+/* ============================================================
+   API GET
+============================================================ */
+
+async function dashboardGet(
+    params
+) {
+
+    const query =
+        new URLSearchParams();
+
+
+    Object.keys(
+        params || {}
+    ).forEach(
+        function (key) {
+
+            const value =
+                params[key];
+
+
+            if (
+                value !== undefined &&
+                value !== null &&
+                value !== ""
+            ) {
+
+                query.set(
+                    key,
+                    String(value)
+                );
+
+            }
+
+        }
+    );
+
+
+    const response =
+        await fetch(
+            API_URL +
+            "?" +
+            query.toString(),
+            {
+                method: "GET",
+                cache: "no-store"
+            }
+        );
+
+
+    if (!response.ok) {
+
+        throw new Error(
+            "Server returned HTTP " +
+            response.status +
+            "."
+        );
+
+    }
+
+
+    return response.json();
+
+}
+
+
+/* ============================================================
+   API POST
+============================================================ */
+
+async function dashboardPost(
+    data
+) {
+
+    const response =
+        await fetch(
+            API_URL,
+            {
+                method: "POST",
+
+                headers: {
+                    "Content-Type":
+                        "text/plain;charset=utf-8"
+                },
+
+                body:
+                    JSON.stringify(
+                        data
+                    )
+            }
+        );
+
+
+    if (!response.ok) {
+
+        throw new Error(
+            "Server returned HTTP " +
+            response.status +
+            "."
+        );
+
+    }
+
+
+    return response.json();
+
+}
+
+
+/* ============================================================
+   DASHBOARD STATUS
+============================================================ */
+
+function setDashboardStatus(
+    message,
+    type
+) {
+
+    const element =
+        document.getElementById(
+            "dashboardStatus"
+        );
+
+
+    if (!element) return;
+
+
+    element.textContent =
+        message || "";
+
+
+    element.className =
+        "slc-dashboard-status";
+
+
+    if (type) {
+
+        element.classList.add(
+            type
+        );
+
+    }
+
+}
+
+
+/* ============================================================
+   QUESTIONS STATUS
+============================================================ */
+
+function setQuestionsStatus(
+    message,
+    type
+) {
+
+    const element =
+        document.getElementById(
+            "questionsStatus"
+        );
+
+
+    if (!element) return;
+
+
+    element.textContent =
+        message || "";
+
+
+    element.className =
+        "questions-status";
+
+
+    if (type) {
+
+        element.classList.add(
+            type
+        );
+
+    }
+
+}
+
+
+/* ============================================================
+   EDITOR STATUS
+============================================================ */
+
+function setQuestionEditorStatus(
+    message,
+    type
+) {
+
+    const element =
+        document.getElementById(
+            "questionEditorStatus"
+        );
+
+
+    if (!element) return;
+
+
+    element.textContent =
+        message || "";
+
+
+    element.className =
+        "question-editor-status";
+
+
+    if (
+        message &&
+        type
+    ) {
+
+        element.classList.add(
+            "show",
+            type
+        );
+
+    }
+
+}
+
+
+/* ============================================================
+   DELETE STATUS
+============================================================ */
+
+function setQuestionDeleteStatus(
+    message,
+    type
+) {
+
+    const element =
+        document.getElementById(
+            "questionDeleteStatus"
+        );
+
+
+    if (!element) return;
+
+
+    element.textContent =
+        message || "";
+
+
+    element.className =
+        "question-editor-status";
+
+
+    if (
+        message &&
+        type
+    ) {
+
+        element.classList.add(
+            "show",
+            type
+        );
+
+    }
+
+}
+
+
+/* ============================================================
+   EMPTY DASHBOARD
+============================================================ */
+
+function showDashboardEmpty(
+    message
+) {
+
+    const summary =
+        document.getElementById(
+            "dashboardSummary"
+        );
+
+
+    const empty =
+        document.getElementById(
+            "dashboardEmpty"
+        );
+
+
+    if (summary) {
+
+        summary.classList.add(
+            "hidden"
+        );
+
+    }
+
+
+    if (empty) {
+
+        empty.classList.remove(
+            "hidden"
+        );
+
+    }
+
+
+    setDashboardStatus(
+        message,
+        "error"
+    );
+
+}
+
+
+/* ============================================================
+   PARTICIPATION DESCRIPTION
+============================================================ */
+
+function getParticipationDescription(
+    rate
+) {
+
+    if (rate >= 100) {
+
+        return "Everyone has participated in this week's quiz.";
+
+    }
+
+
+    if (rate >= 75) {
+
+        return "Most members have participated in this week's quiz.";
+
+    }
+
+
+    if (rate >= 50) {
+
+        return "Participation is above half of the group.";
+
+    }
+
+
+    if (rate > 0) {
+
+        return "There are still members who need to participate.";
+
+    }
+
+
+    return "No quiz participation has been recorded yet.";
+
+}
+
+
+/* ============================================================
+   DATE FORMAT
+============================================================ */
+
+function formatDashboardDate(
+    value
 ) {
 
     if (!value) {
@@ -1454,7 +2718,9 @@ value
 
 
     const date =
-        new Date(value);
+        new Date(
+            value
+        );
 
 
     if (
@@ -1463,7 +2729,9 @@ value
         )
     ) {
 
-        return String(value);
+        return String(
+            value
+        );
 
     }
 
@@ -1479,76 +2747,116 @@ value
 
 }
 
-function formatDateTime(
-value
+
+/* ============================================================
+   GENERIC HELPERS
+============================================================ */
+
+function setText(
+    id,
+    value
 ) {
 
-    if (!value) {
-
-        return "—";
-
-    }
-
-
-    const date =
-        new Date(value);
+    const element =
+        document.getElementById(
+            id
+        );
 
 
-    if (
-        Number.isNaN(
-            date.getTime()
-        )
-    ) {
-
-        return String(value);
-
-    }
+    if (!element) return;
 
 
-    return date.toLocaleString(
-        "en-NG",
-        {
-            day: "numeric",
-            month: "short",
-            year: "numeric",
-            hour: "numeric",
-            minute: "2-digit"
-        }
-    );
+    element.textContent =
+        value === undefined ||
+        value === null ||
+        value === ""
+            ? "—"
+            : String(value);
 
 }
 
-/* ============================================================
-ESCAPE HTML
-============================================================ */
 
+function setInputValue(
+    id,
+    value
+) {
+
+    const element =
+        document.getElementById(
+            id
+        );
+
+
+    if (!element) return;
+
+
+    element.value =
+        value === undefined ||
+        value === null
+            ? ""
+            : String(value);
+
+}
+
+
+function getInputValue(
+    id
+) {
+
+    const element =
+        document.getElementById(
+            id
+        );
+
+
+    if (!element) {
+
+        return "";
+
+    }
+
+
+    return String(
+        element.value || ""
+    ).trim();
+
+}
+
+
+/**
+ * Escape HTML before inserting server data
+ * into generated table markup.
+ */
 function escapeHtml(
-value
+    value
 ) {
 
     return String(
-        value ?? ""
+        value === undefined ||
+        value === null
+            ? ""
+            : value
     )
-    .replace(
-        /&/g,
-        "&amp;"
-    )
-    .replace(
-        /</g,
-        "&lt;"
-    )
-    .replace(
-        />/g,
-        "&gt;"
-    )
-    .replace(
-        /"/g,
-        "&quot;"
-    )
-    .replace(
-        /'/g,
-        "&#039;"
-    );
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
 
 }
  
