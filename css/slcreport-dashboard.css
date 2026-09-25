@@ -2117,3 +2117,38 @@
 
 }
  
+
+
+
+/* ============================================================
+   QUIZ ATTEMPTS
+   ============================================================ */
+
+.attempt-participant {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.attempt-participant strong {
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-weight: 600;
+}
+
+.attempt-participant small {
+    font-size: 0.72rem;
+    color: #737373;
+}
+
+.attempts-table th,
+.attempts-table td {
+    vertical-align: middle;
+}
+
+@media (max-width: 768px) {
+
+    .attempts-table {
+        min-width: 720px;
+    }
+
+}
