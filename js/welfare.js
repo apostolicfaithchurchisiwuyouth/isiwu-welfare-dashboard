@@ -6,33 +6,31 @@
  * ============================================================
  */
 
-(function () {
-    "use strict";
-
+document.addEventListener("DOMContentLoaded", function () {
 
     /* =========================================================
        CONFIGURATION
        ========================================================= */
 
-    const APPS_SCRIPT_URL =
+    const LOGIN_API =
         "https://script.google.com/macros/s/AKfycbw1mVwpgAcIOSNbpgzy52TFyozEGMtWWwVWUDFaofGNzpsguBIaKR4q1dXVtgVHO2xZ1w/exec";
 
-    const SUMMARY_CSV_URL =
+    const SUMMARY_CSV =
         "https://docs.google.com/spreadsheets/d/e/2PACX-1vQHlE5IpmFYaQyW5u-rentH2fGC5VZJ2w9Ql1WI-X8bE76qlN5_ttDIitwlXX1CM4sqdEW8RroDUNSU/pub?gid=439044630&single=true&output=csv";
 
-    const CONTRIBUTIONS_CSV_URL =
+    const CONTRIBUTIONS_CSV =
         "https://docs.google.com/spreadsheets/d/e/2PACX-1vQHlE5IpmFYaQyW5u-rentH2fGC5VZJ2w9Ql1WI-X8bE76qlN5_ttDIitwlXX1CM4sqdEW8RroDUNSU/pub?gid=1555365618&single=true&output=csv";
 
-    const EXPENSES_CSV_URL =
-        "https://docs.google.com/spreadsheets/d/e/2PACX-1vQHlE5IpmFYaQyW5u-rentH2fGC5VJ2w9Ql1WI-X8bE76qlN5_ttDIitwlXX1CM4sqdEW8RroDUNSU/pub?gid=1621695140&single=true&output=csv";
+    const EXPENSES_CSV =
+        "https://docs.google.com/spreadsheets/d/e/2PACX-1vQHlE5IpmFYaQyW5u-rentH2fGC5VZJ2w9Ql1WI-X8bE76qlN5_ttDIitwlXX1CM4sqdEW8RroDUNSU/pub?gid=1621695140&single=true&output=csv";
 
 
     /* =========================================================
        STORAGE
        ========================================================= */
 
-    const LOGIN_KEY = "welfareLoggedIn";
-    const USERNAME_KEY = "username";
+    const LOGIN_STORAGE_KEY = "welfareLoggedIn";
+    const USER_STORAGE_KEY = "username";
 
 
     /* =========================================================
@@ -44,183 +42,377 @@
     const itemsPerPage = 10;
 
     let financeChart = null;
+
+    let failedLoginAttempts = 0;
+
     let refreshTimer = null;
 
+    let loginControlsInitialized = false;
+
 
     /* =========================================================
-       DOM HELPERS
+       TOPBAR LOGIN
+       =========================================================
+       
+       layout.js builds the shared topbar. Because it can replace
+       the contents of #app-topbar, we watch for that and mount
+       the Welfare login controls after the shared layout exists.
        ========================================================= */
 
-    function $(id) {
-        return document.getElementById(id);
+    function createLoginMarkup() {
+
+        const wrapper = document.createElement("div");
+
+        wrapper.id = "welfareTopbarLogin";
+        wrapper.className = "welfare-topbar-login";
+
+        wrapper.innerHTML = `
+            <div id="loginOverlay" class="welfare-login-container">
+
+                <form class="welfare-login-form" autocomplete="on">
+
+                    <div class="welfare-login-brand" title="Welfare">
+                        <i class="fa-solid fa-shield-heart"></i>
+                    </div>
+
+                    <div class="welfare-login-field">
+                        <i class="fa-solid fa-user"></i>
+
+                        <input
+                            type="text"
+                            id="username"
+                            name="username"
+                            placeholder="Username"
+                            autocomplete="username"
+                            required
+                        >
+                    </div>
+
+                    <div class="welfare-login-field password-field">
+                        <i class="fa-solid fa-lock"></i>
+
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            placeholder="Password"
+                            autocomplete="current-password"
+                            required
+                        >
+
+                        <button
+                            type="button"
+                            class="welfare-password-toggle"
+                            aria-label="Show password"
+                        >
+                            <i class="fa-solid fa-eye"></i>
+                        </button>
+                    </div>
+
+                    <button
+                        type="submit"
+                        id="loginBtn"
+                        class="welfare-login-btn"
+                    >
+                        <i class="fa-solid fa-right-to-bracket"></i>
+                        <span>Login</span>
+                    </button>
+
+                </form>
+
+                <div
+                    id="loginError"
+                    class="welfare-login-error hidden"
+                ></div>
+
+            </div>
+        `;
+
+        return wrapper;
     }
 
 
-    /* =========================================================
-       INITIALIZATION
-       ========================================================= */
+    function createLoggedInMarkup(username) {
 
-    document.addEventListener("DOMContentLoaded", function () {
+        const wrapper = document.createElement("div");
 
-        setupPasswordToggle();
-        setupLoginForm();
-        setupLogout();
+        wrapper.id = "welfareLoggedInState";
+        wrapper.className = "welfare-logged-in-state";
 
-        restoreLoginSession();
+        wrapper.innerHTML = `
+            <div class="welfare-user-badge">
+                <i class="fa-solid fa-user-circle"></i>
+                <span>${escapeHtml(username || "User")}</span>
+            </div>
 
-    });
+            <button
+                type="button"
+                id="topbarWelfareLogout"
+                class="welfare-topbar-logout"
+            >
+                <i class="fa-solid fa-right-from-bracket"></i>
+                <span>Logout</span>
+            </button>
+        `;
+
+        return wrapper;
+    }
 
 
-    /* =========================================================
-       LOGIN SESSION
-       ========================================================= */
+    function mountWelfareLogin() {
 
-    function restoreLoginSession() {
+        const topbar = document.getElementById("app-topbar");
+
+        if (!topbar) {
+            return;
+        }
 
         const loggedIn =
-            localStorage.getItem(LOGIN_KEY) === "true";
+            localStorage.getItem(LOGIN_STORAGE_KEY) === "true";
+
+        const username =
+            localStorage.getItem(USER_STORAGE_KEY) || "";
+
+
+        /* -----------------------------------------------------
+           If already mounted, update state only
+           ----------------------------------------------------- */
+
+        let existing =
+            document.getElementById("welfareTopbarLogin");
+
+        if (existing) {
+
+            if (loggedIn) {
+                showLoggedInTopbar(existing, username);
+            } else {
+                showLoginTopbar(existing);
+            }
+
+            return;
+        }
+
+
+        /* -----------------------------------------------------
+           Create the Welfare topbar controls
+           ----------------------------------------------------- */
+
+        existing = createLoginMarkup();
+
+        topbar.appendChild(existing);
+
 
         if (loggedIn) {
-
-            showLoggedInState();
-
-            loadWelfareData();
-
+            showLoggedInTopbar(existing, username);
         } else {
-
-            showLoggedOutState();
-
+            showLoginTopbar(existing);
         }
 
+        bindLoginControls(existing);
     }
 
 
-    function showLoggedInState() {
+    function showLoginTopbar(wrapper) {
 
-        const loginOverlay = $("loginOverlay");
-        const loggedInState = $("welfareLoggedInState");
-        const dashboard = $("dashboardContent");
-
-        if (loginOverlay) {
-            loginOverlay.classList.add("hidden");
-        }
-
-        if (loggedInState) {
-            loggedInState.classList.remove("hidden");
-        }
-
-        if (dashboard) {
-            dashboard.classList.remove("hidden");
-        }
-
-    }
-
-
-    function showLoggedOutState() {
-
-        const loginOverlay = $("loginOverlay");
-        const loggedInState = $("welfareLoggedInState");
-        const dashboard = $("dashboardContent");
+        const loginOverlay =
+            wrapper.querySelector("#loginOverlay");
 
         if (loginOverlay) {
             loginOverlay.classList.remove("hidden");
         }
 
+        const loggedInState =
+            wrapper.querySelector("#welfareLoggedInState");
+
         if (loggedInState) {
-            loggedInState.classList.add("hidden");
+            loggedInState.remove();
         }
-
-        if (dashboard) {
-            dashboard.classList.add("hidden");
-        }
-
     }
 
 
-    /* =========================================================
-       PASSWORD TOGGLE
-       ========================================================= */
+    function showLoggedInTopbar(wrapper, username) {
 
-    function setupPasswordToggle() {
+        const loginOverlay =
+            wrapper.querySelector("#loginOverlay");
 
-        const toggle = $("togglePassword");
-        const password = $("password");
-
-        if (!toggle || !password) {
-            return;
+        if (loginOverlay) {
+            loginOverlay.classList.add("hidden");
         }
 
-        toggle.addEventListener("click", function () {
+        let loggedInState =
+            wrapper.querySelector("#welfareLoggedInState");
 
-            const isPassword =
-                password.getAttribute("type") === "password";
+        if (!loggedInState) {
 
-            password.setAttribute(
-                "type",
-                isPassword ? "text" : "password"
-            );
+            loggedInState =
+                createLoggedInMarkup(username);
 
-            const icon = toggle.querySelector("i");
+            wrapper.appendChild(loggedInState);
 
-            if (icon) {
+            const logoutButton =
+                loggedInState.querySelector("#topbarWelfareLogout");
 
-                icon.className = isPassword
-                    ? "ri-eye-off-line"
-                    : "ri-eye-line";
-
+            if (logoutButton) {
+                logoutButton.addEventListener(
+                    "click",
+                    logout
+                );
             }
 
-            toggle.setAttribute(
-                "aria-label",
-                isPassword
-                    ? "Hide password"
-                    : "Show password"
-            );
+        } else {
 
-        });
+            const nameElement =
+                loggedInState.querySelector(
+                    ".welfare-user-badge span"
+                );
 
+            if (nameElement) {
+                nameElement.textContent =
+                    username || "User";
+            }
+        }
     }
 
 
-    /* =========================================================
-       LOGIN FORM
-       ========================================================= */
+    function bindLoginControls(wrapper) {
 
-    function setupLoginForm() {
-
-        const form = $("loginForm");
-
-        if (!form) {
+        if (loginControlsInitialized) {
             return;
         }
+
+        const form =
+            wrapper.querySelector(".welfare-login-form");
+
+        const loginButton =
+            wrapper.querySelector("#loginBtn");
+
+        const passwordInput =
+            wrapper.querySelector("#password");
+
+        const togglePassword =
+            wrapper.querySelector(
+                ".welfare-password-toggle"
+            );
+
+        if (!form || !loginButton || !passwordInput) {
+            return;
+        }
+
+        loginControlsInitialized = true;
+
 
         form.addEventListener("submit", function (event) {
 
             event.preventDefault();
 
-            handleLogin();
+            login();
 
         });
 
+
+        if (togglePassword) {
+
+            togglePassword.addEventListener(
+                "click",
+                function () {
+
+                    const icon =
+                        togglePassword.querySelector("i");
+
+                    if (passwordInput.type === "password") {
+
+                        passwordInput.type = "text";
+
+                        if (icon) {
+                            icon.className =
+                                "fa-solid fa-eye-slash";
+                        }
+
+                        togglePassword.setAttribute(
+                            "aria-label",
+                            "Hide password"
+                        );
+
+                    } else {
+
+                        passwordInput.type = "password";
+
+                        if (icon) {
+                            icon.className =
+                                "fa-solid fa-eye";
+                        }
+
+                        togglePassword.setAttribute(
+                            "aria-label",
+                            "Show password"
+                        );
+                    }
+                }
+            );
+        }
     }
 
 
-    async function handleLogin() {
+    /* =========================================================
+       TOPBAR OBSERVER
+       ========================================================= */
 
-        const usernameInput = $("username");
-        const passwordInput = $("password");
-        const loginButton = $("loginBtn");
-        const loginError = $("loginError");
+    function startTopbarObserver() {
+
+        const observer = new MutationObserver(
+            function () {
+
+                window.requestAnimationFrame(
+                    function () {
+                        mountWelfareLogin();
+                    }
+                );
+
+            }
+        );
+
+        observer.observe(
+            document.body,
+            {
+                childList: true,
+                subtree: true
+            }
+        );
+
+        mountWelfareLogin();
+    }
+
+
+    /* =========================================================
+       LOGIN
+       ========================================================= */
+
+    async function login() {
+
+        const usernameInput =
+            document.getElementById("username");
+
+        const passwordInput =
+            document.getElementById("password");
+
+        const loginButton =
+            document.getElementById("loginBtn");
+
+        const loginError =
+            document.getElementById("loginError");
+
 
         if (!usernameInput || !passwordInput || !loginButton) {
             return;
         }
+
 
         const username =
             usernameInput.value.trim();
 
         const password =
             passwordInput.value;
+
 
         if (!username || !password) {
 
@@ -229,34 +421,40 @@
             );
 
             return;
-
         }
 
 
-        clearLoginError();
-
         loginButton.disabled = true;
-        loginButton.classList.add("loading");
+
+        loginButton.innerHTML = `
+            <i class="fa-solid fa-spinner fa-spin"></i>
+            <span>Logging in...</span>
+        `;
+
+
+        hideLoginError();
 
 
         try {
 
-            const response = await fetch(APPS_SCRIPT_URL, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "text/plain;charset=utf-8"
-                },
-                body: JSON.stringify({
-                    action: "login",
-                    username: username,
-                    password: password
-                })
-            });
+            const response =
+                await fetch(LOGIN_API, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type":
+                            "application/x-www-form-urlencoded"
+                    },
+                    body: new URLSearchParams({
+                        action: "login",
+                        username: username,
+                        password: password
+                    })
+                });
 
 
             if (!response.ok) {
                 throw new Error(
-                    "Login request failed."
+                    "Unable to connect to the login service."
                 );
             }
 
@@ -273,37 +471,67 @@
                 )
             ) {
 
+                failedLoginAttempts = 0;
+
+
                 /*
-                 * Persist the login.
-                 *
-                 * localStorage is intentional here.
+                 * IMPORTANT:
+                 * localStorage is intentional.
                  * Refreshing the page must NOT log the user out.
                  */
-
                 localStorage.setItem(
-                    LOGIN_KEY,
+                    LOGIN_STORAGE_KEY,
                     "true"
                 );
 
                 localStorage.setItem(
-                    USERNAME_KEY,
+                    USER_STORAGE_KEY,
                     result.user || username
                 );
 
 
-                showLoggedInState();
+                const wrapper =
+                    document.getElementById(
+                        "welfareTopbarLogin"
+                    );
 
-                await loadWelfareData();
+                if (wrapper) {
+                    showLoggedInTopbar(
+                        wrapper,
+                        result.user || username
+                    );
+                }
 
+
+                showDashboard();
+
+                await loadDashboardData();
+
+                startAutoRefresh();
 
             } else {
 
-                showLoginError(
+                failedLoginAttempts++;
+
+                const message =
                     result && result.message
                         ? result.message
-                        : "Invalid username or password."
-                );
+                        : "Invalid username or password.";
 
+                showLoginError(message);
+
+
+                if (failedLoginAttempts >= 3) {
+
+                    showLoginError(
+                        "Too many failed login attempts. Redirecting..."
+                    );
+
+                    setTimeout(function () {
+                        window.location.href =
+                            "../index.html";
+                    }, 3000);
+                }
             }
 
         } catch (error) {
@@ -320,10 +548,12 @@
         } finally {
 
             loginButton.disabled = false;
-            loginButton.classList.remove("loading");
 
+            loginButton.innerHTML = `
+                <i class="fa-solid fa-right-to-bracket"></i>
+                <span>Login</span>
+            `;
         }
-
     }
 
 
@@ -333,7 +563,8 @@
 
     function showLoginError(message) {
 
-        const errorElement = $("loginError");
+        const errorElement =
+            document.getElementById("loginError");
 
         if (!errorElement) {
             return;
@@ -341,12 +572,14 @@
 
         errorElement.textContent = message;
 
+        errorElement.classList.remove("hidden");
     }
 
 
-    function clearLoginError() {
+    function hideLoginError() {
 
-        const errorElement = $("loginError");
+        const errorElement =
+            document.getElementById("loginError");
 
         if (!errorElement) {
             return;
@@ -354,6 +587,37 @@
 
         errorElement.textContent = "";
 
+        errorElement.classList.add("hidden");
+    }
+
+
+    /* =========================================================
+       DASHBOARD STATE
+       ========================================================= */
+
+    function showDashboard() {
+
+        const dashboard =
+            document.getElementById(
+                "dashboardContent"
+            );
+
+        if (dashboard) {
+            dashboard.classList.remove("hidden");
+        }
+    }
+
+
+    function hideDashboard() {
+
+        const dashboard =
+            document.getElementById(
+                "dashboardContent"
+            );
+
+        if (dashboard) {
+            dashboard.classList.add("hidden");
+        }
     }
 
 
@@ -361,57 +625,76 @@
        LOGOUT
        ========================================================= */
 
-    function setupLogout() {
+    function logout() {
 
-        const logoutButton = $("logoutBtn");
+        localStorage.removeItem(
+            LOGIN_STORAGE_KEY
+        );
 
-        if (!logoutButton) {
-            return;
+        localStorage.removeItem(
+            USER_STORAGE_KEY
+        );
+
+
+        stopAutoRefresh();
+
+
+        transactions = [];
+
+        currentPage = 0;
+
+
+        if (financeChart) {
+
+            financeChart.destroy();
+
+            financeChart = null;
         }
 
-        logoutButton.addEventListener("click", function () {
 
-            localStorage.removeItem(LOGIN_KEY);
-            localStorage.removeItem(USERNAME_KEY);
+        hideDashboard();
 
-            transactions = [];
-            currentPage = 0;
 
-            if (refreshTimer) {
-                clearInterval(refreshTimer);
-                refreshTimer = null;
-            }
+        const wrapper =
+            document.getElementById(
+                "welfareTopbarLogin"
+            );
 
-            if (financeChart) {
-                financeChart.destroy();
-                financeChart = null;
-            }
+        if (wrapper) {
 
-            const usernameInput = $("username");
-            const passwordInput = $("password");
+            showLoginTopbar(wrapper);
 
-            if (usernameInput) {
-                usernameInput.value = "";
-            }
+            loginControlsInitialized = false;
 
-            if (passwordInput) {
-                passwordInput.value = "";
-            }
+            bindLoginControls(wrapper);
+        }
 
-            clearLoginError();
 
-            showLoggedOutState();
+        const usernameInput =
+            document.getElementById("username");
 
-        });
+        const passwordInput =
+            document.getElementById("password");
 
+
+        if (usernameInput) {
+            usernameInput.value = "";
+        }
+
+        if (passwordInput) {
+            passwordInput.value = "";
+        }
+
+
+        hideLoginError();
     }
 
 
     /* =========================================================
-       LOAD ALL WELFARE DATA
+       DASHBOARD DATA
        ========================================================= */
 
-    async function loadWelfareData() {
+    async function loadDashboardData() {
 
         try {
 
@@ -420,20 +703,13 @@
                 loadTransactions()
             ]);
 
-            renderActivities();
-            renderChart();
-
-            startAutoRefresh();
-
         } catch (error) {
 
             console.error(
-                "Unable to load welfare data:",
+                "Welfare dashboard loading error:",
                 error
             );
-
         }
-
     }
 
 
@@ -445,8 +721,9 @@
 
         const response =
             await fetch(
-                SUMMARY_CSV_URL + "&_=" + Date.now()
+                SUMMARY_CSV + "&t=" + Date.now()
             );
+
 
         if (!response.ok) {
             throw new Error(
@@ -454,49 +731,57 @@
             );
         }
 
-        const csvText =
+
+        const text =
             await response.text();
 
+
         const rows =
-            parseCSV(csvText);
+            parseCSV(text);
 
 
-        if (!rows.length) {
+        if (!rows || rows.length < 3) {
             return;
         }
 
 
         const totalContributions =
-            parseAmount(
-                rows?.[0]?.[1]
-            );
+            rows[0] && rows[0][1]
+                ? rows[0][1]
+                : 0;
 
         const totalExpenses =
-            parseAmount(
-                rows?.[1]?.[1]
-            );
+            rows[1] && rows[1][1]
+                ? rows[1][1]
+                : 0;
 
         const currentBalance =
-            parseAmount(
-                rows?.[2]?.[1]
-            );
+            rows[2] && rows[2][1]
+                ? rows[2][1]
+                : 0;
 
 
-        updateElement(
+        setElementText(
             "totalContributions",
             formatCurrency(totalContributions)
         );
 
-        updateElement(
+        setElementText(
             "totalExpenses",
             formatCurrency(totalExpenses)
         );
 
-        updateElement(
+        setElementText(
             "currentBalance",
             formatCurrency(currentBalance)
         );
 
+
+        renderFinanceChart(
+            totalContributions,
+            totalExpenses,
+            currentBalance
+        );
     }
 
 
@@ -512,14 +797,14 @@
         ] = await Promise.all([
 
             fetch(
-                CONTRIBUTIONS_CSV_URL +
-                "&_=" +
+                CONTRIBUTIONS_CSV +
+                "&t=" +
                 Date.now()
             ),
 
             fetch(
-                EXPENSES_CSV_URL +
-                "&_=" +
+                EXPENSES_CSV +
+                "&t=" +
                 Date.now()
             )
 
@@ -530,222 +815,198 @@
             !contributionsResponse.ok ||
             !expensesResponse.ok
         ) {
-
             throw new Error(
-                "Unable to load transaction records."
+                "Unable to load welfare transactions."
             );
-
         }
 
 
-        const contributionsCSV =
+        const contributionsText =
             await contributionsResponse.text();
 
-        const expensesCSV =
+        const expensesText =
             await expensesResponse.text();
 
 
         const contributionRows =
-            parseCSV(contributionsCSV);
+            parseCSV(contributionsText);
 
         const expenseRows =
-            parseCSV(expensesCSV);
+            parseCSV(expensesText);
 
 
-        const contributionTransactions =
-            parseContributionRows(
-                contributionRows
-            );
-
-        const expenseTransactions =
-            parseExpenseRows(
-                expenseRows
-            );
+        transactions = [];
 
 
-        transactions = [
-            ...contributionTransactions,
-            ...expenseTransactions
-        ];
+        /*
+         * Contributions:
+         * amount = row[3]
+         * title  = row[5]
+         * date   = row[1]
+         */
+
+        for (
+            let i = 1;
+            i < contributionRows.length;
+            i++
+        ) {
+
+            const row =
+                contributionRows[i];
+
+            if (!row || row.length < 6) {
+                continue;
+            }
 
 
-        transactions.sort(function (a, b) {
+            const amount =
+                parseAmount(row[3]);
 
-            return (
-                getDateValue(b.date) -
-                getDateValue(a.date)
-            );
+            const title =
+                row[5] ||
+                "Welfare Contribution";
 
-        });
+            const date =
+                row[1] || "";
+
+
+            if (!isNaN(amount)) {
+
+                transactions.push({
+                    date: date,
+                    title: title,
+                    amount: amount,
+                    type: "credit"
+                });
+            }
+        }
+
+
+        /*
+         * Expenses:
+         * amount = row[2]
+         * title  = row[3]
+         * date   = row[1]
+         */
+
+        for (
+            let i = 1;
+            i < expenseRows.length;
+            i++
+        ) {
+
+            const row =
+                expenseRows[i];
+
+            if (!row || row.length < 4) {
+                continue;
+            }
+
+
+            const amount =
+                parseAmount(row[2]);
+
+            const title =
+                row[3] ||
+                "Welfare Expense";
+
+            const date =
+                row[1] || "";
+
+
+            if (!isNaN(amount)) {
+
+                transactions.push({
+                    date: date,
+                    title: title,
+                    amount: amount,
+                    type: "debit"
+                });
+            }
+        }
+
+
+        transactions.sort(
+            function (a, b) {
+
+                const dateA =
+                    parseDateValue(a.date);
+
+                const dateB =
+                    parseDateValue(b.date);
+
+                return dateB - dateA;
+            }
+        );
 
 
         currentPage = 0;
 
+        renderTransactions();
     }
 
 
     /* =========================================================
-       CONTRIBUTION ROWS
+       TRANSACTION RENDERING
        ========================================================= */
 
-    function parseContributionRows(rows) {
-
-        const results = [];
-
-        if (!Array.isArray(rows)) {
-            return results;
-        }
-
-
-        rows.forEach(function (row, index) {
-
-            if (!row || row.length < 6) {
-                return;
-            }
-
-            /*
-             * Existing welfare sheet structure:
-             *
-             * row[1] = date
-             * row[3] = amount
-             * row[5] = title/description
-             */
-
-            const date = row[1];
-            const amount = parseAmount(row[3]);
-            const title = cleanText(row[5]);
-
-
-            /*
-             * Ignore empty/header rows.
-             */
-
-            if (
-                index === 0 &&
-                isLikelyHeaderRow(row)
-            ) {
-                return;
-            }
-
-            if (!date && !title && !amount) {
-                return;
-            }
-
-
-            results.push({
-                date: date || "",
-                description:
-                    title || "Contribution",
-                type: "credit",
-                amount: amount
-            });
-
-        });
-
-
-        return results;
-
-    }
-
-
-    /* =========================================================
-       EXPENSE ROWS
-       ========================================================= */
-
-    function parseExpenseRows(rows) {
-
-        const results = [];
-
-        if (!Array.isArray(rows)) {
-            return results;
-        }
-
-
-        rows.forEach(function (row, index) {
-
-            if (!row || row.length < 4) {
-                return;
-            }
-
-            /*
-             * Existing welfare sheet structure:
-             *
-             * row[1] = date
-             * row[2] = amount
-             * row[3] = title/description
-             */
-
-            const date = row[1];
-            const amount = parseAmount(row[2]);
-            const title = cleanText(row[3]);
-
-
-            if (
-                index === 0 &&
-                isLikelyHeaderRow(row)
-            ) {
-                return;
-            }
-
-            if (!date && !title && !amount) {
-                return;
-            }
-
-
-            results.push({
-                date: date || "",
-                description:
-                    title || "Expense",
-                type: "debit",
-                amount: amount
-            });
-
-        });
-
-
-        return results;
-
-    }
-
-
-    /* =========================================================
-       RENDER ACTIVITIES
-       ========================================================= */
-
-    function renderActivities() {
+    function renderTransactions() {
 
         const table =
-            $("activityTable");
+            document.getElementById(
+                "activityTable"
+            );
 
-        const emptyState =
-            $("activityEmptyState");
+        const pageNumber =
+            document.getElementById(
+                "pageNumber"
+            );
+
+        const prevButton =
+            document.getElementById(
+                "prevPageBtn"
+            );
+
+        const nextButton =
+            document.getElementById(
+                "nextPageBtn"
+            );
+
 
         if (!table) {
             return;
         }
 
 
-        table.innerHTML = "";
-
-
         if (!transactions.length) {
 
-            if (emptyState) {
-                emptyState.classList.remove("hidden");
+            table.innerHTML = `
+                <tr>
+                    <td
+                        colspan="4"
+                        class="table-empty"
+                    >
+                        No transactions found.
+                    </td>
+                </tr>
+            `;
+
+
+            if (pageNumber) {
+                pageNumber.textContent =
+                    "Page 1";
             }
 
-            updatePagination(
-                0,
-                0
-            );
+
+            if (prevButton) {
+                prevButton.disabled = true;
+            }
+
+            if (nextButton) {
+                nextButton.disabled = true;
+            }
 
             return;
-
-        }
-
-
-        if (emptyState) {
-            emptyState.classList.add("hidden");
         }
 
 
@@ -755,80 +1016,83 @@
         const end =
             start + itemsPerPage;
 
-        const pageItems =
-            transactions.slice(
-                start,
-                end
-            );
+
+        const pageTransactions =
+            transactions.slice(start, end);
 
 
-        pageItems.forEach(function (transaction) {
+        table.innerHTML =
+            pageTransactions.map(
+                function (transaction) {
 
-            const row =
-                document.createElement("tr");
-
-
-            const dateCell =
-                document.createElement("td");
-
-            dateCell.textContent =
-                formatDate(transaction.date);
+                    const isCredit =
+                        transaction.type === "credit";
 
 
-            const descriptionCell =
-                document.createElement("td");
-
-            descriptionCell.textContent =
-                transaction.description;
-
-
-            const typeCell =
-                document.createElement("td");
-
-            const typeBadge =
-                document.createElement("span");
-
-            typeBadge.className =
-                transaction.type === "credit"
-                    ? "transaction-type transaction-credit"
-                    : "transaction-type transaction-debit";
-
-            typeBadge.textContent =
-                transaction.type === "credit"
-                    ? "Credit"
-                    : "Debit";
-
-            typeCell.appendChild(typeBadge);
+                    const typeClass =
+                        isCredit
+                            ? "credit"
+                            : "debit";
 
 
-            const amountCell =
-                document.createElement("td");
-
-            amountCell.className =
-                transaction.type === "credit"
-                    ? "transaction-credit-amount"
-                    : "transaction-debit-amount";
-
-            amountCell.textContent =
-                (
-                    transaction.type === "credit"
-                        ? "+"
-                        : "-"
-                ) +
-                formatCurrency(
-                    transaction.amount
-                );
+                    const typeIcon =
+                        isCredit
+                            ? "fa-arrow-down"
+                            : "fa-arrow-up";
 
 
-            row.appendChild(dateCell);
-            row.appendChild(descriptionCell);
-            row.appendChild(typeCell);
-            row.appendChild(amountCell);
+                    const typeLabel =
+                        isCredit
+                            ? "Contribution"
+                            : "Expense";
 
 
-            table.appendChild(row);
+                    const sign =
+                        isCredit
+                            ? "+"
+                            : "-";
 
-        });
+
+                    return `
+                        <tr>
+
+                            <td>
+                                ${escapeHtml(
+                                    formatDate(
+                                        transaction.date
+                                    )
+                                )}
+                            </td>
+
+                            <td>
+                                ${escapeHtml(
+                                    transaction.title
+                                )}
+                            </td>
+
+                            <td>
+                                <span
+                                    class="transaction-type ${typeClass}"
+                                >
+                                    <i class="fa-solid ${typeIcon}"></i>
+                                    ${typeLabel}
+                                </span>
+                            </td>
+
+                            <td>
+                                <span
+                                    class="transaction-amount ${typeClass}"
+                                >
+                                    ${sign}${formatCurrency(
+                                        transaction.amount
+                                    )}
+                                </span>
+                            </td>
+
+                        </tr>
+                    `;
+                }
+            ).join("");
 
 
         const totalPages =
@@ -838,11 +1102,26 @@
             );
 
 
-        updatePagination(
-            currentPage + 1,
-            totalPages
-        );
+        if (pageNumber) {
 
+            pageNumber.textContent =
+                "Page " +
+                (currentPage + 1) +
+                " of " +
+                totalPages;
+        }
+
+
+        if (prevButton) {
+            prevButton.disabled =
+                currentPage === 0;
+        }
+
+
+        if (nextButton) {
+            nextButton.disabled =
+                currentPage >= totalPages - 1;
+        }
     }
 
 
@@ -850,49 +1129,15 @@
        PAGINATION
        ========================================================= */
 
-    function updatePagination(
-        page,
-        totalPages
-    ) {
+    function previousPage() {
 
-        const pageNumber =
-            $("pageNumber");
-
-        if (pageNumber) {
-
-            pageNumber.textContent =
-                totalPages > 0
-                    ? `Page ${page} of ${totalPages}`
-                    : "Page 1";
-
+        if (currentPage <= 0) {
+            return;
         }
 
+        currentPage--;
 
-        const buttons =
-            document.querySelectorAll(
-                ".pagination-btn"
-            );
-
-
-        if (buttons.length >= 2) {
-
-            const previousButton =
-                buttons[0];
-
-            const nextButton =
-                buttons[1];
-
-
-            previousButton.disabled =
-                currentPage <= 0;
-
-
-            nextButton.disabled =
-                totalPages === 0 ||
-                currentPage >= totalPages - 1;
-
-        }
-
+        renderTransactions();
     }
 
 
@@ -905,97 +1150,58 @@
             );
 
 
-        if (
-            currentPage <
-            totalPages - 1
-        ) {
-
-            currentPage++;
-
-            renderActivities();
-
+        if (currentPage >= totalPages - 1) {
+            return;
         }
 
+
+        currentPage++;
+
+        renderTransactions();
     }
-
-
-    function prevPage() {
-
-        if (currentPage > 0) {
-
-            currentPage--;
-
-            renderActivities();
-
-        }
-
-    }
-
-
-    window.nextPage = nextPage;
-    window.prevPage = prevPage;
 
 
     /* =========================================================
        CHART
        ========================================================= */
 
-    function renderChart() {
+    function renderFinanceChart(
+        contributions,
+        expenses,
+        balance
+    ) {
 
         const canvas =
-            $("financeChart");
+            document.getElementById(
+                "financeChart"
+            );
+
 
         if (!canvas) {
             return;
         }
 
 
-        if (
-            typeof Chart === "undefined"
-        ) {
-
-            console.error(
-                "Chart.js is not available."
-            );
-
+        if (typeof Chart === "undefined") {
             return;
-
         }
 
 
-        const contributionTotal =
-            transactions
-                .filter(
-                    item =>
-                        item.type === "credit"
-                )
-                .reduce(
-                    (total, item) =>
-                        total + item.amount,
-                    0
-                );
+        const contributionValue =
+            parseAmount(contributions);
 
+        const expenseValue =
+            parseAmount(expenses);
 
-        const expenseTotal =
-            transactions
-                .filter(
-                    item =>
-                        item.type === "debit"
-                )
-                .reduce(
-                    (total, item) =>
-                        total + item.amount,
-                    0
-                );
-
-
-        const balance =
-            contributionTotal -
-            expenseTotal;
+        const balanceValue =
+            parseAmount(balance);
 
 
         if (financeChart) {
+
             financeChart.destroy();
+
+            financeChart = null;
         }
 
 
@@ -1016,12 +1222,9 @@
                         datasets: [
                             {
                                 data: [
-                                    contributionTotal,
-                                    expenseTotal,
-                                    Math.max(
-                                        balance,
-                                        0
-                                    )
+                                    contributionValue,
+                                    expenseValue,
+                                    balanceValue
                                 ],
 
                                 backgroundColor: [
@@ -1030,16 +1233,15 @@
                                     "#0891B2"
                                 ],
 
-                                borderRadius: 7,
+                                borderRadius: 8,
 
                                 borderSkipped: false,
 
-                                barThickness: 38,
+                                barThickness: 42,
 
                                 maxBarThickness: 48
                             }
                         ]
-
                     },
 
                     options: {
@@ -1047,10 +1249,6 @@
                         responsive: true,
 
                         maintainAspectRatio: false,
-
-                        animation: {
-                            duration: 350
-                        },
 
                         plugins: {
 
@@ -1073,13 +1271,9 @@
                                                     context.raw
                                                 )
                                             );
-
                                         }
-
                                 }
-
                             }
-
                         },
 
                         scales: {
@@ -1090,23 +1284,13 @@
                                     display: false
                                 },
 
-                                border: {
-                                    display: false
-                                },
-
                                 ticks: {
-
-                                    color: "#716d76",
-
                                     font: {
                                         family:
                                             "DM Sans",
-                                        size: 10,
-                                        weight: "600"
+                                        size: 10
                                     }
-
                                 }
-
                             },
 
                             y: {
@@ -1115,16 +1299,10 @@
 
                                 grid: {
                                     color:
-                                        "rgba(15, 23, 42, 0.06)"
-                                },
-
-                                border: {
-                                    display: false
+                                        "#eeeeef"
                                 },
 
                                 ticks: {
-
-                                    color: "#85808a",
 
                                     font: {
                                         family:
@@ -1136,24 +1314,16 @@
                                         function (
                                             value
                                         ) {
-
                                             return formatCompactCurrency(
                                                 value
                                             );
-
                                         }
-
                                 }
-
                             }
-
                         }
-
                     }
-
                 }
             );
-
     }
 
 
@@ -1163,9 +1333,7 @@
 
     function startAutoRefresh() {
 
-        if (refreshTimer) {
-            clearInterval(refreshTimer);
-        }
+        stopAutoRefresh();
 
 
         refreshTimer =
@@ -1174,36 +1342,41 @@
 
                     if (
                         localStorage.getItem(
-                            LOGIN_KEY
+                            LOGIN_STORAGE_KEY
                         ) !== "true"
                     ) {
-
                         return;
-
                     }
 
 
                     try {
 
-                        await loadSummary();
-                        await loadTransactions();
-
-                        renderActivities();
-                        renderChart();
+                        await loadDashboardData();
 
                     } catch (error) {
 
                         console.error(
-                            "Welfare auto-refresh failed:",
+                            "Welfare auto-refresh error:",
                             error
                         );
-
                     }
 
                 },
                 30000
             );
+    }
 
+
+    function stopAutoRefresh() {
+
+        if (refreshTimer) {
+
+            clearInterval(
+                refreshTimer
+            );
+
+            refreshTimer = null;
+        }
     }
 
 
@@ -1213,18 +1386,12 @@
 
     function parseCSV(text) {
 
-        if (
-            typeof text !== "string" ||
-            !text.trim()
-        ) {
-            return [];
-        }
-
-
         const rows = [];
 
         let row = [];
-        let cell = "";
+
+        let value = "";
+
         let insideQuotes = false;
 
 
@@ -1241,28 +1408,24 @@
                 text[i + 1];
 
 
-            if (
-                character === '"' &&
-                insideQuotes &&
-                nextCharacter === '"'
-            ) {
-
-                cell += '"';
-
-                i++;
-
-                continue;
-
-            }
-
-
             if (character === '"') {
 
-                insideQuotes =
-                    !insideQuotes;
+                if (
+                    insideQuotes &&
+                    nextCharacter === '"'
+                ) {
+
+                    value += '"';
+
+                    i++;
+
+                } else {
+
+                    insideQuotes =
+                        !insideQuotes;
+                }
 
                 continue;
-
             }
 
 
@@ -1271,11 +1434,11 @@
                 !insideQuotes
             ) {
 
-                row.push(cell.trim());
-                cell = "";
+                row.push(value);
+
+                value = "";
 
                 continue;
-
             }
 
 
@@ -1295,57 +1458,31 @@
                 }
 
 
-                row.push(cell.trim());
-                cell = "";
-
-
-                if (
-                    row.some(
-                        value =>
-                            value !== ""
-                    )
-                ) {
-
-                    rows.push(row);
-
-                }
-
-
-                row = [];
-
-                continue;
-
-            }
-
-
-            cell += character;
-
-        }
-
-
-        if (
-            cell !== "" ||
-            row.length
-        ) {
-
-            row.push(cell.trim());
-
-            if (
-                row.some(
-                    value =>
-                        value !== ""
-                )
-            ) {
+                row.push(value);
 
                 rows.push(row);
 
+                row = [];
+
+                value = "";
+
+                continue;
             }
 
+
+            value += character;
+        }
+
+
+        if (value.length > 0 || row.length > 0) {
+
+            row.push(value);
+
+            rows.push(row);
         }
 
 
         return rows;
-
     }
 
 
@@ -1353,129 +1490,132 @@
        HELPERS
        ========================================================= */
 
-    function updateElement(
-        id,
-        value
-    ) {
-
-        const element =
-            $(id);
-
-        if (element) {
-            element.textContent =
-                value;
-        }
-
-    }
-
-
-    function cleanText(value) {
+    function parseAmount(value) {
 
         if (
             value === null ||
             value === undefined
         ) {
-            return "";
-        }
-
-        return String(value).trim();
-
-    }
-
-
-    function parseAmount(value) {
-
-        if (
-            value === null ||
-            value === undefined ||
-            value === ""
-        ) {
             return 0;
         }
 
 
-        if (typeof value === "number") {
-            return isFinite(value)
-                ? value
-                : 0;
-        }
-
-
-        let cleaned =
+        const cleaned =
             String(value)
                 .replace(/[₦,\s]/g, "")
                 .replace(/[^\d.-]/g, "");
 
 
-        const amount =
-            Number(cleaned);
+        const number =
+            parseFloat(cleaned);
 
 
-        return isFinite(amount)
-            ? amount
-            : 0;
-
+        return isNaN(number)
+            ? 0
+            : number;
     }
 
 
     function formatCurrency(value) {
 
         const amount =
-            Number(value) || 0;
+            parseAmount(value);
 
 
         return "₦" +
-            new Intl.NumberFormat(
+            amount.toLocaleString(
                 "en-NG",
                 {
                     minimumFractionDigits: 0,
-                    maximumFractionDigits: 0
+                    maximumFractionDigits: 2
                 }
-            ).format(amount);
-
+            );
     }
 
 
     function formatCompactCurrency(value) {
 
         const amount =
-            Number(value) || 0;
+            parseAmount(value);
 
 
-        if (Math.abs(amount) >= 1000000) {
+        if (amount >= 1000000) {
 
             return (
                 "₦" +
                 (amount / 1000000)
-                    .toFixed(
-                        amount >= 10000000
-                            ? 0
-                            : 1
-                    ) +
+                    .toFixed(1) +
                 "M"
             );
-
         }
 
 
-        if (Math.abs(amount) >= 1000) {
+        if (amount >= 1000) {
 
             return (
                 "₦" +
                 (amount / 1000)
-                    .toFixed(
-                        amount >= 100000
-                            ? 0
-                            : 1
-                    ) +
+                    .toFixed(1) +
                 "K"
             );
-
         }
 
 
-        return "₦" + amount;
+        return "₦" +
+            amount.toLocaleString(
+                "en-NG"
+            );
+    }
 
+
+    function parseDateValue(value) {
+
+        if (!value) {
+            return 0;
+        }
+
+
+        const date =
+            new Date(value);
+
+
+        if (!isNaN(date.getTime())) {
+            return date.getTime();
+        }
+
+
+        /*
+         * Handles common DD/MM/YYYY style
+         * dates if the browser does not parse them.
+         */
+
+        const match =
+            String(value).match(
+                /^(\d{1,2})[\/-](\d{1,2})[\/-](\d{4})$/
+            );
+
+
+        if (match) {
+
+            const day =
+                parseInt(match[1], 10);
+
+            const month =
+                parseInt(match[2], 10) - 1;
+
+            const year =
+                parseInt(match[3], 10);
+
+
+            return new Date(
+                year,
+                month,
+                day
+            ).getTime();
+        }
+
+
+        return 0;
     }
 
 
@@ -1486,72 +1626,128 @@
         }
 
 
-        const date =
-            new Date(value);
-
-
-        if (
-            Number.isNaN(
-                date.getTime()
-            )
-        ) {
-
-            return cleanText(value);
-
-        }
-
-
-        return new Intl.DateTimeFormat(
-            "en-NG",
-            {
-                day: "2-digit",
-                month: "short",
-                year: "numeric"
-            }
-        ).format(date);
-
-    }
-
-
-    function getDateValue(value) {
-
-        if (!value) {
-            return 0;
-        }
-
-
-        const date =
-            new Date(value);
-
-
         const timestamp =
-            date.getTime();
+            parseDateValue(value);
 
 
-        return Number.isNaN(timestamp)
-            ? 0
-            : timestamp;
+        if (!timestamp) {
+            return value;
+        }
 
+
+        return new Date(timestamp)
+            .toLocaleDateString(
+                "en-NG",
+                {
+                    day: "2-digit",
+                    month: "short",
+                    year: "numeric"
+                }
+            );
     }
 
 
-    function isLikelyHeaderRow(row) {
+    function setElementText(
+        id,
+        value
+    ) {
 
-        const text =
-            row
-                .join(" ")
-                .toLowerCase();
+        const element =
+            document.getElementById(id);
 
 
-        return (
-            text.includes("date") &&
-            (
-                text.includes("amount") ||
-                text.includes("description") ||
-                text.includes("title")
-            )
+        if (element) {
+            element.textContent = value;
+        }
+    }
+
+
+    function escapeHtml(value) {
+
+        return String(value)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
+
+
+    /* =========================================================
+       BUTTON EVENTS
+       ========================================================= */
+
+    const prevPageButton =
+        document.getElementById(
+            "prevPageBtn"
         );
 
+    const nextPageButton =
+        document.getElementById(
+            "nextPageBtn"
+        );
+
+    const logoutButton =
+        document.getElementById(
+            "logoutBtn"
+        );
+
+
+    if (prevPageButton) {
+
+        prevPageButton.addEventListener(
+            "click",
+            previousPage
+        );
     }
 
-})();
+
+    if (nextPageButton) {
+
+        nextPageButton.addEventListener(
+            "click",
+            nextPage
+        );
+    }
+
+
+    if (logoutButton) {
+
+        logoutButton.addEventListener(
+            "click",
+            logout
+        );
+    }
+
+
+    /* =========================================================
+       INITIAL SESSION CHECK
+       ========================================================= */
+
+    const alreadyLoggedIn =
+        localStorage.getItem(
+            LOGIN_STORAGE_KEY
+        ) === "true";
+
+
+    if (alreadyLoggedIn) {
+
+        showDashboard();
+
+        loadDashboardData();
+
+        startAutoRefresh();
+
+    } else {
+
+        hideDashboard();
+    }
+
+
+    /* =========================================================
+       START TOPBAR HANDLING
+       ========================================================= */
+
+    startTopbarObserver();
+
+});
