@@ -1,56 +1,70 @@
 /* ============================================================
    AFC ISIU YOUTH PORTAL V2
    FILE: welfare.css
-   PURPOSE: WELFARE DASHBOARD STYLES
+   PURPOSE: WELFARE DASHBOARD
    ============================================================ */
 
+:root {
+    --welfare-purple-dark: #0A0016;
+    --welfare-purple: #4A0754;
+    --welfare-purple-light: #7B2A84;
+    --welfare-orange: #EA580C;
+    --welfare-cyan: #0891B2;
+
+    --welfare-bg: #f7f7f9;
+    --welfare-card: #ffffff;
+    --welfare-border: #e6e8ed;
+    --welfare-text: #17131b;
+    --welfare-muted: #74717a;
+
+    --welfare-radius: 22px;
+}
 
 /* ============================================================
    PAGE
    ============================================================ */
 
-.dashboard-content.welfare-page {
+.welfare-page {
     width: min(100% - 32px, 1500px);
     max-width: 1500px;
     margin: 0 auto;
-    padding: 0 0 40px;
+    padding: 0 0 80px;
     box-sizing: border-box;
 }
 
-
-/* ============================================================
-   UTILITIES
-   ============================================================ */
-
-.welfare-page .hidden {
-    display: none !important;
+.welfare-dashboard {
+    width: 100%;
+    padding-top: 30px;
 }
 
+.hidden {
+    display: none !important;
+}
 
 /* ============================================================
    TOPBAR LOGIN
    ============================================================ */
 
+/*
+   layout.js may rebuild #app-topbar.
+   welfare.js therefore injects this login area after the shared
+   topbar has been created.
+*/
+
 .welfare-topbar-login {
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    width: 100%;
-    min-height: 48px;
-    box-sizing: border-box;
+    gap: 10px;
+    margin-left: auto;
+    min-width: 0;
+    position: relative;
+    z-index: 20;
 }
-
-
-/*
-   Keep the login compact because it now lives inside
-   the application header rather than the page body.
-*/
 
 .welfare-login-container {
     display: flex;
     align-items: center;
-    gap: 10px;
-    position: relative;
 }
 
 .welfare-login-form {
@@ -60,237 +74,170 @@
     margin: 0;
 }
 
+.welfare-login-brand {
+    width: 34px;
+    height: 34px;
+    flex: 0 0 34px;
+    border-radius: 10px;
+    display: grid;
+    place-items: center;
+    color: #ffffff;
+    background: linear-gradient(
+        135deg,
+        var(--welfare-purple),
+        #6d1679
+    );
+    box-shadow: 0 5px 14px rgba(74, 7, 84, 0.16);
+}
+
+.welfare-login-brand i {
+    font-size: 15px;
+}
+
 .welfare-login-field {
     position: relative;
-    width: 150px;
+    display: flex;
+    align-items: center;
 }
 
 .welfare-login-field > i {
     position: absolute;
     left: 11px;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 15px;
-    color: #74717a;
+    color: #8b8790;
+    font-size: 12px;
     pointer-events: none;
 }
 
 .welfare-login-field input {
-    width: 100%;
-    height: 40px;
-    box-sizing: border-box;
-    border: 1px solid #e1e3e8;
-    border-radius: 11px;
-    background: #ffffff;
-    color: #17131a;
-    padding: 0 12px 0 34px;
+    width: 125px;
+    height: 36px;
+    padding: 0 11px 0 31px;
+    border: 1px solid #dddfe5;
+    border-radius: 10px;
     outline: none;
+    background: #ffffff;
+    color: var(--welfare-text);
     font-family: "DM Sans", sans-serif;
-    font-size: 0.78rem;
-    transition:
-        border-color 0.2s ease,
-        box-shadow 0.2s ease;
+    font-size: 12px;
+    box-sizing: border-box;
+    transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.welfare-login-field.password-field input {
+    width: 120px;
+    padding-right: 32px;
 }
 
 .welfare-login-field input:focus {
-    border-color: #4A0754;
+    border-color: var(--welfare-purple-light);
     box-shadow: 0 0 0 3px rgba(74, 7, 84, 0.08);
 }
 
-.welfare-login-field input::placeholder {
-    color: #99959e;
-}
-
-
-/* Password field */
-
-.welfare-login-field:has(.password-toggle) {
-    width: 165px;
-}
-
-.welfare-login-field:has(.password-toggle) input {
-    padding-right: 36px;
-}
-
-.password-toggle {
+.welfare-password-toggle {
     position: absolute;
-    right: 7px;
-    top: 50%;
-    transform: translateY(-50%);
+    right: 8px;
     border: 0;
     background: transparent;
-    width: 28px;
-    height: 28px;
-    padding: 0;
-    color: #77727b;
+    color: #8b8790;
     cursor: pointer;
-    display: grid;
-    place-items: center;
+    padding: 4px;
+    font-size: 11px;
 }
-
-.password-toggle:hover {
-    color: #4A0754;
-}
-
-
-/* Login button */
 
 .welfare-login-btn {
-    height: 40px;
-    min-width: 76px;
+    height: 36px;
+    padding: 0 14px;
     border: 0;
-    border-radius: 11px;
-    background: #4A0754;
+    border-radius: 10px;
+    background: var(--welfare-purple);
     color: #ffffff;
-    padding: 0 15px;
-    cursor: pointer;
     font-family: "Bricolage Grotesque", sans-serif;
-    font-size: 0.78rem;
+    font-size: 12px;
     font-weight: 600;
+    cursor: pointer;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 7px;
-    transition:
-        background 0.2s ease,
-        transform 0.2s ease,
-        opacity 0.2s ease;
+    gap: 6px;
+    white-space: nowrap;
+    transition: transform 0.18s ease, background 0.18s ease;
 }
 
 .welfare-login-btn:hover {
-    background: #390440;
-}
-
-.welfare-login-btn:active {
-    transform: translateY(1px);
+    background: #5d0a69;
+    transform: translateY(-1px);
 }
 
 .welfare-login-btn:disabled {
     opacity: 0.65;
-    cursor: wait;
+    cursor: not-allowed;
+    transform: none;
 }
 
-.login-btn-loader {
-    display: none;
-}
-
-.welfare-login-btn.loading .login-btn-text {
-    display: none;
-}
-
-.welfare-login-btn.loading .login-btn-loader {
-    display: inline-flex;
-}
-
-.login-btn-loader i {
-    animation: welfareSpin 0.8s linear infinite;
-}
-
-@keyframes welfareSpin {
-    to {
-        transform: rotate(360deg);
-    }
-}
-
-
-/* Login error */
-
-.login-error {
+.welfare-login-error {
     position: absolute;
     right: 0;
     top: calc(100% + 7px);
-    z-index: 1000;
     width: max-content;
     max-width: 280px;
     padding: 8px 11px;
     border-radius: 9px;
-    background: #fff3f3;
-    border: 1px solid #f1cccc;
-    color: #a32020;
+    background: #fff4f4;
+    border: 1px solid #ffd6d6;
+    color: #b42318;
     font-family: "DM Sans", sans-serif;
-    font-size: 0.72rem;
-    line-height: 1.35;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
-    display: none;
+    font-size: 11px;
+    line-height: 1.4;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.07);
 }
-
-.login-error:not(:empty) {
-    display: block;
-}
-
-
-/* ============================================================
-   LOGGED-IN TOPBAR STATE
-   ============================================================ */
 
 .welfare-logged-in-state {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 9px;
 }
 
-.welfare-user-status {
+.welfare-user-badge {
     display: inline-flex;
     align-items: center;
     gap: 7px;
-    min-height: 38px;
+    min-height: 36px;
     padding: 0 11px;
-    border: 1px solid #e6e4e8;
+    border: 1px solid var(--welfare-border);
     border-radius: 10px;
     background: #ffffff;
+    color: var(--welfare-text);
     font-family: "DM Sans", sans-serif;
-    font-size: 0.76rem;
-    color: #454149;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
 }
 
-.welfare-status-dot,
-.status-dot {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: #16a34a;
-    flex: 0 0 auto;
+.welfare-user-badge i {
+    color: var(--welfare-purple);
 }
 
-.welfare-logout-btn {
-    height: 38px;
-    padding: 0 12px;
-    border: 1px solid #eadce9;
+.welfare-topbar-logout {
+    height: 36px;
+    padding: 0 11px;
+    border: 1px solid #ead8e9;
     border-radius: 10px;
     background: #ffffff;
-    color: #4A0754;
+    color: var(--welfare-purple);
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-size: 11px;
+    font-weight: 600;
     cursor: pointer;
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    font-family: "DM Sans", sans-serif;
-    font-size: 0.75rem;
-    font-weight: 600;
-    transition:
-        background 0.2s ease,
-        border-color 0.2s ease;
 }
-
-.welfare-logout-btn:hover {
-    background: #faf5fb;
-    border-color: #d9c5dc;
-}
-
 
 /* ============================================================
-   DASHBOARD TOP SPACING
+   PAGE HEADING
    ============================================================ */
 
-.welfare-dashboard {
-    padding-top: 28px;
-}
-
-
-/* ============================================================
-   PAGE HEADER
-   ============================================================ */
-
-.welfare-page-header {
+.welfare-page-heading {
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
@@ -298,63 +245,63 @@
     margin-bottom: 22px;
 }
 
-.welfare-heading-copy {
-    min-width: 0;
-}
-
 .welfare-eyebrow {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    margin-bottom: 6px;
-    color: #4A0754;
+    gap: 7px;
+    margin-bottom: 7px;
+    color: var(--welfare-purple);
     font-family: "Bricolage Grotesque", sans-serif;
-    font-size: 0.72rem;
-    font-weight: 700;
-    letter-spacing: 0.03em;
-    text-transform: uppercase;
+    font-size: 12px;
+    font-weight: 600;
 }
 
 .welfare-eyebrow i {
-    font-size: 15px;
+    font-size: 11px;
 }
 
-.welfare-page-header h1 {
+.welfare-page-heading h1 {
     margin: 0;
-    color: #0A0016;
+    color: var(--welfare-purple-dark);
     font-family: "Bricolage Grotesque", sans-serif;
-    font-size: clamp(1.35rem, 2.2vw, 1.75rem);
+    font-size: clamp(1.45rem, 2vw, 1.9rem);
     line-height: 1.15;
     font-weight: 700;
 }
 
-.welfare-page-header p {
-    max-width: 620px;
+.welfare-page-heading p {
     margin: 7px 0 0;
-    color: #716d76;
+    color: var(--welfare-muted);
     font-family: "DM Sans", sans-serif;
-    font-size: 0.82rem;
+    font-size: 0.84rem;
     line-height: 1.5;
 }
 
-.welfare-live-status {
+.welfare-logout-btn {
+    height: 40px;
+    padding: 0 14px;
+    border: 1px solid #e6d8e8;
+    border-radius: 11px;
+    background: #ffffff;
+    color: var(--welfare-purple);
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
     display: inline-flex;
     align-items: center;
     gap: 7px;
-    flex: 0 0 auto;
-    padding: 8px 11px;
-    border: 1px solid #e4e7e4;
-    border-radius: 10px;
-    background: #ffffff;
-    color: #4c514e;
-    font-family: "DM Sans", sans-serif;
-    font-size: 0.74rem;
-    font-weight: 600;
+    white-space: nowrap;
+    transition: 0.18s ease;
 }
 
+.welfare-logout-btn:hover {
+    background: #faf3fb;
+    border-color: #d8bede;
+}
 
 /* ============================================================
-   SUMMARY CARDS
+   SUMMARY
    ============================================================ */
 
 .welfare-summary-grid {
@@ -364,294 +311,221 @@
     margin-bottom: 16px;
 }
 
-.welfare-stat-card {
-    min-width: 0;
+.welfare-summary-card {
     min-height: 112px;
-    box-sizing: border-box;
+    padding: 18px;
     display: flex;
     align-items: center;
-    gap: 13px;
-    padding: 17px 18px;
-    border: 1px solid #e6eaee;
-    border-radius: 18px;
-    background: #ffffff;
-    box-shadow: 0 8px 28px rgba(15, 23, 42, 0.045);
+    gap: 14px;
+    background: var(--welfare-card);
+    border: 1px solid var(--welfare-border);
+    border-radius: var(--welfare-radius);
+    box-sizing: border-box;
+    box-shadow: 0 8px 28px rgba(21, 11, 28, 0.045);
 }
 
-.welfare-stat-icon {
-    width: 43px;
-    height: 43px;
-    border-radius: 13px;
-    flex: 0 0 43px;
+.summary-icon {
+    width: 42px;
+    height: 42px;
+    flex: 0 0 42px;
     display: grid;
     place-items: center;
-    font-size: 19px;
+    border-radius: 13px;
+    background: #f3eaf5;
+    color: var(--welfare-purple);
 }
 
-.contribution-icon {
-    background: #f3e9f5;
-    color: #4A0754;
-}
-
-.expense-icon {
+.expense-card .summary-icon {
     background: #fff0e9;
-    color: #EA580C;
+    color: var(--welfare-orange);
 }
 
-.balance-icon {
-    background: #e9f7f9;
-    color: #0891B2;
+.balance-card .summary-icon {
+    background: #e8f7fa;
+    color: var(--welfare-cyan);
 }
 
-.welfare-stat-content {
+.summary-icon i {
+    font-size: 15px;
+}
+
+.summary-content {
     min-width: 0;
 }
 
-.welfare-stat-label {
+.summary-content span {
     display: block;
     margin-bottom: 5px;
-    color: #77727b;
+    color: var(--welfare-muted);
     font-family: "DM Sans", sans-serif;
-    font-size: 0.73rem;
-    line-height: 1.3;
+    font-size: 11px;
+    font-weight: 500;
 }
 
-.welfare-stat-content strong {
+.summary-content strong {
     display: block;
-    color: #151017;
+    color: var(--welfare-purple-dark);
     font-family: "Bricolage Grotesque", sans-serif;
-    font-size: clamp(1.05rem, 2vw, 1.35rem);
-    line-height: 1.1;
+    font-size: clamp(1.1rem, 1.7vw, 1.45rem);
     font-weight: 700;
-    overflow-wrap: anywhere;
+    line-height: 1.1;
 }
 
-
 /* ============================================================
-   MAIN GRID
+   GENERAL CARDS
    ============================================================ */
 
-.welfare-main-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1.35fr) minmax(320px, 0.85fr);
-    align-items: start;
-    gap: 16px;
-}
-
-
-/* ============================================================
-   PANELS
-   ============================================================ */
-
-.welfare-panel {
-    min-width: 0;
-    box-sizing: border-box;
-    border: 1px solid #e6eaee;
-    border-radius: 20px;
+.welfare-card {
     background: #ffffff;
-    box-shadow: 0 8px 28px rgba(15, 23, 42, 0.045);
-    overflow: hidden;
+    border: 1px solid var(--welfare-border);
+    border-radius: var(--welfare-radius);
+    box-shadow: 0 8px 28px rgba(21, 11, 28, 0.045);
+    box-sizing: border-box;
 }
 
-.activity-panel {
-    min-height: 360px;
+.finance-analysis-card {
+    margin-bottom: 16px;
+    padding: 20px;
 }
 
-.chart-panel {
-    min-height: 360px;
+.transactions-card {
+    padding: 20px;
 }
 
-
-/* ============================================================
-   PANEL HEADER
-   ============================================================ */
-
-.welfare-panel-header {
+.section-heading {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    padding: 17px 18px 14px;
-    border-bottom: 1px solid #eef0f2;
+    gap: 11px;
+    margin-bottom: 18px;
 }
 
-.welfare-panel-kicker {
-    display: block;
-    margin-bottom: 3px;
-    color: #8a858d;
-    font-family: "DM Sans", sans-serif;
-    font-size: 0.68rem;
-    font-weight: 600;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
+.section-heading-icon {
+    width: 40px;
+    height: 40px;
+    flex: 0 0 40px;
+    display: grid;
+    place-items: center;
+    border-radius: 12px;
+    background: #f3eaf5;
+    color: var(--welfare-purple);
 }
 
-.welfare-panel-header h2 {
+.section-heading-icon.orange {
+    background: #fff0e9;
+    color: var(--welfare-orange);
+}
+
+.section-heading-icon i {
+    font-size: 14px;
+}
+
+.section-heading h2 {
     margin: 0;
-    color: #17121a;
+    color: var(--welfare-purple-dark);
     font-family: "Bricolage Grotesque", sans-serif;
     font-size: 1rem;
-    line-height: 1.2;
     font-weight: 700;
 }
 
-.welfare-panel-icon {
-    width: 39px;
-    height: 39px;
-    border-radius: 11px;
-    flex: 0 0 39px;
-    display: grid;
-    place-items: center;
-    background: #f3e9f5;
-    color: #4A0754;
-    font-size: 17px;
+.section-heading p {
+    margin: 3px 0 0;
+    color: var(--welfare-muted);
+    font-family: "DM Sans", sans-serif;
+    font-size: 11px;
 }
-
-.welfare-panel-icon.chart-icon {
-    background: #e9f7f9;
-    color: #0891B2;
-}
-
 
 /* ============================================================
-   ACTIVITY TABLE
+   CHART
    ============================================================ */
 
-.activity-table-wrapper {
+.finance-chart-wrapper {
+    position: relative;
+    width: 100%;
+    height: 260px;
+    max-height: 260px;
+}
+
+.finance-chart-wrapper canvas {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+/* ============================================================
+   TABLE
+   ============================================================ */
+
+.table-wrapper {
     width: 100%;
     overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
 .activity-table {
     width: 100%;
+    min-width: 620px;
     border-collapse: collapse;
-    table-layout: fixed;
-}
-
-.activity-table th,
-.activity-table td {
-    padding: 12px 17px;
-    border-bottom: 1px solid #f0f1f3;
-    text-align: left;
     font-family: "DM Sans", sans-serif;
-    vertical-align: middle;
 }
 
 .activity-table th {
-    background: #fafafb;
-    color: #79747d;
-    font-size: 0.67rem;
+    padding: 11px 12px;
+    text-align: left;
+    border-bottom: 1px solid #e9e9ed;
+    color: #77727d;
+    font-size: 10px;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.035em;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
 }
 
 .activity-table td {
-    color: #403b43;
-    font-size: 0.76rem;
-}
-
-.activity-table th:first-child,
-.activity-table td:first-child {
-    width: 92px;
-}
-
-.activity-table th:nth-child(3),
-.activity-table td:nth-child(3) {
-    width: 72px;
-}
-
-.activity-table th:last-child,
-.activity-table td:last-child {
-    width: 105px;
-    text-align: right;
-}
-
-.activity-table td:nth-child(2) {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    padding: 13px 12px;
+    border-bottom: 1px solid #f0f0f2;
+    color: #29242e;
+    font-size: 12px;
+    vertical-align: middle;
 }
 
 .activity-table tbody tr:last-child td {
     border-bottom: 0;
 }
 
-.activity-table tbody tr:hover {
-    background: #fcfbfd;
+.table-loading,
+.table-empty {
+    padding: 28px 12px !important;
+    text-align: center !important;
+    color: var(--welfare-muted) !important;
 }
-
-
-/* Transaction type */
 
 .transaction-type {
     display: inline-flex;
     align-items: center;
-    justify-content: center;
-    min-width: 49px;
-    padding: 4px 7px;
-    border-radius: 7px;
-    font-size: 0.64rem;
+    gap: 5px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.transaction-type.credit {
+    color: #16803c;
+}
+
+.transaction-type.debit {
+    color: #c2410c;
+}
+
+.transaction-amount {
     font-weight: 700;
+    white-space: nowrap;
 }
 
-.transaction-credit {
-    background: #edf8f1;
-    color: #21834a;
+.transaction-amount.credit {
+    color: #16803c;
 }
 
-.transaction-debit {
-    background: #fff1ed;
-    color: #c64d2b;
+.transaction-amount.debit {
+    color: #c2410c;
 }
-
-
-/* Amount */
-
-.transaction-credit-amount {
-    color: #21834a !important;
-    font-weight: 700;
-}
-
-.transaction-debit-amount {
-    color: #c64d2b !important;
-    font-weight: 700;
-}
-
-
-/* ============================================================
-   EMPTY STATE
-   ============================================================ */
-
-.activity-empty-state {
-    min-height: 180px;
-    padding: 25px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    color: #77727b;
-    text-align: center;
-    font-family: "DM Sans", sans-serif;
-}
-
-.empty-icon {
-    width: 42px;
-    height: 42px;
-    margin-bottom: 9px;
-    border-radius: 12px;
-    background: #f5f2f6;
-    color: #6c4770;
-    display: grid;
-    place-items: center;
-    font-size: 18px;
-}
-
-.activity-empty-state p {
-    margin: 0;
-    font-size: 0.76rem;
-}
-
 
 /* ============================================================
    PAGINATION
@@ -660,301 +534,218 @@
 .pagination {
     display: flex;
     align-items: center;
-    justify-content: flex-end;
-    gap: 9px;
-    padding: 12px 17px;
-    border-top: 1px solid #eef0f2;
+    justify-content: space-between;
+    gap: 12px;
+    padding-top: 16px;
 }
 
 .pagination span {
-    min-width: 54px;
-    color: #77727b;
-    text-align: center;
+    color: var(--welfare-muted);
     font-family: "DM Sans", sans-serif;
-    font-size: 0.7rem;
+    font-size: 11px;
+    font-weight: 600;
 }
 
 .pagination-btn {
-    width: 31px;
-    height: 31px;
-    border: 1px solid #e3e5e8;
-    border-radius: 8px;
+    min-height: 34px;
+    padding: 0 11px;
+    border: 1px solid #e2e2e7;
+    border-radius: 9px;
     background: #ffffff;
-    color: #4A0754;
+    color: var(--welfare-purple);
+    font-family: "DM Sans", sans-serif;
+    font-size: 11px;
+    font-weight: 600;
     cursor: pointer;
-    display: grid;
-    place-items: center;
-    font-size: 15px;
-    transition:
-        background 0.2s ease,
-        border-color 0.2s ease,
-        opacity 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
 }
 
-.pagination-btn:hover:not(:disabled) {
-    background: #faf5fb;
-    border-color: #d9c5dc;
+.pagination-btn:hover {
+    background: #faf6fb;
 }
 
 .pagination-btn:disabled {
-    opacity: 0.35;
+    opacity: 0.4;
     cursor: not-allowed;
 }
 
-
 /* ============================================================
-   FINANCIAL CHART
+   RESPONSIVE
    ============================================================ */
 
-/*
-   The important fix here is that the chart has a controlled
-   height instead of allowing Chart.js to stretch indefinitely.
-*/
-
-.chart-container {
-    position: relative;
-    width: 100%;
-    height: 270px;
-    max-height: 270px;
-    box-sizing: border-box;
-    padding: 18px 18px 20px;
-}
-
-.chart-container canvas {
-    display: block !important;
-    width: 100% !important;
-    height: 100% !important;
-    max-width: 100%;
-}
-
-
-/* ============================================================
-   RESPONSIVE — 1100px
-   ============================================================ */
-
-@media (max-width: 1100px) {
-
-    .welfare-main-grid {
-        grid-template-columns: minmax(0, 1.15fr) minmax(300px, 0.85fr);
-    }
-
-    .welfare-login-field {
-        width: 135px;
-    }
-
-    .welfare-login-field:has(.password-toggle) {
-        width: 145px;
-    }
-
-}
-
-
-/* ============================================================
-   RESPONSIVE — 900px
-   ============================================================ */
-
-@media (max-width: 900px) {
-
-    .welfare-main-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .chart-panel {
-        min-height: 340px;
-    }
-
-    .chart-container {
-        height: 280px;
-        max-height: 280px;
-    }
-
-}
-
-
-/* ============================================================
-   RESPONSIVE — 768px
-   ============================================================ */
-
-@media (max-width: 768px) {
-
-    .dashboard-content.welfare-page {
-        width: min(100% - 24px, 1500px);
-        padding-bottom: 30px;
-    }
+@media (max-width: 1000px) {
 
     .welfare-topbar-login {
-        min-height: 44px;
+        gap: 6px;
     }
 
-    .welfare-login-field {
-        width: 125px;
+    .welfare-login-brand {
+        display: none;
     }
 
-    .welfare-login-field:has(.password-toggle) {
-        width: 135px;
+    .welfare-login-field input {
+        width: 110px;
     }
 
-    .welfare-login-btn {
-        min-width: 68px;
-        padding: 0 12px;
+    .welfare-login-field.password-field input {
+        width: 105px;
+    }
+
+    .welfare-summary-grid {
+        gap: 10px;
+    }
+}
+
+@media (max-width: 800px) {
+
+    .welfare-page {
+        width: min(100% - 24px, 1500px);
     }
 
     .welfare-dashboard {
-        padding-top: 22px;
-    }
-
-    .welfare-page-header {
-        align-items: flex-start;
+        padding-top: 24px;
     }
 
     .welfare-summary-grid {
         grid-template-columns: 1fr;
     }
 
-    .welfare-stat-card {
-        min-height: 96px;
+    .welfare-summary-card {
+        min-height: 92px;
     }
 
-}
-
-
-/* ============================================================
-   RESPONSIVE — 600px
-   ============================================================ */
-
-@media (max-width: 600px) {
-
-    .dashboard-content.welfare-page {
-        width: min(100% - 18px, 1500px);
+    .welfare-page-heading {
+        align-items: flex-start;
     }
 
     .welfare-topbar-login {
+        max-width: 100%;
+    }
+
+    .welfare-login-form {
+        gap: 5px;
+    }
+
+    .welfare-login-field input,
+    .welfare-login-field.password-field input {
+        width: 100px;
+    }
+}
+
+@media (max-width: 650px) {
+
+    .welfare-page {
+        width: min(100% - 20px, 1500px);
+        padding-bottom: 70px;
+    }
+
+    .welfare-dashboard {
+        padding-top: 20px;
+    }
+
+    /*
+       The shared topbar can become crowded on small screens,
+       so the login controls become a compact second row.
+    */
+    .welfare-topbar-login {
+        width: 100%;
+        margin-left: 0;
         justify-content: flex-end;
     }
 
     .welfare-login-form {
-        gap: 6px;
+        width: 100%;
+        justify-content: flex-end;
     }
 
     .welfare-login-field {
-        width: 115px;
+        flex: 1 1 0;
+        min-width: 0;
     }
 
-    .welfare-login-field:has(.password-toggle) {
-        width: 125px;
-    }
-
-    .welfare-login-field input {
-        height: 37px;
-        font-size: 0.72rem;
+    .welfare-login-field input,
+    .welfare-login-field.password-field input {
+        width: 100%;
     }
 
     .welfare-login-btn {
-        height: 37px;
-        min-width: 63px;
-        font-size: 0.72rem;
+        flex: 0 0 auto;
     }
 
-    .welfare-dashboard {
-        padding-top: 19px;
+    .welfare-page-heading {
+        display: block;
+        margin-bottom: 18px;
     }
 
-    .welfare-page-header {
-        flex-direction: column;
-        gap: 12px;
-        margin-bottom: 17px;
+    .welfare-logout-btn {
+        margin-top: 14px;
     }
 
-    .welfare-page-header h1 {
-        font-size: 1.35rem;
+    .finance-analysis-card,
+    .transactions-card {
+        padding: 16px;
     }
 
-    .welfare-page-header p {
-        font-size: 0.77rem;
+    .finance-chart-wrapper {
+        height: 220px;
+        max-height: 220px;
     }
-
-    .welfare-main-grid {
-        gap: 12px;
-    }
-
-    .welfare-panel-header {
-        padding: 15px;
-    }
-
-    .activity-table {
-        min-width: 560px;
-    }
-
-    .activity-table-wrapper {
-        overflow-x: auto;
-    }
-
-    .chart-container {
-        height: 250px;
-        max-height: 250px;
-        padding: 14px 12px 18px;
-    }
-
-    .welfare-user-status {
-        display: none;
-    }
-
 }
-
-
-/* ============================================================
-   RESPONSIVE — 480px
-   ============================================================ */
 
 @media (max-width: 480px) {
 
-    .welfare-login-field {
-        width: 105px;
-    }
-
-    .welfare-login-field:has(.password-toggle) {
-        width: 112px;
-    }
-
-    .welfare-login-field input {
-        padding-left: 30px;
-    }
-
-    .welfare-login-field > i {
-        left: 9px;
-        font-size: 14px;
-    }
-
-    .welfare-login-btn {
-        min-width: 58px;
-        padding: 0 9px;
-    }
-
-    .welfare-login-container {
+    .welfare-login-form {
         gap: 5px;
     }
 
-    .welfare-page-header h1 {
-        font-size: 1.25rem;
+    .welfare-login-field input,
+    .welfare-login-field.password-field input {
+        height: 34px;
+        font-size: 11px;
     }
 
-    .welfare-stat-card {
-        padding: 14px;
+    .welfare-login-btn {
+        height: 34px;
+        padding: 0 10px;
+        font-size: 11px;
     }
 
-    .welfare-stat-icon {
-        width: 40px;
-        height: 40px;
-        flex-basis: 40px;
+    .welfare-login-btn span {
+        display: none;
     }
 
-    .welfare-stat-content strong {
-        font-size: 1.05rem;
+    .welfare-login-btn i {
+        margin: 0;
     }
 
-    .chart-container {
-        height: 230px;
-        max-height: 230px;
+    .welfare-page-heading h1 {
+        font-size: 1.4rem;
     }
 
+    .welfare-page-heading p {
+        font-size: 0.8rem;
+    }
+
+    .summary-content strong {
+        font-size: 1.15rem;
+    }
+
+    .section-heading {
+        margin-bottom: 14px;
+    }
+
+    .finance-chart-wrapper {
+        height: 200px;
+        max-height: 200px;
+    }
+
+    .pagination-btn {
+        padding: 0 9px;
+    }
+
+    .pagination-btn i {
+        font-size: 9px;
+    }
 }
