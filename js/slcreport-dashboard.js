@@ -1484,7 +1484,7 @@ function setupQuestionEditor() {
 
             const closeButton =
                 event.target.closest(
-                    "[data-question-modal-close]"
+                    "[data-close-question-editor]"
                 );
 
 
@@ -1497,6 +1497,31 @@ function setupQuestionEditor() {
 
         }
     );
+
+
+    /*
+     * The X icon button in the editor header carries
+     * no data-close-question-editor attribute in the
+     * markup, so it needs an explicit bind.
+     */
+    const closeIconButton =
+        document.getElementById(
+            "closeQuestionEditorButton"
+        );
+
+
+    if (closeIconButton) {
+
+        closeIconButton.addEventListener(
+            "click",
+            function () {
+
+                closeQuestionEditor();
+
+            }
+        );
+
+    }
 
 
     document.addEventListener(
@@ -1515,6 +1540,8 @@ function setupQuestionEditor() {
             closeQuestionEditor();
 
             closeQuestionDeleteModal();
+
+            closeSlcReportModal();
 
         }
     );
@@ -2141,7 +2168,7 @@ function setupQuestionDeleteModal() {
 
             const closeButton =
                 event.target.closest(
-                    "[data-delete-modal-close]"
+                    "[data-close-question-delete]"
                 );
 
 
@@ -2572,7 +2599,7 @@ async function loadQuizAttempts() {
         tableBody.innerHTML = `
             <tr>
                 <td
-                    colspan="5"
+                    colspan="6"
                     class="attempts-empty-cell"
                 >
                     Loading quiz attempts...
@@ -2663,7 +2690,7 @@ async function loadQuizAttempts() {
             tableBody.innerHTML = `
                 <tr>
                     <td
-                        colspan="5"
+                        colspan="6"
                         class="attempts-empty-cell"
                     >
                         Unable to load quiz attempts.
@@ -2844,7 +2871,7 @@ function renderQuizAttempts(
         tableBody.innerHTML = `
             <tr>
                 <td
-                    colspan="5"
+                    colspan="6"
                     class="attempts-empty-cell"
                 >
                     No quiz attempts found.
@@ -2862,8 +2889,43 @@ function renderQuizAttempts(
             .map(
                 function (attempt) {
 
+                    const score =
+                        Number(
+                            attempt.score ?? 0
+                        );
+
+                    const total =
+                        attempt.totalPoints ??
+                        attempt.maxScore ??
+                        attempt.pointsEarned ??
+                        null;
+
+                    const percentage =
+                        attempt.percentage !== undefined &&
+                        attempt.percentage !== null
+                            ? attempt.percentage
+                            : (
+                                total !== null &&
+                                Number(total) > 0
+                                    ? Math.round(
+                                        (
+                                            score /
+                                            Number(total)
+                                        ) * 100
+                                    ) + "%"
+                                    : "—"
+                            );
+
                     return `
                         <tr>
+
+                            <td>
+                                ${escapeHtml(
+                                    attempt.lessonNo ??
+                                    ""
+                                )}
+                            </td>
+
 
                             <td>
 
@@ -2895,32 +2957,32 @@ function renderQuizAttempts(
 
                             <td>
                                 ${escapeHtml(
-                                    attempt.lessonNo ??
-                                    ""
+                                    score
                                 )}
                             </td>
 
 
                             <td>
                                 ${escapeHtml(
-                                    attempt.score ??
-                                    0
+                                    total ?? "—"
                                 )}
                             </td>
 
 
                             <td>
                                 ${escapeHtml(
-                                    attempt.pointsEarned ??
-                                    0
+                                    percentage
                                 )}
                             </td>
 
 
                             <td>
                                 ${escapeHtml(
-                                    attempt.date ||
-                                    ""
+                                    formatDashboardDateTime(
+                                        attempt.date ||
+                                        attempt.submittedAt ||
+                                        attempt.timestamp
+                                    )
                                 )}
                             </td>
 
@@ -3248,87 +3310,121 @@ function renderSLCReports() {
                         Number(participated)
                     );
 
+                const groupLeader =
+                    report.groupLeaderName ||
+                    report.groupLeader ||
+                    "";
+
                 return (
                     "<tr>" +
 
                     "<td>" +
-                        escapeHtml(
-                            String(
-                                report.lessonNo ??
-                                report.lesson ??
-                                "—"
-                            )
-                        ) +
+                        '<span class="slc-report-lesson">' +
+                            escapeHtml(
+                                String(
+                                    report.lessonNo ??
+                                    report.lesson ??
+                                    "—"
+                                )
+                            ) +
+                        "</span>" +
                     "</td>" +
 
                     "<td>" +
-                        escapeHtml(
-                            String(
-                                report.groupName ??
-                                report.group ??
-                                "—"
-                            )
-                        ) +
+                        '<div class="slc-report-group">' +
+                            "<strong>" +
+                                escapeHtml(
+                                    String(
+                                        report.groupName ??
+                                        report.group ??
+                                        "—"
+                                    )
+                                ) +
+                            "</strong>" +
+                            (
+                                groupLeader
+                                    ? "<small>" +
+                                        escapeHtml(
+                                            String(
+                                                groupLeader
+                                            )
+                                        ) +
+                                      "</small>"
+                                    : ""
+                            ) +
+                        "</div>" +
                     "</td>" +
 
                     "<td>" +
-                        escapeHtml(
-                            String(
-                                totalMembers
-                            )
-                        ) +
+                        '<span class="slc-report-number">' +
+                            escapeHtml(
+                                String(
+                                    totalMembers
+                                )
+                            ) +
+                        "</span>" +
                     "</td>" +
 
                     "<td>" +
-                        escapeHtml(
-                            String(
-                                participated
-                            )
-                        ) +
+                        '<span class="slc-report-number participated">' +
+                            escapeHtml(
+                                String(
+                                    participated
+                                )
+                            ) +
+                        "</span>" +
                     "</td>" +
 
                     "<td>" +
-                        escapeHtml(
-                            String(
-                                notParticipated
-                            )
-                        ) +
+                        '<span class="slc-report-number not-participated">' +
+                            escapeHtml(
+                                String(
+                                    notParticipated
+                                )
+                            ) +
+                        "</span>" +
                     "</td>" +
 
                     "<td>" +
-                        escapeHtml(
-                            formatDashboardDateTime(
-                                report.reportDate ||
-                                report.submittedAt ||
-                                report.createdAt ||
-                                report.date
-                            )
-                        ) +
+                        '<span class="slc-report-date">' +
+                            escapeHtml(
+                                formatDashboardDateTime(
+                                    report.reportDate ||
+                                    report.submittedAt ||
+                                    report.createdAt ||
+                                    report.date
+                                )
+                            ) +
+                        "</span>" +
                     "</td>" +
 
                     "<td>" +
-                        escapeHtml(
-                            String(
-                                report.submittedBy ||
-                                report.submittedByName ||
-                                report.createdBy ||
-                                "—"
-                            )
-                        ) +
+                        '<span class="slc-report-submitter">' +
+                            escapeHtml(
+                                String(
+                                    report.submittedBy ||
+                                    report.submittedByName ||
+                                    report.createdBy ||
+                                    "—"
+                                )
+                            ) +
+                        "</span>" +
                     "</td>" +
 
                     "<td>" +
-                        escapeHtml(
-                            String(
-                                report.version ??
-                                "—"
-                            )
-                        ) +
+                        '<span class="slc-report-version">' +
+                            escapeHtml(
+                                String(
+                                    report.version ??
+                                    "—"
+                                )
+                            ) +
+                        "</span>" +
                     "</td>" +
 
                     "<td>" +
 
-                        '<button type="button" class="question-action-button edit" data-report-action="view" data-report-index="' +
+                        '<button type="button" class="slc-report-view-button" data-report-action="view" data-report-index="' +
                             index +
                             '"' +
                             (
@@ -3343,6 +3439,7 @@ function renderSLCReports() {
                                     : ""
                             ) +
                         ">" +
+                            '<i class="ri-eye-line"></i>' +
                             "<span>View</span>" +
                         "</button>" +
 
@@ -3471,6 +3568,32 @@ function setupReportDetailsModal() {
 
         }
     );
+
+
+    /*
+     * The X icon button in the report modal header
+     * carries no data-close-report-modal attribute in
+     * the markup, so it needs an explicit bind.
+     */
+    const closeIconButton =
+        document.getElementById(
+            "closeSlcReportModalButton"
+        );
+
+
+    if (closeIconButton) {
+
+        closeIconButton.addEventListener(
+            "click",
+            function () {
+
+                closeSlcReportModal();
+
+            }
+        );
+
+    }
+
 
     modal.addEventListener(
         "click",
@@ -3659,30 +3782,38 @@ function buildSlcReportDetailsHtml(report) {
             : 0;
 
     return (
-        '<div class="slc-report-detail-grid">' +
 
-            '<div class="slc-report-detail-card">' +
+        /*
+         * Top summary strip — the CSS defines
+         * .slc-report-summary-grid /
+         * .slc-report-summary-item for this,
+         * matching the stat-card look used
+         * elsewhere in the dashboard.
+         */
+        '<div class="slc-report-summary-grid">' +
+
+            '<div class="slc-report-summary-item">' +
                 "<span>Total Members</span>" +
                 "<strong>" +
                     escapeHtml(String(totalMembers)) +
                 "</strong>" +
             "</div>" +
 
-            '<div class="slc-report-detail-card">' +
+            '<div class="slc-report-summary-item">' +
                 "<span>Participated</span>" +
                 "<strong>" +
                     escapeHtml(String(participated)) +
                 "</strong>" +
             "</div>" +
 
-            '<div class="slc-report-detail-card">' +
+            '<div class="slc-report-summary-item">' +
                 "<span>Not Participated</span>" +
                 "<strong>" +
                     escapeHtml(String(notParticipated)) +
                 "</strong>" +
             "</div>" +
 
-            '<div class="slc-report-detail-card">' +
+            '<div class="slc-report-summary-item">' +
                 "<span>Participation Rate</span>" +
                 "<strong>" +
                     escapeHtml(String(participationRate)) +
@@ -3692,12 +3823,18 @@ function buildSlcReportDetailsHtml(report) {
 
         "</div>" +
 
+        /*
+         * Submission metadata — laid out as a
+         * label/value grid (.slc-report-meta-grid /
+         * .slc-report-meta-item) so it reads like
+         * the header block of a printed report.
+         */
         '<div class="slc-report-detail-section">' +
-            "<h4>Submission</h4>" +
+            "<h3>Submission</h3>" +
 
-            '<div class="slc-report-detail-list">' +
+            '<div class="slc-report-meta-grid">' +
 
-                "<div>" +
+                '<div class="slc-report-meta-item">' +
                     "<span>Lesson</span>" +
                     "<strong>" +
                         escapeHtml(
@@ -3710,7 +3847,7 @@ function buildSlcReportDetailsHtml(report) {
                     "</strong>" +
                 "</div>" +
 
-                "<div>" +
+                '<div class="slc-report-meta-item">' +
                     "<span>Group</span>" +
                     "<strong>" +
                         escapeHtml(
@@ -3723,7 +3860,7 @@ function buildSlcReportDetailsHtml(report) {
                     "</strong>" +
                 "</div>" +
 
-                "<div>" +
+                '<div class="slc-report-meta-item">' +
                     "<span>Submitted By</span>" +
                     "<strong>" +
                         escapeHtml(
@@ -3737,7 +3874,7 @@ function buildSlcReportDetailsHtml(report) {
                     "</strong>" +
                 "</div>" +
 
-                "<div>" +
+                '<div class="slc-report-meta-item">' +
                     "<span>Report Date</span>" +
                     "<strong>" +
                         escapeHtml(
@@ -3751,7 +3888,7 @@ function buildSlcReportDetailsHtml(report) {
                     "</strong>" +
                 "</div>" +
 
-                "<div>" +
+                '<div class="slc-report-meta-item">' +
                     "<span>Version</span>" +
                     "<strong>" +
                         escapeHtml(
@@ -3767,7 +3904,7 @@ function buildSlcReportDetailsHtml(report) {
         "</div>" +
 
         '<div class="slc-report-detail-section">' +
-            "<h4>Participation Follow-up</h4>" +
+            "<h3>Participation Follow-up</h3>" +
 
             buildReportArrayList(
                 contactedTable,
@@ -3777,7 +3914,7 @@ function buildSlcReportDetailsHtml(report) {
         "</div>" +
 
         '<div class="slc-report-detail-section">' +
-            "<h4>Non-Participants</h4>" +
+            "<h3>Non-Participants</h3>" +
 
             buildReportArrayList(
                 nonParticipants,
@@ -3787,7 +3924,7 @@ function buildSlcReportDetailsHtml(report) {
         "</div>" +
 
         '<div class="slc-report-detail-section">' +
-            "<h4>Support Given</h4>" +
+            "<h3>Support Given</h3>" +
 
             buildReportArrayList(
                 supportGiven,
@@ -3797,14 +3934,14 @@ function buildSlcReportDetailsHtml(report) {
         "</div>" +
 
         '<div class="slc-report-detail-section">' +
-            "<h4>Notes & Observations</h4>" +
+            "<h3>Notes &amp; Observations</h3>" +
 
-            '<div class="slc-report-notes">' +
+            "<p>" +
                 escapeHtml(
                     notes ||
                     "No additional notes were recorded."
                 ) +
-            "</div>" +
+            "</p>" +
 
         "</div>"
     );
@@ -3869,15 +4006,15 @@ function buildReportArrayList(items, emptyMessage) {
     ) {
 
         return (
-            '<div class="slc-report-empty-list">' +
+            "<p>" +
                 escapeHtml(emptyMessage) +
-            "</div>"
+            "</p>"
         );
 
     }
 
     return (
-        '<ul class="slc-report-detail-items">' +
+        '<ul class="slc-report-detail-list">' +
 
             items
                 .map(function (item) {
