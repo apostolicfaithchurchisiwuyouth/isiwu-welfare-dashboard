@@ -355,7 +355,7 @@
     cursor: pointer;
 
     font-family: "Bricolage Grotesque", sans-serif;
-    font-size: 0.75rem;
+    font-size: 0.68rem;
     font-weight: 600;
 
     transition:
@@ -369,7 +369,7 @@
 }
 
 .welfare-logout-btn i {
-    font-size: 16px;
+    font-size: 14px;
 }
 
 
