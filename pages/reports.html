@@ -1,906 +1,426 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AFC Isiwu Youth Reports</title>
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
-<style>
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-}
-
-html{
-scroll-behavior:smooth;
-}
-
-/* =========================
-BODY
-========================= */
-
-body{
-font-family:"DM Sans",sans-serif;
-background:#fafafa;
-min-height:100vh;
-position:relative;
-overflow-x:hidden;
-}
-
-body::before{
-content:"";
-position:fixed;
-top:-120px;
-right:-120px;
-width:320px;
-height:320px;
-border-radius:50%;
-background:rgba(168,85,247,.08);
-filter:blur(90px);
-z-index:-1;
-}
-
-body::after{
-content:"";
-position:fixed;
-bottom:-150px;
-left:-150px;
-width:350px;
-height:350px;
-border-radius:50%;
-background:rgba(59,130,246,.08);
-filter:blur(90px);
-z-index:-1;
-}
-
-header{
-position:sticky;
-top:0;
-z-index:1000;
-width:88%;
-max-width:820px;
-margin:auto;
-padding:14px 18px;
-display:flex;
-justify-content:space-between;
-align-items:center;
-background:linear-gradient(135deg,#4A0754,#0A0016);
-border-radius:0 0 18px 18px;
-box-shadow:0 10px 30px rgba(0,0,0,.12);
-}
-
-.header-title{
-display:flex;
-align-items:center;
-gap:12px;
-color:#fff;
-font-family:"Bricolage Grotesque",sans-serif;
-font-size:.8rem;
-font-weight:700;
-}
-
-.header-title i{
-width:30px;
-height:30px;
-border-radius:12px;
-display:flex;
-align-items:center;
-justify-content:center;
-background:rgba(255,255,255,.12);
-}
-
-.back-btn{
-
-text-decoration:none;
-
-color:#fff;
-
-padding:10px 14px;
-
-border-radius:999px;
-
-background:
-linear-gradient(
-135deg,
-#4A0754,
-#7c3aed
-);
-
-font-size:.8rem;
-
-border:none;
-
--webkit-tap-highlight-color:transparent;
-
-display:inline-flex;
-align-items:center;
-justify-content:center;
-
-transition:
-transform .2s ease,
-box-shadow .2s ease,
-filter .2s ease;
-
-box-shadow:
-0 8px 20px rgba(74,7,84,.25);
-
-}
-
-
-/* pressed effect */
-
-.back-btn:active{
-
-transform:translateY(-4px) scale(.96);
-
-filter:
-brightness(1.25);
-
-box-shadow:
-0 14px 30px rgba(124,58,237,.45);
-
-}
-
-
-/* =========================
-CONTAINER
-========================= */
-
-.container{
-width:88%;
-max-width:820px;
-margin:auto;
-margin-top:25px;
-padding:35px auto;
-}
-
-.stats-grid{
-display:grid;
-grid-template-columns:
-repeat(4,1fr);
-
-gap:16px;
-
-margin-bottom:28px;
-}
-
-.stat-card{
-
-position:relative;
-overflow:hidden;
-
-padding:18px;
-
-border-radius:22px;
-
-background:
-linear-gradient(
-135deg,
-#ffffff,
-#faf5ff
-);
-border:1px solid rgba(74,7,84,.08);
-box-shadow:
-0 10px 30px rgba(74,7,84,.08);
-transition:.3s ease;
-}
-
-.stat-card:hover{
-transform:translateY(-4px);
-
-box-shadow:
-0 18px 40px rgba(74,7,84,.12);
-}
-
-.stat-card::before{
-content:'';
-
-position:absolute;
-
-width:90px;
-height:90px;
-
-border-radius:50%;
-
-top:-30px;
-right:-30px;
-
-opacity:.15;
-}
-
-.stat-card:nth-child(1)::before{
-background:#7c3aed;
-}
-
-.stat-card:nth-child(2)::before{
-background:#2563eb;
-}
-
-.stat-card:nth-child(3)::before{
-background:#10b981;
-}
-
-.stat-card:nth-child(4)::before{
-background:#f59e0b;
-}
-
-.stat-top{
-display:flex;
-justify-content:space-between;
-align-items:flex-start;
-margin-bottom:12px;
-}
-
-.stat-icon{
-width:35px;
-height:35px;
-
-display:flex;
-align-items:center;
-justify-content:center;
-
-border-radius:14px;
-
-font-size:1rem;
-}
-
-.stat-card:nth-child(1) .stat-icon{
-background:rgba(124,58,237,.12);
-color:#7c3aed;
-}
-
-.stat-card:nth-child(2) .stat-icon{
-background:rgba(37,99,235,.12);
-color:#2563eb;
-}
-
-.stat-card:nth-child(3) .stat-icon{
-background:rgba(16,185,129,.12);
-color:#10b981;
-}
-
-.stat-card:nth-child(4) .stat-icon{
-background:rgba(245,158,11,.12);
-color:#f59e0b;
-}
-
-.stat-number{
-
-font-family:
-'Bricolage Grotesque',
-sans-serif;
-
-font-size:1rem;
-
-font-weight:800;
-
-line-height:1;
-
-margin-bottom:4px;
-
-color:#111827;
-}
-
-.stat-label{
-
-font-size:.7rem;
-
-font-weight:600;
-
-color:#6b7280;
-
-letter-spacing:.05em;
-}
-
-@media(max-width:768px){
-
-.stats-grid{
-grid-template-columns:
-repeat(2,1fr);
-}
-
-.stat-card{
-padding:18px;
-}
-
-.stat-number{
-font-size:1.5rem;
-}
-
-}
-
-
-/* =========================
-FILTER BAR
-========================= */
-
-.filter-bar{
-display:grid;
-grid-template-columns:2fr 1fr 1fr;
-gap:16px;
-margin-bottom:30px;
-}
-
-.search-box,
-.filter-select{
-
-background:#fff;
-
-border:1px solid
-rgba(74,7,84,.08);
-
-border-radius:18px;
-
-padding:16px 45px 16px 16px;
-
-font-size:.75rem;
-
-outline:none;
-
-width:100%;
-
-box-shadow:
-0 10px 25px
-rgba(74,7,84,.05);
-
-appearance:none;
--webkit-appearance:none;
--moz-appearance:none;
-
-cursor:pointer;
-
-background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-
-background-repeat:no-repeat;
-background-position:right 16px center;
-background-size:16px;
-}
-
-/* =========================
-REPORT GRID
-========================= */
-
-.reports-grid{
-display:grid;
-grid-template-columns:
-repeat(auto-fit,minmax(320px,1fr));
-gap:24px;
-}
-
-/* =========================
-REPORT CARD
-========================= */
-
-.report-card{
-position:relative;
-overflow:hidden;
-
-padding:24px;
-
-border-radius:24px;
-
-background:#fff;
-
-border:1px solid
-rgba(74,7,84,.06);
-
-box-shadow:
-0 10px 30px
-rgba(0,0,0,.05);
-
-transition:.35s;
-}
-
-.report-card:hover{
-transform:translateY(-6px);
-
-box-shadow:
-0 20px 45px
-rgba(74,7,84,.12);
-}
-
-.report-card::before{
-content:'';
-
-position:absolute;
-
-width:180px;
-height:180px;
-
-background:
-rgba(74,7,84,.05);
-
-border-radius:50%;
-
-top:-70px;
-right:-70px;
-}
-
-.report-top{
-display:flex;
-justify-content:space-between;
-align-items:center;
-gap:12px;
-margin-bottom:18px;
-position:relative;
-z-index:2;
-}
-
-.report-badge{
-padding:8px 14px;
-
-border-radius:999px;
-
-background:
-rgba(74,7,84,.08);
-
-color:#4A0754;
-
-font-size:.65rem;
-font-weight:700;
-}
-
-.report-date{
-font-size:.68rem;
-color:#777;
-}
-
-.report-title{
-font-size:1rem;
-line-height:1.5;
-margin-bottom:14px;
-position:relative;
-z-index:2;
-}
-
-.report-summary{
-font-size:.7rem;
-line-height:1.8;
-color:#555;
-margin-bottom:22px;
-position:relative;
-z-index:2;
-}
-
-.report-footer{
-display:flex;
-align-items:center;
-justify-content:space-between;
-gap:12px;
-position:relative;
-z-index:2;
-}
-
-.reporter{
-font-size:.7rem;
-font-weight:700;
-}
-
-.reporter-role{
-font-size:.65rem;
-color:#777;
-margin-top:4px;
-}
-
-/* =========================
-EMPTY STATE
-========================= */
-
-.empty-state{
-text-align:center;
-padding:60px 20px;
-font-size:.9rem;
-color:#666;
-}
-
-footer{
-margin-top:50px;
-padding:25px;
-text-align:center;
-font-size:.8rem;
-color:#666;
-}
-
-/* =========================
-MOBILE
-========================= */
-
-@media(max-width:768px){
-
-header{
-width:88%;
-}
-
-.container{
-margin-top:-2px;
-padding-top:25px;
-}
-
-.filter-bar{
-grid-template-columns:1fr;
-}
-
-}
-
-</style>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="theme-color"
+        content="#4A0754"
+    >
+
+    <title>AFC Isiwu Youth Reports</title>
+
+    <!-- =====================================================
+         FONTS
+    ====================================================== -->
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap"
+        rel="stylesheet"
+    >
+
+    <!-- =====================================================
+         ICONS
+    ====================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/remixicon@4.6.0/fonts/remixicon.css"
+    >
+
+    <!-- =====================================================
+         SHARED PORTAL CSS
+    ====================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="../css/main.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="../css/layout.css"
+    >
+
+    <!-- =====================================================
+         PAGE CSS
+    ====================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="../css/reports.css"
+    >
 </head>
+
 
 <body>
 
-<header>
-<div class="header-title">
-<i class="fas fa-receipt"></i>
-<span>All Program Reports</span>
-</div>
+    <!-- =====================================================
+         APP LAYOUT
+    ====================================================== -->
 
-<a href="index.html" class="back-btn">
-← Back
-</a>
-</header>
+    <div class="app-layout">
 
-<div class="container">
+        <!-- Shared sidebar -->
+        <div id="app-sidebar"></div>
 
-<!-- STATISTICS CARDS -->
 
-<div class="stats-grid">
+        <!-- Main application area -->
+        <div class="main-area">
 
-<div class="stat-card">
+            <!-- Shared topbar -->
+            <div id="app-topbar"></div>
 
-<div class="stat-top">
-<div class="stat-icon">
-<i class="fa-solid fa-layer-group"></i>
-</div>
-</div>
 
-<div class="stat-number" id="totalPrograms">0</div>
-<div class="stat-label">Youth Programs</div>
+            <!-- =================================================
+                 REPORTS CONTENT
+            ================================================== -->
 
-</div>
+            <main class="dashboard-content reports-page">
 
-<div class="stat-card">
+                <section class="reports-container">
 
-<div class="stat-top">
-<div class="stat-icon">
-<i class="fa-solid fa-video"></i>
-</div>
-</div>
+                    <!-- =========================================
+                         PAGE INTRO
+                    ========================================== -->
 
-<div class="stat-number" id="totalVirtual">0</div>
-<div class="stat-label">Virtual Programs</div>
+                    <div class="reports-heading">
 
-</div>
+                        <div class="reports-heading-icon">
+                            <i class="fa-solid fa-receipt"></i>
+                        </div>
 
-<div class="stat-card">
+                        <div>
 
-<div class="stat-top">
-<div class="stat-icon">
-<i class="fa-solid fa-users"></i>
-</div>
-</div>
+                            <span class="reports-eyebrow">
+                                Youth Department
+                            </span>
 
-<div class="stat-number" id="totalPhysical">0</div>
-<div class="stat-label">Physical Programs</div>
+                            <h1>
+                                Program Reports
+                            </h1>
 
-</div>
+                            <p>
+                                Browse reports from programs and activities
+                                organized by the AFC Isiwu Youth Department.
+                            </p>
 
-<div class="stat-card">
+                        </div>
 
-<div class="stat-top">
-<div class="stat-icon">
-<i class="fa-solid fa-chart-simple"></i>
-</div>
-</div>
+                    </div>
 
-<div class="stat-number" id="totalTypes">0</div>
-<div class="stat-label">Program Types</div>
 
-</div>
+                    <!-- =========================================
+                         STATISTICS
+                    ========================================== -->
 
-</div>
+                    <section
+                        class="stats-grid"
+                        aria-label="Report statistics"
+                    >
 
-  
-<div class="filter-bar">
+                        <!-- Total Programs -->
 
-<input
-class="search-box"
-id="searchInput"
-type="text"
-placeholder="Search by program title..."
-style="font-family:DM Sans;">
+                        <article class="stat-card">
 
-<select class="filter-select" id="typeFilter" style="font-family:DM Sans;">
-<option value="all">All Program Types</option>
-</select>
+                            <div class="stat-top">
 
-<select class="filter-select" id="sortFilter" style="font-family:DM Sans;">
-<option value="newest">Newest First</option>
-<option value="oldest">Oldest First</option>
-</select>
+                                <div class="stat-icon">
+                                    <i class="fa-solid fa-layer-group"></i>
+                                </div>
 
-</div>
+                            </div>
 
-<div class="reports-grid" id="reportsFeed"></div>
+                            <div
+                                class="stat-number"
+                                id="totalPrograms"
+                            >
+                                0
+                            </div>
 
-<div class="empty-state" id="emptyState" style="display:none;">
-No reports found.
-</div>
+                            <div class="stat-label">
+                                Youth Programs
+                            </div>
 
-</div>
+                        </article>
 
-<footer>
-AFC Isiwu Youth Department Portal © 2026
-</footer>
 
-<script>
+                        <!-- Virtual Programs -->
 
-const secretariatCSV =
-"https://docs.google.com/spreadsheets/d/e/2PACX-1vTE5Ds6_y0OYFL9_pYfRekpMx1Jq-kijbtdXsL-LCyg5KsC8LVootmeHOew2xiqV2sAXEVUKm_3vz17/pub?gid=1085033955&single=true&output=csv";
+                        <article class="stat-card">
 
-let allReports = [];
+                            <div class="stat-top">
 
-function updateStatistics(){
+                                <div class="stat-icon">
+                                    <i class="fa-solid fa-video"></i>
+                                </div>
 
-const totalPrograms =
-allReports.length;
+                            </div>
 
-const totalVirtual =
-allReports.filter(report =>
+                            <div
+                                class="stat-number"
+                                id="totalVirtual"
+                            >
+                                0
+                            </div>
 
-report.programType
-.toLowerCase()
-.includes('virtual')
+                            <div class="stat-label">
+                                Virtual Programs
+                            </div>
 
-).length;
+                        </article>
 
-const totalPhysical =
-totalPrograms -
-totalVirtual;
 
-const totalTypes =
-new Set(
+                        <!-- Physical Programs -->
 
-allReports.map(
-report =>
-report.programType
-)
+                        <article class="stat-card">
 
-).size;
+                            <div class="stat-top">
 
-document.getElementById(
-'totalPrograms'
-).innerText =
-totalPrograms;
+                                <div class="stat-icon">
+                                    <i class="fa-solid fa-users"></i>
+                                </div>
 
-document.getElementById(
-'totalVirtual'
-).innerText =
-totalVirtual;
+                            </div>
 
-document.getElementById(
-'totalPhysical'
-).innerText =
-totalPhysical;
+                            <div
+                                class="stat-number"
+                                id="totalPhysical"
+                            >
+                                0
+                            </div>
 
-document.getElementById(
-'totalTypes'
-).innerText =
-totalTypes;
+                            <div class="stat-label">
+                                Physical Programs
+                            </div>
 
-}
+                        </article>
 
 
-function parseCSV(text){
+                        <!-- Program Types -->
 
-const rows = [];
-let row = [];
-let current = '';
-let insideQuotes = false;
+                        <article class="stat-card">
 
-for(let i = 0; i < text.length; i++){
+                            <div class="stat-top">
 
-const char = text[i];
-const nextChar = text[i + 1];
+                                <div class="stat-icon">
+                                    <i class="fa-solid fa-chart-simple"></i>
+                                </div>
 
-if(char === '"'){
+                            </div>
 
-if(insideQuotes && nextChar === '"'){
-current += '"';
-i++;
-}else{
-insideQuotes = !insideQuotes;
-}
+                            <div
+                                class="stat-number"
+                                id="totalTypes"
+                            >
+                                0
+                            </div>
 
-}else if(char === ',' && !insideQuotes){
+                            <div class="stat-label">
+                                Program Types
+                            </div>
 
-row.push(current.trim());
-current = '';
+                        </article>
 
-}else if(char === '\n' && !insideQuotes){
+                    </section>
 
-row.push(current.trim());
-rows.push(row);
 
-row = [];
-current = '';
+                    <!-- =========================================
+                         FILTERS
+                    ========================================== -->
 
-}else{
+                    <section
+                        class="reports-controls"
+                        aria-label="Report filters"
+                    >
 
-current += char;
+                        <div class="search-wrapper">
 
-}
+                            <i class="fa-solid fa-magnifying-glass"></i>
 
-}
+                            <input
+                                class="search-box"
+                                id="searchInput"
+                                type="text"
+                                placeholder="Search by program title..."
+                                autocomplete="off"
+                            >
 
-if(current){
-row.push(current.trim());
-rows.push(row);
-}
+                        </div>
 
-return rows;
 
-}
+                        <div class="select-wrapper">
 
-async function fetchReports(){
+                            <select
+                                class="filter-select"
+                                id="typeFilter"
+                            >
 
-try{
+                                <option value="all">
+                                    All Program Types
+                                </option>
 
-const response = await fetch(secretariatCSV);
-const data = await response.text();
+                            </select>
 
-const reports = parseCSV(data);
+                            <i class="fa-solid fa-chevron-down"></i>
 
-const actualReports = reports.slice(1);
+                        </div>
 
-allReports = actualReports.map(report => ({
 
-date: report[0] || '',
-programTitle: report[1] || '',
-programType: report[2] || '',
-whatWentWell: report[3] || '',
-reporter: report[4] || ''
+                        <div class="select-wrapper">
 
-}));
+                            <select
+                                class="filter-select"
+                                id="sortFilter"
+                            >
 
-populateProgramTypes();
-updateStatistics();
-renderReports();
+                                <option value="newest">
+                                    Newest First
+                                </option>
 
+                                <option value="oldest">
+                                    Oldest First
+                                </option>
 
-}catch(error){
-console.error(error);
-}
+                            </select>
 
-}
+                            <i class="fa-solid fa-chevron-down"></i>
 
-function populateProgramTypes(){
+                        </div>
 
-const typeFilter = document.getElementById('typeFilter');
+                    </section>
 
-const uniqueTypes = [...new Set(
-allReports.map(report => report.programType)
-)];
 
-uniqueTypes.forEach(type => {
+                    <!-- =========================================
+                         REPORT SECTION LABEL
+                    ========================================== -->
 
-if(type.trim() !== ''){
+                    <div class="reports-section-heading">
 
-const option = document.createElement('option');
-option.value = type;
-option.textContent = type;
+                        <div>
 
-typeFilter.appendChild(option);
+                            <span>
+                                Department Records
+                            </span>
 
-}
+                            <h2>
+                                Recent Program Reports
+                            </h2>
 
-});
+                        </div>
 
-}
+                        <div
+                            class="reports-count"
+                            id="reportsCount"
+                        >
+                            0 reports
+                        </div>
 
-function renderReports(){
+                    </div>
 
-const reportsFeed = document.getElementById('reportsFeed');
-const emptyState = document.getElementById('emptyState');
 
-const searchValue = document.getElementById('searchInput').value.toLowerCase();
-const typeValue = document.getElementById('typeFilter').value;
-const sortValue = document.getElementById('sortFilter').value;
+                    <!-- =========================================
+                         REPORT FEED
+                    ========================================== -->
 
-let filteredReports = allReports.filter(report => {
+                    <section
+                        class="reports-grid"
+                        id="reportsFeed"
+                        aria-live="polite"
+                    ></section>
 
-const matchesSearch = report.programTitle
-.toLowerCase()
-.includes(searchValue);
 
-const matchesType =
-typeValue === 'all' ||
-report.programType === typeValue;
+                    <!-- =========================================
+                         EMPTY STATE
+                    ========================================== -->
 
-return matchesSearch && matchesType;
+                    <div
+                        class="empty-state"
+                        id="emptyState"
+                        style="display:none;"
+                    >
 
-});
+                        <div class="empty-icon">
+                            <i class="fa-regular fa-folder-open"></i>
+                        </div>
 
-if(sortValue === 'newest'){
-filteredReports.reverse();
-}
+                        <h3>
+                            No reports found
+                        </h3>
 
-reportsFeed.innerHTML = '';
+                        <p>
+                            Try changing your search or filter.
+                        </p>
 
-if(filteredReports.length === 0){
-emptyState.style.display = 'block';
-return;
-}else{
-emptyState.style.display = 'none';
-}
+                    </div>
 
-filteredReports.forEach(report => {
 
-reportsFeed.innerHTML += `
+                    <!-- =========================================
+                         LOADING STATE
+                    ========================================== -->
 
-<div class="report-card">
+                    <div
+                        class="reports-loading"
+                        id="reportsLoading"
+                    >
 
-<div class="report-top">
+                        <div class="loading-spinner"></div>
 
-<div class="report-badge">
-${report.programType}
-</div>
+                        <p>
+                            Loading reports...
+                        </p>
 
-<div class="report-date">
-${report.date}
-</div>
+                    </div>
 
-</div>
+                </section>
 
-<h3 class="report-title">
-${report.programTitle}
-</h3>
+            </main>
 
-<p class="report-summary">
-${report.whatWentWell}
-</p>
+        </div>
 
-<div class="report-footer">
 
-<div>
-<div class="reporter">
-${report.reporter}
-</div>
+        <!-- Shared bottom navigation -->
+        <div id="app-bottom-nav"></div>
 
-<div class="reporter-role">
-Secretariat Department
-</div>
-</div>
+    </div>
 
-</div>
 
-</div>
+    <!-- =====================================================
+         SHARED JS
+    ====================================================== -->
 
-`;
+    <script src="../js/layout.js"></script>
 
-});
+    <script src="../js/pwa.js"></script>
 
-}
+    <script src="../js/main.js"></script>
 
-document.getElementById('searchInput')
-.addEventListener('input', renderReports);
 
+    <!-- =====================================================
+         PAGE JS
+    ====================================================== -->
 
-document.getElementById('typeFilter')
-.addEventListener('change', renderReports);
-
-
-document.getElementById('sortFilter')
-.addEventListener('change', renderReports);
-
-fetchReports();
-
-</script>
+    <script src="../js/reports.js"></script>
 
 </body>
+
 </html>
