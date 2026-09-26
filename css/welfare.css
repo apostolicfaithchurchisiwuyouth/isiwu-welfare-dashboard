@@ -4,765 +4,544 @@
    PURPOSE: WELFARE DASHBOARD
    ============================================================ */
 
-:root {
-
-    --welfare-purple-dark: #0A0016;
-    --welfare-purple: #4A0754;
-    --welfare-purple-light: #7B2A84;
-
-    --welfare-orange: #EA580C;
-    --welfare-cyan: #0891B2;
-
-    --welfare-bg: #f7f7f9;
-    --welfare-card: #ffffff;
-
-    --welfare-border: #e6e8ed;
-
-    --welfare-text: #17131b;
-    --welfare-muted: #74717a;
-
-    --welfare-radius: 22px;
-}
-
 
 /* ============================================================
-   PAGE
+   PAGE BASE
    ============================================================ */
 
 .welfare-page {
-
     width: min(100% - 32px, 1500px);
-
     max-width: 1500px;
-
     margin: 0 auto;
-
-    padding: 0 0 80px;
-
+    padding: 28px 0 50px;
     box-sizing: border-box;
 }
 
-
-.welfare-dashboard {
-
-    width: 100%;
-
-    /*
-     * Space between topbar and first dashboard content.
-     */
-    padding-top: 30px;
+.welfare-page *,
+.welfare-page *::before,
+.welfare-page *::after {
+    box-sizing: border-box;
 }
 
-
 .hidden {
-
     display: none !important;
 }
 
 
 /* ============================================================
-   LOGIN MOUNT
+   LOGIN CARD
    ============================================================ */
 
-.welfare-login-mount {
-
-    display: none;
+.welfare-login-card {
+    width: min(100%, 760px);
+    margin: 26px auto 0;
+    padding: 28px;
+    background:
+        radial-gradient(
+            circle at 100% 0%,
+            rgba(74, 7, 84, 0.07),
+            transparent 32%
+        ),
+        #ffffff;
+    border: 1px solid #e6eaee;
+    border-radius: 22px;
+    box-shadow:
+        0 14px 38px rgba(10, 0, 22, 0.07);
 }
 
-
-/* ============================================================
-   WELFARE LOGIN INSIDE SHARED TOPBAR
-   ============================================================ */
-
-.welfare-topbar-login {
-
+.welfare-login-intro {
     display: flex;
-
     align-items: center;
-
-    justify-content: flex-end;
-
-    gap: 8px;
-
-    margin-left: auto;
-
-    min-width: 0;
-
-    position: relative;
-
-    z-index: 100;
-
-    font-family: "DM Sans", sans-serif;
+    gap: 17px;
+    margin-bottom: 24px;
 }
-
-
-/*
- * Login form
- */
-
-.welfare-login-form {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 7px;
-
-    margin: 0;
-}
-
-
-/*
- * Welfare icon
- */
 
 .welfare-login-icon {
-
-    width: 35px;
-
-    height: 35px;
-
-    flex: 0 0 35px;
-
-    display: grid;
-
-    place-items: center;
-
-    border-radius: 10px;
-
-    background: #f2e8f4;
-
-    color: var(--welfare-purple);
-
-    font-size: 17px;
-}
-
-
-/*
- * Inputs
- */
-
-.welfare-login-input {
-
-    width: 128px;
-
-    height: 36px;
-
-    box-sizing: border-box;
-
-    padding: 0 11px;
-
-    border: 1px solid #dedfe5;
-
-    border-radius: 9px;
-
-    background: #ffffff;
-
-    color: var(--welfare-text);
-
-    outline: none;
-
-    font-family: "DM Sans", sans-serif;
-
-    font-size: 12px;
-
-    transition:
-        border-color .18s ease,
-        box-shadow .18s ease;
-}
-
-
-.welfare-login-input::placeholder {
-
-    color: #96939a;
-}
-
-
-.welfare-login-input:focus {
-
-    border-color: var(--welfare-purple);
-
-    box-shadow:
-        0 0 0 3px rgba(74, 7, 84, .07);
-}
-
-
-/*
- * Password wrapper
- */
-
-.welfare-password-wrap {
-
-    position: relative;
+    width: 50px;
+    height: 50px;
+    flex: 0 0 50px;
 
     display: flex;
-
     align-items: center;
-}
-
-
-.welfare-password-wrap .welfare-login-input {
-
-    width: 128px;
-
-    padding-right: 34px;
-}
-
-
-/*
- * Show password
- */
-
-.welfare-password-toggle {
-
-    position: absolute;
-
-    right: 7px;
-
-    top: 50%;
-
-    transform: translateY(-50%);
-
-    width: 24px;
-
-    height: 24px;
-
-    padding: 0;
-
-    border: 0;
-
-    background: transparent;
-
-    color: #85818a;
-
-    cursor: pointer;
-
-    display: grid;
-
-    place-items: center;
-
-    font-size: 13px;
-}
-
-
-/*
- * Login button
- */
-
-.welfare-login-btn {
-
-    height: 36px;
-
-    padding: 0 13px;
-
-    border: 0;
-
-    border-radius: 9px;
-
-    background: var(--welfare-purple);
-
-    color: #ffffff;
-
-    font-family: "Bricolage Grotesque", sans-serif;
-
-    font-size: 12px;
-
-    font-weight: 600;
-
-    cursor: pointer;
-
-    display: inline-flex;
-
-    align-items: center;
-
     justify-content: center;
 
-    gap: 6px;
+    border-radius: 14px;
 
-    white-space: nowrap;
+    background: #f3eaf5;
+    color: #4a0754;
 
-    transition:
-        background .18s ease,
-        transform .18s ease;
+    font-size: 23px;
 }
 
-
-.welfare-login-btn:hover {
-
-    background: #5d0a69;
-
-    transform: translateY(-1px);
+.welfare-login-copy {
+    min-width: 0;
 }
 
+.welfare-login-kicker {
+    display: block;
+    margin-bottom: 3px;
 
-.welfare-login-btn:disabled {
-
-    opacity: .65;
-
-    cursor: wait;
-
-    transform: none;
-}
-
-
-/*
- * Login error
- */
-
-.welfare-login-error {
-
-    position: absolute;
-
-    right: 0;
-
-    top: calc(100% + 7px);
-
-    max-width: 290px;
-
-    padding: 8px 11px;
-
-    border: 1px solid #f1caca;
-
-    border-radius: 9px;
-
-    background: #fff6f6;
-
-    color: #b42318;
-
-    font-size: 11px;
-
-    line-height: 1.4;
-
-    box-shadow:
-        0 8px 24px rgba(0, 0, 0, .08);
-}
-
-
-/*
- * Logged-in topbar state
- */
-
-.welfare-logged-in-state {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 8px;
-}
-
-
-.welfare-user-badge {
-
-    height: 36px;
-
-    padding: 0 10px;
-
-    display: inline-flex;
-
-    align-items: center;
-
-    gap: 7px;
-
-    border: 1px solid var(--welfare-border);
-
-    border-radius: 9px;
-
-    background: #ffffff;
-
-    color: var(--welfare-text);
-
-    font-size: 12px;
-
-    font-weight: 600;
-
-    white-space: nowrap;
-}
-
-
-.welfare-user-badge i {
-
-    color: var(--welfare-purple);
-
-    font-size: 16px;
-}
-
-
-.welfare-topbar-logout {
-
-    height: 36px;
-
-    padding: 0 10px;
-
-    border: 1px solid #e5d8e8;
-
-    border-radius: 9px;
-
-    background: #ffffff;
-
-    color: var(--welfare-purple);
+    color: #4a0754;
 
     font-family: "Bricolage Grotesque", sans-serif;
-
-    font-size: 11px;
-
-    font-weight: 600;
-
-    cursor: pointer;
-
-    display: inline-flex;
-
-    align-items: center;
-
-    gap: 5px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
 }
 
-
-/* ============================================================
-   PAGE HEADING
-   ============================================================ */
-
-.welfare-page-heading {
-
-    display: flex;
-
-    align-items: flex-end;
-
-    justify-content: space-between;
-
-    gap: 24px;
-
-    margin-bottom: 22px;
-}
-
-
-.welfare-eyebrow {
-
-    display: inline-flex;
-
-    align-items: center;
-
-    gap: 7px;
-
-    margin-bottom: 7px;
-
-    color: var(--welfare-purple);
-
-    font-family: "Bricolage Grotesque", sans-serif;
-
-    font-size: 12px;
-
-    font-weight: 600;
-}
-
-
-.welfare-eyebrow i {
-
-    font-size: 13px;
-}
-
-
-.welfare-page-heading h1 {
-
+.welfare-login-copy h1 {
     margin: 0;
 
-    color: var(--welfare-purple-dark);
+    color: #0a0016;
 
     font-family: "Bricolage Grotesque", sans-serif;
-
-    font-size: clamp(1.45rem, 2vw, 1.9rem);
-
-    line-height: 1.15;
-
+    font-size: 1.55rem;
     font-weight: 700;
+    line-height: 1.15;
 }
 
+.welfare-login-copy p {
+    margin: 5px 0 0;
 
-.welfare-page-heading p {
-
-    margin: 7px 0 0;
-
-    color: var(--welfare-muted);
+    color: #68707a;
 
     font-family: "DM Sans", sans-serif;
-
-    font-size: .84rem;
-
+    font-size: 0.84rem;
     line-height: 1.5;
 }
 
 
 /* ============================================================
-   LOGOUT
+   LOGIN FORM
    ============================================================ */
 
-.welfare-logout-btn {
-
-    height: 40px;
-
-    padding: 0 14px;
-
-    border: 1px solid #e6d8e8;
-
-    border-radius: 11px;
-
-    background: #ffffff;
-
-    color: var(--welfare-purple);
-
-    font-family: "Bricolage Grotesque", sans-serif;
-
-    font-size: 12px;
-
-    font-weight: 600;
-
-    cursor: pointer;
-
-    display: inline-flex;
-
-    align-items: center;
-
-    gap: 7px;
-
-    white-space: nowrap;
-
-    transition: .18s ease;
-}
-
-
-.welfare-logout-btn:hover {
-
-    background: #faf3fb;
-
-    border-color: #d8bede;
-}
-
-
-/* ============================================================
-   SUMMARY
-   ============================================================ */
-
-.welfare-summary-grid {
-
+.welfare-login-form {
     display: grid;
-
-    grid-template-columns:
-        repeat(3, minmax(0, 1fr));
-
-    gap: 14px;
-
-    margin-bottom: 16px;
+    grid-template-columns: 1fr 1fr auto;
+    gap: 12px;
+    align-items: end;
 }
 
-
-.welfare-summary-card {
-
-    min-height: 112px;
-
-    padding: 18px;
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 14px;
-
-    background: var(--welfare-card);
-
-    border: 1px solid var(--welfare-border);
-
-    border-radius: var(--welfare-radius);
-
-    box-sizing: border-box;
-
-    box-shadow:
-        0 8px 28px rgba(21, 11, 28, .045);
-}
-
-
-.summary-icon {
-
-    width: 42px;
-
-    height: 42px;
-
-    flex: 0 0 42px;
-
-    display: grid;
-
-    place-items: center;
-
-    border-radius: 13px;
-
-    background: #f3eaf5;
-
-    color: var(--welfare-purple);
-}
-
-
-.summary-icon i {
-
-    font-size: 17px;
-}
-
-
-.summary-icon.expense-icon {
-
-    background: #fff0e9;
-
-    color: var(--welfare-orange);
-}
-
-
-.summary-icon.balance-icon {
-
-    background: #e8f7fa;
-
-    color: var(--welfare-cyan);
-}
-
-
-.summary-content {
-
+.welfare-form-field {
     min-width: 0;
 }
 
-
-.summary-content span {
-
+.welfare-form-field label {
     display: block;
+    margin: 0 0 7px;
 
-    margin-bottom: 5px;
-
-    color: var(--welfare-muted);
-
-    font-family: "DM Sans", sans-serif;
-
-    font-size: 11px;
-
-    font-weight: 500;
-}
-
-
-.summary-content strong {
-
-    display: block;
-
-    color: var(--welfare-purple-dark);
+    color: #25212a;
 
     font-family: "Bricolage Grotesque", sans-serif;
-
-    font-size:
-        clamp(1.1rem, 1.7vw, 1.45rem);
-
-    font-weight: 700;
-
-    line-height: 1.1;
+    font-size: 0.76rem;
+    font-weight: 600;
 }
 
+.welfare-input-wrap {
+    position: relative;
+}
 
-/* ============================================================
-   CARDS
-   ============================================================ */
+.welfare-input-wrap > i:first-child {
+    position: absolute;
+    top: 50%;
+    left: 13px;
 
-.welfare-card {
+    transform: translateY(-50%);
+
+    color: #8b9198;
+    font-size: 17px;
+
+    pointer-events: none;
+}
+
+.welfare-input-wrap input {
+    width: 100%;
+    height: 45px;
+
+    padding: 0 42px 0 39px;
+
+    border: 1px solid #dfe3e7;
+    border-radius: 12px;
+
+    outline: none;
 
     background: #ffffff;
 
-    border: 1px solid var(--welfare-border);
+    color: #0a0016;
 
-    border-radius: var(--welfare-radius);
+    font-family: "DM Sans", sans-serif;
+    font-size: 0.82rem;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.welfare-input-wrap input::placeholder {
+    color: #a1a7ad;
+}
+
+.welfare-input-wrap input:focus {
+    border-color: #4a0754;
 
     box-shadow:
-        0 8px 28px rgba(21, 11, 28, .045);
-
-    box-sizing: border-box;
+        0 0 0 3px rgba(74, 7, 84, 0.08);
 }
 
+.password-toggle {
+    position: absolute;
+    top: 50%;
+    right: 10px;
 
-.finance-analysis-card {
-
-    margin-bottom: 16px;
-
-    padding: 20px;
-}
-
-
-.transactions-card {
-
-    padding: 20px;
-}
-
-
-.section-heading {
+    width: 30px;
+    height: 30px;
 
     display: flex;
-
     align-items: center;
+    justify-content: center;
 
-    gap: 11px;
+    transform: translateY(-50%);
 
-    margin-bottom: 18px;
-}
+    border: 0;
+    border-radius: 8px;
 
+    background: transparent;
+    color: #777f87;
 
-.section-heading-icon {
-
-    width: 40px;
-
-    height: 40px;
-
-    flex: 0 0 40px;
-
-    display: grid;
-
-    place-items: center;
-
-    border-radius: 12px;
-
-    background: #f3eaf5;
-
-    color: var(--welfare-purple);
-}
-
-
-.section-heading-icon.orange {
-
-    background: #fff0e9;
-
-    color: var(--welfare-orange);
-}
-
-
-.section-heading-icon i {
+    cursor: pointer;
 
     font-size: 16px;
 }
 
+.password-toggle:hover {
+    background: #f5f2f6;
+    color: #4a0754;
+}
 
-.section-heading h2 {
+.welfare-login-btn {
+    height: 45px;
+
+    min-width: 126px;
+
+    padding: 0 18px;
+
+    border: 0;
+    border-radius: 12px;
+
+    background: #4a0754;
+    color: #ffffff;
+
+    cursor: pointer;
+
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease,
+        opacity 0.2s ease;
+}
+
+.welfare-login-btn:hover {
+    background: #5b0967;
+    transform: translateY(-1px);
+}
+
+.welfare-login-btn:active {
+    transform: translateY(0);
+}
+
+.welfare-login-btn:disabled {
+    opacity: 0.65;
+    cursor: wait;
+    transform: none;
+}
+
+.login-btn-content {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+}
+
+.login-btn-content i {
+    font-size: 16px;
+}
+
+.welfare-login-error {
+    grid-column: 1 / -1;
+
+    min-height: 18px;
 
     margin: 0;
 
-    color: var(--welfare-purple-dark);
+    color: #b42318;
 
-    font-family: "Bricolage Grotesque", sans-serif;
-
-    font-size: 1rem;
-
-    font-weight: 700;
+    font-family: "DM Sans", sans-serif;
+    font-size: 0.76rem;
+    line-height: 1.4;
 }
 
 
-.section-heading p {
+/* ============================================================
+   DASHBOARD HEADER
+   ============================================================ */
 
-    margin: 3px 0 0;
+.welfare-dashboard {
+    padding-top: 8px;
+}
 
-    color: var(--welfare-muted);
+.welfare-page-heading {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 20px;
+
+    margin-bottom: 24px;
+}
+
+.welfare-eyebrow {
+    display: block;
+    margin-bottom: 5px;
+
+    color: #4a0754;
+
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.welfare-page-heading h1 {
+    margin: 0;
+
+    color: #0a0016;
+
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-size: 1.65rem;
+    font-weight: 700;
+    line-height: 1.15;
+}
+
+.welfare-page-heading p {
+    margin: 6px 0 0;
+
+    color: #68707a;
 
     font-family: "DM Sans", sans-serif;
+    font-size: 0.84rem;
+    line-height: 1.5;
+}
 
-    font-size: 11px;
+.welfare-logout-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+
+    height: 39px;
+
+    padding: 0 14px;
+
+    border: 1px solid #e0e3e6;
+    border-radius: 10px;
+
+    background: #ffffff;
+    color: #4a0754;
+
+    cursor: pointer;
+
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+
+    transition:
+        border-color 0.2s ease,
+        background 0.2s ease;
+}
+
+.welfare-logout-btn:hover {
+    border-color: #d6c6d9;
+    background: #faf7fb;
+}
+
+.welfare-logout-btn i {
+    font-size: 16px;
+}
+
+
+/* ============================================================
+   SUMMARY GRID
+   ============================================================ */
+
+.welfare-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+
+    margin-bottom: 16px;
+}
+
+.welfare-summary-card {
+    min-height: 108px;
+
+    display: flex;
+    align-items: center;
+    gap: 14px;
+
+    padding: 19px;
+
+    background: #ffffff;
+
+    border: 1px solid #e6eaee;
+    border-radius: 18px;
+
+    box-shadow:
+        0 7px 24px rgba(10, 0, 22, 0.035);
+}
+
+.welfare-summary-icon {
+    width: 43px;
+    height: 43px;
+
+    flex: 0 0 43px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 13px;
+
+    font-size: 20px;
+}
+
+.welfare-summary-icon.purple {
+    background: #f3eaf5;
+    color: #4a0754;
+}
+
+.welfare-summary-icon.orange {
+    background: #fff1e9;
+    color: #ea580c;
+}
+
+.welfare-summary-icon.cyan {
+    background: #e9f8fb;
+    color: #0891b2;
+}
+
+.welfare-summary-info {
+    min-width: 0;
+}
+
+.welfare-summary-info span {
+    display: block;
+    margin-bottom: 4px;
+
+    color: #747b83;
+
+    font-family: "DM Sans", sans-serif;
+    font-size: 0.72rem;
+    font-weight: 500;
+}
+
+.welfare-summary-info strong {
+    display: block;
+
+    overflow-wrap: anywhere;
+
+    color: #0a0016;
+
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-size: 1.18rem;
+    font-weight: 700;
+    line-height: 1.15;
+}
+
+
+/* ============================================================
+   GENERAL CARD
+   ============================================================ */
+
+.welfare-card {
+    margin-bottom: 16px;
+
+    padding: 21px;
+
+    background: #ffffff;
+
+    border: 1px solid #e6eaee;
+    border-radius: 20px;
+
+    box-shadow:
+        0 7px 24px rgba(10, 0, 22, 0.035);
+}
+
+.welfare-section-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 18px;
+}
+
+.welfare-section-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.welfare-section-icon {
+    width: 42px;
+    height: 42px;
+
+    flex: 0 0 42px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 13px;
+
+    font-size: 18px;
+}
+
+.welfare-section-icon.purple {
+    background: #f3eaf5;
+    color: #4a0754;
+}
+
+.welfare-section-icon.orange {
+    background: #fff1e9;
+    color: #ea580c;
+}
+
+.welfare-section-icon.cyan {
+    background: #e9f8fb;
+    color: #0891b2;
+}
+
+.welfare-section-title h2 {
+    margin: 0;
+
+    color: #0a0016;
+
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-size: 0.98rem;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.welfare-section-title p {
+    margin: 4px 0 0;
+
+    color: #7a8189;
+
+    font-family: "DM Sans", sans-serif;
+    font-size: 0.73rem;
 }
 
 
@@ -770,149 +549,120 @@
    CHART
    ============================================================ */
 
-.finance-chart-wrapper {
-
+.welfare-chart-container {
     position: relative;
 
     width: 100%;
-
     height: 260px;
-
-    max-height: 260px;
 }
 
-
-.finance-chart-wrapper canvas {
+.welfare-chart-container canvas {
+    display: block;
 
     width: 100% !important;
-
     height: 100% !important;
 }
 
 
 /* ============================================================
-   TABLE
+   ACTIVITY TABLE
    ============================================================ */
 
-.table-wrapper {
-
+.welfare-table-wrap {
     width: 100%;
 
     overflow-x: auto;
 
-    -webkit-overflow-scrolling: touch;
+    border: 1px solid #edf0f2;
+    border-radius: 13px;
 }
 
-
-.activity-table {
-
+.welfare-table {
     width: 100%;
-
-    min-width: 620px;
 
     border-collapse: collapse;
 
-    font-family: "DM Sans", sans-serif;
+    min-width: 600px;
 }
 
+.welfare-table th {
+    padding: 12px 14px;
 
-.activity-table th {
+    border-bottom: 1px solid #e8ecef;
 
-    padding: 11px 12px;
+    background: #fafbfc;
+
+    color: #707780;
 
     text-align: left;
 
-    border-bottom:
-        1px solid #e9e9ed;
-
-    color: #77727d;
-
-    font-size: 10px;
-
-    font-weight: 700;
-
-    text-transform: uppercase;
-
-    letter-spacing: .04em;
+    font-family: "Bricolage Grotesque", sans-serif;
+    font-size: 0.7rem;
+    font-weight: 600;
 
     white-space: nowrap;
 }
 
+.welfare-table td {
+    padding: 13px 14px;
 
-.activity-table td {
+    border-bottom: 1px solid #eef1f3;
 
-    padding: 13px 12px;
+    color: #25212a;
 
-    border-bottom:
-        1px solid #f0f0f2;
-
-    color: #29242e;
-
-    font-size: 12px;
+    font-family: "DM Sans", sans-serif;
+    font-size: 0.76rem;
+    line-height: 1.4;
 
     vertical-align: middle;
 }
 
-
-.activity-table tbody tr:last-child td {
-
+.welfare-table tbody tr:last-child td {
     border-bottom: 0;
 }
 
-
-.table-loading,
-.table-empty {
-
-    padding: 28px 12px !important;
-
-    text-align: center !important;
-
-    color: var(--welfare-muted) !important;
+.welfare-table tbody tr:hover {
+    background: #fcfbfd;
 }
 
+.welfare-table-loading,
+.welfare-table-empty {
+    padding: 30px 14px !important;
 
-.transaction-type {
+    color: #7a8189 !important;
 
-    display: inline-flex;
+    text-align: center;
+}
 
-    align-items: center;
-
-    gap: 5px;
-
-    font-size: 11px;
-
+.transaction-credit {
+    color: #18864b !important;
     font-weight: 600;
 }
 
+.transaction-debit {
+    color: #c2410c !important;
+    font-weight: 600;
+}
+
+.transaction-type {
+    display: inline-flex;
+    align-items: center;
+
+    padding: 4px 8px;
+
+    border-radius: 7px;
+
+    font-size: 0.66rem;
+    font-weight: 600;
+}
 
 .transaction-type.credit {
-
-    color: #16803c;
+    background: #edf9f2;
+    color: #18864b;
 }
-
 
 .transaction-type.debit {
-
-    color: #c2410c;
-}
-
-
-.transaction-amount {
-
-    font-weight: 700;
-
-    white-space: nowrap;
-}
-
-
-.transaction-amount.credit {
-
-    color: #16803c;
-}
-
-
-.transaction-amount.debit {
-
+    background: #fff3ed;
     color: #c2410c;
 }
 
@@ -921,72 +671,58 @@
    PAGINATION
    ============================================================ */
 
-.pagination {
-
+.welfare-pagination {
     display: flex;
-
     align-items: center;
-
-    justify-content: space-between;
-
+    justify-content: center;
     gap: 12px;
 
-    padding-top: 16px;
+    margin-top: 16px;
 }
 
+.welfare-pagination > span {
+    min-width: 65px;
 
-.pagination span {
+    color: #69717a;
 
-    color: var(--welfare-muted);
+    text-align: center;
 
     font-family: "DM Sans", sans-serif;
-
-    font-size: 11px;
-
-    font-weight: 600;
+    font-size: 0.72rem;
+    font-weight: 500;
 }
 
-
 .pagination-btn {
+    width: 34px;
+    height: 34px;
 
-    min-height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-    padding: 0 11px;
-
-    border: 1px solid #e2e2e7;
-
+    border: 1px solid #e0e4e7;
     border-radius: 9px;
 
     background: #ffffff;
-
-    color: var(--welfare-purple);
-
-    font-family: "DM Sans", sans-serif;
-
-    font-size: 11px;
-
-    font-weight: 600;
+    color: #4a0754;
 
     cursor: pointer;
 
-    display: inline-flex;
+    font-size: 17px;
 
-    align-items: center;
-
-    gap: 6px;
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        opacity 0.2s ease;
 }
 
-
-.pagination-btn:hover {
-
-    background: #faf6fb;
+.pagination-btn:hover:not(:disabled) {
+    background: #f8f4f9;
+    border-color: #d6c8d9;
 }
-
 
 .pagination-btn:disabled {
-
-    opacity: .4;
-
+    opacity: 0.4;
     cursor: not-allowed;
 }
 
@@ -995,251 +731,169 @@
    RESPONSIVE
    ============================================================ */
 
-@media (max-width: 1000px) {
+@media (max-width: 980px) {
 
-    .welfare-login-icon {
-
-        display: none;
+    .welfare-login-form {
+        grid-template-columns: 1fr 1fr;
     }
 
-    .welfare-login-input {
-
-        width: 115px;
-    }
-
-    .welfare-password-wrap .welfare-login-input {
-
-        width: 115px;
+    .welfare-login-btn {
+        grid-column: 1 / -1;
+        width: 100%;
     }
 
 }
 
 
-/* ============================================================
-   TABLET
-   ============================================================ */
-
 @media (max-width: 800px) {
 
     .welfare-page {
-
         width: min(100% - 24px, 1500px);
+        padding-top: 22px;
     }
-
-
-    .welfare-dashboard {
-
-        padding-top: 24px;
-    }
-
 
     .welfare-summary-grid {
-
         grid-template-columns: 1fr;
-
-        gap: 10px;
     }
-
-
-    .welfare-summary-card {
-
-        min-height: 92px;
-    }
-
 
     .welfare-page-heading {
-
         align-items: flex-start;
     }
 
 }
 
 
-/* ============================================================
-   MOBILE
-   ============================================================ */
-
 @media (max-width: 650px) {
 
-    .welfare-page {
-
-        width: min(100% - 20px, 1500px);
-
-        padding-bottom: 70px;
+    .welfare-login-card {
+        margin-top: 15px;
+        padding: 21px;
+        border-radius: 18px;
     }
 
-
-    .welfare-dashboard {
-
-        padding-top: 20px;
+    .welfare-login-intro {
+        align-items: flex-start;
     }
-
-
-    /*
-     * Login becomes a compact row without destroying
-     * the shared topbar.
-     */
-
-    .welfare-topbar-login {
-
-        width: 100%;
-
-        margin-left: 0;
-
-        justify-content: flex-end;
-    }
-
 
     .welfare-login-form {
-
-        width: 100%;
-
-        justify-content: flex-end;
-
-        gap: 5px;
+        grid-template-columns: 1fr;
     }
-
-
-    .welfare-login-input,
-    .welfare-password-wrap .welfare-login-input {
-
-        width: 100%;
-
-        min-width: 0;
-    }
-
-
-    .welfare-login-form {
-
-        display: grid;
-
-        grid-template-columns:
-            minmax(0, 1fr)
-            minmax(0, 1fr)
-            auto;
-    }
-
 
     .welfare-login-btn {
-
-        flex: 0 0 auto;
+        grid-column: auto;
     }
-
 
     .welfare-page-heading {
-
-        display: block;
-
-        margin-bottom: 18px;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 14px;
     }
-
 
     .welfare-logout-btn {
-
-        margin-top: 14px;
+        align-self: flex-start;
     }
 
-
-    .finance-analysis-card,
-    .transactions-card {
-
+    .welfare-card {
         padding: 16px;
+        border-radius: 17px;
     }
 
+    .welfare-chart-container {
+        height: 230px;
+    }
 
-    .finance-chart-wrapper {
+}
 
-        height: 220px;
 
-        max-height: 220px;
+@media (max-width: 480px) {
+
+    .welfare-page {
+        width: min(100% - 18px, 1500px);
+        padding-top: 17px;
+        padding-bottom: 35px;
+    }
+
+    .welfare-login-card {
+        padding: 18px;
+    }
+
+    .welfare-login-intro {
+        gap: 12px;
+    }
+
+    .welfare-login-icon {
+        width: 44px;
+        height: 44px;
+        flex-basis: 44px;
+        border-radius: 12px;
+        font-size: 20px;
+    }
+
+    .welfare-login-copy h1 {
+        font-size: 1.35rem;
+    }
+
+    .welfare-login-copy p {
+        font-size: 0.78rem;
+    }
+
+    .welfare-page-heading h1 {
+        font-size: 1.4rem;
+    }
+
+    .welfare-page-heading p {
+        font-size: 0.78rem;
+    }
+
+    .welfare-summary-card {
+        min-height: 94px;
+        padding: 15px;
+    }
+
+    .welfare-summary-icon {
+        width: 39px;
+        height: 39px;
+        flex-basis: 39px;
+        border-radius: 11px;
+    }
+
+    .welfare-summary-info strong {
+        font-size: 1.05rem;
+    }
+
+    .welfare-section-icon {
+        width: 38px;
+        height: 38px;
+        flex-basis: 38px;
+        border-radius: 11px;
+    }
+
+    .welfare-section-title h2 {
+        font-size: 0.9rem;
+    }
+
+    .welfare-section-title p {
+        font-size: 0.68rem;
+    }
+
+    .welfare-chart-container {
+        height: 205px;
     }
 
 }
 
 
 /* ============================================================
-   SMALL MOBILE
+   REDUCED MOTION
    ============================================================ */
 
-@media (max-width: 480px) {
+@media (prefers-reduced-motion: reduce) {
 
-    .welfare-topbar-login {
-
-        gap: 4px;
-    }
-
-
-    .welfare-login-form {
-
-        grid-template-columns:
-            minmax(0, 1fr)
-            minmax(0, 1fr)
-            38px;
-    }
-
-
-    .welfare-login-input,
-    .welfare-password-wrap .welfare-login-input {
-
-        height: 34px;
-
-        font-size: 11px;
-
-        padding-left: 9px;
-    }
-
-
-    .welfare-login-btn {
-
-        width: 38px;
-
-        height: 34px;
-
-        padding: 0;
-    }
-
-
-    .welfare-login-btn span {
-
-        display: none;
-    }
-
-
-    .welfare-login-btn i {
-
-        margin: 0;
-    }
-
-
-    .welfare-page-heading h1 {
-
-        font-size: 1.4rem;
-    }
-
-
-    .welfare-page-heading p {
-
-        font-size: .8rem;
-    }
-
-
-    .summary-content strong {
-
-        font-size: 1.15rem;
-    }
-
-
-    .finance-chart-wrapper {
-
-        height: 200px;
-
-        max-height: 200px;
-    }
-
-
-    .pagination-btn {
-
-        padding: 0 9px;
+    .welfare-page *,
+    .welfare-page *::before,
+    .welfare-page *::after {
+        scroll-behavior: auto !important;
+        transition: none !important;
     }
 
 }
