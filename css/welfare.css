@@ -5,571 +5,991 @@
    ============================================================ */
 
 :root {
+
     --welfare-purple-dark: #0A0016;
     --welfare-purple: #4A0754;
     --welfare-purple-light: #7B2A84;
+
     --welfare-orange: #EA580C;
     --welfare-cyan: #0891B2;
 
     --welfare-bg: #f7f7f9;
     --welfare-card: #ffffff;
+
     --welfare-border: #e6e8ed;
+
     --welfare-text: #17131b;
     --welfare-muted: #74717a;
 
     --welfare-radius: 22px;
 }
 
+
 /* ============================================================
    PAGE
    ============================================================ */
 
 .welfare-page {
+
     width: min(100% - 32px, 1500px);
+
     max-width: 1500px;
+
     margin: 0 auto;
+
     padding: 0 0 80px;
+
     box-sizing: border-box;
 }
 
+
 .welfare-dashboard {
+
     width: 100%;
+
+    /*
+     * Space between topbar and first dashboard content.
+     */
     padding-top: 30px;
 }
 
+
 .hidden {
+
     display: none !important;
 }
 
+
 /* ============================================================
-   TOPBAR LOGIN
+   LOGIN MOUNT
    ============================================================ */
 
-/*
-   layout.js may rebuild #app-topbar.
-   welfare.js therefore injects this login area after the shared
-   topbar has been created.
-*/
+.welfare-login-mount {
+
+    display: none;
+}
+
+
+/* ============================================================
+   WELFARE LOGIN INSIDE SHARED TOPBAR
+   ============================================================ */
 
 .welfare-topbar-login {
+
     display: flex;
+
     align-items: center;
+
     justify-content: flex-end;
-    gap: 10px;
+
+    gap: 8px;
+
     margin-left: auto;
+
     min-width: 0;
+
     position: relative;
-    z-index: 20;
+
+    z-index: 100;
+
+    font-family: "DM Sans", sans-serif;
 }
 
-.welfare-login-container {
-    display: flex;
-    align-items: center;
-}
+
+/*
+ * Login form
+ */
 
 .welfare-login-form {
+
     display: flex;
+
     align-items: center;
-    gap: 8px;
+
+    gap: 7px;
+
     margin: 0;
 }
 
-.welfare-login-brand {
-    width: 34px;
-    height: 34px;
-    flex: 0 0 34px;
-    border-radius: 10px;
+
+/*
+ * Welfare icon
+ */
+
+.welfare-login-icon {
+
+    width: 35px;
+
+    height: 35px;
+
+    flex: 0 0 35px;
+
     display: grid;
+
     place-items: center;
-    color: #ffffff;
-    background: linear-gradient(
-        135deg,
-        var(--welfare-purple),
-        #6d1679
-    );
-    box-shadow: 0 5px 14px rgba(74, 7, 84, 0.16);
+
+    border-radius: 10px;
+
+    background: #f2e8f4;
+
+    color: var(--welfare-purple);
+
+    font-size: 17px;
 }
 
-.welfare-login-brand i {
-    font-size: 15px;
+
+/*
+ * Inputs
+ */
+
+.welfare-login-input {
+
+    width: 128px;
+
+    height: 36px;
+
+    box-sizing: border-box;
+
+    padding: 0 11px;
+
+    border: 1px solid #dedfe5;
+
+    border-radius: 9px;
+
+    background: #ffffff;
+
+    color: var(--welfare-text);
+
+    outline: none;
+
+    font-family: "DM Sans", sans-serif;
+
+    font-size: 12px;
+
+    transition:
+        border-color .18s ease,
+        box-shadow .18s ease;
 }
 
-.welfare-login-field {
+
+.welfare-login-input::placeholder {
+
+    color: #96939a;
+}
+
+
+.welfare-login-input:focus {
+
+    border-color: var(--welfare-purple);
+
+    box-shadow:
+        0 0 0 3px rgba(74, 7, 84, .07);
+}
+
+
+/*
+ * Password wrapper
+ */
+
+.welfare-password-wrap {
+
     position: relative;
+
     display: flex;
+
     align-items: center;
 }
 
-.welfare-login-field > i {
-    position: absolute;
-    left: 11px;
-    color: #8b8790;
-    font-size: 12px;
-    pointer-events: none;
+
+.welfare-password-wrap .welfare-login-input {
+
+    width: 128px;
+
+    padding-right: 34px;
 }
 
-.welfare-login-field input {
-    width: 125px;
-    height: 36px;
-    padding: 0 11px 0 31px;
-    border: 1px solid #dddfe5;
-    border-radius: 10px;
-    outline: none;
-    background: #ffffff;
-    color: var(--welfare-text);
-    font-family: "DM Sans", sans-serif;
-    font-size: 12px;
-    box-sizing: border-box;
-    transition: border-color 0.18s ease, box-shadow 0.18s ease;
-}
 
-.welfare-login-field.password-field input {
-    width: 120px;
-    padding-right: 32px;
-}
-
-.welfare-login-field input:focus {
-    border-color: var(--welfare-purple-light);
-    box-shadow: 0 0 0 3px rgba(74, 7, 84, 0.08);
-}
+/*
+ * Show password
+ */
 
 .welfare-password-toggle {
+
     position: absolute;
-    right: 8px;
+
+    right: 7px;
+
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    width: 24px;
+
+    height: 24px;
+
+    padding: 0;
+
     border: 0;
+
     background: transparent;
-    color: #8b8790;
+
+    color: #85818a;
+
     cursor: pointer;
-    padding: 4px;
-    font-size: 11px;
+
+    display: grid;
+
+    place-items: center;
+
+    font-size: 13px;
 }
+
+
+/*
+ * Login button
+ */
 
 .welfare-login-btn {
+
     height: 36px;
-    padding: 0 14px;
+
+    padding: 0 13px;
+
     border: 0;
-    border-radius: 10px;
+
+    border-radius: 9px;
+
     background: var(--welfare-purple);
+
     color: #ffffff;
+
     font-family: "Bricolage Grotesque", sans-serif;
+
     font-size: 12px;
+
     font-weight: 600;
+
     cursor: pointer;
+
     display: inline-flex;
+
     align-items: center;
+
     justify-content: center;
+
     gap: 6px;
+
     white-space: nowrap;
-    transition: transform 0.18s ease, background 0.18s ease;
+
+    transition:
+        background .18s ease,
+        transform .18s ease;
 }
 
+
 .welfare-login-btn:hover {
+
     background: #5d0a69;
+
     transform: translateY(-1px);
 }
 
+
 .welfare-login-btn:disabled {
-    opacity: 0.65;
-    cursor: not-allowed;
+
+    opacity: .65;
+
+    cursor: wait;
+
     transform: none;
 }
 
+
+/*
+ * Login error
+ */
+
 .welfare-login-error {
+
     position: absolute;
+
     right: 0;
+
     top: calc(100% + 7px);
-    width: max-content;
-    max-width: 280px;
+
+    max-width: 290px;
+
     padding: 8px 11px;
+
+    border: 1px solid #f1caca;
+
     border-radius: 9px;
-    background: #fff4f4;
-    border: 1px solid #ffd6d6;
+
+    background: #fff6f6;
+
     color: #b42318;
-    font-family: "DM Sans", sans-serif;
+
     font-size: 11px;
+
     line-height: 1.4;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.07);
+
+    box-shadow:
+        0 8px 24px rgba(0, 0, 0, .08);
 }
+
+
+/*
+ * Logged-in topbar state
+ */
 
 .welfare-logged-in-state {
+
     display: flex;
+
     align-items: center;
-    gap: 9px;
+
+    gap: 8px;
 }
 
+
 .welfare-user-badge {
+
+    height: 36px;
+
+    padding: 0 10px;
+
     display: inline-flex;
+
     align-items: center;
+
     gap: 7px;
-    min-height: 36px;
-    padding: 0 11px;
+
     border: 1px solid var(--welfare-border);
-    border-radius: 10px;
+
+    border-radius: 9px;
+
     background: #ffffff;
+
     color: var(--welfare-text);
-    font-family: "DM Sans", sans-serif;
+
     font-size: 12px;
+
     font-weight: 600;
+
     white-space: nowrap;
 }
 
+
 .welfare-user-badge i {
+
     color: var(--welfare-purple);
+
+    font-size: 16px;
 }
 
+
 .welfare-topbar-logout {
+
     height: 36px;
-    padding: 0 11px;
-    border: 1px solid #ead8e9;
-    border-radius: 10px;
+
+    padding: 0 10px;
+
+    border: 1px solid #e5d8e8;
+
+    border-radius: 9px;
+
     background: #ffffff;
+
     color: var(--welfare-purple);
+
     font-family: "Bricolage Grotesque", sans-serif;
+
     font-size: 11px;
+
     font-weight: 600;
+
     cursor: pointer;
+
     display: inline-flex;
+
     align-items: center;
-    gap: 6px;
+
+    gap: 5px;
 }
+
 
 /* ============================================================
    PAGE HEADING
    ============================================================ */
 
 .welfare-page-heading {
+
     display: flex;
+
     align-items: flex-end;
+
     justify-content: space-between;
+
     gap: 24px;
+
     margin-bottom: 22px;
 }
 
+
 .welfare-eyebrow {
+
     display: inline-flex;
+
     align-items: center;
+
     gap: 7px;
+
     margin-bottom: 7px;
+
     color: var(--welfare-purple);
+
     font-family: "Bricolage Grotesque", sans-serif;
+
     font-size: 12px;
+
     font-weight: 600;
 }
 
+
 .welfare-eyebrow i {
-    font-size: 11px;
+
+    font-size: 13px;
 }
 
+
 .welfare-page-heading h1 {
+
     margin: 0;
+
     color: var(--welfare-purple-dark);
+
     font-family: "Bricolage Grotesque", sans-serif;
+
     font-size: clamp(1.45rem, 2vw, 1.9rem);
+
     line-height: 1.15;
+
     font-weight: 700;
 }
 
+
 .welfare-page-heading p {
+
     margin: 7px 0 0;
+
     color: var(--welfare-muted);
+
     font-family: "DM Sans", sans-serif;
-    font-size: 0.84rem;
+
+    font-size: .84rem;
+
     line-height: 1.5;
 }
 
+
+/* ============================================================
+   LOGOUT
+   ============================================================ */
+
 .welfare-logout-btn {
+
     height: 40px;
+
     padding: 0 14px;
+
     border: 1px solid #e6d8e8;
+
     border-radius: 11px;
+
     background: #ffffff;
+
     color: var(--welfare-purple);
+
     font-family: "Bricolage Grotesque", sans-serif;
+
     font-size: 12px;
+
     font-weight: 600;
+
     cursor: pointer;
+
     display: inline-flex;
+
     align-items: center;
+
     gap: 7px;
+
     white-space: nowrap;
-    transition: 0.18s ease;
+
+    transition: .18s ease;
 }
 
+
 .welfare-logout-btn:hover {
+
     background: #faf3fb;
+
     border-color: #d8bede;
 }
+
 
 /* ============================================================
    SUMMARY
    ============================================================ */
 
 .welfare-summary-grid {
+
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+
     gap: 14px;
+
     margin-bottom: 16px;
 }
 
+
 .welfare-summary-card {
+
     min-height: 112px;
+
     padding: 18px;
+
     display: flex;
+
     align-items: center;
+
     gap: 14px;
+
     background: var(--welfare-card);
+
     border: 1px solid var(--welfare-border);
+
     border-radius: var(--welfare-radius);
+
     box-sizing: border-box;
-    box-shadow: 0 8px 28px rgba(21, 11, 28, 0.045);
+
+    box-shadow:
+        0 8px 28px rgba(21, 11, 28, .045);
 }
 
+
 .summary-icon {
+
     width: 42px;
+
     height: 42px;
+
     flex: 0 0 42px;
+
     display: grid;
+
     place-items: center;
+
     border-radius: 13px;
+
     background: #f3eaf5;
+
     color: var(--welfare-purple);
 }
 
-.expense-card .summary-icon {
+
+.summary-icon i {
+
+    font-size: 17px;
+}
+
+
+.summary-icon.expense-icon {
+
     background: #fff0e9;
+
     color: var(--welfare-orange);
 }
 
-.balance-card .summary-icon {
+
+.summary-icon.balance-icon {
+
     background: #e8f7fa;
+
     color: var(--welfare-cyan);
 }
 
-.summary-icon i {
-    font-size: 15px;
-}
 
 .summary-content {
+
     min-width: 0;
 }
 
+
 .summary-content span {
+
     display: block;
+
     margin-bottom: 5px;
+
     color: var(--welfare-muted);
+
     font-family: "DM Sans", sans-serif;
+
     font-size: 11px;
+
     font-weight: 500;
 }
 
+
 .summary-content strong {
+
     display: block;
+
     color: var(--welfare-purple-dark);
+
     font-family: "Bricolage Grotesque", sans-serif;
-    font-size: clamp(1.1rem, 1.7vw, 1.45rem);
+
+    font-size:
+        clamp(1.1rem, 1.7vw, 1.45rem);
+
     font-weight: 700;
+
     line-height: 1.1;
 }
 
+
 /* ============================================================
-   GENERAL CARDS
+   CARDS
    ============================================================ */
 
 .welfare-card {
+
     background: #ffffff;
+
     border: 1px solid var(--welfare-border);
+
     border-radius: var(--welfare-radius);
-    box-shadow: 0 8px 28px rgba(21, 11, 28, 0.045);
+
+    box-shadow:
+        0 8px 28px rgba(21, 11, 28, .045);
+
     box-sizing: border-box;
 }
 
+
 .finance-analysis-card {
+
     margin-bottom: 16px;
+
     padding: 20px;
 }
+
 
 .transactions-card {
+
     padding: 20px;
 }
 
+
 .section-heading {
+
     display: flex;
+
     align-items: center;
+
     gap: 11px;
+
     margin-bottom: 18px;
 }
 
+
 .section-heading-icon {
+
     width: 40px;
+
     height: 40px;
+
     flex: 0 0 40px;
+
     display: grid;
+
     place-items: center;
+
     border-radius: 12px;
+
     background: #f3eaf5;
+
     color: var(--welfare-purple);
 }
 
+
 .section-heading-icon.orange {
+
     background: #fff0e9;
+
     color: var(--welfare-orange);
 }
 
+
 .section-heading-icon i {
-    font-size: 14px;
+
+    font-size: 16px;
 }
 
+
 .section-heading h2 {
+
     margin: 0;
+
     color: var(--welfare-purple-dark);
+
     font-family: "Bricolage Grotesque", sans-serif;
+
     font-size: 1rem;
+
     font-weight: 700;
 }
 
+
 .section-heading p {
+
     margin: 3px 0 0;
+
     color: var(--welfare-muted);
+
     font-family: "DM Sans", sans-serif;
+
     font-size: 11px;
 }
+
 
 /* ============================================================
    CHART
    ============================================================ */
 
 .finance-chart-wrapper {
+
     position: relative;
+
     width: 100%;
+
     height: 260px;
+
     max-height: 260px;
 }
 
+
 .finance-chart-wrapper canvas {
+
     width: 100% !important;
+
     height: 100% !important;
 }
+
 
 /* ============================================================
    TABLE
    ============================================================ */
 
 .table-wrapper {
+
     width: 100%;
+
     overflow-x: auto;
+
     -webkit-overflow-scrolling: touch;
 }
 
+
 .activity-table {
+
     width: 100%;
+
     min-width: 620px;
+
     border-collapse: collapse;
+
     font-family: "DM Sans", sans-serif;
 }
 
+
 .activity-table th {
+
     padding: 11px 12px;
+
     text-align: left;
-    border-bottom: 1px solid #e9e9ed;
+
+    border-bottom:
+        1px solid #e9e9ed;
+
     color: #77727d;
+
     font-size: 10px;
+
     font-weight: 700;
+
     text-transform: uppercase;
-    letter-spacing: 0.04em;
+
+    letter-spacing: .04em;
+
     white-space: nowrap;
 }
 
+
 .activity-table td {
+
     padding: 13px 12px;
-    border-bottom: 1px solid #f0f0f2;
+
+    border-bottom:
+        1px solid #f0f0f2;
+
     color: #29242e;
+
     font-size: 12px;
+
     vertical-align: middle;
 }
 
+
 .activity-table tbody tr:last-child td {
+
     border-bottom: 0;
 }
 
+
 .table-loading,
 .table-empty {
+
     padding: 28px 12px !important;
+
     text-align: center !important;
+
     color: var(--welfare-muted) !important;
 }
 
+
 .transaction-type {
+
     display: inline-flex;
+
     align-items: center;
+
     gap: 5px;
+
     font-size: 11px;
+
     font-weight: 600;
 }
 
+
 .transaction-type.credit {
+
     color: #16803c;
 }
 
+
 .transaction-type.debit {
+
     color: #c2410c;
 }
 
+
 .transaction-amount {
+
     font-weight: 700;
+
     white-space: nowrap;
 }
 
+
 .transaction-amount.credit {
+
     color: #16803c;
 }
 
+
 .transaction-amount.debit {
+
     color: #c2410c;
 }
+
 
 /* ============================================================
    PAGINATION
    ============================================================ */
 
 .pagination {
+
     display: flex;
+
     align-items: center;
+
     justify-content: space-between;
+
     gap: 12px;
+
     padding-top: 16px;
 }
 
+
 .pagination span {
+
     color: var(--welfare-muted);
+
     font-family: "DM Sans", sans-serif;
+
     font-size: 11px;
+
     font-weight: 600;
 }
 
+
 .pagination-btn {
+
     min-height: 34px;
+
     padding: 0 11px;
+
     border: 1px solid #e2e2e7;
+
     border-radius: 9px;
+
     background: #ffffff;
+
     color: var(--welfare-purple);
+
     font-family: "DM Sans", sans-serif;
+
     font-size: 11px;
+
     font-weight: 600;
+
     cursor: pointer;
+
     display: inline-flex;
+
     align-items: center;
+
     gap: 6px;
 }
 
+
 .pagination-btn:hover {
+
     background: #faf6fb;
 }
 
+
 .pagination-btn:disabled {
-    opacity: 0.4;
+
+    opacity: .4;
+
     cursor: not-allowed;
 }
+
 
 /* ============================================================
    RESPONSIVE
@@ -577,175 +997,249 @@
 
 @media (max-width: 1000px) {
 
-    .welfare-topbar-login {
-        gap: 6px;
-    }
+    .welfare-login-icon {
 
-    .welfare-login-brand {
         display: none;
     }
 
-    .welfare-login-field input {
-        width: 110px;
+    .welfare-login-input {
+
+        width: 115px;
     }
 
-    .welfare-login-field.password-field input {
-        width: 105px;
+    .welfare-password-wrap .welfare-login-input {
+
+        width: 115px;
     }
 
-    .welfare-summary-grid {
-        gap: 10px;
-    }
 }
+
+
+/* ============================================================
+   TABLET
+   ============================================================ */
 
 @media (max-width: 800px) {
 
     .welfare-page {
+
         width: min(100% - 24px, 1500px);
     }
 
+
     .welfare-dashboard {
+
         padding-top: 24px;
     }
 
+
     .welfare-summary-grid {
+
         grid-template-columns: 1fr;
+
+        gap: 10px;
     }
 
+
     .welfare-summary-card {
+
         min-height: 92px;
     }
 
+
     .welfare-page-heading {
+
         align-items: flex-start;
     }
 
-    .welfare-topbar-login {
-        max-width: 100%;
-    }
-
-    .welfare-login-form {
-        gap: 5px;
-    }
-
-    .welfare-login-field input,
-    .welfare-login-field.password-field input {
-        width: 100px;
-    }
 }
+
+
+/* ============================================================
+   MOBILE
+   ============================================================ */
 
 @media (max-width: 650px) {
 
     .welfare-page {
+
         width: min(100% - 20px, 1500px);
+
         padding-bottom: 70px;
     }
 
+
     .welfare-dashboard {
+
         padding-top: 20px;
     }
 
+
     /*
-       The shared topbar can become crowded on small screens,
-       so the login controls become a compact second row.
-    */
+     * Login becomes a compact row without destroying
+     * the shared topbar.
+     */
+
     .welfare-topbar-login {
+
         width: 100%;
+
         margin-left: 0;
+
         justify-content: flex-end;
     }
 
+
     .welfare-login-form {
+
         width: 100%;
+
         justify-content: flex-end;
-    }
 
-    .welfare-login-field {
-        flex: 1 1 0;
-        min-width: 0;
-    }
-
-    .welfare-login-field input,
-    .welfare-login-field.password-field input {
-        width: 100%;
-    }
-
-    .welfare-login-btn {
-        flex: 0 0 auto;
-    }
-
-    .welfare-page-heading {
-        display: block;
-        margin-bottom: 18px;
-    }
-
-    .welfare-logout-btn {
-        margin-top: 14px;
-    }
-
-    .finance-analysis-card,
-    .transactions-card {
-        padding: 16px;
-    }
-
-    .finance-chart-wrapper {
-        height: 220px;
-        max-height: 220px;
-    }
-}
-
-@media (max-width: 480px) {
-
-    .welfare-login-form {
         gap: 5px;
     }
 
-    .welfare-login-field input,
-    .welfare-login-field.password-field input {
-        height: 34px;
-        font-size: 11px;
+
+    .welfare-login-input,
+    .welfare-password-wrap .welfare-login-input {
+
+        width: 100%;
+
+        min-width: 0;
     }
+
+
+    .welfare-login-form {
+
+        display: grid;
+
+        grid-template-columns:
+            minmax(0, 1fr)
+            minmax(0, 1fr)
+            auto;
+    }
+
 
     .welfare-login-btn {
-        height: 34px;
-        padding: 0 10px;
-        font-size: 11px;
+
+        flex: 0 0 auto;
     }
 
+
+    .welfare-page-heading {
+
+        display: block;
+
+        margin-bottom: 18px;
+    }
+
+
+    .welfare-logout-btn {
+
+        margin-top: 14px;
+    }
+
+
+    .finance-analysis-card,
+    .transactions-card {
+
+        padding: 16px;
+    }
+
+
+    .finance-chart-wrapper {
+
+        height: 220px;
+
+        max-height: 220px;
+    }
+
+}
+
+
+/* ============================================================
+   SMALL MOBILE
+   ============================================================ */
+
+@media (max-width: 480px) {
+
+    .welfare-topbar-login {
+
+        gap: 4px;
+    }
+
+
+    .welfare-login-form {
+
+        grid-template-columns:
+            minmax(0, 1fr)
+            minmax(0, 1fr)
+            38px;
+    }
+
+
+    .welfare-login-input,
+    .welfare-password-wrap .welfare-login-input {
+
+        height: 34px;
+
+        font-size: 11px;
+
+        padding-left: 9px;
+    }
+
+
+    .welfare-login-btn {
+
+        width: 38px;
+
+        height: 34px;
+
+        padding: 0;
+    }
+
+
     .welfare-login-btn span {
+
         display: none;
     }
 
+
     .welfare-login-btn i {
+
         margin: 0;
     }
 
+
     .welfare-page-heading h1 {
+
         font-size: 1.4rem;
     }
 
+
     .welfare-page-heading p {
-        font-size: 0.8rem;
+
+        font-size: .8rem;
     }
 
+
     .summary-content strong {
+
         font-size: 1.15rem;
     }
 
-    .section-heading {
-        margin-bottom: 14px;
-    }
 
     .finance-chart-wrapper {
+
         height: 200px;
+
         max-height: 200px;
     }
 
+
     .pagination-btn {
+
         padding: 0 9px;
     }
 
-    .pagination-btn i {
-        font-size: 9px;
-    }
 }
