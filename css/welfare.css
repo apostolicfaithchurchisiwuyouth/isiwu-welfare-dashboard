@@ -347,7 +347,7 @@
     padding: 0 14px;
 
     border: 1px solid #e0e3e6;
-    border-radius: 10px;
+    border-radius: 35px;
 
     background: #ffffff;
     color: #4a0754;
@@ -790,7 +790,7 @@
     }
 
     .welfare-logout-btn {
-        align-self: flex-start;
+        align-self: flex-end;
     }
 
     .welfare-card {
