@@ -1066,6 +1066,77 @@
 
 }
 
+/* ============================================================
+   MOBILE
+   ============================================================ */
+
+@media (max-width: 768px) {
+
+    .dashboard-content.slcreport-page {
+
+        width: calc(100% - 28px);
+
+        max-width: none;
+    }
+
+    .report-hero {
+
+        padding: 23px;
+
+        border-radius: 24px;
+    }
+
+    .report-hero-icon {
+
+        width: 62px;
+        height: 62px;
+
+        border-radius: 19px;
+
+        font-size: 1.35rem;
+    }
+
+    .report-hero h1 {
+
+        font-size: clamp(1.45rem, 7vw, 2rem);
+    }
+
+    .report-card {
+
+        padding: 22px;
+
+        border-radius: 22px;
+    }
+}
+
+/* ============================================================
+   SMALL MOBILE
+   ============================================================ */
+
+@media (max-width: 600px) {
+
+    .dashboard-content.slcreport-page {
+
+        width: calc(100% - 20px);
+
+        max-width: none;
+    }
+
+    .report-hero {
+
+        display: block;
+
+        padding: 19px;
+
+        border-radius: 22px;
+    }
+
+    .report-hero-icon {
+
+        display: none;
+    }
+}
+
 
 /* ============================================================
    REDUCED MOTION
