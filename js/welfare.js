@@ -4,677 +4,415 @@
  * FILE: welfare.js
  * PURPOSE: WELFARE DASHBOARD
  * ============================================================
+ *
+ * FEATURES
+ * - Welfare login
+ * - Persistent login using localStorage
+ * - Welfare financial summary
+ * - Contributions
+ * - Expenses
+ * - Current balance
+ * - Transaction history
+ * - Pagination
+ * - Chart.js financial chart
+ * - Logout
+ * - Automatic data refresh
+ *
+ * IMPORTANT
+ * - Login is inside welfare.html dashboard content.
+ * - Shared topbar is controlled by layout.js.
+ * ============================================================
  */
 
-document.addEventListener("DOMContentLoaded", function () {
 
-    /* =========================================================
-       CONFIGURATION
-       ========================================================= */
+/* ============================================================
+   CONFIGURATION
+   ============================================================ */
 
-    const LOGIN_API =
-        "https://script.google.com/macros/s/AKfycbw1mVwpgAcIOSNbpgzy52TFyozEGMtWWwVWUDFaofGNzpsguBIaKR4q1dXVtgVHO2xZ1w/exec";
+const WELFARE_API_URL =
+    "https://script.google.com/macros/s/AKfycbw1mVwpgAcIOSNbpgzy52TFyozEGMtWWwVWUDFaofGNzpsguBIaKR4q1dXVtgVHO2xZ1w/exec";
 
-    const SUMMARY_CSV =
-        "https://docs.google.com/spreadsheets/d/e/2PACX-1vQHlE5IpmFYaQyW5u-rentH2fGC5VZJ2w9Ql1WI-X8bE76qlN5_ttDIitwlXX1CM4sqdEW8RroDUNSU/pub?gid=439044630&single=true&output=csv";
+const SUMMARY_CSV_URL =
+    "https://docs.google.com/spreadsheets/d/e/2PACX-1vQHlE5IpmFYaQyW5u-rentH2fGC5VZJ2w9Ql1WI-X8bE76qlN5_ttDIitwlXX1CM4sqdEW8RroDUNSU/pub?gid=439044630&single=true&output=csv";
 
-    const CONTRIBUTIONS_CSV =
-        "https://docs.google.com/spreadsheets/d/e/2PACX-1vQHlE5IpmFYaQyW5u-rentH2fGC5VZJ2w9Ql1WI-X8bE76qlN5_ttDIitwlXX1CM4sqdEW8RroDUNSU/pub?gid=1555365618&single=true&output=csv";
+const CONTRIBUTIONS_CSV_URL =
+    "https://docs.google.com/spreadsheets/d/e/2PACX-1vQHlE5IpmFYaQyW5u-rentH2fGC5VZJ2w9Ql1WI-X8bE76qlN5_ttDIitwlXX1CM4sqdEW8RroDUNSU/pub?gid=1555365618&single=true&output=csv";
 
-    const EXPENSES_CSV =
-        "https://docs.google.com/spreadsheets/d/e/2PACX-1vQHlE5IpmFYaQyW5u-rentH2fGC5VZJ2w9Ql1WI-X8bE76qlN5_ttDIitwlXX1CM4sqdEW8RroDUNSU/pub?gid=1621695140&single=true&output=csv";
-
-
-    /* =========================================================
-       STORAGE
-       ========================================================= */
-
-    const LOGIN_STORAGE_KEY = "welfareLoggedIn";
-    const USER_STORAGE_KEY = "username";
+const EXPENSES_CSV_URL =
+    "https://docs.google.com/spreadsheets/d/e/2PACX-1vQHlE5IpmFYaQyW5u-rentH2fGC5VZJ2w9Ql1WI-X8bE76qlN5_ttDIitwlXX1CM4sqdEW8RroDUNSU/pub?gid=1621695140&single=true&output=csv";
 
 
-    /* =========================================================
-       STATE
-       ========================================================= */
+/* ============================================================
+   STORAGE KEYS
+   ============================================================ */
 
-    let transactions = [];
-    let currentPage = 0;
-    const itemsPerPage = 10;
-
-    let financeChart = null;
-
-    let failedLoginAttempts = 0;
-
-    let refreshTimer = null;
-
-    let loginControlsInitialized = false;
+const WELFARE_LOGIN_KEY = "welfareLoggedIn";
+const WELFARE_USERNAME_KEY = "username";
 
 
-    /* =========================================================
-       TOPBAR LOGIN
-       =========================================================
-       
-       layout.js builds the shared topbar. Because it can replace
-       the contents of #app-topbar, we watch for that and mount
-       the Welfare login controls after the shared layout exists.
-       ========================================================= */
+/* ============================================================
+   STATE
+   ============================================================ */
 
-    function createLoginMarkup() {
+let transactions = [];
 
-        const wrapper = document.createElement("div");
+let currentPage = 0;
 
-        wrapper.id = "welfareTopbarLogin";
-        wrapper.className = "welfare-topbar-login";
+const itemsPerPage = 10;
 
-        wrapper.innerHTML = `
-            <div id="loginOverlay" class="welfare-login-container">
+let financeChart = null;
 
-                <form class="welfare-login-form" autocomplete="on">
+let failedLoginAttempts = 0;
 
-                    <div class="welfare-login-brand" title="Welfare">
-                        <i class="fa-solid fa-shield-heart"></i>
-                    </div>
+let refreshTimer = null;
 
-                    <div class="welfare-login-field">
-                        <i class="fa-solid fa-user"></i>
 
-                        <input
-                            type="text"
-                            id="username"
-                            name="username"
-                            placeholder="Username"
-                            autocomplete="username"
-                            required
-                        >
-                    </div>
+/* ============================================================
+   DOM READY
+   ============================================================ */
 
-                    <div class="welfare-login-field password-field">
-                        <i class="fa-solid fa-lock"></i>
+document.addEventListener("DOMContentLoaded", () => {
 
-                        <input
-                            type="password"
-                            id="password"
-                            name="password"
-                            placeholder="Password"
-                            autocomplete="current-password"
-                            required
-                        >
+    initializeWelfare();
 
-                        <button
-                            type="button"
-                            class="welfare-password-toggle"
-                            aria-label="Show password"
-                        >
-                            <i class="fa-solid fa-eye"></i>
-                        </button>
-                    </div>
+});
 
-                    <button
-                        type="submit"
-                        id="loginBtn"
-                        class="welfare-login-btn"
-                    >
-                        <i class="fa-solid fa-right-to-bracket"></i>
-                        <span>Login</span>
-                    </button>
 
-                </form>
+/* ============================================================
+   INITIALIZE
+   ============================================================ */
 
-                <div
-                    id="loginError"
-                    class="welfare-login-error hidden"
-                ></div>
+function initializeWelfare() {
 
-            </div>
-        `;
+    const loginForm =
+        document.getElementById("welfareLoginForm");
 
-        return wrapper;
+    const loginBtn =
+        document.getElementById("loginBtn");
+
+    const logoutBtn =
+        document.getElementById("logoutBtn");
+
+    const togglePassword =
+        document.getElementById("togglePassword");
+
+    const prevPageBtn =
+        document.getElementById("prevPageBtn");
+
+    const nextPageBtn =
+        document.getElementById("nextPageBtn");
+
+
+    /* --------------------------------------------
+       LOGIN FORM
+       -------------------------------------------- */
+
+    if (loginForm) {
+
+        loginForm.addEventListener(
+            "submit",
+            handleLogin
+        );
+
     }
 
 
-    function createLoggedInMarkup(username) {
+    /* --------------------------------------------
+       LOGIN BUTTON FALLBACK
+       -------------------------------------------- */
 
-        const wrapper = document.createElement("div");
+    if (loginBtn) {
 
-        wrapper.id = "welfareLoggedInState";
-        wrapper.className = "welfare-logged-in-state";
+        loginBtn.addEventListener("click", (event) => {
 
-        wrapper.innerHTML = `
-            <div class="welfare-user-badge">
-                <i class="fa-solid fa-user-circle"></i>
-                <span>${escapeHtml(username || "User")}</span>
-            </div>
-
-            <button
-                type="button"
-                id="topbarWelfareLogout"
-                class="welfare-topbar-logout"
-            >
-                <i class="fa-solid fa-right-from-bracket"></i>
-                <span>Logout</span>
-            </button>
-        `;
-
-        return wrapper;
-    }
-
-
-    function mountWelfareLogin() {
-
-        const topbar = document.getElementById("app-topbar");
-
-        if (!topbar) {
-            return;
-        }
-
-        const loggedIn =
-            localStorage.getItem(LOGIN_STORAGE_KEY) === "true";
-
-        const username =
-            localStorage.getItem(USER_STORAGE_KEY) || "";
-
-
-        /* -----------------------------------------------------
-           If already mounted, update state only
-           ----------------------------------------------------- */
-
-        let existing =
-            document.getElementById("welfareTopbarLogin");
-
-        if (existing) {
-
-            if (loggedIn) {
-                showLoggedInTopbar(existing, username);
-            } else {
-                showLoginTopbar(existing);
+            if (
+                loginForm &&
+                event.target !== loginForm
+            ) {
+                // Submit is handled by the form.
             }
-
-            return;
-        }
-
-
-        /* -----------------------------------------------------
-           Create the Welfare topbar controls
-           ----------------------------------------------------- */
-
-        existing = createLoginMarkup();
-
-        topbar.appendChild(existing);
-
-
-        if (loggedIn) {
-            showLoggedInTopbar(existing, username);
-        } else {
-            showLoginTopbar(existing);
-        }
-
-        bindLoginControls(existing);
-    }
-
-
-    function showLoginTopbar(wrapper) {
-
-        const loginOverlay =
-            wrapper.querySelector("#loginOverlay");
-
-        if (loginOverlay) {
-            loginOverlay.classList.remove("hidden");
-        }
-
-        const loggedInState =
-            wrapper.querySelector("#welfareLoggedInState");
-
-        if (loggedInState) {
-            loggedInState.remove();
-        }
-    }
-
-
-    function showLoggedInTopbar(wrapper, username) {
-
-        const loginOverlay =
-            wrapper.querySelector("#loginOverlay");
-
-        if (loginOverlay) {
-            loginOverlay.classList.add("hidden");
-        }
-
-        let loggedInState =
-            wrapper.querySelector("#welfareLoggedInState");
-
-        if (!loggedInState) {
-
-            loggedInState =
-                createLoggedInMarkup(username);
-
-            wrapper.appendChild(loggedInState);
-
-            const logoutButton =
-                loggedInState.querySelector("#topbarWelfareLogout");
-
-            if (logoutButton) {
-                logoutButton.addEventListener(
-                    "click",
-                    logout
-                );
-            }
-
-        } else {
-
-            const nameElement =
-                loggedInState.querySelector(
-                    ".welfare-user-badge span"
-                );
-
-            if (nameElement) {
-                nameElement.textContent =
-                    username || "User";
-            }
-        }
-    }
-
-
-    function bindLoginControls(wrapper) {
-
-        if (loginControlsInitialized) {
-            return;
-        }
-
-        const form =
-            wrapper.querySelector(".welfare-login-form");
-
-        const loginButton =
-            wrapper.querySelector("#loginBtn");
-
-        const passwordInput =
-            wrapper.querySelector("#password");
-
-        const togglePassword =
-            wrapper.querySelector(
-                ".welfare-password-toggle"
-            );
-
-        if (!form || !loginButton || !passwordInput) {
-            return;
-        }
-
-        loginControlsInitialized = true;
-
-
-        form.addEventListener("submit", function (event) {
-
-            event.preventDefault();
-
-            login();
 
         });
 
-
-        if (togglePassword) {
-
-            togglePassword.addEventListener(
-                "click",
-                function () {
-
-                    const icon =
-                        togglePassword.querySelector("i");
-
-                    if (passwordInput.type === "password") {
-
-                        passwordInput.type = "text";
-
-                        if (icon) {
-                            icon.className =
-                                "fa-solid fa-eye-slash";
-                        }
-
-                        togglePassword.setAttribute(
-                            "aria-label",
-                            "Hide password"
-                        );
-
-                    } else {
-
-                        passwordInput.type = "password";
-
-                        if (icon) {
-                            icon.className =
-                                "fa-solid fa-eye";
-                        }
-
-                        togglePassword.setAttribute(
-                            "aria-label",
-                            "Show password"
-                        );
-                    }
-                }
-            );
-        }
     }
 
 
-    /* =========================================================
-       TOPBAR OBSERVER
-       ========================================================= */
+    /* --------------------------------------------
+       LOGOUT
+       -------------------------------------------- */
 
-    function startTopbarObserver() {
+    if (logoutBtn) {
 
-        const observer = new MutationObserver(
-            function () {
-
-                window.requestAnimationFrame(
-                    function () {
-                        mountWelfareLogin();
-                    }
-                );
-
-            }
+        logoutBtn.addEventListener(
+            "click",
+            handleLogout
         );
 
-        observer.observe(
-            document.body,
+    }
+
+
+    /* --------------------------------------------
+       PASSWORD VISIBILITY
+       -------------------------------------------- */
+
+    if (togglePassword) {
+
+        togglePassword.addEventListener(
+            "click",
+            togglePasswordVisibility
+        );
+
+    }
+
+
+    /* --------------------------------------------
+       PAGINATION
+       -------------------------------------------- */
+
+    if (prevPageBtn) {
+
+        prevPageBtn.addEventListener(
+            "click",
+            previousPage
+        );
+
+    }
+
+    if (nextPageBtn) {
+
+        nextPageBtn.addEventListener(
+            "click",
+            nextPage
+        );
+
+    }
+
+
+    /* --------------------------------------------
+       RESTORE SESSION
+       -------------------------------------------- */
+
+    restoreWelfareSession();
+
+}
+
+
+/* ============================================================
+   RESTORE SESSION
+   ============================================================ */
+
+function restoreWelfareSession() {
+
+    const loggedIn =
+        localStorage.getItem(WELFARE_LOGIN_KEY);
+
+    if (loggedIn === "true") {
+
+        showDashboard();
+
+        loadWelfareData();
+
+        startAutoRefresh();
+
+    } else {
+
+        showLogin();
+
+    }
+
+}
+
+
+/* ============================================================
+   LOGIN
+   ============================================================ */
+
+async function handleLogin(event) {
+
+    event.preventDefault();
+
+    const usernameInput =
+        document.getElementById("username");
+
+    const passwordInput =
+        document.getElementById("password");
+
+    const loginBtn =
+        document.getElementById("loginBtn");
+
+    const loginError =
+        document.getElementById("loginError");
+
+
+    const username =
+        usernameInput
+            ? usernameInput.value.trim()
+            : "";
+
+    const password =
+        passwordInput
+            ? passwordInput.value
+            : "";
+
+
+    /* --------------------------------------------
+       VALIDATION
+       -------------------------------------------- */
+
+    if (!username || !password) {
+
+        showLoginError(
+            "Please enter your username and password."
+        );
+
+        return;
+
+    }
+
+
+    /* --------------------------------------------
+       BUTTON STATE
+       -------------------------------------------- */
+
+    setLoginButtonLoading(true);
+
+    clearLoginError();
+
+
+    try {
+
+        /*
+         * The Apps Script endpoint accepts the login
+         * request as JSON.
+         */
+        const response = await fetch(
+            WELFARE_API_URL,
             {
-                childList: true,
-                subtree: true
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "text/plain;charset=utf-8"
+                },
+
+                body: JSON.stringify({
+                    action: "login",
+                    username: username,
+                    password: password
+                })
             }
         );
 
-        mountWelfareLogin();
-    }
 
+        if (!response.ok) {
 
-    /* =========================================================
-       LOGIN
-       ========================================================= */
-
-    async function login() {
-
-        const usernameInput =
-            document.getElementById("username");
-
-        const passwordInput =
-            document.getElementById("password");
-
-        const loginButton =
-            document.getElementById("loginBtn");
-
-        const loginError =
-            document.getElementById("loginError");
-
-
-        if (!usernameInput || !passwordInput || !loginButton) {
-            return;
-        }
-
-
-        const username =
-            usernameInput.value.trim();
-
-        const password =
-            passwordInput.value;
-
-
-        if (!username || !password) {
-
-            showLoginError(
-                "Please enter your username and password."
+            throw new Error(
+                `Login request failed (${response.status}).`
             );
 
-            return;
         }
 
 
-        loginButton.disabled = true;
+        const rawText =
+            await response.text();
 
-        loginButton.innerHTML = `
-            <i class="fa-solid fa-spinner fa-spin"></i>
-            <span>Logging in...</span>
-        `;
-
-
-        hideLoginError();
+        let result;
 
 
         try {
 
-            const response =
-                await fetch(LOGIN_API, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type":
-                            "application/x-www-form-urlencoded"
-                    },
-                    body: new URLSearchParams({
-                        action: "login",
-                        username: username,
-                        password: password
-                    })
-                });
+            result =
+                JSON.parse(rawText);
+
+        } catch (parseError) {
+
+            throw new Error(
+                "The login server returned an invalid response."
+            );
+
+        }
 
 
-            if (!response.ok) {
-                throw new Error(
-                    "Unable to connect to the login service."
+        /*
+         * Support the normal success response and
+         * a few compatible response structures.
+         */
+        const loginSuccessful =
+            result?.success === true ||
+            result?.status === "success" ||
+            result?.authenticated === true ||
+            result?.ok === true ||
+            result?.result?.success === true;
+
+
+        if (!loginSuccessful) {
+
+            failedLoginAttempts++;
+
+            const message =
+                result?.message ||
+                result?.error ||
+                result?.result?.message ||
+                "Invalid username or password.";
+
+            showLoginError(message);
+
+            setLoginButtonLoading(false);
+
+
+            /*
+             * Original welfare behaviour:
+             * after 3 failed attempts, return to portal home.
+             */
+            if (failedLoginAttempts >= 3) {
+
+                showLoginError(
+                    "Too many failed login attempts. Returning to the portal..."
                 );
+
+                setTimeout(() => {
+
+                    window.location.href =
+                        "../index.html";
+
+                }, 3000);
+
             }
 
-
-            const result =
-                await response.json();
-
-
-            if (
-                result &&
-                (
-                    result.success === true ||
-                    result.status === "success"
-                )
-            ) {
-
-                failedLoginAttempts = 0;
-
-
-                /*
-                 * IMPORTANT:
-                 * localStorage is intentional.
-                 * Refreshing the page must NOT log the user out.
-                 */
-                localStorage.setItem(
-                    LOGIN_STORAGE_KEY,
-                    "true"
-                );
-
-                localStorage.setItem(
-                    USER_STORAGE_KEY,
-                    result.user || username
-                );
-
-
-                const wrapper =
-                    document.getElementById(
-                        "welfareTopbarLogin"
-                    );
-
-                if (wrapper) {
-                    showLoggedInTopbar(
-                        wrapper,
-                        result.user || username
-                    );
-                }
-
-
-                showDashboard();
-
-                await loadDashboardData();
-
-                startAutoRefresh();
-
-            } else {
-
-                failedLoginAttempts++;
-
-                const message =
-                    result && result.message
-                        ? result.message
-                        : "Invalid username or password.";
-
-                showLoginError(message);
-
-
-                if (failedLoginAttempts >= 3) {
-
-                    showLoginError(
-                        "Too many failed login attempts. Redirecting..."
-                    );
-
-                    setTimeout(function () {
-                        window.location.href =
-                            "../index.html";
-                    }, 3000);
-                }
-            }
-
-        } catch (error) {
-
-            console.error(
-                "Welfare login error:",
-                error
-            );
-
-            showLoginError(
-                "Unable to connect. Please try again."
-            );
-
-        } finally {
-
-            loginButton.disabled = false;
-
-            loginButton.innerHTML = `
-                <i class="fa-solid fa-right-to-bracket"></i>
-                <span>Login</span>
-            `;
-        }
-    }
-
-
-    /* =========================================================
-       LOGIN ERROR
-       ========================================================= */
-
-    function showLoginError(message) {
-
-        const errorElement =
-            document.getElementById("loginError");
-
-        if (!errorElement) {
             return;
+
         }
 
-        errorElement.textContent = message;
 
-        errorElement.classList.remove("hidden");
-    }
+        /* --------------------------------------------
+           LOGIN SUCCESS
+           -------------------------------------------- */
 
-
-    function hideLoginError() {
-
-        const errorElement =
-            document.getElementById("loginError");
-
-        if (!errorElement) {
-            return;
-        }
-
-        errorElement.textContent = "";
-
-        errorElement.classList.add("hidden");
-    }
+        failedLoginAttempts = 0;
 
 
-    /* =========================================================
-       DASHBOARD STATE
-       ========================================================= */
-
-    function showDashboard() {
-
-        const dashboard =
-            document.getElementById(
-                "dashboardContent"
-            );
-
-        if (dashboard) {
-            dashboard.classList.remove("hidden");
-        }
-    }
+        const returnedUsername =
+            result?.user ||
+            result?.username ||
+            result?.result?.user ||
+            username;
 
 
-    function hideDashboard() {
-
-        const dashboard =
-            document.getElementById(
-                "dashboardContent"
-            );
-
-        if (dashboard) {
-            dashboard.classList.add("hidden");
-        }
-    }
-
-
-    /* =========================================================
-       LOGOUT
-       ========================================================= */
-
-    function logout() {
-
-        localStorage.removeItem(
-            LOGIN_STORAGE_KEY
+        /*
+         * IMPORTANT:
+         * localStorage is deliberately used so a browser
+         * refresh does NOT log the user out.
+         *
+         * Only the Logout button removes these values.
+         */
+        localStorage.setItem(
+            WELFARE_LOGIN_KEY,
+            "true"
         );
 
-        localStorage.removeItem(
-            USER_STORAGE_KEY
+        localStorage.setItem(
+            WELFARE_USERNAME_KEY,
+            String(returnedUsername)
         );
-
-
-        stopAutoRefresh();
-
-
-        transactions = [];
-
-        currentPage = 0;
-
-
-        if (financeChart) {
-
-            financeChart.destroy();
-
-            financeChart = null;
-        }
-
-
-        hideDashboard();
-
-
-        const wrapper =
-            document.getElementById(
-                "welfareTopbarLogin"
-            );
-
-        if (wrapper) {
-
-            showLoginTopbar(wrapper);
-
-            loginControlsInitialized = false;
-
-            bindLoginControls(wrapper);
-        }
-
-
-        const usernameInput =
-            document.getElementById("username");
-
-        const passwordInput =
-            document.getElementById("password");
 
 
         if (usernameInput) {
@@ -686,176 +424,604 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
 
-        hideLoginError();
+        clearLoginError();
+
+        setLoginButtonLoading(false);
+
+        showDashboard();
+
+        await loadWelfareData();
+
+        startAutoRefresh();
+
+
+    } catch (error) {
+
+        console.error(
+            "Welfare login error:",
+            error
+        );
+
+        failedLoginAttempts++;
+
+        showLoginError(
+            error?.message ||
+            "Unable to sign in. Please try again."
+        );
+
+        setLoginButtonLoading(false);
+
+
+        if (failedLoginAttempts >= 3) {
+
+            showLoginError(
+                "Too many failed login attempts. Returning to the portal..."
+            );
+
+            setTimeout(() => {
+
+                window.location.href =
+                    "../index.html";
+
+            }, 3000);
+
+        }
+
+    }
+
+}
+
+
+/* ============================================================
+   LOGIN BUTTON LOADING
+   ============================================================ */
+
+function setLoginButtonLoading(isLoading) {
+
+    const loginBtn =
+        document.getElementById("loginBtn");
+
+    if (!loginBtn) {
+        return;
     }
 
 
-    /* =========================================================
-       DASHBOARD DATA
-       ========================================================= */
+    if (isLoading) {
 
-    async function loadDashboardData() {
+        loginBtn.disabled = true;
 
-        try {
+        loginBtn.innerHTML = `
+            <span class="login-btn-content">
+                <i class="ri-loader-4-line ri-spin"></i>
+                <span>Signing In...</span>
+            </span>
+        `;
 
-            await Promise.all([
-                loadSummary(),
-                loadTransactions()
-            ]);
+    } else {
 
-        } catch (error) {
+        loginBtn.disabled = false;
 
-            console.error(
-                "Welfare dashboard loading error:",
-                error
-            );
-        }
+        loginBtn.innerHTML = `
+            <span class="login-btn-content">
+                <i class="ri-login-box-line"></i>
+                <span>Sign In</span>
+            </span>
+        `;
+
+    }
+
+}
+
+
+/* ============================================================
+   LOGIN ERROR
+   ============================================================ */
+
+function showLoginError(message) {
+
+    const loginError =
+        document.getElementById("loginError");
+
+    if (!loginError) {
+        return;
+    }
+
+    loginError.textContent =
+        message || "";
+
+}
+
+
+/* ============================================================
+   CLEAR LOGIN ERROR
+   ============================================================ */
+
+function clearLoginError() {
+
+    const loginError =
+        document.getElementById("loginError");
+
+    if (!loginError) {
+        return;
+    }
+
+    loginError.textContent = "";
+
+}
+
+
+/* ============================================================
+   PASSWORD VISIBILITY
+   ============================================================ */
+
+function togglePasswordVisibility() {
+
+    const passwordInput =
+        document.getElementById("password");
+
+    const toggleButton =
+        document.getElementById("togglePassword");
+
+    if (!passwordInput || !toggleButton) {
+        return;
     }
 
 
-    /* =========================================================
-       SUMMARY
-       ========================================================= */
-
-    async function loadSummary() {
-
-        const response =
-            await fetch(
-                SUMMARY_CSV + "&t=" + Date.now()
-            );
+    const icon =
+        toggleButton.querySelector("i");
 
 
-        if (!response.ok) {
-            throw new Error(
-                "Unable to load welfare summary."
-            );
+    if (passwordInput.type === "password") {
+
+        passwordInput.type = "text";
+
+        toggleButton.setAttribute(
+            "aria-label",
+            "Hide password"
+        );
+
+        toggleButton.setAttribute(
+            "title",
+            "Hide password"
+        );
+
+        if (icon) {
+            icon.className = "ri-eye-off-line";
         }
 
+    } else {
 
-        const text =
-            await response.text();
+        passwordInput.type = "password";
 
+        toggleButton.setAttribute(
+            "aria-label",
+            "Show password"
+        );
 
-        const rows =
-            parseCSV(text);
+        toggleButton.setAttribute(
+            "title",
+            "Show password"
+        );
 
-
-        if (!rows || rows.length < 3) {
-            return;
+        if (icon) {
+            icon.className = "ri-eye-line";
         }
 
+    }
 
-        const totalContributions =
-            rows[0] && rows[0][1]
-                ? rows[0][1]
-                : 0;
-
-        const totalExpenses =
-            rows[1] && rows[1][1]
-                ? rows[1][1]
-                : 0;
-
-        const currentBalance =
-            rows[2] && rows[2][1]
-                ? rows[2][1]
-                : 0;
+}
 
 
-        setElementText(
-            "totalContributions",
-            formatCurrency(totalContributions)
-        );
+/* ============================================================
+   SHOW LOGIN
+   ============================================================ */
 
-        setElementText(
-            "totalExpenses",
-            formatCurrency(totalExpenses)
-        );
+function showLogin() {
 
-        setElementText(
-            "currentBalance",
-            formatCurrency(currentBalance)
-        );
+    const loginOverlay =
+        document.getElementById("loginOverlay");
+
+    const dashboardContent =
+        document.getElementById("dashboardContent");
 
 
-        renderFinanceChart(
-            totalContributions,
-            totalExpenses,
-            currentBalance
-        );
+    if (loginOverlay) {
+
+        loginOverlay.classList.remove("hidden");
+
     }
 
 
-    /* =========================================================
-       TRANSACTIONS
-       ========================================================= */
+    if (dashboardContent) {
 
-    async function loadTransactions() {
+        dashboardContent.classList.add("hidden");
+
+    }
+
+}
+
+
+/* ============================================================
+   SHOW DASHBOARD
+   ============================================================ */
+
+function showDashboard() {
+
+    const loginOverlay =
+        document.getElementById("loginOverlay");
+
+    const dashboardContent =
+        document.getElementById("dashboardContent");
+
+
+    if (loginOverlay) {
+
+        loginOverlay.classList.add("hidden");
+
+    }
+
+
+    if (dashboardContent) {
+
+        dashboardContent.classList.remove("hidden");
+
+    }
+
+}
+
+
+/* ============================================================
+   LOGOUT
+   ============================================================ */
+
+function handleLogout() {
+
+    /*
+     * Only the explicit Logout button removes
+     * the persistent welfare session.
+     */
+    localStorage.removeItem(
+        WELFARE_LOGIN_KEY
+    );
+
+    localStorage.removeItem(
+        WELFARE_USERNAME_KEY
+    );
+
+
+    stopAutoRefresh();
+
+
+    transactions = [];
+
+    currentPage = 0;
+
+
+    if (financeChart) {
+
+        financeChart.destroy();
+
+        financeChart = null;
+
+    }
+
+
+    const activityTable =
+        document.getElementById("activityTable");
+
+    if (activityTable) {
+
+        activityTable.innerHTML = `
+            <tr>
+                <td
+                    colspan="4"
+                    class="welfare-table-loading"
+                >
+                    Loading activity...
+                </td>
+            </tr>
+        `;
+
+    }
+
+
+    const usernameInput =
+        document.getElementById("username");
+
+    const passwordInput =
+        document.getElementById("password");
+
+
+    if (usernameInput) {
+        usernameInput.value = "";
+    }
+
+    if (passwordInput) {
+        passwordInput.value = "";
+    }
+
+
+    clearLoginError();
+
+    showLogin();
+
+}
+
+
+/* ============================================================
+   LOAD ALL WELFARE DATA
+   ============================================================ */
+
+async function loadWelfareData() {
+
+    try {
 
         const [
-            contributionsResponse,
-            expensesResponse
+            summaryRows,
+            contributionRows,
+            expenseRows
         ] = await Promise.all([
 
-            fetch(
-                CONTRIBUTIONS_CSV +
-                "&t=" +
-                Date.now()
-            ),
+            fetchCSV(SUMMARY_CSV_URL),
 
-            fetch(
-                EXPENSES_CSV +
-                "&t=" +
-                Date.now()
-            )
+            fetchCSV(CONTRIBUTIONS_CSV_URL),
+
+            fetchCSV(EXPENSES_CSV_URL)
 
         ]);
 
 
-        if (
-            !contributionsResponse.ok ||
-            !expensesResponse.ok
-        ) {
-            throw new Error(
-                "Unable to load welfare transactions."
-            );
+        updateSummary(summaryRows);
+
+        buildTransactions(
+            contributionRows,
+            expenseRows
+        );
+
+        renderTransactions();
+
+        renderFinanceChart(summaryRows);
+
+
+    } catch (error) {
+
+        console.error(
+            "Welfare data loading error:",
+            error
+        );
+
+        const activityTable =
+            document.getElementById("activityTable");
+
+        if (activityTable) {
+
+            activityTable.innerHTML = `
+                <tr>
+                    <td
+                        colspan="4"
+                        class="welfare-table-empty"
+                    >
+                        Unable to load welfare data.
+                    </td>
+                </tr>
+            `;
+
+        }
+
+    }
+
+}
+
+
+/* ============================================================
+   FETCH CSV
+   ============================================================ */
+
+async function fetchCSV(url) {
+
+    const response =
+        await fetch(
+            `${url}&_=${Date.now()}`,
+            {
+                cache: "no-store"
+            }
+        );
+
+
+    if (!response.ok) {
+
+        throw new Error(
+            `Unable to load CSV (${response.status}).`
+        );
+
+    }
+
+
+    const text =
+        await response.text();
+
+
+    return parseCSV(text);
+
+}
+
+
+/* ============================================================
+   CSV PARSER
+   ============================================================ */
+
+function parseCSV(text) {
+
+    const rows = [];
+
+    let row = [];
+
+    let cell = "";
+
+    let insideQuotes = false;
+
+
+    for (let i = 0; i < text.length; i++) {
+
+        const character =
+            text[i];
+
+        const nextCharacter =
+            text[i + 1];
+
+
+        if (character === '"' && insideQuotes && nextCharacter === '"') {
+
+            cell += '"';
+
+            i++;
+
+            continue;
+
         }
 
 
-        const contributionsText =
-            await contributionsResponse.text();
+        if (character === '"') {
 
-        const expensesText =
-            await expensesResponse.text();
+            insideQuotes =
+                !insideQuotes;
 
+            continue;
 
-        const contributionRows =
-            parseCSV(contributionsText);
-
-        const expenseRows =
-            parseCSV(expensesText);
+        }
 
 
-        transactions = [];
+        if (character === "," && !insideQuotes) {
+
+            row.push(cell);
+
+            cell = "";
+
+            continue;
+
+        }
 
 
-        /*
-         * Contributions:
-         * amount = row[3]
-         * title  = row[5]
-         * date   = row[1]
-         */
-
-        for (
-            let i = 1;
-            i < contributionRows.length;
-            i++
+        if (
+            (character === "\n" || character === "\r") &&
+            !insideQuotes
         ) {
 
-            const row =
-                contributionRows[i];
+            if (
+                character === "\r" &&
+                nextCharacter === "\n"
+            ) {
+                i++;
+            }
+
+
+            row.push(cell);
+
+            rows.push(row);
+
+            row = [];
+
+            cell = "";
+
+            continue;
+
+        }
+
+
+        cell += character;
+
+    }
+
+
+    if (cell !== "" || row.length > 0) {
+
+        row.push(cell);
+
+        rows.push(row);
+
+    }
+
+
+    return rows.map((currentRow) =>
+        currentRow.map((value) =>
+            String(value ?? "").trim()
+        )
+    );
+
+}
+
+
+/* ============================================================
+   UPDATE SUMMARY
+   ============================================================ */
+
+function updateSummary(rows) {
+
+    if (!Array.isArray(rows) || !rows.length) {
+        return;
+    }
+
+
+    const contributions =
+        rows[0]?.[1] || "0";
+
+    const expenses =
+        rows[1]?.[1] || "0";
+
+    const balance =
+        rows[2]?.[1] || "0";
+
+
+    setText(
+        "totalContributions",
+        formatCurrency(contributions)
+    );
+
+    setText(
+        "totalExpenses",
+        formatCurrency(expenses)
+    );
+
+    setText(
+        "currentBalance",
+        formatCurrency(balance)
+    );
+
+}
+
+
+/* ============================================================
+   BUILD TRANSACTIONS
+   ============================================================ */
+
+function buildTransactions(
+    contributionRows,
+    expenseRows
+) {
+
+    const contributionTransactions = [];
+
+    const expenseTransactions = [];
+
+
+    /*
+     * CONTRIBUTIONS
+     *
+     * Existing sheet mapping:
+     * amount = row[3]
+     * title  = row[5]
+     * date   = row[1]
+     */
+    if (Array.isArray(contributionRows)) {
+
+        contributionRows.forEach((row, index) => {
+
+            if (index === 0) {
+                return;
+            }
 
             if (!row || row.length < 6) {
-                continue;
+                return;
             }
 
 
@@ -864,890 +1030,796 @@ document.addEventListener("DOMContentLoaded", function () {
 
             const title =
                 row[5] ||
-                "Welfare Contribution";
+                "Contribution";
 
             const date =
-                row[1] || "";
+                row[1] ||
+                "";
 
 
-            if (!isNaN(amount)) {
-
-                transactions.push({
-                    date: date,
-                    title: title,
-                    amount: amount,
-                    type: "credit"
-                });
+            if (!amount && !title && !date) {
+                return;
             }
-        }
 
 
-        /*
-         * Expenses:
-         * amount = row[2]
-         * title  = row[3]
-         * date   = row[1]
-         */
+            contributionTransactions.push({
 
-        for (
-            let i = 1;
-            i < expenseRows.length;
-            i++
-        ) {
+                date: date,
 
-            const row =
-                expenseRows[i];
+                title: title,
+
+                amount: amount,
+
+                type: "credit"
+
+            });
+
+        });
+
+    }
+
+
+    /*
+     * EXPENSES
+     *
+     * Existing sheet mapping:
+     * date   = row[1]
+     * amount = row[2]
+     * title  = row[3]
+     */
+    if (Array.isArray(expenseRows)) {
+
+        expenseRows.forEach((row, index) => {
+
+            if (index === 0) {
+                return;
+            }
 
             if (!row || row.length < 4) {
-                continue;
+                return;
             }
 
+
+            const date =
+                row[1] ||
+                "";
 
             const amount =
                 parseAmount(row[2]);
 
             const title =
                 row[3] ||
-                "Welfare Expense";
-
-            const date =
-                row[1] || "";
+                "Expense";
 
 
-            if (!isNaN(amount)) {
-
-                transactions.push({
-                    date: date,
-                    title: title,
-                    amount: amount,
-                    type: "debit"
-                });
+            if (!amount && !title && !date) {
+                return;
             }
-        }
 
 
-        transactions.sort(
-            function (a, b) {
+            expenseTransactions.push({
 
-                const dateA =
-                    parseDateValue(a.date);
+                date: date,
 
-                const dateB =
-                    parseDateValue(b.date);
+                title: title,
 
-                return dateB - dateA;
-            }
-        );
+                amount: amount,
 
+                type: "debit"
 
-        currentPage = 0;
+            });
 
-        renderTransactions();
+        });
+
     }
 
 
-    /* =========================================================
-       TRANSACTION RENDERING
-       ========================================================= */
-
-    function renderTransactions() {
-
-        const table =
-            document.getElementById(
-                "activityTable"
-            );
-
-        const pageNumber =
-            document.getElementById(
-                "pageNumber"
-            );
-
-        const prevButton =
-            document.getElementById(
-                "prevPageBtn"
-            );
-
-        const nextButton =
-            document.getElementById(
-                "nextPageBtn"
-            );
+    transactions = [
+        ...contributionTransactions,
+        ...expenseTransactions
+    ];
 
 
-        if (!table) {
-            return;
+    transactions.sort(
+        (a, b) => {
+
+            const dateA =
+                parseDateValue(a.date);
+
+            const dateB =
+                parseDateValue(b.date);
+
+            return dateB - dateA;
+
         }
+    );
 
 
-        if (!transactions.length) {
+    currentPage = 0;
 
-            table.innerHTML = `
-                <tr>
-                    <td
-                        colspan="4"
-                        class="table-empty"
-                    >
-                        No transactions found.
-                    </td>
-                </tr>
-            `;
+}
 
 
-            if (pageNumber) {
-                pageNumber.textContent =
-                    "Page 1";
-            }
+/* ============================================================
+   RENDER TRANSACTIONS
+   ============================================================ */
+
+function renderTransactions() {
+
+    const activityTable =
+        document.getElementById("activityTable");
+
+    const pageNumber =
+        document.getElementById("pageNumber");
+
+    const prevPageBtn =
+        document.getElementById("prevPageBtn");
+
+    const nextPageBtn =
+        document.getElementById("nextPageBtn");
 
 
-            if (prevButton) {
-                prevButton.disabled = true;
-            }
-
-            if (nextButton) {
-                nextButton.disabled = true;
-            }
-
-            return;
-        }
+    if (!activityTable) {
+        return;
+    }
 
 
-        const start =
-            currentPage * itemsPerPage;
-
-        const end =
-            start + itemsPerPage;
-
-
-        const pageTransactions =
-            transactions.slice(start, end);
-
-
-        table.innerHTML =
-            pageTransactions.map(
-                function (transaction) {
-
-                    const isCredit =
-                        transaction.type === "credit";
-
-
-                    const typeClass =
-                        isCredit
-                            ? "credit"
-                            : "debit";
-
-
-                    const typeIcon =
-                        isCredit
-                            ? "fa-arrow-down"
-                            : "fa-arrow-up";
-
-
-                    const typeLabel =
-                        isCredit
-                            ? "Contribution"
-                            : "Expense";
-
-
-                    const sign =
-                        isCredit
-                            ? "+"
-                            : "-";
-
-
-                    return `
-                        <tr>
-
-                            <td>
-                                ${escapeHtml(
-                                    formatDate(
-                                        transaction.date
-                                    )
-                                )}
-                            </td>
-
-                            <td>
-                                ${escapeHtml(
-                                    transaction.title
-                                )}
-                            </td>
-
-                            <td>
-                                <span
-                                    class="transaction-type ${typeClass}"
-                                >
-                                    <i class="fa-solid ${typeIcon}"></i>
-                                    ${typeLabel}
-                                </span>
-                            </td>
-
-                            <td>
-                                <span
-                                    class="transaction-amount ${typeClass}"
-                                >
-                                    ${sign}${formatCurrency(
-                                        transaction.amount
-                                    )}
-                                </span>
-                            </td>
-
-                        </tr>
-                    `;
-                }
-            ).join("");
-
-
-        const totalPages =
+    const totalPages =
+        Math.max(
+            1,
             Math.ceil(
                 transactions.length /
                 itemsPerPage
-            );
+            )
+        );
 
 
-        if (pageNumber) {
+    if (currentPage >= totalPages) {
 
-            pageNumber.textContent =
-                "Page " +
-                (currentPage + 1) +
-                " of " +
-                totalPages;
-        }
+        currentPage =
+            totalPages - 1;
 
-
-        if (prevButton) {
-            prevButton.disabled =
-                currentPage === 0;
-        }
-
-
-        if (nextButton) {
-            nextButton.disabled =
-                currentPage >= totalPages - 1;
-        }
     }
 
 
-    /* =========================================================
-       PAGINATION
-       ========================================================= */
+    if (currentPage < 0) {
 
-    function previousPage() {
+        currentPage = 0;
 
-        if (currentPage <= 0) {
-            return;
-        }
+    }
+
+
+    const startIndex =
+        currentPage * itemsPerPage;
+
+    const endIndex =
+        startIndex + itemsPerPage;
+
+
+    const pageTransactions =
+        transactions.slice(
+            startIndex,
+            endIndex
+        );
+
+
+    if (!pageTransactions.length) {
+
+        activityTable.innerHTML = `
+            <tr>
+                <td
+                    colspan="4"
+                    class="welfare-table-empty"
+                >
+                    No welfare activity found.
+                </td>
+            </tr>
+        `;
+
+    } else {
+
+        activityTable.innerHTML =
+            pageTransactions
+                .map(renderTransactionRow)
+                .join("");
+
+    }
+
+
+    if (pageNumber) {
+
+        pageNumber.textContent =
+            `Page ${currentPage + 1} of ${totalPages}`;
+
+    }
+
+
+    if (prevPageBtn) {
+
+        prevPageBtn.disabled =
+            currentPage === 0;
+
+    }
+
+
+    if (nextPageBtn) {
+
+        nextPageBtn.disabled =
+            currentPage >= totalPages - 1;
+
+    }
+
+}
+
+
+/* ============================================================
+   RENDER TRANSACTION ROW
+   ============================================================ */
+
+function renderTransactionRow(transaction) {
+
+    const isCredit =
+        transaction.type === "credit";
+
+
+    const typeLabel =
+        isCredit
+            ? "Contribution"
+            : "Expense";
+
+
+    const amountPrefix =
+        isCredit
+            ? "+"
+            : "-";
+
+
+    const amountClass =
+        isCredit
+            ? "transaction-credit"
+            : "transaction-debit";
+
+
+    const typeClass =
+        isCredit
+            ? "credit"
+            : "debit";
+
+
+    return `
+        <tr>
+
+            <td>
+                ${escapeHTML(
+                    formatDate(transaction.date)
+                )}
+            </td>
+
+            <td>
+                ${escapeHTML(
+                    transaction.title
+                )}
+            </td>
+
+            <td>
+                <span
+                    class="transaction-type ${typeClass}"
+                >
+                    ${typeLabel}
+                </span>
+            </td>
+
+            <td
+                class="${amountClass}"
+            >
+                ${amountPrefix}${formatCurrency(
+                    transaction.amount
+                )}
+            </td>
+
+        </tr>
+    `;
+
+}
+
+
+/* ============================================================
+   PREVIOUS PAGE
+   ============================================================ */
+
+function previousPage() {
+
+    if (currentPage > 0) {
 
         currentPage--;
 
         renderTransactions();
+
     }
 
-
-    function nextPage() {
-
-        const totalPages =
-            Math.ceil(
-                transactions.length /
-                itemsPerPage
-            );
+}
 
 
-        if (currentPage >= totalPages - 1) {
-            return;
-        }
+/* ============================================================
+   NEXT PAGE
+   ============================================================ */
 
+function nextPage() {
+
+    const totalPages =
+        Math.ceil(
+            transactions.length /
+            itemsPerPage
+        );
+
+
+    if (
+        currentPage <
+        totalPages - 1
+    ) {
 
         currentPage++;
 
         renderTransactions();
+
+    }
+
+}
+
+
+/*
+ * Keep these globally available in case another
+ * existing part of the page calls them.
+ */
+window.prevPage = previousPage;
+window.nextPage = nextPage;
+
+
+/* ============================================================
+   FINANCE CHART
+   ============================================================ */
+
+function renderFinanceChart(summaryRows) {
+
+    const canvas =
+        document.getElementById("financeChart");
+
+    if (!canvas) {
+        return;
     }
 
 
-    /* =========================================================
-       CHART
-       ========================================================= */
-
-    function renderFinanceChart(
-        contributions,
-        expenses,
-        balance
+    if (
+        typeof Chart === "undefined"
     ) {
 
-        const canvas =
-            document.getElementById(
-                "financeChart"
-            );
+        console.warn(
+            "Chart.js is not available."
+        );
+
+        return;
+
+    }
 
 
-        if (!canvas) {
-            return;
-        }
+    const contributions =
+        parseAmount(
+            summaryRows?.[0]?.[1]
+        );
+
+    const expenses =
+        parseAmount(
+            summaryRows?.[1]?.[1]
+        );
+
+    const balance =
+        parseAmount(
+            summaryRows?.[2]?.[1]
+        );
 
 
-        if (typeof Chart === "undefined") {
-            return;
-        }
+    if (financeChart) {
+
+        financeChart.destroy();
+
+        financeChart = null;
+
+    }
 
 
-        const contributionValue =
-            parseAmount(contributions);
+    financeChart =
+        new Chart(
+            canvas,
+            {
+                type: "bar",
 
-        const expenseValue =
-            parseAmount(expenses);
+                data: {
 
-        const balanceValue =
-            parseAmount(balance);
+                    labels: [
+                        "Contributions",
+                        "Expenses",
+                        "Balance"
+                    ],
 
+                    datasets: [
+                        {
+                            data: [
+                                contributions,
+                                expenses,
+                                balance
+                            ],
 
-        if (financeChart) {
+                            borderWidth: 0,
 
-            financeChart.destroy();
+                            borderRadius: 7,
 
-            financeChart = null;
-        }
+                            maxBarThickness: 55
+                        }
+                    ]
 
+                },
 
-        financeChart =
-            new Chart(
-                canvas.getContext("2d"),
-                {
-                    type: "bar",
+                options: {
 
-                    data: {
+                    responsive: true,
 
-                        labels: [
-                            "Contributions",
-                            "Expenses",
-                            "Balance"
-                        ],
+                    maintainAspectRatio: false,
 
-                        datasets: [
-                            {
-                                data: [
-                                    contributionValue,
-                                    expenseValue,
-                                    balanceValue
-                                ],
+                    plugins: {
 
-                                backgroundColor: [
-                                    "#4A0754",
-                                    "#EA580C",
-                                    "#0891B2"
-                                ],
+                        legend: {
+                            display: false
+                        },
 
-                                borderRadius: 8,
+                        tooltip: {
 
-                                borderSkipped: false,
+                            callbacks: {
 
-                                barThickness: 42,
+                                label: function(context) {
 
-                                maxBarThickness: 48
+                                    return (
+                                        " ₦" +
+                                        Number(
+                                            context.raw || 0
+                                        ).toLocaleString(
+                                            "en-NG"
+                                        )
+                                    );
+
+                                }
+
                             }
-                        ]
+
+                        }
+
                     },
 
-                    options: {
+                    scales: {
 
-                        responsive: true,
+                        x: {
 
-                        maintainAspectRatio: false,
-
-                        plugins: {
-
-                            legend: {
+                            grid: {
                                 display: false
                             },
 
-                            tooltip: {
-
-                                callbacks: {
-
-                                    label:
-                                        function (
-                                            context
-                                        ) {
-
-                                            return (
-                                                " " +
-                                                formatCurrency(
-                                                    context.raw
-                                                )
-                                            );
-                                        }
+                            ticks: {
+                                font: {
+                                    family:
+                                        "DM Sans",
+                                    size: 11
                                 }
                             }
+
                         },
 
-                        scales: {
+                        y: {
 
-                            x: {
+                            beginAtZero: true,
 
-                                grid: {
-                                    display: false
-                                },
-
-                                ticks: {
-                                    font: {
-                                        family:
-                                            "DM Sans",
-                                        size: 10
-                                    }
-                                }
+                            grid: {
+                                color:
+                                    "rgba(10, 0, 22, 0.06)"
                             },
 
-                            y: {
+                            ticks: {
 
-                                beginAtZero: true,
-
-                                grid: {
-                                    color:
-                                        "#eeeeef"
+                                font: {
+                                    family:
+                                        "DM Sans",
+                                    size: 10
                                 },
 
-                                ticks: {
+                                callback: function(value) {
 
-                                    font: {
-                                        family:
-                                            "DM Sans",
-                                        size: 9
-                                    },
-
-                                    callback:
-                                        function (
+                                    return (
+                                        "₦" +
+                                        Number(
                                             value
-                                        ) {
-                                            return formatCompactCurrency(
-                                                value
-                                            );
-                                        }
+                                        ).toLocaleString(
+                                            "en-NG"
+                                        )
+                                    );
+
                                 }
+
                             }
+
                         }
+
                     }
+
                 }
-            );
-    }
+
+            }
+        );
+
+}
 
 
-    /* =========================================================
-       AUTO REFRESH
-       ========================================================= */
+/* ============================================================
+   AUTO REFRESH
+   ============================================================ */
 
-    function startAutoRefresh() {
+function startAutoRefresh() {
 
-        stopAutoRefresh();
-
-
-        refreshTimer =
-            setInterval(
-                async function () {
-
-                    if (
-                        localStorage.getItem(
-                            LOGIN_STORAGE_KEY
-                        ) !== "true"
-                    ) {
-                        return;
-                    }
+    stopAutoRefresh();
 
 
-                    try {
+    refreshTimer =
+        setInterval(
+            () => {
 
-                        await loadDashboardData();
-
-                    } catch (error) {
-
-                        console.error(
-                            "Welfare auto-refresh error:",
-                            error
-                        );
-                    }
-
-                },
-                30000
-            );
-    }
+                const loggedIn =
+                    localStorage.getItem(
+                        WELFARE_LOGIN_KEY
+                    );
 
 
-    function stopAutoRefresh() {
+                if (loggedIn === "true") {
 
-        if (refreshTimer) {
-
-            clearInterval(
-                refreshTimer
-            );
-
-            refreshTimer = null;
-        }
-    }
-
-
-    /* =========================================================
-       CSV PARSER
-       ========================================================= */
-
-    function parseCSV(text) {
-
-        const rows = [];
-
-        let row = [];
-
-        let value = "";
-
-        let insideQuotes = false;
-
-
-        for (
-            let i = 0;
-            i < text.length;
-            i++
-        ) {
-
-            const character =
-                text[i];
-
-            const nextCharacter =
-                text[i + 1];
-
-
-            if (character === '"') {
-
-                if (
-                    insideQuotes &&
-                    nextCharacter === '"'
-                ) {
-
-                    value += '"';
-
-                    i++;
+                    loadWelfareData();
 
                 } else {
 
-                    insideQuotes =
-                        !insideQuotes;
+                    stopAutoRefresh();
+
                 }
 
-                continue;
-            }
+            },
+            30000
+        );
+
+}
 
 
-            if (
-                character === "," &&
-                !insideQuotes
-            ) {
+/* ============================================================
+   STOP AUTO REFRESH
+   ============================================================ */
 
-                row.push(value);
+function stopAutoRefresh() {
 
-                value = "";
+    if (refreshTimer) {
 
-                continue;
-            }
+        clearInterval(
+            refreshTimer
+        );
 
+        refreshTimer = null;
 
-            if (
-                (
-                    character === "\n" ||
-                    character === "\r"
-                ) &&
-                !insideQuotes
-            ) {
-
-                if (
-                    character === "\r" &&
-                    nextCharacter === "\n"
-                ) {
-                    i++;
-                }
-
-
-                row.push(value);
-
-                rows.push(row);
-
-                row = [];
-
-                value = "";
-
-                continue;
-            }
-
-
-            value += character;
-        }
-
-
-        if (value.length > 0 || row.length > 0) {
-
-            row.push(value);
-
-            rows.push(row);
-        }
-
-
-        return rows;
     }
 
-
-    /* =========================================================
-       HELPERS
-       ========================================================= */
-
-    function parseAmount(value) {
-
-        if (
-            value === null ||
-            value === undefined
-        ) {
-            return 0;
-        }
+}
 
 
-        const cleaned =
-            String(value)
-                .replace(/[₦,\s]/g, "")
-                .replace(/[^\d.-]/g, "");
+/* ============================================================
+   PARSE AMOUNT
+   ============================================================ */
 
+function parseAmount(value) {
 
-        const number =
-            parseFloat(cleaned);
-
-
-        return isNaN(number)
-            ? 0
-            : number;
-    }
-
-
-    function formatCurrency(value) {
-
-        const amount =
-            parseAmount(value);
-
-
-        return "₦" +
-            amount.toLocaleString(
-                "en-NG",
-                {
-                    minimumFractionDigits: 0,
-                    maximumFractionDigits: 2
-                }
-            );
-    }
-
-
-    function formatCompactCurrency(value) {
-
-        const amount =
-            parseAmount(value);
-
-
-        if (amount >= 1000000) {
-
-            return (
-                "₦" +
-                (amount / 1000000)
-                    .toFixed(1) +
-                "M"
-            );
-        }
-
-
-        if (amount >= 1000) {
-
-            return (
-                "₦" +
-                (amount / 1000)
-                    .toFixed(1) +
-                "K"
-            );
-        }
-
-
-        return "₦" +
-            amount.toLocaleString(
-                "en-NG"
-            );
-    }
-
-
-    function parseDateValue(value) {
-
-        if (!value) {
-            return 0;
-        }
-
-
-        const date =
-            new Date(value);
-
-
-        if (!isNaN(date.getTime())) {
-            return date.getTime();
-        }
-
-
-        /*
-         * Handles common DD/MM/YYYY style
-         * dates if the browser does not parse them.
-         */
-
-        const match =
-            String(value).match(
-                /^(\d{1,2})[\/-](\d{1,2})[\/-](\d{4})$/
-            );
-
-
-        if (match) {
-
-            const day =
-                parseInt(match[1], 10);
-
-            const month =
-                parseInt(match[2], 10) - 1;
-
-            const year =
-                parseInt(match[3], 10);
-
-
-            return new Date(
-                year,
-                month,
-                day
-            ).getTime();
-        }
-
-
-        return 0;
-    }
-
-
-    function formatDate(value) {
-
-        if (!value) {
-            return "—";
-        }
-
-
-        const timestamp =
-            parseDateValue(value);
-
-
-        if (!timestamp) {
-            return value;
-        }
-
-
-        return new Date(timestamp)
-            .toLocaleDateString(
-                "en-NG",
-                {
-                    day: "2-digit",
-                    month: "short",
-                    year: "numeric"
-                }
-            );
-    }
-
-
-    function setElementText(
-        id,
-        value
+    if (
+        value === null ||
+        value === undefined
     ) {
 
-        const element =
-            document.getElementById(id);
+        return 0;
+
+    }
 
 
-        if (element) {
-            element.textContent = value;
+    if (typeof value === "number") {
+
+        return Number.isFinite(value)
+            ? value
+            : 0;
+
+    }
+
+
+    const cleaned =
+        String(value)
+            .replace(/[₦,\s]/g, "")
+            .replace(/[^\d.-]/g, "");
+
+
+    const number =
+        parseFloat(cleaned);
+
+
+    return Number.isFinite(number)
+        ? number
+        : 0;
+
+}
+
+
+/* ============================================================
+   FORMAT CURRENCY
+   ============================================================ */
+
+function formatCurrency(value) {
+
+    const amount =
+        parseAmount(value);
+
+
+    return (
+        "₦" +
+        amount.toLocaleString(
+            "en-NG",
+            {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2
+            }
+        )
+    );
+
+}
+
+
+/* ============================================================
+   FORMAT DATE
+   ============================================================ */
+
+function formatDate(value) {
+
+    if (!value) {
+        return "—";
+    }
+
+
+    const date =
+        parseDateValue(value);
+
+
+    if (
+        Number.isNaN(
+            date.getTime()
+        )
+    ) {
+
+        return String(value);
+
+    }
+
+
+    return date.toLocaleDateString(
+        "en-NG",
+        {
+            day: "2-digit",
+            month: "short",
+            year: "numeric"
         }
+    );
+
+}
+
+
+/* ============================================================
+   PARSE DATE
+   ============================================================ */
+
+function parseDateValue(value) {
+
+    if (!value) {
+
+        return new Date(0);
+
     }
 
 
-    function escapeHtml(value) {
+    const date =
+        new Date(value);
 
-        return String(value)
-            .replace(/&/g, "&amp;")
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;")
-            .replace(/"/g, "&quot;")
-            .replace(/'/g, "&#039;");
+
+    if (!Number.isNaN(date.getTime())) {
+
+        return date;
+
     }
 
 
-    /* =========================================================
-       BUTTON EVENTS
-       ========================================================= */
-
-    const prevPageButton =
-        document.getElementById(
-            "prevPageBtn"
-        );
-
-    const nextPageButton =
-        document.getElementById(
-            "nextPageBtn"
-        );
-
-    const logoutButton =
-        document.getElementById(
-            "logoutBtn"
+    /*
+     * Fallback for common DD/MM/YYYY
+     * or DD-MM-YYYY values.
+     */
+    const match =
+        String(value).match(
+            /^(\d{1,2})[\/-](\d{1,2})[\/-](\d{2,4})$/
         );
 
 
-    if (prevPageButton) {
+    if (match) {
 
-        prevPageButton.addEventListener(
-            "click",
-            previousPage
+        let year =
+            parseInt(
+                match[3],
+                10
+            );
+
+        if (year < 100) {
+            year += 2000;
+        }
+
+
+        return new Date(
+            year,
+            parseInt(match[2], 10) - 1,
+            parseInt(match[1], 10)
         );
+
     }
 
 
-    if (nextPageButton) {
+    return new Date(0);
 
-        nextPageButton.addEventListener(
-            "click",
-            nextPage
-        );
+}
+
+
+/* ============================================================
+   SET TEXT
+   ============================================================ */
+
+function setText(id, value) {
+
+    const element =
+        document.getElementById(id);
+
+    if (element) {
+
+        element.textContent =
+            value;
+
     }
 
+}
 
-    if (logoutButton) {
 
-        logoutButton.addEventListener(
-            "click",
-            logout
-        );
+/* ============================================================
+   ESCAPE HTML
+   ============================================================ */
+
+function escapeHTML(value) {
+
+    return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+}
+
+
+/* ============================================================
+   CLEANUP
+   ============================================================ */
+
+window.addEventListener(
+    "beforeunload",
+    () => {
+
+        stopAutoRefresh();
+
     }
-
-
-    /* =========================================================
-       INITIAL SESSION CHECK
-       ========================================================= */
-
-    const alreadyLoggedIn =
-        localStorage.getItem(
-            LOGIN_STORAGE_KEY
-        ) === "true";
-
-
-    if (alreadyLoggedIn) {
-
-        showDashboard();
-
-        loadDashboardData();
-
-        startAutoRefresh();
-
-    } else {
-
-        hideDashboard();
-    }
-
-
-    /* =========================================================
-       START TOPBAR HANDLING
-       ========================================================= */
-
-    startTopbarObserver();
-
-});
+);
