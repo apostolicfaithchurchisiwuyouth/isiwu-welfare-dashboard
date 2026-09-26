@@ -1,177 +1,399 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>AFC Isiu Youth Portal | Welfare Dashboard</title>
 
-    <meta name="theme-color" content="#4A0754">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta
+        name="theme-color"
+        content="#4A0754"
+    >
 
-    <link rel="manifest" href="../manifest.json">
+    <meta
+        name="apple-mobile-web-app-capable"
+        content="yes"
+    >
+
+    <meta
+        name="apple-mobile-web-app-status-bar-style"
+        content="default"
+    >
+
+    <link
+        rel="manifest"
+        href="../manifest.json"
+    >
+
+    <!-- ======================================================
+         FONTS
+         ====================================================== -->
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
 
     <link
         href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap"
         rel="stylesheet"
     >
 
+    <!-- ======================================================
+         REMIX ICON
+         ====================================================== -->
+
     <link
+        href="https://cdn.jsdelivr.net/npm/remixicon@4.6.0/fonts/remixicon.css"
         rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
     >
 
-    <link rel="stylesheet" href="../css/main.css">
-    <link rel="stylesheet" href="../css/layout.css">
-    <link rel="stylesheet" href="../css/welfare.css">
+    <!-- ======================================================
+         SHARED PORTAL CSS
+         ====================================================== -->
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link
+        rel="stylesheet"
+        href="../css/main.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="../css/layout.css"
+    >
+
+    <!-- ======================================================
+         WELFARE CSS
+         ====================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="../css/welfare.css"
+    >
+
+    <!-- ======================================================
+         CHART.JS
+         ====================================================== -->
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/chart.js"
+    ></script>
+
 </head>
+
 
 <body>
 
 <div class="app-layout">
 
-    <!-- Shared sidebar -->
+    <!-- ======================================================
+         SHARED SIDEBAR
+         ====================================================== -->
+
     <div id="app-sidebar"></div>
+
 
     <div class="main-area">
 
-        <!-- Shared portal topbar -->
+        <!-- ==================================================
+             SHARED TOPBAR
+
+             layout.js builds the normal portal header here.
+             welfare.js adds the Welfare login to the header
+             without destroying the existing portal header.
+             ================================================== -->
+
         <div id="app-topbar"></div>
+
+
+        <!-- ==================================================
+             MAIN CONTENT
+             ================================================== -->
 
         <main class="dashboard-content welfare-page">
 
-            <!-- Welfare login is injected into the shared topbar by welfare.js -->
 
-            <!-- Dashboard -->
-            <section id="dashboardContent" class="welfare-dashboard hidden">
+            <!-- =================================================
+                 LOGIN AREA
 
-                <!-- Page heading -->
+                 This is deliberately NOT a large page overlay.
+
+                 welfare.js mounts it into the shared topbar.
+                 ================================================= -->
+
+            <div
+                id="welfareLoginMount"
+                class="welfare-login-mount"
+                aria-hidden="true"
+            ></div>
+
+
+            <!-- =================================================
+                 DASHBOARD
+                 ================================================= -->
+
+            <section
+                id="dashboardContent"
+                class="welfare-dashboard hidden"
+            >
+
+                <!-- =============================================
+                     PAGE HEADING
+                     ============================================= -->
+
                 <div class="welfare-page-heading">
+
                     <div>
+
                         <span class="welfare-eyebrow">
-                            <i class="fa-solid fa-shield-heart"></i>
+                            <i class="ri-shield-star-line"></i>
                             Welfare Management
                         </span>
 
-                        <h1>Welfare Dashboard</h1>
+                        <h1>
+                            Welfare Dashboard
+                        </h1>
 
                         <p>
-                            Monitor welfare contributions, expenses and the current welfare balance.
+                            Monitor welfare contributions,
+                            expenses and the current welfare balance.
                         </p>
+
                     </div>
+
 
                     <button
                         id="logoutBtn"
                         class="welfare-logout-btn"
                         type="button"
                     >
-                        <i class="fa-solid fa-right-from-bracket"></i>
-                        <span>Logout</span>
+
+                        <i class="ri-logout-box-r-line"></i>
+
+                        <span>
+                            Logout
+                        </span>
+
                     </button>
+
                 </div>
 
-                <!-- Summary cards -->
+
+                <!-- =============================================
+                     SUMMARY CARDS
+                     ============================================= -->
+
                 <section class="welfare-summary-grid">
 
-                    <article class="welfare-summary-card contribution-card">
+
+                    <!-- Contributions -->
+
+                    <article class="welfare-summary-card">
+
                         <div class="summary-icon">
-                            <i class="fa-solid fa-arrow-trend-up"></i>
+
+                            <i class="ri-arrow-up-circle-line"></i>
+
                         </div>
 
                         <div class="summary-content">
-                            <span>Total Contributions</span>
-                            <strong id="totalContributions">₦0</strong>
+
+                            <span>
+                                Total Contributions
+                            </span>
+
+                            <strong id="totalContributions">
+                                ₦0
+                            </strong>
+
                         </div>
+
                     </article>
 
-                    <article class="welfare-summary-card expense-card">
-                        <div class="summary-icon">
-                            <i class="fa-solid fa-arrow-trend-down"></i>
+
+                    <!-- Expenses -->
+
+                    <article class="welfare-summary-card">
+
+                        <div class="summary-icon expense-icon">
+
+                            <i class="ri-arrow-down-circle-line"></i>
+
                         </div>
 
                         <div class="summary-content">
-                            <span>Total Expenses</span>
-                            <strong id="totalExpenses">₦0</strong>
+
+                            <span>
+                                Total Expenses
+                            </span>
+
+                            <strong id="totalExpenses">
+                                ₦0
+                            </strong>
+
                         </div>
+
                     </article>
 
-                    <article class="welfare-summary-card balance-card">
-                        <div class="summary-icon">
-                            <i class="fa-solid fa-wallet"></i>
+
+                    <!-- Balance -->
+
+                    <article class="welfare-summary-card">
+
+                        <div class="summary-icon balance-icon">
+
+                            <i class="ri-wallet-3-line"></i>
+
                         </div>
 
                         <div class="summary-content">
-                            <span>Current Balance</span>
-                            <strong id="currentBalance">₦0</strong>
+
+                            <span>
+                                Current Balance
+                            </span>
+
+                            <strong id="currentBalance">
+                                ₦0
+                            </strong>
+
                         </div>
+
                     </article>
 
                 </section>
 
-                <!-- Financial analysis -->
+
+                <!-- =============================================
+                     FINANCIAL ANALYSIS
+                     ============================================= -->
+
                 <section class="welfare-card finance-analysis-card">
 
                     <div class="section-heading">
+
                         <div class="section-heading-icon">
-                            <i class="fa-solid fa-chart-column"></i>
+
+                            <i class="ri-bar-chart-box-line"></i>
+
                         </div>
 
                         <div>
-                            <h2>Financial Analysis</h2>
-                            <p>Overview of welfare funds.</p>
+
+                            <h2>
+                                Financial Analysis
+                            </h2>
+
+                            <p>
+                                Overview of welfare funds.
+                            </p>
+
                         </div>
+
                     </div>
 
+
                     <div class="finance-chart-wrapper">
-                        <canvas id="financeChart"></canvas>
+
+                        <canvas
+                            id="financeChart"
+                        ></canvas>
+
                     </div>
 
                 </section>
 
-                <!-- Transactions -->
+
+                <!-- =============================================
+                     TRANSACTIONS
+                     ============================================= -->
+
                 <section class="welfare-card transactions-card">
 
                     <div class="section-heading">
+
                         <div class="section-heading-icon orange">
-                            <i class="fa-solid fa-receipt"></i>
+
+                            <i class="ri-receipt-line"></i>
+
                         </div>
 
                         <div>
-                            <h2>Recent Transactions</h2>
-                            <p>Welfare contributions and expenses.</p>
+
+                            <h2>
+                                Recent Transactions
+                            </h2>
+
+                            <p>
+                                Welfare contributions and expenses.
+                            </p>
+
                         </div>
+
                     </div>
+
 
                     <div class="table-wrapper">
 
                         <table class="activity-table">
+
                             <thead>
+
                                 <tr>
-                                    <th>Date</th>
-                                    <th>Description</th>
-                                    <th>Type</th>
-                                    <th>Amount</th>
+
+                                    <th>
+                                        Date
+                                    </th>
+
+                                    <th>
+                                        Description
+                                    </th>
+
+                                    <th>
+                                        Type
+                                    </th>
+
+                                    <th>
+                                        Amount
+                                    </th>
+
                                 </tr>
+
                             </thead>
 
+
                             <tbody id="activityTable">
+
                                 <tr>
-                                    <td colspan="4" class="table-loading">
+
+                                    <td
+                                        colspan="4"
+                                        class="table-loading"
+                                    >
                                         Loading transactions...
                                     </td>
+
                                 </tr>
+
                             </tbody>
+
                         </table>
 
                     </div>
 
-                    <!-- Pagination -->
+
+                    <!-- =========================================
+                         PAGINATION
+                         ========================================= -->
+
                     <div class="pagination">
 
                         <button
@@ -179,19 +401,29 @@
                             id="prevPageBtn"
                             class="pagination-btn"
                         >
-                            <i class="fa-solid fa-chevron-left"></i>
+
+                            <i class="ri-arrow-left-s-line"></i>
+
                             Previous
+
                         </button>
 
-                        <span id="pageNumber">Page 1</span>
+
+                        <span id="pageNumber">
+                            Page 1
+                        </span>
+
 
                         <button
                             type="button"
                             id="nextPageBtn"
                             class="pagination-btn"
                         >
+
                             Next
-                            <i class="fa-solid fa-chevron-right"></i>
+
+                            <i class="ri-arrow-right-s-line"></i>
+
                         </button>
 
                     </div>
@@ -204,15 +436,37 @@
 
     </div>
 
-    <!-- Shared bottom navigation -->
+
+    <!-- ======================================================
+         SHARED BOTTOM NAV
+         ====================================================== -->
+
     <div id="app-bottom-nav"></div>
 
 </div>
 
+
+<!-- ==========================================================
+     SHARED PORTAL JAVASCRIPT
+     ========================================================== -->
+
 <script src="../js/pwa.js"></script>
+
 <script src="../js/main.js"></script>
-<script src="../js/welfare.js"></script>
+
 <script src="../js/layout.js"></script>
 
+
+<!-- ==========================================================
+     WELFARE JAVASCRIPT
+
+     IMPORTANT:
+     This is loaded AFTER layout.js so Welfare can safely
+     attach its login to the completed shared topbar.
+     ========================================================== -->
+
+<script src="../js/welfare.js"></script>
+
 </body>
+
 </html>
