@@ -4,15 +4,16 @@
    PURPOSE: SECRETARIAT REPORTS PAGE
    ============================================================ */
 
+
 /* ============================================================
-   FONT SYSTEM
+   REPORT PAGE DESIGN TOKENS
    ============================================================ */
 
 .reports-page {
     --reports-purple: #4A0754;
     --reports-purple-dark: #0A0016;
-    --reports-purple-soft: #f7f2f8;
-    --reports-purple-border: #e7ddea;
+    --reports-purple-soft: #f8f4f9;
+    --reports-purple-border: #e8dfea;
 
     --reports-orange: #EA580C;
     --reports-orange-dark: #c2410c;
@@ -23,13 +24,15 @@
     --reports-text-soft: #625b68;
     --reports-muted: #8a828f;
 
-    --reports-border: #ebe7ef;
+    --reports-border: #e8e4ea;
     --reports-border-light: #f0edf2;
+
     --reports-surface: #ffffff;
     --reports-background: #faf9fb;
 
     font-family: "DM Sans", sans-serif;
     color: var(--reports-text);
+
     box-sizing: border-box;
 }
 
@@ -59,7 +62,7 @@
 
 
 /* ============================================================
-   PAGE HEADER
+   PAGE HEADING
    ============================================================ */
 
 .reports-heading {
@@ -80,10 +83,10 @@
 
     flex: 0 0 38px;
 
+    border: 1px solid var(--reports-purple-border);
     border-radius: 10px;
 
     background: var(--reports-purple-soft);
-    border: 1px solid var(--reports-purple-border);
 
     color: var(--reports-purple);
 
@@ -99,6 +102,7 @@
     font-family: "Bricolage Grotesque", sans-serif;
     font-size: clamp(1.35rem, 2vw, 1.75rem);
     font-weight: 700;
+
     line-height: 1.15;
 }
 
@@ -110,6 +114,7 @@
     font-family: "Bricolage Grotesque", sans-serif;
     font-size: 0.67rem;
     font-weight: 700;
+
     letter-spacing: 0.09em;
     text-transform: uppercase;
 }
@@ -121,7 +126,7 @@
 
     color: var(--reports-text-soft);
 
-    font-size: 0.82rem;
+    font-size: 0.84rem;
     line-height: 1.6;
 }
 
@@ -132,7 +137,9 @@
 
 .stats-grid {
     display: grid;
+
     grid-template-columns: repeat(4, minmax(0, 1fr));
+
     gap: 14px;
 
     margin: 0 0 24px;
@@ -146,6 +153,7 @@
     padding: 17px 18px;
 
     background: var(--reports-surface);
+
     border: 1px solid var(--reports-border);
     border-radius: 14px;
 
@@ -169,13 +177,13 @@
     height: 100%;
 
     background: var(--reports-purple);
-
-    opacity: 0.9;
 }
 
 .stat-card:hover {
-    border-color: #ddd3e2;
-    box-shadow: 0 7px 20px rgba(74, 7, 84, 0.06);
+    border-color: #dcd3df;
+
+    box-shadow: 0 6px 18px rgba(74, 7, 84, 0.055);
+
     transform: translateY(-1px);
 }
 
@@ -189,6 +197,7 @@
     font-family: "Bricolage Grotesque", sans-serif;
     font-size: 0.69rem;
     font-weight: 650;
+
     line-height: 1.3;
 }
 
@@ -200,6 +209,7 @@
     font-family: "Bricolage Grotesque", sans-serif;
     font-size: 1.35rem;
     font-weight: 700;
+
     line-height: 1;
 }
 
@@ -221,20 +231,26 @@
 
 
 /* ============================================================
-   REPORT CONTROLS
+   FILTER / SEARCH CONTROLS
    ============================================================ */
 
 .reports-controls {
     display: grid;
-    grid-template-columns: minmax(0, 2fr) minmax(150px, 1fr) minmax(150px, 1fr);
+
+    grid-template-columns:
+        minmax(0, 2fr)
+        minmax(150px, 1fr)
+        minmax(150px, 1fr);
+
     gap: 12px;
 
-    margin-bottom: 24px;
+    margin-bottom: 25px;
 }
 
 .search-wrapper,
 .select-wrapper {
     position: relative;
+
     min-width: 0;
 }
 
@@ -269,7 +285,7 @@
     color: var(--reports-text);
 
     font-family: "DM Sans", sans-serif;
-    font-size: 0.78rem;
+    font-size: 0.79rem;
 
     outline: none;
 
@@ -316,7 +332,8 @@
 .search-box:focus,
 .filter-select:focus {
     border-color: #cdbbd2;
-    box-shadow: 0 0 0 3px rgba(74, 7, 84, 0.07);
+
+    box-shadow: 0 0 0 3px rgba(74, 7, 84, 0.06);
 }
 
 
@@ -342,6 +359,7 @@
     font-family: "Bricolage Grotesque", sans-serif;
     font-size: 1rem;
     font-weight: 700;
+
     line-height: 1.25;
 }
 
@@ -355,10 +373,10 @@
 
     padding: 0 9px;
 
+    border: 1px solid var(--reports-purple-border);
     border-radius: 7px;
 
     background: var(--reports-purple-soft);
-    border: 1px solid var(--reports-purple-border);
 
     color: var(--reports-purple);
 
@@ -384,7 +402,7 @@
 
 
 /* ============================================================
-   REPORT CARD
+   MODERN REPORT CARD
    ============================================================ */
 
 .report-card {
@@ -395,12 +413,12 @@
 
     min-width: 0;
 
-    padding: 20px;
+    padding: 21px;
 
     background: #ffffff;
 
-    border: 1px solid var(--reports-border);
-    border-radius: 18px;
+    border: 1px solid #e7e3e9;
+    border-radius: 16px;
 
     overflow: hidden;
 
@@ -411,55 +429,18 @@
 }
 
 
-/* Premium purple/orange top accent */
-.report-card::before {
-    content: "";
-
-    position: absolute;
-
-    top: 0;
-    left: 0;
-    right: 0;
-
-    height: 3px;
-
-    background: linear-gradient(
-        90deg,
-        #4A0754 0%,
-        #7a237f 38%,
-        #EA580C 72%,
-        #F59E0B 100%
-    );
-
-    opacity: 0.9;
-}
-
-
-/* Very subtle background glow */
-.report-card::after {
-    content: "";
-
-    position: absolute;
-
-    top: -55px;
-    right: -55px;
-
-    width: 130px;
-    height: 130px;
-
-    border-radius: 50%;
-
-    background: rgba(234, 88, 12, 0.035);
-
-    pointer-events: none;
-}
+/*
+   IMPORTANT:
+   No decorative top line / gradient.
+   The card is intentionally clean and flat.
+*/
 
 .report-card:hover {
-    border-color: #d9cfe0;
+    border-color: #d8cbdc;
 
     box-shadow:
-        0 10px 28px rgba(74, 7, 84, 0.075),
-        0 2px 7px rgba(74, 7, 84, 0.035);
+        0 8px 24px rgba(15, 8, 18, 0.055),
+        0 2px 6px rgba(74, 7, 84, 0.025);
 
     transform: translateY(-2px);
 }
@@ -470,21 +451,18 @@
    ============================================================ */
 
 .report-top {
-    position: relative;
-    z-index: 1;
-
     display: flex;
     align-items: center;
     justify-content: space-between;
 
     gap: 12px;
 
-    margin-bottom: 15px;
+    margin-bottom: 16px;
 }
 
 
 /* ============================================================
-   REPORT BADGE
+   REPORT TYPE BADGE
    ============================================================ */
 
 .report-badge {
@@ -496,34 +474,35 @@
 
     padding: 6px 10px;
 
-    border-radius: 8px;
+    border: 1px solid #f3d5bd;
+    border-radius: 7px;
 
-    background: var(--reports-orange-soft);
-    border: 1px solid var(--reports-orange-border);
+    background: #fff8f2;
 
-    color: var(--reports-orange-dark);
+    color: #b94a0b;
 
     font-family: "Bricolage Grotesque", sans-serif;
-    font-size: 0.67rem;
+    font-size: 0.65rem;
     font-weight: 700;
+
     letter-spacing: 0.035em;
     line-height: 1;
 
     text-transform: uppercase;
 }
 
-
-/* Different subtle badge treatment if report types are added */
 .report-badge i {
     margin-right: 5px;
-    font-size: 0.65rem;
+
+    font-size: 0.62rem;
 }
 
 .report-date {
-    color: #7c7480;
+    color: #827a86;
 
     font-size: 0.71rem;
     font-weight: 500;
+
     line-height: 1.3;
 
     white-space: nowrap;
@@ -535,37 +514,20 @@
    ============================================================ */
 
 .report-title {
-    position: relative;
-    z-index: 1;
-
-    margin: 0 0 9px;
-
-    padding-left: 11px;
+    margin: 0 0 10px;
 
     color: var(--reports-purple-dark);
 
     font-family: "Bricolage Grotesque", sans-serif;
-    font-size: 1.05rem;
+
+    /*
+       Slightly increased from the previous version.
+    */
+    font-size: 1.12rem;
+
     font-weight: 700;
-    line-height: 1.3;
-}
 
-
-/* Small orange title marker */
-.report-title::before {
-    content: "";
-
-    position: absolute;
-
-    left: 0;
-    top: 3px;
-    bottom: 3px;
-
-    width: 3px;
-
-    border-radius: 3px;
-
-    background: var(--reports-orange);
+    line-height: 1.35;
 }
 
 
@@ -574,17 +536,20 @@
    ============================================================ */
 
 .report-summary {
-    position: relative;
-    z-index: 1;
-
     margin: 0;
 
-    color: var(--reports-text-soft);
+    color: #5d5662;
 
     font-family: "DM Sans", sans-serif;
-    font-size: 0.81rem;
+
+    /*
+       Increased slightly for easier reading.
+    */
+    font-size: 0.85rem;
+
     font-weight: 400;
-    line-height: 1.65;
+
+    line-height: 1.7;
 }
 
 
@@ -593,19 +558,16 @@
    ============================================================ */
 
 .report-footer {
-    position: relative;
-    z-index: 1;
-
     display: flex;
     align-items: center;
     justify-content: space-between;
 
     gap: 14px;
 
-    margin-top: 18px;
+    margin-top: 20px;
     padding-top: 14px;
 
-    border-top: 1px solid var(--reports-border-light);
+    border-top: 1px solid #f0edf2;
 }
 
 .reporter {
@@ -617,14 +579,22 @@
     min-width: 0;
 }
 
+
+/*
+   Smaller reporter name.
+   It now acts as supporting metadata rather than a headline.
+*/
+
 .reporter-name {
     overflow: hidden;
 
-    color: #302936;
+    color: #504853;
 
-    font-family: "Bricolage Grotesque", sans-serif;
-    font-size: 0.76rem;
-    font-weight: 650;
+    font-family: "DM Sans", sans-serif;
+
+    font-size: 0.68rem;
+
+    font-weight: 600;
 
     line-height: 1.3;
 
@@ -633,15 +603,20 @@
 }
 
 .reporter-role {
-    color: #8a828f;
+    color: #948c97;
 
-    font-size: 0.68rem;
+    font-family: "DM Sans", sans-serif;
+
+    font-size: 0.63rem;
+
+    font-weight: 400;
+
     line-height: 1.3;
 }
 
 
 /* ============================================================
-   OPTIONAL REPORT ACTION / VIEW BUTTON
+   REPORT ACTION / VIEW BUTTON
    ============================================================ */
 
 .report-card .report-action,
@@ -655,10 +630,11 @@
 
     flex: 0 0 30px;
 
-    border: 1px solid #eadfea;
+    border: 1px solid #e5dce8;
     border-radius: 8px;
 
-    background: #faf8fb;
+    background: #fbf9fc;
+
     color: var(--reports-purple);
 
     transition:
@@ -671,6 +647,7 @@
 .report-card .report-action:hover,
 .report-card .view-report:hover {
     background: var(--reports-purple);
+
     border-color: var(--reports-purple);
 
     color: #ffffff;
@@ -711,10 +688,10 @@
 
     margin-bottom: 13px;
 
+    border: 1px solid var(--reports-purple-border);
     border-radius: 12px;
 
     background: var(--reports-purple-soft);
-    border: 1px solid var(--reports-purple-border);
 
     color: var(--reports-purple);
 
@@ -739,6 +716,7 @@
     color: var(--reports-muted);
 
     font-size: 0.78rem;
+
     line-height: 1.6;
 }
 
@@ -776,7 +754,7 @@
 
 
 /* ============================================================
-   TABLET — 1200PX
+   1200PX
    ============================================================ */
 
 @media (max-width: 1200px) {
@@ -786,17 +764,20 @@
     }
 
     .reports-controls {
-        grid-template-columns: minmax(0, 1.7fr) minmax(140px, 1fr) minmax(140px, 1fr);
+        grid-template-columns:
+            minmax(0, 1.7fr)
+            minmax(140px, 1fr)
+            minmax(140px, 1fr);
     }
 
     .report-card {
-        padding: 18px;
+        padding: 19px;
     }
 }
 
 
 /* ============================================================
-   TABLET — 1000PX
+   1000PX
    ============================================================ */
 
 @media (max-width: 1000px) {
@@ -821,13 +802,14 @@
 
 
 /* ============================================================
-   TABLET / LARGE MOBILE — 800PX
+   800PX
    ============================================================ */
 
 @media (max-width: 800px) {
 
     .reports-grid {
         grid-template-columns: 1fr;
+
         gap: 15px;
     }
 
@@ -836,13 +818,13 @@
     }
 
     .report-card {
-        border-radius: 16px;
+        border-radius: 15px;
     }
 }
 
 
 /* ============================================================
-   MOBILE — 768PX
+   768PX
    ============================================================ */
 
 @media (max-width: 768px) {
@@ -859,6 +841,7 @@
     .reports-heading-icon {
         width: 35px;
         height: 35px;
+
         flex-basis: 35px;
     }
 
@@ -873,6 +856,7 @@
 
     .stats-grid {
         gap: 10px;
+
         margin-bottom: 19px;
     }
 
@@ -891,7 +875,7 @@
 
 
 /* ============================================================
-   MOBILE — 600PX
+   600PX
    ============================================================ */
 
 @media (max-width: 600px) {
@@ -924,6 +908,7 @@
 
     .stat-card {
         padding: 14px;
+
         border-radius: 12px;
     }
 
@@ -937,6 +922,7 @@
 
     .reports-controls {
         grid-template-columns: 1fr;
+
         gap: 9px;
     }
 
@@ -956,54 +942,59 @@
     .reports-count {
         min-width: 26px;
         height: 23px;
+
         padding: 0 8px;
     }
 
     .report-card {
         padding: 17px;
-        border-radius: 15px;
+
+        border-radius: 14px;
     }
 
     .report-top {
         align-items: flex-start;
-        margin-bottom: 13px;
+
+        margin-bottom: 14px;
     }
 
     .report-badge {
         padding: 5px 8px;
-        font-size: 0.62rem;
+
+        font-size: 0.61rem;
     }
 
     .report-date {
-        font-size: 0.67rem;
+        font-size: 0.66rem;
     }
 
     .report-title {
-        font-size: 0.98rem;
+        font-size: 1rem;
+        line-height: 1.35;
     }
 
     .report-summary {
-        font-size: 0.78rem;
-        line-height: 1.6;
+        font-size: 0.81rem;
+        line-height: 1.65;
     }
 
     .report-footer {
-        margin-top: 15px;
+        margin-top: 16px;
         padding-top: 12px;
     }
 
     .reporter-name {
-        font-size: 0.72rem;
+        font-size: 0.66rem;
     }
 
     .reporter-role {
-        font-size: 0.64rem;
+        font-size: 0.61rem;
     }
 }
 
 
 /* ============================================================
-   SMALL MOBILE — 420PX
+   420PX
    ============================================================ */
 
 @media (max-width: 420px) {
@@ -1042,5 +1033,13 @@
 
     .report-date {
         font-size: 0.63rem;
+    }
+
+    .report-title {
+        font-size: 0.96rem;
+    }
+
+    .report-summary {
+        font-size: 0.79rem;
     }
 }
