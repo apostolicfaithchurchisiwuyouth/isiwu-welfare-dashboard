@@ -1,8 +1,8 @@
 /* =========================================================
    AFC ISIU YOUTH PORTAL
    SHARED APPLICATION LAYOUT
-   VERSION 2.2
-   FIXED / RESPONSIVE HEADER
+   VERSION 2.3
+   FIXED DESKTOP SIDEBAR / FIXED RESPONSIVE HEADER
 ========================================================= */
 
 
@@ -69,17 +69,24 @@
 
 /* =========================================================
    SIDEBAR
+   DESKTOP — FIXED AND IMMOVABLE
 ========================================================= */
 
 .sidebar {
 
-    position: sticky;
+    position: fixed;
 
     top: 0;
+
+    left: 0;
+
+    z-index: 6000;
 
     width: 290px;
 
     height: 100vh;
+
+    height: 100dvh;
 
     display: flex;
 
@@ -98,6 +105,8 @@
     overflow-y: auto;
 
     overscroll-behavior: contain;
+
+    flex-shrink: 0;
 
 }
 
@@ -367,6 +376,7 @@
 
 /* =========================================================
    MAIN AREA
+   DESKTOP — LEAVES ROOM FOR FIXED SIDEBAR
 ========================================================= */
 
 .main-area {
@@ -377,18 +387,17 @@
 
     min-height: 100vh;
 
+    margin-left: 290px;
+
     display: flex;
 
     flex-direction: column;
 
     /*
-       IMPORTANT:
+       The header is fixed and removed from normal
+       document flow.
 
-       The header is fixed and therefore removed
-       from normal document flow.
-
-       This padding creates the space that the
-       fixed header occupies.
+       This padding reserves the header's height.
     */
 
     padding-top: 82px;
@@ -402,13 +411,6 @@
 ========================================================= */
 
 .topbar {
-
-    /*
-       FIXED HEADER
-
-       This guarantees that the header remains
-       attached to the viewport while scrolling.
-    */
 
     position: fixed;
 
@@ -734,7 +736,6 @@
 
 @media (max-width: 1100px) and (min-width: 769px) {
 
-
     .app-layout {
 
         grid-template-columns:
@@ -745,7 +746,17 @@
 
     .sidebar {
 
+        position: fixed;
+
+        top: 0;
+
+        left: 0;
+
         width: 90px;
+
+        height: 100vh;
+
+        height: 100dvh;
 
         padding:
             22px 12px;
@@ -753,21 +764,18 @@
     }
 
 
-    /*
-       FIXED HEADER MUST ALSO START
-       AFTER THE TABLET SIDEBAR.
-    */
+    .main-area {
 
-    .topbar {
+        margin-left: 90px;
 
-        left: 90px;
+        padding-top: 82px;
 
     }
 
 
-    .main-area {
+    .topbar {
 
-        padding-top: 82px;
+        left: 90px;
 
     }
 
@@ -836,7 +844,6 @@
 
 @media (max-width: 768px) {
 
-
     .app-layout {
 
         display:
@@ -849,7 +856,7 @@
 
 
     /* =====================================================
-       SIDEBAR
+       SIDEBAR — MOBILE DRAWER
     ================================================== */
 
     .sidebar {
@@ -868,6 +875,9 @@
 
         width:
             min(320px, 85vw);
+
+        height:
+            100vh;
 
         height:
             100dvh;
@@ -987,6 +997,9 @@
 
         min-height:
             100vh;
+
+        margin-left:
+            0;
 
         padding-top:
             74px;
@@ -1246,7 +1259,6 @@
 
 @media (min-width: 1500px) {
 
-
     .app-layout {
 
         grid-template-columns:
@@ -1257,16 +1269,26 @@
 
     .sidebar {
 
+        position:
+            fixed;
+
+        top:
+            0;
+
+        left:
+            0;
+
         width:
             320px;
 
+        height:
+            100vh;
+
+        height:
+            100dvh;
+
     }
 
-
-    /*
-       HEADER MUST MATCH
-       THE LARGER SIDEBAR.
-    */
 
     .topbar {
 
@@ -1277,6 +1299,9 @@
 
 
     .main-area {
+
+        margin-left:
+            320px;
 
         padding-top:
             82px;
@@ -1364,7 +1389,6 @@
 
 
 @media (max-width: 768px) {
-
 
     .dashboard-container {
 
@@ -1638,7 +1662,6 @@
 
 @media (max-width: 768px) {
 
-
     .section-header {
 
         align-items:
@@ -1688,174 +1711,303 @@
 }
 
 
+/* =========================================================
+   DASHBOARD MAIN
+========================================================= */
 
 .dashboard-main {
-    width: 100%;
-    padding-top: 25px;
+
+    width:
+        100%;
+
+    padding-top:
+        25px;
+
 }
+
 
 @media (max-width: 768px) {
 
     .dashboard-main {
-        padding-top: 25px;
+
+        padding-top:
+            25px;
+
     }
 
 }
 
 
-
 /* ============================================================
    OFFLINE / INTERNET CONNECTION REQUIRED UI
    GLOBAL OVERLAY — OWNED BY layout.css
-   ============================================================ */
+============================================================ */
+
 
 /* ------------------------------------------------------------
    OFFLINE TOP BANNER
-   ------------------------------------------------------------ */
+------------------------------------------------------------ */
 
 #offlineBanner {
+
     position: fixed;
+
     top: 0;
+
     left: 0;
+
     right: 0;
+
     z-index: 15000;
 
     display: flex;
+
     justify-content: center;
 
     padding: 12px 16px;
 
-    background: rgba(10, 0, 22, 0.94);
-    border-bottom: 1px solid rgba(234, 88, 12, 0.35);
+    background:
+        rgba(10, 0, 22, 0.94);
 
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
+    border-bottom:
+        1px solid rgba(234, 88, 12, 0.35);
+
+    backdrop-filter:
+        blur(18px);
+
+    -webkit-backdrop-filter:
+        blur(18px);
 
     box-shadow:
         0 10px 30px rgba(10, 0, 22, 0.22),
         0 1px 0 rgba(255, 255, 255, 0.04);
 
-    transform: translateY(-120%);
+    transform:
+        translateY(-120%);
+
     opacity: 0;
+
     pointer-events: none;
 
     transition:
         transform 0.35s ease,
         opacity 0.35s ease;
+
 }
+
 
 #offlineBanner.show {
-    transform: translateY(0);
-    opacity: 1;
-    pointer-events: auto;
+
+    transform:
+        translateY(0);
+
+    opacity:
+        1;
+
+    pointer-events:
+        auto;
+
 }
+
 
 .offline-banner-content {
-    width: min(100%, 720px);
 
-    display: flex;
-    align-items: center;
-    gap: 12px;
+    width:
+        min(100%, 720px);
 
-    color: #ffffff;
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        12px;
+
+    color:
+        #ffffff;
+
 }
+
 
 .offline-banner-content > i {
-    width: 38px;
-    height: 38px;
 
-    flex: 0 0 38px;
+    width:
+        38px;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    height:
+        38px;
 
-    border-radius: 12px;
+    flex:
+        0 0 38px;
 
-    background: rgba(234, 88, 12, 0.14);
-    color: #fb923c;
+    display:
+        flex;
 
-    font-size: 15px;
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    border-radius:
+        12px;
+
+    background:
+        rgba(234, 88, 12, 0.14);
+
+    color:
+        #fb923c;
+
+    font-size:
+        15px;
+
 }
+
 
 .offline-banner-content div {
-    min-width: 0;
 
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
+    min-width:
+        0;
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    gap:
+        2px;
+
 }
+
 
 .offline-banner-content strong {
-    font-family: "Bricolage Grotesque", sans-serif;
-    font-size: 0.86rem;
-    font-weight: 700;
-    line-height: 1.2;
+
+    font-family:
+        "Bricolage Grotesque",
+        sans-serif;
+
+    font-size:
+        0.86rem;
+
+    font-weight:
+        700;
+
+    line-height:
+        1.2;
+
 }
 
+
 .offline-banner-content span {
-    font-family: "DM Sans", sans-serif;
-    font-size: 0.72rem;
-    line-height: 1.4;
-    color: rgba(255, 255, 255, 0.68);
+
+    font-family:
+        "DM Sans",
+        sans-serif;
+
+    font-size:
+        0.72rem;
+
+    line-height:
+        1.4;
+
+    color:
+        rgba(255, 255, 255, 0.68);
+
 }
 
 
 /* ------------------------------------------------------------
    INTERNET CONNECTION REQUIRED MODAL
-   ------------------------------------------------------------ */
+------------------------------------------------------------ */
 
 #offlineMessage {
-    position: fixed;
-    inset: 0;
 
-    z-index: 20000;
+    position:
+        fixed;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    inset:
+        0;
 
-    width: 100%;
-    height: 100%;
+    z-index:
+        20000;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    width:
+        100%;
+
+    height:
+        100%;
 
     padding:
-        24px
-        20px
+        24px 20px
         calc(24px + env(safe-area-inset-bottom));
 
-    background: rgba(10, 0, 22, 0.72);
+    background:
+        rgba(10, 0, 22, 0.72);
 
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter:
+        blur(16px);
 
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
+    -webkit-backdrop-filter:
+        blur(16px);
+
+    opacity:
+        0;
+
+    visibility:
+        hidden;
+
+    pointer-events:
+        none;
 
     transition:
         opacity 0.25s ease,
         visibility 0.25s ease;
+
 }
 
+
 #offlineMessage.show {
-    opacity: 1;
-    visibility: visible;
-    pointer-events: auto;
+
+    opacity:
+        1;
+
+    visibility:
+        visible;
+
+    pointer-events:
+        auto;
+
 }
 
 
 /* ------------------------------------------------------------
    MODAL CARD
-   ------------------------------------------------------------ */
+------------------------------------------------------------ */
 
 .offline-message-card {
-    position: relative;
 
-    width: min(100%, 400px);
+    position:
+        relative;
 
-    padding: 30px 26px 24px;
+    width:
+        min(100%, 400px);
 
-    border-radius: 28px;
+    padding:
+        30px 26px 24px;
+
+    border-radius:
+        28px;
 
     background:
         linear-gradient(
@@ -1864,40 +2016,60 @@
             rgba(248, 247, 251, 0.98)
         );
 
-    border: 1px solid rgba(74, 7, 84, 0.10);
+    border:
+        1px solid rgba(74, 7, 84, 0.10);
 
     box-shadow:
         0 30px 80px rgba(10, 0, 22, 0.30),
         0 10px 30px rgba(10, 0, 22, 0.12);
 
-    text-align: center;
+    text-align:
+        center;
 
-    transform: translateY(18px) scale(0.97);
+    transform:
+        translateY(18px) scale(0.97);
 
     transition:
         transform 0.3s cubic-bezier(.2,.8,.2,1);
+
 }
 
-#offlineMessage.show .offline-message-card {
-    transform: translateY(0) scale(1);
+
+#offlineMessage.show
+.offline-message-card {
+
+    transform:
+        translateY(0) scale(1);
+
 }
 
 
 /* ------------------------------------------------------------
    ICON
-   ------------------------------------------------------------ */
+------------------------------------------------------------ */
 
 .offline-message-icon {
-    width: 68px;
-    height: 68px;
 
-    margin: 0 auto 20px;
+    width:
+        68px;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    height:
+        68px;
 
-    border-radius: 22px;
+    margin:
+        0 auto 20px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    border-radius:
+        22px;
 
     background:
         linear-gradient(
@@ -1906,71 +2078,112 @@
             rgba(234, 88, 12, 0.12)
         );
 
-    color: #4a0754;
+    color:
+        #4a0754;
 
-    font-size: 28px;
+    font-size:
+        28px;
 
     box-shadow:
-        inset 0 0 0 1px rgba(74, 7, 84, 0.08);
+        inset 0 0 0 1px
+        rgba(74, 7, 84, 0.08);
+
 }
 
+
 .offline-message-icon i {
-    font-size: 27px;
+
+    font-size:
+        27px;
+
 }
 
 
 /* ------------------------------------------------------------
    HEADING
-   ------------------------------------------------------------ */
+------------------------------------------------------------ */
 
 .offline-message-card h3 {
-    margin: 0 0 10px;
 
-    font-family: "Bricolage Grotesque", sans-serif;
+    margin:
+        0 0 10px;
 
-    font-size: 1.25rem;
-    font-weight: 700;
+    font-family:
+        "Bricolage Grotesque",
+        sans-serif;
 
-    line-height: 1.2;
+    font-size:
+        1.25rem;
 
-    letter-spacing: -0.02em;
+    font-weight:
+        700;
 
-    color: #0f172a;
+    line-height:
+        1.2;
+
+    letter-spacing:
+        -0.02em;
+
+    color:
+        #0f172a;
+
 }
 
 
 /* ------------------------------------------------------------
    DESCRIPTION
-   ------------------------------------------------------------ */
+------------------------------------------------------------ */
 
 .offline-message-card p {
-    margin: 0 auto 22px;
 
-    max-width: 330px;
+    margin:
+        0 auto 22px;
 
-    font-family: "DM Sans", sans-serif;
+    max-width:
+        330px;
 
-    font-size: 0.78rem;
-    line-height: 1.55;
+    font-family:
+        "DM Sans",
+        sans-serif;
 
-    color: #64748b;
+    font-size:
+        0.78rem;
+
+    line-height:
+        1.55;
+
+    color:
+        #64748b;
+
 }
 
 
 /* ------------------------------------------------------------
    OK BUTTON
-   ------------------------------------------------------------ */
+------------------------------------------------------------ */
 
 #closeOfflineMessage {
-    width: 100%;
-    min-height: 48px;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    width:
+        100%;
 
-    border: 0;
-    border-radius: 15px;
+    min-height:
+        48px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    border:
+        0;
+
+    border-radius:
+        15px;
 
     background:
         linear-gradient(
@@ -1979,133 +2192,222 @@
             #5f126b
         );
 
-    color: #ffffff;
+    color:
+        #ffffff;
 
-    font-family: "DM Sans", sans-serif;
+    font-family:
+        "DM Sans",
+        sans-serif;
 
-    font-size: 0.82rem;
-    font-weight: 700;
+    font-size:
+        0.82rem;
 
-    cursor: pointer;
+    font-weight:
+        700;
+
+    cursor:
+        pointer;
 
     box-shadow:
-        0 10px 24px rgba(74, 7, 84, 0.22);
+        0 10px 24px
+        rgba(74, 7, 84, 0.22);
 
     transition:
         transform 0.2s ease,
         box-shadow 0.2s ease,
         opacity 0.2s ease;
+
 }
+
 
 #closeOfflineMessage:hover {
-    transform: translateY(-1px);
+
+    transform:
+        translateY(-1px);
 
     box-shadow:
-        0 14px 28px rgba(74, 7, 84, 0.28);
+        0 14px 28px
+        rgba(74, 7, 84, 0.28);
+
 }
+
 
 #closeOfflineMessage:active {
-    transform: scale(0.98);
+
+    transform:
+        scale(0.98);
+
 }
 
+
 #closeOfflineMessage:focus-visible {
-    outline: 3px solid rgba(234, 88, 12, 0.30);
-    outline-offset: 3px;
+
+    outline:
+        3px solid
+        rgba(234, 88, 12, 0.30);
+
+    outline-offset:
+        3px;
+
 }
 
 
 /* ------------------------------------------------------------
    PREVENT PAGE SCROLL WHILE MODAL IS OPEN
-   ------------------------------------------------------------ */
+------------------------------------------------------------ */
 
 body.offline-modal-open {
-    overflow: hidden !important;
+
+    overflow:
+        hidden !important;
+
 }
 
 
 /* ------------------------------------------------------------
    MOBILE
-   ------------------------------------------------------------ */
+------------------------------------------------------------ */
 
 @media (max-width: 768px) {
 
     #offlineBanner {
+
         padding:
             calc(10px + env(safe-area-inset-top))
             14px
             10px;
+
     }
+
 
     .offline-banner-content {
-        gap: 10px;
+
+        gap:
+            10px;
+
     }
+
 
     .offline-banner-content > i {
-        width: 34px;
-        height: 34px;
-        flex-basis: 34px;
 
-        border-radius: 10px;
+        width:
+            34px;
+
+        height:
+            34px;
+
+        flex-basis:
+            34px;
+
+        border-radius:
+            10px;
+
     }
+
 
     .offline-banner-content strong {
-        font-size: 0.78rem;
+
+        font-size:
+            0.78rem;
+
     }
+
 
     .offline-banner-content span {
-        font-size: 0.67rem;
+
+        font-size:
+            0.67rem;
+
     }
+
 
     #offlineMessage {
-        align-items: center;
+
+        align-items:
+            center;
 
         padding:
-            20px
-            16px
+            20px 16px
             calc(20px + env(safe-area-inset-bottom));
+
     }
+
 
     .offline-message-card {
-        width: 100%;
-        max-width: 360px;
 
-        padding: 26px 21px 21px;
+        width:
+            100%;
 
-        border-radius: 25px;
+        max-width:
+            360px;
+
+        padding:
+            26px 21px 21px;
+
+        border-radius:
+            25px;
+
     }
+
 
     .offline-message-icon {
-        width: 60px;
-        height: 60px;
 
-        margin-bottom: 17px;
+        width:
+            60px;
 
-        border-radius: 19px;
+        height:
+            60px;
+
+        margin-bottom:
+            17px;
+
+        border-radius:
+            19px;
+
     }
+
 
     .offline-message-card h3 {
-        font-size: 1.12rem;
+
+        font-size:
+            1.12rem;
+
     }
+
 
     .offline-message-card p {
-        font-size: 0.75rem;
-        line-height: 1.5;
 
-        margin-bottom: 20px;
+        font-size:
+            0.75rem;
+
+        line-height:
+            1.5;
+
+        margin-bottom:
+            20px;
+
     }
+
 
     #closeOfflineMessage {
-        min-height: 46px;
-        border-radius: 14px;
+
+        min-height:
+            46px;
+
+        border-radius:
+            14px;
+
     }
+
 }
 
 
 /* ------------------------------------------------------------
    DARK MODE
-   ------------------------------------------------------------ */
+------------------------------------------------------------ */
 
 [data-theme="dark"] .offline-message-card {
+
     background:
         linear-gradient(
             145deg,
@@ -2113,22 +2415,34 @@ body.offline-modal-open {
             #121016
         );
 
-    border-color: rgba(255, 255, 255, 0.08);
+    border-color:
+        rgba(255, 255, 255, 0.08);
 
     box-shadow:
         0 30px 80px rgba(0, 0, 0, 0.55),
         0 10px 30px rgba(0, 0, 0, 0.35);
+
 }
+
 
 [data-theme="dark"] .offline-message-card h3 {
-    color: #ffffff;
+
+    color:
+        #ffffff;
+
 }
+
 
 [data-theme="dark"] .offline-message-card p {
-    color: #a9a4b0;
+
+    color:
+        #a9a4b0;
+
 }
 
+
 [data-theme="dark"] .offline-message-icon {
+
     background:
         linear-gradient(
             145deg,
@@ -2136,13 +2450,15 @@ body.offline-modal-open {
             rgba(234, 88, 12, 0.13)
         );
 
-    color: #c084fc;
+    color:
+        #c084fc;
+
 }
 
 
 /* ------------------------------------------------------------
    REDUCED MOTION
-   ------------------------------------------------------------ */
+------------------------------------------------------------ */
 
 @media (prefers-reduced-motion: reduce) {
 
@@ -2150,6 +2466,10 @@ body.offline-modal-open {
     #offlineMessage,
     .offline-message-card,
     #closeOfflineMessage {
-        transition: none !important;
+
+        transition:
+            none !important;
+
     }
+
 }
