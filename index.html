@@ -146,6 +146,360 @@
          styled while the shared shell is being migrated.
     ====================================================== -->
 
+
+    <!-- =====================================================
+         HUB REPORT MODALS CSS
+
+         Self-contained bottom-sheet modal styling for the
+         Quiz Report and Secretariat Report cards. Does not
+         depend on academic-help-modal styles.
+    ====================================================== -->
+
+    <style>
+
+        /* =================================================
+           TRIGGER BUTTON RESET
+           
+           .hub-item is normally an <a>; the report cards
+           are <button> elements instead, so browser button
+           defaults need resetting to match.
+        ================================================== */
+
+        .hub-modal-trigger {
+            border: 0;
+
+            font: inherit;
+            text-align: left;
+
+            cursor: pointer;
+
+            appearance: none;
+
+            width: 100%;
+        }
+
+
+        /* =================================================
+           MODAL ROOT
+        ================================================== */
+
+        .hub-report-modal {
+            position: fixed;
+
+            inset: 0;
+
+            z-index: 10000;
+
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+
+            visibility: hidden;
+
+            opacity: 0;
+
+            pointer-events: none;
+
+            transition:
+                opacity 0.25s ease,
+                visibility 0.25s ease;
+        }
+
+
+        .hub-report-modal.active {
+            visibility: visible;
+
+            opacity: 1;
+
+            pointer-events: auto;
+        }
+
+
+        .hub-report-modal-backdrop {
+            position: absolute;
+
+            inset: 0;
+
+            background: rgba(10, 0, 22, 0.5);
+
+            backdrop-filter: blur(3px);
+            -webkit-backdrop-filter: blur(3px);
+
+            cursor: pointer;
+        }
+
+
+        /* =================================================
+           PANEL (BOTTOM SHEET)
+        ================================================== */
+
+        .hub-report-modal-panel {
+            position: relative;
+
+            z-index: 1;
+
+            width: 100%;
+            max-width: 520px;
+
+            max-height: calc(100vh - 32px);
+
+            overflow-y: auto;
+
+            padding: 12px 20px
+                calc(22px + env(safe-area-inset-bottom, 0px));
+
+            box-sizing: border-box;
+
+            border-radius: 22px 22px 0 0;
+
+            background: #ffffff;
+
+            box-shadow:
+                0 -12px 40px rgba(10, 0, 22, 0.22);
+
+            transform: translateY(100%);
+
+            transition: transform 0.3s ease;
+        }
+
+
+        .hub-report-modal.active
+        .hub-report-modal-panel {
+            transform: translateY(0);
+        }
+
+
+        @media (min-width: 560px) {
+
+            .hub-report-modal-panel {
+                margin-bottom: 24px;
+
+                border-radius: 22px;
+            }
+
+        }
+
+
+        .hub-report-modal-handle {
+            width: 40px;
+            height: 4px;
+
+            margin: 0 auto 14px;
+
+            border-radius: 999px;
+
+            background: #e5dfe8;
+        }
+
+
+        /* =================================================
+           HEADER
+        ================================================== */
+
+        .hub-report-modal-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 16px;
+
+            margin-bottom: 14px;
+        }
+
+
+        .hub-report-modal-heading {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+
+            min-width: 0;
+        }
+
+
+        .hub-report-modal-icon {
+            width: 42px;
+            height: 42px;
+
+            flex: 0 0 42px;
+
+            display: grid;
+            place-items: center;
+
+            border-radius: 12px;
+
+            background: #f3e8ff;
+            color: #4A0754;
+
+            font-size: 1rem;
+        }
+
+
+        .hub-report-modal-eyebrow {
+            display: block;
+
+            margin-bottom: 3px;
+
+            color: #EA580C;
+
+            font-family: "DM Sans", sans-serif;
+            font-size: 0.65rem;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+
+        .hub-report-modal-heading h2 {
+            margin: 0;
+
+            color: #0A0016;
+
+            font-family: "Bricolage Grotesque", sans-serif;
+            font-size: 1.1rem;
+            line-height: 1.25;
+        }
+
+
+        .hub-report-modal-close {
+            width: 34px;
+            height: 34px;
+
+            flex: 0 0 34px;
+
+            display: grid;
+            place-items: center;
+
+            border: 1px solid #e5dfe8;
+            border-radius: 9px;
+
+            background: #ffffff;
+            color: #665d69;
+
+            cursor: pointer;
+
+            transition:
+                background 0.2s ease,
+                color 0.2s ease,
+                border-color 0.2s ease;
+        }
+
+
+        .hub-report-modal-close:hover {
+            background: #fff8f4;
+            border-color: #f1cbb9;
+            color: #EA580C;
+        }
+
+
+        /* =================================================
+           OPTIONS
+        ================================================== */
+
+        .hub-report-modal-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+
+        .hub-report-modal-option {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+
+            padding: 14px;
+
+            border: 1px solid #eeeaf0;
+            border-radius: 14px;
+
+            background: #fafafa;
+            color: inherit;
+
+            text-decoration: none;
+
+            transition:
+                background 0.2s ease,
+                border-color 0.2s ease,
+                transform 0.2s ease;
+        }
+
+
+        .hub-report-modal-option:hover {
+            background: #fff8f4;
+            border-color: #f1cbb9;
+
+            transform: translateY(-1px);
+        }
+
+
+        .hub-report-modal-option-icon {
+            width: 38px;
+            height: 38px;
+
+            flex: 0 0 38px;
+
+            display: grid;
+            place-items: center;
+
+            border-radius: 11px;
+
+            background: #fff1e8;
+            color: #EA580C;
+        }
+
+
+        .hub-report-modal-option-content {
+            min-width: 0;
+        }
+
+
+        .hub-report-modal-option-content h3 {
+            margin: 0 0 3px;
+
+            color: #0A0016;
+
+            font-family: "Bricolage Grotesque", sans-serif;
+            font-size: 0.92rem;
+        }
+
+
+        .hub-report-modal-option-content p {
+            margin: 0;
+
+            color: #6b6470;
+
+            font-family: "DM Sans", sans-serif;
+            font-size: 0.74rem;
+            line-height: 1.45;
+        }
+
+
+        .hub-report-modal-option-arrow {
+            flex: 0 0 auto;
+
+            margin-left: auto;
+
+            color: #aaa3ad;
+
+            font-size: 0.8rem;
+        }
+
+
+        .hub-report-modal-option:hover
+        .hub-report-modal-option-arrow {
+            color: #EA580C;
+        }
+
+
+        /* =================================================
+           BODY SCROLL LOCK
+        ================================================== */
+
+        body.hub-modal-open {
+            overflow: hidden;
+        }
+
+    </style>
+
 </head>
 
 
@@ -486,13 +840,21 @@
 
                         <!-- =====================================
                             SLC QUIZ REPORTS
+
+                            Opens the Quiz Report bottom modal
+                            (submit / check submitted reports)
+                            instead of navigating directly.
                         ====================================== -->
 
-                        <a
-                            href="/pages/request-welfare"
-                            class="hub-item"
+                        <button
+                            type="button"
+                            class="hub-item hub-modal-trigger"
+                            id="quizReportTrigger"
+                            data-hub-modal="quizReportModal"
+                            aria-haspopup="dialog"
+                            aria-controls="quizReportModal"
                             data-online-only
-                            data-feature="Welfare"
+                            data-feature="Slcreport"
                         >
 
                             <div class="hub-header">
@@ -502,7 +864,7 @@
                                 >
 
                                     <i
-                                        class="fa-solid fa-hand-holding-heart"
+                                        class="fa-solid fa-clipboard-list"
                                     ></i>
 
                                 </div>
@@ -511,15 +873,61 @@
 
 
                             <h4>
-                                Submit Quiz Report
+                                Quiz Report
                             </h4>
 
 
                             <p>
-                                Request support and welfare assistance.
+                                Submit SLC quiz report for your group every week.
                             </p>
 
-                        </a>
+                        </button>
+
+
+                        <!-- =====================================
+                            SECRETARIAT REPORT
+
+                            Opens the Secretariat Report bottom
+                            modal (submit / view submitted
+                            programme reports).
+                        ====================================== -->
+
+                        <button
+                            type="button"
+                            class="hub-item hub-modal-trigger"
+                            id="secretariatReportTrigger"
+                            data-hub-modal="secretariatReportModal"
+                            aria-haspopup="dialog"
+                            aria-controls="secretariatReportModal"
+                            data-online-only
+                            data-feature="SecretariatReport"
+                        >
+
+                            <div class="hub-header">
+
+                                <div
+                                    class="hub-icon event-icon"
+                                >
+
+                                    <i
+                                        class="fa-solid fa-folder-open"
+                                    ></i>
+
+                                </div>
+
+                            </div>
+
+
+                            <h4>
+                                Secretariat Report
+                            </h4>
+
+
+                            <p>
+                                Submit or view programme reports for the secretariat.
+                            </p>
+
+                        </button>
 
 
                     </div>
@@ -532,7 +940,7 @@
 
         </div>
 
-        <!-- =========================================================
+<!-- =========================================================
      ACADEMIC HELP OPTIONS MODAL
 ========================================================= -->
 
@@ -855,6 +1263,357 @@
 
 </div>
 
+
+<!-- =========================================================
+     QUIZ REPORT BOTTOM MODAL
+========================================================= -->
+
+<div
+    class="hub-report-modal"
+    id="quizReportModal"
+    aria-hidden="true"
+>
+
+    <div
+        class="hub-report-modal-backdrop"
+        data-hub-modal-close
+    ></div>
+
+
+    <section
+        class="hub-report-modal-panel"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="quizReportModalTitle"
+    >
+
+        <div class="hub-report-modal-handle"></div>
+
+
+        <div class="hub-report-modal-header">
+
+            <div class="hub-report-modal-heading">
+
+                <div class="hub-report-modal-icon">
+
+                    <i
+                        class="fa-solid fa-clipboard-list"
+                        aria-hidden="true"
+                    ></i>
+
+                </div>
+
+
+                <div>
+
+                    <span class="hub-report-modal-eyebrow">
+                        QUIZ REPORTING
+                    </span>
+
+
+                    <h2 id="quizReportModalTitle">
+                        Quiz Report
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <button
+                type="button"
+                class="hub-report-modal-close"
+                data-hub-modal-close
+                aria-label="Close Quiz Report"
+            >
+
+                <i
+                    class="fa-solid fa-xmark"
+                    aria-hidden="true"
+                ></i>
+
+            </button>
+
+        </div>
+
+
+        <div class="hub-report-modal-options">
+
+
+            <!-- =============================================
+                 SUBMIT QUIZ REPORT
+            ============================================== -->
+
+            <a
+                href="#"
+                class="hub-report-modal-option"
+            >
+
+                <div class="hub-report-modal-option-icon">
+
+                    <i
+                        class="fa-solid fa-pen-to-square"
+                        aria-hidden="true"
+                    ></i>
+
+                </div>
+
+
+                <div class="hub-report-modal-option-content">
+
+                    <h3>
+                        Submit Quiz Report
+                    </h3>
+
+
+                    <p>
+                        Submit your group's SLC quiz report for
+                        this week.
+                    </p>
+
+                </div>
+
+
+                <div class="hub-report-modal-option-arrow">
+
+                    <i
+                        class="fa-solid fa-arrow-right"
+                        aria-hidden="true"
+                    ></i>
+
+                </div>
+
+            </a>
+
+
+            <!-- =============================================
+                 CHECK SUBMITTED REPORTS
+            ============================================== -->
+
+            <a
+                href="#"
+                class="hub-report-modal-option"
+            >
+
+                <div class="hub-report-modal-option-icon">
+
+                    <i
+                        class="fa-solid fa-list-check"
+                        aria-hidden="true"
+                    ></i>
+
+                </div>
+
+
+                <div class="hub-report-modal-option-content">
+
+                    <h3>
+                        Check Submitted Reports
+                    </h3>
+
+
+                    <p>
+                        Review the quiz reports you've already
+                        submitted.
+                    </p>
+
+                </div>
+
+
+                <div class="hub-report-modal-option-arrow">
+
+                    <i
+                        class="fa-solid fa-arrow-right"
+                        aria-hidden="true"
+                    ></i>
+
+                </div>
+
+            </a>
+
+
+        </div>
+
+    </section>
+
+</div>
+
+
+<!-- =========================================================
+     SECRETARIAT REPORT BOTTOM MODAL
+========================================================= -->
+
+<div
+    class="hub-report-modal"
+    id="secretariatReportModal"
+    aria-hidden="true"
+>
+
+    <div
+        class="hub-report-modal-backdrop"
+        data-hub-modal-close
+    ></div>
+
+
+    <section
+        class="hub-report-modal-panel"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="secretariatReportModalTitle"
+    >
+
+        <div class="hub-report-modal-handle"></div>
+
+
+        <div class="hub-report-modal-header">
+
+            <div class="hub-report-modal-heading">
+
+                <div class="hub-report-modal-icon">
+
+                    <i
+                        class="fa-solid fa-folder-open"
+                        aria-hidden="true"
+                    ></i>
+
+                </div>
+
+
+                <div>
+
+                    <span class="hub-report-modal-eyebrow">
+                        SECRETARIAT
+                    </span>
+
+
+                    <h2 id="secretariatReportModalTitle">
+                        Secretariat Report
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <button
+                type="button"
+                class="hub-report-modal-close"
+                data-hub-modal-close
+                aria-label="Close Secretariat Report"
+            >
+
+                <i
+                    class="fa-solid fa-xmark"
+                    aria-hidden="true"
+                ></i>
+
+            </button>
+
+        </div>
+
+
+        <div class="hub-report-modal-options">
+
+
+            <!-- =============================================
+                 SUBMIT PROGRAM REPORT
+            ============================================== -->
+
+            <a
+                href="#"
+                class="hub-report-modal-option"
+            >
+
+                <div class="hub-report-modal-option-icon">
+
+                    <i
+                        class="fa-solid fa-file-circle-plus"
+                        aria-hidden="true"
+                    ></i>
+
+                </div>
+
+
+                <div class="hub-report-modal-option-content">
+
+                    <h3>
+                        Submit Program Report
+                    </h3>
+
+
+                    <p>
+                        Submit a report for a completed
+                        programme or event.
+                    </p>
+
+                </div>
+
+
+                <div class="hub-report-modal-option-arrow">
+
+                    <i
+                        class="fa-solid fa-arrow-right"
+                        aria-hidden="true"
+                    ></i>
+
+                </div>
+
+            </a>
+
+
+            <!-- =============================================
+                 VIEW SUBMITTED PROGRAM REPORTS
+            ============================================== -->
+
+            <a
+                href="#"
+                class="hub-report-modal-option"
+            >
+
+                <div class="hub-report-modal-option-icon">
+
+                    <i
+                        class="fa-solid fa-folder-open"
+                        aria-hidden="true"
+                    ></i>
+
+                </div>
+
+
+                <div class="hub-report-modal-option-content">
+
+                    <h3>
+                        View Submitted Program Reports
+                    </h3>
+
+
+                    <p>
+                        Browse previously submitted programme
+                        reports.
+                    </p>
+
+                </div>
+
+
+                <div class="hub-report-modal-option-arrow">
+
+                    <i
+                        class="fa-solid fa-arrow-right"
+                        aria-hidden="true"
+                    ></i>
+
+                </div>
+
+            </a>
+
+
+        </div>
+
+    </section>
+
+</div>
+
+
         <!-- =====================================================
              MOBILE BOTTOM NAVIGATION
 
@@ -906,6 +1665,8 @@
     <script src="/js/main.js"></script>
 
     <script src="/js/academic-help-modal.js"></script>
+
+    <script src="/js/hub-report-modals.js"></script>
     <!-- =========================================================
          NOTIFICATION FRONTEND CONTROLLER
          
