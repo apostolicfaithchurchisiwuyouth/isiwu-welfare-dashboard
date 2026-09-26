@@ -12,23 +12,23 @@
 .reports-page {
     --reports-purple: #4A0754;
     --reports-purple-dark: #0A0016;
-    --reports-purple-soft: #f8f4f9;
-    --reports-purple-border: #e8dfea;
+    --reports-purple-soft: #f7f2f8;
+    --reports-purple-border: #e6dce9;
 
     --reports-orange: #EA580C;
     --reports-orange-dark: #c2410c;
     --reports-orange-soft: #fff7ed;
-    --reports-orange-border: #fed7aa;
+    --reports-orange-border: #f5d4bc;
 
     --reports-text: #211a24;
-    --reports-text-soft: #625b68;
-    --reports-muted: #8a828f;
+    --reports-text-soft: #5f5864;
+    --reports-muted: #89818e;
 
-    --reports-border: #e8e4ea;
-    --reports-border-light: #f0edf2;
+    --reports-border: #e4dfe7;
+    --reports-border-light: #eeeaf0;
 
     --reports-surface: #ffffff;
-    --reports-background: #faf9fb;
+    --reports-card-surface: #fdfcfd;
 
     font-family: "DM Sans", sans-serif;
     color: var(--reports-text);
@@ -83,10 +83,9 @@
 
     flex: 0 0 38px;
 
+    background: var(--reports-purple-soft);
     border: 1px solid var(--reports-purple-border);
     border-radius: 10px;
-
-    background: var(--reports-purple-soft);
 
     color: var(--reports-purple);
 
@@ -152,7 +151,7 @@
 
     padding: 17px 18px;
 
-    background: var(--reports-surface);
+    background: #ffffff;
 
     border: 1px solid var(--reports-border);
     border-radius: 14px;
@@ -180,24 +179,31 @@
 }
 
 .stat-card:hover {
-    border-color: #dcd3df;
+    border-color: #d8cddd;
 
-    box-shadow: 0 6px 18px rgba(74, 7, 84, 0.055);
+    box-shadow: 0 7px 20px rgba(74, 7, 84, 0.06);
 
     transform: translateY(-1px);
 }
+
+
+/*
+   Bricolage Grotesque is intentionally used for both
+   statistic labels and values.
+*/
 
 .stat-label {
     display: block;
 
     margin-bottom: 7px;
 
-    color: var(--reports-muted);
+    color: #77707c;
 
     font-family: "Bricolage Grotesque", sans-serif;
-    font-size: 0.69rem;
-    font-weight: 650;
+    font-size: 0.68rem;
+    font-weight: 600;
 
+    letter-spacing: 0.01em;
     line-height: 1.3;
 }
 
@@ -207,9 +213,10 @@
     color: var(--reports-purple-dark);
 
     font-family: "Bricolage Grotesque", sans-serif;
-    font-size: 1.35rem;
+    font-size: 1.42rem;
     font-weight: 700;
 
+    letter-spacing: -0.015em;
     line-height: 1;
 }
 
@@ -373,10 +380,10 @@
 
     padding: 0 9px;
 
+    background: var(--reports-purple-soft);
+
     border: 1px solid var(--reports-purple-border);
     border-radius: 7px;
-
-    background: var(--reports-purple-soft);
 
     color: var(--reports-purple);
 
@@ -405,6 +412,13 @@
    MODERN REPORT CARD
    ============================================================ */
 
+/*
+   The card is intentionally NOT pure white.
+
+   A very soft white surface gives it the modern dashboard/
+   Next.js-style layered appearance without looking heavy.
+*/
+
 .report-card {
     position: relative;
 
@@ -415,10 +429,19 @@
 
     padding: 21px;
 
-    background: #ffffff;
+    background:
+        linear-gradient(
+            145deg,
+            #ffffff 0%,
+            #fdfbfd 55%,
+            #faf8fb 100%
+        );
 
-    border: 1px solid #e7e3e9;
+    border: 1px solid #e4dfe7;
     border-radius: 16px;
+
+    box-shadow:
+        0 1px 2px rgba(15, 8, 18, 0.025);
 
     overflow: hidden;
 
@@ -430,17 +453,34 @@
 
 
 /*
-   IMPORTANT:
-   No decorative top line / gradient.
-   The card is intentionally clean and flat.
+   Very subtle internal glow.
+   No top line and no thick decoration.
 */
 
+.report-card::after {
+    content: "";
+
+    position: absolute;
+
+    top: -75px;
+    right: -75px;
+
+    width: 170px;
+    height: 170px;
+
+    border-radius: 50%;
+
+    background: rgba(74, 7, 84, 0.025);
+
+    pointer-events: none;
+}
+
 .report-card:hover {
-    border-color: #d8cbdc;
+    border-color: #d5c9da;
 
     box-shadow:
-        0 8px 24px rgba(15, 8, 18, 0.055),
-        0 2px 6px rgba(74, 7, 84, 0.025);
+        0 10px 28px rgba(15, 8, 18, 0.06),
+        0 2px 7px rgba(74, 7, 84, 0.025);
 
     transform: translateY(-2px);
 }
@@ -451,6 +491,9 @@
    ============================================================ */
 
 .report-top {
+    position: relative;
+    z-index: 1;
+
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -474,12 +517,12 @@
 
     padding: 6px 10px;
 
-    border: 1px solid #f3d5bd;
+    background: var(--reports-orange-soft);
+
+    border: 1px solid var(--reports-orange-border);
     border-radius: 7px;
 
-    background: #fff8f2;
-
-    color: #b94a0b;
+    color: var(--reports-orange-dark);
 
     font-family: "Bricolage Grotesque", sans-serif;
     font-size: 0.65rem;
@@ -500,6 +543,7 @@
 .report-date {
     color: #827a86;
 
+    font-family: "DM Sans", sans-serif;
     font-size: 0.71rem;
     font-weight: 500;
 
@@ -514,19 +558,18 @@
    ============================================================ */
 
 .report-title {
+    position: relative;
+    z-index: 1;
+
     margin: 0 0 10px;
 
     color: var(--reports-purple-dark);
 
     font-family: "Bricolage Grotesque", sans-serif;
-
-    /*
-       Slightly increased from the previous version.
-    */
     font-size: 1.12rem;
-
     font-weight: 700;
 
+    letter-spacing: -0.01em;
     line-height: 1.35;
 }
 
@@ -536,17 +579,15 @@
    ============================================================ */
 
 .report-summary {
+    position: relative;
+    z-index: 1;
+
     margin: 0;
 
     color: #5d5662;
 
     font-family: "DM Sans", sans-serif;
-
-    /*
-       Increased slightly for easier reading.
-    */
-    font-size: 0.85rem;
-
+    font-size: 0.86rem;
     font-weight: 400;
 
     line-height: 1.7;
@@ -558,6 +599,9 @@
    ============================================================ */
 
 .report-footer {
+    position: relative;
+    z-index: 1;
+
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -565,53 +609,60 @@
     gap: 14px;
 
     margin-top: 20px;
-    padding-top: 14px;
+    padding-top: 13px;
 
-    border-top: 1px solid #f0edf2;
+    border-top: 1px solid #eeeaf0;
 }
 
 .reporter {
     display: flex;
     flex-direction: column;
 
-    gap: 2px;
+    gap: 1px;
 
     min-width: 0;
 }
 
 
 /*
-   Smaller reporter name.
-   It now acts as supporting metadata rather than a headline.
+   SIGNIFICANTLY SMALLER REPORTER NAME
 */
 
 .reporter-name {
     overflow: hidden;
 
-    color: #504853;
+    color: #625b66;
 
     font-family: "DM Sans", sans-serif;
 
-    font-size: 0.68rem;
-
+    font-size: 0.62rem;
     font-weight: 600;
 
-    line-height: 1.3;
+    line-height: 1.25;
 
     text-overflow: ellipsis;
     white-space: nowrap;
 }
 
+
+/*
+   DEPARTMENT / ROLE IS EVEN SMALLER
+*/
+
 .reporter-role {
-    color: #948c97;
+    overflow: hidden;
+
+    color: #9a929d;
 
     font-family: "DM Sans", sans-serif;
 
-    font-size: 0.63rem;
-
+    font-size: 0.57rem;
     font-weight: 400;
 
-    line-height: 1.3;
+    line-height: 1.25;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 
@@ -630,10 +681,10 @@
 
     flex: 0 0 30px;
 
+    background: #fbf9fc;
+
     border: 1px solid #e5dce8;
     border-radius: 8px;
-
-    background: #fbf9fc;
 
     color: var(--reports-purple);
 
@@ -670,7 +721,12 @@
 
     padding: 35px 20px;
 
-    background: #ffffff;
+    background:
+        linear-gradient(
+            145deg,
+            #ffffff 0%,
+            #fcfafc 100%
+        );
 
     border: 1px dashed #dcd3e0;
     border-radius: 16px;
@@ -688,10 +744,10 @@
 
     margin-bottom: 13px;
 
+    background: var(--reports-purple-soft);
+
     border: 1px solid var(--reports-purple-border);
     border-radius: 12px;
-
-    background: var(--reports-purple-soft);
 
     color: var(--reports-purple);
 
@@ -864,6 +920,10 @@
         padding: 15px;
     }
 
+    .stat-label {
+        font-size: 0.65rem;
+    }
+
     .stat-value {
         font-size: 1.2rem;
     }
@@ -913,7 +973,7 @@
     }
 
     .stat-label {
-        font-size: 0.64rem;
+        font-size: 0.61rem;
     }
 
     .stat-value {
@@ -984,11 +1044,11 @@
     }
 
     .reporter-name {
-        font-size: 0.66rem;
+        font-size: 0.59rem;
     }
 
     .reporter-role {
-        font-size: 0.61rem;
+        font-size: 0.55rem;
     }
 }
 
@@ -1012,7 +1072,7 @@
     }
 
     .stat-label {
-        font-size: 0.61rem;
+        font-size: 0.59rem;
     }
 
     .stat-value {
@@ -1041,5 +1101,13 @@
 
     .report-summary {
         font-size: 0.79rem;
+    }
+
+    .reporter-name {
+        font-size: 0.56rem;
+    }
+
+    .reporter-role {
+        font-size: 0.53rem;
     }
 }
