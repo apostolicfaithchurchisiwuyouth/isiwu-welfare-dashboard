@@ -6,533 +6,612 @@
 
 
 /* ============================================================
-   PAGE FOUNDATION
+   PAGE BASE
    ============================================================ */
 
-.welfare-page {
+.dashboard-content.welfare-page {
+
     width: min(100% - 32px, 1500px);
+
     max-width: 1500px;
+
     margin: 0 auto;
+
     padding: 0 0 34px;
+
     box-sizing: border-box;
+
     font-family: "DM Sans", sans-serif;
+
     color: #111827;
+
 }
 
 
-/* Prevent unwanted mobile tap rectangles */
 .welfare-page *,
 .welfare-page *::before,
 .welfare-page *::after {
-    -webkit-tap-highlight-color: transparent;
+
     box-sizing: border-box;
+
+    -webkit-tap-highlight-color: transparent;
+
 }
 
 
 .welfare-page button,
 .welfare-page input {
+
     font-family: inherit;
+
 }
 
 
 /* ============================================================
-   LOGIN OVERLAY
+   LOGIN
    ============================================================ */
 
 #loginOverlay {
+
     position: fixed;
+
     inset: 0;
-    z-index: 9999;
+
+    z-index: 99999;
 
     display: flex;
+
     align-items: center;
+
     justify-content: center;
 
     padding: 24px;
 
     background:
         radial-gradient(
-            circle at 15% 20%,
-            rgba(74, 7, 84, 0.18),
+            circle at 10% 10%,
+            rgba(74, 7, 84, 0.08),
             transparent 32%
         ),
         radial-gradient(
-            circle at 85% 80%,
-            rgba(234, 88, 12, 0.12),
-            transparent 30%
+            circle at 90% 90%,
+            rgba(234, 88, 12, 0.07),
+            transparent 32%
         ),
-        #f7f7f9;
+        #f8f8fa;
 
-    overflow-y: auto;
 }
 
 
 #loginOverlay.hidden {
+
     display: none !important;
+
 }
 
 
-/* ============================================================
-   LOGIN MODAL
-   ============================================================ */
+.welfare-login-card {
 
-.login-modal {
     width: min(100%, 410px);
 
-    padding: 34px;
+    padding: 30px;
 
-    background: rgba(255, 255, 255, 0.96);
+    background: #ffffff;
 
-    border: 1px solid #e6e8ec;
-    border-radius: 26px;
+    border: 1px solid #e5e7eb;
+
+    border-radius: 24px;
 
     box-shadow:
-        0 24px 70px rgba(15, 23, 42, 0.12),
-        0 4px 18px rgba(15, 23, 42, 0.05);
+        0 20px 60px rgba(15, 23, 42, 0.10);
 
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
 }
 
 
-/* ============================================================
-   LOGIN LOGO
-   ============================================================ */
-
-.login-logo {
-    width: 54px;
-    height: 54px;
+.welfare-login-brand {
 
     display: flex;
+
     align-items: center;
+
+    gap: 13px;
+
+    margin-bottom: 18px;
+
+}
+
+
+.welfare-login-icon {
+
+    width: 48px;
+
+    height: 48px;
+
+    display: flex;
+
+    align-items: center;
+
     justify-content: center;
 
-    margin-bottom: 22px;
+    flex-shrink: 0;
 
     color: #ffffff;
-    background: #4a0754;
 
-    border-radius: 16px;
+    background: #4A0754;
 
-    font-size: 21px;
+    border-radius: 13px;
 
-    box-shadow:
-        0 10px 24px rgba(74, 7, 84, 0.18);
+    font-size: 18px;
+
 }
 
 
-.login-heading {
-    margin-bottom: 25px;
-}
+.welfare-login-brand span {
 
-
-.login-eyebrow {
     display: block;
 
-    margin-bottom: 7px;
+    margin-bottom: 3px;
 
-    color: #4a0754;
+    color: #4A0754;
 
     font-family: "Bricolage Grotesque", sans-serif;
-    font-size: 0.68rem;
+
+    font-size: 0.61rem;
+
     font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
+
+    letter-spacing: 0.06em;
+
 }
 
 
-.login-heading h2 {
+.welfare-login-brand h1 {
+
     margin: 0;
 
-    color: #0a0016;
+    color: #0A0016;
 
     font-family: "Bricolage Grotesque", sans-serif;
-    font-size: 1.65rem;
-    font-weight: 700;
+
+    font-size: 1.35rem;
+
     line-height: 1.15;
+
 }
 
 
-.login-subtitle {
-    margin: 9px 0 0;
+.welfare-login-description {
+
+    margin: 0 0 22px;
 
     color: #667085;
 
-    font-size: 0.82rem;
+    font-size: 0.76rem;
+
     line-height: 1.55;
+
 }
 
 
-/* ============================================================
-   LOGIN FORM
-   ============================================================ */
+.welfare-login-form {
 
-.login-form {
     display: flex;
+
     flex-direction: column;
-    gap: 16px;
+
+    gap: 14px;
+
 }
 
 
-.login-field {
+.welfare-field {
+
     display: flex;
+
     flex-direction: column;
-    gap: 7px;
+
+    gap: 6px;
+
 }
 
 
-.login-field label {
+.welfare-field label {
+
     color: #344054;
 
     font-family: "Bricolage Grotesque", sans-serif;
-    font-size: 0.75rem;
+
+    font-size: 0.71rem;
+
     font-weight: 600;
+
 }
 
 
-.input-wrap {
+.welfare-input-wrap {
+
     position: relative;
+
 }
 
 
-.input-wrap i {
+.welfare-input-wrap i {
+
     position: absolute;
-    left: 14px;
+
+    left: 13px;
+
     top: 50%;
 
     transform: translateY(-50%);
 
-    color: #98a2b3;
+    color: #98A2B3;
 
-    font-size: 17px;
+    font-size: 16px;
 
     pointer-events: none;
+
 }
 
 
-.login-field input {
-    width: 100%;
-    min-height: 46px;
+.welfare-field input {
 
-    padding: 0 14px 0 42px;
+    width: 100%;
+
+    min-height: 45px;
+
+    padding: 0 13px 0 39px;
 
     color: #101828;
+
     background: #ffffff;
 
     border: 1px solid #dfe3e8;
-    border-radius: 12px;
+
+    border-radius: 11px;
 
     outline: none;
 
-    font-size: 0.82rem;
+    font-size: 0.77rem;
 
     transition:
-        border-color 0.2s ease,
-        box-shadow 0.2s ease;
+        border-color .2s ease,
+        box-shadow .2s ease;
+
 }
 
 
-.login-field input::placeholder {
-    color: #98a2b3;
+.welfare-field input::placeholder {
+
+    color: #98A2B3;
+
 }
 
 
-.login-field input:focus {
-    border-color: #4a0754;
+.welfare-field input:focus {
+
+    border-color: #4A0754;
 
     box-shadow:
-        0 0 0 3px rgba(74, 7, 84, 0.08);
+        0 0 0 3px rgba(74, 7, 84, 0.07);
+
 }
 
 
-/* ============================================================
-   LOGIN BUTTON
-   ============================================================ */
+.welfare-login-btn {
 
-.login-btn {
     width: 100%;
-    min-height: 46px;
+
+    min-height: 45px;
 
     display: flex;
+
     align-items: center;
+
     justify-content: center;
-    gap: 8px;
+
+    gap: 7px;
 
     margin-top: 3px;
 
-    border: 0;
-    border-radius: 12px;
-
     color: #ffffff;
-    background: #4a0754;
+
+    background: #4A0754;
+
+    border: 0;
+
+    border-radius: 11px;
 
     cursor: pointer;
 
     font-family: "Bricolage Grotesque", sans-serif;
-    font-size: 0.78rem;
+
+    font-size: 0.74rem;
+
     font-weight: 600;
 
     transition:
-        transform 0.18s ease,
-        background 0.18s ease,
-        box-shadow 0.18s ease;
+        background .2s ease,
+        transform .2s ease;
+
 }
 
 
-.login-btn:hover {
-    background: #39053f;
+.welfare-login-btn:hover {
 
-    box-shadow:
-        0 8px 20px rgba(74, 7, 84, 0.16);
+    background: #39053F;
 
     transform: translateY(-1px);
+
 }
 
 
-.login-btn:active {
-    transform: translateY(0);
-}
+.welfare-login-btn:disabled {
 
+    opacity: .65;
 
-.login-btn:disabled {
-    opacity: 0.65;
     cursor: wait;
+
     transform: none;
+
 }
 
 
-/* ============================================================
-   LOGIN BACK BUTTON
-   ============================================================ */
+.welfare-login-back {
 
-.login-back-btn {
     display: flex;
+
     align-items: center;
+
     justify-content: center;
+
     gap: 6px;
 
-    min-height: 38px;
+    min-height: 35px;
 
     color: #667085;
 
     text-decoration: none;
 
     font-family: "Bricolage Grotesque", sans-serif;
-    font-size: 0.72rem;
+
+    font-size: 0.68rem;
+
     font-weight: 600;
 
-    transition: color 0.18s ease;
 }
 
 
-.login-back-btn:hover {
-    color: #4a0754;
+.welfare-login-back:hover {
+
+    color: #4A0754;
+
 }
 
 
-/* ============================================================
-   LOGIN ERROR
-   ============================================================ */
+.welfare-login-error {
 
-.login-error {
     min-height: 17px;
 
-    margin-top: -2px;
-
-    color: #c2410c;
+    color: #C2410C;
 
     text-align: center;
 
-    font-size: 0.72rem;
+    font-size: 0.68rem;
+
     font-weight: 600;
+
 }
 
 
 /* ============================================================
-   DASHBOARD VISIBILITY
+   DASHBOARD
    ============================================================ */
 
 #dashboardContent {
+
     display: none;
-}
 
-
-#dashboardContent.visible {
-    display: block;
 }
 
 
 /* ============================================================
-   WELFARE INTRO
+   PAGE HEADER
    ============================================================ */
 
-.welfare-intro {
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: 24px;
+.welfare-page-header {
 
-    margin-bottom: 22px;
-    padding: 24px 26px;
+    display: flex;
+
+    align-items: flex-end;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+    margin-bottom: 16px;
+
+    padding: 21px 23px;
 
     background:
         radial-gradient(
-            circle at 90% 15%,
-            rgba(74, 7, 84, 0.07),
+            circle at 92% 0%,
+            rgba(74, 7, 84, 0.065),
             transparent 27%
-        ),
-        radial-gradient(
-            circle at 75% 100%,
-            rgba(234, 88, 12, 0.05),
-            transparent 25%
         ),
         #ffffff;
 
     border: 1px solid #e6eaee;
-    border-radius: 24px;
+
+    border-radius: 22px;
 
     box-shadow:
-        0 8px 28px rgba(15, 23, 42, 0.045);
+        0 7px 25px rgba(15, 23, 42, 0.035);
+
 }
 
 
-.intro-copy {
+.welfare-page-heading {
+
     min-width: 0;
+
 }
 
 
-.page-kicker {
+.welfare-eyebrow {
+
     display: inline-flex;
+
     align-items: center;
-    gap: 7px;
 
-    margin-bottom: 7px;
+    gap: 6px;
 
-    color: #4a0754;
+    margin-bottom: 5px;
+
+    color: #4A0754;
 
     font-family: "Bricolage Grotesque", sans-serif;
-    font-size: 0.68rem;
+
+    font-size: 0.64rem;
+
     font-weight: 700;
-    letter-spacing: 0.025em;
+
 }
 
 
-.kicker-dot {
-    width: 7px;
-    height: 7px;
+.welfare-eyebrow-dot {
 
-    flex: 0 0 auto;
+    width: 6px;
 
-    background: #ea580c;
+    height: 6px;
+
+    background: #EA580C;
 
     border-radius: 50%;
+
 }
 
 
-.intro-copy h1 {
+.welfare-page-heading h1 {
+
     margin: 0;
 
-    color: #0a0016;
+    color: #0A0016;
 
     font-family: "Bricolage Grotesque", sans-serif;
-    font-size: clamp(1.35rem, 2.5vw, 1.8rem);
+
+    font-size: clamp(1.3rem, 2.2vw, 1.7rem);
+
     font-weight: 700;
+
     line-height: 1.15;
+
 }
 
 
-.intro-copy p {
-    max-width: 600px;
+.welfare-page-heading p {
 
-    margin: 7px 0 0;
+    margin: 6px 0 0;
 
     color: #667085;
 
-    font-size: 0.78rem;
-    line-height: 1.55;
+    font-size: 0.74rem;
+
+    line-height: 1.5;
+
 }
 
 
-.intro-actions {
+.welfare-page-actions {
+
     display: flex;
+
     align-items: center;
-    justify-content: flex-end;
-    gap: 9px;
+
+    gap: 8px;
 
     flex-shrink: 0;
+
 }
 
 
-.status-chip {
-    min-height: 36px;
+.welfare-active-status {
 
     display: inline-flex;
+
     align-items: center;
-    gap: 7px;
 
-    padding: 0 12px;
+    gap: 6px;
 
-    color: #176b3a;
-    background: #f0faf4;
+    min-height: 34px;
 
-    border: 1px solid #d8f0df;
-    border-radius: 10px;
+    padding: 0 10px;
+
+    color: #176B3A;
+
+    background: #F0FAF4;
+
+    border: 1px solid #D9EFDF;
+
+    border-radius: 9px;
 
     font-family: "Bricolage Grotesque", sans-serif;
-    font-size: 0.68rem;
+
+    font-size: 0.65rem;
+
     font-weight: 600;
+
 }
 
 
-.status-dot {
-    width: 7px;
-    height: 7px;
+.welfare-active-status span {
 
-    background: #22c55e;
+    width: 6px;
+
+    height: 6px;
+
+    background: #22C55E;
 
     border-radius: 50%;
+
 }
 
 
-.logout-btn {
-    min-height: 36px;
+.welfare-logout-btn {
+
+    min-height: 34px;
 
     display: inline-flex;
+
     align-items: center;
-    justify-content: center;
-    gap: 7px;
 
-    padding: 0 13px;
+    gap: 6px;
 
-    color: #4a0754;
+    padding: 0 11px;
+
+    color: #4A0754;
+
     background: #ffffff;
 
-    border: 1px solid #ded5e1;
-    border-radius: 10px;
+    border: 1px solid #DDD3E1;
+
+    border-radius: 9px;
 
     cursor: pointer;
 
     font-family: "Bricolage Grotesque", sans-serif;
-    font-size: 0.68rem;
+
+    font-size: 0.65rem;
+
     font-weight: 600;
 
-    transition:
-        background 0.18s ease,
-        border-color 0.18s ease,
-        transform 0.18s ease;
 }
 
 
-.logout-btn:hover {
-    background: #faf5fb;
-    border-color: #cbb5d0;
+.welfare-logout-btn:hover {
 
-    transform: translateY(-1px);
-}
+    background: #FAF5FB;
 
-
-.logout-btn i {
-    font-size: 15px;
 }
 
 
@@ -540,267 +619,338 @@
    STATISTICS
    ============================================================ */
 
-.welfare-stats {
+.welfare-stat-grid {
+
     display: grid;
 
     grid-template-columns:
         repeat(4, minmax(0, 1fr));
 
-    gap: 14px;
+    gap: 12px;
 
-    margin-bottom: 14px;
+    margin-bottom: 12px;
+
 }
 
 
 .welfare-stat-card {
+
     min-width: 0;
 
-    padding: 19px;
+    padding: 17px;
 
     background: #ffffff;
 
     border: 1px solid #e6eaee;
-    border-radius: 20px;
+
+    border-radius: 19px;
 
     box-shadow:
-        0 7px 24px rgba(15, 23, 42, 0.04);
+        0 6px 22px rgba(15, 23, 42, 0.035);
+
 }
 
 
-.stat-top {
+.welfare-stat-head {
+
     display: flex;
+
     align-items: center;
+
     justify-content: space-between;
 
-    gap: 12px;
+    gap: 8px;
 
-    margin-bottom: 16px;
+    margin-bottom: 13px;
+
 }
 
 
-.stat-icon {
-    width: 40px;
-    height: 40px;
+.welfare-stat-head > span {
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    border-radius: 12px;
-
-    font-size: 17px;
-}
-
-
-.stat-purple {
-    color: #4a0754;
-    background: #f5edf7;
-}
-
-
-.stat-orange {
-    color: #c2410c;
-    background: #fff4ed;
-}
-
-
-.stat-cyan {
-    color: #087f9f;
-    background: #edfafd;
-}
-
-
-.stat-green {
-    color: #177245;
-    background: #eefaf3;
-}
-
-
-.stat-label {
     color: #667085;
 
     font-family: "Bricolage Grotesque", sans-serif;
-    font-size: 0.69rem;
+
+    font-size: 0.66rem;
+
     font-weight: 600;
+
 }
 
 
-.stat-value,
-.status-value {
+.welfare-stat-icon {
+
+    width: 38px;
+
+    height: 38px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 11px;
+
+    font-size: 16px;
+
+}
+
+
+.welfare-stat-icon.purple {
+
+    color: #4A0754;
+
+    background: #F5EDF7;
+
+}
+
+
+.welfare-stat-icon.orange {
+
+    color: #C2410C;
+
+    background: #FFF3EB;
+
+}
+
+
+.welfare-stat-icon.cyan {
+
+    color: #087F9F;
+
+    background: #ECFAFD;
+
+}
+
+
+.welfare-stat-icon.green {
+
+    color: #177245;
+
+    background: #EEF9F2;
+
+}
+
+
+.welfare-stat-card strong {
+
+    display: block;
+
     margin-bottom: 5px;
 
-    color: #0a0016;
+    color: #0A0016;
 
     font-family: "Bricolage Grotesque", sans-serif;
-    font-size: clamp(1.15rem, 2vw, 1.55rem);
+
+    font-size: clamp(1.08rem, 1.8vw, 1.42rem);
+
     font-weight: 700;
+
     line-height: 1.15;
 
     overflow-wrap: anywhere;
+
 }
 
 
-.status-value {
+.welfare-stat-card .welfare-status-value {
+
     color: #177245;
+
 }
 
 
-.stat-description {
+.welfare-stat-card p {
+
     margin: 0;
 
-    color: #98a2b3;
+    color: #98A2B3;
 
-    font-size: 0.67rem;
+    font-size: 0.62rem;
+
     line-height: 1.45;
+
 }
 
 
 /* ============================================================
-   MAIN GRID
+   MAIN CONTENT
    ============================================================ */
 
-.welfare-main-grid {
+.welfare-content-grid {
+
     display: grid;
 
     grid-template-columns:
         minmax(0, 1.35fr)
-        minmax(320px, 0.9fr);
+        minmax(310px, .9fr);
 
-    gap: 14px;
+    gap: 12px;
 
-    align-items: stretch;
 }
 
 
-/* ============================================================
-   PANELS
-   ============================================================ */
-
 .welfare-panel {
+
     min-width: 0;
 
     background: #ffffff;
 
     border: 1px solid #e6eaee;
-    border-radius: 22px;
+
+    border-radius: 21px;
 
     box-shadow:
-        0 7px 24px rgba(15, 23, 42, 0.04);
+        0 6px 22px rgba(15, 23, 42, 0.035);
 
     overflow: hidden;
+
 }
 
 
-.activities,
-.chart-box {
-    min-height: 100%;
-}
+/* ============================================================
+   PANEL HEADER
+   ============================================================ */
 
+.welfare-panel-header {
 
-.panel-header {
-    min-height: 78px;
+    min-height: 73px;
 
     display: flex;
+
     align-items: center;
+
     justify-content: space-between;
 
-    gap: 18px;
+    gap: 14px;
 
-    padding: 17px 19px;
+    padding: 15px 17px;
 
-    border-bottom: 1px solid #eef0f3;
+    border-bottom: 1px solid #EEF0F3;
+
 }
 
 
-.panel-title-area {
+.welfare-panel-title {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
     min-width: 0;
 
-    display: flex;
-    align-items: center;
-    gap: 11px;
 }
 
 
-.panel-icon {
-    width: 40px;
-    height: 40px;
+.welfare-panel-icon {
+
+    width: 39px;
+
+    height: 39px;
 
     display: flex;
+
     align-items: center;
+
     justify-content: center;
 
     flex: 0 0 auto;
 
-    border-radius: 12px;
+    border-radius: 11px;
 
-    font-size: 17px;
+    font-size: 16px;
+
 }
 
 
-.panel-icon.purple {
-    color: #4a0754;
-    background: #f5edf7;
+.welfare-panel-icon.purple {
+
+    color: #4A0754;
+
+    background: #F5EDF7;
+
 }
 
 
-.panel-icon.cyan {
-    color: #087f9f;
-    background: #edfafd;
+.welfare-panel-icon.cyan {
+
+    color: #087F9F;
+
+    background: #ECFAFD;
+
 }
 
 
-.panel-title-area h2 {
+.welfare-panel-title h2 {
+
     margin: 0;
 
-    color: #0a0016;
+    color: #0A0016;
 
     font-family: "Bricolage Grotesque", sans-serif;
-    font-size: 0.88rem;
+
+    font-size: 0.84rem;
+
     font-weight: 700;
-    line-height: 1.25;
+
 }
 
 
-.panel-title-area p {
+.welfare-panel-title p {
+
     margin: 3px 0 0;
 
-    color: #98a2b3;
+    color: #98A2B3;
 
-    font-size: 0.66rem;
-    line-height: 1.4;
+    font-size: 0.61rem;
+
 }
 
 
-.header-badge {
+.welfare-panel-badge,
+.welfare-live-badge {
+
     display: inline-flex;
+
     align-items: center;
-    gap: 6px;
 
-    min-height: 29px;
+    gap: 5px;
 
-    padding: 0 9px;
+    min-height: 27px;
 
-    color: #4a0754;
-    background: #faf5fb;
+    padding: 0 8px;
 
-    border: 1px solid #eee3f0;
+    color: #4A0754;
+
+    background: #FAF5FB;
+
+    border: 1px solid #EEE3F0;
+
     border-radius: 8px;
 
+    white-space: nowrap;
+
     font-family: "Bricolage Grotesque", sans-serif;
-    font-size: 0.62rem;
+
+    font-size: 0.59rem;
+
     font-weight: 600;
 
-    white-space: nowrap;
 }
 
 
-.badge-dot {
-    width: 6px;
-    height: 6px;
+.welfare-live-badge {
 
-    background: #ea580c;
+    color: #087F9F;
 
-    border-radius: 50%;
+    background: #F0FBFD;
+
+    border-color: #D9F1F5;
+
 }
 
 
@@ -808,116 +958,141 @@
    TABLE
    ============================================================ */
 
-.table-wrapper {
+.welfare-table-wrap {
+
     width: 100%;
 
     overflow-x: auto;
+
 }
 
 
 .modern-table {
+
     width: 100%;
 
     border-collapse: collapse;
 
     table-layout: fixed;
+
 }
 
 
 .modern-table th {
-    padding: 11px 18px;
 
-    color: #98a2b3;
-    background: #fbfcfd;
+    padding: 10px 17px;
 
-    border-bottom: 1px solid #eef0f3;
+    color: #98A2B3;
+
+    background: #FBFCFD;
+
+    border-bottom: 1px solid #EEF0F3;
 
     text-align: left;
 
     font-family: "Bricolage Grotesque", sans-serif;
-    font-size: 0.62rem;
+
+    font-size: 0.59rem;
+
     font-weight: 600;
-    letter-spacing: 0.01em;
+
 }
 
 
 .modern-table th:last-child,
 .modern-table td:last-child {
-    width: 145px;
+
+    width: 135px;
 
     text-align: right;
+
 }
 
 
 .modern-table td {
-    padding: 13px 18px;
 
-    color: #344054;
+    padding: 12px 17px;
 
-    border-bottom: 1px solid #f0f2f4;
+    border-bottom: 1px solid #F0F2F4;
 
     vertical-align: middle;
 
-    font-size: 0.71rem;
+    font-size: 0.68rem;
+
 }
 
 
 .modern-table tbody tr:last-child td {
+
     border-bottom: 0;
+
 }
 
 
 .modern-table td strong {
+
     display: block;
 
     margin-bottom: 2px;
 
-    color: #1d2939;
+    color: #1D2939;
 
     font-family: "Bricolage Grotesque", sans-serif;
-    font-size: 0.71rem;
+
+    font-size: 0.68rem;
+
     font-weight: 600;
 
     overflow: hidden;
+
     text-overflow: ellipsis;
+
     white-space: nowrap;
+
 }
 
 
 .modern-table td small {
-    color: #98a2b3;
 
-    font-size: 0.61rem;
+    color: #98A2B3;
+
+    font-size: 0.57rem;
+
 }
 
 
 .modern-table td.credit {
-    color: #15803d;
+
+    color: #15803D;
 
     font-family: "Bricolage Grotesque", sans-serif;
-    font-size: 0.71rem;
+
     font-weight: 700;
+
 }
 
 
 .modern-table td.debit {
-    color: #c2410c;
+
+    color: #C2410C;
 
     font-family: "Bricolage Grotesque", sans-serif;
-    font-size: 0.71rem;
+
     font-weight: 700;
+
 }
 
 
-.table-loading,
-.table-empty {
-    padding: 34px 18px !important;
+.welfare-table-loading {
 
-    color: #98a2b3 !important;
+    padding: 35px 15px !important;
+
+    color: #98A2B3 !important;
 
     text-align: center !important;
 
-    font-size: 0.72rem !important;
+    font-size: 0.67rem !important;
+
 }
 
 
@@ -925,21 +1100,25 @@
    PAGINATION
    ============================================================ */
 
-.pagination {
-    min-height: 57px;
+.welfare-pagination {
+
+    min-height: 52px;
 
     display: flex;
+
     align-items: center;
+
     justify-content: center;
-    gap: 12px;
 
-    padding: 10px 18px;
+    gap: 10px;
 
-    border-top: 1px solid #eef0f3;
+    border-top: 1px solid #EEF0F3;
+
 }
 
 
-.pagination span {
+.welfare-pagination span {
+
     min-width: 75px;
 
     color: #667085;
@@ -947,45 +1126,54 @@
     text-align: center;
 
     font-family: "Bricolage Grotesque", sans-serif;
-    font-size: 0.64rem;
+
+    font-size: 0.61rem;
+
     font-weight: 600;
+
 }
 
 
 .pagination-btn {
-    width: 31px;
-    height: 31px;
+
+    width: 29px;
+
+    height: 29px;
 
     display: flex;
+
     align-items: center;
+
     justify-content: center;
 
-    color: #4a0754;
-    background: #faf5fb;
+    color: #4A0754;
 
-    border: 1px solid #eee3f0;
+    background: #FAF5FB;
+
+    border: 1px solid #EEE3F0;
+
     border-radius: 8px;
 
     cursor: pointer;
 
-    font-size: 14px;
+    font-size: 13px;
 
-    transition:
-        background 0.18s ease,
-        border-color 0.18s ease,
-        opacity 0.18s ease;
 }
 
 
 .pagination-btn:hover:not(:disabled) {
-    background: #f3eaf5;
-    border-color: #ddc9e1;
+
+    background: #F3EAF5;
+
 }
 
 
 .pagination-btn:disabled {
-    opacity: 0.38;
+
+    opacity: .35;
+
     cursor: not-allowed;
+
 }
 
 
@@ -993,62 +1181,85 @@
    CHART
    ============================================================ */
 
-.chart-container {
+.welfare-chart-container {
+
     position: relative;
 
-    width: 100%;
-    min-height: 300px;
+    height: 300px;
 
-    padding: 20px 19px 8px;
+    padding: 20px 17px 8px;
+
 }
 
 
-.chart-container canvas {
+.welfare-chart-container canvas {
+
     width: 100% !important;
+
     height: 270px !important;
+
 }
 
 
-.chart-summary {
+.welfare-chart-legend {
+
     display: flex;
-    flex-wrap: wrap;
-    gap: 14px;
 
-    padding: 4px 19px 18px;
+    flex-wrap: wrap;
+
+    gap: 13px;
+
+    padding: 3px 17px 17px;
+
 }
 
 
-.chart-summary-item {
+.welfare-chart-legend span {
+
     display: inline-flex;
+
     align-items: center;
-    gap: 6px;
+
+    gap: 5px;
 
     color: #667085;
 
-    font-size: 0.63rem;
+    font-size: 0.59rem;
+
 }
 
 
-.summary-marker {
+.welfare-chart-legend i {
+
     width: 7px;
+
     height: 7px;
 
+    display: block;
+
     border-radius: 50%;
+
 }
 
 
-.summary-marker.contribution {
-    background: #4a0754;
+.welfare-chart-legend i.contribution {
+
+    background: #4A0754;
+
 }
 
 
-.summary-marker.expense {
-    background: #ea580c;
+.welfare-chart-legend i.expense {
+
+    background: #EA580C;
+
 }
 
 
-.summary-marker.balance {
-    background: #0891b2;
+.welfare-chart-legend i.balance {
+
+    background: #0891B2;
+
 }
 
 
@@ -1056,342 +1267,368 @@
    FOOTER NOTE
    ============================================================ */
 
-.welfare-footer-note {
+.welfare-update-note {
+
     display: flex;
+
     align-items: center;
+
     justify-content: center;
-    gap: 6px;
 
-    margin-top: 15px;
+    gap: 5px;
 
-    color: #98a2b3;
+    margin-top: 12px;
 
-    font-size: 0.63rem;
+    color: #98A2B3;
+
+    font-size: 0.59rem;
+
 }
 
 
-.welfare-footer-note i {
-    color: #4a0754;
+.welfare-update-note i {
 
-    font-size: 13px;
+    color: #4A0754;
+
+    font-size: 12px;
+
 }
 
 
 /* ============================================================
-   RESPONSIVE — 1200
+   TABLET
    ============================================================ */
 
-@media (max-width: 1200px) {
+@media (max-width: 1100px) {
 
-    .welfare-stats {
+    .welfare-stat-grid {
+
         grid-template-columns:
             repeat(2, minmax(0, 1fr));
+
+    }
+
+
+    .welfare-content-grid {
+
+        grid-template-columns: 1fr;
+
     }
 
 }
 
 
 /* ============================================================
-   RESPONSIVE — 900
+   900PX
    ============================================================ */
 
 @media (max-width: 900px) {
 
-    .welfare-page {
+    .dashboard-content.welfare-page {
+
         width: min(100% - 24px, 760px);
-    }
 
-
-    .welfare-main-grid {
-        grid-template-columns: 1fr;
-    }
-
-
-    .chart-box {
-        min-height: auto;
-    }
-
-
-    .chart-container {
-        min-height: 280px;
     }
 
 }
 
 
 /* ============================================================
-   RESPONSIVE — 700
+   700PX
    ============================================================ */
 
 @media (max-width: 700px) {
 
-    .welfare-page {
-        width: min(100% - 20px, 620px);
+    .dashboard-content.welfare-page {
 
-        padding-bottom: 26px;
+        width: min(100% - 20px, 650px);
+
+        padding-bottom: 80px;
+
     }
 
 
-    .welfare-intro {
+    .welfare-page-header {
+
         align-items: flex-start;
+
         flex-direction: column;
 
-        padding: 20px;
+        padding: 19px;
+
     }
 
 
-    .intro-actions {
+    .welfare-page-actions {
+
         width: 100%;
 
         justify-content: space-between;
+
     }
 
 
-    .welfare-stats {
-        gap: 10px;
-    }
+    .welfare-active-status,
+    .welfare-logout-btn {
 
+        min-height: 35px;
 
-    .welfare-stat-card {
-        padding: 16px;
-        border-radius: 18px;
-    }
-
-
-    .stat-icon {
-        width: 36px;
-        height: 36px;
-
-        border-radius: 10px;
-
-        font-size: 16px;
-    }
-
-
-    .panel-header {
-        padding: 15px;
-    }
-
-
-    .modern-table th,
-    .modern-table td {
-        padding-left: 14px;
-        padding-right: 14px;
     }
 
 }
 
 
 /* ============================================================
-   RESPONSIVE — 520
+   MOBILE
    ============================================================ */
 
 @media (max-width: 520px) {
 
-    .welfare-page {
-        width: min(100% - 16px, 500px);
+    .dashboard-content.welfare-page {
+
+        width: calc(100% - 16px);
+
     }
 
 
-    .welfare-intro {
-        margin-bottom: 11px;
-        padding: 17px;
+    .welfare-page-header {
 
-        border-radius: 19px;
+        margin-bottom: 10px;
+
+        border-radius: 18px;
+
+        padding: 16px;
+
     }
 
 
-    .intro-copy h1 {
-        font-size: 1.3rem;
+    .welfare-page-heading h1 {
+
+        font-size: 1.27rem;
+
     }
 
 
-    .intro-copy p {
-        font-size: 0.72rem;
+    .welfare-page-heading p {
+
+        font-size: 0.68rem;
+
     }
 
 
-    .intro-actions {
-        align-items: stretch;
-        flex-direction: column;
-    }
+    .welfare-stat-grid {
 
+        gap: 8px;
 
-    .status-chip,
-    .logout-btn {
-        width: 100%;
+        margin-bottom: 10px;
 
-        justify-content: center;
-    }
-
-
-    .welfare-stats {
-        grid-template-columns: 1fr 1fr;
-
-        gap: 9px;
-
-        margin-bottom: 11px;
     }
 
 
     .welfare-stat-card {
+
         padding: 14px;
 
         border-radius: 16px;
+
     }
 
 
-    .stat-top {
-        margin-bottom: 12px;
+    .welfare-stat-head {
+
+        margin-bottom: 10px;
+
     }
 
 
-    .stat-label {
-        font-size: 0.62rem;
+    .welfare-stat-icon {
+
+        width: 34px;
+
+        height: 34px;
+
+        border-radius: 9px;
+
+        font-size: 14px;
+
     }
 
 
-    .stat-value,
-    .status-value {
-        font-size: 1.05rem;
+    .welfare-stat-head > span {
+
+        font-size: 0.59rem;
+
     }
 
 
-    .stat-description {
-        font-size: 0.6rem;
+    .welfare-stat-card strong {
+
+        font-size: 1rem;
+
     }
 
 
-    .panel-header {
-        min-height: 70px;
+    .welfare-stat-card p {
+
+        font-size: 0.57rem;
+
+    }
+
+
+    .welfare-panel {
+
+        border-radius: 18px;
+
+    }
+
+
+    .welfare-panel-header {
+
+        min-height: 67px;
 
         padding: 13px;
+
     }
 
 
-    .panel-title-area {
-        gap: 9px;
-    }
+    .welfare-panel-icon {
 
-
-    .panel-icon {
         width: 35px;
+
         height: 35px;
 
         border-radius: 10px;
 
-        font-size: 15px;
     }
 
 
-    .panel-title-area h2 {
-        font-size: 0.8rem;
+    .welfare-panel-title h2 {
+
+        font-size: 0.77rem;
+
     }
 
 
-    .panel-title-area p {
-        font-size: 0.59rem;
+    .welfare-panel-title p {
+
+        font-size: 0.56rem;
+
     }
 
 
-    .header-badge {
+    .welfare-panel-badge,
+    .welfare-live-badge {
+
         display: none;
+
     }
 
 
     .modern-table th {
-        font-size: 0.58rem;
+
+        padding: 9px 12px;
+
+        font-size: 0.55rem;
+
     }
 
 
     .modern-table td {
-        padding: 11px 12px;
 
-        font-size: 0.65rem;
+        padding: 10px 12px;
+
+        font-size: 0.62rem;
+
     }
 
 
     .modern-table td strong {
-        font-size: 0.65rem;
+
+        font-size: 0.62rem;
+
     }
 
 
     .modern-table td small {
-        font-size: 0.56rem;
+
+        font-size: 0.53rem;
+
     }
 
 
     .modern-table th:last-child,
     .modern-table td:last-child {
+
         width: 105px;
+
     }
 
 
-    .chart-container {
-        min-height: 250px;
+    .welfare-chart-container {
 
-        padding: 14px 12px 5px;
+        height: 260px;
+
+        padding: 15px 10px 5px;
+
     }
 
 
-    .chart-container canvas {
-        height: 230px !important;
+    .welfare-chart-container canvas {
+
+        height: 235px !important;
+
     }
 
 
-    .chart-summary {
-        gap: 10px;
+    .welfare-chart-legend {
 
-        padding: 4px 13px 15px;
+        gap: 9px;
+
+        padding: 2px 12px 14px;
+
     }
 
 
-    .chart-summary-item {
-        font-size: 0.58rem;
-    }
+    .welfare-login-card {
 
+        padding: 25px 21px;
 
-    .welfare-footer-note {
-        font-size: 0.58rem;
+        border-radius: 21px;
+
     }
 
 }
 
 
 /* ============================================================
-   RESPONSIVE — 380
+   VERY SMALL DEVICES
    ============================================================ */
 
 @media (max-width: 380px) {
 
-    .welfare-stats {
+    .welfare-stat-grid {
+
         grid-template-columns: 1fr;
+
     }
 
 
-    .welfare-stat-card {
-        padding: 15px;
+    .welfare-page-actions {
+
+        align-items: stretch;
+
+        flex-direction: column;
+
     }
 
 
-    .stat-top {
-        margin-bottom: 10px;
-    }
+    .welfare-active-status,
+    .welfare-logout-btn {
 
+        width: 100%;
 
-    .stat-description {
-        font-size: 0.62rem;
-    }
+        justify-content: center;
 
-
-    .login-modal {
-        padding: 27px 21px;
-        border-radius: 22px;
-    }
-
-
-    .login-heading h2 {
-        font-size: 1.45rem;
     }
 
 }
@@ -1406,8 +1643,11 @@
     .welfare-page *,
     .welfare-page *::before,
     .welfare-page *::after {
-        scroll-behavior: auto !important;
+
         transition: none !important;
+
+        animation: none !important;
+
     }
 
 }
