@@ -579,6 +579,274 @@
 
         }
 
+                /* =================================================
+           PORTAL DARK MODE
+           
+           Controlled by:
+           <html data-theme="dark">
+           
+           This intentionally does NOT use
+           prefers-color-scheme so the portal theme
+           button remains the single source of truth.
+        ================================================== */
+
+        [data-theme="dark"] .hub-report-modal-backdrop {
+            background: rgba(0, 0, 0, 0.68);
+        }
+
+
+        /* =================================================
+           REPORT MODAL PANEL
+        ================================================== */
+
+        [data-theme="dark"] .hub-report-modal-panel {
+            background: #17141C;
+
+            box-shadow:
+                0 -12px 40px rgba(0, 0, 0, 0.55);
+        }
+
+
+        [data-theme="dark"] .hub-report-modal-handle {
+            background: #403845;
+        }
+
+
+        /* =================================================
+           REPORT MODAL HEADER
+        ================================================== */
+
+        [data-theme="dark"] .hub-report-modal-icon {
+            background: rgba(168, 85, 247, 0.16);
+            color: #C084FC;
+        }
+
+
+        [data-theme="dark"] .hub-report-modal-eyebrow {
+            color: #FB923C;
+        }
+
+
+        [data-theme="dark"] .hub-report-modal-heading h2 {
+            color: #F5F3F7;
+        }
+
+
+        [data-theme="dark"] .hub-report-modal-close {
+            border-color: #39333F;
+            background: #121016;
+            color: #A7A2AE;
+        }
+
+
+        [data-theme="dark"] .hub-report-modal-close:hover {
+            background: rgba(234, 88, 12, 0.12);
+            border-color: rgba(234, 88, 12, 0.35);
+            color: #FB923C;
+        }
+
+
+        /* =================================================
+           REPORT MODAL OPTIONS
+        ================================================== */
+
+        [data-theme="dark"] .hub-report-modal-option {
+            border-color: #302B35;
+            background: #121016;
+            color: #F5F3F7;
+        }
+
+
+        [data-theme="dark"] .hub-report-modal-option:hover {
+            background: #1D1923;
+            border-color: rgba(234, 88, 12, 0.35);
+
+            transform: translateY(-1px);
+        }
+
+
+        [data-theme="dark"] .hub-report-modal-option-icon {
+            background: rgba(234, 88, 12, 0.12);
+            color: #FB923C;
+        }
+
+
+        [data-theme="dark"] .hub-report-modal-option-content h3 {
+            color: #F5F3F7;
+        }
+
+
+        [data-theme="dark"] .hub-report-modal-option-content p {
+            color: #A7A2AE;
+        }
+
+
+        [data-theme="dark"] .hub-report-modal-option-arrow {
+            color: #6F6875;
+        }
+
+
+        [data-theme="dark"]
+        .hub-report-modal-option:hover
+        .hub-report-modal-option-arrow {
+            color: #FB923C;
+        }
+
+
+        /* =================================================
+           ACADEMIC HELP MODAL
+           
+           These selectors match the academic-help-modal
+           styles already defined in main.css.
+        ================================================== */
+
+        [data-theme="dark"] .academic-help-modal-backdrop {
+            background: rgba(0, 0, 0, 0.68);
+        }
+
+
+        [data-theme="dark"] .academic-help-modal-panel {
+            background: #17141C;
+
+            box-shadow:
+                0 -12px 40px rgba(0, 0, 0, 0.55);
+        }
+
+
+        [data-theme="dark"] .academic-help-modal-icon {
+            background: rgba(168, 85, 247, 0.16);
+            color: #C084FC;
+        }
+
+
+        [data-theme="dark"] .academic-help-modal-eyebrow {
+            color: #FB923C;
+        }
+
+
+        [data-theme="dark"] .academic-help-modal-heading h2 {
+            color: #F5F3F7;
+        }
+
+
+        [data-theme="dark"] .academic-help-modal-close {
+            border-color: #39333F;
+            background: #121016;
+            color: #A7A2AE;
+        }
+
+
+        [data-theme="dark"] .academic-help-modal-close:hover {
+            background: rgba(234, 88, 12, 0.12);
+            border-color: rgba(234, 88, 12, 0.35);
+            color: #FB923C;
+        }
+
+
+        [data-theme="dark"] .academic-help-modal-intro p {
+            color: #A7A2AE;
+        }
+
+
+        /* =================================================
+           ACADEMIC HELP OPTIONS
+        ================================================== */
+
+        [data-theme="dark"] .academic-help-option {
+            background: #121016;
+            border-color: #302B35;
+            color: #F5F3F7;
+        }
+
+
+        [data-theme="dark"] .academic-help-option:hover {
+            background: #1D1923;
+            border-color: rgba(234, 88, 12, 0.35);
+        }
+
+
+        [data-theme="dark"] .academic-help-option-icon {
+            background: rgba(234, 88, 12, 0.12);
+            color: #FB923C;
+        }
+
+
+        [data-theme="dark"] .academic-help-option-content h3 {
+            color: #F5F3F7;
+        }
+
+
+        [data-theme="dark"] .academic-help-option-content p {
+            color: #A7A2AE;
+        }
+
+
+        [data-theme="dark"] .academic-help-option-arrow {
+            color: #6F6875;
+        }
+
+
+        [data-theme="dark"] .academic-help-option:hover
+        .academic-help-option-arrow {
+            color: #FB923C;
+        }
+
+
+        /* =================================================
+           HOLIDAY LEARNING BADGE
+        ================================================== */
+
+        [data-theme="dark"] .academic-help-holiday-badge {
+            background: rgba(34, 197, 94, 0.12);
+            border-color: rgba(34, 197, 94, 0.22);
+            color: #4ADE80;
+        }
+
+
+        /* =================================================
+           HOLIDAY LEARNING LOCKED NOTE
+        ================================================== */
+
+        [data-theme="dark"] .academic-help-holiday-note {
+            background: rgba(168, 85, 247, 0.08);
+            border-color: rgba(168, 85, 247, 0.18);
+            color: #C8C1CC;
+        }
+
+
+        [data-theme="dark"] .academic-help-holiday-note i {
+            color: #C084FC;
+        }
+
+
+        /* =================================================
+           DARK MODE SCROLLBAR
+        ================================================== */
+
+        [data-theme="dark"] .hub-report-modal-panel::-webkit-scrollbar,
+        [data-theme="dark"] .academic-help-modal-panel::-webkit-scrollbar {
+            width: 6px;
+        }
+
+
+        [data-theme="dark"] .hub-report-modal-panel::-webkit-scrollbar-track,
+        [data-theme="dark"] .academic-help-modal-panel::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+
+        [data-theme="dark"] .hub-report-modal-panel::-webkit-scrollbar-thumb,
+        [data-theme="dark"] .academic-help-modal-panel::-webkit-scrollbar-thumb {
+            background: #403845;
+            border-radius: 10px;
+        }
+
+
+        [data-theme="dark"] .hub-report-modal-panel::-webkit-scrollbar-thumb:hover,
+        [data-theme="dark"] .academic-help-modal-panel::-webkit-scrollbar-thumb:hover {
+            background: #5A5060;
+        }
+
     </style>
 
 </head>
