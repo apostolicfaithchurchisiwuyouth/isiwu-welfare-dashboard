@@ -1733,113 +1733,788 @@
 
 /* ============================================================
    DARK MODE
-   Scoped only to Results page.
+   PORTAL-CONTROLLED RESULTS THEME
+   ------------------------------------------------------------
+   Controlled by:
+   <html data-theme="dark">
+
+   IMPORTANT:
+   This section intentionally uses the same dark surface hierarchy
+   as the rest of the AFC Isiu Youth Portal.
 ============================================================ */
 
-body.dark-mode .results-page,
-body[data-theme="dark"] .results-page {
 
-    --results-text: #f7f2f8;
+/* ============================================================
+   RESULTS DARK VARIABLES
+============================================================ */
 
-    --results-muted: #b9aebb;
+[data-theme="dark"] .results-page {
 
-    --results-border: #3b3040;
+    --results-purple: #C084FC;
+    --results-purple-dark: #A855F7;
+    --results-purple-soft: rgba(168, 85, 247, 0.13);
 
-    --results-surface: #211923;
+    --results-orange: #FB923C;
+    --results-orange-soft: rgba(234, 88, 12, 0.12);
 
-    --results-soft: #281f2b;
+    --results-green: #4ADE80;
+    --results-green-soft: rgba(34, 197, 94, 0.12);
 
-    --results-purple-soft: #33243a;
+    --results-red: #F87171;
+    --results-red-soft: rgba(248, 113, 113, 0.12);
+
+    --results-text: #F5F3F7;
+    --results-muted: #A7A2AE;
+
+    --results-border: #302B35;
+
+    --results-surface: #17141C;
+    --results-soft: #121016;
 }
 
 
-body.dark-mode .results-page .results-hero,
-body[data-theme="dark"] .results-page .results-hero {
+/* ============================================================
+   HERO
+============================================================ */
+
+[data-theme="dark"] .results-page .results-hero {
 
     background:
         linear-gradient(
             135deg,
-            #241c26 0%,
-            #211923 60%,
-            #2b211d 100%
+            #17141C 0%,
+            #1B1720 56%,
+            #21191A 100%
         );
 
-    border-color: #3b3040;
+    border-color: #302B35;
+
+    box-shadow:
+        0 18px 45px rgba(0, 0, 0, 0.28);
 }
 
 
-body.dark-mode .results-page .results-hero h1,
-body[data-theme="dark"] .results-page .results-hero h1 {
+[data-theme="dark"] .results-page .results-hero::before {
 
-    color: #ffffff;
+    background:
+        linear-gradient(
+            180deg,
+            #A855F7,
+            #FB923C
+        );
 }
 
 
-body.dark-mode .results-page .results-member,
-body[data-theme="dark"] .results-page .results-member {
+[data-theme="dark"] .results-page .results-hero::after {
 
-    background: rgba(255, 255, 255, 0.06);
-
-    border-color: rgba(255, 255, 255, 0.09);
+    background:
+        rgba(168, 85, 247, 0.08);
 }
 
 
-body.dark-mode .results-page .results-card,
-body.dark-mode .results-page .latest-result,
-body.dark-mode .results-page .review-header-card,
-body.dark-mode .results-page .review-question,
-body.dark-mode .results-page .review-loading,
-body.dark-mode .results-page .review-empty,
-body[data-theme="dark"] .results-page .results-card,
-body[data-theme="dark"] .results-page .latest-result,
-body[data-theme="dark"] .results-page .review-header-card,
-body[data-theme="dark"] .results-page .review-question,
-body[data-theme="dark"] .results-page .review-loading,
-body[data-theme="dark"] .results-page .review-empty {
+[data-theme="dark"] .results-page .results-eyebrow {
 
-    background: var(--results-surface);
-
-    border-color: var(--results-border);
+    color: #C084FC;
 }
 
 
-body.dark-mode .results-page .history-item,
-body[data-theme="dark"] .results-page .history-item {
+[data-theme="dark"] .results-page .results-eyebrow-dot {
 
-    background: #281f2b;
-
-    border-color: #3b3040;
+    background: #FB923C;
 }
 
 
-body.dark-mode .results-page .history-review-btn,
-body.dark-mode .results-page .review-close-btn,
-body[data-theme="dark"] .results-page .history-review-btn,
-body[data-theme="dark"] .results-page .review-close-btn {
+[data-theme="dark"] .results-page .results-hero h1 {
 
-    color: #eadff0;
-
-    background: transparent;
-
-    border-color: #4b3d50;
+    color: #F5F3F7;
 }
 
 
-body.dark-mode .results-page .review-option,
-body[data-theme="dark"] .results-page .review-option {
+[data-theme="dark"] .results-page .results-hero p {
 
-    background: #2a222d;
-
-    border-color: #403542;
+    color: #A7A2AE;
 }
 
 
-body.dark-mode .results-page .review-option-text,
-body[data-theme="dark"] .results-page .review-option-text {
+[data-theme="dark"] .results-page .results-member {
 
-    color: #d7ccd9;
+    color: #C084FC;
+
+    background:
+        rgba(168, 85, 247, 0.11);
+
+    border-color:
+        rgba(192, 132, 252, 0.18);
 }
 
+
+[data-theme="dark"] .results-page .results-hero-mark {
+
+    color: #C084FC;
+}
+
+
+[data-theme="dark"] .results-page .results-hero-circle {
+
+    color: #C084FC;
+
+    background: #121016;
+
+    border-color: #39333F;
+
+    box-shadow:
+        0 10px 28px rgba(0, 0, 0, 0.30);
+}
+
+
+/* ============================================================
+   MESSAGE
+============================================================ */
+
+[data-theme="dark"] .results-page .results-message {
+
+    color: #FCD34D;
+
+    background:
+        rgba(245, 158, 11, 0.09);
+
+    border-color:
+        rgba(245, 158, 11, 0.22);
+}
+
+
+/* ============================================================
+   LATEST RESULT
+============================================================ */
+
+[data-theme="dark"] .results-page .latest-result {
+
+    background: #17141C;
+
+    border-color: #302B35;
+
+    box-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.24);
+}
+
+
+[data-theme="dark"] .results-page .content-eyebrow {
+
+    color: #FB923C;
+}
+
+
+[data-theme="dark"] .results-page .latest-result h2 {
+
+    color: #F5F3F7;
+}
+
+
+[data-theme="dark"] .results-page .latest-lesson-pill {
+
+    color: #C084FC;
+
+    background:
+        rgba(168, 85, 247, 0.13);
+}
+
+
+/* ============================================================
+   SCORE PANEL
+============================================================ */
+
+[data-theme="dark"] .results-page .score-panel {
+
+    background:
+        linear-gradient(
+            145deg,
+            #4A0754,
+            #25012D
+        );
+
+    color: #FFFFFF;
+
+    box-shadow:
+        0 14px 30px rgba(0, 0, 0, 0.28);
+}
+
+
+[data-theme="dark"] .results-page .score-panel-label {
+
+    color: rgba(255, 255, 255, 0.70);
+}
+
+
+[data-theme="dark"] .results-page .score-display span {
+
+    color: rgba(255, 255, 255, 0.72);
+}
+
+
+[data-theme="dark"] .results-page .score-panel-note {
+
+    color: rgba(255, 255, 255, 0.62);
+}
+
+
+/* ============================================================
+   RESULT DETAILS
+============================================================ */
+
+[data-theme="dark"] .results-page .result-detail-card {
+
+    background: #121016;
+
+    border-color: #302B35;
+}
+
+
+[data-theme="dark"] .results-page .result-detail-card span {
+
+    color: #A7A2AE;
+}
+
+
+[data-theme="dark"] .results-page .result-detail-card strong {
+
+    color: #F5F3F7;
+}
+
+
+[data-theme="dark"] .results-page .points-icon {
+
+    color: #FB923C;
+
+    background:
+        rgba(234, 88, 12, 0.12);
+}
+
+
+[data-theme="dark"] .results-page .date-icon {
+
+    color: #C084FC;
+
+    background:
+        rgba(168, 85, 247, 0.13);
+}
+
+
+[data-theme="dark"] .results-page .results-review-btn {
+
+    color: #FFFFFF;
+
+    background: #7E22CE;
+}
+
+
+[data-theme="dark"] .results-page .results-review-btn:hover {
+
+    background: #9333EA;
+}
+
+
+/* ============================================================
+   GENERAL RESULTS CARD
+============================================================ */
+
+[data-theme="dark"] .results-page .results-card {
+
+    background: #17141C;
+
+    border-color: #302B35;
+
+    box-shadow:
+        0 8px 26px rgba(0, 0, 0, 0.23);
+}
+
+
+/* ============================================================
+   CARD HEADING
+============================================================ */
+
+[data-theme="dark"] .results-page .card-heading-icon {
+
+    color: #C084FC;
+
+    background:
+        rgba(168, 85, 247, 0.13);
+}
+
+
+[data-theme="dark"] .results-page .card-heading span {
+
+    color: #FB923C;
+}
+
+
+[data-theme="dark"] .results-page .card-heading h2 {
+
+    color: #F5F3F7;
+}
+
+
+[data-theme="dark"] .results-page .card-heading p {
+
+    color: #A7A2AE;
+}
+
+
+[data-theme="dark"] .results-page .history-count {
+
+    color: #C084FC;
+
+    background:
+        rgba(168, 85, 247, 0.13);
+}
+
+
+/* ============================================================
+   HISTORY LIST
+============================================================ */
+
+[data-theme="dark"] .results-page .history-item {
+
+    background: #121016;
+
+    border-color: #302B35;
+}
+
+
+[data-theme="dark"] .results-page .history-item:hover {
+
+    background: #1D1923;
+
+    border-color: #51465A;
+
+    box-shadow:
+        0 7px 20px rgba(0, 0, 0, 0.25);
+}
+
+
+[data-theme="dark"] .results-page .history-number {
+
+    color: #C084FC;
+
+    background:
+        rgba(168, 85, 247, 0.13);
+}
+
+
+[data-theme="dark"] .results-page .history-top strong {
+
+    color: #F5F3F7;
+}
+
+
+[data-theme="dark"] .results-page .history-top span {
+
+    color: #A7A2AE;
+}
+
+
+[data-theme="dark"] .results-page .history-score {
+
+    color: #A7A2AE;
+}
+
+
+[data-theme="dark"] .results-page .history-score span:last-child {
+
+    color: #4ADE80;
+
+    background:
+        rgba(34, 197, 94, 0.12);
+}
+
+
+[data-theme="dark"] .results-page .history-review-btn {
+
+    color: #C084FC;
+
+    background: #17141C;
+
+    border-color: #39333F;
+}
+
+
+[data-theme="dark"] .results-page .history-review-btn:hover {
+
+    color: #D8B4FE;
+
+    background: #211C26;
+
+    border-color: #51465A;
+}
+
+
+/* ============================================================
+   EMPTY RESULTS
+============================================================ */
+
+[data-theme="dark"] .results-page .empty-results-icon {
+
+    color: #C084FC;
+
+    background:
+        rgba(168, 85, 247, 0.13);
+}
+
+
+[data-theme="dark"] .results-page .empty-results > span {
+
+    color: #FB923C;
+}
+
+
+[data-theme="dark"] .results-page .empty-results h2 {
+
+    color: #F5F3F7;
+}
+
+
+[data-theme="dark"] .results-page .empty-results p {
+
+    color: #A7A2AE;
+}
+
+
+[data-theme="dark"] .results-page .results-primary-link {
+
+    color: #FFFFFF;
+
+    background: #7E22CE;
+}
+
+
+[data-theme="dark"] .results-page .results-primary-link:hover {
+
+    background: #9333EA;
+}
+
+
+/* ============================================================
+   REVIEW SECTION
+============================================================ */
+
+[data-theme="dark"] .results-page .review-header-card {
+
+    background: #17141C;
+
+    border-color: #302B35;
+
+    box-shadow:
+        0 8px 25px rgba(0, 0, 0, 0.23);
+}
+
+
+[data-theme="dark"] .results-page .review-heading-icon {
+
+    color: #C084FC;
+
+    background:
+        rgba(168, 85, 247, 0.13);
+}
+
+
+[data-theme="dark"] .results-page .review-heading span {
+
+    color: #FB923C;
+}
+
+
+[data-theme="dark"] .results-page .review-heading h2 {
+
+    color: #F5F3F7;
+}
+
+
+[data-theme="dark"] .results-page .review-heading p {
+
+    color: #A7A2AE;
+}
+
+
+[data-theme="dark"] .results-page .review-close-btn {
+
+    color: #C084FC;
+
+    background: #17141C;
+
+    border-color: #39333F;
+}
+
+
+[data-theme="dark"] .results-page .review-close-btn:hover {
+
+    background: #211C26;
+
+    border-color: #51465A;
+}
+
+
+/* ============================================================
+   REVIEW LOADING / EMPTY
+============================================================ */
+
+[data-theme="dark"] .results-page .review-loading,
+[data-theme="dark"] .results-page .review-empty {
+
+    color: #A7A2AE;
+
+    background: #17141C;
+
+    border-color: #302B35;
+}
+
+
+[data-theme="dark"] .results-page .review-loading i {
+
+    color: #C084FC;
+}
+
+
+/* ============================================================
+   REVIEW QUESTIONS
+============================================================ */
+
+[data-theme="dark"] .results-page .review-question {
+
+    background: #17141C;
+
+    border-color: #302B35;
+
+    box-shadow:
+        0 5px 18px rgba(0, 0, 0, 0.20);
+}
+
+
+[data-theme="dark"] .results-page .review-question-number {
+
+    color: #A7A2AE;
+}
+
+
+[data-theme="dark"] .results-page .review-question-text {
+
+    color: #F5F3F7;
+}
+
+
+/* ============================================================
+   REVIEW RESULT BADGES
+============================================================ */
+
+[data-theme="dark"] .results-page .review-result-correct {
+
+    color: #4ADE80;
+
+    background:
+        rgba(34, 197, 94, 0.12);
+}
+
+
+[data-theme="dark"] .results-page .review-result-wrong {
+
+    color: #F87171;
+
+    background:
+        rgba(248, 113, 113, 0.12);
+}
+
+
+/* ============================================================
+   REVIEW OPTIONS
+============================================================ */
+
+[data-theme="dark"] .results-page .review-option {
+
+    background: #121016;
+
+    border-color: #302B35;
+}
+
+
+[data-theme="dark"] .results-page .review-option-letter {
+
+    color: #A7A2AE;
+
+    background: #17141C;
+
+    border-color: #39333F;
+}
+
+
+[data-theme="dark"] .results-page .review-option-text {
+
+    color: #D8D2DC;
+}
+
+
+/* ============================================================
+   CORRECT OPTION
+============================================================ */
+
+[data-theme="dark"] .results-page .review-option.review-correct {
+
+    background:
+        rgba(34, 197, 94, 0.10);
+
+    border-color:
+        rgba(74, 222, 128, 0.28);
+}
+
+
+[data-theme="dark"] .results-page .review-option.review-correct
+.review-option-letter {
+
+    color: #08100B;
+
+    background: #4ADE80;
+
+    border-color: #4ADE80;
+}
+
+
+[data-theme="dark"] .results-page .review-option.review-correct
+.review-option-text {
+
+    color: #86EFAC;
+
+    font-weight: 650;
+}
+
+
+/* ============================================================
+   WRONG OPTION
+============================================================ */
+
+[data-theme="dark"] .results-page .review-option.review-wrong {
+
+    background:
+        rgba(248, 113, 113, 0.09);
+
+    border-color:
+        rgba(248, 113, 113, 0.27);
+}
+
+
+[data-theme="dark"] .results-page .review-option.review-wrong
+.review-option-letter {
+
+    color: #FFFFFF;
+
+    background: #F87171;
+
+    border-color: #F87171;
+}
+
+
+[data-theme="dark"] .results-page .review-option.review-wrong
+.review-option-text {
+
+    color: #FDA4AF;
+
+    font-weight: 600;
+}
+
+
+/* ============================================================
+   REVIEW ANSWER SUMMARY
+============================================================ */
+
+[data-theme="dark"] .results-page .review-answer-summary {
+
+    border-top-color: #302B35;
+
+    color: #A7A2AE;
+}
+
+
+[data-theme="dark"] .results-page .review-your-answer {
+
+    color: #FDA4AF;
+
+    background:
+        rgba(248, 113, 113, 0.10);
+}
+
+
+[data-theme="dark"] .results-page .review-your-answer.correct-answer {
+
+    color: #86EFAC;
+
+    background:
+        rgba(34, 197, 94, 0.10);
+}
+
+
+[data-theme="dark"] .results-page .review-correct-answer {
+
+    color: #86EFAC;
+
+    background:
+        rgba(34, 197, 94, 0.10);
+}
+
+
+/* ============================================================
+   FOCUS STATES
+============================================================ */
+
+[data-theme="dark"] .results-page button:focus-visible,
+[data-theme="dark"] .results-page a:focus-visible {
+
+    outline-color:
+        rgba(192, 132, 252, 0.65);
+}
+
+
+/* ============================================================
+   DARK MODE — FORCE REMAINING WHITE SURFACES DARK
+============================================================ */
+
+[data-theme="dark"] .results-page
+.results-hero-circle,
+
+[data-theme="dark"] .results-page
+.latest-result,
+
+[data-theme="dark"] .results-page
+.results-card,
+
+[data-theme="dark"] .results-page
+.review-header-card,
+
+[data-theme="dark"] .results-page
+.review-loading,
+
+[data-theme="dark"] .results-page
+.review-empty,
+
+[data-theme="dark"] .results-page
+.review-question,
+
+[data-theme="dark"] .results-page
+.history-review-btn,
+
+[data-theme="dark"] .results-page
+.review-close-btn {
+
+    color-scheme: dark;
+}
+
+
+/* ============================================================
+   DARK MODE — SELECTION
+============================================================ */
+
+[data-theme="dark"] .results-page ::selection {
+
+    color: #FFFFFF;
+
+    background:
+        rgba(168, 85, 247, 0.30);
+}
 
 /* ============================================================
    TABLET
