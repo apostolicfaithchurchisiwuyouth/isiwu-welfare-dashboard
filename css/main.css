@@ -2795,3 +2795,34 @@ body.academic-help-modal-open {
     }
 
 }
+
+
+
+
+/* ============================================================
+   AFC ISIU YOUTH PORTAL
+   FORCE LIGHT MODE
+   ============================================================ */
+
+html {
+    color-scheme: light !important;
+    background: #ffffff !important;
+}
+
+body {
+    background: #ffffff !important;
+    color: #0A0016 !important;
+}
+
+/* Ignore the user's device/browser dark-mode preference */
+@media (prefers-color-scheme: dark) {
+    html {
+        color-scheme: light !important;
+        background: #ffffff !important;
+    }
+
+    body {
+        background: #ffffff !important;
+        color: #0A0016 !important;
+    }
+}
