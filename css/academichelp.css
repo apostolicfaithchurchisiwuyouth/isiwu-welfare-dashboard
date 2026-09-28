@@ -1933,3 +1933,792 @@
 .academic-page *::after {
     animation: none !important;
 }
+
+
+
+/* ============================================================
+   AFC ISIU YOUTH PORTAL V2
+   ACADEMIC HELP — DARK MODE
+   ------------------------------------------------------------
+   Controlled by:
+   <html data-theme="dark">
+
+   Add this section at the VERY END of academichelp.css.
+   It overrides the light-only colors above without changing
+   the page structure, sizing, or responsive behaviour.
+============================================================ */
+
+
+/* ============================================================
+   ACADEMIC PAGE DARK VARIABLES
+============================================================ */
+
+[data-theme="dark"] .academic-page {
+    color-scheme: dark;
+
+    --academic-bg: #08070B;
+
+    --academic-surface: #17141C;
+    --academic-surface-2: #121016;
+    --academic-surface-3: #1D1923;
+
+    --academic-border: #302B35;
+    --academic-border-strong: #39333F;
+
+    --academic-text: #F5F3F7;
+    --academic-text-soft: #D8D2DC;
+    --academic-muted: #A7A2AE;
+    --academic-faint: #77717F;
+
+    --academic-purple: #C084FC;
+    --academic-purple-bright: #A855F7;
+
+    --academic-orange: #FB923C;
+    --academic-orange-dark: #EA580C;
+
+    --academic-cyan: #22D3EE;
+
+    --academic-green: #4ADE80;
+    --academic-red: #F87171;
+}
+
+
+/* ============================================================
+   PAGE FOUNDATION
+============================================================ */
+
+[data-theme="dark"] .academic-page {
+    color: var(--academic-text);
+}
+
+
+/* ============================================================
+   HERO
+============================================================ */
+
+[data-theme="dark"] .academic-hero {
+    background:
+        linear-gradient(
+            135deg,
+            #17141C 0%,
+            #1B1720 48%,
+            #21191A 100%
+        );
+
+    border-color: var(--academic-border);
+
+    box-shadow:
+        0 18px 55px rgba(0, 0, 0, .30);
+}
+
+[data-theme="dark"] .academic-hero::before {
+    background:
+        radial-gradient(
+            circle,
+            rgba(234, 88, 12, .16),
+            rgba(234, 88, 12, 0)
+        );
+}
+
+[data-theme="dark"] .academic-hero::after {
+    background:
+        radial-gradient(
+            circle,
+            rgba(34, 211, 238, .10),
+            rgba(34, 211, 238, 0)
+        );
+}
+
+[data-theme="dark"] .academic-eyebrow {
+    color: var(--academic-orange);
+}
+
+[data-theme="dark"] .academic-hero h1 {
+    color: var(--academic-text);
+}
+
+[data-theme="dark"] .academic-hero h1 span {
+    color: var(--academic-purple);
+}
+
+[data-theme="dark"] .academic-hero p {
+    color: var(--academic-muted);
+}
+
+
+/* ============================================================
+   HERO ACTIONS
+============================================================ */
+
+[data-theme="dark"] .academic-primary-btn {
+    background:
+        linear-gradient(
+            135deg,
+            #EA580C,
+            #F97316
+        );
+
+    color: #FFFFFF;
+
+    box-shadow:
+        0 10px 24px rgba(234, 88, 12, .22);
+}
+
+[data-theme="dark"] .academic-text-btn {
+    color: var(--academic-purple);
+}
+
+[data-theme="dark"] .academic-text-btn i {
+    color: var(--academic-cyan);
+}
+
+
+/* ============================================================
+   SEARCH
+============================================================ */
+
+[data-theme="dark"] .academic-search-box {
+    background: var(--academic-surface);
+
+    border-color: var(--academic-border);
+
+    box-shadow:
+        0 10px 30px rgba(0, 0, 0, .22);
+}
+
+[data-theme="dark"] .academic-search-icon {
+    background: rgba(34, 211, 238, .10);
+
+    color: var(--academic-cyan);
+}
+
+[data-theme="dark"] .academic-search-box input {
+    background: transparent;
+
+    color: var(--academic-text);
+}
+
+[data-theme="dark"] .academic-search-box input::placeholder {
+    color: var(--academic-faint);
+}
+
+[data-theme="dark"] .academic-search-clear {
+    background: var(--academic-surface-3);
+
+    color: var(--academic-muted);
+}
+
+[data-theme="dark"] .academic-search-clear:hover {
+    background: #25202B;
+
+    color: var(--academic-text);
+}
+
+
+/* ============================================================
+   SECTION HEADINGS
+============================================================ */
+
+[data-theme="dark"] .academic-section-kicker {
+    color: var(--academic-orange);
+}
+
+[data-theme="dark"] .academic-section-heading h2 {
+    color: var(--academic-text);
+}
+
+
+/* ============================================================
+   CATEGORY CARDS
+============================================================ */
+
+[data-theme="dark"] .academic-category-card {
+    background: var(--academic-surface);
+
+    border-color: var(--academic-border);
+
+    box-shadow:
+        0 8px 25px rgba(0, 0, 0, .22);
+}
+
+[data-theme="dark"] .academic-category-card:hover {
+    border-color: rgba(192, 132, 252, .28);
+
+    background: var(--academic-surface-3);
+}
+
+
+/* Category icons */
+
+[data-theme="dark"] .academic-category-card:nth-child(1) .category-icon {
+    background: rgba(168, 85, 247, .14);
+    color: var(--academic-purple);
+}
+
+[data-theme="dark"] .academic-category-card:nth-child(2) .category-icon {
+    background: rgba(234, 88, 12, .13);
+    color: var(--academic-orange);
+}
+
+[data-theme="dark"] .academic-category-card:nth-child(3) .category-icon {
+    background: rgba(37, 99, 235, .13);
+    color: #60A5FA;
+}
+
+[data-theme="dark"] .academic-category-card:nth-child(4) .category-icon {
+    background: rgba(5, 150, 105, .13);
+    color: #34D399;
+}
+
+[data-theme="dark"] .academic-category-card:nth-child(5) .category-icon {
+    background: rgba(8, 145, 178, .13);
+    color: var(--academic-cyan);
+}
+
+[data-theme="dark"] .academic-category-card:nth-child(6) .category-icon {
+    background: rgba(219, 39, 119, .13);
+    color: #F472B6;
+}
+
+[data-theme="dark"] .category-copy strong {
+    color: var(--academic-text);
+}
+
+[data-theme="dark"] .category-copy small {
+    color: var(--academic-muted);
+}
+
+[data-theme="dark"] .category-arrow {
+    color: var(--academic-faint);
+}
+
+
+/* ============================================================
+   FAQ SECTION
+============================================================ */
+
+[data-theme="dark"] .academic-show-all {
+    color: var(--academic-purple);
+}
+
+[data-theme="dark"] .academic-show-all i {
+    color: var(--academic-cyan);
+}
+
+
+/* ============================================================
+   FAQ FILTERS
+============================================================ */
+
+[data-theme="dark"] .academic-filter {
+    background: var(--academic-surface);
+
+    border-color: var(--academic-border);
+
+    color: var(--academic-muted);
+}
+
+[data-theme="dark"] .academic-filter:hover {
+    border-color: var(--academic-border-strong);
+
+    color: var(--academic-text-soft);
+
+    background: var(--academic-surface-3);
+}
+
+[data-theme="dark"] .academic-filter.active {
+    border-color: var(--academic-purple-bright);
+
+    background: var(--academic-purple-bright);
+
+    color: #FFFFFF;
+}
+
+
+/* ============================================================
+   FAQ ITEMS
+============================================================ */
+
+[data-theme="dark"] .academic-faq-item,
+[data-theme="dark"] .faq-item {
+    background: var(--academic-surface);
+
+    border-color: var(--academic-border);
+
+    box-shadow:
+        0 8px 25px rgba(0, 0, 0, .22);
+}
+
+[data-theme="dark"] .academic-faq-question,
+[data-theme="dark"] .faq-question {
+    background: var(--academic-surface);
+
+    color: var(--academic-text);
+}
+
+[data-theme="dark"] .academic-faq-question:hover,
+[data-theme="dark"] .faq-question:hover {
+    background: var(--academic-surface-3);
+}
+
+[data-theme="dark"] .academic-faq-question i,
+[data-theme="dark"] .faq-question i {
+    background: rgba(168, 85, 247, .13);
+
+    color: var(--academic-purple);
+}
+
+[data-theme="dark"] .academic-faq-category,
+[data-theme="dark"] .faq-category {
+    background: rgba(34, 211, 238, .10);
+
+    color: #67E8F9;
+}
+
+[data-theme="dark"] .academic-faq-answer,
+[data-theme="dark"] .faq-answer {
+    color: var(--academic-text-soft);
+}
+
+[data-theme="dark"] .academic-faq-item.open,
+[data-theme="dark"] .academic-faq-item.active,
+[data-theme="dark"] .faq-item.open,
+[data-theme="dark"] .faq-item.active {
+    border-color: rgba(192, 132, 252, .28);
+}
+
+[data-theme="dark"] .academic-faq-item.open .academic-faq-question,
+[data-theme="dark"] .academic-faq-item.active .academic-faq-question,
+[data-theme="dark"] .faq-item.open .faq-question,
+[data-theme="dark"] .faq-item.active .faq-question {
+    color: var(--academic-purple);
+}
+
+
+/* ============================================================
+   LOADING STATE
+============================================================ */
+
+[data-theme="dark"] .academic-loading-state {
+    background: var(--academic-surface);
+
+    border-color: var(--academic-border-strong);
+
+    color: var(--academic-muted);
+}
+
+
+/* ============================================================
+   EMPTY STATE
+============================================================ */
+
+[data-theme="dark"] .academic-empty-state {
+    background: var(--academic-surface);
+
+    border-color: var(--academic-border);
+
+    box-shadow:
+        0 8px 25px rgba(0, 0, 0, .18);
+}
+
+[data-theme="dark"] .empty-icon {
+    background: rgba(234, 88, 12, .13);
+
+    color: var(--academic-orange);
+}
+
+[data-theme="dark"] .academic-empty-state h3 {
+    color: var(--academic-text);
+}
+
+[data-theme="dark"] .academic-empty-state p {
+    color: var(--academic-muted);
+}
+
+
+/* ============================================================
+   ASK QUESTION — INTRO
+============================================================ */
+
+[data-theme="dark"] .ask-question-intro {
+    background:
+        linear-gradient(
+            145deg,
+            #10051A 0%,
+            #4A0754 65%,
+            #5D0B67 100%
+        );
+
+    box-shadow:
+        0 18px 45px rgba(0, 0, 0, .28);
+}
+
+[data-theme="dark"] .ask-question-intro::after {
+    background:
+        radial-gradient(
+            circle,
+            rgba(34, 211, 238, .24),
+            rgba(34, 211, 238, 0)
+        );
+}
+
+[data-theme="dark"] .ask-question-icon {
+    background: rgba(234, 88, 12, .20);
+
+    color: var(--academic-orange);
+}
+
+[data-theme="dark"] .ask-question-intro .academic-section-kicker {
+    color: var(--academic-orange);
+}
+
+[data-theme="dark"] .ask-question-intro h2 {
+    color: #FFFFFF;
+}
+
+[data-theme="dark"] .ask-question-intro > p {
+    color: rgba(255, 255, 255, .72);
+}
+
+[data-theme="dark"] .response-note {
+    border-top-color: rgba(255, 255, 255, .13);
+
+    color: rgba(255, 255, 255, .67);
+}
+
+[data-theme="dark"] .response-note i {
+    color: var(--academic-cyan);
+}
+
+
+/* ============================================================
+   QUESTION FORM CARD
+============================================================ */
+
+[data-theme="dark"] .academic-question-card {
+    background: var(--academic-surface);
+
+    border-color: var(--academic-border);
+
+    box-shadow:
+        0 16px 45px rgba(0, 0, 0, .26);
+}
+
+[data-theme="dark"] .form-field label {
+    color: var(--academic-text-soft);
+}
+
+[data-theme="dark"] .form-field label span {
+    color: var(--academic-orange);
+}
+
+
+/* ============================================================
+   INPUTS / SELECT
+============================================================ */
+
+[data-theme="dark"] .input-wrapper > i,
+[data-theme="dark"] .select-wrapper > i {
+    color: #8E8795;
+}
+
+[data-theme="dark"] .input-wrapper input,
+[data-theme="dark"] .select-wrapper select {
+    background: var(--academic-surface-2);
+
+    border-color: var(--academic-border-strong);
+
+    color: var(--academic-text);
+}
+
+[data-theme="dark"] .input-wrapper input::placeholder,
+[data-theme="dark"] .textarea-wrapper textarea::placeholder {
+    color: var(--academic-faint);
+}
+
+[data-theme="dark"] .input-wrapper input:focus,
+[data-theme="dark"] .select-wrapper select:focus,
+[data-theme="dark"] .textarea-wrapper textarea:focus {
+    border-color: var(--academic-purple-bright);
+
+    box-shadow:
+        0 0 0 4px rgba(168, 85, 247, .12);
+}
+
+[data-theme="dark"] .select-wrapper select option {
+    background: var(--academic-surface-2);
+
+    color: var(--academic-text);
+}
+
+
+/* ============================================================
+   TEXTAREA
+============================================================ */
+
+[data-theme="dark"] .textarea-wrapper textarea {
+    background: var(--academic-surface-2);
+
+    border-color: var(--academic-border-strong);
+
+    color: var(--academic-text);
+}
+
+[data-theme="dark"] .character-count {
+    background: rgba(29, 25, 35, .92);
+
+    color: var(--academic-muted);
+}
+
+
+/* ============================================================
+   FORM ERRORS
+============================================================ */
+
+[data-theme="dark"] .field-error {
+    color: var(--academic-red);
+}
+
+
+/* ============================================================
+   CONSENT
+============================================================ */
+
+[data-theme="dark"] .custom-checkbox {
+    background: var(--academic-surface-2);
+
+    border-color: var(--academic-border-strong);
+
+    color: #FFFFFF;
+}
+
+[data-theme="dark"] .contact-consent input:checked + .custom-checkbox {
+    border-color: var(--academic-purple-bright);
+
+    background: var(--academic-purple-bright);
+}
+
+[data-theme="dark"] .consent-text {
+    color: var(--academic-muted);
+}
+
+
+/* ============================================================
+   SUBMIT BUTTON
+============================================================ */
+
+[data-theme="dark"] .submit-question-btn {
+    background:
+        linear-gradient(
+            135deg,
+            #4A0754,
+            #6D1B78
+        );
+
+    color: #FFFFFF;
+
+    box-shadow:
+        0 11px 25px rgba(74, 7, 84, .28);
+}
+
+[data-theme="dark"] .submit-question-btn:hover:not(:disabled) {
+    background:
+        linear-gradient(
+            135deg,
+            #5A0A66,
+            #7E248A
+        );
+}
+
+
+/* ============================================================
+   FORM STATUS
+============================================================ */
+
+[data-theme="dark"] .form-status.success {
+    background: rgba(34, 197, 94, .10);
+
+    color: #4ADE80;
+
+    border-color: rgba(74, 222, 128, .24);
+}
+
+[data-theme="dark"] .form-status.error {
+    background: rgba(248, 113, 113, .10);
+
+    color: #F87171;
+
+    border-color: rgba(248, 113, 113, .24);
+}
+
+
+/* ============================================================
+   PUBLISHED ANSWERS
+============================================================ */
+
+[data-theme="dark"] .published-answer-card {
+    background: var(--academic-surface);
+
+    border-color: var(--academic-border);
+
+    box-shadow:
+        0 9px 28px rgba(0, 0, 0, .22);
+}
+
+[data-theme="dark"] .published-answer-card:hover {
+    border-color: var(--academic-border-strong);
+
+    background: var(--academic-surface-3);
+}
+
+[data-theme="dark"] .published-answer-question {
+    color: var(--academic-text);
+}
+
+[data-theme="dark"] .published-answer {
+    color: var(--academic-text-soft);
+}
+
+[data-theme="dark"] .published-answer-meta {
+    color: var(--academic-muted);
+}
+
+[data-theme="dark"] .published-answer-category {
+    background: rgba(34, 197, 94, .11);
+
+    color: #4ADE80;
+}
+
+[data-theme="dark"] .published-loading {
+    border-color: var(--academic-border-strong);
+
+    color: var(--academic-muted);
+}
+
+
+/* ============================================================
+   COMMON DARK SURFACE PROTECTION
+   Prevents shared/light styles from forcing white surfaces.
+============================================================ */
+
+[data-theme="dark"] .academic-page .academic-search-box,
+[data-theme="dark"] .academic-page .academic-category-card,
+[data-theme="dark"] .academic-page .academic-faq-item,
+[data-theme="dark"] .academic-page .faq-item,
+[data-theme="dark"] .academic-page .academic-faq-question,
+[data-theme="dark"] .academic-page .faq-question,
+[data-theme="dark"] .academic-page .academic-loading-state,
+[data-theme="dark"] .academic-page .academic-empty-state,
+[data-theme="dark"] .academic-page .academic-question-card,
+[data-theme="dark"] .academic-page .published-answer-card {
+    color-scheme: dark;
+}
+
+
+/* ============================================================
+   FOCUS STATES
+============================================================ */
+
+[data-theme="dark"] .academic-page button:focus-visible,
+[data-theme="dark"] .academic-page input:focus-visible,
+[data-theme="dark"] .academic-page select:focus-visible,
+[data-theme="dark"] .academic-page textarea:focus-visible {
+    outline: 2px solid rgba(192, 132, 252, .65);
+
+    outline-offset: 3px;
+}
+
+
+/* ============================================================
+   TEXT SELECTION
+============================================================ */
+
+[data-theme="dark"] .academic-page ::selection {
+    background: rgba(168, 85, 247, .30);
+
+    color: #FFFFFF;
+}
+
+
+/* ============================================================
+   DARK SCROLLBAR
+============================================================ */
+
+[data-theme="dark"] .academic-page ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+[data-theme="dark"] .academic-page ::-webkit-scrollbar-track {
+    background: #0D0B10;
+}
+
+[data-theme="dark"] .academic-page ::-webkit-scrollbar-thumb {
+    background: #39333F;
+
+    border-radius: 999px;
+}
+
+[data-theme="dark"] .academic-page ::-webkit-scrollbar-thumb:hover {
+    background: #51465A;
+}
+
+
+/* ============================================================
+   MOBILE DARK MODE
+   Layout remains unchanged.
+============================================================ */
+
+@media (max-width: 768px) {
+
+    [data-theme="dark"] .academic-hero {
+        background:
+            linear-gradient(
+                135deg,
+                #17141C 0%,
+                #1B1720 52%,
+                #21191A 100%
+            );
+    }
+
+    [data-theme="dark"] .academic-category-card,
+    [data-theme="dark"] .academic-faq-item,
+    [data-theme="dark"] .faq-item,
+    [data-theme="dark"] .academic-question-card,
+    [data-theme="dark"] .published-answer-card {
+        box-shadow:
+            0 7px 22px rgba(0, 0, 0, .22);
+    }
+
+    [data-theme="dark"] .ask-question-intro {
+        background:
+            linear-gradient(
+                145deg,
+                #10051A 0%,
+                #4A0754 65%,
+                #5D0B67 100%
+            );
+    }
+}
+
+
+/* ============================================================
+   FINAL DARK INPUT SAFETY
+============================================================ */
+
+[data-theme="dark"] .academic-page input,
+[data-theme="dark"] .academic-page select,
+[data-theme="dark"] .academic-page textarea {
+    color-scheme: dark;
+}
+
+[data-theme="dark"] .academic-page input:-webkit-autofill,
+[data-theme="dark"] .academic-page input:-webkit-autofill:hover,
+[data-theme="dark"] .academic-page input:-webkit-autofill:focus {
+    -webkit-text-fill-color: var(--academic-text);
+
+    box-shadow:
+        0 0 0 1000px var(--academic-surface-2) inset;
+
+    border-color: var(--academic-border-strong);
+}
