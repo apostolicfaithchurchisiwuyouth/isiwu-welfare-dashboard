@@ -3266,3 +3266,971 @@ a:focus-visible {
 
 }
  
+
+
+
+/* ============================================================
+   DARK MODE
+   PORTAL-CONTROLLED HOLIDAY LEARNING THEME
+   ------------------------------------------------------------
+   Controlled by:
+   <html data-theme="dark">
+
+   Keeps the existing layout, spacing and responsive behaviour.
+============================================================ */
+
+
+/* ============================================================
+   PAGE FOUNDATION
+============================================================ */
+
+[data-theme="dark"] .holiday-learning-page {
+
+    color:
+        #F5F3F7;
+}
+
+
+/* ============================================================
+   HERO
+============================================================ */
+
+[data-theme="dark"] .holiday-hero {
+
+    border-color:
+        #302B35;
+
+    background:
+        linear-gradient(
+            120deg,
+            #17141C 0%,
+            #1B1720 47%,
+            #21191A 100%
+        );
+
+    box-shadow:
+        0 24px 65px
+        rgba(0, 0, 0, .30);
+}
+
+
+[data-theme="dark"] .holiday-hero::before {
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(168, 85, 247, .17),
+            transparent 68%
+        );
+}
+
+
+[data-theme="dark"] .holiday-hero::after {
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(234, 88, 12, .12),
+            transparent 68%
+        );
+}
+
+
+[data-theme="dark"] .hero-glow-one {
+
+    background:
+        rgba(192, 132, 252, .08);
+}
+
+
+[data-theme="dark"] .hero-glow-two {
+
+    background:
+        rgba(251, 146, 60, .08);
+}
+
+
+[data-theme="dark"] .holiday-hero-label {
+
+    border-color:
+        rgba(192, 132, 252, .16);
+
+    background:
+        rgba(168, 85, 247, .10);
+
+    color:
+        #C084FC;
+}
+
+
+[data-theme="dark"] .holiday-hero-label-dot {
+
+    background:
+        #A855F7;
+
+    box-shadow:
+        0 0 0 4px
+        rgba(168, 85, 247, .13);
+}
+
+
+[data-theme="dark"] .holiday-hero h1 {
+
+    color:
+        #F5F3F7;
+}
+
+
+[data-theme="dark"] .holiday-hero h1 span {
+
+    color:
+        #FB923C;
+}
+
+
+[data-theme="dark"] .holiday-hero p {
+
+    color:
+        #A7A2AE;
+}
+
+
+[data-theme="dark"] .holiday-status {
+
+    border-color:
+        rgba(192, 132, 252, .14);
+
+    background:
+        rgba(168, 85, 247, .09);
+
+    color:
+        #C084FC;
+}
+
+
+[data-theme="dark"] .holiday-status.is-open {
+
+    background:
+        rgba(34, 197, 94, .10);
+
+    border-color:
+        rgba(34, 197, 94, .18);
+
+    color:
+        #4ADE80;
+}
+
+
+[data-theme="dark"] .holiday-status.is-open
+.holiday-status-dot {
+
+    background:
+        #4ADE80;
+}
+
+
+[data-theme="dark"] .holiday-status.is-closed {
+
+    background:
+        rgba(148, 163, 184, .08);
+
+    border-color:
+        rgba(148, 163, 184, .14);
+
+    color:
+        #A7A2AE;
+}
+
+
+[data-theme="dark"] .holiday-season {
+
+    border-color:
+        #302B35;
+
+    background:
+        rgba(255, 255, 255, .04);
+
+    color:
+        #A7A2AE;
+}
+
+
+/* ============================================================
+   HERO VISUAL
+============================================================ */
+
+[data-theme="dark"] .holiday-visual-ring {
+
+    border-color:
+        rgba(192, 132, 252, .14);
+}
+
+
+[data-theme="dark"] .ring-two {
+
+    border-color:
+        rgba(168, 85, 247, .18);
+}
+
+
+[data-theme="dark"] .ring-three {
+
+    border-color:
+        rgba(251, 146, 60, .18);
+}
+
+
+[data-theme="dark"] .holiday-visual-icon {
+
+    border-color:
+        rgba(255, 255, 255, .12);
+
+    background:
+        linear-gradient(
+            135deg,
+            #4A0754,
+            #7C3AED
+        );
+
+    color:
+        #FFFFFF;
+
+    box-shadow:
+        0 24px 55px
+        rgba(0, 0, 0, .35);
+}
+
+
+[data-theme="dark"] .holiday-floating-card {
+
+    border-color:
+        rgba(255, 255, 255, .10);
+
+    background:
+        rgba(23, 20, 28, .94);
+
+    box-shadow:
+        0 14px 34px
+        rgba(0, 0, 0, .30);
+
+    color:
+        #D8D2DC;
+}
+
+
+[data-theme="dark"] .holiday-floating-icon.digital {
+
+    background:
+        rgba(37, 99, 235, .13);
+
+    color:
+        #60A5FA;
+}
+
+
+[data-theme="dark"] .holiday-floating-icon.career {
+
+    background:
+        rgba(168, 85, 247, .13);
+
+    color:
+        #C084FC;
+}
+
+
+[data-theme="dark"] .holiday-floating-icon.creative {
+
+    background:
+        rgba(8, 145, 178, .13);
+
+    color:
+        #22D3EE;
+}
+
+
+/* ============================================================
+   SECTION HEADINGS
+============================================================ */
+
+[data-theme="dark"] .holiday-section-kicker {
+
+    color:
+        #FB923C;
+}
+
+
+[data-theme="dark"] .holiday-section-heading h2,
+[data-theme="dark"] .holiday-library-header h2,
+[data-theme="dark"] .holiday-progress-heading h2 {
+
+    color:
+        #F5F3F7;
+}
+
+
+[data-theme="dark"] .holiday-section-heading > p {
+
+    color:
+        #A7A2AE;
+}
+
+
+/* ============================================================
+   CATEGORY CARDS
+============================================================ */
+
+[data-theme="dark"] .holiday-category-card {
+
+    border-color:
+        #302B35;
+
+    background:
+        #17141C;
+
+    color:
+        #F5F3F7;
+
+    box-shadow:
+        0 10px 28px
+        rgba(0, 0, 0, .24);
+}
+
+
+[data-theme="dark"] .holiday-category-card::before {
+
+    background:
+        rgba(168, 85, 247, .07);
+}
+
+
+[data-theme="dark"] .holiday-category-card:hover {
+
+    border-color:
+        rgba(192, 132, 252, .24);
+
+    box-shadow:
+        0 19px 40px
+        rgba(0, 0, 0, .34);
+}
+
+
+[data-theme="dark"] .holiday-category-icon.digital {
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(37, 99, 235, .16),
+            rgba(59, 130, 246, .07)
+        );
+
+    color:
+        #60A5FA;
+}
+
+
+[data-theme="dark"] .holiday-category-icon.career {
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(124, 58, 237, .17),
+            rgba(167, 139, 250, .07)
+        );
+
+    color:
+        #C084FC;
+}
+
+
+[data-theme="dark"] .holiday-category-icon.challenge {
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(234, 88, 12, .16),
+            rgba(251, 146, 60, .07)
+        );
+
+    color:
+        #FB923C;
+}
+
+
+[data-theme="dark"] .holiday-category-icon.creative {
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(8, 145, 178, .16),
+            rgba(34, 211, 238, .07)
+        );
+
+    color:
+        #22D3EE;
+}
+
+
+[data-theme="dark"] .holiday-category-number {
+
+    color:
+        #77717F;
+}
+
+
+[data-theme="dark"] .holiday-category-copy strong {
+
+    color:
+        #F5F3F7;
+}
+
+
+[data-theme="dark"] .holiday-category-copy small {
+
+    color:
+        #A7A2AE;
+}
+
+
+[data-theme="dark"] .holiday-category-arrow {
+
+    border-color:
+        #39333F;
+
+    background:
+        #121016;
+
+    color:
+        #77717F;
+}
+
+
+[data-theme="dark"] .holiday-category-card:hover
+.holiday-category-arrow {
+
+    background:
+        #A855F7;
+
+    border-color:
+        #A855F7;
+
+    color:
+        #FFFFFF;
+}
+
+
+/* ============================================================
+   LEARNING LIBRARY
+============================================================ */
+
+[data-theme="dark"] .holiday-library-section {
+
+    border-color:
+        #302B35;
+
+    background:
+        linear-gradient(
+            145deg,
+            #17141C 0%,
+            #121016 100%
+        );
+
+    box-shadow:
+        0 18px 50px
+        rgba(0, 0, 0, .28);
+}
+
+
+[data-theme="dark"] .holiday-library-count {
+
+    background:
+        rgba(168, 85, 247, .13);
+
+    color:
+        #C084FC;
+}
+
+
+[data-theme="dark"] .holiday-library-header p {
+
+    color:
+        #A7A2AE;
+}
+
+
+[data-theme="dark"] .holiday-filter-button {
+
+    border-color:
+        #39333F;
+
+    background:
+        #121016;
+
+    color:
+        #C084FC;
+}
+
+
+[data-theme="dark"] .holiday-filter-button:hover {
+
+    background:
+        #A855F7;
+
+    color:
+        #FFFFFF;
+}
+
+
+/* ============================================================
+   FILTERS
+============================================================ */
+
+[data-theme="dark"] .holiday-filter {
+
+    border-color:
+        #39333F;
+
+    background:
+        #121016;
+
+    color:
+        #A7A2AE;
+}
+
+
+[data-theme="dark"] .holiday-filter:hover,
+[data-theme="dark"] .holiday-filter.active {
+
+    border-color:
+        #A855F7;
+
+    background:
+        #A855F7;
+
+    color:
+        #FFFFFF;
+}
+
+
+/* ============================================================
+   COURSE SLIDER
+============================================================ */
+
+[data-theme="dark"] .holiday-lesson-grid {
+
+    scrollbar-color:
+        rgba(168, 85, 247, .35)
+        transparent;
+}
+
+
+[data-theme="dark"] .holiday-lesson-grid::-webkit-scrollbar-thumb {
+
+    background:
+        rgba(168, 85, 247, .30);
+}
+
+
+/* ============================================================
+   COURSE CARD
+============================================================ */
+
+[data-theme="dark"] .holiday-lesson-card {
+
+    border-color:
+        #302B35;
+
+    background:
+        #17141C;
+
+    box-shadow:
+        0 10px 28px
+        rgba(0, 0, 0, .28);
+}
+
+
+[data-theme="dark"] .holiday-lesson-card:hover {
+
+    border-color:
+        rgba(192, 132, 252, .24);
+
+    box-shadow:
+        0 20px 42px
+        rgba(0, 0, 0, .38);
+}
+
+
+/* ============================================================
+   COURSE TOP
+============================================================ */
+
+[data-theme="dark"] .holiday-lesson-top {
+
+    background:
+        linear-gradient(
+            135deg,
+            #211C26,
+            #17141C
+        );
+}
+
+
+[data-theme="dark"] .holiday-lesson-top::after {
+
+    background:
+        rgba(168, 85, 247, .10);
+}
+
+
+[data-theme="dark"] .holiday-lesson-icon {
+
+    border-color:
+        rgba(255, 255, 255, .10);
+
+    background:
+        linear-gradient(
+            135deg,
+            #4A0754,
+            #7C3AED
+        );
+
+    color:
+        #FFFFFF;
+
+    box-shadow:
+        0 10px 22px
+        rgba(0, 0, 0, .30);
+}
+
+
+[data-theme="dark"] .holiday-lesson-level {
+
+    border-color:
+        rgba(255, 255, 255, .10);
+
+    background:
+        rgba(255, 255, 255, .06);
+
+    color:
+        #A7A2AE;
+}
+
+
+/* ============================================================
+   COURSE BODY
+============================================================ */
+
+[data-theme="dark"] .holiday-lesson-card h3 {
+
+    color:
+        #F5F3F7;
+}
+
+
+[data-theme="dark"] .holiday-lesson-card p {
+
+    color:
+        #A7A2AE;
+}
+
+
+/* ============================================================
+   COURSE META
+============================================================ */
+
+[data-theme="dark"] .holiday-lesson-meta {
+
+    color:
+        #A7A2AE;
+}
+
+
+[data-theme="dark"] .holiday-lesson-meta span {
+
+    border-color:
+        #302B35;
+
+    background:
+        #121016;
+}
+
+
+[data-theme="dark"] .holiday-lesson-meta span i {
+
+    color:
+        #C084FC;
+}
+
+
+[data-theme="dark"] .holiday-lesson-meta::after {
+
+    border-color:
+        rgba(34, 197, 94, .18);
+
+    background:
+        rgba(34, 197, 94, .10);
+
+    color:
+        #4ADE80;
+}
+
+
+/* ============================================================
+   COURSE ACTION
+============================================================ */
+
+[data-theme="dark"] .holiday-lesson-action {
+
+    border-color:
+        rgba(192, 132, 252, .12);
+
+    background:
+        #4A0754;
+
+    color:
+        #FFFFFF;
+}
+
+
+[data-theme="dark"] .holiday-lesson-action:hover {
+
+    background:
+        #6B1A78;
+
+    box-shadow:
+        0 8px 18px
+        rgba(0, 0, 0, .30);
+}
+
+
+/* ============================================================
+   EMPTY STATE
+============================================================ */
+
+[data-theme="dark"] .holiday-empty-state {
+
+    border-color:
+        #39333F;
+
+    background:
+        #17141C;
+
+    color:
+        #F5F3F7;
+}
+
+
+[data-theme="dark"] .holiday-empty-icon {
+
+    background:
+        #121016;
+
+    color:
+        #77717F;
+}
+
+
+[data-theme="dark"] .holiday-empty-state h3 {
+
+    color:
+        #F5F3F7;
+}
+
+
+[data-theme="dark"] .holiday-empty-state p {
+
+    color:
+        #A7A2AE;
+}
+
+
+/* ============================================================
+   PROGRESS
+============================================================ */
+
+[data-theme="dark"] .holiday-progress-card {
+
+    border-color:
+        rgba(192, 132, 252, .14);
+
+    background:
+        linear-gradient(
+            110deg,
+            #3A0542,
+            #4A0754 55%,
+            #6D28D9
+        );
+
+    box-shadow:
+        0 18px 42px
+        rgba(0, 0, 0, .35);
+}
+
+
+[data-theme="dark"] .holiday-progress-card::after {
+
+    background:
+        rgba(255, 255, 255, .07);
+}
+
+
+[data-theme="dark"] .holiday-progress-icon {
+
+    border-color:
+        rgba(255, 255, 255, .14);
+
+    background:
+        rgba(255, 255, 255, .10);
+
+    color:
+        #FFFFFF;
+}
+
+
+[data-theme="dark"] .holiday-progress-pulse {
+
+    border-color:
+        #3A0542;
+
+    background:
+        #4ADE80;
+}
+
+
+[data-theme="dark"] .holiday-progress-label {
+
+    color:
+        rgba(255, 255, 255, .62);
+}
+
+
+[data-theme="dark"] .holiday-progress-copy strong {
+
+    color:
+        #FFFFFF;
+}
+
+
+[data-theme="dark"] .holiday-progress-copy p {
+
+    color:
+        rgba(255, 255, 255, .70);
+}
+
+
+[data-theme="dark"] .holiday-progress-value strong {
+
+    color:
+        #FFFFFF;
+}
+
+
+[data-theme="dark"] .holiday-progress-value span {
+
+    color:
+        rgba(255, 255, 255, .58);
+}
+
+
+/* ============================================================
+   FOOTER NOTE
+============================================================ */
+
+[data-theme="dark"] .holiday-footer-note {
+
+    border-color:
+        #302B35;
+
+    background:
+        #17141C;
+
+    color:
+        #77717F;
+}
+
+
+[data-theme="dark"] .holiday-footer-note i {
+
+    color:
+        #C084FC;
+}
+
+
+/* ============================================================
+   FOCUS STATES
+============================================================ */
+
+[data-theme="dark"] .holiday-learning-page
+button:focus-visible,
+[data-theme="dark"] .holiday-learning-page
+a:focus-visible {
+
+    outline-color:
+        #C084FC;
+}
+
+
+/* ============================================================
+   DARK SURFACE PROTECTION
+   Prevents inherited/light shared styles from leaking into
+   dynamically generated Holiday Learning content.
+============================================================ */
+
+[data-theme="dark"] .holiday-learning-page
+input,
+[data-theme="dark"] .holiday-learning-page
+select,
+[data-theme="dark"] .holiday-learning-page
+textarea {
+
+    background:
+        #121016;
+
+    border-color:
+        #39333F;
+
+    color:
+        #F5F3F7;
+}
+
+
+[data-theme="dark"] .holiday-learning-page
+input::placeholder,
+[data-theme="dark"] .holiday-learning-page
+textarea::placeholder {
+
+    color:
+        #716A76;
+}
+
+
+[data-theme="dark"] .holiday-learning-page
+select option {
+
+    background:
+        #121016;
+
+    color:
+        #F5F3F7;
+}
+
+
+[data-theme="dark"] .holiday-learning-page
+button:disabled {
+
+    opacity:
+        .45;
+}
+
+
+/* ============================================================
+   SELECTION
+============================================================ */
+
+[data-theme="dark"] .holiday-learning-page ::selection {
+
+    background:
+        rgba(168, 85, 247, .30);
+
+    color:
+        #FFFFFF;
+}
