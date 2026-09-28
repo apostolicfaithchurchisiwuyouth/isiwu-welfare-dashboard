@@ -3438,41 +3438,1064 @@
 
 
 /* =========================================================
-   LIGHT THEME PROTECTION
-   PREVENT DEVICE/BROWSER DARK THEME OVERRIDE
+   LESSONS PAGE — PORTAL DARK MODE
+   ---------------------------------------------------------
+   Controlled by:
+   <html data-theme="dark">
+
+   IMPORTANT:
+   The old LIGHT THEME PROTECTION block at the bottom of
+   this file should be removed so it does not override this.
 ========================================================= */
 
-.lessons-page {
+
+/* =========================================================
+   DARK MODE VARIABLES
+========================================================= */
+
+[data-theme="dark"] .lessons-page {
+
+    color-scheme: dark;
+
+    --lessons-bg: #08070B;
+
+    --lessons-surface: #17141C;
+
+    --lessons-surface-2: #121016;
+
+    --lessons-surface-3: #1D1923;
+
+    --lessons-border: #302B35;
+
+    --lessons-border-strong: #39333F;
+
+    --lessons-text: #F5F3F7;
+
+    --lessons-text-soft: #D8D2DC;
+
+    --lessons-muted: #A7A2AE;
+
+    --lessons-faint: #77717F;
+
+    --lessons-purple: #C084FC;
+
+    --lessons-purple-bright: #A855F7;
+
+    --lessons-orange: #FB923C;
+
+    --lessons-orange-dark: #EA580C;
+
+    --lessons-cyan: #22D3EE;
+
+    --lessons-green: #4ADE80;
+
+    --lessons-red: #F87171;
+
+}
+
+
+/* =========================================================
+   PAGE FOUNDATION
+========================================================= */
+
+[data-theme="dark"] .lessons-page {
+
+    background: transparent;
+
+    color: var(--lessons-text);
+
+}
+
+
+/* =========================================================
+   PAGE HEADER
+========================================================= */
+
+[data-theme="dark"] .lessons-heading .section-badge {
+
+    background:
+        rgba(234, 88, 12, 0.13);
+
+    color:
+        var(--lessons-orange);
+
+}
+
+
+[data-theme="dark"] .lessons-heading h1 {
+
+    color:
+        var(--lessons-text);
+
+}
+
+
+[data-theme="dark"] .lessons-heading p {
+
+    color:
+        var(--lessons-muted);
+
+}
+
+
+/* =========================================================
+   WEEK INDICATOR
+========================================================= */
+
+[data-theme="dark"] .lesson-week {
+
+    border-color:
+        var(--lessons-border);
+
+    background:
+        var(--lessons-surface);
+
+    color:
+        var(--lessons-text-soft);
+
+    box-shadow:
+        0 7px 22px
+        rgba(0, 0, 0, 0.24);
+
+}
+
+
+[data-theme="dark"] .lesson-week i {
+
+    color:
+        var(--lessons-orange);
+
+}
+
+
+/* =========================================================
+   CLASS TABS
+========================================================= */
+
+[data-theme="dark"] .lesson-selector {
+
+    background:
+        #121016;
+
+    border-color:
+        var(--lessons-border);
+
+}
+
+
+[data-theme="dark"] .class-tab {
+
+    color:
+        var(--lessons-muted);
+
+}
+
+
+[data-theme="dark"] .class-tab:hover {
+
+    color:
+        var(--lessons-orange);
+
+}
+
+
+[data-theme="dark"] .class-tab.active {
+
+    background:
+        var(--lessons-surface);
+
+    color:
+        var(--lessons-orange);
+
+    box-shadow:
+        0 5px 16px
+        rgba(0, 0, 0, 0.28);
+
+}
+
+
+[data-theme="dark"] .class-tab:focus-visible {
+
+    outline-color:
+        rgba(251, 146, 60, 0.30);
+
+}
+
+
+/* =========================================================
+   LESSON TOPIC CARD
+========================================================= */
+
+[data-theme="dark"] .lesson-topic-card {
+
+    background:
+        var(--lessons-surface);
+
+    border-color:
+        rgba(251, 146, 60, 0.18);
+
+    border-left-color:
+        var(--lessons-orange-dark);
+
+    box-shadow:
+        0 12px 30px
+        rgba(0, 0, 0, 0.28);
+
+}
+
+
+[data-theme="dark"] .lesson-topic-label {
+
+    background:
+        rgba(234, 88, 12, 0.13);
+
+    color:
+        var(--lessons-orange);
+
+}
+
+
+[data-theme="dark"] .lesson-topic-card h2,
+[data-theme="dark"] .lesson-topic-card h4 {
+
+    color:
+        var(--lessons-text);
+
+}
+
+
+[data-theme="dark"] .lesson-topic {
+
+    color:
+        var(--lessons-muted);
+
+}
+
+
+/* =========================================================
+   LESSON INFORMATION CARDS
+========================================================= */
+
+[data-theme="dark"] .lesson-info-card {
+
+    border-color:
+        var(--lessons-border);
+
+    background:
+        var(--lessons-surface);
+
+    box-shadow:
+        0 7px 22px
+        rgba(0, 0, 0, 0.22);
+
+}
+
+
+[data-theme="dark"] .info-icon {
+
+    background:
+        rgba(234, 88, 12, 0.12);
+
+    color:
+        var(--lessons-orange);
+
+}
+
+
+[data-theme="dark"] .lesson-info-card span {
+
+    color:
+        var(--lessons-faint);
+
+}
+
+
+[data-theme="dark"] .lesson-info-card strong {
+
+    color:
+        var(--lessons-text-soft);
+
+}
+
+
+/* =========================================================
+   MEMORY VERSE
+========================================================= */
+
+[data-theme="dark"] .memory-verse-card {
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(234, 88, 12, 0.12),
+            rgba(23, 20, 28, 0.96)
+        );
+
+    border-color:
+        rgba(251, 146, 60, 0.16);
+
+}
+
+
+[data-theme="dark"] .memory-verse-icon {
+
+    background:
+        var(--lessons-orange-dark);
+
+    color:
+        #FFFFFF;
+
+}
+
+
+[data-theme="dark"] .memory-verse-content > span {
+
+    color:
+        var(--lessons-orange);
+
+}
+
+
+[data-theme="dark"] .memory-verse-content p {
+
+    color:
+        #F0D8C5;
+
+}
+
+
+/* =========================================================
+   STUDY LESSON CARD
+========================================================= */
+
+[data-theme="dark"] .lesson-content-card {
+
+    background:
+        var(--lessons-surface);
+
+    border-color:
+        var(--lessons-border);
+
+    box-shadow:
+        0 9px 30px
+        rgba(0, 0, 0, 0.27);
+
+}
+
+
+/* =========================================================
+   STUDY CARD HEADER
+========================================================= */
+
+[data-theme="dark"] .content-card-header {
+
+    border-bottom-color:
+        var(--lessons-border);
+
+}
+
+
+[data-theme="dark"] .content-card-icon {
+
+    background:
+        rgba(34, 211, 238, 0.10);
+
+    color:
+        var(--lessons-cyan);
+
+}
+
+
+[data-theme="dark"] .content-card-header span {
+
+    color:
+        var(--lessons-cyan);
+
+}
+
+
+[data-theme="dark"] .content-card-header h3 {
+
+    color:
+        var(--lessons-text);
+
+}
+
+
+/* =========================================================
+   ACTUAL LESSON CONTENT
+========================================================= */
+
+[data-theme="dark"] .lesson-content {
+
+    color:
+        var(--lessons-text-soft);
+
+}
+
+
+[data-theme="dark"] .lesson-content h1,
+[data-theme="dark"] .lesson-content h2,
+[data-theme="dark"] .lesson-content h3,
+[data-theme="dark"] .lesson-content h4 {
+
+    color:
+        var(--lessons-text);
+
+}
+
+
+[data-theme="dark"] .lesson-content strong,
+[data-theme="dark"] .lesson-rich-content strong,
+[data-theme="dark"] .lesson-rich-content b {
+
+    color:
+        var(--lessons-text-soft);
+
+}
+
+
+/* =========================================================
+   BLOCKQUOTES
+========================================================= */
+
+[data-theme="dark"] .lesson-content blockquote {
+
+    border-left-color:
+        var(--lessons-cyan);
+
+    background:
+        rgba(8, 145, 178, 0.10);
+
+    color:
+        #C7E7EC;
+
+}
+
+
+/* =========================================================
+   DISCUSSION CARD
+========================================================= */
+
+[data-theme="dark"] .discussion-card {
+
+    background:
+        var(--lessons-surface);
+
+    border-color:
+        rgba(251, 146, 60, 0.14);
+
+    box-shadow:
+        0 9px 30px
+        rgba(0, 0, 0, 0.26);
+
+}
+
+
+[data-theme="dark"] .discussion-header {
+
+    border-bottom-color:
+        var(--lessons-border);
+
+}
+
+
+[data-theme="dark"] .discussion-icon {
+
+    background:
+        rgba(234, 88, 12, 0.12);
+
+    color:
+        var(--lessons-orange);
+
+}
+
+
+[data-theme="dark"] .discussion-header span {
+
+    color:
+        var(--lessons-orange);
+
+}
+
+
+[data-theme="dark"] .discussion-header h3 {
+
+    color:
+        var(--lessons-text);
+
+}
+
+
+[data-theme="dark"] .discussion-question {
+
+    border-bottom-color:
+        var(--lessons-border);
+
+}
+
+
+[data-theme="dark"] .discussion-number {
+
+    background:
+        rgba(234, 88, 12, 0.12);
+
+    color:
+        var(--lessons-orange);
+
+}
+
+
+[data-theme="dark"] .discussion-question p {
+
+    color:
+        var(--lessons-text-soft);
+
+}
+
+
+[data-theme="dark"] .discussion-empty {
+
+    color:
+        var(--lessons-muted);
+
+}
+
+
+/* =========================================================
+   LESSON SIDEBAR — PROGRESS
+========================================================= */
+
+[data-theme="dark"] .lesson-progress-box {
+
+    background:
+        var(--lessons-surface);
+
+    border-color:
+        var(--lessons-border);
+
+    box-shadow:
+        0 8px 25px
+        rgba(0, 0, 0, 0.24);
+
+}
+
+
+[data-theme="dark"] .progress-header span {
+
+    color:
+        var(--lessons-muted);
+
+}
+
+
+[data-theme="dark"] .progress-header strong {
+
+    color:
+        var(--lessons-orange);
+
+}
+
+
+[data-theme="dark"] .progress-track {
+
+    background:
+        #2A252E;
+
+}
+
+
+[data-theme="dark"] .progress-bar {
+
+    background:
+        linear-gradient(
+            90deg,
+            #EA580C,
+            #FB923C
+        );
+
+}
+
+
+[data-theme="dark"] .lesson-progress-box > p {
+
+    color:
+        var(--lessons-muted);
+
+}
+
+
+/* =========================================================
+   META BOX
+========================================================= */
+
+[data-theme="dark"] .lesson-meta-box > div {
+
+    background:
+        var(--lessons-surface);
+
+    border-color:
+        var(--lessons-border);
+
+    box-shadow:
+        0 7px 20px
+        rgba(0, 0, 0, 0.22);
+
+}
+
+
+[data-theme="dark"] .lesson-meta-box i {
+
+    color:
+        var(--lessons-cyan);
+
+}
+
+
+[data-theme="dark"] .lesson-meta-box span {
+
+    color:
+        var(--lessons-faint);
+
+}
+
+
+[data-theme="dark"] .lesson-meta-box strong {
+
+    color:
+        var(--lessons-text-soft);
+
+}
+
+
+/* =========================================================
+   FINISH READING BUTTON
+========================================================= */
+
+[data-theme="dark"] .finish-reading-btn {
+
+    background:
+        #0F0D13;
+
+    color:
+        #FFFFFF;
+
+    box-shadow:
+        0 7px 20px
+        rgba(0, 0, 0, 0.20);
+
+}
+
+
+[data-theme="dark"] .finish-reading-btn:hover {
+
+    background:
+        #1B1720;
+
+    box-shadow:
+        0 10px 25px
+        rgba(0, 0, 0, 0.30);
+
+}
+
+
+[data-theme="dark"] .finish-icon {
+
+    background:
+        rgba(255, 255, 255, 0.10);
+
+}
+
+
+/* =========================================================
+   COMPLETED LESSON
+========================================================= */
+
+[data-theme="dark"] .lesson-completed .finish-reading-btn {
+
+    background:
+        #0F766E;
+
+}
+
+
+[data-theme="dark"] .lesson-completed .progress-bar {
+
+    background:
+        #0F766E;
+
+}
+
+
+/* =========================================================
+   ERROR STATE
+========================================================= */
+
+[data-theme="dark"] .lesson-error-message {
+
+    background:
+        rgba(234, 88, 12, 0.08);
+
+    border-color:
+        rgba(251, 146, 60, 0.18);
+
+}
+
+
+[data-theme="dark"] .lesson-error-message i {
+
+    color:
+        var(--lessons-orange);
+
+}
+
+
+[data-theme="dark"] .lesson-error-message strong {
+
+    color:
+        var(--lessons-text);
+
+}
+
+
+[data-theme="dark"] .lesson-error-message p {
+
+    color:
+        var(--lessons-muted);
+
+}
+
+
+/* =========================================================
+   MOBILE FINISH CARD
+========================================================= */
+
+[data-theme="dark"] .mobile-finish-card {
+
+    background:
+        var(--lessons-surface);
+
+    border-color:
+        var(--lessons-border);
+
+    box-shadow:
+        0 8px 25px
+        rgba(0, 0, 0, 0.25);
+
+}
+
+
+[data-theme="dark"] .mobile-reading-info > div {
+
+    background:
+        var(--lessons-surface-2);
+
+}
+
+
+[data-theme="dark"] .mobile-reading-info i {
+
+    color:
+        var(--lessons-cyan);
+
+}
+
+
+[data-theme="dark"] .mobile-reading-info span {
+
+    color:
+        var(--lessons-faint);
+
+}
+
+
+[data-theme="dark"] .mobile-reading-info strong {
+
+    color:
+        var(--lessons-text-soft);
+
+}
+
+
+[data-theme="dark"] .mobile-progress-heading span {
+
+    color:
+        var(--lessons-muted);
+
+}
+
+
+[data-theme="dark"] .mobile-progress-heading strong {
+
+    color:
+        var(--lessons-orange);
+
+}
+
+
+/* =========================================================
+   YORUBA AUDIO CARD
+========================================================= */
+
+[data-theme="dark"] .yoruba-audio-card {
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(234, 88, 12, 0.12),
+            rgba(23, 20, 28, 0.97)
+        );
+
+    border-color:
+        rgba(251, 146, 60, 0.17);
+
+    box-shadow:
+        0 10px 30px
+        rgba(0, 0, 0, 0.26);
+
+}
+
+
+[data-theme="dark"] .yoruba-audio-card::before {
+
+    background:
+        rgba(234, 88, 12, 0.08);
+
+}
+
+
+[data-theme="dark"] .audio-icon-ring {
+
+    background:
+        linear-gradient(
+            135deg,
+            #EA580C,
+            #FB923C
+        );
+
+    color:
+        #FFFFFF;
+
+    box-shadow:
+        0 10px 24px
+        rgba(234, 88, 12, 0.20);
+
+}
+
+
+[data-theme="dark"] .yoruba-audio-eyebrow {
+
+    color:
+        var(--lessons-orange);
+
+}
+
+
+[data-theme="dark"] .audio-live-dot {
+
+    background:
+        var(--lessons-orange);
+
+    box-shadow:
+        0 0 0 4px
+        rgba(234, 88, 12, 0.11);
+
+}
+
+
+[data-theme="dark"] .yoruba-audio-content h3 {
+
+    color:
+        var(--lessons-text);
+
+}
+
+
+[data-theme="dark"] .yoruba-audio-content p {
+
+    color:
+        var(--lessons-muted);
+
+}
+
+
+/* =========================================================
+   RICH LESSON CONTENT
+========================================================= */
+
+[data-theme="dark"] .lesson-rich-content {
+
+    color:
+        var(--lessons-text-soft);
+
+}
+
+
+[data-theme="dark"] .lesson-rich-content h1,
+[data-theme="dark"] .lesson-rich-content h2,
+[data-theme="dark"] .lesson-rich-content h3,
+[data-theme="dark"] .lesson-rich-content h4,
+[data-theme="dark"] .lesson-rich-content h5,
+[data-theme="dark"] .lesson-rich-content h6 {
+
+    color:
+        var(--lessons-text);
+
+}
+
+
+[data-theme="dark"] .lesson-rich-content strong,
+[data-theme="dark"] .lesson-rich-content b {
+
+    color:
+        var(--lessons-text-soft);
+
+}
+
+
+/* =========================================================
+   RICH CONTENT LINKS
+========================================================= */
+
+[data-theme="dark"] .lesson-rich-content a {
+
+    color:
+        var(--lessons-orange);
+
+}
+
+
+/* =========================================================
+   RICH CONTENT BLOCKQUOTES
+========================================================= */
+
+[data-theme="dark"] .lesson-rich-content blockquote {
+
+    border-left-color:
+        var(--lessons-orange);
+
+    background:
+        rgba(234, 88, 12, 0.08);
+
+    color:
+        var(--lessons-text-soft);
+
+}
+
+
+/* =========================================================
+   RICH CONTENT TABLES
+========================================================= */
+
+[data-theme="dark"] .lesson-rich-content table {
+
+    color:
+        var(--lessons-text-soft);
+
+}
+
+
+[data-theme="dark"] .lesson-rich-content th,
+[data-theme="dark"] .lesson-rich-content td {
+
+    border-color:
+        var(--lessons-border);
+
+}
+
+
+[data-theme="dark"] .lesson-rich-content th {
+
+    color:
+        var(--lessons-text);
+
+    background:
+        var(--lessons-surface-2);
+
+}
+
+
+[data-theme="dark"] .lesson-rich-content td {
+
+    color:
+        var(--lessons-text-soft);
+
+    background:
+        var(--lessons-surface);
+
+}
+
+
+/* =========================================================
+   DARK MODE — AUDIO PLAYER
+========================================================= */
+
+[data-theme="dark"] .yoruba-audio-player audio {
 
     color-scheme:
-        light;
+        dark;
 
 }
 
 
-/* Keep the primary lesson surfaces white */
+/* =========================================================
+   DARK MODE — GENERAL SURFACE SAFETY
+   Prevent hard-coded white lesson surfaces from leaking through.
+========================================================= */
 
-.lessons-page .lesson-topic-card,
-.lessons-page .lesson-info-card,
-.lessons-page .lesson-content-card,
-.lessons-page .discussion-card,
-.lessons-page .lesson-progress-box,
-.lessons-page .lesson-meta-box > div,
-.lessons-page .mobile-finish-card,
-.lessons-page .lesson-week,
-.lessons-page .class-tab.active {
+[data-theme="dark"] .lessons-page .lesson-topic-card,
+[data-theme="dark"] .lessons-page .lesson-info-card,
+[data-theme="dark"] .lessons-page .lesson-content-card,
+[data-theme="dark"] .lessons-page .discussion-card,
+[data-theme="dark"] .lessons-page .lesson-progress-box,
+[data-theme="dark"] .lessons-page .lesson-meta-box > div,
+[data-theme="dark"] .lessons-page .mobile-finish-card,
+[data-theme="dark"] .lessons-page .lesson-week {
 
     background-color:
-        #ffffff;
+        var(--lessons-surface);
 
 }
 
 
-/* Keep the mobile information surfaces light */
+/* =========================================================
+   DARK MODE — SELECTION
+========================================================= */
 
-.lessons-page .mobile-reading-info > div {
+[data-theme="dark"] .lessons-page ::selection {
 
-    background-color:
-        #f8fafb;
+    background:
+        rgba(168, 85, 247, 0.30);
+
+    color:
+        #FFFFFF;
+
+}
+
+
+/* =========================================================
+   DARK MODE — SCROLLBAR
+========================================================= */
+
+[data-theme="dark"] .lessons-page {
+
+    scrollbar-color:
+        #51465A
+        transparent;
+
+}
+
+
+/* =========================================================
+   DARK MODE — NATIVE FORM/CONTROL SAFETY
+========================================================= */
+
+[data-theme="dark"] .lessons-page input,
+[data-theme="dark"] .lessons-page textarea,
+[data-theme="dark"] .lessons-page select,
+[data-theme="dark"] .lessons-page button {
+
+    color-scheme:
+        dark;
 
 }
