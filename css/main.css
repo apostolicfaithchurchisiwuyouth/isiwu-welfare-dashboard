@@ -51,64 +51,6 @@ body {
 
 
 /* =========================================================
-   ROOT VARIABLES
-========================================================= */
-
-:root {
-
-    --brand: #ea580c;
-    --brand-dark: #fb923c;
-    --brand-light: #ff4e5314;
-
-    --ink: #0891b2;
-    --ink-soft: #06b6d4;
-    --ink-mute: #f0f8fa;
-
-    --bg: #f7faf8;
-    --surface: #ffffff;
-
-    --green: #0EA472;
-
-    --primary: #4a0754;
-    --primary-dark: #0A0016;
-    --secondary: #4a0754;
-
-    --light: #ffffff;
-
-    --background: #f7f7fb;
-
-    --text: #0F172A;
-    --text-light: #6b7280;
-
-    --border: #ececf2;
-
-    --radius: 25px;
-
-    --transition: .35s ease;
-
-    /*
-       Header layer.
-       This keeps the header above:
-       - cards
-       - sidebar
-       - page content
-       - decorative elements
-    */
-    --header-z-index: 1000;
-
-    /*
-       Bottom navigation layer.
-    */
-    --bottom-nav-z-index: 1100;
-
-    /*
-       Sidebar layer.
-    */
-    --sidebar-z-index: 1200;
-}
-
-
-/* =========================================================
    TYPOGRAPHY
 ========================================================= */
 
@@ -1045,566 +987,536 @@ main,
 
 /* =========================================================
    AFC ISIU YOUTH PORTAL
-   PREMIUM DARK MODE
+   DASHBOARD DARK MODE
+   CONTROLLED BY THE PORTAL THEME SWITCH
 ========================================================= */
 
-@media (prefers-color-scheme: dark) {
+[data-theme="dark"] {
 
-    /* =====================================================
-       DARK THEME VARIABLES
-    ===================================================== */
+    --background: #08070B;
+    --bg: #08070B;
 
-    :root {
+    --surface: #121016;
+    --surface-elevated: #17141C;
+    --surface-hover: #1D1923;
 
-        --background: #08070B;
-        --bg: #08070B;
+    --text: #F5F3F7;
+    --text-light: #A7A2AE;
+    --text-muted: #77717F;
 
-        --surface: #121016;
-        --surface-elevated: #17141C;
-        --surface-hover: #1D1923;
+    --border: rgba(255,255,255,.075);
+    --border-soft: rgba(255,255,255,.045);
 
-        --text: #F5F3F7;
-        --text-light: #A7A2AE;
-        --text-muted: #77717F;
+    --primary: #A855F7;
+    --primary-dark: #7E22CE;
+    --secondary: #C084FC;
 
-        --border: rgba(255, 255, 255, 0.075);
-        --border-soft: rgba(255, 255, 255, 0.045);
+    --brand: #FB923C;
+    --brand-dark: #EA580C;
 
-        --primary: #A855F7;
-        --primary-dark: #7E22CE;
-        --secondary: #C084FC;
+    --ink: #22D3EE;
+    --ink-soft: #67E8F9;
 
-        --brand: #FB923C;
-        --brand-dark: #EA580C;
+    --green: #22C55E;
 
-        --ink: #22D3EE;
-        --ink-soft: #67E8F9;
+    --card-bg: #121016;
+    --surface-bg: #17141C;
 
-        --green: #22C55E;
+    --text-primary: #F5F3F7;
+    --text-secondary: #A7A2AE;
 
-        --card-bg: #121016;
-        --surface-bg: #17141C;
+    --border-color: rgba(255,255,255,.075);
 
-        --text-primary: #F5F3F7;
-        --text-secondary: #A7A2AE;
+    color-scheme: dark;
+}
 
-        --border-color: rgba(255,255,255,.075);
-    }
 
+/* =========================================================
+   PAGE
+========================================================= */
 
-    /* =====================================================
-       PAGE
-    ===================================================== */
+[data-theme="dark"] html {
 
-    html {
+    background:
+        #08070B;
+}
 
-        color-scheme: dark;
 
-        background:
-            #08070B;
-    }
+[data-theme="dark"] body {
 
+    background:
+        #08070B;
 
-    body {
+    color:
+        #F5F3F7;
+}
 
-        background:
-            #08070B;
 
-        color:
-            #F5F3F7;
-    }
+[data-theme="dark"] main,
+[data-theme="dark"] .page,
+[data-theme="dark"] .page-content,
+[data-theme="dark"] .content,
+[data-theme="dark"] .app,
+[data-theme="dark"] .app-content,
+[data-theme="dark"] .hub {
 
+    background:
+        transparent;
+}
 
-    /*
-       Make sure common page wrappers don't introduce
-       a white background.
-    */
 
-    main,
-    .page,
-    .page-content,
-    .content,
-    .app,
-    .app-content,
-    .hub {
+/* =========================================================
+   HEADER
+========================================================= */
 
-        background:
-            transparent;
-    }
+[data-theme="dark"] header,
+[data-theme="dark"] .site-header,
+[data-theme="dark"] .main-header,
+[data-theme="dark"] .app-header,
+[data-theme="dark"] .portal-header,
+[data-theme="dark"] #header,
+[data-theme="dark"] #siteHeader,
+[data-theme="dark"] #mainHeader {
 
+    background:
+        #0D0B12;
 
-    /* =====================================================
-       HEADER
-    ===================================================== */
+    border-bottom:
+        1px solid rgba(255,255,255,.055);
 
-    header,
-    .site-header,
-    .main-header,
-    .app-header,
-    .portal-header,
-    #header,
-    #siteHeader,
-    #mainHeader {
+    box-shadow:
+        0 8px 30px rgba(0,0,0,.22);
 
-        background:
-            #0D0B12;
+    backdrop-filter:
+        none;
 
-        border-bottom:
-            1px solid
-            rgba(255,255,255,.055);
+    -webkit-backdrop-filter:
+        none;
+}
 
-        box-shadow:
-            0 8px 30px
-            rgba(0,0,0,.22);
 
-        backdrop-filter:
-            none;
+[data-theme="dark"] header::before,
+[data-theme="dark"] .site-header::before,
+[data-theme="dark"] .main-header::before,
+[data-theme="dark"] .app-header::before,
+[data-theme="dark"] .portal-header::before {
 
-        -webkit-backdrop-filter:
-            none;
-    }
+    background:
+        transparent;
+}
 
 
-    /*
-       Remove the artificial glass overlay.
-    */
+/* =========================================================
+   HUB CARDS
+========================================================= */
 
-    header::before,
-    .site-header::before,
-    .main-header::before,
-    .app-header::before,
-    .portal-header::before {
+[data-theme="dark"] .hub-item {
 
-        background:
-            transparent;
-    }
+    background:
+        #121016;
 
+    border:
+        1px solid rgba(255,255,255,.065);
 
-    /* =====================================================
-       HUB CARDS
-    ===================================================== */
+    box-shadow:
+        0 8px 24px rgba(0,0,0,.18);
 
-    .hub-item {
+    backdrop-filter:
+        none;
 
-        background:
-            #121016;
+    -webkit-backdrop-filter:
+        none;
+}
 
-        border:
-            1px solid
-            rgba(255,255,255,.065);
 
-        box-shadow:
-            0 8px 24px
-            rgba(0,0,0,.18);
+[data-theme="dark"] .hub-item:hover {
 
-        backdrop-filter:
-            none;
+    background:
+        #17141C;
 
-        -webkit-backdrop-filter:
-            none;
-    }
+    border-color:
+        rgba(255,255,255,.10);
 
+    box-shadow:
+        0 14px 34px rgba(0,0,0,.28);
+}
 
-    .hub-item:hover {
 
-        background:
-            #17141C;
+/* =========================================================
+   FEATURED CARD
+========================================================= */
 
-        border-color:
-            rgba(255,255,255,.10);
+[data-theme="dark"] .featured {
 
-        box-shadow:
-            0 14px 34px
-            rgba(0,0,0,.28);
-    }
+    background:
+        linear-gradient(
+            135deg,
+            #15111B 0%,
+            #131017 55%,
+            #100E14 100%
+        );
 
+    border-color:
+        rgba(168,85,247,.12);
+}
 
-    /* =====================================================
-       FEATURED CARD
-    ===================================================== */
 
-    .featured {
+/* =========================================================
+   CARD DECORATIVE GLOW
+========================================================= */
 
-        background:
-            linear-gradient(
-                135deg,
-                #15111B 0%,
-                #131017 55%,
-                #100E14 100%
-            );
+[data-theme="dark"] .hub-item::before {
 
-        border-color:
-            rgba(168,85,247,.12);
-    }
+    background:
+        radial-gradient(
+            circle,
+            rgba(168,85,247,.09),
+            transparent 70%
+        );
+}
 
 
-    /* =====================================================
-       CARD DECORATIVE GLOW
-    ===================================================== */
+/* =========================================================
+   CARD TEXT
+========================================================= */
 
-    .hub-item::before {
+[data-theme="dark"] .hub-item h4 {
 
-        background:
-            radial-gradient(
-                circle,
-                rgba(168,85,247,.09),
-                transparent 70%
-            );
-    }
+    color:
+        #F5F3F7;
+}
 
 
-    /* =====================================================
-       TEXT
-    ===================================================== */
+[data-theme="dark"] .hub-item p {
 
-    .hub-item h4 {
+    color:
+        #A7A2AE;
+}
 
-        color:
-            #F5F3F7;
-    }
 
+[data-theme="dark"] .hub-count {
 
-    .hub-item p {
+    color:
+        #77717F;
+}
 
-        color:
-            #A7A2AE;
-    }
 
+/* =========================================================
+   CARD BADGES
+========================================================= */
 
-    .hub-count {
+[data-theme="dark"] .hub-badge {
 
-        color:
-            #77717F;
-    }
+    background:
+        rgba(168,85,247,.09);
 
+    color:
+        #C084FC;
 
-    /* =====================================================
-       BADGES
-    ===================================================== */
+    border:
+        1px solid rgba(168,85,247,.12);
+}
 
-    .hub-badge {
 
-        background:
-            rgba(168,85,247,.09);
+/* =========================================================
+   GLASS CARDS
+========================================================= */
 
-        color:
-            #C084FC;
+[data-theme="dark"] .feature-card,
+[data-theme="dark"] .hub-item {
 
-        border:
-            1px solid
-            rgba(168,85,247,.12);
-    }
+    background:
+        #121016;
 
+    border-color:
+        rgba(255,255,255,.065);
 
-    /* =====================================================
-       BOTTOM NAV
-    ===================================================== */
+    box-shadow:
+        0 8px 24px rgba(0,0,0,.18);
 
-    .bottom-nav {
+    backdrop-filter:
+        none;
 
-        background:
-            #0D0B12;
+    -webkit-backdrop-filter:
+        none;
+}
 
-        border-top:
-            1px solid
-            rgba(255,255,255,.055);
 
-        box-shadow:
-            0 -8px 28px
-            rgba(0,0,0,.25);
+/* =========================================================
+   BOTTOM NAV
+========================================================= */
 
-        backdrop-filter:
-            none;
+[data-theme="dark"] .bottom-nav {
 
-        -webkit-backdrop-filter:
-            none;
-    }
+    background:
+        #0D0B12;
 
+    border-top:
+        1px solid rgba(255,255,255,.055);
 
-    /* =====================================================
-       FEATURE CARDS
-    ===================================================== */
+    box-shadow:
+        0 -8px 28px rgba(0,0,0,.25);
 
-    .feature-card {
+    backdrop-filter:
+        none;
 
-        background:
-            #121016;
+    -webkit-backdrop-filter:
+        none;
+}
 
-        border-color:
-            rgba(255,255,255,.065);
 
-        box-shadow:
-            0 8px 24px
-            rgba(0,0,0,.18);
-    }
+/* =========================================================
+   NOTIFICATION PANEL
+========================================================= */
 
+[data-theme="dark"] .notification-panel {
 
-    /* =====================================================
-       NOTIFICATION PANEL
-    ===================================================== */
+    background:
+        #171020;
 
-    .notification-panel {
+    border-color:
+        rgba(255,255,255,.08);
 
-        background:
-            #121016;
+    box-shadow:
+        0 20px 50px rgba(0,0,0,.45);
+}
 
-        border-color:
-            rgba(255,255,255,.075);
 
-        box-shadow:
-            0 24px 60px
-            rgba(0,0,0,.50);
-    }
+[data-theme="dark"] .notification-panel-title {
 
+    color:
+        #ffffff;
+}
 
-    .notification-panel-title {
 
-        color:
-            #F5F3F7;
-    }
+[data-theme="dark"] .notification-panel-subtitle,
+[data-theme="dark"] #notificationStatusText {
 
+    color:
+        #b8b1c2;
+}
 
-    .notification-panel-subtitle {
 
-        color:
-            #A7A2AE;
-    }
+[data-theme="dark"] .notification-status {
 
+    background:
+        rgba(255,255,255,.05);
+}
 
-    .notification-status {
 
-        background:
-            #17141C;
-    }
+[data-theme="dark"] .notification-panel-close {
 
+    background:
+        rgba(255,255,255,.06);
 
-    #notificationStatusText {
+    color:
+        #b8b1c2;
+}
 
-        color:
-            #A7A2AE;
-    }
 
+[data-theme="dark"] .notification-panel-close:hover {
 
-    .notification-panel-close {
+    background:
+        rgba(255,255,255,.10);
 
-        background:
-            #17141C;
+    color:
+        #ffffff;
+}
 
-        color:
-            #A7A2AE;
 
-        border:
-            1px solid
-            rgba(255,255,255,.055);
-    }
+[data-theme="dark"] .notification-disable-btn {
 
+    border-color:
+        rgba(255,255,255,.12);
 
-    .notification-panel-close:hover {
+    color:
+        #b8b1c2;
+}
 
-        background:
-            #1D1923;
 
-        color:
-            #F5F3F7;
-    }
+[data-theme="dark"] .notification-disable-btn:hover {
 
+    background:
+        rgba(255,255,255,.08);
 
-    .notification-disable-btn {
+    color:
+        #ffffff;
+}
 
-        border-color:
-            rgba(255,255,255,.09);
 
-        color:
-            #A7A2AE;
-    }
+/* =========================================================
+   ACADEMIC HELP MODAL
+========================================================= */
 
+[data-theme="dark"] .academic-help-modal-backdrop {
 
-    .notification-disable-btn:hover {
+    background:
+        rgba(0,0,0,.76);
+}
 
-        background:
-            #17141C;
 
-        color:
-            #F5F3F7;
-    }
+[data-theme="dark"] .academic-help-modal-panel {
 
+    background:
+        #121016;
 
-    /* =====================================================
-       ACADEMIC HELP MODAL
-    ===================================================== */
+    border-color:
+        rgba(255,255,255,.075);
 
-    .academic-help-modal-backdrop {
+    box-shadow:
+        0 30px 90px rgba(0,0,0,.60);
+}
 
-        background:
-            rgba(0,0,0,.76);
-    }
 
+[data-theme="dark"] .academic-help-modal-heading h2 {
 
-    .academic-help-modal-panel {
+    color:
+        #F5F3F7;
+}
 
-        background:
-            #121016;
 
-        border-color:
-            rgba(255,255,255,.075);
+[data-theme="dark"] .academic-help-modal-eyebrow {
 
-        box-shadow:
-            0 30px 90px
-            rgba(0,0,0,.60);
-    }
+    color:
+        #77717F;
+}
 
 
-    .academic-help-modal-heading h2 {
+[data-theme="dark"] .academic-help-modal-intro p {
 
-        color:
-            #F5F3F7;
-    }
+    color:
+        #A7A2AE;
+}
 
 
-    .academic-help-modal-eyebrow {
+[data-theme="dark"] .academic-help-modal-close {
 
-        color:
-            #77717F;
-    }
+    background:
+        #17141C;
 
+    border-color:
+        rgba(255,255,255,.08);
 
-    .academic-help-modal-intro p {
+    color:
+        #A7A2AE;
+}
 
-        color:
-            #A7A2AE;
-    }
 
+[data-theme="dark"] .academic-help-modal-close:hover {
 
-    .academic-help-modal-close {
+    background:
+        #1D1923;
 
-        background:
-            #17141C;
+    color:
+        #F5F3F7;
+}
 
-        border-color:
-            rgba(255,255,255,.08);
 
-        color:
-            #A7A2AE;
-    }
+/* =========================================================
+   ACADEMIC OPTIONS
+========================================================= */
 
+[data-theme="dark"] .academic-help-option {
 
-    .academic-help-modal-close:hover {
+    background:
+        #121016;
 
-        background:
-            #1D1923;
+    border-color:
+        rgba(255,255,255,.065);
+}
 
-        color:
-            #F5F3F7;
-    }
 
+[data-theme="dark"] .academic-help-option:hover {
 
-    /* =====================================================
-       ACADEMIC OPTIONS
-    ===================================================== */
+    background:
+        #17141C;
 
-    .academic-help-option {
+    border-color:
+        rgba(168,85,247,.20);
+}
 
-        background:
-            #121016;
 
-        border-color:
-            rgba(255,255,255,.065);
-    }
+[data-theme="dark"] .academic-help-option-content h3 {
 
+    color:
+        #F5F3F7;
+}
 
-    .academic-help-option:hover {
 
-        background:
-            #17141C;
+[data-theme="dark"] .academic-help-option-content p {
 
-        border-color:
-            rgba(168,85,247,.20);
-    }
+    color:
+        #A7A2AE;
+}
 
 
-    .academic-help-option-content h3 {
+[data-theme="dark"] .academic-help-option-arrow {
 
-        color:
-            #F5F3F7;
-    }
+    color:
+        #77717F;
+}
 
 
-    .academic-help-option-content p {
+[data-theme="dark"] .academic-help-holiday-note {
 
-        color:
-            #A7A2AE;
-    }
+    background:
+        #17141C;
 
+    color:
+        #A7A2AE;
+}
 
-    .academic-help-option-arrow {
 
-        color:
-            #77717F;
-    }
+/* =========================================================
+   FORM ELEMENTS
+========================================================= */
 
+[data-theme="dark"] input,
+[data-theme="dark"] textarea,
+[data-theme="dark"] select {
 
-    .academic-help-holiday-note {
+    background:
+        #121016;
 
-        background:
-            #17141C;
+    color:
+        #F5F3F7;
 
-        color:
-            #A7A2AE;
-    }
+    border-color:
+        rgba(255,255,255,.09);
+}
 
 
-    /* =====================================================
-       FORM ELEMENTS
-    ===================================================== */
+[data-theme="dark"] input::placeholder,
+[data-theme="dark"] textarea::placeholder {
 
-    input,
-    textarea,
-    select {
+    color:
+        #77717F;
+}
 
-        background:
-            #121016;
 
-        color:
-            #F5F3F7;
+[data-theme="dark"] input:focus,
+[data-theme="dark"] textarea:focus,
+[data-theme="dark"] select:focus {
 
-        border-color:
-            rgba(255,255,255,.09);
-    }
+    border-color:
+        rgba(168,85,247,.45);
 
+    box-shadow:
+        0 0 0 3px rgba(168,85,247,.08);
+}
 
-    input::placeholder,
-    textarea::placeholder {
 
-        color:
-            #77717F;
-    }
+/* =========================================================
+   SELECTION
+========================================================= */
 
+[data-theme="dark"] ::selection {
 
-    input:focus,
-    textarea:focus,
-    select:focus {
+    background:
+        rgba(168,85,247,.30);
 
-        border-color:
-            rgba(168,85,247,.45);
-
-        box-shadow:
-            0 0 0 3px
-            rgba(168,85,247,.08);
-    }
-
-
-    /* =====================================================
-       SELECTION
-    ===================================================== */
-
-    ::selection {
-
-        background:
-            rgba(168,85,247,.30);
-
-        color:
-            #FFFFFF;
-    }
+    color:
+        #FFFFFF;
 }
 
 /* =========================================================
