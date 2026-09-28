@@ -1062,3 +1062,470 @@
 .prayer-page *::after {
     animation: none !important;
 }
+
+
+
+
+
+/* ============================================================
+   AFC ISIU YOUTH PORTAL V2
+   PRAYER REQUEST PAGE — DARK MODE
+   ------------------------------------------------------------
+   Controlled by:
+   <html data-theme="dark">
+
+   Existing layout, spacing, sizing and responsive behavior
+   remain unchanged.
+============================================================ */
+
+
+/* ============================================================
+   PAGE THEME
+============================================================ */
+
+[data-theme="dark"] .prayer-page {
+    color-scheme: dark;
+}
+
+
+/* ============================================================
+   HERO
+============================================================ */
+
+[data-theme="dark"] .prayer-hero {
+
+    background:
+        linear-gradient(
+            135deg,
+            #17141C 0%,
+            #1B1720 48%,
+            #21191A 100%
+        );
+
+    border-color: #302B35;
+
+    box-shadow:
+        0 18px 55px rgba(0, 0, 0, .30);
+}
+
+[data-theme="dark"] .prayer-hero::before {
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(168, 85, 247, .16),
+            rgba(168, 85, 247, 0)
+        );
+}
+
+[data-theme="dark"] .prayer-hero::after {
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(34, 211, 238, .10),
+            rgba(34, 211, 238, 0)
+        );
+}
+
+
+/* ============================================================
+   HERO TEXT
+============================================================ */
+
+[data-theme="dark"] .prayer-eyebrow {
+    color: #C084FC;
+}
+
+[data-theme="dark"] .prayer-hero h1 {
+    color: #F5F3F7;
+}
+
+[data-theme="dark"] .prayer-hero h1 span {
+    color: #FB923C;
+}
+
+[data-theme="dark"] .prayer-hero p {
+    color: #A7A2AE;
+}
+
+
+/* ============================================================
+   HERO PRIMARY BUTTON
+============================================================ */
+
+[data-theme="dark"] .prayer-primary-btn {
+
+    background:
+        linear-gradient(
+            135deg,
+            #7E22CE,
+            #9333EA
+        );
+
+    color: #FFFFFF;
+
+    box-shadow:
+        0 10px 24px rgba(126, 34, 206, .24);
+}
+
+[data-theme="dark"] .prayer-primary-btn:hover {
+
+    background:
+        linear-gradient(
+            135deg,
+            #9333EA,
+            #A855F7
+        );
+}
+
+
+/* ============================================================
+   SECTION KICKER
+============================================================ */
+
+[data-theme="dark"] .prayer-section-kicker {
+    color: #FB923C;
+}
+
+
+/* ============================================================
+   INTRO PANEL
+============================================================ */
+
+[data-theme="dark"] .prayer-intro {
+
+    background:
+        linear-gradient(
+            145deg,
+            #0D0712 0%,
+            #3B0643 65%,
+            #4A0754 100%
+        );
+
+    color: #FFFFFF;
+
+    box-shadow:
+        0 18px 45px rgba(0, 0, 0, .30);
+}
+
+[data-theme="dark"] .prayer-intro::after {
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(34, 211, 238, .16),
+            rgba(34, 211, 238, 0)
+        );
+}
+
+[data-theme="dark"] .prayer-intro-icon {
+
+    background: rgba(234, 88, 12, .14);
+
+    color: #FB923C;
+}
+
+[data-theme="dark"] .prayer-intro .prayer-section-kicker {
+    color: #FB923C;
+}
+
+[data-theme="dark"] .prayer-intro h2 {
+    color: #FFFFFF;
+}
+
+[data-theme="dark"] .prayer-intro > p {
+    color: rgba(255, 255, 255, .72);
+}
+
+[data-theme="dark"] .prayer-response-note {
+
+    border-top-color: rgba(255, 255, 255, .12);
+
+    color: rgba(255, 255, 255, .67);
+}
+
+[data-theme="dark"] .prayer-response-note i {
+    color: #22D3EE;
+}
+
+
+/* ============================================================
+   FORM CARD
+============================================================ */
+
+[data-theme="dark"] .prayer-form-card {
+
+    background: #17141C;
+
+    border-color: #302B35;
+
+    box-shadow:
+        0 16px 45px rgba(0, 0, 0, .28);
+}
+
+
+/* ============================================================
+   ANONYMOUS TOGGLE
+============================================================ */
+
+[data-theme="dark"] .prayer-anonymous-toggle {
+
+    border-color: #39333F;
+
+    background: #121016;
+}
+
+[data-theme="dark"] .prayer-anonymous-toggle:hover {
+    background: #1D1923;
+}
+
+[data-theme="dark"] .prayer-anonymous-toggle .custom-checkbox {
+
+    border-color: #51465A;
+
+    background: #17141C;
+
+    color: #FFFFFF;
+}
+
+[data-theme="dark"] .prayer-anonymous-toggle input:checked + .custom-checkbox {
+
+    border-color: #A855F7;
+
+    background: #7E22CE;
+}
+
+[data-theme="dark"] .prayer-anonymous-toggle .consent-text {
+    color: #D8D2DC;
+}
+
+
+/* ============================================================
+   FORM LABELS
+============================================================ */
+
+[data-theme="dark"] .form-field label {
+    color: #D8D2DC;
+}
+
+[data-theme="dark"] .form-field label span {
+    color: #FB923C;
+}
+
+[data-theme="dark"] .form-field label .optional-tag {
+    color: #77717F;
+}
+
+
+/* ============================================================
+   INPUTS + SELECTS
+============================================================ */
+
+[data-theme="dark"] .input-wrapper > i,
+[data-theme="dark"] .select-wrapper > i {
+    color: #77717F;
+}
+
+[data-theme="dark"] .input-wrapper input,
+[data-theme="dark"] .select-wrapper select {
+
+    border-color: #39333F;
+
+    background: #121016;
+
+    color: #F5F3F7;
+}
+
+[data-theme="dark"] .input-wrapper input:disabled {
+
+    background: #1D1923;
+
+    color: #77717F;
+
+    border-color: #302B35;
+}
+
+[data-theme="dark"] .input-wrapper input::placeholder,
+[data-theme="dark"] .textarea-wrapper textarea::placeholder {
+    color: #716A76;
+}
+
+[data-theme="dark"] .input-wrapper input:focus,
+[data-theme="dark"] .select-wrapper select:focus,
+[data-theme="dark"] .textarea-wrapper textarea:focus {
+
+    border-color: #A855F7;
+
+    box-shadow:
+        0 0 0 4px rgba(168, 85, 247, .13);
+}
+
+
+/* ============================================================
+   SELECT OPTIONS
+   ============================================================ */
+
+[data-theme="dark"] .select-wrapper select option {
+    background: #121016;
+    color: #F5F3F7;
+}
+
+
+/* ============================================================
+   TEXTAREA
+============================================================ */
+
+[data-theme="dark"] .textarea-wrapper textarea {
+
+    border-color: #39333F;
+
+    background: #121016;
+
+    color: #F5F3F7;
+}
+
+[data-theme="dark"] .character-count {
+
+    background: rgba(18, 16, 22, .92);
+
+    color: #77717F;
+}
+
+
+/* ============================================================
+   FORM ERRORS
+============================================================ */
+
+[data-theme="dark"] .field-error {
+    color: #F87171;
+}
+
+
+/* ============================================================
+   SUBMIT BUTTON
+============================================================ */
+
+[data-theme="dark"] .submit-prayer-btn {
+
+    background:
+        linear-gradient(
+            135deg,
+            #7E22CE,
+            #9333EA
+        );
+
+    color: #FFFFFF;
+
+    box-shadow:
+        0 11px 25px rgba(126, 34, 206, .25);
+}
+
+[data-theme="dark"] .submit-prayer-btn:hover:not(:disabled) {
+
+    background:
+        linear-gradient(
+            135deg,
+            #9333EA,
+            #A855F7
+        );
+}
+
+[data-theme="dark"] .submit-prayer-btn:disabled {
+    opacity: .45;
+}
+
+
+/* ============================================================
+   SUCCESS STATUS
+============================================================ */
+
+[data-theme="dark"] .form-status.success {
+
+    background: rgba(34, 197, 94, .11);
+
+    color: #4ADE80;
+
+    border-color: rgba(74, 222, 128, .22);
+}
+
+
+/* ============================================================
+   ERROR STATUS
+============================================================ */
+
+[data-theme="dark"] .form-status.error {
+
+    background: rgba(127, 29, 29, .18);
+
+    color: #F87171;
+
+    border-color: rgba(248, 113, 113, .25);
+}
+
+
+/* ============================================================
+   COMMON DARK SURFACE PROTECTION
+   Prevent shared/global light styles from leaking into
+   prayer request components.
+============================================================ */
+
+[data-theme="dark"] .prayer-page .prayer-form-card,
+[data-theme="dark"] .prayer-page .prayer-anonymous-toggle,
+[data-theme="dark"] .prayer-page .input-wrapper input,
+[data-theme="dark"] .prayer-page .select-wrapper select,
+[data-theme="dark"] .prayer-page .textarea-wrapper textarea {
+
+    color-scheme: dark;
+}
+
+
+/* ============================================================
+   SELECTION
+============================================================ */
+
+[data-theme="dark"] .prayer-page ::selection {
+
+    background: rgba(168, 85, 247, .30);
+
+    color: #FFFFFF;
+}
+
+
+/* ============================================================
+   MOBILE DARK MODE
+   Keeps the existing mobile structure untouched.
+============================================================ */
+
+@media (max-width: 768px) {
+
+    [data-theme="dark"] .prayer-form-card {
+        background: #17141C;
+    }
+
+}
+
+
+/* ============================================================
+   DARK MODE SCROLLBAR
+============================================================ */
+
+[data-theme="dark"] .prayer-page ::-webkit-scrollbar {
+    width: 7px;
+    height: 7px;
+}
+
+[data-theme="dark"] .prayer-page ::-webkit-scrollbar-track {
+    background: #121016;
+}
+
+[data-theme="dark"] .prayer-page ::-webkit-scrollbar-thumb {
+
+    background: #39333F;
+
+    border-radius: 999px;
+}
+
+[data-theme="dark"] .prayer-page ::-webkit-scrollbar-thumb:hover {
+    background: #51465A;
+}
