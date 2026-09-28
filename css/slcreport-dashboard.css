@@ -6261,586 +6261,490 @@
 
 
 /* ============================================================
+   AFC ISIU YOUTH PORTAL
+   SLC REPORT DASHBOARD
    PORTAL DARK MODE
    ============================================================ */
 
-/*
- * Activated by:
- *
- * <html data-theme="dark">
- *
- * This uses the same dark visual language as:
- * layout.css
- * welfare.css
- * slcreport.css
- *
- * No operating-system dark-mode preference is required.
- */
+[data-theme="dark"] {
+
+    color-scheme: dark;
+
+    --slc-dark-bg: #08070B;
+    --slc-dark-surface: #121016;
+    --slc-dark-surface-2: #17141C;
+    --slc-dark-surface-3: #1D1923;
+    --slc-dark-border: #302B35;
+    --slc-dark-border-strong: #39333F;
+
+    --slc-dark-text: #F5F3F7;
+    --slc-dark-text-2: #D8D2DC;
+    --slc-dark-muted: #A7A2AE;
+    --slc-dark-faint: #77717F;
+
+    --slc-dark-purple: #C084FC;
+    --slc-dark-purple-bright: #A855F7;
+    --slc-dark-orange: #FB923C;
+    --slc-dark-cyan: #22D3EE;
+    --slc-dark-green: #4ADE80;
+    --slc-dark-red: #F87171;
+}
 
 
 /* ============================================================
-   DASHBOARD CONTROLS
+   PAGE / GENERAL
 ============================================================ */
 
-[data-theme="dark"] .slc-dashboard-page .slc-control-field label {
-
-    color: #ddd8e1;
+[data-theme="dark"] .slc-dashboard-page,
+[data-theme="dark"] .slc-dashboard-content,
+[data-theme="dark"] .slc-dashboard-main,
+[data-theme="dark"] .slc-dashboard-wrapper {
+    background: transparent;
+    color: #F5F3F7;
 }
 
 
-[data-theme="dark"] .slc-dashboard-page .slc-control-input i {
+/* ============================================================
+   CONTROL / FILTER AREA
+============================================================ */
 
-    color: #817986;
+[data-theme="dark"] .slc-control-field label {
+    color: #D8D2DC;
 }
 
-
-[data-theme="dark"] .slc-dashboard-page .slc-control-input input {
-
-    border-color: #39333f;
-
+[data-theme="dark"] .slc-control-input {
     background: #121016;
-
-    color: #f5f3f7;
+    border-color: #39333F;
+    color: #F5F3F7;
 }
 
-
-[data-theme="dark"] .slc-dashboard-page .slc-control-input input::placeholder {
-
-    color: #716a76;
+[data-theme="dark"] .slc-control-input i {
+    color: #938B98;
 }
 
-
-[data-theme="dark"] .slc-dashboard-page .slc-control-input input:focus {
-
-    border-color: #a855f7;
-
-    box-shadow:
-        0 0 0 3px rgba(168, 85, 247, .13);
+[data-theme="dark"] .slc-control-input input,
+[data-theme="dark"] .slc-control-input select {
+    background: transparent;
+    color: #F5F3F7;
 }
 
-
-[data-theme="dark"] .slc-dashboard-page .slc-dashboard-load-btn {
-
-    background: #7e22ce;
-
-    box-shadow:
-        0 10px 24px rgba(126, 34, 206, .20);
+[data-theme="dark"] .slc-control-input input::placeholder {
+    color: #716A76;
 }
 
+[data-theme="dark"] .slc-control-input input:focus,
+[data-theme="dark"] .slc-control-input select:focus {
+    border-color: #A855F7;
+    box-shadow: 0 0 0 3px rgba(168, 85, 247, .13);
+    outline: none;
+}
 
-[data-theme="dark"] .slc-dashboard-page .slc-dashboard-load-btn:hover {
-
-    background: #9333ea;
+[data-theme="dark"] .slc-control-input select option {
+    background: #121016;
+    color: #F5F3F7;
 }
 
 
 /* ============================================================
-   STATUS
+   LOAD BUTTON
 ============================================================ */
 
-[data-theme="dark"] .slc-dashboard-page .slc-dashboard-status.success {
-
-    background: rgba(6, 95, 70, .18);
-
-    color: #6ee7b7;
+[data-theme="dark"] .slc-dashboard-load-btn {
+    color: #FFFFFF;
 }
 
-
-[data-theme="dark"] .slc-dashboard-page .slc-dashboard-status.error {
-
-    background: rgba(127, 29, 29, .20);
-
-    color: #fca5a5;
+[data-theme="dark"] .slc-dashboard-load-btn:hover {
+    background: #9333EA;
 }
 
 
 /* ============================================================
-   MAIN HEADINGS
+   STATUS MESSAGES
 ============================================================ */
 
-[data-theme="dark"] .slc-dashboard-page .slc-dashboard-section-heading h2,
-[data-theme="dark"] .slc-dashboard-page .slc-members-heading h2,
-[data-theme="dark"] .slc-dashboard-page .slc-group-card-heading h2 {
-
-    color: #f5f3f7;
+[data-theme="dark"] .slc-dashboard-status.success {
+    background: rgba(34, 197, 94, .10);
+    border-color: rgba(74, 222, 128, .22);
+    color: #4ADE80;
 }
 
-
-[data-theme="dark"] .slc-dashboard-page .slc-dashboard-section-label {
-
-    color: #fb923c;
-}
-
-
-[data-theme="dark"] .slc-dashboard-page .slc-dashboard-date {
-
-    color: #9a929f;
+[data-theme="dark"] .slc-dashboard-status.error {
+    background: rgba(239, 68, 68, .10);
+    border-color: rgba(248, 113, 113, .22);
+    color: #F87171;
 }
 
 
 /* ============================================================
-   STATISTICS
+   SECTION HEADINGS
 ============================================================ */
 
-[data-theme="dark"] .slc-dashboard-page .slc-stat-card {
+[data-theme="dark"] .slc-dashboard-section-heading {
+    color: #F5F3F7;
+}
 
-    border-color: #302b35;
+[data-theme="dark"] .slc-dashboard-section-heading h2,
+[data-theme="dark"] .slc-dashboard-section-heading h3 {
+    color: #F5F3F7;
+}
 
-    background: #17141c;
+[data-theme="dark"] .slc-dashboard-section-heading p {
+    color: #A7A2AE;
+}
 
-    box-shadow:
-        0 7px 24px rgba(0, 0, 0, .20);
+[data-theme="dark"] .slc-dashboard-date {
+    color: #A7A2AE;
 }
 
 
-[data-theme="dark"] .slc-dashboard-page .slc-stat-icon.purple {
+/* ============================================================
+   STAT CARDS
+============================================================ */
 
+[data-theme="dark"] .slc-stat-card {
+    background: #17141C;
+    border-color: #302B35;
+    box-shadow: 0 8px 28px rgba(0, 0, 0, .25);
+}
+
+[data-theme="dark"] .slc-stat-card:hover {
+    background: #1D1923;
+    border-color: #39333F;
+}
+
+[data-theme="dark"] .slc-stat-icon {
     background: rgba(168, 85, 247, .13);
-
-    color: #c084fc;
+    color: #C084FC;
 }
 
-
-[data-theme="dark"] .slc-dashboard-page .slc-stat-icon.green {
-
-    background: rgba(34, 197, 94, .12);
-
-    color: #4ade80;
-}
-
-
-[data-theme="dark"] .slc-dashboard-page .slc-stat-icon.orange {
-
+[data-theme="dark"] .slc-stat-icon.orange {
     background: rgba(234, 88, 12, .12);
-
-    color: #fb923c;
+    color: #FB923C;
 }
 
-
-[data-theme="dark"] .slc-dashboard-page .slc-stat-icon.cyan {
-
+[data-theme="dark"] .slc-stat-icon.cyan {
     background: rgba(8, 145, 178, .13);
-
-    color: #22d3ee;
+    color: #22D3EE;
 }
 
-
-[data-theme="dark"] .slc-dashboard-page .slc-stat-content span {
-
-    color: #9a929f;
+[data-theme="dark"] .slc-stat-icon.green {
+    background: rgba(34, 197, 94, .12);
+    color: #4ADE80;
 }
 
-
-[data-theme="dark"] .slc-dashboard-page .slc-stat-content strong {
-
-    color: #f5f3f7;
+[data-theme="dark"] .slc-stat-content span {
+    color: #A7A2AE;
 }
 
-
-/* ============================================================
-   PROGRESS
-============================================================ */
-
-[data-theme="dark"] .slc-dashboard-page .slc-progress-card {
-
-    border-color: #302b35;
-
-    background: #17141c;
-
-    box-shadow:
-        0 7px 24px rgba(0, 0, 0, .20);
-}
-
-
-[data-theme="dark"] .slc-dashboard-page .slc-progress-header span {
-
-    color: #ddd8e1;
-}
-
-
-[data-theme="dark"] .slc-dashboard-page .slc-progress-header strong {
-
-    color: #c084fc;
-}
-
-
-[data-theme="dark"] .slc-dashboard-page .slc-progress-track {
-
-    background: #29242e;
-}
-
-
-[data-theme="dark"] .slc-dashboard-page .slc-progress-fill {
-
-    background:
-        linear-gradient(
-            90deg,
-            #7e22ce,
-            #ea580c
-        );
-}
-
-
-[data-theme="dark"] .slc-dashboard-page .slc-progress-card p {
-
-    color: #9a929f;
+[data-theme="dark"] .slc-stat-content strong {
+    color: #F5F3F7;
 }
 
 
 /* ============================================================
-   GROUP INFORMATION
+   PROGRESS CARD
 ============================================================ */
 
-[data-theme="dark"] .slc-dashboard-page .slc-group-card {
+[data-theme="dark"] .slc-progress-card {
+    background: #17141C;
+    border-color: #302B35;
+    box-shadow: 0 8px 28px rgba(0, 0, 0, .25);
+}
 
-    border-color: #302b35;
+[data-theme="dark"] .slc-progress-header h3 {
+    color: #F5F3F7;
+}
 
-    background: #17141c;
+[data-theme="dark"] .slc-progress-header span {
+    color: #A7A2AE;
+}
 
-    box-shadow:
-        0 7px 24px rgba(0, 0, 0, .20);
+[data-theme="dark"] .slc-progress-track {
+    background: #29242E;
+}
+
+[data-theme="dark"] .slc-progress-fill {
+    background: linear-gradient(
+        90deg,
+        #7E22CE,
+        #A855F7
+    );
+}
+
+[data-theme="dark"] .slc-progress-info {
+    color: #A7A2AE;
+}
+
+[data-theme="dark"] .slc-progress-info strong {
+    color: #F5F3F7;
 }
 
 
-[data-theme="dark"] .slc-dashboard-page .slc-group-icon {
+/* ============================================================
+   GROUP CARDS
+============================================================ */
 
+[data-theme="dark"] .slc-group-card {
+    background: #17141C;
+    border-color: #302B35;
+    box-shadow: 0 8px 28px rgba(0, 0, 0, .25);
+}
+
+[data-theme="dark"] .slc-group-card:hover {
+    background: #1D1923;
+}
+
+[data-theme="dark"] .slc-group-icon {
+    background: rgba(168, 85, 247, .13);
+    color: #C084FC;
+}
+
+[data-theme="dark"] .slc-group-card h3 {
+    color: #F5F3F7;
+}
+
+[data-theme="dark"] .slc-group-card p {
+    color: #A7A2AE;
+}
+
+[data-theme="dark"] .slc-group-item {
+    border-color: #29242E;
+}
+
+[data-theme="dark"] .slc-group-item strong {
+    color: #F5F3F7;
+}
+
+[data-theme="dark"] .slc-group-item span {
+    color: #9A929F;
+}
+
+
+/* ============================================================
+   MEMBERS CARD
+============================================================ */
+
+[data-theme="dark"] .slc-members-card {
+    background: #17141C;
+    border-color: #302B35;
+    box-shadow: 0 8px 28px rgba(0, 0, 0, .25);
+}
+
+[data-theme="dark"] .slc-members-heading h3 {
+    color: #F5F3F7;
+}
+
+[data-theme="dark"] .slc-members-heading p {
+    color: #A7A2AE;
+}
+
+[data-theme="dark"] .slc-members-count {
+    background: rgba(168, 85, 247, .13);
+    color: #C084FC;
+}
+
+[data-theme="dark"] .slc-member-list {
+    border-color: #29242E;
+}
+
+[data-theme="dark"] .slc-member-item {
+    border-bottom-color: #29242E;
+}
+
+[data-theme="dark"] .slc-member-item:hover {
+    background: #1D1923;
+}
+
+[data-theme="dark"] .slc-member-item span {
+    color: #D8D2DC;
+}
+
+[data-theme="dark"] .slc-member-item span:last-child {
+    color: #A7A2AE;
+}
+
+[data-theme="dark"] .slc-member-number {
+    background: #211C26;
+    color: #C084FC;
+}
+
+
+/* ============================================================
+   OBSERVATION CARD
+============================================================ */
+
+[data-theme="dark"] .slc-observation-card {
+    background: #17141C;
+    border-color: #302B35;
+    box-shadow: 0 8px 28px rgba(0, 0, 0, .25);
+}
+
+[data-theme="dark"] .slc-observation-icon {
     background: rgba(234, 88, 12, .12);
+    color: #FB923C;
+}
 
-    color: #fb923c;
+[data-theme="dark"] .slc-observation-card span {
+    color: #A7A2AE;
+}
+
+[data-theme="dark"] .slc-observation-card p {
+    color: #D8D2DC;
 }
 
 
-[data-theme="dark"] .slc-dashboard-page .slc-group-card-heading p {
+/* ============================================================
+   EMPTY STATE
+============================================================ */
 
-    color: #9a929f;
+[data-theme="dark"] .slc-empty-state {
+    background: #17141C;
+    border-color: #302B35;
+}
+
+[data-theme="dark"] .slc-empty-icon {
+    background: #211C26;
+    color: #A855F7;
+}
+
+[data-theme="dark"] .slc-empty-state h3 {
+    color: #F5F3F7;
+}
+
+[data-theme="dark"] .slc-empty-state p {
+    color: #A7A2AE;
 }
 
 
-[data-theme="dark"] .slc-dashboard-page .slc-group-item {
+/* ============================================================
+   DASHBOARD NAVIGATION
+============================================================ */
 
+[data-theme="dark"] .slc-dashboard-nav {
     background: #121016;
+    border-color: #302B35;
 }
 
-
-[data-theme="dark"] .slc-dashboard-page .slc-group-item span {
-
-    color: #77717f;
+[data-theme="dark"] .slc-dashboard-nav a {
+    color: #A7A2AE;
 }
 
+[data-theme="dark"] .slc-dashboard-nav a:hover {
+    background: #1D1923;
+    color: #C084FC;
+}
 
-[data-theme="dark"] .slc-dashboard-page .slc-group-item strong {
-
-    color: #ddd8e1;
+[data-theme="dark"] .slc-dashboard-nav a.active {
+    background: rgba(168, 85, 247, .13);
+    color: #C084FC;
 }
 
 
 /* ============================================================
-   MEMBERS
+   QUIZ SECTION
 ============================================================ */
 
-[data-theme="dark"] .slc-dashboard-page .slc-members-card {
+[data-theme="dark"] .quiz-section {
+    background: transparent;
+}
 
-    border-color: #302b35;
+[data-theme="dark"] .quiz-section h2,
+[data-theme="dark"] .quiz-section h3 {
+    color: #F5F3F7;
+}
 
-    background: #17141c;
+[data-theme="dark"] .quiz-section p {
+    color: #A7A2AE;
+}
 
-    box-shadow:
-        0 7px 24px rgba(0, 0, 0, .20);
+[data-theme="dark"] .quiz-count {
+    background: rgba(168, 85, 247, .13);
+    color: #C084FC;
 }
 
 
-[data-theme="dark"] .slc-dashboard-page .slc-members-heading p {
+/* ============================================================
+   QUIZ BUTTONS
+============================================================ */
 
-    color: #9a929f;
+[data-theme="dark"] .quiz-primary-btn {
+    background: #7E22CE;
+    color: #FFFFFF;
+}
+
+[data-theme="dark"] .quiz-primary-btn:hover {
+    background: #9333EA;
+}
+
+[data-theme="dark"] .quiz-secondary-btn {
+    background: #17141C;
+    border-color: #39333F;
+    color: #C084FC;
+}
+
+[data-theme="dark"] .quiz-secondary-btn:hover {
+    background: #211C26;
+}
+
+[data-theme="dark"] .quiz-danger-btn {
+    background: rgba(239, 68, 68, .12);
+    border-color: rgba(248, 113, 113, .22);
+    color: #F87171;
 }
 
 
-[data-theme="dark"] .slc-dashboard-page .slc-count-badge {
+/* ============================================================
+   QUESTIONS TOOLBAR
+============================================================ */
 
-    background: rgba(234, 88, 12, .12);
-
-    color: #fb923c;
+[data-theme="dark"] .questions-toolbar {
+    background: #17141C;
+    border-color: #302B35;
 }
 
+[data-theme="dark"] .questions-toolbar label {
+    color: #D8D2DC;
+}
 
-[data-theme="dark"] .slc-dashboard-page .slc-member-item {
-
-    border-color: #302b35;
-
+[data-theme="dark"] .questions-toolbar input,
+[data-theme="dark"] .questions-toolbar select {
     background: #121016;
+    border-color: #39333F;
+    color: #F5F3F7;
 }
 
-
-[data-theme="dark"] .slc-dashboard-page .slc-member-number {
-
-    background: rgba(168, 85, 247, .13);
-
-    color: #c084fc;
+[data-theme="dark"] .questions-toolbar input::placeholder {
+    color: #716A76;
 }
 
-
-[data-theme="dark"] .slc-dashboard-page .slc-member-item span:last-child {
-
-    color: #ddd8e1;
-}
-
-
-/* ============================================================
-   OBSERVATION
-============================================================ */
-
-[data-theme="dark"] .slc-dashboard-page .slc-observation-card {
-
-    border-color: rgba(168, 85, 247, .20);
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(168, 85, 247, .10),
-            rgba(126, 34, 206, .06)
-        );
-}
-
-
-[data-theme="dark"] .slc-dashboard-page .slc-observation-icon {
-
-    background: #17141c;
-
-    color: #c084fc;
-}
-
-
-[data-theme="dark"] .slc-dashboard-page .slc-observation-card span {
-
-    color: #c084fc;
-}
-
-
-[data-theme="dark"] .slc-dashboard-page .slc-observation-card p {
-
-    color: #c8c2cc;
+[data-theme="dark"] .questions-toolbar input:focus,
+[data-theme="dark"] .questions-toolbar select:focus {
+    border-color: #A855F7;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(168, 85, 247, .12);
 }
 
 
 /* ============================================================
-   DASHBOARD EMPTY STATE
+   QUESTION STATUS
 ============================================================ */
 
-[data-theme="dark"] .slc-dashboard-page .slc-dashboard-empty {
-
-    border-color: #39333f;
-
-    background: #17141c;
+[data-theme="dark"] .question-status {
+    background: #17141C;
+    border-color: #302B35;
+    color: #A7A2AE;
 }
 
-
-[data-theme="dark"] .slc-dashboard-page .slc-empty-icon {
-
-    background: rgba(168, 85, 247, .13);
-
-    color: #c084fc;
+[data-theme="dark"] .question-status.success {
+    background: rgba(34, 197, 94, .10);
+    border-color: rgba(74, 222, 128, .20);
+    color: #4ADE80;
 }
 
-
-[data-theme="dark"] .slc-dashboard-page .slc-dashboard-empty h2 {
-
-    color: #f5f3f7;
-}
-
-
-[data-theme="dark"] .slc-dashboard-page .slc-dashboard-empty p {
-
-    color: #9a929f;
-}
-
-
-/* ============================================================
-   QUIZ DASHBOARD NAVIGATION
-============================================================ */
-
-[data-theme="dark"] .slc-dashboard-page .quiz-dashboard-nav {
-
-    border-color: #302b35;
-
-    background: #17141c;
-}
-
-
-[data-theme="dark"] .slc-dashboard-page .quiz-dashboard-nav::-webkit-scrollbar-thumb {
-
-    background: #514a56;
-}
-
-
-[data-theme="dark"] .slc-dashboard-page .quiz-nav-button {
-
-    color: #a7a2ae;
-}
-
-
-[data-theme="dark"] .slc-dashboard-page .quiz-nav-button:hover {
-
-    background: #211c26;
-
-    color: #c084fc;
-}
-
-
-[data-theme="dark"] .slc-dashboard-page .quiz-nav-button.active {
-
-    background: #7e22ce;
-
-    color: #ffffff;
-}
-
-
-[data-theme="dark"] .slc-dashboard-page .quiz-nav-button.active:hover {
-
-    background: #9333ea;
-}
-
-
-/* ============================================================
-   QUIZ SECTION HEADER
-============================================================ */
-
-[data-theme="dark"] .slc-dashboard-page .quiz-section-heading h2 {
-
-    color: #f5f3f7;
-}
-
-
-[data-theme="dark"] .slc-dashboard-page .quiz-section-heading p {
-
-    color: #9a929f;
-}
-
-
-[data-theme="dark"] .slc-dashboard-page .quiz-section-icon {
-
-    background: rgba(168, 85, 247, .13);
-
-    color: #c084fc;
-}
-
-
-[data-theme="dark"] .slc-dashboard-page .quiz-section-count {
-
-    color: #9a929f;
-}
-
-
-[data-theme="dark"] .slc-dashboard-page .quiz-section-count strong {
-
-    color: #c084fc;
-}
-
-
-/* ============================================================
-   PRIMARY / SECONDARY / DANGER BUTTONS
-============================================================ */
-
-[data-theme="dark"] .slc-dashboard-page .dashboard-primary-button {
-
-    background: #ea580c;
-
-    box-shadow:
-        0 8px 20px rgba(234, 88, 12, .18);
-}
-
-
-[data-theme="dark"] .slc-dashboard-page .dashboard-primary-button:hover {
-
-    background: #f97316;
-}
-
-
-[data-theme="dark"] .slc-dashboard-page .dashboard-secondary-button {
-
-    border-color: #39333f;
-
-    background: #17141c;
-
-    color: #c084fc;
-}
-
-
-[data-theme="dark"] .slc-dashboard-page .dashboard-secondary-button:hover {
-
-    background: #211c20;
-
-    border-color: rgba(234, 88, 12, .35);
-
-    color: #fb923c;
-}
-
-
-[data-theme="dark"] .slc-dashboard-page .dashboard-danger-button {
-
-    background: #b91c1c;
-}
-
-
-[data-theme="dark"] .slc-dashboard-page .dashboard-danger-button:hover {
-
-    background: #dc2626;
-}
-
-
-/* ============================================================
-   QUESTIONS FILTER
-============================================================ */
-
-[data-theme="dark"] .slc-dashboard-page .questions-filter input {
-
-    border-color: #39333f;
-
-    background: #121016;
-
-    color: #f5f3f7;
-}
-
-
-[data-theme="dark"] .slc-dashboard-page .questions-filter input::placeholder {
-
-    color: #716a76;
-}
-
-
-[data-theme="dark"] .slc-dashboard-page .questions-filter input:focus {
-
-    border-color: #a855f7;
-
-    box-shadow:
-        0 0 0 3px rgba(168, 85, 247, .13);
-}
-
-
-/* ============================================================
-   QUESTIONS STATUS
-============================================================ */
-
-[data-theme="dark"] .slc-dashboard-page .questions-status.loading {
-
-    background: #211c26;
-
-    color: #a7a2ae;
-}
-
-
-[data-theme="dark"] .slc-dashboard-page .questions-status.success {
-
-    background: rgba(6, 95, 70, .18);
-
-    color: #6ee7b7;
-}
-
-
-[data-theme="dark"] .slc-dashboard-page .questions-status.error {
-
-    background: rgba(127, 29, 29, .20);
-
-    color: #fca5a5;
+[data-theme="dark"] .question-status.error {
+    background: rgba(239, 68, 68, .10);
+    border-color: rgba(248, 113, 113, .20);
+    color: #F87171;
 }
 
 
@@ -6848,117 +6752,98 @@
    QUESTIONS TABLE
 ============================================================ */
 
-[data-theme="dark"] .slc-dashboard-page .questions-table-wrapper {
+[data-theme="dark"] .questions-table-wrap {
+    background: #121016;
+    border-color: #302B35;
+}
 
-    border-color: #302b35;
-
+[data-theme="dark"] .questions-table {
     background: #121016;
 }
 
-
-[data-theme="dark"] .slc-dashboard-page .questions-table th {
-
-    border-bottom-color: #302b35;
-
-    background: #1d1923;
-
-    color: #a7a2ae;
+[data-theme="dark"] .questions-table thead {
+    background: #1D1923;
 }
 
-
-[data-theme="dark"] .slc-dashboard-page .questions-table td {
-
-    border-bottom-color: #29242e;
-
-    color: #ddd8e1;
+[data-theme="dark"] .questions-table th {
+    background: #1D1923;
+    border-bottom-color: #302B35;
+    color: #A7A0AD;
 }
 
+[data-theme="dark"] .questions-table td {
+    background: #121016;
+    border-bottom-color: #29242E;
+    color: #D8D2DC;
+}
 
-[data-theme="dark"] .slc-dashboard-page .questions-table tbody tr:hover {
+[data-theme="dark"] .questions-table tbody tr:hover td {
+    background: #1D1923;
+}
 
-    background: #1d1923;
+[data-theme="dark"] .questions-table strong {
+    color: #F5F3F7;
 }
 
 
 /* ============================================================
-   QUESTION CONTENT
+   QUESTION BADGES
 ============================================================ */
 
-[data-theme="dark"] .slc-dashboard-page .question-lesson-badge {
-
+[data-theme="dark"] .question-badge {
     background: rgba(168, 85, 247, .13);
-
-    color: #c084fc;
+    color: #C084FC;
 }
 
-
-[data-theme="dark"] .slc-dashboard-page .admin-question-text {
-
-    color: #f0edf2;
+[data-theme="dark"] .question-content {
+    color: #D8D2DC;
 }
 
-
-[data-theme="dark"] .slc-dashboard-page .question-options div {
-
-    color: #aaa3ad;
+[data-theme="dark"] .question-content strong {
+    color: #F5F3F7;
 }
 
-
-[data-theme="dark"] .slc-dashboard-page .question-options strong {
-
-    color: #c084fc;
+[data-theme="dark"] .question-options div {
+    color: #BDB5C4;
 }
 
-
-[data-theme="dark"] .slc-dashboard-page .correct-answer-badge {
-
-    background: rgba(234, 88, 12, .12);
-
-    color: #fb923c;
-}
-
-
-[data-theme="dark"] .slc-dashboard-page .question-action-button {
-
-    border-color: #39333f;
-
-    background: #17141c;
-
-    color: #c084fc;
-}
-
-
-[data-theme="dark"] .slc-dashboard-page .question-action-button:hover {
-
-    background: #211c20;
-
-    border-color: rgba(234, 88, 12, .35);
-
-    color: #fb923c;
+[data-theme="dark"] .question-options strong {
+    color: #F5F3F7;
 }
 
 
 /* ============================================================
-   QUESTIONS INFORMATION NOTE
+   QUESTION ACTION BUTTONS
 ============================================================ */
 
-[data-theme="dark"] .slc-dashboard-page .questions-info-note {
+[data-theme="dark"] .question-action-btn {
+    background: #17141C;
+    border-color: #39333F;
+    color: #C084FC;
+}
 
-    border-top-color: #29242e;
+[data-theme="dark"] .question-action-btn:hover {
+    background: #211C26;
+}
 
-    color: #9a929f;
+[data-theme="dark"] .question-delete-icon {
+    background: rgba(239, 68, 68, .10);
+    color: #F87171;
+}
+
+[data-theme="dark"] .question-delete-icon:hover {
+    background: rgba(239, 68, 68, .18);
 }
 
 
-[data-theme="dark"] .slc-dashboard-page .questions-info-note > i {
+/* ============================================================
+   INFO NOTE
+============================================================ */
 
-    color: #fb923c;
-}
-
-
-[data-theme="dark"] .slc-dashboard-page .questions-info-note strong {
-
-    color: #ddd8e1;
+[data-theme="dark"] .question-info-note {
+    background: rgba(8, 145, 178, .08);
+    border-color: rgba(34, 211, 238, .16);
+    color: #A7DDE5;
 }
 
 
@@ -6966,157 +6851,88 @@
    QUESTION EDITOR MODAL
 ============================================================ */
 
-[data-theme="dark"] .slc-dashboard-page .question-editor-overlay {
-
-    background: rgba(0, 0, 0, .68);
+[data-theme="dark"] .question-editor-overlay {
+    background: rgba(0, 0, 0, .72);
 }
 
-
-[data-theme="dark"] .slc-dashboard-page .question-editor-dialog,
-[data-theme="dark"] .slc-dashboard-page .question-delete-dialog {
-
-    border-color: #39333f;
-
-    background: #17141c;
-
-    box-shadow:
-        0 20px 60px rgba(0, 0, 0, .48);
+[data-theme="dark"] .question-editor-modal {
+    background: #17141C;
+    border-color: #39333F;
+    box-shadow: 0 25px 80px rgba(0, 0, 0, .55);
 }
 
-
-[data-theme="dark"] .slc-dashboard-page .question-editor-header {
-
-    border-bottom-color: #29242e;
+[data-theme="dark"] .question-editor-header {
+    background: #17141C;
+    border-bottom-color: #302B35;
 }
 
-
-[data-theme="dark"] .slc-dashboard-page .question-editor-eyebrow {
-
-    color: #fb923c;
+[data-theme="dark"] .question-editor-header h2,
+[data-theme="dark"] .question-editor-header h3 {
+    color: #F5F3F7;
 }
 
-
-[data-theme="dark"] .slc-dashboard-page .question-editor-header h2 {
-
-    color: #f5f3f7;
+[data-theme="dark"] .question-editor-header p {
+    color: #A7A2AE;
 }
 
-
-[data-theme="dark"] .slc-dashboard-page .question-editor-header p {
-
-    color: #9a929f;
+[data-theme="dark"] .question-editor-close {
+    background: #211C26;
+    color: #A7A2AE;
 }
 
+[data-theme="dark"] .question-editor-close:hover {
+    background: #29242E;
+    color: #F5F3F7;
+}
 
-[data-theme="dark"] .slc-dashboard-page .question-editor-close {
+[data-theme="dark"] .question-editor-modal label {
+    color: #D8D2DC;
+}
 
-    border-color: #39333f;
-
+[data-theme="dark"] .question-editor-modal input,
+[data-theme="dark"] .question-editor-modal textarea,
+[data-theme="dark"] .question-editor-modal select {
     background: #121016;
-
-    color: #a7a2ae;
+    border-color: #39333F;
+    color: #F5F3F7;
 }
 
-
-[data-theme="dark"] .slc-dashboard-page .question-editor-close:hover {
-
-    background: #211c20;
-
-    border-color: rgba(234, 88, 12, .35);
-
-    color: #fb923c;
+[data-theme="dark"] .question-editor-modal input::placeholder,
+[data-theme="dark"] .question-editor-modal textarea::placeholder {
+    color: #716A76;
 }
 
-
-/* ============================================================
-   QUESTION EDITOR FORM
-============================================================ */
-
-[data-theme="dark"] .slc-dashboard-page .question-form-field label {
-
-    color: #ddd8e1;
+[data-theme="dark"] .question-editor-modal input:focus,
+[data-theme="dark"] .question-editor-modal textarea:focus,
+[data-theme="dark"] .question-editor-modal select:focus {
+    border-color: #A855F7;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(168, 85, 247, .12);
 }
 
-
-[data-theme="dark"] .slc-dashboard-page .question-form-field input,
-[data-theme="dark"] .slc-dashboard-page .question-form-field textarea,
-[data-theme="dark"] .slc-dashboard-page .question-form-field select {
-
-    border-color: #39333f;
-
+[data-theme="dark"] .question-editor-status {
     background: #121016;
-
-    color: #f5f3f7;
-}
-
-
-[data-theme="dark"] .slc-dashboard-page .question-form-field input::placeholder,
-[data-theme="dark"] .slc-dashboard-page .question-form-field textarea::placeholder {
-
-    color: #716a76;
-}
-
-
-[data-theme="dark"] .slc-dashboard-page .question-form-field input:focus,
-[data-theme="dark"] .slc-dashboard-page .question-form-field textarea:focus,
-[data-theme="dark"] .slc-dashboard-page .question-form-field select:focus {
-
-    border-color: #a855f7;
-
-    box-shadow:
-        0 0 0 3px rgba(168, 85, 247, .13);
+    border-color: #302B35;
+    color: #A7A2AE;
 }
 
 
 /* ============================================================
-   EDITOR STATUS
+   DELETE CONFIRMATION
 ============================================================ */
 
-[data-theme="dark"] .slc-dashboard-page .question-editor-status.success {
-
-    background: rgba(6, 95, 70, .18);
-
-    color: #6ee7b7;
+[data-theme="dark"] .question-delete-dialog {
+    background: #17141C;
+    border-color: #39333F;
+    box-shadow: 0 25px 80px rgba(0, 0, 0, .55);
 }
 
-
-[data-theme="dark"] .slc-dashboard-page .question-editor-status.error {
-
-    background: rgba(127, 29, 29, .20);
-
-    color: #fca5a5;
+[data-theme="dark"] .question-delete-dialog h3 {
+    color: #F5F3F7;
 }
 
-
-[data-theme="dark"] .slc-dashboard-page .question-editor-status.loading {
-
-    background: #211c26;
-
-    color: #a7a2ae;
-}
-
-
-/* ============================================================
-   DELETE DIALOG
-============================================================ */
-
-[data-theme="dark"] .slc-dashboard-page .question-delete-icon {
-
-    background: rgba(185, 28, 28, .16);
-
-    color: #f87171;
-}
-
-
-[data-theme="dark"] .slc-dashboard-page .question-delete-dialog h2 {
-
-    color: #f5f3f7;
-}
-
-
-[data-theme="dark"] .slc-dashboard-page .question-delete-dialog > p {
-
-    color: #9a929f;
+[data-theme="dark"] .question-delete-dialog p {
+    color: #A7A2AE;
 }
 
 
@@ -7124,350 +6940,255 @@
    QUIZ SETTINGS
 ============================================================ */
 
-[data-theme="dark"] .slc-dashboard-page .quiz-settings-card {
-
-    background: #17141c;
-
-    border-color: #302b35;
-
-    box-shadow:
-        0 7px 24px rgba(0, 0, 0, .20);
+[data-theme="dark"] .quiz-settings-card {
+    background: #17141C;
+    border-color: #302B35;
+    box-shadow: 0 8px 28px rgba(0, 0, 0, .25);
 }
 
-
-[data-theme="dark"] .slc-dashboard-page .quiz-settings-field label {
-
-    color: #ddd8e1;
+[data-theme="dark"] .quiz-settings-card h2,
+[data-theme="dark"] .quiz-settings-card h3 {
+    color: #F5F3F7;
 }
 
+[data-theme="dark"] .quiz-settings-card p {
+    color: #A7A2AE;
+}
 
-[data-theme="dark"] .slc-dashboard-page .quiz-settings-field input {
+[data-theme="dark"] .quiz-settings-card label {
+    color: #D8D2DC;
+}
 
-    border-color: #39333f;
-
+[data-theme="dark"] .quiz-settings-card input,
+[data-theme="dark"] .quiz-settings-card textarea,
+[data-theme="dark"] .quiz-settings-card select {
     background: #121016;
-
-    color: #f5f3f7;
+    border-color: #39333F;
+    color: #F5F3F7;
 }
 
-
-[data-theme="dark"] .slc-dashboard-page .quiz-settings-field input:focus {
-
-    border-color: #a855f7;
-
-    box-shadow:
-        0 0 0 3px rgba(168, 85, 247, .13);
+[data-theme="dark"] .quiz-settings-card input::placeholder,
+[data-theme="dark"] .quiz-settings-card textarea::placeholder {
+    color: #716A76;
 }
 
-
-[data-theme="dark"] .slc-dashboard-page .quiz-settings-field small {
-
-    color: #77717f;
+[data-theme="dark"] .quiz-settings-card input:focus,
+[data-theme="dark"] .quiz-settings-card textarea:focus,
+[data-theme="dark"] .quiz-settings-card select:focus {
+    border-color: #A855F7;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(168, 85, 247, .12);
 }
 
-
-[data-theme="dark"] .slc-dashboard-page .quiz-settings-status {
-
-    color: #9a929f;
-}
-
-
-[data-theme="dark"] .slc-dashboard-page .quiz-settings-status.is-success {
-
-    color: #4ade80;
-}
-
-
-[data-theme="dark"] .slc-dashboard-page .quiz-settings-status.is-error {
-
-    color: #f87171;
-}
-
-
-/* ============================================================
-   QUIZ ATTEMPTS
-============================================================ */
-
-[data-theme="dark"] .slc-dashboard-page .attempt-participant strong {
-
-    color: #f0edf2;
-}
-
-
-[data-theme="dark"] .slc-dashboard-page .attempt-participant small {
-
-    color: #77717f;
-}
-
-
-/* ============================================================
-   SLC REPORTS TOOLBAR
-============================================================ */
-
-[data-theme="dark"] .slc-dashboard-page .slc-reports-filter-field label {
-
-    color: #ddd8e1;
-}
-
-
-[data-theme="dark"] .slc-dashboard-page .slc-reports-filter-field input {
-
-    border-color: #39333f;
-
+[data-theme="dark"] .quiz-settings-status {
     background: #121016;
-
-    color: #f5f3f7;
-}
-
-
-[data-theme="dark"] .slc-dashboard-page .slc-reports-filter-field input::placeholder {
-
-    color: #716a76;
-}
-
-
-[data-theme="dark"] .slc-dashboard-page .slc-reports-filter-field input:focus {
-
-    border-color: #a855f7;
-
-    box-shadow:
-        0 0 0 3px rgba(168, 85, 247, .13);
-}
-
-
-[data-theme="dark"] .slc-dashboard-page .slc-reports-count {
-
-    color: #9a929f;
-}
-
-
-[data-theme="dark"] .slc-dashboard-page .slc-reports-count strong {
-
-    color: #c084fc;
+    border-color: #302B35;
+    color: #A7A2AE;
 }
 
 
 /* ============================================================
-   SLC REPORT STATUS
+   REPORTS TOOLBAR
 ============================================================ */
 
-[data-theme="dark"] .slc-dashboard-page .slc-reports-status.loading {
-
-    background: #211c26;
-
-    color: #a7a2ae;
+[data-theme="dark"] .reports-toolbar {
+    background: #17141C;
+    border-color: #302B35;
 }
 
-
-[data-theme="dark"] .slc-dashboard-page .slc-reports-status.success {
-
-    background: rgba(6, 95, 70, .18);
-
-    color: #6ee7b7;
+[data-theme="dark"] .reports-toolbar label {
+    color: #D8D2DC;
 }
 
+[data-theme="dark"] .reports-toolbar input,
+[data-theme="dark"] .reports-toolbar select {
+    background: #121016;
+    border-color: #39333F;
+    color: #F5F3F7;
+}
 
-[data-theme="dark"] .slc-dashboard-page .slc-reports-status.error {
+[data-theme="dark"] .reports-toolbar input::placeholder {
+    color: #716A76;
+}
 
-    background: rgba(127, 29, 29, .20);
+[data-theme="dark"] .reports-toolbar input:focus,
+[data-theme="dark"] .reports-toolbar select:focus {
+    border-color: #A855F7;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(168, 85, 247, .12);
+}
 
-    color: #fca5a5;
+[data-theme="dark"] .reports-count {
+    color: #A7A2AE;
 }
 
 
 /* ============================================================
-   SLC REPORTS TABLE
+   REPORT STATUS
 ============================================================ */
 
-[data-theme="dark"] .slc-dashboard-page .slc-reports-table-wrapper {
+[data-theme="dark"] .report-status {
+    background: #17141C;
+    border-color: #302B35;
+    color: #A7A2AE;
+}
 
-    border-color: #302b35;
+[data-theme="dark"] .report-status.success {
+    background: rgba(34, 197, 94, .10);
+    border-color: rgba(74, 222, 128, .20);
+    color: #4ADE80;
+}
 
+[data-theme="dark"] .report-status.error {
+    background: rgba(239, 68, 68, .10);
+    border-color: rgba(248, 113, 113, .20);
+    color: #F87171;
+}
+
+
+/* ============================================================
+   REPORTS TABLE
+============================================================ */
+
+[data-theme="dark"] .reports-table-wrap {
+    background: #121016;
+    border-color: #302B35;
+}
+
+[data-theme="dark"] .reports-table {
     background: #121016;
 }
 
-
-[data-theme="dark"] .slc-dashboard-page .slc-reports-table th {
-
-    border-bottom-color: #302b35;
-
-    background: #1d1923;
-
-    color: #a7a2ae;
+[data-theme="dark"] .reports-table thead {
+    background: #1D1923;
 }
 
-
-[data-theme="dark"] .slc-dashboard-page .slc-reports-table td {
-
-    border-bottom-color: #29242e;
-
-    color: #ddd8e1;
+[data-theme="dark"] .reports-table th {
+    background: #1D1923;
+    border-bottom-color: #302B35;
+    color: #A7A0AD;
 }
 
+[data-theme="dark"] .reports-table td {
+    background: #121016;
+    border-bottom-color: #29242E;
+    color: #D8D2DC;
+}
 
-[data-theme="dark"] .slc-dashboard-page .slc-reports-table tbody tr:hover {
+[data-theme="dark"] .reports-table tbody tr:hover td {
+    background: #1D1923;
+}
 
-    background: #1d1923;
+[data-theme="dark"] .reports-table strong {
+    color: #F5F3F7;
 }
 
 
 /* ============================================================
-   SLC REPORT TABLE CONTENT
+   REPORT BADGES
 ============================================================ */
 
-[data-theme="dark"] .slc-dashboard-page .slc-report-lesson {
+[data-theme="dark"] .slc-report-number.participated {
+    color: #4ADE80;
+}
 
+[data-theme="dark"] .slc-report-number.not-participated {
+    color: #FB923C;
+}
+
+[data-theme="dark"] .slc-report-group {
     background: rgba(168, 85, 247, .13);
-
-    color: #c084fc;
+    color: #C084FC;
 }
 
-
-[data-theme="dark"] .slc-dashboard-page .slc-report-group strong {
-
-    color: #f0edf2;
+[data-theme="dark"] .slc-report-date {
+    color: #A7A2AE;
 }
 
-
-[data-theme="dark"] .slc-dashboard-page .slc-report-group small {
-
-    color: #77717f;
+[data-theme="dark"] .slc-report-submitter {
+    color: #D8D2DC;
 }
 
-
-[data-theme="dark"] .slc-dashboard-page .slc-report-number {
-
-    color: #ddd8e1;
-}
-
-
-[data-theme="dark"] .slc-dashboard-page .slc-report-number.participated {
-
-    color: #4ade80;
-}
-
-
-[data-theme="dark"] .slc-dashboard-page .slc-report-number.not-participated {
-
-    color: #fbbf24;
-}
-
-
-[data-theme="dark"] .slc-dashboard-page .slc-report-date,
-[data-theme="dark"] .slc-dashboard-page .slc-report-submitter {
-
-    color: #9a929f;
-}
-
-
-[data-theme="dark"] .slc-dashboard-page .slc-report-version {
-
-    background: #211c26;
-
-    color: #a7a2ae;
-}
-
-
-[data-theme="dark"] .slc-dashboard-page .slc-report-view-button {
-
-    border-color: #39333f;
-
-    background: #17141c;
-
-    color: #c084fc;
-}
-
-
-[data-theme="dark"] .slc-dashboard-page .slc-report-view-button:hover {
-
-    background: #211c20;
-
-    border-color: rgba(234, 88, 12, .35);
-
-    color: #fb923c;
+[data-theme="dark"] .slc-report-version {
+    background: #211C26;
+    color: #A7A2AE;
 }
 
 
 /* ============================================================
-   SLC REPORT EMPTY STATE
+   REPORT VIEW BUTTON
 ============================================================ */
 
-[data-theme="dark"] .slc-dashboard-page .slc-reports-empty-icon {
-
-    background: rgba(168, 85, 247, .13);
-
-    color: #c084fc;
+[data-theme="dark"] .slc-report-view-btn {
+    background: #17141C;
+    border-color: #39333F;
+    color: #C084FC;
 }
 
-
-[data-theme="dark"] .slc-dashboard-page .slc-reports-empty h3 {
-
-    color: #f5f3f7;
-}
-
-
-[data-theme="dark"] .slc-dashboard-page .slc-reports-empty p {
-
-    color: #9a929f;
+[data-theme="dark"] .slc-report-view-btn:hover {
+    background: #211C26;
+    border-color: #51465A;
 }
 
 
 /* ============================================================
-   SLC REPORT DETAILS MODAL
+   REPORT EMPTY STATE
 ============================================================ */
 
-[data-theme="dark"] .slc-dashboard-page .slc-report-modal-overlay {
+[data-theme="dark"] .slc-report-empty {
+    background: #17141C;
+    border-color: #302B35;
+}
 
-    background: rgba(0, 0, 0, .68);
+[data-theme="dark"] .slc-report-empty-icon {
+    background: #211C26;
+    color: #A855F7;
+}
+
+[data-theme="dark"] .slc-report-empty h3 {
+    color: #F5F3F7;
+}
+
+[data-theme="dark"] .slc-report-empty p {
+    color: #A7A2AE;
 }
 
 
-[data-theme="dark"] .slc-dashboard-page .slc-report-modal-dialog {
+/* ============================================================
+   REPORT VIEW MODAL
+============================================================ */
 
-    border-color: #39333f;
-
-    background: #17141c;
-
-    box-shadow:
-        0 20px 60px rgba(0, 0, 0, .48);
+[data-theme="dark"] .slc-report-modal-overlay {
+    background: rgba(0, 0, 0, .72);
 }
 
-
-[data-theme="dark"] .slc-dashboard-page .slc-report-modal-header {
-
-    border-bottom-color: #29242e;
+[data-theme="dark"] .slc-report-modal {
+    background: #17141C;
+    border-color: #39333F;
+    box-shadow: 0 25px 80px rgba(0, 0, 0, .55);
 }
 
-
-[data-theme="dark"] .slc-dashboard-page .slc-report-modal-header h2 {
-
-    color: #f5f3f7;
+[data-theme="dark"] .slc-report-modal-header {
+    background: #17141C;
+    border-bottom-color: #302B35;
 }
 
-
-[data-theme="dark"] .slc-dashboard-page .slc-report-modal-header p {
-
-    color: #9a929f;
+[data-theme="dark"] .slc-report-modal-header h2 {
+    color: #F5F3F7;
 }
 
-
-[data-theme="dark"] .slc-dashboard-page .slc-report-modal-close {
-
-    border-color: #39333f;
-
-    background: #121016;
-
-    color: #a7a2ae;
+[data-theme="dark"] .slc-report-modal-header p {
+    color: #A7A2AE;
 }
 
+[data-theme="dark"] .slc-report-modal-close {
+    background: #211C26;
+    color: #A7A2AE;
+}
 
-[data-theme="dark"] .slc-dashboard-page .slc-report-modal-close:hover {
-
-    background: #211c20;
-
-    border-color: rgba(234, 88, 12, .35);
-
-    color: #fb923c;
+[data-theme="dark"] .slc-report-modal-close:hover {
+    background: #29242E;
+    color: #F5F3F7;
 }
 
 
@@ -7475,102 +7196,157 @@
    REPORT DETAILS
 ============================================================ */
 
-[data-theme="dark"] .slc-dashboard-page .slc-report-summary-item {
+[data-theme="dark"] .slc-report-details {
+    color: #D8D2DC;
+}
 
+[data-theme="dark"] .slc-report-detail-label {
+    color: #9A929F;
+}
+
+[data-theme="dark"] .slc-report-detail-value {
+    color: #F5F3F7;
+}
+
+[data-theme="dark"] .slc-report-summary {
     background: #121016;
+    border-color: #302B35;
 }
 
-
-[data-theme="dark"] .slc-dashboard-page .slc-report-summary-item span {
-
-    color: #77717f;
+[data-theme="dark"] .slc-report-summary h3 {
+    color: #F5F3F7;
 }
 
-
-[data-theme="dark"] .slc-dashboard-page .slc-report-summary-item strong {
-
-    color: #f0edf2;
+[data-theme="dark"] .slc-report-summary p {
+    color: #A7A2AE;
 }
 
-
-[data-theme="dark"] .slc-dashboard-page .slc-report-detail-section {
-
-    border-top-color: #29242e;
-}
-
-
-[data-theme="dark"] .slc-dashboard-page .slc-report-detail-section h3 {
-
-    color: #c084fc;
-}
-
-
-[data-theme="dark"] .slc-dashboard-page .slc-report-detail-section p {
-
-    color: #c8c2cc;
-}
-
-
-[data-theme="dark"] .slc-dashboard-page .slc-report-detail-list li {
-
-    border-color: #302b35;
-
+[data-theme="dark"] .slc-report-detail-section {
     background: #121016;
-
-    color: #c8c2cc;
+    border-color: #302B35;
 }
 
-
-[data-theme="dark"] .slc-dashboard-page .slc-report-detail-list li strong {
-
-    color: #f0edf2;
+[data-theme="dark"] .slc-report-detail-section h3 {
+    color: #F5F3F7;
 }
 
-
-[data-theme="dark"] .slc-dashboard-page .slc-report-meta-item {
-
-    background: #121016;
+[data-theme="dark"] .slc-report-detail-section p {
+    color: #D8D2DC;
 }
 
-
-[data-theme="dark"] .slc-dashboard-page .slc-report-meta-item span {
-
-    color: #77717f;
+[data-theme="dark"] .slc-report-detail-section li {
+    color: #D8D2DC;
 }
 
-
-[data-theme="dark"] .slc-dashboard-page .slc-report-meta-item strong {
-
-    color: #ddd8e1;
+[data-theme="dark"] .slc-report-meta {
+    color: #9A929F;
 }
 
 
 /* ============================================================
-   GLOBAL DARK-MODE SELECTION
+   PARTICIPATION / ATTEMPTS
+============================================================ */
+
+[data-theme="dark"] .attempt-participant {
+    color: #D8D2DC;
+}
+
+[data-theme="dark"] .attempt-participant small {
+    color: #9A929F;
+}
+
+
+/* ============================================================
+   COMMON BUTTONS / ICONS
+============================================================ */
+
+[data-theme="dark"] .slc-dashboard-page button:not(.slc-dashboard-load-btn) {
+    -webkit-tap-highlight-color: transparent;
+}
+
+[data-theme="dark"] .slc-dashboard-page input,
+[data-theme="dark"] .slc-dashboard-page textarea,
+[data-theme="dark"] .slc-dashboard-page select {
+    color-scheme: dark;
+}
+
+
+/* ============================================================
+   SCROLLBARS
+============================================================ */
+
+[data-theme="dark"] .slc-dashboard-page ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+[data-theme="dark"] .slc-dashboard-page ::-webkit-scrollbar-track {
+    background: #0D0B12;
+}
+
+[data-theme="dark"] .slc-dashboard-page ::-webkit-scrollbar-thumb {
+    background: #39333F;
+    border-radius: 10px;
+}
+
+[data-theme="dark"] .slc-dashboard-page ::-webkit-scrollbar-thumb:hover {
+    background: #51465A;
+}
+
+
+/* ============================================================
+   SELECTION
 ============================================================ */
 
 [data-theme="dark"] .slc-dashboard-page ::selection {
-
     background: rgba(168, 85, 247, .30);
-
-    color: #ffffff;
+    color: #FFFFFF;
 }
 
 
 /* ============================================================
-   DARK MODE — SMALL MOBILE POLISH
+   FORCE DARK SURFACES
+   Prevent accidental white backgrounds from inherited rules.
 ============================================================ */
 
-@media (max-width: 700px) {
+[data-theme="dark"] .slc-stat-card,
+[data-theme="dark"] .slc-progress-card,
+[data-theme="dark"] .slc-group-card,
+[data-theme="dark"] .slc-members-card,
+[data-theme="dark"] .slc-observation-card,
+[data-theme="dark"] .slc-empty-state,
+[data-theme="dark"] .questions-toolbar,
+[data-theme="dark"] .questions-table-wrap,
+[data-theme="dark"] .quiz-settings-card,
+[data-theme="dark"] .reports-toolbar,
+[data-theme="dark"] .reports-table-wrap,
+[data-theme="dark"] .slc-report-empty,
+[data-theme="dark"] .question-editor-modal,
+[data-theme="dark"] .question-delete-dialog,
+[data-theme="dark"] .slc-report-modal {
+    background-color: #17141C;
+}
 
-    [data-theme="dark"] .slc-dashboard-page .slc-stat-card,
-    [data-theme="dark"] .slc-dashboard-page .slc-progress-card,
-    [data-theme="dark"] .slc-dashboard-page .slc-group-card,
-    [data-theme="dark"] .slc-dashboard-page .slc-members-card,
-    [data-theme="dark"] .slc-dashboard-page .quiz-settings-card {
 
-        box-shadow:
-            0 6px 20px rgba(0, 0, 0, .20);
-    }
+/* ============================================================
+   FORCE DARK TABLE / INPUT SURFACES
+============================================================ */
 
+[data-theme="dark"] .questions-table-wrap,
+[data-theme="dark"] .reports-table-wrap,
+[data-theme="dark"] .questions-table,
+[data-theme="dark"] .reports-table,
+[data-theme="dark"] .questions-table tbody,
+[data-theme="dark"] .reports-table tbody {
+    background-color: #121016;
+}
+
+[data-theme="dark"] .questions-table td,
+[data-theme="dark"] .reports-table td {
+    background-color: #121016;
+}
+
+[data-theme="dark"] .questions-table tbody tr:hover td,
+[data-theme="dark"] .reports-table tbody tr:hover td {
+    background-color: #1D1923;
 }
