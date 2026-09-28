@@ -1944,3 +1944,18 @@ footer {
 
     color-scheme: dark;
 }
+/* ============================================================
+   DARK MODE — REMOVE NATIVE SELECT ARROW
+============================================================ */
+
+[data-theme="dark"] select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: none !important;
+}
+
+/* Prevent any pseudo-element from adding another arrow */
+[data-theme="dark"] select::-ms-expand {
+    display: none;
+}
