@@ -4273,3 +4273,1321 @@
 /* ============================================================
    END OF FINAL RESOURCE LAYOUT CORRECTION
 ============================================================ */
+
+
+
+
+/* ============================================================
+   AFC ISIU YOUTH PORTAL V2
+   HOLIDAY LESSONS — DARK MODE
+   ------------------------------------------------------------
+   Controlled by:
+   <html data-theme="dark">
+
+   This section is intentionally placed at the end so it
+   overrides the light-only colors used throughout this file.
+============================================================ */
+
+
+/* ============================================================
+   DARK THEME VARIABLES
+============================================================ */
+
+[data-theme="dark"] .holiday-lesson-page {
+
+    color-scheme: dark;
+
+    --holiday-bg: #08070B;
+    --holiday-surface: #17141C;
+    --holiday-surface-2: #121016;
+    --holiday-surface-3: #1D1923;
+
+    --holiday-border: #302B35;
+    --holiday-border-strong: #39333F;
+
+    --holiday-text: #F5F3F7;
+    --holiday-text-soft: #D8D2DC;
+    --holiday-muted: #A7A2AE;
+    --holiday-faint: #77717F;
+
+    --holiday-purple: #C084FC;
+    --holiday-purple-bright: #A855F7;
+
+    --holiday-orange: #FB923C;
+    --holiday-orange-dark: #EA580C;
+
+    --holiday-cyan: #22D3EE;
+    --holiday-green: #4ADE80;
+    --holiday-red: #F87171;
+}
+
+
+/* ============================================================
+   FOUNDATION
+============================================================ */
+
+[data-theme="dark"] .dashboard-content.holiday-lesson-page {
+
+    color:
+        var(--holiday-text);
+
+}
+
+
+/* ============================================================
+   LOADING
+============================================================ */
+
+[data-theme="dark"] .lesson-loading {
+
+    color:
+        var(--holiday-text);
+
+}
+
+
+[data-theme="dark"] .lesson-loading-kicker,
+[data-theme="dark"] .lesson-section-kicker {
+
+    color:
+        var(--holiday-orange);
+
+}
+
+
+[data-theme="dark"] .lesson-loading h1 {
+
+    color:
+        var(--holiday-text);
+
+}
+
+
+[data-theme="dark"] .lesson-loading p {
+
+    color:
+        var(--holiday-muted);
+
+}
+
+
+[data-theme="dark"] .lesson-loading-icon {
+
+    color:
+        #ffffff;
+
+    background:
+        linear-gradient(
+            135deg,
+            #FB923C,
+            #EA580C
+        );
+
+    box-shadow:
+        0 9px 24px
+        rgba(234, 88, 12, .20);
+
+}
+
+
+/* ============================================================
+   ERROR
+============================================================ */
+
+[data-theme="dark"] .lesson-error {
+
+    background:
+        var(--holiday-surface);
+
+    border-color:
+        var(--holiday-border);
+
+    box-shadow:
+        0 16px 42px
+        rgba(0, 0, 0, .30);
+
+}
+
+
+[data-theme="dark"] .lesson-error-icon {
+
+    color:
+        #FB923C;
+
+    background:
+        rgba(234, 88, 12, .12);
+
+}
+
+
+[data-theme="dark"] .lesson-error h1 {
+
+    color:
+        var(--holiday-text);
+
+}
+
+
+[data-theme="dark"] .lesson-error p {
+
+    color:
+        var(--holiday-muted);
+
+}
+
+
+[data-theme="dark"] .lesson-error-button {
+
+    color:
+        #ffffff;
+
+    background:
+        linear-gradient(
+            135deg,
+            #EA580C,
+            #F97316
+        );
+
+}
+
+
+/* ============================================================
+   TOP BAR
+============================================================ */
+
+[data-theme="dark"] .lesson-back-button {
+
+    color:
+        var(--holiday-orange);
+
+}
+
+
+[data-theme="dark"] .lesson-back-button:hover {
+
+    color:
+        #FDBA74;
+
+}
+
+
+[data-theme="dark"] .lesson-reader-label {
+
+    color:
+        var(--holiday-faint);
+
+}
+
+
+/* ============================================================
+   READER HEADER
+============================================================ */
+
+[data-theme="dark"] .lesson-reader-header {
+
+    background:
+        linear-gradient(
+            135deg,
+            #17141C 0%,
+            #1B1720 62%,
+            #21191A 100%
+        );
+
+    border-color:
+        var(--holiday-border);
+
+    box-shadow:
+        0 14px 40px
+        rgba(0, 0, 0, .28);
+
+}
+
+
+[data-theme="dark"] .lesson-reader-header::after {
+
+    background:
+        rgba(168, 85, 247, .10);
+
+}
+
+
+[data-theme="dark"] .lesson-reader-header::before {
+
+    background:
+        rgba(234, 88, 12, .10);
+
+}
+
+
+[data-theme="dark"] .lesson-reader-icon {
+
+    color:
+        #ffffff;
+
+    background:
+        linear-gradient(
+            135deg,
+            #FB923C,
+            #EA580C 55%,
+            #7C3AED
+        );
+
+    box-shadow:
+        0 11px 25px
+        rgba(234, 88, 12, .20);
+
+}
+
+
+/* ============================================================
+   ICON VARIATIONS
+============================================================ */
+
+[data-theme="dark"] .lesson-reader-icon.icon-orange {
+
+    background:
+        linear-gradient(
+            135deg,
+            #FB923C,
+            #EA580C
+        );
+
+}
+
+
+[data-theme="dark"] .lesson-reader-icon.icon-purple {
+
+    background:
+        linear-gradient(
+            135deg,
+            #A855F7,
+            #4A0754
+        );
+
+}
+
+
+[data-theme="dark"] .lesson-reader-icon.icon-blue {
+
+    background:
+        linear-gradient(
+            135deg,
+            #3B82F6,
+            #0891B2
+        );
+
+}
+
+
+[data-theme="dark"] .lesson-reader-icon.icon-green {
+
+    background:
+        linear-gradient(
+            135deg,
+            #22C55E,
+            #0D9488
+        );
+
+}
+
+
+[data-theme="dark"] .lesson-reader-icon.icon-pink {
+
+    background:
+        linear-gradient(
+            135deg,
+            #DB2777,
+            #9333EA
+        );
+
+}
+
+
+/* ============================================================
+   READER BADGES
+============================================================ */
+
+[data-theme="dark"] .lesson-category-badge {
+
+    color:
+        #FB923C;
+
+    background:
+        rgba(234, 88, 12, .13);
+
+}
+
+
+[data-theme="dark"] .lesson-level-badge {
+
+    color:
+        #4ADE80;
+
+    background:
+        rgba(34, 197, 94, .12);
+
+}
+
+
+[data-theme="dark"] .lesson-reader-header h1 {
+
+    color:
+        var(--holiday-text);
+
+}
+
+
+[data-theme="dark"] .lesson-description {
+
+    color:
+        var(--holiday-muted);
+
+}
+
+
+/* ============================================================
+   META
+============================================================ */
+
+[data-theme="dark"] .lesson-reader-meta {
+
+    border-top-color:
+        var(--holiday-border);
+
+}
+
+
+[data-theme="dark"] .lesson-reader-meta span {
+
+    color:
+        var(--holiday-muted);
+
+}
+
+
+[data-theme="dark"] .lesson-reader-meta i {
+
+    color:
+        var(--holiday-orange);
+
+}
+
+
+[data-theme="dark"] .lesson-reader-meta strong {
+
+    color:
+        var(--holiday-text-soft);
+
+}
+
+
+/* ============================================================
+   READING PROGRESS
+============================================================ */
+
+[data-theme="dark"] .lesson-reading-progress {
+
+    background:
+        var(--holiday-surface);
+
+    border-color:
+        var(--holiday-border);
+
+}
+
+
+[data-theme="dark"] .lesson-reading-progress-top {
+
+    color:
+        var(--holiday-muted);
+
+}
+
+
+[data-theme="dark"] .lesson-reading-progress-top strong {
+
+    color:
+        var(--holiday-orange);
+
+}
+
+
+[data-theme="dark"] .lesson-reading-progress-track {
+
+    background:
+        #29242E;
+
+}
+
+
+[data-theme="dark"] .lesson-reading-progress-fill {
+
+    background:
+        linear-gradient(
+            90deg,
+            #FB923C,
+            #EA580C,
+            #A855F7
+        );
+
+}
+
+
+/* ============================================================
+   RESOURCE WRAPPER
+============================================================ */
+
+[data-theme="dark"] .lesson-resource {
+
+    background:
+        transparent;
+
+    border-color:
+        transparent;
+
+    box-shadow:
+        none;
+
+}
+
+
+/* ============================================================
+   RESOURCE ITEMS
+============================================================ */
+
+[data-theme="dark"] .lesson-resource-item {
+
+    background:
+        linear-gradient(
+            135deg,
+            #211A17 0%,
+            #17141C 62%,
+            #1B1720 100%
+        );
+
+    border-color:
+        rgba(234, 88, 12, .20);
+
+    box-shadow:
+        0 9px 28px
+        rgba(0, 0, 0, .22);
+
+}
+
+
+[data-theme="dark"] .lesson-resource-item .lesson-resource-icon {
+
+    color:
+        var(--holiday-orange);
+
+    background:
+        rgba(234, 88, 12, .13);
+
+    box-shadow:
+        inset 0 0 0 1px
+        rgba(234, 88, 12, .10);
+
+}
+
+
+[data-theme="dark"] .lesson-resource-item
+.lesson-resource-copy > span {
+
+    color:
+        var(--holiday-orange);
+
+}
+
+
+[data-theme="dark"] .lesson-resource-item
+.lesson-resource-copy h2 {
+
+    color:
+        var(--holiday-text);
+
+}
+
+
+[data-theme="dark"] .lesson-resource-item
+.lesson-resource-copy p {
+
+    color:
+        var(--holiday-muted);
+
+}
+
+
+[data-theme="dark"] .lesson-resource-complete {
+
+    color:
+        var(--holiday-green);
+
+}
+
+
+[data-theme="dark"] .lesson-resource-item
+.lesson-resource-button {
+
+    color:
+        #ffffff;
+
+    background:
+        linear-gradient(
+            135deg,
+            #EA580C,
+            #F97316
+        );
+
+    box-shadow:
+        0 7px 18px
+        rgba(234, 88, 12, .20);
+
+}
+
+
+[data-theme="dark"] .lesson-resource-item
+.lesson-resource-button:hover {
+
+    background:
+        linear-gradient(
+            135deg,
+            #C2410C,
+            #EA580C
+        );
+
+}
+
+
+[data-theme="dark"] .lesson-resource-icon .fa-youtube {
+
+    color:
+        #FB923C;
+
+}
+
+
+/* ============================================================
+   LEGACY SINGLE RESOURCE
+============================================================ */
+
+[data-theme="dark"]
+.lesson-resource:not(:has(.lesson-resource-list)) {
+
+    background:
+        linear-gradient(
+            135deg,
+            #211A17 0%,
+            #17141C 62%,
+            #1B1720 100%
+        );
+
+    border-color:
+        rgba(234, 88, 12, .20);
+
+    box-shadow:
+        0 9px 28px
+        rgba(0, 0, 0, .22);
+
+}
+
+
+[data-theme="dark"]
+.lesson-resource:not(:has(.lesson-resource-list))
+.lesson-resource-icon {
+
+    color:
+        var(--holiday-orange);
+
+    background:
+        rgba(234, 88, 12, .13);
+
+}
+
+
+/* ============================================================
+   VIDEO PLAYER ERROR
+============================================================ */
+
+[data-theme="dark"] .lesson-video-player-error i {
+
+    color:
+        var(--holiday-orange);
+
+}
+
+
+[data-theme="dark"] .lesson-video-player-error p {
+
+    color:
+        var(--holiday-muted);
+
+}
+
+
+/* ============================================================
+   MAIN CONTENT CARD
+============================================================ */
+
+[data-theme="dark"] .lesson-content {
+
+    background:
+        var(--holiday-surface);
+
+    border-color:
+        var(--holiday-border);
+
+    box-shadow:
+        0 11px 34px
+        rgba(0, 0, 0, .28);
+
+}
+
+
+[data-theme="dark"] .lesson-content p {
+
+    color:
+        var(--holiday-text-soft);
+
+}
+
+
+[data-theme="dark"] .lesson-content h2,
+[data-theme="dark"] .lesson-content h3 {
+
+    color:
+        var(--holiday-text);
+
+}
+
+
+[data-theme="dark"] .lesson-content li {
+
+    color:
+        var(--holiday-text-soft);
+
+}
+
+
+/* ============================================================
+   BLOCKQUOTES
+============================================================ */
+
+[data-theme="dark"] .lesson-content blockquote {
+
+    background:
+        rgba(234, 88, 12, .08);
+
+    border-left-color:
+        var(--holiday-orange);
+
+    color:
+        var(--holiday-text-soft);
+
+}
+
+
+/* ============================================================
+   STRONG + LINKS
+============================================================ */
+
+[data-theme="dark"] .lesson-content strong {
+
+    color:
+        var(--holiday-text);
+
+}
+
+
+[data-theme="dark"] .lesson-content a {
+
+    color:
+        var(--holiday-orange);
+
+}
+
+
+/* ============================================================
+   SIDEBAR
+============================================================ */
+
+[data-theme="dark"] .lesson-sidebar-card {
+
+    background:
+        var(--holiday-surface);
+
+    border-color:
+        var(--holiday-border);
+
+    box-shadow:
+        0 9px 28px
+        rgba(0, 0, 0, .25);
+
+}
+
+
+[data-theme="dark"] .lesson-sidebar-heading {
+
+    color:
+        var(--holiday-text);
+
+    border-bottom-color:
+        var(--holiday-border);
+
+}
+
+
+[data-theme="dark"] .lesson-sidebar-heading i {
+
+    color:
+        var(--holiday-orange);
+
+}
+
+
+[data-theme="dark"] .lesson-section-link {
+
+    color:
+        var(--holiday-muted);
+
+    border-bottom-color:
+        #29242E;
+
+}
+
+
+[data-theme="dark"] .lesson-section-link:hover {
+
+    color:
+        var(--holiday-orange);
+
+    background:
+        #1D1923;
+
+}
+
+
+[data-theme="dark"] .lesson-section-number {
+
+    color:
+        var(--holiday-orange);
+
+    background:
+        rgba(234, 88, 12, .12);
+
+}
+
+
+[data-theme="dark"] .lesson-section-link strong {
+
+    color:
+        inherit;
+
+}
+
+
+/* ============================================================
+   SIDEBAR NOTE
+============================================================ */
+
+[data-theme="dark"] .lesson-sidebar-note {
+
+    border-color:
+        #3A3040;
+
+    background:
+        linear-gradient(
+            135deg,
+            #211A1D,
+            #1B1720
+        );
+
+}
+
+
+[data-theme="dark"] .lesson-sidebar-note > i {
+
+    color:
+        var(--holiday-purple);
+
+}
+
+
+[data-theme="dark"] .lesson-sidebar-note strong {
+
+    color:
+        var(--holiday-text);
+
+}
+
+
+[data-theme="dark"] .lesson-sidebar-note p {
+
+    color:
+        var(--holiday-muted);
+
+}
+
+
+/* ============================================================
+   COMPLETION CARD
+============================================================ */
+
+[data-theme="dark"] .lesson-completion {
+
+    background:
+        linear-gradient(
+            135deg,
+            #211A17,
+            #17141C
+        );
+
+    border-color:
+        #3B302C;
+
+}
+
+
+[data-theme="dark"] .lesson-completion-icon {
+
+    background:
+        linear-gradient(
+            135deg,
+            #EA580C,
+            #7C3AED
+        );
+
+}
+
+
+[data-theme="dark"] .lesson-completion-copy > span {
+
+    color:
+        var(--holiday-orange);
+
+}
+
+
+[data-theme="dark"] .lesson-completion-copy h2 {
+
+    color:
+        var(--holiday-text);
+
+}
+
+
+[data-theme="dark"] .lesson-completion-copy p {
+
+    color:
+        var(--holiday-muted);
+
+}
+
+
+[data-theme="dark"] .lesson-complete-button {
+
+    color:
+        #ffffff;
+
+    background:
+        linear-gradient(
+            135deg,
+            #EA580C,
+            #F97316
+        );
+
+}
+
+
+/* ============================================================
+   FOOTER NAVIGATION
+============================================================ */
+
+[data-theme="dark"] .lesson-reader-footer {
+
+    border-top-color:
+        var(--holiday-border);
+
+}
+
+
+[data-theme="dark"] .lesson-footer-back {
+
+    color:
+        var(--holiday-muted);
+
+}
+
+
+[data-theme="dark"] .lesson-footer-back:hover {
+
+    color:
+        var(--holiday-orange);
+
+}
+
+
+[data-theme="dark"] .lesson-next-button {
+
+    border-color:
+        var(--holiday-orange);
+
+    color:
+        var(--holiday-orange);
+
+    background:
+        var(--holiday-surface);
+
+}
+
+
+[data-theme="dark"] .lesson-next-button:hover {
+
+    color:
+        #ffffff;
+
+    background:
+        var(--holiday-orange-dark);
+
+}
+
+
+/* ============================================================
+   COMPLETED STATE
+============================================================ */
+
+[data-theme="dark"] .lesson-completed {
+
+    background:
+        var(--holiday-surface);
+
+    border-color:
+        var(--holiday-border);
+
+    box-shadow:
+        0 16px 45px
+        rgba(0, 0, 0, .30);
+
+}
+
+
+[data-theme="dark"] .lesson-completed h1 {
+
+    color:
+        var(--holiday-text);
+
+}
+
+
+[data-theme="dark"] .lesson-completed > p {
+
+    color:
+        var(--holiday-muted);
+
+}
+
+
+[data-theme="dark"] .lesson-completed-icon {
+
+    background:
+        linear-gradient(
+            135deg,
+            #22C55E,
+            #0D9488
+        );
+
+    box-shadow:
+        0 12px 25px
+        rgba(34, 197, 94, .16);
+
+}
+
+
+[data-theme="dark"] .lesson-completed-primary {
+
+    color:
+        #ffffff;
+
+    background:
+        linear-gradient(
+            135deg,
+            #EA580C,
+            #F97316
+        );
+
+}
+
+
+[data-theme="dark"] .lesson-completed-secondary {
+
+    border-color:
+        var(--holiday-border-strong);
+
+    color:
+        var(--holiday-purple);
+
+    background:
+        var(--holiday-surface-2);
+
+}
+
+
+/* ============================================================
+   VIDEO MODAL
+============================================================ */
+
+[data-theme="dark"] .lesson-video-modal-backdrop {
+
+    background:
+        rgba(3, 2, 6, .86);
+
+}
+
+
+[data-theme="dark"] .lesson-video-modal-dialog {
+
+    background:
+        var(--holiday-surface);
+
+    border-color:
+        rgba(234, 88, 12, .18);
+
+    box-shadow:
+        0 30px 90px
+        rgba(0, 0, 0, .55),
+        0 8px 30px
+        rgba(0, 0, 0, .30);
+
+}
+
+
+[data-theme="dark"] .lesson-video-modal-header {
+
+    border-bottom-color:
+        var(--holiday-border);
+
+    background:
+        linear-gradient(
+            135deg,
+            #211A17 0%,
+            #17141C 62%,
+            #1B1720 100%
+        );
+
+}
+
+
+[data-theme="dark"] .lesson-video-modal-kicker {
+
+    color:
+        var(--holiday-orange);
+
+}
+
+
+[data-theme="dark"] .lesson-video-modal-heading h2 {
+
+    color:
+        var(--holiday-text);
+
+}
+
+
+[data-theme="dark"] .lesson-video-modal-close {
+
+    background:
+        #211C26;
+
+    color:
+        var(--holiday-text-soft);
+
+}
+
+
+[data-theme="dark"] .lesson-video-modal-close:hover {
+
+    background:
+        rgba(234, 88, 12, .14);
+
+    color:
+        var(--holiday-orange);
+
+}
+
+
+[data-theme="dark"] .lesson-video-modal-player {
+
+    background:
+        #0A090C;
+
+}
+
+
+[data-theme="dark"] .lesson-video-player-container {
+
+    background:
+        #000000;
+
+}
+
+
+[data-theme="dark"] .lesson-video-modal-footer {
+
+    background:
+        var(--holiday-surface);
+
+}
+
+
+[data-theme="dark"] .lesson-video-modal-footer-icon {
+
+    background:
+        rgba(255, 0, 0, .10);
+
+    color:
+        #FF5A5A;
+
+}
+
+
+[data-theme="dark"] .lesson-video-modal-footer strong {
+
+    color:
+        var(--holiday-text);
+
+}
+
+
+[data-theme="dark"] .lesson-video-modal-footer span {
+
+    color:
+        var(--holiday-muted);
+
+}
+
+
+/* ============================================================
+   COMMON DARK SURFACE PROTECTION
+   ------------------------------------------------------------
+   Prevent shared/global light styles from leaking into this
+   page when the portal is in dark mode.
+============================================================ */
+
+[data-theme="dark"] .holiday-lesson-page input,
+[data-theme="dark"] .holiday-lesson-page textarea,
+[data-theme="dark"] .holiday-lesson-page select {
+
+    color-scheme:
+        dark;
+
+}
+
+
+/* ============================================================
+   FOCUS STATES
+============================================================ */
+
+[data-theme="dark"] .lesson-back-button:focus-visible,
+[data-theme="dark"] .lesson-error-button:focus-visible,
+[data-theme="dark"] .lesson-complete-button:focus-visible,
+[data-theme="dark"] .lesson-next-button:focus-visible,
+[data-theme="dark"] .lesson-completed-primary:focus-visible,
+[data-theme="dark"] .lesson-completed-secondary:focus-visible,
+[data-theme="dark"] .lesson-section-link:focus-visible,
+[data-theme="dark"] .lesson-resource-button:focus-visible,
+[data-theme="dark"] .lesson-video-modal-close:focus-visible {
+
+    outline-color:
+        rgba(251, 146, 60, .35);
+
+}
+
+
+/* ============================================================
+   TEXT SELECTION
+============================================================ */
+
+[data-theme="dark"] .holiday-lesson-page ::selection {
+
+    background:
+        rgba(168, 85, 247, .30);
+
+    color:
+        #ffffff;
+
+}
+
+
+/* ============================================================
+   SCROLLBAR
+============================================================ */
+
+[data-theme="dark"] .holiday-lesson-page::-webkit-scrollbar {
+
+    width:
+        8px;
+
+}
+
+
+[data-theme="dark"] .holiday-lesson-page::-webkit-scrollbar-track {
+
+    background:
+        #08070B;
+
+}
+
+
+[data-theme="dark"] .holiday-lesson-page::-webkit-scrollbar-thumb {
+
+    background:
+        #39333F;
+
+    border-radius:
+        999px;
+
+}
+
+
+[data-theme="dark"] .holiday-lesson-page::-webkit-scrollbar-thumb:hover {
+
+    background:
+        #51465A;
+
+}
+
+
+/* ============================================================
+   MOBILE DARK MODE
+============================================================ */
+
+@media (max-width: 768px) {
+
+    [data-theme="dark"] .lesson-resource-item {
+
+        background:
+            linear-gradient(
+                135deg,
+                #211A17 0%,
+                #17141C 62%,
+                #1B1720 100%
+            );
+
+    }
+
+}
+
+
+@media (max-width: 520px) {
+
+    [data-theme="dark"] .lesson-reader-header {
+
+        background:
+            linear-gradient(
+                135deg,
+                #17141C 0%,
+                #1B1720 100%
+            );
+
+    }
+
+}
