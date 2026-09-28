@@ -1152,3 +1152,463 @@
     }
 
 }
+
+
+
+
+
+
+/* ============================================================
+   PORTAL DARK MODE
+   ------------------------------------------------------------
+   Controlled by:
+   <html data-theme="dark">
+
+   This page-specific layer works with the shared portal
+   theme system and does not depend on the user's OS theme.
+   ============================================================ */
+
+
+/* ============================================================
+   HERO
+   ============================================================ */
+
+[data-theme="dark"] .report-hero {
+
+    background:
+        linear-gradient(
+            135deg,
+            #17141c 0%,
+            #1b1720 48%,
+            #21191a 100%
+        );
+
+    border-color: rgba(192, 132, 252, 0.14);
+
+    box-shadow:
+        0 18px 55px rgba(0, 0, 0, 0.30);
+}
+
+
+[data-theme="dark"] .report-hero::before {
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(168, 85, 247, 0.16),
+            rgba(168, 85, 247, 0)
+        );
+}
+
+
+[data-theme="dark"] .report-hero::after {
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(34, 211, 238, 0.10),
+            rgba(34, 211, 238, 0)
+        );
+}
+
+
+[data-theme="dark"] .report-eyebrow {
+    color: #C084FC;
+}
+
+
+[data-theme="dark"] .report-hero h1 {
+    color: #F5F3F7;
+}
+
+
+[data-theme="dark"] .report-hero h1 span {
+    color: #FB923C;
+}
+
+
+[data-theme="dark"] .report-hero p {
+    color: #A7A2AE;
+}
+
+
+[data-theme="dark"] .report-hero-icon {
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(168, 85, 247, 0.16),
+            rgba(234, 88, 12, 0.13)
+        );
+
+    color: #C084FC;
+}
+
+
+/* ============================================================
+   LOGIN CARD
+   ============================================================ */
+
+[data-theme="dark"] .welfare-login-card {
+
+    background:
+        radial-gradient(
+            circle at 100% 0%,
+            rgba(168, 85, 247, 0.12),
+            transparent 32%
+        ),
+        #17141C;
+
+    border-color: #302B35;
+
+    box-shadow:
+        0 14px 38px rgba(0, 0, 0, 0.32);
+}
+
+
+[data-theme="dark"] .welfare-login-icon {
+
+    background: rgba(168, 85, 247, 0.14);
+    color: #C084FC;
+}
+
+
+[data-theme="dark"] .welfare-login-kicker {
+    color: #C084FC;
+}
+
+
+[data-theme="dark"] .welfare-login-copy h1 {
+    color: #F5F3F7;
+}
+
+
+[data-theme="dark"] .welfare-login-copy p {
+    color: #A7A2AE;
+}
+
+
+/* ============================================================
+   LOGIN FORM
+   ============================================================ */
+
+[data-theme="dark"] .welfare-form-field label {
+    color: #DDD8E1;
+}
+
+
+[data-theme="dark"] .welfare-input-wrap > i:first-child {
+    color: #817986;
+}
+
+
+[data-theme="dark"] .welfare-input-wrap input {
+
+    border-color: #39333F;
+
+    background: #121016;
+
+    color: #F5F3F7;
+}
+
+
+[data-theme="dark"] .welfare-input-wrap input::placeholder {
+    color: #716A76;
+}
+
+
+[data-theme="dark"] .welfare-input-wrap input:focus {
+
+    border-color: #A855F7;
+
+    box-shadow:
+        0 0 0 3px rgba(168, 85, 247, 0.13);
+}
+
+
+[data-theme="dark"] .password-toggle {
+    color: #938B98;
+}
+
+
+[data-theme="dark"] .password-toggle:hover {
+
+    background: #211C26;
+    color: #C084FC;
+}
+
+
+[data-theme="dark"] .welfare-login-btn {
+    background: #7E22CE;
+    color: #FFFFFF;
+}
+
+
+[data-theme="dark"] .welfare-login-btn:hover {
+    background: #9333EA;
+}
+
+
+[data-theme="dark"] .welfare-login-error {
+    color: #F87171;
+}
+
+
+/* ============================================================
+   DASHBOARD HEADER
+   ============================================================ */
+
+[data-theme="dark"] .welfare-eyebrow {
+    color: #C084FC;
+}
+
+
+[data-theme="dark"] .welfare-page-heading h1 {
+    color: #F5F3F7;
+}
+
+
+[data-theme="dark"] .welfare-page-heading p {
+    color: #A7A2AE;
+}
+
+
+[data-theme="dark"] .welfare-logout-btn {
+
+    border-color: #39333F;
+
+    background: #17141C;
+
+    color: #FB923C;
+}
+
+
+[data-theme="dark"] .welfare-logout-btn:hover {
+
+    border-color: rgba(234, 88, 12, 0.35);
+
+    background: #211C20;
+}
+
+
+/* ============================================================
+   SUMMARY CARDS
+   ============================================================ */
+
+[data-theme="dark"] .welfare-summary-card {
+
+    background: #17141C;
+
+    border-color: #302B35;
+
+    box-shadow:
+        0 7px 24px rgba(0, 0, 0, 0.24);
+}
+
+
+[data-theme="dark"] .welfare-summary-icon.purple {
+
+    background: rgba(168, 85, 247, 0.13);
+    color: #C084FC;
+}
+
+
+[data-theme="dark"] .welfare-summary-icon.orange {
+
+    background: rgba(234, 88, 12, 0.12);
+    color: #FB923C;
+}
+
+
+[data-theme="dark"] .welfare-summary-icon.cyan {
+
+    background: rgba(8, 145, 178, 0.13);
+    color: #22D3EE;
+}
+
+
+[data-theme="dark"] .welfare-summary-info span {
+    color: #9A929F;
+}
+
+
+[data-theme="dark"] .welfare-summary-info strong {
+    color: #F5F3F7;
+}
+
+
+/* ============================================================
+   GENERAL CARDS
+   ============================================================ */
+
+[data-theme="dark"] .welfare-card {
+
+    background: #17141C;
+
+    border-color: #302B35;
+
+    box-shadow:
+        0 7px 24px rgba(0, 0, 0, 0.24);
+}
+
+
+[data-theme="dark"] .welfare-section-icon.purple {
+
+    background: rgba(168, 85, 247, 0.13);
+    color: #C084FC;
+}
+
+
+[data-theme="dark"] .welfare-section-icon.orange {
+
+    background: rgba(234, 88, 12, 0.12);
+    color: #FB923C;
+}
+
+
+[data-theme="dark"] .welfare-section-icon.cyan {
+
+    background: rgba(8, 145, 178, 0.13);
+    color: #22D3EE;
+}
+
+
+[data-theme="dark"] .welfare-section-title h2 {
+    color: #F5F3F7;
+}
+
+
+[data-theme="dark"] .welfare-section-title p {
+    color: #9A929F;
+}
+
+
+/* ============================================================
+   ACTIVITY TABLE
+   ============================================================ */
+
+[data-theme="dark"] .welfare-table-wrap {
+
+    border-color: #302B35;
+
+    background: #121016;
+}
+
+
+[data-theme="dark"] .welfare-table th {
+
+    border-bottom-color: #302B35;
+
+    background: #1D1923;
+
+    color: #A7A2AE;
+}
+
+
+[data-theme="dark"] .welfare-table td {
+
+    border-bottom-color: #29242E;
+
+    color: #DDD8E1;
+}
+
+
+[data-theme="dark"] .welfare-table tbody tr:hover {
+    background: #1D1923;
+}
+
+
+[data-theme="dark"] .welfare-table-loading,
+[data-theme="dark"] .welfare-table-empty {
+    color: #9A929F !important;
+}
+
+
+/* ============================================================
+   TRANSACTION COLORS
+   ============================================================ */
+
+[data-theme="dark"] .transaction-credit {
+    color: #4ADE80 !important;
+}
+
+
+[data-theme="dark"] .transaction-debit {
+    color: #FB923C !important;
+}
+
+
+[data-theme="dark"] .transaction-type.credit {
+
+    background: rgba(34, 197, 94, 0.12);
+
+    color: #4ADE80;
+}
+
+
+[data-theme="dark"] .transaction-type.debit {
+
+    background: rgba(234, 88, 12, 0.12);
+
+    color: #FB923C;
+}
+
+
+/* ============================================================
+   PAGINATION
+   ============================================================ */
+
+[data-theme="dark"] .welfare-pagination > span {
+    color: #9A929F;
+}
+
+
+[data-theme="dark"] .pagination-btn {
+
+    border-color: #39333F;
+
+    background: #17141C;
+
+    color: #C084FC;
+}
+
+
+[data-theme="dark"] .pagination-btn:hover:not(:disabled) {
+
+    background: #211C26;
+
+    border-color: #51465A;
+}
+
+
+[data-theme="dark"] .pagination-btn:disabled {
+    opacity: 0.35;
+}
+
+
+/* ============================================================
+   CHART AREA
+   ------------------------------------------------------------
+   Chart.js itself is rendered on canvas, so the canvas cannot
+   inherit CSS text colours. The welfare JS should ideally use
+   the theme variables when configuring Chart.js.
+   
+   The surrounding chart container is already transparent, so
+   no forced background is needed here.
+   ============================================================ */
+
+[data-theme="dark"] .welfare-chart-container {
+    background: transparent;
+}
+
+
+/* ============================================================
+   SELECTION
+   ============================================================ */
+
+[data-theme="dark"] .welfare-page ::selection {
+
+    background: rgba(168, 85, 247, 0.30);
+
+    color: #FFFFFF;
+}
