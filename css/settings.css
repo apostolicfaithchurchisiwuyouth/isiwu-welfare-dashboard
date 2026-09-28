@@ -1334,3 +1334,398 @@
         padding: 17px;
     }
 }
+
+
+
+/* ============================================================
+   AFC ISIU YOUTH PORTAL V2
+   SETTINGS PAGE — DARK MODE
+   ------------------------------------------------------------
+   Controlled by:
+   <html data-theme="dark">
+
+   Existing layout, spacing, sizing and responsive behavior
+   remain unchanged.
+============================================================ */
+
+
+/* ============================================================
+   PAGE THEME
+============================================================ */
+
+[data-theme="dark"] .settings-page {
+    color-scheme: dark;
+}
+
+
+/* ============================================================
+   PWA INSTALL CARD
+============================================================ */
+
+[data-theme="dark"] .pwa-install-card {
+
+    background: #17141C;
+
+    border-color: #302B35;
+
+    box-shadow:
+        0 16px 45px rgba(0, 0, 0, .28);
+}
+
+[data-theme="dark"] .pwa-install-card:hover {
+
+    border-color: rgba(168, 85, 247, .28);
+
+    box-shadow:
+        0 20px 52px rgba(0, 0, 0, .34);
+}
+
+
+/* ============================================================
+   PWA ICON
+============================================================ */
+
+[data-theme="dark"] .pwa-install-icon {
+
+    background: rgba(234, 88, 12, .12);
+
+    color: #FB923C;
+}
+
+
+/* ============================================================
+   PWA CONTENT
+============================================================ */
+
+[data-theme="dark"] .pwa-install-content h1,
+[data-theme="dark"] .pwa-install-content h3 {
+
+    color: #F5F3F7;
+}
+
+[data-theme="dark"] .pwa-install-content > p {
+    color: #A7A2AE;
+}
+
+
+/* ============================================================
+   INSTALL STATUS
+============================================================ */
+
+[data-theme="dark"] .pwa-status {
+    color: #A7A2AE;
+}
+
+[data-theme="dark"] .pwa-status-dot {
+    background: #77717F;
+}
+
+[data-theme="dark"] .pwa-status.is-ready .pwa-status-dot,
+[data-theme="dark"] .pwa-status.is-installed .pwa-status-dot {
+    background: #4ADE80;
+}
+
+[data-theme="dark"] .pwa-status.is-error .pwa-status-dot {
+    background: #F87171;
+}
+
+[data-theme="dark"] .pwa-status.is-loading .pwa-status-dot {
+    background: #FB923C;
+}
+
+
+/* ============================================================
+   INSTALL BUTTON
+============================================================ */
+
+[data-theme="dark"] .pwa-install-button {
+
+    background: #EA580C;
+
+    color: #FFFFFF;
+
+    box-shadow:
+        0 6px 16px rgba(234, 88, 12, .24);
+}
+
+[data-theme="dark"] .pwa-install-button:hover {
+
+    background: #F97316;
+
+    box-shadow:
+        0 8px 20px rgba(234, 88, 12, .30);
+}
+
+
+/* ============================================================
+   HELP BUTTON
+============================================================ */
+
+[data-theme="dark"] .pwa-help-button {
+
+    border-color: #39333F;
+
+    background: #121016;
+
+    color: #D8D2DC;
+}
+
+[data-theme="dark"] .pwa-help-button:hover {
+
+    background: #1D1923;
+
+    border-color: #51465A;
+
+    color: #F5F3F7;
+}
+
+
+/* ============================================================
+   SETTINGS SECTION HEADING
+============================================================ */
+
+[data-theme="dark"] .settings-section-label {
+    color: #77717F;
+}
+
+[data-theme="dark"] .settings-section-heading h2 {
+    color: #F5F3F7;
+}
+
+
+/* ============================================================
+   APP INFORMATION CARD
+============================================================ */
+
+[data-theme="dark"] .app-information-card {
+
+    background: #17141C;
+
+    border-color: #302B35;
+
+    box-shadow:
+        0 14px 40px rgba(0, 0, 0, .24);
+}
+
+
+/* ============================================================
+   APP INFORMATION ROWS
+============================================================ */
+
+[data-theme="dark"] .app-info-row {
+
+    border-bottom-color: #29242E;
+}
+
+[data-theme="dark"] .app-info-row span {
+    color: #A7A2AE;
+}
+
+[data-theme="dark"] .app-info-row strong {
+    color: #F5F3F7;
+}
+
+
+/* ============================================================
+   INSTALLATION MODAL OVERLAY
+============================================================ */
+
+[data-theme="dark"] .pwa-modal-overlay {
+
+    background:
+        rgba(5, 0, 6, .76);
+}
+
+
+/* ============================================================
+   INSTALLATION MODAL
+============================================================ */
+
+[data-theme="dark"] .pwa-modal {
+
+    background: #17141C;
+
+    box-shadow:
+        0 25px 70px rgba(0, 0, 0, .55);
+}
+
+
+/* ============================================================
+   MODAL HEADER
+============================================================ */
+
+[data-theme="dark"] .pwa-modal-header {
+
+    border-bottom-color: #302B35;
+}
+
+[data-theme="dark"] .pwa-modal-icon {
+
+    background: rgba(234, 88, 12, .12);
+
+    color: #FB923C;
+}
+
+[data-theme="dark"] .pwa-modal-heading h2 {
+    color: #F5F3F7;
+}
+
+[data-theme="dark"] .pwa-modal-heading p {
+    color: #77717F;
+}
+
+
+/* ============================================================
+   MODAL CLOSE BUTTON
+============================================================ */
+
+[data-theme="dark"] .pwa-modal-close {
+
+    background: #121016;
+
+    color: #A7A2AE;
+}
+
+[data-theme="dark"] .pwa-modal-close:hover {
+
+    background: #1D1923;
+
+    color: #F5F3F7;
+}
+
+
+/* ============================================================
+   INSTALL METHODS
+============================================================ */
+
+[data-theme="dark"] .install-method {
+
+    border-bottom-color: #29242E;
+}
+
+[data-theme="dark"] .install-method-number {
+
+    background: rgba(234, 88, 12, .12);
+
+    color: #FB923C;
+}
+
+[data-theme="dark"] .install-method-content h3 {
+    color: #F5F3F7;
+}
+
+[data-theme="dark"] .install-method-content p {
+    color: #A7A2AE;
+}
+
+
+/* ============================================================
+   INSTALL NOTE
+============================================================ */
+
+[data-theme="dark"] .install-note {
+
+    background: #121016;
+}
+
+[data-theme="dark"] .install-note i {
+    color: #4ADE80;
+}
+
+[data-theme="dark"] .install-note p {
+    color: #A7A2AE;
+}
+
+
+/* ============================================================
+   MODAL FOOTER
+============================================================ */
+
+[data-theme="dark"] .pwa-modal-footer {
+
+    border-top-color: #302B35;
+}
+
+[data-theme="dark"] .pwa-modal-done {
+
+    background: #0F0D13;
+
+    color: #F5F3F7;
+}
+
+[data-theme="dark"] .pwa-modal-done:hover {
+    background: #211C26;
+}
+
+
+/* ============================================================
+   COMMON DARK SURFACE PROTECTION
+   Prevent shared/global light styles from leaking into
+   settings components.
+============================================================ */
+
+[data-theme="dark"] .settings-page .pwa-install-card,
+[data-theme="dark"] .settings-page .pwa-help-button,
+[data-theme="dark"] .settings-page .app-information-card,
+[data-theme="dark"] .settings-page .pwa-modal {
+
+    color-scheme: dark;
+}
+
+
+/* ============================================================
+   MODAL SCROLLBAR
+============================================================ */
+
+[data-theme="dark"] .pwa-modal-body::-webkit-scrollbar {
+    width: 7px;
+}
+
+[data-theme="dark"] .pwa-modal-body::-webkit-scrollbar-track {
+    background: #121016;
+}
+
+[data-theme="dark"] .pwa-modal-body::-webkit-scrollbar-thumb {
+
+    background: #39333F;
+
+    border-radius: 999px;
+}
+
+[data-theme="dark"] .pwa-modal-body::-webkit-scrollbar-thumb:hover {
+    background: #51465A;
+}
+
+
+/* ============================================================
+   TEXT SELECTION
+============================================================ */
+
+[data-theme="dark"] .settings-page ::selection {
+
+    background: rgba(168, 85, 247, .30);
+
+    color: #FFFFFF;
+}
+
+
+/* ============================================================
+   MOBILE DARK MODE
+   Existing mobile layout remains unchanged.
+============================================================ */
+
+@media (max-width: 768px) {
+
+    [data-theme="dark"] .pwa-install-card {
+        background: #17141C;
+    }
+
+    [data-theme="dark"] .app-information-card {
+        background: #17141C;
+    }
+
+    [data-theme="dark"] .pwa-modal {
+        background: #17141C;
+    }
+
+}
