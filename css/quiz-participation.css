@@ -2057,3 +2057,880 @@
         2px;
 
 }
+
+
+
+
+
+/* ============================================================
+   AFC ISIU YOUTH PORTAL V2
+   QUIZ PARTICIPATION — DARK MODE
+   ------------------------------------------------------------
+   Controlled by:
+   <html data-theme="dark">
+============================================================ */
+
+
+/* ============================================================
+   DARK MODE VARIABLES
+============================================================ */
+
+[data-theme="dark"] .quiz-participation-page {
+
+    --qp-bg: #08070B;
+    --qp-surface: #17141C;
+    --qp-surface-2: #121016;
+    --qp-surface-3: #1D1923;
+
+    --qp-border: #302B35;
+    --qp-border-strong: #39333F;
+
+    --qp-text: #F5F3F7;
+    --qp-text-soft: #D8D2DC;
+    --qp-muted: #A7A2AE;
+    --qp-faint: #77717F;
+
+    --qp-purple: #C084FC;
+    --qp-purple-bright: #A855F7;
+
+    --qp-orange: #FB923C;
+    --qp-cyan: #22D3EE;
+
+    --qp-green: #4ADE80;
+    --qp-red: #F87171;
+}
+
+
+/* ============================================================
+   LOADING / ERROR STATES
+============================================================ */
+
+[data-theme="dark"] .participation-state {
+
+    background: var(--qp-surface);
+
+    border-color: var(--qp-border);
+
+    color: var(--qp-text-soft);
+
+    box-shadow:
+        0 8px 24px
+        rgba(0, 0, 0, 0.24);
+
+}
+
+
+[data-theme="dark"] .participation-state strong {
+
+    color: var(--qp-text);
+
+}
+
+
+[data-theme="dark"] .participation-state p {
+
+    color: var(--qp-muted);
+
+}
+
+
+[data-theme="dark"] .participation-spinner {
+
+    border-color: #39333F;
+
+    border-top-color: var(--qp-purple);
+
+    border-right-color: var(--qp-orange);
+
+}
+
+
+[data-theme="dark"] .participation-state-error {
+
+    border-color: #493039;
+
+    background: #171216;
+
+}
+
+
+[data-theme="dark"] .participation-state-icon {
+
+    background: rgba(248, 113, 113, 0.11);
+
+    color: var(--qp-red);
+
+}
+
+
+[data-theme="dark"] .participation-retry-button {
+
+    border-color: var(--qp-border-strong);
+
+    background: var(--qp-surface-2);
+
+    color: var(--qp-purple);
+
+}
+
+
+[data-theme="dark"] .participation-retry-button:hover {
+
+    background: var(--qp-surface-3);
+
+    border-color: #51465A;
+
+}
+
+
+/* ============================================================
+   CURRENT QUIZ
+============================================================ */
+
+[data-theme="dark"] .participation-current {
+
+    background: var(--qp-surface);
+
+    border-color: var(--qp-border);
+
+    box-shadow:
+        0 8px 26px
+        rgba(0, 0, 0, 0.25);
+
+}
+
+
+[data-theme="dark"] .participation-current-icon {
+
+    border-color: #493950;
+
+    background: rgba(168, 85, 247, 0.12);
+
+    color: var(--qp-purple);
+
+}
+
+
+[data-theme="dark"] .participation-current-label {
+
+    color: var(--qp-orange);
+
+}
+
+
+[data-theme="dark"] .participation-current-details h1 {
+
+    color: var(--qp-text);
+
+}
+
+
+[data-theme="dark"] .participation-current-details p {
+
+    color: var(--qp-muted);
+
+}
+
+
+[data-theme="dark"] .participation-current-status {
+
+    border-color: var(--qp-border);
+
+    background: var(--qp-surface-2);
+
+    color: var(--qp-muted);
+
+}
+
+
+[data-theme="dark"] .participation-status-dot {
+
+    background: #77717F;
+
+}
+
+
+/* OPEN */
+
+[data-theme="dark"] .participation-current-status.is-open {
+
+    color: var(--qp-green);
+
+    background: rgba(34, 197, 94, 0.10);
+
+    border-color: rgba(74, 222, 128, 0.20);
+
+}
+
+
+[data-theme="dark"]
+.participation-current-status.is-open
+.participation-status-dot {
+
+    background: var(--qp-green);
+
+    box-shadow:
+        0 0 0 3px rgba(74, 222, 128, 0.10);
+
+}
+
+
+/* CLOSED */
+
+[data-theme="dark"] .participation-current-status.is-closed {
+
+    color: var(--qp-orange);
+
+    background: rgba(234, 88, 12, 0.10);
+
+    border-color: rgba(251, 146, 60, 0.20);
+
+}
+
+
+[data-theme="dark"]
+.participation-current-status.is-closed
+.participation-status-dot {
+
+    background: var(--qp-orange);
+
+    box-shadow:
+        0 0 0 3px rgba(251, 146, 60, 0.10);
+
+}
+
+
+/* CURRENT */
+
+[data-theme="dark"] .participation-current-status.is-current {
+
+    color: var(--qp-purple);
+
+    background: rgba(168, 85, 247, 0.11);
+
+    border-color: rgba(192, 132, 252, 0.18);
+
+}
+
+
+[data-theme="dark"]
+.participation-current-status.is-current
+.participation-status-dot {
+
+    background: var(--qp-purple);
+
+    box-shadow:
+        0 0 0 3px rgba(192, 132, 252, 0.10);
+
+}
+
+
+/* ============================================================
+   SUMMARY
+============================================================ */
+
+[data-theme="dark"] .participation-summary {
+
+    background: var(--qp-surface);
+
+    border-color: var(--qp-border);
+
+    box-shadow:
+        0 8px 26px
+        rgba(0, 0, 0, 0.25);
+
+}
+
+
+[data-theme="dark"] .participation-summary-primary {
+
+    background: var(--qp-surface);
+
+}
+
+
+[data-theme="dark"] .participation-summary-heading .section-kicker {
+
+    color: var(--qp-orange);
+
+}
+
+
+[data-theme="dark"] .participation-summary-heading h2 {
+
+    color: var(--qp-text);
+
+}
+
+
+/* ============================================================
+   PROGRESS
+============================================================ */
+
+[data-theme="dark"] .participation-progress-meta {
+
+    color: var(--qp-muted);
+
+}
+
+
+[data-theme="dark"] .participation-progress-meta strong {
+
+    color: var(--qp-purple);
+
+}
+
+
+[data-theme="dark"] .participation-progress-track {
+
+    background: #2A252E;
+
+}
+
+
+[data-theme="dark"] .participation-progress-bar {
+
+    background:
+        linear-gradient(
+            90deg,
+            #7E22CE 0%,
+            #A855F7 52%,
+            #EA580C 100%
+        );
+
+    box-shadow:
+        0 1px 5px
+        rgba(168, 85, 247, 0.20);
+
+}
+
+
+/* ============================================================
+   SUMMARY STATISTICS
+============================================================ */
+
+[data-theme="dark"] .participation-summary-stats {
+
+    border-left-color: var(--qp-border);
+
+}
+
+
+[data-theme="dark"] .participation-stat {
+
+    border-left-color: var(--qp-border);
+
+}
+
+
+[data-theme="dark"] .participation-stat-label {
+
+    color: var(--qp-muted);
+
+}
+
+
+[data-theme="dark"] .participation-stat-value {
+
+    color: var(--qp-text);
+
+}
+
+
+[data-theme="dark"]
+.participation-stat:nth-child(1)
+.participation-stat-value {
+
+    color: var(--qp-purple);
+
+}
+
+
+[data-theme="dark"]
+.participation-stat:nth-child(2)
+.participation-stat-value {
+
+    color: var(--qp-green);
+
+}
+
+
+[data-theme="dark"]
+.participation-stat:nth-child(3)
+.participation-stat-value {
+
+    color: var(--qp-orange);
+
+}
+
+
+/* ============================================================
+   SEARCH
+============================================================ */
+
+[data-theme="dark"] .participation-search > i {
+
+    color: var(--qp-faint);
+
+}
+
+
+[data-theme="dark"] .participation-search input {
+
+    border-color: var(--qp-border-strong);
+
+    background: var(--qp-surface-2);
+
+    color: var(--qp-text);
+
+}
+
+
+[data-theme="dark"] .participation-search input::placeholder {
+
+    color: var(--qp-faint);
+
+}
+
+
+[data-theme="dark"] .participation-search input:focus {
+
+    border-color: var(--qp-purple-bright);
+
+    box-shadow:
+        0 0 0 3px
+        rgba(168, 85, 247, 0.13);
+
+}
+
+
+/* ============================================================
+   PARTICIPATION SECTIONS
+============================================================ */
+
+[data-theme="dark"] .participation-section {
+
+    background: var(--qp-surface);
+
+    border-color: var(--qp-border);
+
+    box-shadow:
+        0 8px 26px
+        rgba(0, 0, 0, 0.25);
+
+}
+
+
+[data-theme="dark"] .participation-section-header {
+
+    border-bottom-color: var(--qp-border);
+
+    background: var(--qp-surface);
+
+}
+
+
+/* PARTICIPATED HEADER */
+
+[data-theme="dark"]
+.participation-section:first-child
+.participation-section-header {
+
+    background:
+        linear-gradient(
+            100deg,
+            #17141C 0%,
+            #151B18 100%
+        );
+
+}
+
+
+/* PENDING HEADER */
+
+[data-theme="dark"]
+.participation-section:last-child
+.participation-section-header {
+
+    background:
+        linear-gradient(
+            100deg,
+            #17141C 0%,
+            #1B1814 100%
+        );
+
+}
+
+
+/* ============================================================
+   SECTION INDICATORS
+============================================================ */
+
+[data-theme="dark"]
+.participation-section-indicator.participated {
+
+    background: var(--qp-green);
+
+    box-shadow:
+        0 0 0 3px rgba(74, 222, 128, 0.11);
+
+}
+
+
+[data-theme="dark"]
+.participation-section-indicator.pending {
+
+    background: var(--qp-orange);
+
+    box-shadow:
+        0 0 0 3px rgba(251, 146, 60, 0.11);
+
+}
+
+
+/* ============================================================
+   SECTION TITLES
+============================================================ */
+
+[data-theme="dark"] .participation-section-title h2 {
+
+    color: var(--qp-text);
+
+}
+
+
+[data-theme="dark"]
+.participation-section:first-child
+.participation-section-title h2 {
+
+    color: var(--qp-green);
+
+}
+
+
+[data-theme="dark"]
+.participation-section:last-child
+.participation-section-title h2 {
+
+    color: var(--qp-orange);
+
+}
+
+
+[data-theme="dark"] .participation-section-title p {
+
+    color: var(--qp-muted);
+
+}
+
+
+/* ============================================================
+   SECTION BADGES
+============================================================ */
+
+[data-theme="dark"]
+.participation-section:first-child
+.participation-section-badge {
+
+    border-color: rgba(74, 222, 128, 0.20);
+
+    background: rgba(34, 197, 94, 0.10);
+
+    color: var(--qp-green);
+
+}
+
+
+[data-theme="dark"]
+.participation-section:last-child
+.participation-section-badge {
+
+    border-color: rgba(251, 146, 60, 0.20);
+
+    background: rgba(234, 88, 12, 0.10);
+
+    color: var(--qp-orange);
+
+}
+
+
+/* ============================================================
+   MEMBER TABLE HEADER
+============================================================ */
+
+[data-theme="dark"] .participation-member-columns {
+
+    border-bottom-color: var(--qp-border);
+
+    background: var(--qp-surface-2);
+
+}
+
+
+[data-theme="dark"] .participation-member-columns span {
+
+    color: var(--qp-faint);
+
+}
+
+
+[data-theme="dark"]
+.participation-member-columns span:first-child {
+
+    color: var(--qp-purple);
+
+}
+
+
+[data-theme="dark"]
+.participation-member-columns span:nth-child(2) {
+
+    color: var(--qp-cyan);
+
+}
+
+
+[data-theme="dark"]
+.participation-member-columns span:nth-child(3) {
+
+    color: var(--qp-orange);
+
+}
+
+
+/* ============================================================
+   MEMBER RECORDS
+============================================================ */
+
+[data-theme="dark"] .participation-member {
+
+    border-bottom-color: #29242E;
+
+    background: var(--qp-surface);
+
+}
+
+
+[data-theme="dark"] .participation-member:hover {
+
+    background: var(--qp-surface-3);
+
+}
+
+
+/* ============================================================
+   MEMBER AVATARS
+============================================================ */
+
+[data-theme="dark"] .participation-member-avatar {
+
+    border-color: #493950;
+
+    background: rgba(168, 85, 247, 0.12);
+
+    color: var(--qp-purple);
+
+}
+
+
+[data-theme="dark"]
+.participation-member:nth-child(3n + 1)
+.participation-member-avatar {
+
+    background: rgba(168, 85, 247, 0.12);
+
+    border-color: rgba(192, 132, 252, 0.20);
+
+    color: var(--qp-purple);
+
+}
+
+
+[data-theme="dark"]
+.participation-member:nth-child(3n + 2)
+.participation-member-avatar {
+
+    background: rgba(34, 211, 238, 0.10);
+
+    border-color: rgba(34, 211, 238, 0.18);
+
+    color: var(--qp-cyan);
+
+}
+
+
+[data-theme="dark"]
+.participation-member:nth-child(3n + 3)
+.participation-member-avatar {
+
+    background: rgba(251, 146, 60, 0.10);
+
+    border-color: rgba(251, 146, 60, 0.18);
+
+    color: var(--qp-orange);
+
+}
+
+
+/* ============================================================
+   MEMBER IDENTITY
+============================================================ */
+
+[data-theme="dark"] .participation-member-name {
+
+    color: var(--qp-text-soft);
+
+}
+
+
+[data-theme="dark"] .participation-member-id {
+
+    color: var(--qp-faint);
+
+}
+
+
+/* ============================================================
+   GROUP / FAMILY
+============================================================ */
+
+[data-theme="dark"] .participation-member-group {
+
+    border-left-color: rgba(34, 211, 238, 0.20);
+
+    color: var(--qp-cyan);
+
+}
+
+
+/* ============================================================
+   GROUP ROLE
+============================================================ */
+
+[data-theme="dark"] .participation-member-role {
+
+    border-left-color: rgba(251, 146, 60, 0.20);
+
+    color: var(--qp-orange);
+
+}
+
+
+/* ============================================================
+   EMPTY STATE
+============================================================ */
+
+[data-theme="dark"] .participation-empty > i {
+
+    color: #918797;
+
+}
+
+
+[data-theme="dark"] .participation-empty strong {
+
+    color: var(--qp-text-soft);
+
+}
+
+
+[data-theme="dark"] .participation-empty p {
+
+    color: var(--qp-muted);
+
+}
+
+
+/* ============================================================
+   MOBILE HORIZONTAL SCROLLBAR
+============================================================ */
+
+[data-theme="dark"] .participation-member-table {
+
+    scrollbar-color:
+        #51465A
+        transparent;
+
+}
+
+
+/* ============================================================
+   MOBILE SUMMARY DIVIDER
+============================================================ */
+
+@media (max-width: 820px) {
+
+    [data-theme="dark"]
+    .participation-summary-primary {
+
+        border-bottom-color: var(--qp-border);
+
+    }
+
+}
+
+
+/* ============================================================
+   DARK MODE — FORM / SURFACE SAFETY
+   Prevent remaining white native surfaces.
+============================================================ */
+
+[data-theme="dark"] .quiz-participation-page input,
+[data-theme="dark"] .quiz-participation-page textarea,
+[data-theme="dark"] .quiz-participation-page select {
+
+    color-scheme: dark;
+
+}
+
+
+/* ============================================================
+   DARK MODE — SELECTION
+============================================================ */
+
+[data-theme="dark"] .quiz-participation-page ::selection {
+
+    background: rgba(168, 85, 247, 0.30);
+
+    color: #FFFFFF;
+
+}
+
+
+/* ============================================================
+   DARK MODE — FOCUS
+============================================================ */
+
+[data-theme="dark"]
+.participation-retry-button:focus-visible,
+[data-theme="dark"]
+.participation-search input:focus-visible {
+
+    outline-color: var(--qp-purple);
+
+}
+
+
+/* ============================================================
+   DARK MODE — PREVENT NATIVE SELECT ARROW
+   Only applies if this page contains select controls.
+============================================================ */
+
+[data-theme="dark"] .quiz-participation-page select {
+
+    appearance: none;
+
+    -webkit-appearance: none;
+
+    -moz-appearance: none;
+
+    background-image: none !important;
+
+}
+
+
+[data-theme="dark"] .quiz-participation-page select::-ms-expand {
+
+    display: none;
+
+}
