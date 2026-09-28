@@ -1044,27 +1044,97 @@ main,
 
 
 /* =========================================================
-   DARK MODE
-========================================================= */
+   AFC ISIU YOUTH PORTAL
+   PREMIUM DARK MODE
+   ========================================================= */
+
+/*
+   The dark theme uses layered surfaces rather than pure black.
+
+   Background:
+   #09090b
+
+   Surface:
+   #111113
+
+   Elevated surface:
+   #18181b
+
+   This creates the same visual hierarchy commonly seen
+   in modern Next.js / shadcn-style interfaces.
+*/
+
 
 @media (prefers-color-scheme: dark) {
 
+    /* =====================================================
+       DARK THEME TOKENS
+    ===================================================== */
+
     :root {
 
-        --background:
-            #101114;
+        --background: #09090b;
 
-        --surface:
-            #18191d;
+        --bg: #09090b;
 
-        --text:
-            #ffffff;
+        --surface: #111113;
 
-        --text-light:
-            #c5c5c5;
+        --surface-elevated: #18181b;
 
-        --border:
-            #292b31;
+        --surface-hover: #1f1f23;
+
+        --text: #fafafa;
+
+        --text-light: #a1a1aa;
+
+        --text-muted: #71717a;
+
+        --border: #27272a;
+
+        --border-soft: rgba(255, 255, 255, .07);
+
+        --primary: #a855f7;
+
+        --primary-dark: #7e22ce;
+
+        --secondary: #c084fc;
+
+        --ink: #22d3ee;
+
+        --ink-soft: #67e8f9;
+
+        --ink-mute: rgba(34, 211, 238, .08);
+
+        --brand: #fb923c;
+
+        --brand-dark: #ea580c;
+
+        --green: #22c55e;
+
+        --light: #ffffff;
+
+        --card-bg: #111113;
+
+        --surface-bg: #18181b;
+
+        --text-primary: #fafafa;
+
+        --text-secondary: #a1a1aa;
+
+        --border-color: #27272a;
+    }
+
+
+    /* =====================================================
+       PAGE
+    ===================================================== */
+
+    html {
+
+        color-scheme: dark;
+
+        background:
+            #09090b;
     }
 
 
@@ -1075,8 +1145,16 @@ main,
 
         color:
             var(--text);
+
+        transition:
+            background .25s ease,
+            color .25s ease;
     }
 
+
+    /* =====================================================
+       HEADER
+    ===================================================== */
 
     header,
     .site-header,
@@ -1088,44 +1166,599 @@ main,
     #mainHeader {
 
         background:
-            rgba(16, 17, 20, .92);
+            rgba(9, 9, 11, .82);
 
         border-bottom:
             1px solid
-            rgba(255, 255, 255, .08);
+            rgba(255, 255, 255, .07);
 
         box-shadow:
-            0 4px 20px
-            rgba(0, 0, 0, .25);
+            0 8px 30px
+            rgba(0, 0, 0, .24);
+
+        backdrop-filter:
+            blur(20px)
+            saturate(140%);
+
+        -webkit-backdrop-filter:
+            blur(20px)
+            saturate(140%);
     }
 
+
+    header::before,
+    .site-header::before,
+    .main-header::before,
+    .app-header::before,
+    .portal-header::before {
+
+        background:
+            rgba(9, 9, 11, .35);
+    }
+
+
+    /* =====================================================
+       MAIN HUB
+    ===================================================== */
+
+    .hub {
+
+        background:
+            transparent;
+    }
+
+
+    /* =====================================================
+       HUB CARDS
+    ===================================================== */
 
     .hub-item {
 
         background:
-            rgba(24, 25, 29, .88);
+            rgba(17, 17, 19, .92);
 
         border:
             1px solid
-            rgba(255, 255, 255, .08);
+            rgba(255, 255, 255, .075);
 
         box-shadow:
-            0 .5rem 1.4rem
-            rgba(0, 0, 0, .20);
+            0 10px 30px
+            rgba(0, 0, 0, .20),
+
+            inset 0 1px 0
+            rgba(255, 255, 255, .025);
+
+        backdrop-filter:
+            blur(18px);
+
+        -webkit-backdrop-filter:
+            blur(18px);
     }
 
+
+    /*
+       Very subtle hover elevation.
+    */
+
+    .hub-item:hover {
+
+        background:
+            #18181b;
+
+        border-color:
+            rgba(255, 255, 255, .11);
+
+        box-shadow:
+            0 18px 40px
+            rgba(0, 0, 0, .30);
+    }
+
+
+    /* =====================================================
+       CARD DECORATIVE GLOW
+    ===================================================== */
+
+    .hub-item::before {
+
+        background:
+            radial-gradient(
+                circle,
+                rgba(168, 85, 247, .12),
+                transparent 70%
+            );
+    }
+
+
+    /* =====================================================
+       FEATURED CARD
+    ===================================================== */
 
     .featured {
 
         background:
             linear-gradient(
                 135deg,
-                #18191d,
-                #211c29
+                #151218 0%,
+                #17131c 50%,
+                #121214 100%
             );
+
+        border:
+            1px solid
+            rgba(168, 85, 247, .13);
+
+        box-shadow:
+            0 12px 35px
+            rgba(0, 0, 0, .25),
+
+            inset 0 1px 0
+            rgba(255, 255, 255, .035);
+    }
+
+
+    /* =====================================================
+       CARD TITLES
+    ===================================================== */
+
+    .hub-item h4 {
+
+        color:
+            #fafafa;
+    }
+
+
+    /* =====================================================
+       CARD DESCRIPTIONS
+    ===================================================== */
+
+    .hub-item p {
+
+        color:
+            #a1a1aa;
+    }
+
+
+    /* =====================================================
+       CARD COUNTS
+    ===================================================== */
+
+    .hub-count {
+
+        color:
+            #71717a;
+    }
+
+
+    /* =====================================================
+       BADGES
+    ===================================================== */
+
+    .hub-badge {
+
+        background:
+            rgba(168, 85, 247, .10);
+
+        color:
+            #c084fc;
+
+        border:
+            1px solid
+            rgba(168, 85, 247, .12);
+    }
+
+
+    /* =====================================================
+       ICON CONTAINERS
+    ===================================================== */
+
+    .hub-icon {
+
+        box-shadow:
+            0 8px 22px
+            rgba(0, 0, 0, .25);
+    }
+
+
+    /* =====================================================
+       BUTTONS
+    ===================================================== */
+
+    button {
+
+        color:
+            inherit;
+    }
+
+
+    /* =====================================================
+       FOCUS
+    ===================================================== */
+
+    button:focus-visible,
+    a:focus-visible {
+
+        outline-color:
+            #a855f7;
+    }
+
+
+    /* =====================================================
+       NOTIFICATION PANEL
+    ===================================================== */
+
+    .notification-panel {
+
+        background:
+            #111113;
+
+        border-color:
+            rgba(255, 255, 255, .08);
+
+        box-shadow:
+            0 24px 70px
+            rgba(0, 0, 0, .50);
+    }
+
+
+    .notification-panel-title {
+
+        color:
+            #fafafa;
+    }
+
+
+    .notification-panel-subtitle {
+
+        color:
+            #a1a1aa;
+    }
+
+
+    .notification-status {
+
+        background:
+            #18181b;
+    }
+
+
+    #notificationStatusText {
+
+        color:
+            #a1a1aa;
+    }
+
+
+    .notification-panel-close {
+
+        background:
+            #18181b;
+
+        color:
+            #a1a1aa;
+
+        border:
+            1px solid
+            rgba(255, 255, 255, .06);
+    }
+
+
+    .notification-panel-close:hover {
+
+        background:
+            #27272a;
+
+        color:
+            #fafafa;
+    }
+
+
+    .notification-disable-btn {
+
+        border-color:
+            #27272a;
+
+        color:
+            #a1a1aa;
+    }
+
+
+    .notification-disable-btn:hover {
+
+        background:
+            #18181b;
+
+        border-color:
+            #3f3f46;
+
+        color:
+            #fafafa;
+    }
+
+
+    /* =====================================================
+       ACADEMIC HELP MODAL
+    ===================================================== */
+
+    .academic-help-modal-backdrop {
+
+        background:
+            rgba(0, 0, 0, .72);
+    }
+
+
+    .academic-help-modal-panel {
+
+        background:
+            #111113;
+
+        border-color:
+            rgba(255, 255, 255, .08);
+
+        box-shadow:
+            0 30px 100px
+            rgba(0, 0, 0, .60);
+    }
+
+
+    .academic-help-modal-heading h2 {
+
+        color:
+            #fafafa;
+    }
+
+
+    .academic-help-modal-eyebrow {
+
+        color:
+            #71717a;
+    }
+
+
+    .academic-help-modal-intro p {
+
+        color:
+            #a1a1aa;
+    }
+
+
+    .academic-help-modal-icon {
+
+        background:
+            rgba(168, 85, 247, .10);
+
+        color:
+            #c084fc;
+    }
+
+
+    .academic-help-modal-close {
+
+        background:
+            #18181b;
+
+        border-color:
+            #27272a;
+
+        color:
+            #a1a1aa;
+    }
+
+
+    .academic-help-modal-close:hover {
+
+        background:
+            #27272a;
+
+        border-color:
+            #3f3f46;
+
+        color:
+            #ffffff;
+    }
+
+
+    /* =====================================================
+       ACADEMIC OPTIONS
+    ===================================================== */
+
+    .academic-help-option {
+
+        background:
+            #111113;
+
+        border-color:
+            #27272a;
+    }
+
+
+    .academic-help-option:hover {
+
+        background:
+            #18181b;
+
+        border-color:
+            rgba(168, 85, 247, .25);
+
+        box-shadow:
+            0 12px 30px
+            rgba(0, 0, 0, .25);
+    }
+
+
+    .academic-help-option-content h3 {
+
+        color:
+            #fafafa;
+    }
+
+
+    .academic-help-option-content p {
+
+        color:
+            #a1a1aa;
+    }
+
+
+    .academic-help-option-icon {
+
+        background:
+            rgba(168, 85, 247, .10);
+
+        color:
+            #c084fc;
+    }
+
+
+    .academic-help-option-arrow {
+
+        color:
+            #71717a;
+    }
+
+
+    .academic-help-option.is-locked {
+
+        opacity:
+            .55;
+    }
+
+
+    .academic-help-option.is-locked:hover {
+
+        background:
+            #111113;
+
+        border-color:
+            #27272a;
+    }
+
+
+    .academic-help-option.is-locked
+    .academic-help-option-icon {
+
+        background:
+            #18181b;
+
+        color:
+            #71717a;
+    }
+
+
+    .academic-help-holiday-note {
+
+        background:
+            #18181b;
+
+        color:
+            #a1a1aa;
+    }
+
+
+    .academic-help-holiday-note i {
+
+        color:
+            #71717a;
+    }
+
+
+    /* =====================================================
+       BOTTOM NAVIGATION
+    ===================================================== */
+
+    .bottom-nav {
+
+        background:
+            rgba(9, 9, 11, .88);
+
+        border-top:
+            1px solid
+            rgba(255, 255, 255, .07);
+
+        box-shadow:
+            0 -10px 35px
+            rgba(0, 0, 0, .25);
+
+        backdrop-filter:
+            blur(22px)
+            saturate(140%);
+
+        -webkit-backdrop-filter:
+            blur(22px)
+            saturate(140%);
+    }
+
+
+    /* =====================================================
+       COMMON SURFACE CLASSES
+    ===================================================== */
+
+    .feature-card {
+
+        background:
+            #111113;
+
+        border-color:
+            rgba(255, 255, 255, .075);
+
+        box-shadow:
+            0 10px 30px
+            rgba(0, 0, 0, .20);
+    }
+
+
+    /* =====================================================
+       FORM ELEMENTS
+    ===================================================== */
+
+    input,
+    textarea,
+    select {
+
+        background:
+            #111113;
+
+        color:
+            #fafafa;
+
+        border-color:
+            #27272a;
+    }
+
+
+    input::placeholder,
+    textarea::placeholder {
+
+        color:
+            #71717a;
+    }
+
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+
+        border-color:
+            rgba(168, 85, 247, .55);
+
+        box-shadow:
+            0 0 0 3px
+            rgba(168, 85, 247, .10);
+    }
+
+
+    /* =====================================================
+       SELECTION
+    ===================================================== */
+
+    ::selection {
+
+        background:
+            rgba(168, 85, 247, .30);
+
+        color:
+            #ffffff;
     }
 }
-
 
 /* =========================================================
    ACCESSIBILITY
@@ -2797,32 +3430,3 @@ body.academic-help-modal-open {
 }
 
 
-
-
-/* ============================================================
-   AFC ISIU YOUTH PORTAL
-   FORCE LIGHT MODE
-   ============================================================ */
-
-html {
-    color-scheme: light !important;
-    background: #ffffff !important;
-}
-
-body {
-    background: #ffffff !important;
-    color: #0A0016 !important;
-}
-
-/* Ignore the user's device/browser dark-mode preference */
-@media (prefers-color-scheme: dark) {
-    html {
-        color-scheme: light !important;
-        background: #ffffff !important;
-    }
-
-    body {
-        background: #ffffff !important;
-        color: #0A0016 !important;
-    }
-}
