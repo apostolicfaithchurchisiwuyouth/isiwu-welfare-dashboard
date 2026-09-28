@@ -280,6 +280,83 @@
             opacity: .85;
         }
 
+
+        /* ============================================================
+   AFC ISIU YOUTH PORTAL V2
+   INLINE LOADING / SUCCESS UI — DARK MODE
+   ------------------------------------------------------------
+   Controlled by:
+   <html data-theme="dark">
+============================================================ */
+
+[data-theme="dark"] #loadingScreen {
+    background: #08070B;
+}
+
+[data-theme="dark"] #loadingScreen p {
+    color: #A7A2AE;
+}
+
+[data-theme="dark"] .report-loader {
+    border-color: #302B35;
+    border-top-color: #C084FC;
+}
+
+
+/* ============================================================
+   SUCCESS SCREEN
+============================================================ */
+
+[data-theme="dark"] #successBox {
+    background: #08070B;
+}
+
+[data-theme="dark"] #successBox .success-icon {
+    background: #4A0754;
+    color: #FFFFFF;
+
+    box-shadow:
+        0 14px 35px rgba(74, 7, 84, .28);
+}
+
+[data-theme="dark"] #successBox h2 {
+    color: #F5F3F7;
+}
+
+[data-theme="dark"] #successBox p {
+    color: #A7A2AE;
+}
+
+
+/* ============================================================
+   BUTTON SPINNER
+============================================================ */
+
+[data-theme="dark"] .btn-spinner {
+    border-color: rgba(255, 255, 255, .28);
+    border-top-color: #FFFFFF;
+}
+
+
+/* ============================================================
+   LOADING BUTTON STATE
+============================================================ */
+
+[data-theme="dark"] .report-primary-btn.btn-loading,
+[data-theme="dark"] .report-submit-btn.btn-loading {
+    opacity: .78;
+}
+
+
+/* ============================================================
+   ACCESSIBILITY / SELECTION
+============================================================ */
+
+[data-theme="dark"] #loadingScreen ::selection,
+[data-theme="dark"] #successBox ::selection {
+    background: rgba(168, 85, 247, .30);
+    color: #FFFFFF;
+}
     </style>
 
 </head>
