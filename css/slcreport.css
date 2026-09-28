@@ -1468,3 +1468,557 @@
     animation: none !important;
 }
  
+
+
+
+/* ============================================================
+   PORTAL DARK MODE
+   ============================================================ */
+
+/*
+ * SLC REPORT
+ * Portal-controlled dark theme.
+ *
+ * Activated by:
+ * <html data-theme="dark">
+ *
+ * This does NOT depend on the user's operating-system
+ * dark-mode preference.
+ */
+
+
+/* ============================================================
+   HERO
+   ============================================================ */
+
+[data-theme="dark"] .slcreport-page .report-hero {
+
+    background:
+        linear-gradient(
+            135deg,
+            #17141c 0%,
+            #1b1720 48%,
+            #21191a 100%
+        );
+
+    border-color: rgba(192, 132, 252, .14);
+
+    box-shadow:
+        0 18px 55px rgba(0, 0, 0, .30);
+}
+
+[data-theme="dark"] .slcreport-page .report-hero::before {
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(168, 85, 247, .16),
+            rgba(168, 85, 247, 0)
+        );
+}
+
+[data-theme="dark"] .slcreport-page .report-hero::after {
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(34, 211, 238, .10),
+            rgba(34, 211, 238, 0)
+        );
+}
+
+[data-theme="dark"] .slcreport-page .report-eyebrow {
+
+    color: #c084fc;
+}
+
+[data-theme="dark"] .slcreport-page .report-hero h1 {
+
+    color: #f5f3f7;
+}
+
+[data-theme="dark"] .slcreport-page .report-hero h1 span {
+
+    color: #fb923c;
+}
+
+[data-theme="dark"] .slcreport-page .report-hero p {
+
+    color: #a7a2ae;
+}
+
+[data-theme="dark"] .slcreport-page .report-hero-icon {
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(168, 85, 247, .16),
+            rgba(234, 88, 12, .13)
+        );
+
+    color: #c084fc;
+}
+
+
+/* ============================================================
+   LOGIN
+   ============================================================ */
+
+[data-theme="dark"] .slcreport-page .report-login-card {
+
+    background: #17141c;
+
+    border-color: #302b35;
+
+    box-shadow:
+        0 14px 38px rgba(0, 0, 0, .32);
+}
+
+
+/* ============================================================
+   GENERAL REPORT CARDS
+   ============================================================ */
+
+[data-theme="dark"] .slcreport-page .report-card {
+
+    background: #17141c;
+
+    border-color: #302b35;
+
+    box-shadow:
+        0 10px 32px rgba(0, 0, 0, .24);
+}
+
+
+/* ============================================================
+   CARD HEADINGS
+   ============================================================ */
+
+[data-theme="dark"] .slcreport-page .report-card-heading h2 {
+
+    color: #f5f3f7;
+}
+
+[data-theme="dark"] .slcreport-page .report-card-heading p {
+
+    color: #9a929f;
+}
+
+
+/* ============================================================
+   SECTION ICONS
+   ============================================================ */
+
+[data-theme="dark"] .slcreport-page .report-section-icon.orange {
+
+    background: rgba(234, 88, 12, .12);
+
+    color: #fb923c;
+}
+
+[data-theme="dark"] .slcreport-page .report-section-icon.purple {
+
+    background: rgba(168, 85, 247, .13);
+
+    color: #c084fc;
+}
+
+[data-theme="dark"] .slcreport-page .report-section-icon.cyan {
+
+    background: rgba(8, 145, 178, .13);
+
+    color: #22d3ee;
+}
+
+
+/* ============================================================
+   TOP ACTIONS
+   ============================================================ */
+
+[data-theme="dark"] .slcreport-page .report-logout-btn {
+
+    border-color: #39333f;
+
+    background: #17141c;
+
+    color: #a7a2ae;
+}
+
+[data-theme="dark"] .slcreport-page .report-logout-btn:hover {
+
+    color: #c084fc;
+
+    border-color: rgba(168, 85, 247, .30);
+
+    background: #211c26;
+}
+
+
+/* ============================================================
+   FORM LABELS
+   ============================================================ */
+
+[data-theme="dark"] .slcreport-page .report-field label {
+
+    color: #ddd8e1;
+}
+
+
+/* ============================================================
+   FORM INPUTS
+   ============================================================ */
+
+[data-theme="dark"] .slcreport-page .report-field input,
+[data-theme="dark"] .slcreport-page .report-field textarea,
+[data-theme="dark"] .slcreport-page .report-field select {
+
+    border-color: #39333f;
+
+    background: #121016;
+
+    color: #f5f3f7;
+}
+
+[data-theme="dark"] .slcreport-page .report-field input::placeholder,
+[data-theme="dark"] .slcreport-page .report-field textarea::placeholder {
+
+    color: #716a76;
+}
+
+[data-theme="dark"] .slcreport-page .report-field input:focus,
+[data-theme="dark"] .slcreport-page .report-field textarea:focus,
+[data-theme="dark"] .slcreport-page .report-field select:focus {
+
+    border-color: #a855f7;
+
+    box-shadow:
+        0 0 0 3px rgba(168, 85, 247, .13);
+}
+
+
+/* ============================================================
+   READONLY INPUTS
+   ============================================================ */
+
+[data-theme="dark"] .slcreport-page .report-field input[readonly] {
+
+    background: #1d1923;
+
+    color: #c8c2cc;
+}
+
+[data-theme="dark"] .slcreport-page .report-readonly-wrap > i {
+
+    color: #c084fc;
+}
+
+[data-theme="dark"] .slcreport-page .report-readonly-wrap input {
+
+    border-color: rgba(168, 85, 247, .22);
+
+    background:
+        linear-gradient(
+            135deg,
+            #1d1923,
+            #17141c
+        );
+
+    color: #ddd8e1;
+}
+
+[data-theme="dark"] .slcreport-page .report-readonly-note {
+
+    color: #77717f;
+}
+
+
+/* ============================================================
+   INPUT ICONS
+   ============================================================ */
+
+[data-theme="dark"] .slcreport-page .report-input-wrap > i {
+
+    color: #817986;
+}
+
+
+/* ============================================================
+   HELPERS
+   ============================================================ */
+
+[data-theme="dark"] .slcreport-page .report-helper {
+
+    color: #9a929f;
+}
+
+[data-theme="dark"] .slcreport-page .report-helper i {
+
+    color: #22d3ee;
+}
+
+
+/* ============================================================
+   NON-PARTICIPANT NUMBER
+   ============================================================ */
+
+[data-theme="dark"] .slcreport-page .report-name-number {
+
+    background: rgba(168, 85, 247, .12);
+
+    color: #c084fc;
+}
+
+
+/* ============================================================
+   NON-PARTICIPANT INPUTS
+   ============================================================ */
+
+[data-theme="dark"] .slcreport-page .report-name-field input {
+
+    border-color: #39333f;
+
+    background: #121016;
+
+    color: #f5f3f7;
+}
+
+[data-theme="dark"] .slcreport-page .report-name-field input::placeholder {
+
+    color: #716a76;
+}
+
+[data-theme="dark"] .slcreport-page .report-name-field input:focus {
+
+    border-color: #a855f7;
+
+    box-shadow:
+        0 0 0 3px rgba(168, 85, 247, .13);
+}
+
+
+/* ============================================================
+   CONTACT TABLE WRAPPER
+   ============================================================ */
+
+[data-theme="dark"] .slcreport-page .report-table-wrap {
+
+    border-color: #302b35;
+
+    background: #121016;
+}
+
+
+/* ============================================================
+   CONTACT TABLE
+   ============================================================ */
+
+[data-theme="dark"] .slcreport-page .contact-table {
+
+    background: #121016;
+
+    color: #ddd8e1;
+}
+
+[data-theme="dark"] .slcreport-page .contact-table th,
+[data-theme="dark"] .slcreport-page .contact-table td {
+
+    border-bottom-color: #29242e;
+}
+
+[data-theme="dark"] .slcreport-page .contact-table th {
+
+    background: #1d1923;
+
+    color: #a7a2ae;
+}
+
+[data-theme="dark"] .slcreport-page .contact-table td {
+
+    color: #ddd8e1;
+}
+
+[data-theme="dark"] .slcreport-page .contact-table tbody tr:hover {
+
+    background: #1d1923;
+}
+
+[data-theme="dark"] .slcreport-page .contact-table th:first-child,
+[data-theme="dark"] .slcreport-page .contact-table td:first-child {
+
+    color: #77717f;
+}
+
+
+/* ============================================================
+   CONTACT TABLE INPUTS
+   ============================================================ */
+
+[data-theme="dark"] .slcreport-page .contact-table td input,
+[data-theme="dark"] .slcreport-page .contact-table td select {
+
+    border-color: #39333f;
+
+    background: #17141c;
+
+    color: #f5f3f7;
+}
+
+[data-theme="dark"] .slcreport-page .contact-table td input::placeholder {
+
+    color: #716a76;
+}
+
+[data-theme="dark"] .slcreport-page .contact-table td input:focus,
+[data-theme="dark"] .slcreport-page .contact-table td select:focus {
+
+    border-color: #a855f7;
+
+    box-shadow:
+        0 0 0 2px rgba(168, 85, 247, .13);
+}
+
+
+/* ============================================================
+   SUPPORT OPTIONS
+   ============================================================ */
+
+[data-theme="dark"] .slcreport-page .support-option {
+
+    border-color: #39333f;
+
+    background: #17141c;
+
+    color: #ddd8e1;
+}
+
+[data-theme="dark"] .slcreport-page .support-option:hover {
+
+    border-color: rgba(168, 85, 247, .30);
+
+    background: #211c26;
+}
+
+[data-theme="dark"] .slcreport-page .support-check-icon {
+
+    border-color: #514a56;
+
+    background: #121016;
+
+    color: transparent;
+}
+
+[data-theme="dark"] .slcreport-page .support-option input:checked + .support-check-icon {
+
+    background: #7e22ce;
+
+    border-color: #7e22ce;
+
+    color: #ffffff;
+}
+
+
+/* ============================================================
+   BANNERS
+   ============================================================ */
+
+[data-theme="dark"] .slcreport-page .report-banner.error {
+
+    background: rgba(127, 29, 29, .20);
+
+    border-color: rgba(248, 113, 113, .24);
+
+    color: #fca5a5;
+}
+
+[data-theme="dark"] .slcreport-page .report-banner.warn {
+
+    background: rgba(154, 52, 18, .18);
+
+    border-color: rgba(251, 146, 60, .24);
+
+    color: #fdba74;
+}
+
+[data-theme="dark"] .slcreport-page .report-banner.success {
+
+    background: rgba(6, 95, 70, .18);
+
+    border-color: rgba(74, 222, 128, .22);
+
+    color: #6ee7b7;
+}
+
+
+/* ============================================================
+   BUTTONS
+   ============================================================ */
+
+[data-theme="dark"] .slcreport-page .report-primary-btn,
+[data-theme="dark"] .slcreport-page .report-submit-btn {
+
+    background:
+        linear-gradient(
+            135deg,
+            #7e22ce,
+            #9333ea
+        );
+
+    color: #ffffff;
+
+    box-shadow:
+        0 10px 24px rgba(126, 34, 206, .22);
+}
+
+[data-theme="dark"] .slcreport-page .report-primary-btn:hover,
+[data-theme="dark"] .slcreport-page .report-submit-btn:hover {
+
+    box-shadow:
+        0 13px 28px rgba(126, 34, 206, .30);
+}
+
+
+/* ============================================================
+   SUBMIT AREA
+   ============================================================ */
+
+[data-theme="dark"] .slcreport-page .report-submit-area p {
+
+    color: #77717f;
+}
+
+[data-theme="dark"] .slcreport-page .report-submit-area p i {
+
+    color: #22d3ee;
+}
+
+
+/* ============================================================
+   TEXT SELECTION
+   ============================================================ */
+
+[data-theme="dark"] .slcreport-page ::selection {
+
+    background: rgba(168, 85, 247, .30);
+
+    color: #ffffff;
+}
+
+
+/* ============================================================
+   MOBILE DARK MODE POLISH
+   ============================================================ */
+
+@media (max-width: 768px) {
+
+    [data-theme="dark"] .slcreport-page .report-card {
+
+        box-shadow:
+            0 8px 26px rgba(0, 0, 0, .22);
+    }
+
+    [data-theme="dark"] .slcreport-page .report-hero {
+
+        box-shadow:
+            0 14px 38px rgba(0, 0, 0, .26);
+    }
+}
